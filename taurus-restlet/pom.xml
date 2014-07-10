@@ -66,6 +66,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.restlet.jse</groupId>
+			<artifactId>org.restlet.ext.json</artifactId>
+			<version>2.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.restlet.jse</groupId>
 			<artifactId>org.restlet.ext.spring</artifactId>
 			<version>${restletVersion}</version>
 			<exclusions>
