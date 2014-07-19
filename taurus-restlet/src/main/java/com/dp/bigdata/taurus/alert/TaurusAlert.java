@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
 import javax.mail.MessagingException;
 
@@ -17,8 +16,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import com.dianping.cat.Cat;
 import com.dp.bigdata.taurus.core.AttemptStatus;
@@ -43,23 +40,6 @@ import com.dp.bigdata.taurus.generated.module.UserGroupMappingExample;
  * @author damon.zhu
  */
 public class TaurusAlert {
-
-	public static void main(String[] args) {
-		ApplicationContext context = new FileSystemXmlApplicationContext("classpath:applicationContext.xml");
-		TaurusAlert alert = (TaurusAlert) context.getBean("alert");
-		try {
-			if (args.length == 0) {
-				alert.start(-1);
-			} else if (args.length == 1) {
-				alert.start(Integer.parseInt(args[0]));
-			} else {
-				LOG.error("参数个数只能是0或1个");
-			}
-		} catch (Exception e) {
-			Cat.logError(e);
-			e.printStackTrace();
-		}
-	}
 
 	private static final Log LOG = LogFactory.getLog(TaurusAlert.class);
 
@@ -138,14 +118,6 @@ public class TaurusAlert {
 		alert.setName("AlertThread");
 		alert.setDaemon(true);
 		alert.start();
-
-		while (true) {
-			try {
-				TimeUnit.SECONDS.sleep(60);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 
 	public class AlertThread implements Runnable {
