@@ -208,15 +208,17 @@ final public class Engine implements Scheduler {
 	}
 
 	class TriggleTask extends Thread {
-
 		@Override
 		public void run() {
 			while (true) {
 				LOG.info("DepedencyTriggle trys to triggle the jobs...");
 
+				Transaction t = Cat.newTransaction("Engine", "Schedule");
 				try {
 					crontabTriggle.triggle();
+
 					dependencyTriggle.triggle();
+
 					List<AttemptContext> contexts = filter.filter(getReadyToRunAttempt());
 
 					if (contexts != null) {
@@ -231,6 +233,8 @@ final public class Engine implements Scheduler {
 				} catch (Throwable e) {
 					Cat.logError(e);
 					LOG.error("UnExpected Exception", e);
+				} finally {
+					t.complete();
 				}
 
 				try {
@@ -510,7 +514,7 @@ final public class Engine implements Scheduler {
 		}
 	}
 
-	public void attemptUnKnowed(String attemptID) {
+	public void attemptUnKnown(String attemptID) {
 		AttemptContext context = runningAttempts.get(AttemptID.getTaskID(attemptID)).get(attemptID);
 		TaskAttempt attempt = context.getAttempt();
 		attempt.setEndtime(new Date());

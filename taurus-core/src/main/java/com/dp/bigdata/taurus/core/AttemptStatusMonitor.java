@@ -7,8 +7,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import com.dianping.cat.Cat;
 import com.dp.bigdata.taurus.generated.module.TaskAttempt;
@@ -21,8 +19,7 @@ import com.dp.bigdata.taurus.generated.module.TaskAttempt;
  */
 public class AttemptStatusMonitor implements Runnable {
 
-	private static final Log LOG = LogFactory
-			.getLog(AttemptStatusMonitor.class);
+	private static final Log LOG = LogFactory.getLog(AttemptStatusMonitor.class);
 
 	private final AtomicBoolean isInterrupt = new AtomicBoolean(false);
 
@@ -31,15 +28,6 @@ public class AttemptStatusMonitor implements Runnable {
 	@Autowired
 	public AttemptStatusMonitor(Scheduler scheduler) {
 		this.scheduler = scheduler;
-	}
-
-	public static void main(String args[]) {
-		ApplicationContext context = new FileSystemXmlApplicationContext(
-				"classpath:applicationContext.xml");
-		Engine engine = (Engine) context.getBean("engine");
-		Runnable runnable = new AttemptStatusMonitor(engine);
-		Thread t = new Thread(runnable);
-		t.start();
 	}
 
 	@Override
@@ -52,7 +40,7 @@ public class AttemptStatusMonitor implements Runnable {
 					AttemptStatus sstatus = scheduler.getAttemptStatus(attempt.getAttemptid());
 					int status = sstatus.getStatus();
 					LOG.info("Current status for attempt " + attempt.getAttemptid() + " : " + status);
-					
+
 					switch (status) {
 					case AttemptStatus.SUCCEEDED:
 						attempt.getAttempt().setReturnvalue(sstatus.getReturnCode());
@@ -68,7 +56,7 @@ public class AttemptStatusMonitor implements Runnable {
 							Date start = attempt.getStarttime();
 							long now = System.currentTimeMillis();
 							if (now > start.getTime() + timeout * 1000 * 60) {
-								LOG.info("attempt " + attempt.getAttemptid()+ " executing timeout ");
+								LOG.info("attempt " + attempt.getAttemptid() + " executing timeout ");
 								scheduler.attemptExpired(attempt.getAttemptid());
 							}
 						} else {
@@ -78,7 +66,8 @@ public class AttemptStatusMonitor implements Runnable {
 									String previousAttemptID = attempt.getAttemptid();
 									TaskAttempt newFiredAttempt = scheduler.getRecentFiredAttemptByTaskID(taskID);
 
-									if (newFiredAttempt != null && !newFiredAttempt.getAttemptid().equalsIgnoreCase(previousAttemptID)) {
+									if (newFiredAttempt != null
+									      && !newFiredAttempt.getAttemptid().equalsIgnoreCase(previousAttemptID)) {
 										scheduler.killAttempt(previousAttemptID);
 									}
 								}
@@ -89,7 +78,7 @@ public class AttemptStatusMonitor implements Runnable {
 						break;
 					}
 					case AttemptStatus.UNKNOWN: {
-						scheduler.attemptUnKnowed(attempt.getAttemptid());
+						scheduler.attemptUnKnown(attempt.getAttemptid());
 					}
 					}
 				}

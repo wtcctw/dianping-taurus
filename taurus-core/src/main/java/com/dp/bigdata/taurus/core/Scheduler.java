@@ -98,7 +98,7 @@ public interface Scheduler {
 	 * Notify the scheduler that a attempt has been finished with a unknown status.
 	 * @param attemptID
 	 */
-	public void attemptUnKnowed(String attemptID);
+	public void attemptUnKnown(String attemptID);
 	
 	/**
 	 * get all running attempts
