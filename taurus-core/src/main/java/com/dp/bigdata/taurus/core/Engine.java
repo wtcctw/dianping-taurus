@@ -230,7 +230,7 @@ final public class Engine implements Scheduler {
 							}
 						}
 					}
-					
+
 					t.setStatus(Message.SUCCESS);
 				} catch (Throwable e) {
 					Cat.logError(e);
@@ -388,12 +388,12 @@ final public class Engine implements Scheduler {
 		attempt.setExechost(host.getIp());
 		attempt.setStarttime(new Date());
 
-		Transaction transaction = Cat.newTransaction("Attempt-New", context.getName());
+		Transaction transaction = Cat.newTransaction("Attempt.Schedule", context.getName());
 
 		try {
 			zookeeper.execute(context.getContext());
 			LOG.info("Attempt " + attempt.getAttemptid() + " is running now...");
-			Cat.logEvent("Attempt-Running", context.getName(), Message.SUCCESS, context.getAttemptid());
+			Cat.logEvent("Attempt-Scheduled", context.getName(), Message.SUCCESS, context.getAttemptid());
 			transaction.setStatus(Message.SUCCESS);
 		} catch (Exception ee) {
 			Cat.logError(ee);
