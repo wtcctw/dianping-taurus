@@ -234,7 +234,7 @@ final public class Engine implements Scheduler {
 					t.setStatus(Message.SUCCESS);
 				} catch (Throwable e) {
 					Cat.logError(e);
-					LOG.error("UnExpected Exception", e);
+					LOG.error(e);
 				} finally {
 					t.complete();
 				}
