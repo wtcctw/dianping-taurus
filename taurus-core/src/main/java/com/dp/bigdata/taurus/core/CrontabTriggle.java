@@ -83,7 +83,7 @@ public class CrontabTriggle implements Triggle {
 				attempt.setAttemptid(attemptID);
 				attemptMapper.insert(attempt);
 				LOG.info(String.format("New attempt (%s) fired.", attemptID));
-				Cat.logEvent("Crontab-Fire", task.getName());
+				Cat.logEvent("Crontab.Fire", task.getName());
 				nextFireTime = ce.getNextValidTimeAfter(nextFireTime);
 			}
 		}

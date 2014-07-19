@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.TimeUnit;
 
 import javax.mail.MessagingException;
 
@@ -138,6 +138,14 @@ public class TaurusAlert {
 		alert.setName("AlertThread");
 		alert.setDaemon(true);
 		alert.start();
+
+		while (true) {
+			try {
+				TimeUnit.SECONDS.sleep(60);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public class AlertThread implements Runnable {

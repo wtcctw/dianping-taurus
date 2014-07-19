@@ -388,17 +388,13 @@ final public class Engine implements Scheduler {
 		attempt.setExechost(host.getIp());
 		attempt.setStarttime(new Date());
 
-		Transaction transaction = Cat.newTransaction("Attempt.Schedule", context.getName());
-
 		try {
 			zookeeper.execute(context.getContext());
 			LOG.info("Attempt " + attempt.getAttemptid() + " is running now...");
-			Cat.logEvent("Attempt-Scheduled", context.getName(), Message.SUCCESS, context.getAttemptid());
-			transaction.setStatus(Message.SUCCESS);
+			Cat.logEvent("Attempt.Scheduled", context.getName(), Message.SUCCESS, context.getAttemptid());
 		} catch (Exception ee) {
 			Cat.logError(ee);
-			Cat.logEvent("Attempt-SubmitFailed", context.getName(), "submit-fail", context.getAttemptid());
-			transaction.setStatus(ee);
+			Cat.logEvent("Attempt.SubmitFailed", context.getName(), "submit-fail", context.getAttemptid());
 
 			attempt.setStatus(AttemptStatus.SUBMIT_FAIL);
 			attempt.setEndtime(new Date());
@@ -406,9 +402,7 @@ final public class Engine implements Scheduler {
 
 			throw new ScheduleException("Fail to execute attemptID : " + attempt.getAttemptid() + " on host : "
 			      + host.getIp(), ee);
-		} finally {
-			transaction.complete();
-		}
+		} 
 
 		// update the status for TaskAttempt
 		attempt.setStatus(AttemptStatus.RUNNING);

@@ -9,7 +9,7 @@
 	<!-- Datasource -->
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
 		<property name="driverClass" value="com.mysql.jdbc.Driver" />
-		<property name="jdbcUrl" value="jdbc:mysql://10.1.77.85:3306/TaurusCopy" />
+		<property name="jdbcUrl" value="jdbc:mysql://127.0.0.1:3306/TaurusCopy" />
 		<property name="user" value="root" />
 		<property name="password" value="123456" />
 		<property name="minPoolSize" value="5" />
@@ -60,16 +60,16 @@
         <property name="iface" value="com.dianping.sms.biz.SMSService"/>
         <property name="serialize" value="java"/>
         <property name="callMethod" value="sync"/>
-        <property name="timeout" value="5000"/> -->
-    </bean>
+        <property name="timeout" value="5000"/> 
+    </bean>-->
 	
 	<bean id="alert" class="com.dp.bigdata.taurus.alert.TaurusAlert" init-method="load">
-		<property name="mailService">
+		<!-- <property name="mailService">
 			<ref bean="mailService" />
 		</property>
 		<property name="smsService">
 			<ref bean="smsService" />
-		</property>
+		</property> -->
 	</bean>
 </beans>
 
