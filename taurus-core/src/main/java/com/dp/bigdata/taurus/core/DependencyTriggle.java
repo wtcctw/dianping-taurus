@@ -10,6 +10,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.dianping.cat.Cat;
 import com.dp.bigdata.taurus.core.parser.DependencyParser;
 import com.dp.bigdata.taurus.generated.mapper.TaskAttemptMapper;
 import com.dp.bigdata.taurus.generated.module.Task;
@@ -73,9 +74,9 @@ public class DependencyTriggle implements Triggle {
 			isDepencyFinish = true;
 		} else {
 			try {
-				isDepencyFinish = parser.isDepdencySatisfied(expression,
-						statusCheck);
+				isDepencyFinish = parser.isDepdencySatisfied(expression, statusCheck);
 			} catch (ParseException e) {
+				Cat.logError(e);
 				return;
 			}
 		}
@@ -85,12 +86,12 @@ public class DependencyTriggle implements Triggle {
 		 */
 		if (isDepencyFinish) {
 			if (hasDependency) {
-				LOG.info("Attempt " + attempt.getAttemptid()
-						+ " has passed dependencies");
+				LOG.info("Attempt " + attempt.getAttemptid() + " has passed dependencies");
 			} else {
-				LOG.info("Attempt " + attempt.getAttemptid()
-						+ " has no dependencies, execute it directly");
+				LOG.info("Attempt " + attempt.getAttemptid() + " has no dependencies, execute it directly");
 			}
+			Cat.logEvent("Depend.Fire", task.getName());
+
 			attempt.setStatus(AttemptStatus.DEPENDENCY_PASS);
 			taskAttemptMapper.updateByPrimaryKeySelective(attempt);
 		} else {
@@ -100,10 +101,9 @@ public class DependencyTriggle implements Triggle {
 			int timeout = task.getWaittimeout();
 			Date start = attempt.getScheduletime();
 			long now = System.currentTimeMillis();
-			if (now > start.getTime() + 1000L * 60 * timeout
-					&& attempt.getStatus() != AttemptStatus.DEPENDENCY_TIMEOUT) {
-				LOG.info("Attempt " + attempt.getAttemptid()
-						+ " has dependency waiting timeout ");
+			if (now > start.getTime() + 1000L * 60 * timeout && attempt.getStatus() != AttemptStatus.DEPENDENCY_TIMEOUT) {
+				Cat.logEvent("Depend.Fire.Timeout", task.getName());
+				LOG.info("Attempt " + attempt.getAttemptid() + " has dependency waiting timeout ");
 				// I do think dependency_fail status is unnecessary.
 				attempt.setStatus(AttemptStatus.DEPENDENCY_TIMEOUT);
 				attempt.setEndtime(new Date());
