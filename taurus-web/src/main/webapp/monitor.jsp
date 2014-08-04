@@ -17,7 +17,10 @@
         .timeout-tag {
             font-size: 130%
         }
-        .time_inal{float: right}
+
+        .time_inal {
+            float: right
+        }
     </style>
 </head>
 <body data-spy="scroll">
@@ -31,6 +34,9 @@
 <%@ page import="com.dp.bigdata.taurus.restlet.shared.TaskDTO" %>
 <%@ page import="com.dp.bigdata.taurus.restlet.resource.ITaskResource" %>
 <%@ page import="com.dp.bigdata.taurus.core.InstanceID" %>
+<%@ page import="org.restlet.data.Form" %>
+<%@ page import="com.dp.bigdata.taurus.restlet.resource.ITasksResource" %>
+<%@ page import="java.util.List" %>
 
 <div class="container" style="margin-top: 10px">
 <div id="alertContainer" class="container">
@@ -47,8 +53,8 @@
             countTotal = 0;
     %>
     <div class="time_inal">
-    <a href="monitor.jsp?id=1&taskdate＝<%=df.format(new Date(time.getTime() - (countTotal+1)*hourTime))    %>">[-1h] </a>
-    <a href="monitor.jsp?id=24&taskdate＝<%=df.format(new Date(new Date().getTime() -hourTime))    %>">[当天] </a>
+        <a href="monitor.jsp?id=1&taskdate＝<%=df.format(new Date(time.getTime() - (countTotal+1)*hourTime))    %>">[-1h] </a>
+        <a href="monitor.jsp?id=24&taskdate＝<%=df.format(new Date(new Date().getTime() -hourTime))    %>">[当天] </a>
     </div>
 </ul>
 
@@ -61,7 +67,8 @@
            class="table table-striped table-format table-hover" id="running">
         <thead>
         <tr>
-            <th>ID</th>
+            <th>任务ID</th>
+            <th>任务名称</th>
             <th>实际启动时间</th>
             <th>实际结束时间</th>
             <th>预计调度时间</th>
@@ -109,14 +116,24 @@
             for (AttemptDTO dto : attempts) {
                 String state = dto.getStatus();
                 if (state.equals("RUNNING")) {
-                    // ClientResource crTask = new ClientResource(host + "monitor");
-                    // crTask.setAttribute("task_id",dto.getTaskID());
-                    //ITaskResource taskResource = crTask.wrap(ITaskResource.class);
-                    // TaskDTO taskDTO =taskResource.retrieve();
+                    ClientResource crTask = new ClientResource(host + "task" + "?task_id=" + dto.getTaskID());
+                    crTask.setAttribute("task_id", dto.getTaskID());
+                    ITasksResource taskResource = crTask.wrap(ITasksResource.class);
+                    List<TaskDTO> taskDTOList = taskResource.retrieve();
+                    TaskDTO taskDTO = new TaskDTO();
+                    for (TaskDTO task : taskDTOList) {
+                        if (task.getTaskid().equals(dto.getTaskID())) {
+                            taskDTO = task;
+                        }
+
+                    }
+
 
         %>
         <tr id="<%=dto.getAttemptID()%>">
             <td><%=dto.getTaskID()%>
+            </td>
+            <td><%=taskDTO.getName()%>
             </td>
             <%if (dto.getStartTime() != null) {%>
             <td><%=formatter.format(dto.getStartTime())%>
@@ -136,19 +153,12 @@
             <%} else {%>
             <td>NULL</td>
             <%}%>
-            <!-- <td><%=dto.getExecHost()%></td> -->
             <td>
                     <%if(state.equals("RUNNING") || state.equals("TIMEOUT")){%>
-                <!-- <li> -->
                 <a>无日志</a>
-                <!-- </li> -->
                     <%}else {%>
-                <!-- <li> -->
                 <a target="_blank" href="attempts.do?id=<%=dto.getAttemptID()%>&action=view-log">日志</a>
-                <!-- </li> -->
                     <%}%>
-                <!-- </ul>
-            </div> -->
 
         </tr>
         <% }
@@ -165,7 +175,8 @@
            class="table table-striped table-format table-hover" id="fail">
         <thead>
         <tr>
-            <th>ID</th>
+            <th>任务ID</th>
+            <th>任务名称</th>
             <th>实际启动时间</th>
             <th>实际结束时间</th>
             <th>预计调度时间</th>
@@ -177,20 +188,28 @@
         <%
             for (AttemptDTO dto : attempts) {
                 String state = dto.getStatus();
-                //ClientResource crTask = new ClientResource(host + "monitor");
-                //crTask.setAttribute("task_id",dto.getTaskID());
-                //ITaskResource taskResource = crTask.wrap(ITaskResource.class);
-                // TaskDTO taskDTO =taskResource.retrieve();
+                ClientResource crTask = new ClientResource(host + "task" + "?task_id=" + dto.getTaskID());
+                ITasksResource taskResource = crTask.wrap(ITasksResource.class);
+                List<TaskDTO> taskDTOList = taskResource.retrieve();
+                TaskDTO taskDTO = new TaskDTO();
+                for (TaskDTO task : taskDTOList) {
+                    if (task.getTaskid().equals(dto.getTaskID())) {
+                        taskDTO = task;
+                    }
+
+                }
                 if (taskTime != null) {
                     String startTime = formatter.format(dto.getStartTime());
                     String endTime = formatter.format(dto.getEndTime());
 
-                    if (state.equals("FAILED") && (taskTime != null && startTime.compareTo(taskTime) >= 0 || endTime.compareTo(taskTime) > 0)) {
+                    if (state.equals("FAILED") && (startTime.compareTo(taskTime) >=0 || endTime.compareTo(taskTime) >= 0)) {
 
 
         %>
         <tr id="<%=dto.getAttemptID()%>">
             <td><%=dto.getTaskID()%>
+            </td>
+            <td><%=taskDTO.getName()%>
             </td>
             <%if (dto.getStartTime() != null) {%>
             <td><%=formatter.format(dto.getStartTime())%>
@@ -210,19 +229,12 @@
             <%} else {%>
             <td>NULL</td>
             <%}%>
-            <!-- <td><%=dto.getExecHost()%></td> -->
             <td>
                     <%if(state.equals("RUNNING") || state.equals("TIMEOUT")){%>
-                <!-- <li> -->
                 <a>无日志</a>
-                <!-- </li> -->
                     <%}else {%>
-                <!-- <li> -->
                 <a target="_blank" href="attempts.do?id=<%=dto.getAttemptID()%>&action=view-log">日志</a>
-                <!-- </li> -->
                     <%}%>
-                <!-- </ul>
-            </div> -->
 
         </tr>
         <% }
@@ -234,6 +246,8 @@
         <tr id="<%=dto.getAttemptID()%>">
             <td><%=dto.getTaskID()%>
             </td>
+            <td><%=taskDTO.getName()%>
+            </td>
             <%if (dto.getStartTime() != null) {%>
             <td><%=formatter.format(dto.getStartTime())%>
             </td>
@@ -252,19 +266,12 @@
             <%} else {%>
             <td>NULL</td>
             <%}%>
-            <!-- <td><%=dto.getExecHost()%></td> -->
             <td>
                     <%if(state.equals("RUNNING") || state.equals("TIMEOUT")){%>
-                <!-- <li> -->
                 <a>无日志</a>
-                <!-- </li> -->
                     <%}else {%>
-                <!-- <li> -->
                 <a target="_blank" href="attempts.do?id=<%=dto.getAttemptID()%>&action=view-log">日志</a>
-                <!-- </li> -->
                     <%}%>
-                <!-- </ul>
-            </div> -->
 
         </tr>
         <% }
@@ -282,7 +289,8 @@
            class="table table-striped table-format table-hover" id="timeout">
         <thead>
         <tr>
-            <th>ID</th>
+            <th>任务ID</th>
+            <th>任务名称</th>
             <th>实际启动时间</th>
             <th>实际结束时间</th>
             <th>预计调度时间</th>
@@ -296,18 +304,26 @@
 
             for (AttemptDTO dto : attempts) {
                 String state = dto.getStatus();
-                //  cr.setAttribute("task_id",dto.getTaskID());
-                //  ITaskResource taskResource = cr.wrap(ITaskResource.class);
-                //  TaskDTO taskDTO =taskResource.retrieve();
+                ClientResource crTask = new ClientResource(host + "task" + "?task_id=" + dto.getTaskID());
+                crTask.setAttribute("task_id", dto.getTaskID());
+                ITasksResource taskResource = crTask.wrap(ITasksResource.class);
+                List<TaskDTO> taskDTOList = taskResource.retrieve();
+                TaskDTO taskDTO = new TaskDTO();
+                for (TaskDTO task : taskDTOList) {
+                    if (task.getTaskid().equals(dto.getTaskID())) {
+                        taskDTO = task;
+                    }
+                }
+
                 if (time != null) {
                     String startTime = formatter.format(dto.getStartTime());
                     String endTime = formatter.format(dto.getEndTime());
-                    if (state.equals("TIMEOUT") && (taskTime != null && startTime.compareTo(taskTime) >= 0 || endTime.compareTo(taskTime) > 0)) {
-
-
+                    if (state.equals("TIMEOUT") && ( startTime.compareTo(taskTime) >= 0 || endTime.compareTo(taskTime) >= 0)) {
         %>
         <tr id="<%=dto.getAttemptID()%>">
             <td><%=dto.getTaskID()%>
+            </td>
+            <td><%=taskDTO.getName()%>
             </td>
             <%if (dto.getStartTime() != null) {%>
             <td><%=formatter.format(dto.getStartTime())%>
@@ -350,6 +366,8 @@
         %>
         <tr id="<%=dto.getAttemptID()%>">
             <td><%=dto.getTaskID()%>
+            </td>
+            <td><%=taskDTO.getName()%>
             </td>
             <%if (dto.getStartTime() != null) {%>
             <td><%=formatter.format(dto.getStartTime())%>
