@@ -52,10 +52,7 @@
         if (countTotal == null)
             countTotal = 0;
     %>
-    <div class="time_inal">
-        <a href="monitor.jsp?id=1&taskdate＝<%=df.format(new Date(time.getTime() - (countTotal+1)*hourTime))    %>">[-1h] </a>
-        <a href="monitor.jsp?id=24&taskdate＝<%=df.format(new Date(new Date().getTime() -hourTime))    %>">[当天] </a>
-    </div>
+
 </ul>
 
 
@@ -106,6 +103,7 @@
             }
 
 
+
             cr = new ClientResource(url);
             cr.setRequestEntityBuffering(true);
             IAttemptsResource resource = cr.wrap(IAttemptsResource.class);
@@ -114,19 +112,14 @@
 
 
             for (AttemptDTO dto : attempts) {
+                String startTime = formatter.format(dto.getStartTime());
+                String endTime = formatter.format(dto.getEndTime());
                 String state = dto.getStatus();
-                if (state.equals("RUNNING")) {
-                    ClientResource crTask = new ClientResource(host + "task" + "?task_id=" + dto.getTaskID());
-                    crTask.setAttribute("task_id", dto.getTaskID());
-                    ITasksResource taskResource = crTask.wrap(ITasksResource.class);
-                    List<TaskDTO> taskDTOList = taskResource.retrieve();
-                    TaskDTO taskDTO = new TaskDTO();
-                    for (TaskDTO task : taskDTOList) {
-                        if (task.getTaskid().equals(dto.getTaskID())) {
-                            taskDTO = task;
-                        }
+                if (state.equals("RUNNING")&& (startTime.compareTo(now) <=0 &&(endTime.isEmpty()|| endTime.compareTo(now) >= 0))) {
+                    ClientResource crTask = new ClientResource(host + "task" + "/" + dto.getTaskID());
+                    ITaskResource taskResource = crTask.wrap(ITaskResource.class);
+                    TaskDTO taskDTO = taskResource.retrieve();
 
-                    }
 
 
         %>
@@ -166,8 +159,14 @@
         </tbody>
     </table>
 </ul>
+<div class="time_inal">
+
+    <a href="monitor.jsp?id=1&taskdate＝<%=df.format(new Date(time.getTime() - (countTotal+1)*hourTime))    %>">[-1h]的时间区间[<%=formatter.format(new Date(time.getTime() - (countTotal+1)*hourTime))%>~<%=formatter.format(new Date(time.getTime()- countTotal*hourTime))%>] </a>
+    |<a href="monitor.jsp?id=24&taskdate＝<%=df.format(new Date(new Date().getTime() -24*hourTime))    %>">[当天]的时间区间[<%=formatter.format(new Date(new Date().getTime() -24*hourTime))%>~<%=formatter.format(new Date())%>] </a>
+</div>
 <ul class="fail-tag">
     <li><a>失败的任务 <span class="label label-important">FAILED</span></a></li>
+
 </ul>
 
 <ul class="breadcrumb">
@@ -188,16 +187,10 @@
         <%
             for (AttemptDTO dto : attempts) {
                 String state = dto.getStatus();
-                ClientResource crTask = new ClientResource(host + "task" + "?task_id=" + dto.getTaskID());
-                ITasksResource taskResource = crTask.wrap(ITasksResource.class);
-                List<TaskDTO> taskDTOList = taskResource.retrieve();
-                TaskDTO taskDTO = new TaskDTO();
-                for (TaskDTO task : taskDTOList) {
-                    if (task.getTaskid().equals(dto.getTaskID())) {
-                        taskDTO = task;
-                    }
+                ClientResource crTask = new ClientResource(host + "task" + "/" + dto.getTaskID());
+                ITaskResource taskResource = crTask.wrap(ITaskResource.class);
+                TaskDTO taskDTO = taskResource.retrieve();
 
-                }
                 if (taskTime != null) {
                     String startTime = formatter.format(dto.getStartTime());
                     String endTime = formatter.format(dto.getEndTime());
@@ -281,6 +274,7 @@
         </tbody>
     </table>
 </ul>
+
 <ul class="timeout-tag">
     <li><a>超时的任务<span class="label label-important">TIMEOUT</span></a></li>
 </ul>
@@ -304,16 +298,9 @@
 
             for (AttemptDTO dto : attempts) {
                 String state = dto.getStatus();
-                ClientResource crTask = new ClientResource(host + "task" + "?task_id=" + dto.getTaskID());
-                crTask.setAttribute("task_id", dto.getTaskID());
-                ITasksResource taskResource = crTask.wrap(ITasksResource.class);
-                List<TaskDTO> taskDTOList = taskResource.retrieve();
-                TaskDTO taskDTO = new TaskDTO();
-                for (TaskDTO task : taskDTOList) {
-                    if (task.getTaskid().equals(dto.getTaskID())) {
-                        taskDTO = task;
-                    }
-                }
+                ClientResource crTask = new ClientResource(host + "task" + "/" + dto.getTaskID());
+                ITaskResource taskResource = crTask.wrap(ITaskResource.class);
+                TaskDTO taskDTO = taskResource.retrieve();
 
                 if (time != null) {
                     String startTime = formatter.format(dto.getStartTime());

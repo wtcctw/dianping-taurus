@@ -3,6 +3,7 @@ package com.dp.bigdata.taurus.restlet.resource;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
+import org.restlet.resource.Options;
 import org.restlet.resource.Post;
 
 import com.dp.bigdata.taurus.restlet.shared.TaskDTO;

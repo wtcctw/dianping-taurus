@@ -84,12 +84,14 @@
 							</button>
 							<ul class="dropdown-menu"> -->
                             	<%if(state.equals("RUNNING") || state.equals("TIMEOUT")){%>
-								<!-- <li> -->
-									<a href="#confirm" onClick="action($(this).parents('tr').attr('id'))">Kill</a>
+								<!-- <li>
+									<a href="#confirm" onClick="action($(this).parents('tr').attr('id'))">Kill</a>-->
+                        <a target="_blank" href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
 								<!-- </li> -->
                                 <%}else {%>
-								<!-- <li> -->
-									<a target="_blank" href="attempts.do?id=<%=dto.getAttemptID()%>&action=view-log">日志</a>
+								<!-- <li>
+									<a target="_blank" href="attempts.do?id=<%=dto.getAttemptID()%>&action=view-log">日志</a> -->
+                        <a target="_blank" href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
 								<!-- </li> -->
                                 <%}%>
 							<!-- </ul>
@@ -118,5 +120,6 @@
 	<script type="text/javascript" charset="utf-8" language="javascript" src="js/jquery.dataTables.js"></script>
 	<script type="text/javascript" charset="utf-8" language="javascript" src="js/DT_bootstrap.js"></script>
     <script type="text/javascript" charset="utf-8" language="javascript" src="js/attempt.js"></script>
+
 </body>
 </html>

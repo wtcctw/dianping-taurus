@@ -12,7 +12,12 @@
 		<param-name>RESTLET_SERVER</param-name>
 		<param-value>http://localhost:8080/api/</param-value>
 	</context-param>
-	<context-param>
+    <context-param>
+        <param-name>AGENT_SERVER_PORT</param-name>   <!-- agent 的服务端口号-->
+        <param-value>8278</param-value>
+    </context-param>
+
+    <context-param>
 		<param-name>XSL_UPLOAD_TMP_DIR</param-name>
 		<param-value>/tmp/</param-value>
 	</context-param>

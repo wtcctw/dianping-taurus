@@ -6,6 +6,10 @@ import java.util.Date;
 import com.dp.bigdata.taurus.core.TaskStatus;
 import com.dp.bigdata.taurus.generated.module.AlertRule;
 import com.dp.bigdata.taurus.generated.module.Task;
+import org.json.JSONObject;
+
+
+import javax.xml.bind.annotation.XmlRootElement;
 
 public class TaskDTO implements Serializable {
 
@@ -378,5 +382,42 @@ public class TaskDTO implements Serializable {
 	public void setAppName(String appName) {
 	   this.appName = appName;
    }
+
+    @Override
+    public String toString() {
+        return "TaskDTO{" +
+                "taskid='" + taskid + '\'' +
+                ", name='" + name + '\'' +
+                ", appName='" + appName + '\'' +
+                ", creator='" + creator + '\'' +
+                ", dependencyexpr='" + dependencyexpr + '\'' +
+                ", addtime=" + addtime +
+                ", lastscheduletime=" + lastscheduletime +
+                ", updatetime=" + updatetime +
+                ", crontab='" + crontab + '\'' +
+                ", status='" + status + '\'' +
+                ", isAutoKill=" + isAutoKill +
+                ", proxyuser='" + proxyuser + '\'' +
+                ", waittimeout=" + waittimeout +
+                ", executiontimeout=" + executiontimeout +
+                ", isautoretry=" + isautoretry +
+                ", filename='" + filename + '\'' +
+                ", retrytimes=" + retrytimes +
+                ", command='" + command + '\'' +
+                ", poolid=" + poolid +
+                ", hostname='" + hostname + '\'' +
+                ", type='" + type + '\'' +
+                ", description='" + description + '\'' +
+                ", ruleID=" + ruleID +
+                ", hassms=" + hassms +
+                ", hasmail=" + hasmail +
+                ", userid='" + userid + '\'' +
+                ", groupid='" + groupid + '\'' +
+                ", conditions='" + conditions + '\'' +
+                ", mainClass='" + mainClass + '\'' +
+                ", taskUrl='" + taskUrl + '\'' +
+                ", hadoopName='" + hadoopName + '\'' +
+                '}';
+    }
 
 }

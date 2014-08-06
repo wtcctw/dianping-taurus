@@ -73,7 +73,7 @@ public class TaskHelper {
 		try {
 			SecurityUtil.login(conf, "dp.hdfsclinet.keytab.file", "dp.hdfsclinet.kerberos.principal");
 		} catch (IOException e) {
-			throw new RuntimeException(e.getMessage(), e);
+//			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 
