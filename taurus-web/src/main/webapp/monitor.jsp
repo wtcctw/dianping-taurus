@@ -150,7 +150,7 @@
                     <%if(state.equals("RUNNING") || state.equals("TIMEOUT")){%>
                 <a>无日志</a>
                     <%}else {%>
-                <a target="_blank" href="attempts.do?id=<%=dto.getAttemptID()%>&action=view-log">日志</a>
+                <a target="_blank" href="viewlog.jsp.do?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
                     <%}%>
 
         </tr>
@@ -226,7 +226,7 @@
                     <%if(state.equals("RUNNING") || state.equals("TIMEOUT")){%>
                 <a>无日志</a>
                     <%}else {%>
-                <a target="_blank" href="attempts.do?id=<%=dto.getAttemptID()%>&action=view-log">日志</a>
+                        <a target="_blank" href="viewlog.jsp.do?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
                     <%}%>
 
         </tr>
@@ -263,7 +263,7 @@
                     <%if(state.equals("RUNNING") || state.equals("TIMEOUT")){%>
                 <a>无日志</a>
                     <%}else {%>
-                <a target="_blank" href="attempts.do?id=<%=dto.getAttemptID()%>&action=view-log">日志</a>
+                       <a target="_blank" href="viewlog.jsp.do?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
                     <%}%>
 
         </tr>
@@ -338,7 +338,7 @@
                 <!-- </li> -->
                     <%}else {%>
                 <!-- <li> -->
-                <a target="_blank" href="attempts.do?id=<%=dto.getAttemptID()%>&action=view-log">日志</a>
+                        <a target="_blank" href="viewlog.jsp.do?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
                 <!-- </li> -->
                     <%}%>
                 <!-- </ul>
@@ -382,7 +382,7 @@
                 <!-- </li> -->
                     <%}else {%>
                 <!-- <li> -->
-                <a target="_blank" href="attempts.do?id=<%=dto.getAttemptID()%>&action=view-log">日志</a>
+                        <a target="_blank" href="viewlog.jsp.do?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
                 <!-- </li> -->
                     <%}%>
                 <!-- </ul>
