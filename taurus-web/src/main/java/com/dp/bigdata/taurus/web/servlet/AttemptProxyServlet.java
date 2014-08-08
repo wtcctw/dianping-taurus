@@ -37,6 +37,7 @@ public class AttemptProxyServlet extends HttpServlet {
     private static final String RUNLOG = "runlog";
     private static final String ISEND = "isend";
     private static final String STATUS = "status";
+    private static final String LOG = "view-log";
 
     private String RESTLET_URL_BASE;
     private String ERROR_PAGE;
@@ -69,6 +70,20 @@ public class AttemptProxyServlet extends HttpServlet {
         if (action.equals(KILL)) {
             attemptResource.kill();
             response.setStatus(attemptCr.getStatus().getCode());
+        }else if (action.equals(LOG)) {
+            response.setContentType("text/html;charset=utf-8");
+            try {
+                Representation rep = attemptCr.get(MediaType.TEXT_HTML);
+                if (attemptCr.getStatus().getCode() == 200) {
+                    OutputStream output = response.getOutputStream();
+                    rep.write(output);
+                    output.close();
+                } else {
+                    getServletContext().getRequestDispatcher(ERROR_PAGE).forward(request, response);
+                }
+            } catch (Exception e) {
+                getServletContext().getRequestDispatcher(ERROR_PAGE).forward(request, response);
+            }
         } else if (action.equals(RUNLOG)) {
 
             String contentLenStr;                                   //从agent取来的日志长度（String的）

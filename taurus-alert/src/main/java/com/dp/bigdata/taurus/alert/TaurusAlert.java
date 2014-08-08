@@ -203,9 +203,8 @@ public class TaurusAlert {
 			sbMailContent.append("</tr>");
 			sbMailContent.append("<tr>");
 			sbMailContent.append("<td>日志查看</td><td>"
-					+ "http://taurus.dp/viewlog.jsp?id="
-					+ attempt.getAttemptid() + "&status="
-                    + attempt.getStatus() + "</td>");
+					+ "http://taurus.dp/attempts.do?id="
+					+ attempt.getAttemptid() + "&action=view-log</td>");
 			sbMailContent.append("</tr>");
 			sbMailContent.append("</table>");
 
