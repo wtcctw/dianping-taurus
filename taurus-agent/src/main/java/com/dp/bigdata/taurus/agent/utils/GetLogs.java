@@ -50,7 +50,12 @@ public class GetLogs extends ServerResource implements IGetLogs {
         } else {
 
             final RandomAccessFile logFile = new RandomAccessFile(logFilePath, "rw");
-
+            long fileLength = logFile.length();
+            double fileSize = (double)fileLength / 1024 / 1024;
+            if (fileSize > 1)
+            {
+                logFile.seek(fileLength- 1024 * 1024);              //如果文件大于1MB 则只显示文件最后的1MB数据
+            }
             while ((tmp = logFile.readLine()) != null) {
                 logStr += tmp + "\n";
             }
