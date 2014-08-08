@@ -136,17 +136,18 @@ public class AttemptProxyServlet extends HttpServlet {
                         url = "http://" + hostIp + ":" + AGENT_PORT
                                 + "/api/getlog/"
                                 + date
-                                + ":" + attemptID
-                                + ":" + lastTimeFileSize
-                                + ":NORMAL"
-                                + ":" + queryType;
+                                + "/" + attemptID
+                                + "/" + lastTimeFileSize
+                                + "/NORMAL"
+                                + "/" + queryType;
                     } else {                                                        //增量获取日志
                         url = "http://" + hostIp + ":" + AGENT_PORT
                                 + "/api/getlog/"
                                 + date
-                                + ":" + attemptID
-                                + ":" + lastTimeFileSize
-                                + ":INC" + ":" + queryType;
+                                + "/" + attemptID
+                                + "/" + lastTimeFileSize
+                                + "/INC"
+                                + "/" + queryType;
 
                         acceptContentWay = true;
                     }

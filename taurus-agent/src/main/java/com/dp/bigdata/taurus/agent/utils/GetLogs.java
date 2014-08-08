@@ -22,15 +22,16 @@ public class GetLogs extends ServerResource implements IGetLogs {
     public String retrieve() throws IOException {
 
         String logStr = "";                                  //返回的日志结果
-        String logFilePath = "";
-        String log_path = (String) getRequestAttributes().get("log_path");
-        String[] datas = log_path.split(":");               //客户端发来的路径由date:attemptID:status构成，在这里分离
-        String date = datas[0];
-        String attemptID = datas[1];
-        String posSize = datas[2];
-        String flag = datas[3];                 //这个主要是标志当web刷新时，任务还在执行，但是等请求的时候，任务已经结束的时间点
-        String queryType = datas[4];
-        long lastTimeFileSize = Long.parseLong(posSize);
+        String logFilePath;
+
+        String date = (String) getRequestAttributes().get("date");               //日志日期
+        String attemptID = (String) getRequestAttributes().get("attemptId");
+        String fileOffset = (String) getRequestAttributes().get("file_offset");  //文件偏移量
+        String flag = (String) getRequestAttributes().get("flag");               //这个主要是标志当web刷新时，任务还在执行，但是等请求的时候，任务已经结束的时间点
+        String queryType = (String) getRequestAttributes().get("query_type");    //区分是log，还是error log
+
+        long lastTimeFileSize = Long.parseLong(fileOffset);
+
         if (queryType.equals("log")){
             logFilePath = logPath + FILE_SEPRATOR + date + FILE_SEPRATOR + attemptID + ".log";
         }else{

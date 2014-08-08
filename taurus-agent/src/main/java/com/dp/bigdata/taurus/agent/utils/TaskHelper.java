@@ -43,6 +43,8 @@ public class TaskHelper {
 
 	private final static int BUFFER_SIZE = 1024 * 1024;
 
+	private final static String HDFS_LOG_PATH = AgentEnvValue.getHdfsValue(AgentEnvValue.HDFS_HOST, "")
+	      + "/user/workcron/taurus/logs/";
 
 	private final static String LOG_HEAD = "<html><head>    <meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">    <title>log</title>"
 	      + "<style type=\"text/css\"></style><style>.stderr {background-color: #f5ebeb;}.stdout {background-color: #f5ebeb;}"
@@ -71,7 +73,7 @@ public class TaskHelper {
 		try {
 			SecurityUtil.login(conf, "dp.hdfsclinet.keytab.file", "dp.hdfsclinet.kerberos.principal");
 		} catch (IOException e) {
-//			throw new RuntimeException(e.getMessage(), e);
+			throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 
@@ -104,6 +106,7 @@ public class TaskHelper {
 		reader.close();
 		writer.write(LOG_END);
 		writer.close();
+		writeFileToHdfs(targetFile, HDFS_LOG_PATH + "/" + fileName);
 	}
 
 	public void deployTask(String fileName, String localFileName) throws FileNotFoundException, IOException,
@@ -183,7 +186,7 @@ public class TaskHelper {
 			writer.write(line + HTML_LINE_SPLITTER);
 		}
 	}
-    @SuppressWarnings("unused")
+
 	private void writeFileToHdfs(String srcFile, String destFile) throws IOException {
 		File file = new File(srcFile);
 		if (!file.exists()) {
