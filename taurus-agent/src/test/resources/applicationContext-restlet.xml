@@ -24,8 +24,8 @@
 	<!-- Singleton instance of RESTful Resource -->
 	<bean name="/api/getlog/{log_path}" id="getLogs" autowire="byName" scope="prototype"
 		class="com.dp.bigdata.taurus.agent.utils.GetLogs" />
-    <bean name="/api/geterrorlog/{log_path}" id="getErrorLogs" autowire="byName" scope="prototype"
-          class="com.dp.bigdata.taurus.agent.utils.GetErrorLogs" />
+    <bean name="/api/isend/{attemptId}" id="isEnd" autowire="byName" scope="prototype"
+          class="com.dp.bigdata.taurus.agent.utils.LogFileEnd" />
 
 </beans>
 

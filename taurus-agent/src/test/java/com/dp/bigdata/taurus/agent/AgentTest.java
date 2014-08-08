@@ -14,6 +14,7 @@ public class AgentTest {
         ApplicationContext context = new FileSystemXmlApplicationContext("classpath:applicationContext-restlet.xml");
         Component restlet = (Component) context.getBean("component");
         try {
+           // new ClearLogsTimerManager();
             restlet.start();
             as.start();
             System.out.println(String.format("[%s] [INFO] Press any key to stop server ... ", 1));

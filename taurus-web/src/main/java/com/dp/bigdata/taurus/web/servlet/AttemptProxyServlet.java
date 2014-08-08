@@ -23,7 +23,7 @@ import com.dp.bigdata.taurus.restlet.resource.IAttemptResource;
 
 /**
  * AttemptProxyServlet
- * 
+ *
  * @author damon.zhu
  */
 public class AttemptProxyServlet extends HttpServlet {
@@ -34,12 +34,9 @@ public class AttemptProxyServlet extends HttpServlet {
     private static final long serialVersionUID = -2924647981910768516L;
 
     private static final String KILL = "kill";
-    private static final String LOG = "view-log";
     private static final String RUNLOG = "runlog";
-    private static final String ERRORLOG = "runerrorlog";
-
-    private static int indexOfLog=0;
-    private static int indexOfErrorLog=0;
+    private static final String ISEND = "isend";
+    private static final String STATUS = "status";
 
     private String RESTLET_URL_BASE;
     private String ERROR_PAGE;
@@ -65,7 +62,6 @@ public class AttemptProxyServlet extends HttpServlet {
 
         String attemptID = request.getParameter("id");
         String action = request.getParameter("action") == null ? "" : request.getParameter("action").toLowerCase();
-        String status = request.getParameter("status");
 
         ClientResource attemptCr = new ClientResource(RESTLET_URL_BASE + "attempt/" + attemptID);
         IAttemptResource attemptResource = attemptCr.wrap(IAttemptResource.class);
@@ -73,86 +69,55 @@ public class AttemptProxyServlet extends HttpServlet {
         if (action.equals(KILL)) {
             attemptResource.kill();
             response.setStatus(attemptCr.getStatus().getCode());
-        } /*else if (action.equals(LOG)) {
-            response.setContentType("text/html;charset=utf-8");
+        } else if (action.equals(RUNLOG)) {
+
+            String contentLenStr;                                   //从agent取来的日志长度（String的）
+            String hostIp = "";                                     //agent 主机ip
+            String tureStatus = "";                                 //任务的真实状态 （从参数获得的可能会过期）
+            String fileSizeAttribute = "";                          //区别是log的文件偏移属性 还是error-log的文件偏移
+
+            long lastTimeFileSize;                                  //文件偏移
+
+            String queryType = request.getParameter("querytype");   //区分js请求是log，还是error log
+
+            Date endTime = null;                                    //这个是取该任务的最后执行日期的日志，如果是RUNNING，endTime为空，则取当天日志
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            ClientResource attemptLogCr = new ClientResource(RESTLET_URL_BASE + "attempt");
+
             try {
-                Representation rep = attemptCr.get(MediaType.TEXT_HTML);
-                if (attemptCr.getStatus().getCode() == 200) {
-                    OutputStream output = response.getOutputStream();
-                    rep.write(output);
-                    output.close();
+
+                if (queryType.equals("log")) {
+                    fileSizeAttribute = "lastTimeFileSize";
+                    contentLenStr = (String) request.getSession().getAttribute(fileSizeAttribute);
                 } else {
-                    //getServletContext().getRequestDispatcher(ERROR_PAGE).forward(request, response);
+                    fileSizeAttribute = "errorLastTimeFileSize";
+                    contentLenStr = (String) request.getSession().getAttribute(fileSizeAttribute);
                 }
-            } catch (Exception e) {
-                getServletContext().getRequestDispatcher(ERROR_PAGE).forward(request, response);
-            }
-        }*/ else if (action.equals(LOG)) {
-            response.setContentType("text/html;charset=utf-8");
-            try {
-                    String host = "";
-                    Date endTime = null;
-                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
-                    ClientResource attemptLogCr = new ClientResource(RESTLET_URL_BASE + "attempt");
-
-                    IAttemptsResource attemptLogResource = attemptLogCr.wrap(IAttemptsResource.class);
-                    List<AttemptDTO> attemptList = attemptLogResource.retrieve();
-
-                    for (AttemptDTO dto : attemptList) {
-                        if (dto.getAttemptID().equals(attemptID)) {
-                            host = dto.getExecHost();
-                            endTime = dto.getEndTime();
-                            break;
-                        }
-                    }
-
-                    String date;
-                    ClientResource getLogCr = null;
-
-                    if (endTime == null) {
-                        date = format.format(new Date());
-                    } else {
-                        date = format.format(endTime);
-                    }
-
-                    if (host.isEmpty()) {
-                        getServletContext().getRequestDispatcher(ERROR_PAGE).forward(request, response);
-                    } else {
-                        String url = "http://" + host +":"+ AGENT_PORT + "/api/getlog/" + date + ":" + attemptID + ":" + status;
-                        getLogCr = new ClientResource(url);
-
-                    }
-
-                    Representation repLog = getLogCr.get(MediaType.TEXT_HTML);
-                    OutputStream output = response.getOutputStream();
-                    repLog.write(output);
-                    output.close();
-            } catch (Exception e) {
-                getServletContext().getRequestDispatcher(ERROR_PAGE).forward(request, response);
-            }
-
-        }else if (action.equals(ERRORLOG)){
-            try {
-                String host = "";
-                Date endTime = null;
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-
-                ClientResource attemptLogCr = new ClientResource(RESTLET_URL_BASE + "attempt");
+                if (contentLenStr == null) {
+                    lastTimeFileSize = 0;
+                } else {
+                    lastTimeFileSize = Long.parseLong(contentLenStr);
+                }
 
                 IAttemptsResource attemptLogResource = attemptLogCr.wrap(IAttemptsResource.class);
                 List<AttemptDTO> attemptList = attemptLogResource.retrieve();
 
                 for (AttemptDTO dto : attemptList) {
                     if (dto.getAttemptID().equals(attemptID)) {
-                        host = dto.getExecHost();
+                        hostIp = dto.getExecHost();
                         endTime = dto.getEndTime();
+                        tureStatus = dto.getStatus();
                         break;
                     }
                 }
 
-                String date;
-                ClientResource getLogCr = null;
+                String date;                                  //取哪天的日志
+                String isEnd;                                 //标记任务是否执行完成
+                boolean acceptContentWay = false;             //false :NORMAL 全量接受；true：INC 增量接受
+
+                ClientResource getLogCr;
+                ClientResource getIsEndCr = null;
 
                 if (endTime == null) {
                     date = format.format(new Date());
@@ -160,58 +125,81 @@ public class AttemptProxyServlet extends HttpServlet {
                     date = format.format(endTime);
                 }
 
-                if (host.isEmpty()) {
-
+                if (hostIp.isEmpty()) {
                     OutputStream output = response.getOutputStream();
-
                     output.close();
                 } else {
-                    String url = "http://" + host +":"+ AGENT_PORT + "/api/geterrorlog/" + date + ":" + attemptID + ":" + status;
+
+                    String url = "";                //请求agent restlet的URI
+
+                    if (lastTimeFileSize == 0 && !tureStatus.equals("RUNNING")) {    //如果任务真实状态不是运行中的，并且 文件偏移为0 ，说明是历史任务，直接全量获取日志
+                        url = "http://" + hostIp + ":" + AGENT_PORT
+                                + "/api/getlog/"
+                                + date
+                                + ":" + attemptID
+                                + ":" + lastTimeFileSize
+                                + ":NORMAL"
+                                + ":" + queryType;
+                    } else {                                                        //增量获取日志
+                        url = "http://" + hostIp + ":" + AGENT_PORT
+                                + "/api/getlog/"
+                                + date
+                                + ":" + attemptID
+                                + ":" + lastTimeFileSize
+                                + ":INC" + ":" + queryType;
+
+                        acceptContentWay = true;
+                    }
 
                     getLogCr = new ClientResource(url);
+                    String context = getLogCr.get().getText();
 
+                    if (context != null) {
+                        lastTimeFileSize += context.length();
+                    }
+
+                    String isEndUrl = "http://" + hostIp
+                            + ":" + AGENT_PORT
+                            + "/api/isend/" + attemptID;
+
+                    getIsEndCr = new ClientResource(isEndUrl);
+                    isEnd = getIsEndCr.get().getText();
+
+                    if (acceptContentWay && isEnd.equals("false")) {
+                        request.getSession().setAttribute(fileSizeAttribute, ((Long) lastTimeFileSize).toString());
+                    } else if (isEnd.equals("true")) {
+                        request.getSession().setAttribute(fileSizeAttribute, "0");
+                    }
+
+                    String retStr;                                              //格式化日志 以便在web显示是换行的
+                    String logStr = context;
+                    OutputStream output = response.getOutputStream();
+
+                    if (logStr == null) {                                     //时间间隔短，日志尚未生成可能获得null
+                        retStr = " ";
+                    } else {
+                        retStr = logStr.replace("\n", "<br>");
+                    }
+
+                    output.write(retStr.getBytes());
+                    output.close();
                 }
-
-                Representation repLog = getLogCr.get(MediaType.TEXT_HTML);
-               /* String retunStr = repLog.getText();
-                String logStr = retunStr.substring(indexOfLog+1,retunStr.length());
-                indexOfLog =  retunStr.length();*/
-
-
-                OutputStream output = response.getOutputStream();
-                repLog.write(output);
-                output.close();
             } catch (Exception e) {
-                OutputStream output = response.getOutputStream();
-                output.close();
+                System.out.println("!!!!!!!error:"+e.getStackTrace());
             }
-        }else if(action.equals(RUNLOG)){
-            try {
+        } else if (action.equals(ISEND)) {
             String host = "";
-            Date endTime = null;
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-
             ClientResource attemptLogCr = new ClientResource(RESTLET_URL_BASE + "attempt");
-
             IAttemptsResource attemptLogResource = attemptLogCr.wrap(IAttemptsResource.class);
             List<AttemptDTO> attemptList = attemptLogResource.retrieve();
 
             for (AttemptDTO dto : attemptList) {
                 if (dto.getAttemptID().equals(attemptID)) {
                     host = dto.getExecHost();
-                    endTime = dto.getEndTime();
                     break;
                 }
             }
-
-            String date;
             ClientResource getLogCr = null;
-
-            if (endTime == null) {
-                date = format.format(new Date());
-            } else {
-                date = format.format(endTime);
-            }
 
             if (host.isEmpty()) {
 
@@ -219,23 +207,33 @@ public class AttemptProxyServlet extends HttpServlet {
 
                 output.close();
             } else {
-                String url = "http://" + host +":"+ AGENT_PORT + "/api/getlog/" + date + ":" + attemptID + ":" + status;
+                String url = "http://" + host + ":" + AGENT_PORT + "/api/isend/" + attemptID;
 
                 getLogCr = new ClientResource(url);
 
             }
 
             Representation repLog = getLogCr.get(MediaType.TEXT_HTML);
-            //String retunStr = repLog.getText();
-          //  String logStr = retunStr.substring(indexOfErrorLog+1,retunStr.length());
-            //indexOfErrorLog =  repLog.getText().length();
             OutputStream output = response.getOutputStream();
             repLog.write(output);
             output.close();
-        } catch (Exception e) {
+        } else if (action.equals(STATUS)) {
+            String taskStatus = "";
+            ClientResource attemptLogCr = new ClientResource(RESTLET_URL_BASE + "attempt");
+            IAttemptsResource attemptLogResource = attemptLogCr.wrap(IAttemptsResource.class);
+            List<AttemptDTO> attemptList = attemptLogResource.retrieve();
+
+            for (AttemptDTO dto : attemptList) {
+                if (dto.getAttemptID().equals(attemptID)) {
+                    taskStatus = dto.getStatus();
+                    break;
+                }
+            }
+
             OutputStream output = response.getOutputStream();
+            output.write(taskStatus.getBytes());
             output.close();
         }
-        }
+
     }
 }

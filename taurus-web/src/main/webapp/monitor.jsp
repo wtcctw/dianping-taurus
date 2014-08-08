@@ -112,10 +112,26 @@
 
 
             for (AttemptDTO dto : attempts) {
-                String startTime = formatter.format(dto.getStartTime());
-                String endTime = formatter.format(dto.getEndTime());
+                Date startDate = dto.getStartTime();
+                String startTime;
+                if (startDate == null){
+                    startTime = null;
+                }else {
+                    startTime = formatter.format(startDate);
+                }
+
+                Date endDate = dto.getEndTime();
+                String endTime;
+                if (endDate == null)
+                {
+                    endTime=null;
+                }else{
+                    endTime = formatter.format(endDate);
+                }
+
+
                 String state = dto.getStatus();
-                if (state.equals("RUNNING")&& (startTime.compareTo(now) <=0 &&(endTime.isEmpty()|| endTime.compareTo(now) >= 0))) {
+                if (state.equals("RUNNING")&& (startTime.compareTo(now) <=0 &&(endTime == null|| endTime.compareTo(now) >= 0))) {
                     ClientResource crTask = new ClientResource(host + "task" + "/" + dto.getTaskID());
                     ITaskResource taskResource = crTask.wrap(ITaskResource.class);
                     TaskDTO taskDTO = taskResource.retrieve();
@@ -147,11 +163,9 @@
             <td>NULL</td>
             <%}%>
             <td>
-                    <%if(state.equals("RUNNING") || state.equals("TIMEOUT")){%>
-                <a>无日志</a>
-                    <%}else {%>
-                <a target="_blank" href="viewlog.jsp.do?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
-                    <%}%>
+            <td>
+                <a target="_blank" href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
+            </td>
 
         </tr>
         <% }
@@ -192,8 +206,22 @@
                 TaskDTO taskDTO = taskResource.retrieve();
 
                 if (taskTime != null) {
-                    String startTime = formatter.format(dto.getStartTime());
-                    String endTime = formatter.format(dto.getEndTime());
+                    Date startDate = dto.getStartTime();
+                    String startTime;
+                    if (startDate == null){
+                        startTime = null;
+                    }else {
+                        startTime = formatter.format(startDate);
+                    }
+
+                    Date endDate = dto.getEndTime();
+                    String endTime;
+                    if (endDate == null)
+                    {
+                        endTime=null;
+                    }else{
+                        endTime = formatter.format(endDate);
+                    }
 
                     if (state.equals("FAILED") && (startTime.compareTo(taskTime) >=0 || endTime.compareTo(taskTime) >= 0)) {
 
@@ -223,11 +251,9 @@
             <td>NULL</td>
             <%}%>
             <td>
-                    <%if(state.equals("RUNNING") || state.equals("TIMEOUT")){%>
-                <a>无日志</a>
-                    <%}else {%>
-                        <a target="_blank" href="viewlog.jsp.do?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
-                    <%}%>
+            <td>
+                <a target="_blank" href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
+            </td>
 
         </tr>
         <% }
@@ -260,11 +286,8 @@
             <td>NULL</td>
             <%}%>
             <td>
-                    <%if(state.equals("RUNNING") || state.equals("TIMEOUT")){%>
-                <a>无日志</a>
-                    <%}else {%>
-                       <a target="_blank" href="viewlog.jsp.do?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
-                    <%}%>
+               <a target="_blank" href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
+            </td>
 
         </tr>
         <% }
@@ -303,8 +326,22 @@
                 TaskDTO taskDTO = taskResource.retrieve();
 
                 if (time != null) {
-                    String startTime = formatter.format(dto.getStartTime());
-                    String endTime = formatter.format(dto.getEndTime());
+                    Date startDate = dto.getStartTime();
+                    String startTime;
+                    if (startDate == null){
+                        startTime = null;
+                    }else {
+                        startTime = formatter.format(startDate);
+                    }
+
+                    Date endDate = dto.getEndTime();
+                    String endTime;
+                    if (endDate == null)
+                    {
+                        endTime=null;
+                    }else{
+                        endTime = formatter.format(endDate);
+                    }
                     if (state.equals("TIMEOUT") && ( startTime.compareTo(taskTime) >= 0 || endTime.compareTo(taskTime) >= 0)) {
         %>
         <tr id="<%=dto.getAttemptID()%>">
@@ -330,19 +367,9 @@
             <%} else {%>
             <td>NULL</td>
             <%}%>
-            <!-- <td><%=dto.getExecHost()%></td> -->
             <td>
-                    <%if(state.equals("RUNNING") || state.equals("TIMEOUT")){%>
-                <!-- <li> -->
-                <a>无日志</a>
-                <!-- </li> -->
-                    <%}else {%>
-                <!-- <li> -->
-                        <a target="_blank" href="viewlog.jsp.do?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
-                <!-- </li> -->
-                    <%}%>
-                <!-- </ul>
-            </div> -->
+                <a target="_blank" href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
+            </td>
 
         </tr>
         <% }
@@ -376,17 +403,9 @@
             <%}%>
             <!-- <td><%=dto.getExecHost()%></td> -->
             <td>
-                    <%if(state.equals("RUNNING") || state.equals("TIMEOUT")){%>
-                <!-- <li> -->
-                <a>无日志</a>
-                <!-- </li> -->
-                    <%}else {%>
-                <!-- <li> -->
-                        <a target="_blank" href="viewlog.jsp.do?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
-                <!-- </li> -->
-                    <%}%>
-                <!-- </ul>
-            </div> -->
+            <td>
+                <a target="_blank" href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
+            </td>
 
         </tr>
         <% }
