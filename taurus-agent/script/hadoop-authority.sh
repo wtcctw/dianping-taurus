@@ -3,6 +3,7 @@
 # Discarded
 
 cd `dirname $0`
+export
 source ./agent-env.sh ./agent-env.sh
 sudo -u $1 -i "kinit -r 12l -k -t $homeDir/$1/.keytab $1@DIANPING.COM";
 if [ $? != 0 ] ; then

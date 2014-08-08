@@ -17,4 +17,5 @@ public interface IAttemptResource {
     @Delete
     public void kill();
 
+
 }

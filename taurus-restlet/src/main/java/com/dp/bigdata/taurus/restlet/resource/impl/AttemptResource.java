@@ -60,6 +60,7 @@ public class AttemptResource extends ServerResource implements IAttemptResource 
 
     }
 
+
     @Override
     @Get
     public FileRepresentation log() {

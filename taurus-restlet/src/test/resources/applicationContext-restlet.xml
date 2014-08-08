@@ -61,7 +61,8 @@
 	</bean>
 	<bean name="/api/hostip" id="hostIpResource" autowire="byName" scope="prototype"
 		class="com.dp.bigdata.taurus.restlet.resource.impl.HostIpResource" />
-			
+    <bean name="/api/isexist/{attempt_id}" id="isExistHDFS" autowire="byName"
+          scope="prototype" class="com.dp.bigdata.taurus.restlet.utils.IsExistInHDSF"/>
 	<!-- Core Service -->
 	<bean id="hdfsUtils" class="com.dp.bigdata.taurus.restlet.utils.DefaultHdfsUtils"
 		init-method="init" />

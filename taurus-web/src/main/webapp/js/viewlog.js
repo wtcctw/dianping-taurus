@@ -3,6 +3,7 @@ var status;
 var error_log_rtn;
 var log_rtn;
 var result;
+
 $(document).ready(function () {
     attemptID = GetQueryString("id"); //通过表达式获得传递参数
     status = get_task_status();
@@ -10,10 +11,6 @@ $(document).ready(function () {
 
 });
 
-function sleep(n) {
-    var start = new Date().getTime();
-    while(true)  if(new Date().getTime()-start > n) break;
-}
 function GetQueryString(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
     var r = window.location.search.substr(1).match(reg);
@@ -28,27 +25,32 @@ function fetch_errorLog() {
         clearInterval(error_log_rtn);
     }
     status = get_task_status();
-        $.ajax({
-            url : "attempts.do",
-            data : {
-                id : attemptID,
-                action : 'runlog',
-                querytype:'errorlog',
-                status:status
-            },
-            timeout : 1000000,
-            type : 'POST',
-            async:false,
-            error: function(){
-                $logContainer.text("无数据");
-            },
-            success: function (response) {
-                result = response.replace("\n","<br>")
-                $logContainer.append("<div class=\"terminal-like\">"+response+"</div>");
-                $logContainer.scrollTop($logContainer.get(0).scrollHeight);
-            }
 
-        });
+    $.ajax({
+        url : "attempts.do",
+        data : {
+            id : attemptID,
+            action : 'runlog',
+            querytype:'errorlog',
+            status:status
+        },
+        timeout : 1000000,
+        type : 'POST',
+        error: function(){
+            $logContainer.text("无数据");
+        },
+        success: function (response) {
+            result = response.replace("\n","<br>")
+
+            $logContainer.append("<div class=\"terminal-like\">"+response+"</div>");
+            $logContainer.scrollTop($logContainer.get(0).scrollHeight);
+            $(".loading").hide();
+        },
+        beforeSend:function(){//正在加载，显示“正在加载......”
+            $(".loading").show();
+        }
+
+    });
 
 
 
@@ -63,27 +65,33 @@ function fetch_Log() {
     }
 
     status = get_task_status();
-        $.ajax({
-            url: "attempts.do",
-            data: {
-                id: attemptID,
-                action: 'runlog',
-                querytype:'log',
-                status:status
-            },
-            timeout: 1000000,
-            type: 'POST',
-            async:false,
-            error: function () {
-                $logContainer.text("没有找到日志数据");
-            },
-            success: function (response) {
-                 result = response.replace("\n","<br>")
-                $logContainer.append("<div class=\"terminal-like\">"+response+"</div>");
-                $logContainer.scrollTop($logContainer.get(0).scrollHeight);
-            }
 
-        });
+    $.ajax({
+        url: "attempts.do",
+        data: {
+            id: attemptID,
+            action: 'runlog',
+            querytype:'log',
+            status:status
+        },
+        timeout: 1000000,
+        type: 'POST',
+        error: function () {
+            $logContainer.text("没有找到日志数据");
+        },
+        success: function (response) {
+
+            result = response.replace("\n","<br>");
+
+            $logContainer.append("<div class=\"terminal-like\">"+response+"</div>");
+            $logContainer.scrollTop($logContainer.get(0).scrollHeight);
+            $(".loading").hide();
+        },
+        beforeSend:function(){//正在加载，显示“正在加载......”
+            $(".loading").show();
+        }
+
+    });
 
 }
 
