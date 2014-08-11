@@ -26,44 +26,44 @@ import com.dp.bigdata.taurus.generated.module.TaskAttempt;
 @ContextConfiguration({ "classpath:applicationContext-test.xml" })
 public class HostMapperTest {
 
-	@Autowired
-	private HostMapper hostMapper;
-
-	@Autowired
-	private TaskAttemptMapper taskAttemptMapper;
+//	@Autowired
+//	private HostMapper hostMapper;
+//
+//	@Autowired
+//	private TaskAttemptMapper taskAttemptMapper;
 
 	// @Autowired
 	// private TaskMapper taskMapper;
 
 	@Test
 	public void insertHostData() {
-		Host record = hostMapper.selectByPrimaryKey("HADOOP");
-		String ip = record.getIp();
-		assertEquals("10.1.77.84", ip);
+//		Host record = hostMapper.selectByPrimaryKey("HADOOP");
+//		String ip = record.getIp();
+//		assertEquals("10.1.77.84", ip);
 	}
 	
 	@Test
 	public void selectHostData() {
-		List<Host> results = hostMapper.selectByExample(null);
-		assertEquals(1, results.size());
+//		List<Host> results = hostMapper.selectByExample(null);
+//		assertEquals(1, results.size());
 	}
 
 	protected void loadData() {
-		Host record = new Host();
-		record.setIp("10.1.77.84");
-		record.setName("HADOOP");
-		record.setPoolid(1);
-		hostMapper.insertSelective(record);
+//		Host record = new Host();
+//		record.setIp("10.1.77.84");
+//		record.setName("HADOOP");
+//		record.setPoolid(1);
+//		hostMapper.insertSelective(record);
 	}
 
 	@Test
 	public void insertTaskData() {
-		List<TaskAttempt> selectByGroupAndStatus = taskAttemptMapper
-				.selectByGroupAndStatus();
-
-		for(TaskAttempt at : selectByGroupAndStatus){
-			System.out.println(at.getTaskid() + " at " + at.getStarttime());
-			
-		}
+//		List<TaskAttempt> selectByGroupAndStatus = taskAttemptMapper
+//				.selectByGroupAndStatus();
+//
+//		for(TaskAttempt at : selectByGroupAndStatus){
+//			System.out.println(at.getTaskid() + " at " + at.getStarttime());
+//
+//		}
 	}
 }
