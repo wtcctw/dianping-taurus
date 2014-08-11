@@ -2,6 +2,7 @@ package com.dp.bigdata.taurus.web.servlet;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.ConnectException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -186,6 +187,7 @@ public class AttemptProxyServlet extends HttpServlet {
                         }
 
                         getLogCr = new ClientResource(url);
+
                         String context = getLogCr.get().getText();
 
                         if (context != null) {
@@ -220,6 +222,14 @@ public class AttemptProxyServlet extends HttpServlet {
                     }
                 }
             } catch (Exception e) {
+                String exceptMessage = e.getMessage();
+                if (exceptMessage.equals("Connection Error")){
+                    //说明agent端的restlet连不上：1.网络原因 .2agent 挂了
+                    String responseStr = "<font color=red>【服务异常】- -# agent 连接有问题，请联系管理员</font>";
+                    OutputStream output = response.getOutputStream();
+                    output.write(responseStr.getBytes());
+                    output.close();
+                }
                 System.out.println("!!!!!!!error:" + e.getStackTrace());
             }
 

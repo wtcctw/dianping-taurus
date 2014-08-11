@@ -1,5 +1,6 @@
 package com.dp.bigdata.taurus.agent;
 
+import com.dp.bigdata.taurus.agent.utils.ClearLogsTimerManager;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.restlet.Component;
@@ -14,7 +15,7 @@ public class AgentTest {
         ApplicationContext context = new FileSystemXmlApplicationContext("classpath:applicationContext-restlet.xml");
         Component restlet = (Component) context.getBean("component");
         try {
-           // new ClearLogsTimerManager();
+            new ClearLogsTimerManager();
             restlet.start();
             as.start();
             System.out.println(String.format("[%s] [INFO] Press any key to stop server ... ", 1));
