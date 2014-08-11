@@ -1,5 +1,6 @@
 package com.dp.bigdata.taurus.agent;
 
+import com.dp.bigdata.taurus.agent.utils.ClearLogsTimerManager;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.restlet.Component;
@@ -12,7 +13,7 @@ public class StartServer {
 		AgentServer as = injector.getInstance(AgentServer.class);
         ApplicationContext context = new FileSystemXmlApplicationContext("classpath:applicationContext-restlet.xml");
         Component restlet = (Component) context.getBean("component");
-       // new ClearLogsTimerManager();
+        new ClearLogsTimerManager();
         try {
             restlet.start();
             as.start();

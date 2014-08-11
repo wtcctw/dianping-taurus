@@ -14,7 +14,7 @@
 	</context-param>
     <context-param>
         <param-name>AGENT_SERVER_PORT</param-name>   <!-- agent 的服务端口号-->
-        <param-value>8278</param-value>
+        <param-value>8080</param-value>
     </context-param>
 
     <context-param>
