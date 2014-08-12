@@ -362,4 +362,12 @@
         from TaurusTaskAttempt where attemptid = #{attemptId}
     </select>
 
+    <select id="getAttemptByStatus" resultMap="BaseResultMap">
+
+        select
+         <include refid="Base_Column_List" />
+        from TaurusTaskAttempt
+       where status =#{status}
+    </select>
+
 </mapper>

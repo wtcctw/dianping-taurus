@@ -116,4 +116,16 @@ public class DefaultHdfsUtils implements HdfsUtils {
             throw e;
         }
     }
+
+    @Override
+    public boolean isExistFile(String srcFile) throws IOException, FileNotFoundException {
+        FileSystem fs = FileSystem.get(URI.create(srcFile), conf);
+        Path path = new Path(srcFile);
+        if (fs.exists(path)) {
+            fs.close();
+            return true;
+        }
+        fs.close();
+        return false;
+    }
 }

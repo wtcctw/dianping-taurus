@@ -35,7 +35,6 @@ import com.dp.bigdata.taurus.restlet.utils.HdfsUtils;
 import com.dp.bigdata.taurus.restlet.utils.RequestExtrator;
 import com.dp.bigdata.taurus.restlet.utils.TaskConverter;
 
-import javax.ws.rs.Produces;
 
 /**
  * Resource url : http://xxx.xxx/api/task/{task_id}

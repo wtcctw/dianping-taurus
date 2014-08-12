@@ -16,6 +16,7 @@ public class TaurusServer {
     public static final String ALL = "all";
 
     public static void main(String args[]) {
+        System.setProperty("org.restlet.engine.loggerFacadeClass", "org.restlet.ext.slf4j.Slf4jLoggerFacade");
         ApplicationContext context = new FileSystemXmlApplicationContext("classpath:applicationContext-core.xml",
                 "classpath:applicationContext-restlet.xml");
         Engine engine = (Engine) context.getBean("engine");

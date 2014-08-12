@@ -1,16 +1,21 @@
 package com.dp.bigdata.taurus.restlet.utils;
 
+import com.dp.bigdata.taurus.zookeeper.common.utils.ClassLoaderUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.security.SecurityUtil;
+import org.apache.hadoop.security.UserGroupInformation;
 import org.restlet.resource.ServerResource;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
+import java.util.Properties;
 
 /**
  * Created by mkirin on 14-8-8.
@@ -18,36 +23,28 @@ import java.net.URI;
 public class IsExistInHDSF extends ServerResource implements IExistInHDFS {
     @Autowired
     private FilePathManager pathManager;
-    private final Configuration conf = new Configuration();
+    @Autowired
+    private HdfsUtils hdfsUtils;
 
     @Override
-    public String isExistInHDFS() {
+    public String isExistInHDFS(){
         String attemptID = (String) getRequest().getAttributes().get("attempt_id");
         String logPath = pathManager.getRemoteLog(attemptID);
-        String localPath = pathManager.getLocalLogPath(attemptID);
-        File file = new File(localPath);
 
-
-        FileSystem fs;
-        FSDataInputStream hdfsInput;
+        boolean isexist = false;
         try {
-            FileOutputStream fos = new FileOutputStream(file);
-            fs = FileSystem.get(URI.create(logPath), conf);
-            hdfsInput = fs.open(new Path(logPath));
-            if(hdfsInput == null){
-                fos.close();
-                fs.close();
-                return "false";
-            }else{
-                hdfsInput.close();
-                fos.close();
-                fs.close();
+            isexist = hdfsUtils.isExistFile(logPath);
+        } catch (IOException e) {
+            System.out.println("==========exception message:"+e.getMessage());
+            System.out.println(e.getStackTrace().toString());
+            return "null";
+        }
+        if(isexist){
                 return "true";
+            }else{
+                return "false";
             }
 
 
-        } catch (IOException e) {
-            return "false";
-        }
     }
 }

@@ -574,4 +574,8 @@
         on a.taskid = b.taskid
         where  b.attemptid = #{attemptId}
     </select>
+
+    <select id="getTasks" resultMap="BaseResultMap" >
+        select * from TaurusTask
+    </select>
 </mapper>

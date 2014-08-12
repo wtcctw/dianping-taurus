@@ -8,6 +8,7 @@
     <link href="css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css">
     <link href="css/taurus.css" rel="stylesheet" type="text/css">
     <link rel="Shortcut Icon" href="img/icon.png" type="image/x-icon">
+    <link href="css/index.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" type="text/css" href="css/DT_bootstrap.css">
 </head>
 <body  data-spy="scroll">

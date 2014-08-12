@@ -68,8 +68,10 @@
           scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.GetTaskNameByAttemptId"/>
     <bean name="/api/getattemptbyid/{attempt_id}" id="getAttempt" autowire="byName"
           scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.GetAttemptById"/>
-
-
+    <bean name="/api/getattemptsbystatus/{status}" id="getAttempts" autowire="byName"
+          scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.GetAttemptsByStatus"/>
+    <bean name="/api/gettasks" id="getTasks" autowire="byName"
+          scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.GetTasks"/>
 		<!-- Core Service -->
 		<bean id="hdfsUtils" class="com.dp.bigdata.taurus.restlet.utils.DefaultHdfsUtils"
 			init-method="init" />

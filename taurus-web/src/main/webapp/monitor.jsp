@@ -35,6 +35,7 @@
 <%@ page import="org.restlet.data.Form" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.dp.bigdata.taurus.restlet.resource.*" %>
+<%@ page import="com.dp.bigdata.taurus.generated.module.Task" %>
 
 <div class="container" style="margin-top: 10px">
 <div id="alertContainer" class="container">
@@ -75,12 +76,15 @@
         <tbody>
         <%
 
+            ClientResource crTask = new ClientResource(host + "gettasks");
+            IGetTasks taskResource = crTask.wrap(IGetTasks.class);
+            ArrayList<Task> tasks= taskResource.retrieve();
 
             String id = request.getParameter("id");
             String taskTime = "";
 
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            String url = host + "attempt";
+            String url = host + "getattemptsbystatus/";
 
             String now = formatter.format(new Date());
             if (id == null) {
@@ -102,13 +106,11 @@
 
 
 
-            cr = new ClientResource(url);
-            cr.setRequestEntityBuffering(true);
-            IAttemptsResource resource = cr.wrap(IAttemptsResource.class);
-            cr.accept(MediaType.APPLICATION_XML);
+            cr = new ClientResource(url+6);
+            IGetAttemptsByStatus resource = cr.wrap(IGetAttemptsByStatus.class);
             ArrayList<AttemptDTO> attempts = resource.retrieve();
 
-
+            if (attempts !=null)
             for (AttemptDTO dto : attempts) {
                 Date startDate = dto.getStartTime();
                 String startTime;
@@ -130,9 +132,13 @@
 
                 String state = dto.getStatus();
                 if (state.equals("RUNNING")&& (startTime.compareTo(now) <=0 &&(endTime == null|| endTime.compareTo(now) >= 0))) {
-                    ClientResource crTask = new ClientResource(host + "gettaskname" + "/" + dto.getAttemptID());
-                    IGetTaskNameByAttemptId taskResource = crTask.wrap(IGetTaskNameByAttemptId.class);
-                    String taskName = taskResource.retrieve();
+                   String taskName ="";
+                    for (Task task: tasks){
+                        if (task.getTaskid().equals(dto.getTaskID())){
+                            taskName = task.getName();
+                            break;
+                        }
+                    }
         %>
         <tr id="<%=dto.getAttemptID()%>">
             <td><%=dto.getTaskID()%>
@@ -194,11 +200,20 @@
         </thead>
         <tbody>
         <%
-            for (AttemptDTO dto : attempts) {
-                String state = dto.getStatus();
-                ClientResource crTask = new ClientResource(host + "gettaskname" + "/" + dto.getAttemptID());
-                IGetTaskNameByAttemptId taskResource = crTask.wrap(IGetTaskNameByAttemptId.class);
-                String taskName = taskResource.retrieve();
+            ClientResource failCr = new ClientResource(url+8);
+            IGetAttemptsByStatus failResource = failCr.wrap(IGetAttemptsByStatus.class);
+            ArrayList<AttemptDTO> failAttempts = failResource.retrieve();
+
+            if (failAttempts != null)
+            for (AttemptDTO dto : failAttempts) {
+               String state = dto.getStatus();
+                String taskName ="";
+                for (Task task: tasks){
+                    if (task.getTaskid().equals(dto.getTaskID())){
+                        taskName = task.getName();
+                        break;
+                    }
+                }
 
                 if (taskTime != null) {
                     Date startDate = dto.getStartTime();
@@ -313,13 +328,20 @@
         </thead>
         <tbody>
         <%
+            ClientResource timeOutCr = new ClientResource(url+9);
+            IGetAttemptsByStatus timeOutResource = timeOutCr.wrap(IGetAttemptsByStatus.class);
+            ArrayList<AttemptDTO> timeOutAttempts = timeOutResource.retrieve();
 
-            for (AttemptDTO dto : attempts) {
+            if (timeOutAttempts !=null)
+            for (AttemptDTO dto : timeOutAttempts) {
                 String state = dto.getStatus();
-                ClientResource crTask = new ClientResource(host + "gettaskname" + "/" + dto.getAttemptID());
-                IGetTaskNameByAttemptId taskResource = crTask.wrap(IGetTaskNameByAttemptId.class);
-                String taskName = taskResource.retrieve();
-
+                String taskName ="";
+                for (Task task: tasks){
+                    if (task.getTaskid().equals(dto.getTaskID())){
+                        taskName = task.getName();
+                        break;
+                    }
+                }
 
                 if (time != null) {
                     Date startDate = dto.getStartTime();
