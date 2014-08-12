@@ -16,7 +16,7 @@
 
 	<bean id="server" class="org.restlet.ext.spring.SpringServer">
 		<constructor-arg value="http" />
-		<constructor-arg value="8080" />
+		<constructor-arg value="8278" />
 	</bean>
 
 	<bean name="router" class="org.restlet.ext.spring.SpringBeanRouter" />
@@ -26,6 +26,8 @@
 		class="com.dp.bigdata.taurus.agent.utils.GetLogs" />
     <bean name="/api/isend/{attemptId}" id="isEnd" autowire="byName" scope="prototype"
           class="com.dp.bigdata.taurus.agent.utils.LogFileEnd" />
+    <bean name="/api/isnew" id="isNew" autowire="byName" scope="prototype"
+          class="com.dp.bigdata.taurus.agent.utils.NewAgentVersion" />
 
 </beans>
 

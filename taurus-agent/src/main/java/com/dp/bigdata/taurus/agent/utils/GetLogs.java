@@ -61,7 +61,6 @@ public class GetLogs extends ServerResource implements IGetLogs {
             }
 
         }
-
         return logStr;
     }
 }

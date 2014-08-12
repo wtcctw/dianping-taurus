@@ -93,4 +93,5 @@ public interface TaskMapper {
      * @mbggenerated Thu May 15 16:53:11 HKT 2014
      */
     int updateByPrimaryKey(Task record);
+    public Task getTaskByAttemptId(@Param("attemptId")String attemptId);
 }

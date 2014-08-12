@@ -567,4 +567,11 @@
       appName = #{appname,jdbcType=VARCHAR}
     where taskID = #{taskid,jdbcType=VARCHAR}
   </update>
+
+    <select id="getTaskByAttemptId" parameterType="String" resultMap="BaseResultMap" >
+        select a.* from TaurusTask a
+        join TaurusTaskAttempt b
+        on a.taskid = b.taskid
+        where  b.attemptid = #{attemptId}
+    </select>
 </mapper>

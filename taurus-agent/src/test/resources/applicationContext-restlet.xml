@@ -26,6 +26,8 @@
 		class="com.dp.bigdata.taurus.agent.utils.GetLogs" />
     <bean name="/api/isend/{attemptId}" id="isEnd" autowire="byName" scope="prototype"
           class="com.dp.bigdata.taurus.agent.utils.LogFileEnd" />
+    <bean name="/api/isnew" id="isNew" autowire="byName" scope="prototype"
+          class="com.dp.bigdata.taurus.agent.utils.NewAgentVersion" />
 
 </beans>
 

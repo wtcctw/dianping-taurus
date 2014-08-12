@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.dp.bigdata.taurus.restlet.resource.IAttemptsResource;
+import com.dp.bigdata.taurus.restlet.resource.IGetAttemptById;
 import com.dp.bigdata.taurus.restlet.shared.AttemptDTO;
 import org.restlet.data.MediaType;
 import org.restlet.representation.Representation;
@@ -98,27 +99,10 @@ public class AttemptProxyServlet extends HttpServlet {
 
             Date endTime = null;                                    //这个是取该任务的最后执行日期的日志，如果是RUNNING，endTime为空，则取当天日志
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            ClientResource attemptLogCr = new ClientResource(RESTLET_URL_BASE + "attempt");
-            ClientResource isExistLogInHDFSCr = new ClientResource(RESTLET_URL_BASE + "isexist/" + attemptID);
+            ClientResource attemptLogCr = new ClientResource(RESTLET_URL_BASE + "getattemptbyid/"+attemptID);
+
 
             try {
-
-                String isExist = isExistLogInHDFSCr.get().getText();
-                if (isExist.equals("true")) {
-                    response.setContentType("text/html;charset=utf-8");
-                    try {
-                        Representation rep = attemptCr.get(MediaType.TEXT_HTML);
-                        if (attemptCr.getStatus().getCode() == 200) {
-                            OutputStream output = response.getOutputStream();
-                            rep.write(output);
-                            output.close();
-                        } else {
-                            getServletContext().getRequestDispatcher(ERROR_PAGE).forward(request, response);
-                        }
-                    } catch (Exception e) {
-                        getServletContext().getRequestDispatcher(ERROR_PAGE).forward(request, response);
-                    }
-                } else {
 
                     if (queryType.equals("log")) {
                         fileSizeAttribute = "lastTimeFileSize";
@@ -134,16 +118,14 @@ public class AttemptProxyServlet extends HttpServlet {
                         lastTimeFileSize = Long.parseLong(contentLenStr);
                     }
 
-                    IAttemptsResource attemptLogResource = attemptLogCr.wrap(IAttemptsResource.class);
-                    List<AttemptDTO> attemptList = attemptLogResource.retrieve();
+                    IGetAttemptById attemptLogResource = attemptLogCr.wrap(IGetAttemptById.class);
+                    AttemptDTO dto  = attemptLogResource.retrieve();
 
-                    for (AttemptDTO dto : attemptList) {
-                        if (dto.getAttemptID().equals(attemptID)) {
-                            hostIp = dto.getExecHost();
-                            endTime = dto.getEndTime();
-                            tureStatus = dto.getStatus();
-                            break;
-                        }
+                    if (dto != null) {
+                        hostIp = dto.getExecHost();
+                        endTime = dto.getEndTime();
+                        tureStatus = dto.getStatus();
+
                     }
 
                     String date;                                  //取哪天的日志
@@ -163,64 +145,107 @@ public class AttemptProxyServlet extends HttpServlet {
                         OutputStream output = response.getOutputStream();
                         output.close();
                     } else {
+                        try {
 
-                        String url = "";                //请求agent restlet的URI
+                            ClientResource isNewAgentCr = new ClientResource("http://" + hostIp + ":" + AGENT_PORT
+                                    + "/api/isnew");
+                            String isNew = isNewAgentCr.get().getText();
+                            if (isNew.equals("true")) {
+                                String url = "";                //请求agent restlet的URI
 
-                        if (lastTimeFileSize == 0 && !tureStatus.equals("RUNNING")) {    //如果任务真实状态不是运行中的，并且 文件偏移为0 ，说明是历史任务，直接全量获取日志
-                            url = "http://" + hostIp + ":" + AGENT_PORT
-                                    + "/api/getlog/"
-                                    + date
-                                    + "/" + attemptID
-                                    + "/" + lastTimeFileSize
-                                    + "/NORMAL"
-                                    + "/" + queryType;
-                        } else {                                                        //增量获取日志
-                            url = "http://" + hostIp + ":" + AGENT_PORT
-                                    + "/api/getlog/"
-                                    + date
-                                    + "/" + attemptID
-                                    + "/" + lastTimeFileSize
-                                    + "/INC"
-                                    + "/" + queryType;
+                                if (lastTimeFileSize == 0 && !tureStatus.equals("RUNNING")) {    //如果任务真实状态不是运行中的，并且 文件偏移为0 ，说明是历史任务，直接全量获取日志
+                                    url = "http://" + hostIp + ":" + AGENT_PORT
+                                            + "/api/getlog/"
+                                            + date
+                                            + "/" + attemptID
+                                            + "/" + lastTimeFileSize
+                                            + "/NORMAL"
+                                            + "/" + queryType;
+                                } else {                                                        //增量获取日志
+                                    url = "http://" + hostIp + ":" + AGENT_PORT
+                                            + "/api/getlog/"
+                                            + date
+                                            + "/" + attemptID
+                                            + "/" + lastTimeFileSize
+                                            + "/INC"
+                                            + "/" + queryType;
 
-                            acceptContentWay = true;
+                                    acceptContentWay = true;
+                                }
+
+                                getLogCr = new ClientResource(url);
+
+                                String context = getLogCr.get().getText();
+
+                                if (context != null) {
+                                    lastTimeFileSize += context.length();
+                                }else {
+                                    if (!acceptContentWay){
+                                        context="无日志数据";
+                                    }
+                                }
+
+                                String isEndUrl = "http://" + hostIp
+                                        + ":" + AGENT_PORT
+                                        + "/api/isend/" + attemptID;
+
+                                getIsEndCr = new ClientResource(isEndUrl);
+                                isEnd = getIsEndCr.get().getText();
+
+                                if (acceptContentWay && isEnd.equals("false")) {
+                                    request.getSession().setAttribute(fileSizeAttribute, ((Long) lastTimeFileSize).toString());
+                                } else if (isEnd.equals("true")) {
+                                    request.getSession().setAttribute(fileSizeAttribute, "0");
+                                }
+
+                                String retStr;                                              //格式化日志 以便在web显示是换行的
+                                String logStr = context;
+                                OutputStream output = response.getOutputStream();
+
+                                if (logStr == null) {                                     //时间间隔短，日志尚未生成可能获得null
+                                    retStr = " ";
+                                } else {
+                                    retStr = logStr.replace("\n", "<br>");
+                                }
+
+                                output.write(retStr.getBytes());
+                                output.close();
+                            }else {
+                                response.setContentType("text/html;charset=utf-8");
+                                try {
+                                    Representation rep = attemptCr.get(MediaType.TEXT_HTML);
+                                    if (attemptCr.getStatus().getCode() == 200) {
+                                        OutputStream output = response.getOutputStream();
+                                        rep.write(output);
+                                        output.close();
+                                    } else {
+                                        getServletContext().getRequestDispatcher(ERROR_PAGE).forward(request, response);
+                                    }
+                                } catch (Exception e) {
+                                    getServletContext().getRequestDispatcher(ERROR_PAGE).forward(request, response);
+                                }
+                            }
+                        } catch (Exception e) {
+                            String exceptMessage = e.getMessage();
+                            if (exceptMessage.equals("Connection Error")||exceptMessage.equals("Not Found")){
+                                response.setContentType("text/html;charset=utf-8");
+                                try {
+                                    Representation rep = attemptCr.get(MediaType.TEXT_HTML);
+                                    if (attemptCr.getStatus().getCode() == 200) {
+                                        OutputStream output = response.getOutputStream();
+                                        rep.write(output);
+                                        output.close();
+                                    } else {
+                                        getServletContext().getRequestDispatcher(ERROR_PAGE).forward(request, response);
+                                    }
+                                } catch (Exception except) {
+                                    getServletContext().getRequestDispatcher(ERROR_PAGE).forward(request, response);
+                                }
+                            }else{
+                                getServletContext().getRequestDispatcher(ERROR_PAGE).forward(request, response);
+                            }
                         }
-
-                        getLogCr = new ClientResource(url);
-
-                        String context = getLogCr.get().getText();
-
-                        if (context != null) {
-                            lastTimeFileSize += context.length();
-                        }
-
-                        String isEndUrl = "http://" + hostIp
-                                + ":" + AGENT_PORT
-                                + "/api/isend/" + attemptID;
-
-                        getIsEndCr = new ClientResource(isEndUrl);
-                        isEnd = getIsEndCr.get().getText();
-
-                        if (acceptContentWay && isEnd.equals("false")) {
-                            request.getSession().setAttribute(fileSizeAttribute, ((Long) lastTimeFileSize).toString());
-                        } else if (isEnd.equals("true")) {
-                            request.getSession().setAttribute(fileSizeAttribute, "0");
-                        }
-
-                        String retStr;                                              //格式化日志 以便在web显示是换行的
-                        String logStr = context;
-                        OutputStream output = response.getOutputStream();
-
-                        if (logStr == null) {                                     //时间间隔短，日志尚未生成可能获得null
-                            retStr = " ";
-                        } else {
-                            retStr = logStr.replace("\n", "<br>");
-                        }
-
-                        output.write(retStr.getBytes());
-                        output.close();
                     }
-                }
             } catch (Exception e) {
                 String exceptMessage = e.getMessage();
                 if (exceptMessage.equals("Connection Error")){
@@ -235,28 +260,22 @@ public class AttemptProxyServlet extends HttpServlet {
 
         } else if (action.equals(ISEND)) {
             String host = "";
-            ClientResource attemptLogCr = new ClientResource(RESTLET_URL_BASE + "attempt");
-            IAttemptsResource attemptLogResource = attemptLogCr.wrap(IAttemptsResource.class);
-            List<AttemptDTO> attemptList = attemptLogResource.retrieve();
+            ClientResource attemptLogCr = new ClientResource(RESTLET_URL_BASE + "getattemptbyid/" + attemptID);
+            IGetAttemptById attemptLogResource = attemptLogCr.wrap(IGetAttemptById.class);
+            AttemptDTO dto  = attemptLogResource.retrieve();
 
-            for (AttemptDTO dto : attemptList) {
-                if (dto.getAttemptID().equals(attemptID)) {
-                    host = dto.getExecHost();
-                    break;
-                }
+            if (dto != null) {
+                host = dto.getExecHost();
             }
+
             ClientResource getLogCr = null;
 
             if (host.isEmpty()) {
-
                 OutputStream output = response.getOutputStream();
-
                 output.close();
             } else {
                 String url = "http://" + host + ":" + AGENT_PORT + "/api/isend/" + attemptID;
-
                 getLogCr = new ClientResource(url);
-
             }
 
             Representation repLog = getLogCr.get(MediaType.TEXT_HTML);
@@ -265,15 +284,12 @@ public class AttemptProxyServlet extends HttpServlet {
             output.close();
         } else if (action.equals(STATUS)) {
             String taskStatus = "";
-            ClientResource attemptLogCr = new ClientResource(RESTLET_URL_BASE + "attempt");
-            IAttemptsResource attemptLogResource = attemptLogCr.wrap(IAttemptsResource.class);
-            List<AttemptDTO> attemptList = attemptLogResource.retrieve();
+            ClientResource attemptLogCr = new ClientResource(RESTLET_URL_BASE + "getattemptbyid/" + attemptID);
+            IGetAttemptById attemptLogResource = attemptLogCr.wrap(IGetAttemptById.class);
+            AttemptDTO dto  = attemptLogResource.retrieve();
 
-            for (AttemptDTO dto : attemptList) {
-                if (dto.getAttemptID().equals(attemptID)) {
-                    taskStatus = dto.getStatus();
-                    break;
-                }
+            if (dto != null) {
+                taskStatus = dto.getStatus();
             }
 
             OutputStream output = response.getOutputStream();

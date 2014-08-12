@@ -3,6 +3,12 @@
 <head>
     <%@ include file="jsp/common-header.jsp"%>
 	<link href="css/index.css" rel="stylesheet" type="text/css" >
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="css/viewlog.css" rel="stylesheet" type="text/css">
+    <link href="css/bootstrap-responsive.min.css" rel="stylesheet" type="text/css">
+    <link href="css/taurus.css" rel="stylesheet" type="text/css">
+    <link rel="Shortcut Icon" href="img/icon.png" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="css/DT_bootstrap.css">
 </head>
 <body  data-spy="scroll">
 <div class="navbar navbar-inverse navbar-fixed-top">
@@ -18,7 +24,7 @@
 	</div>
 </div>
 <div class="container">
-    <div class="hero-unit">
+    <div class="terminal terminal-like">
   		<h1>Not Found</h1>
     	<p>你要的东西不在这或者目前不存在，到别处看看风景吧。</p>
     </div>

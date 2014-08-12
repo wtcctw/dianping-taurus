@@ -26,17 +26,15 @@
 <body data-spy="scroll">
 <%@page import="org.restlet.data.MediaType,
                 org.restlet.resource.ClientResource,
-                com.dp.bigdata.taurus.restlet.resource.IAttemptsResource,
                 com.dp.bigdata.taurus.restlet.shared.AttemptDTO,
                 java.text.SimpleDateFormat" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="com.dp.bigdata.taurus.restlet.resource.impl.TaskResource" %>
 <%@ page import="com.dp.bigdata.taurus.restlet.shared.TaskDTO" %>
-<%@ page import="com.dp.bigdata.taurus.restlet.resource.ITaskResource" %>
 <%@ page import="com.dp.bigdata.taurus.core.InstanceID" %>
 <%@ page import="org.restlet.data.Form" %>
-<%@ page import="com.dp.bigdata.taurus.restlet.resource.ITasksResource" %>
 <%@ page import="java.util.List" %>
+<%@ page import="com.dp.bigdata.taurus.restlet.resource.*" %>
 
 <div class="container" style="margin-top: 10px">
 <div id="alertContainer" class="container">
@@ -132,17 +130,14 @@
 
                 String state = dto.getStatus();
                 if (state.equals("RUNNING")&& (startTime.compareTo(now) <=0 &&(endTime == null|| endTime.compareTo(now) >= 0))) {
-                    ClientResource crTask = new ClientResource(host + "task" + "/" + dto.getTaskID());
-                    ITaskResource taskResource = crTask.wrap(ITaskResource.class);
-                    TaskDTO taskDTO = taskResource.retrieve();
-
-
-
+                    ClientResource crTask = new ClientResource(host + "gettaskname" + "/" + dto.getAttemptID());
+                    IGetTaskNameByAttemptId taskResource = crTask.wrap(IGetTaskNameByAttemptId.class);
+                    String taskName = taskResource.retrieve();
         %>
         <tr id="<%=dto.getAttemptID()%>">
             <td><%=dto.getTaskID()%>
             </td>
-            <td><%=taskDTO.getName()%>
+            <td><%=taskName%>
             </td>
             <%if (dto.getStartTime() != null) {%>
             <td><%=formatter.format(dto.getStartTime())%>
@@ -201,9 +196,9 @@
         <%
             for (AttemptDTO dto : attempts) {
                 String state = dto.getStatus();
-                ClientResource crTask = new ClientResource(host + "task" + "/" + dto.getTaskID());
-                ITaskResource taskResource = crTask.wrap(ITaskResource.class);
-                TaskDTO taskDTO = taskResource.retrieve();
+                ClientResource crTask = new ClientResource(host + "gettaskname" + "/" + dto.getAttemptID());
+                IGetTaskNameByAttemptId taskResource = crTask.wrap(IGetTaskNameByAttemptId.class);
+                String taskName = taskResource.retrieve();
 
                 if (taskTime != null) {
                     Date startDate = dto.getStartTime();
@@ -230,7 +225,7 @@
         <tr id="<%=dto.getAttemptID()%>">
             <td><%=dto.getTaskID()%>
             </td>
-            <td><%=taskDTO.getName()%>
+            <td><%=taskName%>
             </td>
             <%if (dto.getStartTime() != null) {%>
             <td><%=formatter.format(dto.getStartTime())%>
@@ -265,7 +260,7 @@
         <tr id="<%=dto.getAttemptID()%>">
             <td><%=dto.getTaskID()%>
             </td>
-            <td><%=taskDTO.getName()%>
+            <td><%=taskName%>
             </td>
             <%if (dto.getStartTime() != null) {%>
             <td><%=formatter.format(dto.getStartTime())%>
@@ -321,9 +316,10 @@
 
             for (AttemptDTO dto : attempts) {
                 String state = dto.getStatus();
-                ClientResource crTask = new ClientResource(host + "task" + "/" + dto.getTaskID());
-                ITaskResource taskResource = crTask.wrap(ITaskResource.class);
-                TaskDTO taskDTO = taskResource.retrieve();
+                ClientResource crTask = new ClientResource(host + "gettaskname" + "/" + dto.getAttemptID());
+                IGetTaskNameByAttemptId taskResource = crTask.wrap(IGetTaskNameByAttemptId.class);
+                String taskName = taskResource.retrieve();
+
 
                 if (time != null) {
                     Date startDate = dto.getStartTime();
@@ -347,7 +343,7 @@
         <tr id="<%=dto.getAttemptID()%>">
             <td><%=dto.getTaskID()%>
             </td>
-            <td><%=taskDTO.getName()%>
+            <td><%=taskName%>
             </td>
             <%if (dto.getStartTime() != null) {%>
             <td><%=formatter.format(dto.getStartTime())%>
@@ -381,7 +377,7 @@
         <tr id="<%=dto.getAttemptID()%>">
             <td><%=dto.getTaskID()%>
             </td>
-            <td><%=taskDTO.getName()%>
+            <td><%=taskName%>
             </td>
             <%if (dto.getStartTime() != null) {%>
             <td><%=formatter.format(dto.getStartTime())%>

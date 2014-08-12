@@ -1,5 +1,6 @@
 package com.dp.bigdata.taurus.generated.mapper;
 
+import com.dp.bigdata.taurus.generated.module.Task;
 import com.dp.bigdata.taurus.generated.module.TaskAttempt;
 import com.dp.bigdata.taurus.generated.module.TaskAttemptExample;
 import java.util.List;
@@ -95,4 +96,5 @@ public interface TaskAttemptMapper {
      * @mbggenerated Mon Apr 28 17:39:50 HKT 2014
      */
     int updateByPrimaryKey(TaskAttempt record);
+    public TaskAttempt getAttemptById(@Param("attemptId")String attemptId);
 }
