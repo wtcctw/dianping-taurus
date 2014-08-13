@@ -153,7 +153,6 @@ public class AttemptProxyServlet extends HttpServlet {
                                 Representation rep = attemptCr.get(MediaType.TEXT_HTML);
                                 if (attemptCr.getStatus().getCode() == 200) {
                                     OutputStream output = response.getOutputStream();
-                                    System.out.println("###########into old version###########");
                                     if (queryType.equals("errorlog")) { //不显示数据
                                         String retStr = " ";
                                         output.write(retStr.getBytes());
