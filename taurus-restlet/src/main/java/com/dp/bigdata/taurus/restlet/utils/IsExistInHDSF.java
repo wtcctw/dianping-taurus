@@ -27,24 +27,17 @@ public class IsExistInHDSF extends ServerResource implements IExistInHDFS {
     private HdfsUtils hdfsUtils;
 
     @Override
-    public String isExistInHDFS(){
+    public String isExistInHDFS() {
         String attemptID = (String) getRequest().getAttributes().get("attempt_id");
         String logPath = pathManager.getRemoteLog(attemptID);
 
-        boolean isexist = false;
+        boolean isexist;
         try {
             isexist = hdfsUtils.isExistFile(logPath);
         } catch (IOException e) {
-            System.out.println("==========exception message:"+e.getMessage());
-            System.out.println(e.getStackTrace().toString());
             return "null";
         }
-        if(isexist){
-                return "true";
-            }else{
-                return "false";
-            }
 
-
+        return isexist ? "true" : "false";
     }
 }

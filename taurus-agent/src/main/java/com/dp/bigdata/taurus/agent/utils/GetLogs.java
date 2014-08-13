@@ -1,13 +1,6 @@
 package com.dp.bigdata.taurus.agent.utils;
 
-import org.restlet.Context;
-import org.restlet.Request;
-import org.restlet.Response;
-import org.restlet.engine.adapter.HttpRequest;
 import org.restlet.resource.ServerResource;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.io.*;
 
 /**
@@ -32,36 +25,34 @@ public class GetLogs extends ServerResource implements IGetLogs {
 
         long lastTimeFileSize = Long.parseLong(fileOffset);
 
-        if (queryType.equals("log")){
+        if (queryType.equals("log")) {
             logFilePath = logPath + FILE_SEPRATOR + date + FILE_SEPRATOR + attemptID + ".log";
-        }else{
+        } else {
             logFilePath = logPath + FILE_SEPRATOR + date + FILE_SEPRATOR + attemptID + ".error";
         }
 
 
         String tmp;
-       if (flag.equals("INC")){
+        if (flag.equals("INC")) {
             final RandomAccessFile logFile = new RandomAccessFile(logFilePath, "rw");
             logFile.seek(lastTimeFileSize);
 
             while ((tmp = logFile.readLine()) != null) {
-                logStr += tmp +"\n";
+                logStr += tmp + "\n";
             }
         } else {
 
             final RandomAccessFile logFile = new RandomAccessFile(logFilePath, "rw");
             long fileLength = logFile.length();
-            double fileSize = (double)fileLength / 1024 / 1024;
-            if (fileSize > 1)
-            {
-                logFile.seek(fileLength- 1024 * 1024);              //如果文件大于1MB 则只显示文件最后的1MB数据
+            double fileSize = fileLength / 1024L / 1024L;
+            if (fileSize > 1) {
+                logFile.seek(fileLength - 1024 * 1024);              //如果文件大于1MB 则只显示文件最后的1MB数据
             }
             while ((tmp = logFile.readLine()) != null) {
                 logStr += tmp + "\n";
             }
 
         }
-        System.out.println("######type:"+queryType+"$$$$$$fileOffset: "+fileOffset + "log: "+ logStr);
         return logStr;
     }
 }

@@ -125,6 +125,7 @@ public class DefaultHdfsUtils implements HdfsUtils {
             fs.close();
             return true;
         }
+
         fs.close();
         return false;
     }

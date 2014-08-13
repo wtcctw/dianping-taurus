@@ -31,7 +31,7 @@
 		class="com.dp.bigdata.taurus.restlet.resource.impl.ManualTaskResource" />
 	<bean name="/api/attempt/{attempt_id}" id="attemptResource"
 		autowire="byName" scope="prototype"
-		class="com.dp.bigdata.taurus.restlet.resource.impl.AttemptResource" />
+		class="com.dp.bigdata.taurus.restlet.resource.impl.LogResource" />
 	<bean name="/api/status" id="attemptStatusResource"
 		autowire="byName" scope="prototype"
 		class="com.dp.bigdata.taurus.restlet.resource.impl.AttemptStatusResource" />
@@ -63,10 +63,8 @@
 		class="com.dp.bigdata.taurus.restlet.resource.impl.HostIpResource" />
     <bean name="/api/isexist/{attempt_id}" id="isExistHDFS" autowire="byName"
           scope="prototype" class="com.dp.bigdata.taurus.restlet.utils.IsExistInHDSF"/>
-    <bean name="/api/gettaskname/{attempt_id}" id="getTaskName" autowire="byName"
-          scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.GetTaskNameByAttemptId"/>
     <bean name="/api/getattemptbyid/{attempt_id}" id="getAttempt" autowire="byName"
-          scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.GetAttemptById"/>
+          scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.AttemptResource"/>
     <bean name="/api/getattemptsbystatus/{status}" id="getAttempts" autowire="byName"
           scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.GetAttemptsByStatus"/>
     <bean name="/api/gettasks" id="getTasks" autowire="byName"

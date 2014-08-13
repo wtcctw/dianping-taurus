@@ -13,15 +13,13 @@ public class StartServer {
 		AgentServer as = injector.getInstance(AgentServer.class);
         ApplicationContext context = new FileSystemXmlApplicationContext("classpath:applicationContext-restlet.xml");
         Component restlet = (Component) context.getBean("component");
-        new ClearLogsTimerManager();
+        ClearLogsTimerManager.getClearLogsTimerManager().start();
         try {
             restlet.start();
             as.start();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
 	}
 
     @Override

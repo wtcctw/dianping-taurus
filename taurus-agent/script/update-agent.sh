@@ -11,8 +11,7 @@ source /etc/profile
 
 
 #hadoop fs -copyToLocal /user/workcron/taurus/agent/* ./
-#wget http://10.1.1.163:8000/taurus-agent.tar.gz
-wget http://192.168.214.164:2014/taurus-agent.tar.gz
+wget http://10.1.1.163:8000/taurus-agent.tar.gz
 tar -xzvf  taurus-agent.tar.gz
 rm taurus-agent.tar.gz
 

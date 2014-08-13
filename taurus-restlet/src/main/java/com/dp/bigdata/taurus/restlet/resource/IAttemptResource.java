@@ -1,21 +1,12 @@
 package com.dp.bigdata.taurus.restlet.resource;
 
-import org.restlet.representation.FileRepresentation;
-import org.restlet.resource.Delete;
+import com.dp.bigdata.taurus.restlet.shared.AttemptDTO;
 import org.restlet.resource.Get;
 
 /**
- * IAttemptResource DELETE is to kill a attempt.
- * 
- * @author damon.zhu
+ * Created by mkirin on 14-8-12.
  */
 public interface IAttemptResource {
-
     @Get
-    public FileRepresentation log();
-
-    @Delete
-    public void kill();
-
-
+    public AttemptDTO retrieve();
 }
