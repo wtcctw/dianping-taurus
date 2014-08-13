@@ -151,7 +151,33 @@ public class AttemptProxyServlet extends HttpServlet {
 //                                   + "/api/isnew");
                            ClientResource isNewAgentCr = new ClientResource(RESTLET_URL_BASE+ "isexist/"+ attemptID);
                             String isNew = isNewAgentCr.get().getText();
-                            if (isNew.equals("false")) {
+                            if (isNew.equals("true")){
+
+                                response.setContentType("text/html;charset=utf-8");
+
+                                try {
+                                    Representation rep = attemptCr.get(MediaType.TEXT_HTML);
+                                    if (attemptCr.getStatus().getCode() == 200) {
+                                        OutputStream output = response.getOutputStream();
+                                        System.out.println("###########into old version###########");
+                                        if(queryType.equals("errorlog")){ //不显示数据
+                                            String retStr = " ";
+                                            output.write(retStr.getBytes());
+                                            output.close();
+                                        }else {
+                                            rep.write(output);
+                                            output.close();
+                                        }
+
+                                    } else {
+                                        getServletContext().getRequestDispatcher(ERROR_PAGE).forward(request, response);
+                                    }
+                                } catch (Exception e) {
+                                    System.out.println("###########into old version except###########");
+                                    getServletContext().getRequestDispatcher(ERROR_PAGE).forward(request, response);
+                                }
+
+                            }else {
                                 String url = "";                //请求agent restlet的URI
 
                                 if (lastTimeFileSize == 0 && !tureStatus.equals("RUNNING")) {    //如果任务真实状态不是运行中的，并且 文件偏移为0 ，说明是历史任务，直接全量获取日志
@@ -208,32 +234,15 @@ public class AttemptProxyServlet extends HttpServlet {
                                 } else {
                                     retStr = logStr.replace("\n", "<br>");
                                 }
-                                System.out.println("##########LogStr########"+retStr);
+                                System.out.println("##########LogStr########"+logStr);
                                 output.write(retStr.getBytes());
                                 output.close();
-                            }else if (isNew.equals("true")){
-
-                                response.setContentType("text/html;charset=utf-8");
-
-                                try {
-                                    Representation rep = attemptCr.get(MediaType.TEXT_HTML);
-                                    if (attemptCr.getStatus().getCode() == 200) {
-                                        OutputStream output = response.getOutputStream();
-                                        rep.write(output);
-                                        output.close();
-                                    } else {
-                                        getServletContext().getRequestDispatcher(ERROR_PAGE).forward(request, response);
-                                    }
-                                } catch (Exception e) {
-                                    getServletContext().getRequestDispatcher(ERROR_PAGE).forward(request, response);
-                                }
-                            }else{
-                                System.out.println("#######################HDFS service excepttion###################");
                             }
 
                         } catch (Exception e) {
                             String exceptMessage = e.getMessage();
                             if (exceptMessage.equals("Connection Error")||exceptMessage.equals("Not Found")){
+                                System.out.println("###########Connection#Error##########:"+exceptMessage);
                                 response.setContentType("text/html;charset=utf-8");
                                 ClientResource oldAgentCr = new ClientResource(RESTLET_URL_BASE + "attempt/" + attemptID);
                                 try {
@@ -249,6 +258,7 @@ public class AttemptProxyServlet extends HttpServlet {
                                     getServletContext().getRequestDispatcher(ERROR_PAGE).forward(request, response);
                                 }
                             }else{
+                                System.out.println("###########other#Error##########:"+exceptMessage);
                                 getServletContext().getRequestDispatcher(ERROR_PAGE).forward(request, response);
                             }
                         }

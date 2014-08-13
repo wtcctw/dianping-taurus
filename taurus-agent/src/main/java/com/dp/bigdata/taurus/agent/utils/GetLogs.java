@@ -61,6 +61,7 @@ public class GetLogs extends ServerResource implements IGetLogs {
             }
 
         }
+        System.out.println("######type:"+queryType+"$$$$$$fileOffset: "+fileOffset + "log: "+ logStr);
         return logStr;
     }
 }
