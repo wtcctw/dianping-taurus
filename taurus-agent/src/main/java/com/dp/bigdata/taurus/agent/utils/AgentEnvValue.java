@@ -95,11 +95,17 @@ public final class AgentEnvValue {
 
     public static void setConfigs(String configs) {
         URL confFile = ClassLoaderUtils.getDefaultClassLoader().getResource(CONF);
+        FileWriter writer = null;
         try {
-            FileWriter writer = new FileWriter(new File(confFile.toURI()));
+            writer = new FileWriter(new File(confFile.toURI()));
             writer.write(configs);
         } catch (Exception e) {
-            LOG.error(e, e);
+            LOG.error(e,e);
+        }finally{
+      	  try {
+	         writer.close();
+         } catch (IOException e) {
+         }
         }
     }
 

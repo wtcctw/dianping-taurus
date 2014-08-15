@@ -22,7 +22,8 @@ public class RestletTest {
 
 	@Test
 	public void testMain() {
-		ApplicationContext context = new FileSystemXmlApplicationContext("classpath:applicationContext-core.xml",
+		@SuppressWarnings("resource")
+      ApplicationContext context = new FileSystemXmlApplicationContext("classpath:applicationContext-core.xml",
 		      "classpath:applicationContext-restlet.xml");
 		Engine engine = (Engine) context.getBean("engine");
 		Component restlet = (Component) context.getBean("component");

@@ -9,8 +9,8 @@
 
 	<context id="MySQLTables" targetRuntime="MyBatis3">
 		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
-			connectionURL="jdbc:mysql://127.0.0.1:3306/TaurusCopy" userId="root"
-			password="123123">
+			connectionURL="jdbc:mysql://10.1.1.163:3306/TaurusCopy" userId="root"
+			password="123456">
 		</jdbcConnection>
 
 		<javaModelGenerator targetPackage="com.dp.bigdata.taurus.generated.module"

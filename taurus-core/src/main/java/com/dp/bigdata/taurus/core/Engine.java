@@ -208,15 +208,17 @@ final public class Engine implements Scheduler {
 	}
 
 	class TriggleTask extends Thread {
-
 		@Override
 		public void run() {
 			while (true) {
 				LOG.info("DepedencyTriggle trys to triggle the jobs...");
 
+				Transaction t = Cat.newTransaction("Engine", "Schedule");
 				try {
 					crontabTriggle.triggle();
+
 					dependencyTriggle.triggle();
+
 					List<AttemptContext> contexts = filter.filter(getReadyToRunAttempt());
 
 					if (contexts != null) {
@@ -228,9 +230,13 @@ final public class Engine implements Scheduler {
 							}
 						}
 					}
+
+					t.setStatus(Message.SUCCESS);
 				} catch (Throwable e) {
 					Cat.logError(e);
-					LOG.error("UnExpected Exception", e);
+					LOG.error(e);
+				} finally {
+					t.complete();
 				}
 
 				try {
@@ -382,17 +388,13 @@ final public class Engine implements Scheduler {
 		attempt.setExechost(host.getIp());
 		attempt.setStarttime(new Date());
 
-		Transaction transaction = Cat.newTransaction("Attempt-New", context.getName());
-
 		try {
 			zookeeper.execute(context.getContext());
 			LOG.info("Attempt " + attempt.getAttemptid() + " is running now...");
-			Cat.logEvent("Attempt-Running", context.getName(), Message.SUCCESS, context.getAttemptid());
-			transaction.setStatus(Message.SUCCESS);
+			Cat.logEvent("Attempt.Scheduled", context.getName(), Message.SUCCESS, context.getAttemptid());
 		} catch (Exception ee) {
 			Cat.logError(ee);
-			Cat.logEvent("Attempt-SubmitFailed", context.getName(), "submit-fail", context.getAttemptid());
-			transaction.setStatus(ee);
+			Cat.logEvent("Attempt.SubmitFailed", context.getName(), "submit-fail", context.getAttemptid());
 
 			attempt.setStatus(AttemptStatus.SUBMIT_FAIL);
 			attempt.setEndtime(new Date());
@@ -400,9 +402,7 @@ final public class Engine implements Scheduler {
 
 			throw new ScheduleException("Fail to execute attemptID : " + attempt.getAttemptid() + " on host : "
 			      + host.getIp(), ee);
-		} finally {
-			transaction.complete();
-		}
+		} 
 
 		// update the status for TaskAttempt
 		attempt.setStatus(AttemptStatus.RUNNING);
@@ -510,7 +510,7 @@ final public class Engine implements Scheduler {
 		}
 	}
 
-	public void attemptUnKnowed(String attemptID) {
+	public void attemptUnKnown(String attemptID) {
 		AttemptContext context = runningAttempts.get(AttemptID.getTaskID(attemptID)).get(attemptID);
 		TaskAttempt attempt = context.getAttempt();
 		attempt.setEndtime(new Date());

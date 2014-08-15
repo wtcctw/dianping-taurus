@@ -94,16 +94,13 @@
 
                 <a href="#confirm" onClick="action($(this).parents('tr').attr('id'))">Kill</a>
                 <%
-
-                    if (isExist.equals("true")) {
+                    if (isExist.equals("false")) {
                 %>
-                <a target="_blank" href="attempts.do?id=<%=dto.getAttemptID()%>&action=view-log">日志</a>
-                <%} else {%>
                 <a target="_blank" href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
-                <%}%>
                 <%
+                    }
                 } else {
-                    if (isExist.equals("true")) {
+                    if (!isExist.equals("false")) {
                 %>
                 <a target="_blank" href="attempts.do?id=<%=dto.getAttemptID()%>&action=view-log">日志</a>
                 <%} else {%>
@@ -111,7 +108,8 @@
                 <%}%>
             </td>
         </tr>
-        <% } }%>
+        <% }
+        }%>
         </tbody>
     </table>
 </div>

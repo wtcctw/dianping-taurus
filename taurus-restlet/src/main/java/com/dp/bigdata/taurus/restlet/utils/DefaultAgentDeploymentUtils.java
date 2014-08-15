@@ -34,7 +34,6 @@ public class DefaultAgentDeploymentUtils implements AgentDeploymentUtils {
     @Autowired
     private Deployer deployer;
 
-    @SuppressWarnings("unused")
     @Autowired
     private FilePathManager filePathManager;
 

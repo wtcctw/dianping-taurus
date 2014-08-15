@@ -131,8 +131,8 @@
 
 
                 String state = dto.getStatus();
-                if (state.equals("RUNNING")&& (startTime.compareTo(now) <=0 &&(endTime == null|| endTime.compareTo(now) >= 0))) {
-                   String taskName ="";
+                if (startTime!=null &&state.equals("RUNNING")&& (startTime.compareTo(now) <=0 &&(endTime == null|| endTime.compareTo(now) >= 0))) {
+                    String taskName ="";
                     for (Task task: tasks){
                         if (task.getTaskid().equals(dto.getTaskID())){
                             taskName = task.getName();
@@ -164,7 +164,7 @@
             <td>NULL</td>
             <%}%>
             <td>
-            <td>
+
                 <a target="_blank" href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
             </td>
 
@@ -207,13 +207,7 @@
             if (failAttempts != null)
             for (AttemptDTO dto : failAttempts) {
                String state = dto.getStatus();
-                String taskName ="";
-                for (Task task: tasks){
-                    if (task.getTaskid().equals(dto.getTaskID())){
-                        taskName = task.getName();
-                        break;
-                    }
-                }
+
 
                 if (taskTime != null) {
                     Date startDate = dto.getStartTime();
@@ -233,8 +227,14 @@
                         endTime = formatter.format(endDate);
                     }
 
-                    if (state.equals("FAILED") && (startTime.compareTo(taskTime) >=0 || endTime.compareTo(taskTime) >= 0)) {
-
+                    if (startTime!=null && state.equals("FAILED") && (startTime.compareTo(taskTime) >=0 || endTime.compareTo(taskTime) >= 0)) {
+                        String taskName ="";
+                        for (Task task: tasks){
+                            if (task.getTaskid().equals(dto.getTaskID())){
+                                taskName = task.getName();
+                                break;
+                            }
+                        }
 
         %>
         <tr id="<%=dto.getAttemptID()%>">
@@ -260,7 +260,7 @@
             <%} else {%>
             <td>NULL</td>
             <%}%>
-            <td>
+
             <td>
                 <a target="_blank" href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
             </td>
@@ -269,7 +269,13 @@
         <% }
         } else {
             if (state.equals("FAILED")) {
-
+                String taskName ="";
+                for (Task task: tasks){
+                    if (task.getTaskid().equals(dto.getTaskID())){
+                        taskName = task.getName();
+                        break;
+                    }
+                }
 
         %>
         <tr id="<%=dto.getAttemptID()%>">
@@ -335,13 +341,7 @@
             if (timeOutAttempts !=null)
             for (AttemptDTO dto : timeOutAttempts) {
                 String state = dto.getStatus();
-                String taskName ="";
-                for (Task task: tasks){
-                    if (task.getTaskid().equals(dto.getTaskID())){
-                        taskName = task.getName();
-                        break;
-                    }
-                }
+
 
                 if (time != null) {
                     Date startDate = dto.getStartTime();
@@ -360,7 +360,14 @@
                     }else{
                         endTime = formatter.format(endDate);
                     }
-                    if (state.equals("TIMEOUT") && ( startTime.compareTo(taskTime) >= 0 || endTime.compareTo(taskTime) >= 0)) {
+                    if (startTime!=null && state.equals("TIMEOUT") && ( startTime.compareTo(taskTime) >= 0 || endTime.compareTo(taskTime) >= 0)) {
+                        String taskName ="";
+                        for (Task task: tasks){
+                            if (task.getTaskid().equals(dto.getTaskID())){
+                                taskName = task.getName();
+                                break;
+                            }
+                        }
         %>
         <tr id="<%=dto.getAttemptID()%>">
             <td><%=dto.getTaskID()%>
@@ -393,7 +400,13 @@
         <% }
         } else {
             if (state.equals("TIMEOUT")) {
-
+                String taskName ="";
+                for (Task task: tasks){
+                    if (task.getTaskid().equals(dto.getTaskID())){
+                        taskName = task.getName();
+                        break;
+                    }
+                }
 
         %>
         <tr id="<%=dto.getAttemptID()%>">
@@ -420,7 +433,7 @@
             <td>NULL</td>
             <%}%>
             <!-- <td><%=dto.getExecHost()%></td> -->
-            <td>
+
             <td>
                 <a target="_blank" href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
             </td>

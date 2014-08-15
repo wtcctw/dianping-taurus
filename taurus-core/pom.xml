@@ -13,7 +13,7 @@
 		<dependency>
 			<groupId>com.dianping.cat</groupId>
 			<artifactId>cat-client</artifactId>
-			<version>1.0.1</version>
+			<version>1.0.5</version>
 		</dependency>
 		<dependency>
 			<groupId>com.dp.bigdata</groupId>
