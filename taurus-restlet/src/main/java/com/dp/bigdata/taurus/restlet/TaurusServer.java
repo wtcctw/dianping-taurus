@@ -20,9 +20,12 @@ public class TaurusServer {
 
 	public static void main(String args[]) {
 		@SuppressWarnings("resource")
+
 		ApplicationContext context = new FileSystemXmlApplicationContext("classpath:applicationContext-core.xml",
 		      "classpath:applicationContext-restlet.xml");
-		Engine engine = (Engine) context.getBean("engine");
+        System.setProperty("org.restlet.engine.loggerFacadeClass", "org.restlet.ext.slf4j.Slf4jLoggerFacade");
+
+        Engine engine = (Engine) context.getBean("engine");
 		TaurusAlert alert = (TaurusAlert) context.getBean("alert");
 		Component restlet = (Component) context.getBean("component");
 

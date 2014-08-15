@@ -18,7 +18,7 @@ import com.dp.bigdata.taurus.restlet.resource.IManualTaskResource;
  */
 public class ManualTaskResource extends ServerResource implements IManualTaskResource {
 
-    private static final Log LOG = LogFactory.getLog(AttemptResource.class);
+    private static final Log LOG = LogFactory.getLog(LogResource.class);
     private static final int EXECUTE = 1;
     private static final int SUSPEND = 2;
     private static final int RESUME = 3;

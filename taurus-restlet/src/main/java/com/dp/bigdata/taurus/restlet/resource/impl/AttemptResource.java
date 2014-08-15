@@ -1,82 +1,59 @@
 package com.dp.bigdata.taurus.restlet.resource.impl;
 
-import java.io.File;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.restlet.data.MediaType;
-import org.restlet.data.Status;
-import org.restlet.representation.FileRepresentation;
-import org.restlet.resource.Get;
+import com.dp.bigdata.taurus.core.AttemptStatus;
+import com.dp.bigdata.taurus.generated.mapper.TaskAttemptMapper;
+import com.dp.bigdata.taurus.generated.module.TaskAttempt;
+import com.dp.bigdata.taurus.restlet.resource.IAttemptResource;
+import com.dp.bigdata.taurus.restlet.shared.AttemptDTO;
 import org.restlet.resource.ServerResource;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.dp.bigdata.taurus.core.ScheduleException;
-import com.dp.bigdata.taurus.core.Scheduler;
-import com.dp.bigdata.taurus.restlet.resource.IAttemptResource;
-import com.dp.bigdata.taurus.restlet.utils.FilePathManager;
-import com.dp.bigdata.taurus.restlet.utils.HdfsUtils;
-
 /**
- * Resource url : http://xxx.xxx/api/attempt/{attempt_id}
- * 
- * @author damon.zhu
+ * Created by mkirin on 14-8-12.
  */
 public class AttemptResource extends ServerResource implements IAttemptResource {
-
-    private static final Log LOG = LogFactory.getLog(AttemptResource.class);
-
     @Autowired
-    private Scheduler scheduler;
-
-    @Autowired
-    private FilePathManager pathManager;
-
-    @Autowired
-    private HdfsUtils hdfsUtils;
+    TaskAttemptMapper taskAttemptMapper;
 
     @Override
-    public void kill() {
-        String attemptID = (String) getRequest().getAttributes().get("attempt_id");
+    public AttemptDTO retrieve() {
+        String attemptId = (String) getRequestAttributes().get("attempt_id");
+        TaskAttempt taskAttempt = taskAttemptMapper.getAttemptById(attemptId);
+        AttemptDTO dto = new AttemptDTO();
 
-        if (attemptID.split("_").length != 5) {
-            setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-            return;
-        }
-
-        boolean isRunning = scheduler.isRuningAttempt(attemptID);
-
-        if (!isRunning) {
-            setStatus(Status.CLIENT_ERROR_CONFLICT);
-            return;
-        }
-
-        try {
-            scheduler.killAttempt(attemptID);
-        } catch (ScheduleException se) {
-            LOG.error(se.getMessage(), se);
-            setStatus(Status.SERVER_ERROR_INTERNAL);
-        }
-
-    }
-
-    @Override
-    @Get
-    public FileRepresentation log() {
-        //String attemptID = "attempt_201209241101_0009_0001_0001";
-        String attemptID = (String) getRequest().getAttributes().get("attempt_id");
-        String logPath = pathManager.getRemoteLog(attemptID);
-        String localPath = pathManager.getLocalLogPath(attemptID);
-        File file = new File(localPath);
-        if (!file.exists()) {
-            try {
-                hdfsUtils.readFile(logPath, localPath);
-            } catch (Exception e) {
-                LOG.info("File not found");
-                setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-                return null;
+        if (taskAttempt != null){
+            dto.setAttemptID(attemptId);
+            if (taskAttempt.getEndtime() != null){
+                dto.setEndTime(taskAttempt.getEndtime());
             }
+
+            if (taskAttempt.getExechost() != null){
+                dto.setExecHost(taskAttempt.getExechost());
+            }
+
+            if (taskAttempt.getInstanceid() != null){
+                dto.setInstanceID(taskAttempt.getInstanceid());
+            }
+
+            if (taskAttempt.getTaskid() != null){
+                dto.setTaskID(taskAttempt.getTaskid());
+            }
+            if (taskAttempt.getScheduletime() != null){
+                dto.setScheduleTime(taskAttempt.getScheduletime());
+            }
+
+            if (taskAttempt.getStarttime() != null){
+                dto.setStartTime(taskAttempt.getStarttime());
+            }
+
+            if (taskAttempt.getStatus() != null){
+                dto.setStatus(AttemptStatus.getInstanceRunState(taskAttempt.getStatus()));
+            }
+
+        }else {
+            dto = null;
         }
-        return new FileRepresentation(file, MediaType.TEXT_HTML);
+
+        return dto;
     }
 }

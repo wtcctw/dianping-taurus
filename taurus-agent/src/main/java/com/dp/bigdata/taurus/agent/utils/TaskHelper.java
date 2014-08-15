@@ -73,7 +73,7 @@ public class TaskHelper {
 		try {
 			SecurityUtil.login(conf, "dp.hdfsclinet.keytab.file", "dp.hdfsclinet.kerberos.principal");
 		} catch (IOException e) {
-			throw new RuntimeException(e.getMessage(), e);
+			//throw new RuntimeException(e.getMessage(), e);
 		}
 	}
 
@@ -106,7 +106,7 @@ public class TaskHelper {
 		reader.close();
 		writer.write(LOG_END);
 		writer.close();
-		writeFileToHdfs(targetFile, HDFS_LOG_PATH + "/" + fileName);
+		//writeFileToHdfs(targetFile, HDFS_LOG_PATH + "/" + fileName);  //新版本的agent不在上传日志到hdfs
 	}
 
 	public void deployTask(String fileName, String localFileName) throws FileNotFoundException, IOException,

@@ -106,7 +106,7 @@ public class ScheduleUtility {
 		LOGGER.debug(attemptID + " end schedule");
 	}
 
-	private static abstract class BaseTaskListener implements IZkChildListener{
+	private static abstract class BaseTaskListener implements IZkChildListener {
 
 		protected String localIp;
 		protected ScheduleInfoChannel cs;
@@ -144,7 +144,7 @@ public class ScheduleUtility {
     /**
      * @param executor
      * @param localIp
-     * @param schedule
+     * @param
      */
     public static void checkAndOperate(Executor executor, String localIp, ScheduleInfoChannel cs,boolean atStart) {
         synchronized (ScheduleUtility.class) {

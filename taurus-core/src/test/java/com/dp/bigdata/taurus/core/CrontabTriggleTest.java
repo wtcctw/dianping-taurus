@@ -23,7 +23,7 @@ import com.dp.bigdata.taurus.generated.module.TaskExample;
  *
  */
 public class CrontabTriggleTest extends AbstractDaoTest{
-    
+
     @Autowired
     @Qualifier("triggle.crontab")
     private CrontabTriggle crontabTriggle;
@@ -42,7 +42,7 @@ public class CrontabTriggleTest extends AbstractDaoTest{
 
     private final String TASKID1 = "task_201210171442_0001";
     private final String TASKID2 = "task_201210171442_0002";
-    
+
     @Override
     protected void loadData() {
         /*
@@ -58,7 +58,7 @@ public class CrontabTriggleTest extends AbstractDaoTest{
         task1.setLastscheduletime(cal.getTime());
         task1.setUpdatetime(cal.getTime());
         taskMapper.insertSelective(task1);
-        
+
         Task task2 = new Task();
         task2.setTaskid(TASKID2);
         task2.setName("test2");
@@ -69,7 +69,7 @@ public class CrontabTriggleTest extends AbstractDaoTest{
         task2.setLastscheduletime(ca2.getTime());
         task2.setUpdatetime(ca2.getTime());
         taskMapper.insertSelective(task2);
-        
+
         engine.load();
     }
     
@@ -138,7 +138,7 @@ public class CrontabTriggleTest extends AbstractDaoTest{
         cal.set(2012, Calendar.OCTOBER, 15, 10, 19, 0);
         attempt.setScheduletime(cal.getTime());
         attemptMapper.insert(attempt);
-        
+
         
         /*
          * verify
@@ -150,7 +150,7 @@ public class CrontabTriggleTest extends AbstractDaoTest{
         example.or();
         List<TaskAttempt> attempts = attemptMapper.selectByExample(example);
         assertEquals(4, attempts.size());
-        
+
         cleanTableTaskAttempt();
     }
     
