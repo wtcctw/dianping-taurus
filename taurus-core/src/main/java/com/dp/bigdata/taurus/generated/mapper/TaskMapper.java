@@ -2,6 +2,8 @@ package com.dp.bigdata.taurus.generated.mapper;
 
 import com.dp.bigdata.taurus.generated.module.Task;
 import com.dp.bigdata.taurus.generated.module.TaskExample;
+
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -93,4 +95,7 @@ public interface TaskMapper {
      * @mbggenerated Thu May 15 16:53:11 HKT 2014
      */
     int updateByPrimaryKey(Task record);
+    public Task getTaskByAttemptId(@Param("attemptId")String attemptId);
+
+    public ArrayList<Task> getTasks();
 }

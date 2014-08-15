@@ -24,10 +24,19 @@
 					<h1>服务器更新日志</h1>
 					<table class="table table-striped table-bordered table-condensed">
 						<tbody>
+
 							<tr class="text-success">
 								<th width="90%">最新发布功能描述</th>
 								<th width="10%">发布时间</th>
 							</tr>
+                            <tr>
+                                <td>新增实时查看正在运行的任务日志</td>
+                                <td>2014-08-05</td>
+                            </tr>
+                            <tr>
+                                <td>新增任务监控<a href="monitor.jsp">任务监控</a>页面</td>
+                                <td>2014-08-03</td>
+                            </tr>
 							<tr>
 								<td>重新组织了<a href="about.jsp">帮助</a>页面</td>
 								<td>2013-09-27</td>
@@ -65,15 +74,15 @@
 					<table class="table table-striped table-bordered table-condensed">
 						<tbody>
 							<tr>
-								<td>孙任远</td>
-								<td>renyuan.sun@dianping.com</td>
-								<td>1815</td>
-							</tr>
-							<tr>
 								<td>朱浩</td>
 								<td>hao.zhu@dianping.com</td>
 								<td>1815</td>
 							</tr>
+                            <tr>
+                                <td>李明</td>
+                                <td>kirin.li@dianping.com</td>
+                                <td>1815</td>
+                            </tr>
 						</tbody>
 					</table>
 				</section>

@@ -355,4 +355,19 @@
    			from TaurusTaskAttempt where status = 1 or status = 3 order by startTime asc) atms 
   	group by taskID
   </select>
+
+
+    <select id="getAttemptById" resultMap="BaseResultMap">
+       select *
+        from TaurusTaskAttempt where attemptid = #{attemptId}
+    </select>
+
+    <select id="getAttemptByStatus" resultMap="BaseResultMap">
+
+        select
+         <include refid="Base_Column_List" />
+        from TaurusTaskAttempt
+       where status =#{status}
+    </select>
+
 </mapper>

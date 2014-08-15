@@ -16,7 +16,7 @@
 
 	<bean id="server" class="org.restlet.ext.spring.SpringServer">
 		<constructor-arg value="http" />
-		<constructor-arg value="8080" />
+		<constructor-arg value="8182" />
 	</bean>
 
 	<bean name="router" class="org.restlet.ext.spring.SpringBeanRouter" />
@@ -31,7 +31,7 @@
 		class="com.dp.bigdata.taurus.restlet.resource.impl.ManualTaskResource" />
 	<bean name="/api/attempt/{attempt_id}" id="attemptResource"
 		autowire="byName" scope="prototype"
-		class="com.dp.bigdata.taurus.restlet.resource.impl.AttemptResource" />
+		class="com.dp.bigdata.taurus.restlet.resource.impl.LogResource" />
 	<bean name="/api/status" id="attemptStatusResource"
 		autowire="byName" scope="prototype"
 		class="com.dp.bigdata.taurus.restlet.resource.impl.AttemptStatusResource" />
@@ -61,8 +61,15 @@
 	</bean>
 	<bean name="/api/hostip" id="hostIpResource" autowire="byName" scope="prototype"
 		class="com.dp.bigdata.taurus.restlet.resource.impl.HostIpResource" />
-			
-	<!-- Core Service -->
+    <bean name="/api/isexist/{attempt_id}" id="isExistHDFS" autowire="byName"
+          scope="prototype" class="com.dp.bigdata.taurus.restlet.utils.IsExistInHDSF"/>
+    <bean name="/api/getattemptbyid/{attempt_id}" id="getAttempt" autowire="byName"
+          scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.AttemptResource"/>
+    <bean name="/api/getattemptsbystatus/{status}" id="getAttempts" autowire="byName"
+          scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.GetAttemptsByStatus"/>
+    <bean name="/api/gettasks" id="getTasks" autowire="byName"
+          scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.GetTasks"/>
+    <!-- Core Service -->
 	<bean id="hdfsUtils" class="com.dp.bigdata.taurus.restlet.utils.DefaultHdfsUtils"
 		init-method="init" />
 	<bean id="agentDeployUtils"

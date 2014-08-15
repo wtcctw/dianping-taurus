@@ -32,7 +32,7 @@ public final class AgentEnvValue {
     public static final String NAMENODE_PRINCIPAL = "namenodePrincipal";
     public static final String KERBEROS_PRINCIPAL = "clinetPrincipal";
     public static final String KEYTAB_FILE = "keytabFile";
-    
+
     public static final String POM_PATH = "META-INF/maven/com.dp.bigdata/taurus-agent/pom.properties";
 
     public static String getValue(String key) {
@@ -88,11 +88,11 @@ public final class AgentEnvValue {
                 line = reader.readLine();
             }
         } catch (Exception e) {
-            LOG.error(e,e);
+            LOG.error(e, e);
         }
         return result;
     }
-    
+
     public static void setConfigs(String configs) {
         URL confFile = ClassLoaderUtils.getDefaultClassLoader().getResource(CONF);
         FileWriter writer = null;
@@ -108,7 +108,7 @@ public final class AgentEnvValue {
          }
         }
     }
-    
+
     public static String getVersion() {
         try {
             Properties props = new Properties();
@@ -116,6 +116,7 @@ public final class AgentEnvValue {
             props.load(in);
             String result = props.getProperty("version");
             in.close();
+
             if (result == null) {
                 return "0.1";
             }
@@ -125,7 +126,6 @@ public final class AgentEnvValue {
             return "0.1";
         }
     }
-    
-    
+
 
 }

@@ -1,0 +1,51 @@
+.label-pending {
+}
+
+.label-doing {
+  background-color: #149BDF;
+}
+
+.label-warning {
+  background-color: #FAA732;
+}
+
+.label-cancelled {
+  background-color: #C09853;
+}
+
+.label-success {
+  background-color: #5EB95E;
+}
+
+.label-failed {
+  background-color: #C43C35;
+}
+
+.progress {
+  margin-bottom: 0px;
+}
+
+.progress-cancelled .bar {
+  background-color: #C09853;
+  background-image: -moz-linear-gradient(top, #C09853, #C0884F);
+  background-image: -ms-linear-gradient(top, #C09853, #C0884F);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#C09853), to(#C0884F));
+  background-image: -webkit-linear-gradient(top, #C09853, #C0884F);
+  background-image: -o-linear-gradient(top, #C09853, #C0884F);
+  background-image: linear-gradient(top, #C09853, #C0884F);
+  background-repeat: repeat-x;
+  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#C09853', endColorstr='#C0884F', GradientType=0);
+}
+
+.terminal-like {
+	color: #00dd11;
+	background-color: #000;
+}
+
+.selected {
+	background-color: #eee;
+}
+
+.accordion-group {
+	border: none;
+}

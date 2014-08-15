@@ -99,6 +99,7 @@ public class DefaultHdfsUtils implements HdfsUtils {
         try {
             fs = FileSystem.get(URI.create(srcFile), conf);
             hdfsInput = fs.open(new Path(srcFile));
+
             int num = hdfsInput.read(buf);
             while (num != (-1)) {//是否读完文件
                 fos.write(buf, 0, num);//把文件数据写出网络缓冲区
@@ -114,5 +115,18 @@ public class DefaultHdfsUtils implements HdfsUtils {
             }
             throw e;
         }
+    }
+
+    @Override
+    public boolean isExistFile(String srcFile) throws IOException, FileNotFoundException {
+        FileSystem fs = FileSystem.get(URI.create(srcFile), conf);
+        Path path = new Path(srcFile);
+        if (fs.exists(path)) {
+            fs.close();
+            return true;
+        }
+
+        fs.close();
+        return false;
     }
 }

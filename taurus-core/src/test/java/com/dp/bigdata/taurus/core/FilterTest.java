@@ -19,16 +19,16 @@ public class FilterTest extends AbstractDaoTest{
     private final String TASKID1 = "task_201210171442_0001";
     private final String TASKID2 = "task_201210171442_0002";
     private final String TASKID3 = "task_201210171442_0003";
-    
+
     @Autowired
     private Engine engine;
-    
+
     @Autowired
     private IDFactory idFactory;
-    
+
     @Autowired
     private TaskMapper taskMapper;
-    
+
     @Autowired
     private TaskAttemptMapper attemptMapper;
     
@@ -61,7 +61,7 @@ public class FilterTest extends AbstractDaoTest{
         task3.setStatus(TaskStatus.RUNNING);
         taskMapper.insertSelective(task3);
 
-        
+
         /*
          * insert attempt
          */
@@ -72,7 +72,7 @@ public class FilterTest extends AbstractDaoTest{
         attempt1.setAttemptid(idFactory.newAttemptID(instanceID1));
         attempt1.setStatus(AttemptStatus.RUNNING);
         attemptMapper.insertSelective(attempt1);
-        
+
         TaskAttempt attempt2 = new TaskAttempt();
         attempt2.setTaskid(TASKID2);
         String instanceID2 = idFactory.newInstanceID(TASKID2);
@@ -80,7 +80,7 @@ public class FilterTest extends AbstractDaoTest{
         attempt2.setAttemptid(idFactory.newAttemptID(instanceID2));
         attempt2.setStatus(AttemptStatus.RUNNING);
         attemptMapper.insertSelective(attempt2);
-        
+
         TaskAttempt attempt3 = new TaskAttempt();
         attempt3.setTaskid(TASKID3);
         String instanceID3 = idFactory.newInstanceID(TASKID3);
@@ -88,22 +88,22 @@ public class FilterTest extends AbstractDaoTest{
         attempt3.setAttemptid(idFactory.newAttemptID(instanceID3));
         attempt3.setStatus(AttemptStatus.RUNNING);
         attemptMapper.insertSelective(attempt3);
-        
+
         /*
          * Engine load task
          */
         engine.load();
         engine.setMaxConcurrency(5);
-        
+
         /*
          * set next to null
          */
         filter2.setNext(null);
-        
+
         /*
          * load attemptcontext
          */
-        
+
         TaskAttempt attempt4 = new TaskAttempt();
         attempt4.setTaskid(TASKID3);
         String instanceID4 = idFactory.newInstanceID(TASKID3);
@@ -111,7 +111,7 @@ public class FilterTest extends AbstractDaoTest{
         attempt4.setAttemptid(idFactory.newAttemptID(instanceID4));
         attempt4.setStatus(AttemptStatus.DEPENDENCY_PASS);
         contexts.add(new AttemptContext(attempt4 , task3));
-        
+
         TaskAttempt attempt5 = new TaskAttempt();
         attempt5.setTaskid(TASKID3);
         String instanceID5 = idFactory.newInstanceID(TASKID3);
@@ -119,7 +119,7 @@ public class FilterTest extends AbstractDaoTest{
         attempt5.setAttemptid(idFactory.newAttemptID(instanceID5));
         attempt5.setStatus(AttemptStatus.DEPENDENCY_PASS);
         contexts.add(new AttemptContext(attempt5 , task3));
-        
+
         TaskAttempt attempt6 = new TaskAttempt();
         attempt6.setTaskid(TASKID3);
         String instanceID6 = idFactory.newInstanceID(TASKID3);
@@ -127,7 +127,7 @@ public class FilterTest extends AbstractDaoTest{
         attempt6.setAttemptid(idFactory.newAttemptID(instanceID6));
         attempt6.setStatus(AttemptStatus.DEPENDENCY_PASS);
         contexts.add(new AttemptContext(attempt6 , task3));
-        
+
         TaskAttempt attempt7 = new TaskAttempt();
         attempt7.setTaskid(TASKID1);
         String instanceID7 = idFactory.newInstanceID(TASKID1);
@@ -135,7 +135,7 @@ public class FilterTest extends AbstractDaoTest{
         attempt7.setAttemptid(idFactory.newAttemptID(instanceID7));
         attempt7.setStatus(AttemptStatus.DEPENDENCY_PASS);
         contexts.add(new AttemptContext(attempt7 , task1));
-        
+
         TaskAttempt attempt8 = new TaskAttempt();
         attempt8.setTaskid(TASKID2);
         String instanceID8 = idFactory.newInstanceID(TASKID2);
@@ -151,7 +151,7 @@ public class FilterTest extends AbstractDaoTest{
         
         List<AttemptContext> _context = filter2.filter(contexts);
         assertEquals(2, _context.size());
-        
+
         AttemptContext context0 = _context.get(0);
         assertEquals(TASKID3, context0.getTaskid());
 
