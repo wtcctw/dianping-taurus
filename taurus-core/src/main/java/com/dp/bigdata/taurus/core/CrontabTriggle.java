@@ -72,19 +72,23 @@ public class CrontabTriggle implements Triggle {
 
 			// iterator each fire time from last previousFireTime to current.
 			Date nextFireTime = ce.getNextValidTimeAfter(previousFireTime);
-			while (nextFireTime.before(now)) {
-				String instanceID = idFactory.newInstanceID(task.getTaskid());
-				TaskAttempt attempt = new TaskAttempt();
-				String attemptID = idFactory.newAttemptID(instanceID);
-				attempt.setInstanceid(instanceID);
-				attempt.setTaskid(task.getTaskid());
-				attempt.setScheduletime(nextFireTime);
-				attempt.setStatus(AttemptStatus.INITIALIZED);
-				attempt.setAttemptid(attemptID);
-				attemptMapper.insert(attempt);
-				LOG.info(String.format("New attempt (%s) fired.", attemptID));
-				Cat.logEvent("Crontab.Fire", task.getName());
-				nextFireTime = ce.getNextValidTimeAfter(nextFireTime);
+			try {
+				while (nextFireTime.before(now)) {
+					String instanceID = idFactory.newInstanceID(task.getTaskid());
+					TaskAttempt attempt = new TaskAttempt();
+					String attemptID = idFactory.newAttemptID(instanceID);
+					attempt.setInstanceid(instanceID);
+					attempt.setTaskid(task.getTaskid());
+					attempt.setScheduletime(nextFireTime);
+					attempt.setStatus(AttemptStatus.INITIALIZED);
+					attempt.setAttemptid(attemptID);
+					attemptMapper.insert(attempt);
+					LOG.info(String.format("New attempt (%s) fired.", attemptID));
+					Cat.logEvent("Crontab.Fire", task.getName());
+					nextFireTime = ce.getNextValidTimeAfter(nextFireTime);
+				}
+			} catch (Throwable t) {
+				Cat.logError(task.getName(), t);
 			}
 		}
 	}
