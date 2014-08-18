@@ -12,8 +12,6 @@
                 com.dp.bigdata.taurus.restlet.resource.IAttemptsResource,
                 com.dp.bigdata.taurus.restlet.shared.AttemptDTO,
                 java.text.SimpleDateFormat" %>
-<%@ page import="com.dp.bigdata.taurus.restlet.utils.IExistInHDFS" %>
-
 <div class="container" style="margin-top: 10px">
     <div id="alertContainer" class="container">
     </div>
@@ -84,32 +82,17 @@
 
             <td>
                 <%
-                    String isExistUrl = host + "isexist/" + dto.getAttemptID();
-                    ClientResource isExistCr = new ClientResource(isExistUrl);
-                    isExistCr.setRequestEntityBuffering(true);
-                    IExistInHDFS isExistResource = isExistCr.wrap(IExistInHDFS.class);
-                    isExistCr.accept(MediaType.APPLICATION_XML);
-                    String isExist = isExistResource.isExistInHDFS();
                     if (state.equals("RUNNING") || state.equals("TIMEOUT")) {%>
 
                 <a href="#confirm" onClick="action($(this).parents('tr').attr('id'))">Kill</a>
-                <%
-                    if (isExist.equals("false")) {
-                %>
                 <a target="_blank" href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
                 <%
-                    }
-                } else {
-                    if (!isExist.equals("false")) {
-                %>
-                <a target="_blank" href="attempts.do?id=<%=dto.getAttemptID()%>&action=view-log">日志</a>
-                <%} else {%>
+                } else {%>
                 <a target="_blank" href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
                 <%}%>
             </td>
         </tr>
-        <% }
-        }%>
+       <% }%>
         </tbody>
     </table>
 </div>

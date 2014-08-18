@@ -7,8 +7,14 @@ var result;
 $(document).ready(function () {
     attemptID = GetQueryString("id"); //通过表达式获得传递参数
     status = get_task_status();
+    var is_new = is_new_agent();
+    var error_panel=document.getElementById("error-panel");
+    var log_panel = document.getElementById("spann");
+    if (is_new != "false"){
+        error_panel.style.display="none";
+        log_panel.style.width="95%";
+    }
     do_relash_task();
-
 });
 
 function GetQueryString(name) {
@@ -146,6 +152,28 @@ function get_task_status() {
         data : {
             id : attemptID,
             action : 'status'
+        },
+        timeout : 10000,
+        type : 'POST',
+        async:false,
+        error: function(){
+            ret =  "null"
+        },
+        success: function (response) {
+            ret = response;
+        }
+
+    });
+    return ret;
+}
+
+function is_new_agent() {
+    var ret="";
+    $.ajax({
+        url : "attempts.do",
+        data : {
+            id : attemptID,
+            action : 'isnew'
         },
         timeout : 10000,
         type : 'POST',

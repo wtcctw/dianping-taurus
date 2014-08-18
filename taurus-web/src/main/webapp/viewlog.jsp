@@ -19,18 +19,22 @@
     .error-tag {
         font-size: 130%
     }
+
     .spanm {
 
         width: 600px;
     }
+
     .spann {
 
         width: 48%;
     }
+
     .row-fluid .spanm {
         width: 49.914893617021278%;
         *width: 49.861702127659576%;
     }
+
     .row-fluid .spann {
         width: 49.81196581196582%;
         *width: 49.75877432260411%;
@@ -63,27 +67,29 @@
     <li><a href="./schedule.jsp">调度中心</a> <span class="divider">/</span></li>
     <li><a href="#" class="active">查看日志</a> <span class="divider">/</span></li>
 </ul>
-<div class="spanm">
-    <ul class="error-tag">
-        <li><a>错误信息<span class="label label-important">STDERR</span></a></li>
-    </ul>
-    <div data-spy="scroll" data-offset="0" style="height: 510px; overflow: auto;" class="terminal terminal-like " id="errolog">
+<div id="error-panel">
+    <div class="spanm">
+        <ul class="error-tag" id="error-tag">
+            <li><a>错误信息<span class="label label-important">STDERR</span></a></li>
+        </ul>
+        <div data-spy="scroll" data-offset="0" style="height: 510px; overflow: auto;" class="terminal terminal-like "
+             id="errolog">
 
 
-
+        </div>
     </div>
 </div>
-<div class="spann">
-    <ul class="run-tag">
-        <li><a>日志信息<span class="label label-info">STDOUT</span></a></li>
-    </ul>
-    <div data-spy="scroll" data-offset="0" style="height: 510px; line-height: 20px; overflow: auto;" class="terminal terminal-like " id="strout">
+<div id="log-panel">
+    <div class="spann" id="spann">
+        <ul class="run-tag">
+            <li><a>日志信息<span class="label label-info">STDOUT</span></a></li>
+        </ul>
+        <div data-spy="scroll" data-offset="0" style="height: 510px; line-height: 20px; overflow: auto;"
+             class="terminal terminal-like " id="strout">
 
 
-
-
+        </div>
+    </div>
 </div>
-</div>
-
 </body>
 </html>

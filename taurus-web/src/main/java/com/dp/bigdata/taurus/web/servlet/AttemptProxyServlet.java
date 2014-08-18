@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -34,6 +35,7 @@ public class AttemptProxyServlet extends HttpServlet {
     private static final String KILL = "kill";
     private static final String RUNLOG = "runlog";
     private static final String ISEND = "isend";
+    private static final String ISNEW = "isnew";
     private static final String STATUS = "status";
     private static final String LOG = "view-log";
 
@@ -145,29 +147,10 @@ public class AttemptProxyServlet extends HttpServlet {
 
                         ClientResource isNewAgentCr = new ClientResource(RESTLET_URL_BASE + "isexist/" + attemptID);
                         String isNew = isNewAgentCr.get().getText();
-                        if (isNew.equals("true")) {
+                        if (isNew.equals("true")||isNew.equals("null")) {
+                            String oldUrl = "/attempts.do?id="+attemptID+"&action=view-log";
+                            response.sendRedirect(oldUrl);
 
-                            response.setContentType("text/html;charset=utf-8");
-
-                            try {
-                                Representation rep = attemptCr.get(MediaType.TEXT_HTML);
-                                if (attemptCr.getStatus().getCode() == 200) {
-                                    OutputStream output = response.getOutputStream();
-                                    if (queryType.equals("errorlog")) { //不显示数据
-                                        String retStr = " ";
-                                        output.write(retStr.getBytes());
-                                        output.close();
-                                    } else {
-                                        rep.write(output);
-                                        output.close();
-                                    }
-
-                                } else {
-                                    getServletContext().getRequestDispatcher(ERROR_PAGE).forward(request, response);
-                                }
-                            } catch (Exception e) {
-                                getServletContext().getRequestDispatcher(ERROR_PAGE).forward(request, response);
-                            }
 
                         } else {
                             String url = "";                //请求agent restlet的URI
@@ -299,6 +282,15 @@ public class AttemptProxyServlet extends HttpServlet {
 
             OutputStream output = response.getOutputStream();
             output.write(taskStatus.getBytes());
+            output.close();
+        }else if (action.equals(ISNEW)) {
+            OutputStream output = response.getOutputStream();
+            ClientResource isNewAgentCr = new ClientResource(RESTLET_URL_BASE + "isexist/" + attemptID);
+            String isNew = isNewAgentCr.get().getText();
+            if (isNew == null){
+                isNew = " ";
+            }
+            output.write(isNew.getBytes());
             output.close();
         }
 
