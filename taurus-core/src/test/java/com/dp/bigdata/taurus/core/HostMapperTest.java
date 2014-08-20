@@ -37,14 +37,14 @@ public class HostMapperTest {
 	@Autowired
 	private TaskMapper taskMapper;
     @Ignore
-	@Test
+	//@Test
 	public void insertHostData() {
 		Host record = hostMapper.selectByPrimaryKey("HADOOP");
 		String ip = record.getIp();
 		assertEquals("10.1.77.84", ip);
 	}
     @Ignore
-	@Test
+	//@Test
 	public void selectHostData() {
 		List<Host> results = hostMapper.selectByExample(null);
 		assertEquals(1, results.size());
@@ -57,8 +57,8 @@ public class HostMapperTest {
 		record.setPoolid(1);
 		hostMapper.insertSelective(record);
 	}
-    @Ignore
-	@Test
+    //@Ignore
+	//@Test
 	public void insertTaskData() {
 		List<TaskAttempt> selectByGroupAndStatus = taskAttemptMapper
 				.selectByGroupAndStatus();

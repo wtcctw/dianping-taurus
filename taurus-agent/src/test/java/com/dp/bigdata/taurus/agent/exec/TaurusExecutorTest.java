@@ -27,7 +27,7 @@ import org.junit.Test;
  */
 public class TaurusExecutorTest {
     
-    @Test
+    //@Test
     public void testExecute() throws IOException {
 //        Executor exec = new TaurusExecutor();
 //        exec.execute("test", System.out, System.err, "C:/1.bat");

@@ -15,7 +15,7 @@ import org.junit.Test;
  */
 public class DependencyParserTest {
 
-	@Ignore
+	//@Ignore
 	public void testPrefixExpression1() throws ParseException {
 		
 		String dependencyExpr = "[wordcount][10][0]&[LogSort][10][0]|[HipSort][10][0]&[test][1][0]";
@@ -38,7 +38,7 @@ public class DependencyParserTest {
 		assertEquals(null,current);
 	}
 
-	@Ignore
+	//@Ignore
 	public void testPrefixExpression2() throws ParseException {
 
 		String dependencyExpr = "[wordcount][10][0]|[LogSort][10][0]&[HipSort][10][0]";
@@ -57,7 +57,7 @@ public class DependencyParserTest {
 		assertEquals(null,current);
 	}
 	
-	@Ignore
+	//@Ignore
 	public void testPrefixExpression3() throws ParseException {
 
         String dependencyExpr = "[rtable-(dai.ly)][1][0]";

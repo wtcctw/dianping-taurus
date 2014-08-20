@@ -39,7 +39,7 @@ public class DependencyTriggleTest extends AbstractDaoTest {
 
     @Autowired
     private IDFactory idFactory;
-    @Ignore
+   // @Ignore
     @Override
     protected void loadData() {
 
@@ -116,8 +116,8 @@ public class DependencyTriggleTest extends AbstractDaoTest {
          */
         engine.load();
     }
-    @Ignore
-    @Test
+    //@Ignore
+    //@Test
     public void testTriggle(){
         triggle.triggle();
         

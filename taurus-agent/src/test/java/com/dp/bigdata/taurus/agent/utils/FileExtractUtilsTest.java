@@ -37,7 +37,7 @@ public class FileExtractUtilsTest {
     private String getAbsolutePath(String str){
         return ClassLoaderUtils.getDefaultClassLoader().getResource(str).getFile() ;
     }
-    @Test
+    //@Test
     public void TestUnzip(){
         String path =  getAbsolutePath("extract/test.zip");
         File file  = new File(path);
@@ -55,7 +55,7 @@ public class FileExtractUtilsTest {
         
     }
     
-    @Test
+    //@Test
     public void TestunTarunGzip(){
         String path =  getAbsolutePath("extract/test.tar.gz");
         File file  = new File(path);
@@ -73,7 +73,7 @@ public class FileExtractUtilsTest {
         }
     }
     
-    @Test
+   // @Test
     public void TestunTarunBzip(){
         String path =  getAbsolutePath("extract/test.tar.bz2");
         File file  = new File(path);

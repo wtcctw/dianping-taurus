@@ -38,7 +38,7 @@ public class FilterTest extends AbstractDaoTest{
     private MaximumConcurrentTaskFilter filter2;
     
     private List<AttemptContext> contexts = new ArrayList<AttemptContext>();
-    @Ignore
+   // @Ignore
     @Override
     protected void loadData() {
         /*
@@ -146,8 +146,8 @@ public class FilterTest extends AbstractDaoTest{
         contexts.add(new AttemptContext(attempt8 , task2));
     }
 
-    @Ignore
-    @Test
+    //@Ignore
+    //@Test
     public void testFilter(){
         
         List<AttemptContext> _context = filter2.filter(contexts);

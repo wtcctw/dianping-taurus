@@ -43,7 +43,7 @@ public class CrontabTriggleTest extends AbstractDaoTest{
 
     private final String TASKID1 = "task_201210171442_0001";
     private final String TASKID2 = "task_201210171442_0002";
-    @Ignore
+    //@Ignore
     @Override
     protected void loadData() {
         /*
@@ -73,16 +73,16 @@ public class CrontabTriggleTest extends AbstractDaoTest{
 
         engine.load();
     }
-    @Ignore
-    @Test
+    //@Ignore
+    //@Test
     public void testLoadData(){
         TaskExample tae = new TaskExample();
         tae.or();
         List<Task> tasks = taskMapper.selectByExample(tae);
         assertEquals(2, tasks.size());
     }
-    @Ignore
-    @Test
+    //@Ignore
+    //@Test
     public void testTriggleFirstTime(){
         /*
          * verify
@@ -96,8 +96,8 @@ public class CrontabTriggleTest extends AbstractDaoTest{
         assertEquals(1, attempts.size());
         cleanTableTaskAttempt();
     }
-    @Ignore
-    @Test
+    //@Ignore
+    //@Test
     public void testTriggleFromPrevious(){
         /*
          * insert previous task attempt
@@ -124,8 +124,8 @@ public class CrontabTriggleTest extends AbstractDaoTest{
         assertEquals(5, attempts.size());
         cleanTableTaskAttempt();
     }
-    @Ignore
-    @Test
+   // @Ignore
+    //@Test
     public void testTriggleFromLastScheduleTime(){
         /*
          * insert previous task attempt

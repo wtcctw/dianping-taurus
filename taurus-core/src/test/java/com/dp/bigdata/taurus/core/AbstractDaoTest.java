@@ -24,12 +24,12 @@ public abstract class AbstractDaoTest {
     protected SqlSessionFactoryBean sqlSessionFactoryBean;
 
     //@Before
-    @Ignore
+   // @Ignore
     public void loadDatabase() {
         createTable();
         loadData();
     }
-    @Ignore
+    //@Ignore
     public void createTable() {
         SqlSessionFactory sqlSessionFactory = null;
         try {
