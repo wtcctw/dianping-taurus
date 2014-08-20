@@ -59,6 +59,9 @@ public class AttemptProxyServlet extends HttpServlet {
         } catch (LionException e) {
             RESTLET_URL_BASE = context.getInitParameter("RESTLET_SERVER");
             e.printStackTrace();
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println("AttemptProxyServlet EERROR++++++++:"+e.getMessage());
         }
     }
 

@@ -50,6 +50,9 @@ public class FilePathManager {
             NAMENODE = props.getProperty("host");
             WORKDIR = props.getProperty("path");
             e.printStackTrace();
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println("FilePathManager EERROR++++++++:"+e.getMessage());
         }
     }
 

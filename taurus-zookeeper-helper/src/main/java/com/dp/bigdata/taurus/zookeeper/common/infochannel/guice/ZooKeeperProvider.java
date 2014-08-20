@@ -35,6 +35,7 @@ public final class ZooKeeperProvider implements Provider<ZkClient>{
 			return zk ;
 		} catch (Exception e) {
 		    LOG.error(e.getMessage(),e);
+            System.out.println("ZooKeeperProvider EERROR++++++++:"+e.getMessage());
 			return null;
 		}
 	}
