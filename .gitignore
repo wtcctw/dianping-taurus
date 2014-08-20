@@ -20,6 +20,6 @@ taurus-core/derby.log
 /*/build/*
 .*
 /*/.*
-
+*.iml
 taurus-web/src/main/webapp/WEB-INF/lib/*
 

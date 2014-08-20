@@ -9,9 +9,6 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Properties;
 
-import com.dianping.lion.EnvZooKeeperConfig;
-import com.dianping.lion.client.ConfigCache;
-import com.dianping.lion.client.LionException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -22,13 +19,13 @@ public final class AgentEnvValue {
     private static final Log LOG = LogFactory.getLog(AgentEnvValue.class);
 
     public static final String CONF = "agentConf.properties";
-    public static final String KEY_CHECK_INTERVALS = "taurus.agent.envvaule.checkintervals";//"checkIntervals";
+    public static final String KEY_CHECK_INTERVALS = "checkIntervals";
     public static final String AGENT_ROOT_PATH = "taurusAgentPath";
-    public static final String JOB_PATH = "taurus.agent.envvalue.jobpath";//"taurusJobPath";
-    public static final String LOG_PATH = "taurus.agent.envvalue.logpath";//"taurusLogPath";
-    public static final String NEED_HADOOP_AUTHORITY = "taurus.agent.envvalue.needhadoopauthority";//"needHadoopAuthority";
-    public static final String NEED_SUDO_AUTHORITY = "taurus.agent.envvalue.needsudoauthority";//"needSudoAuthority";
-    public static final String HOME_PATH = "taurus.agent.envvalue.homepath";//"homePath";
+    public static final String JOB_PATH = "taurusJobPath";
+    public static final String LOG_PATH = "taurusLogPath";
+    public static final String NEED_HADOOP_AUTHORITY = "needHadoopAuthority";
+    public static final String NEED_SUDO_AUTHORITY = "needSudoAuthority";
+    public static final String HOME_PATH = "homePath";
 
     public static final String HDFS_CONF = "hdfs.properties";
     public static final String HDFS_HOST = "hdfsHost";
@@ -44,18 +41,16 @@ public final class AgentEnvValue {
 
     public static String getValue(String key, String defaultValue) {
         try {
-//            Properties props = new Properties();
-//            InputStream in = ClassLoaderUtils.getDefaultClassLoader().getResourceAsStream(CONF);
-//            props.load(in);
-            //String result = props.getProperty(key);
-            String result = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty(key);
-
-//            in.close();
+            Properties props = new Properties();
+            InputStream in = ClassLoaderUtils.getDefaultClassLoader().getResourceAsStream(CONF);
+            props.load(in);
+            String result = props.getProperty(key);
+            in.close();
             if (result == null) {
                 return defaultValue;
             }
             return result;
-        } catch (LionException e) {
+        } catch (IOException e) {
             LOG.error(e.getMessage(), e);
             return defaultValue;
         }
@@ -67,17 +62,16 @@ public final class AgentEnvValue {
 
     public static String getHdfsValue(String key, String defaultValue) {
         try {
-//            Properties props = new Properties();
-//            InputStream in = ClassLoaderUtils.getDefaultClassLoader().getResourceAsStream(HDFS_CONF);
-//            props.load(in);
-            //String result = props.getProperty(key);
-            String result = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty(key);
-//            in.close();
+            Properties props = new Properties();
+            InputStream in = ClassLoaderUtils.getDefaultClassLoader().getResourceAsStream(HDFS_CONF);
+            props.load(in);
+            String result = props.getProperty(key);
+            in.close();
             if (result == null) {
                 return defaultValue;
             }
             return result;
-        }catch (LionException e) {
+        } catch (IOException e) {
             LOG.error(e.getMessage(), e);
             return defaultValue;
         }
