@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
+import com.dp.bigdata.taurus.generated.mapper.TaskMapper;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,44 +28,44 @@ import com.dp.bigdata.taurus.generated.module.TaskAttempt;
 @ContextConfiguration({ "classpath:applicationContext-test.xml" })
 public class HostMapperTest {
 
-//	@Autowired
-//	private HostMapper hostMapper;
-//
-//	@Autowired
-//	private TaskAttemptMapper taskAttemptMapper;
+	@Autowired
+	private HostMapper hostMapper;
 
-	// @Autowired
-	// private TaskMapper taskMapper;
+	@Autowired
+	private TaskAttemptMapper taskAttemptMapper;
 
+	@Autowired
+	private TaskMapper taskMapper;
+    @Ignore
 	@Test
 	public void insertHostData() {
-//		Host record = hostMapper.selectByPrimaryKey("HADOOP");
-//		String ip = record.getIp();
-//		assertEquals("10.1.77.84", ip);
+		Host record = hostMapper.selectByPrimaryKey("HADOOP");
+		String ip = record.getIp();
+		assertEquals("10.1.77.84", ip);
 	}
-	
+    @Ignore
 	@Test
 	public void selectHostData() {
-//		List<Host> results = hostMapper.selectByExample(null);
-//		assertEquals(1, results.size());
+		List<Host> results = hostMapper.selectByExample(null);
+		assertEquals(1, results.size());
 	}
-
+    @Ignore
 	protected void loadData() {
-//		Host record = new Host();
-//		record.setIp("10.1.77.84");
-//		record.setName("HADOOP");
-//		record.setPoolid(1);
-//		hostMapper.insertSelective(record);
+		Host record = new Host();
+		record.setIp("10.1.77.84");
+		record.setName("HADOOP");
+		record.setPoolid(1);
+		hostMapper.insertSelective(record);
 	}
-
+    @Ignore
 	@Test
 	public void insertTaskData() {
-//		List<TaskAttempt> selectByGroupAndStatus = taskAttemptMapper
-//				.selectByGroupAndStatus();
-//
-//		for(TaskAttempt at : selectByGroupAndStatus){
-//			System.out.println(at.getTaskid() + " at " + at.getStarttime());
-//
-//		}
+		List<TaskAttempt> selectByGroupAndStatus = taskAttemptMapper
+				.selectByGroupAndStatus();
+
+		for(TaskAttempt at : selectByGroupAndStatus){
+			System.out.println(at.getTaskid() + " at " + at.getStarttime());
+
+		}
 	}
 }

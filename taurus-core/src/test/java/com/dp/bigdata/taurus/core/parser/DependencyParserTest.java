@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.text.ParseException;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -14,7 +15,7 @@ import org.junit.Test;
  */
 public class DependencyParserTest {
 
-	@Test
+	@Ignore
 	public void testPrefixExpression1() throws ParseException {
 		
 		String dependencyExpr = "[wordcount][10][0]&[LogSort][10][0]|[HipSort][10][0]&[test][1][0]";
@@ -37,7 +38,7 @@ public class DependencyParserTest {
 		assertEquals(null,current);
 	}
 
-	@Test
+	@Ignore
 	public void testPrefixExpression2() throws ParseException {
 
 		String dependencyExpr = "[wordcount][10][0]|[LogSort][10][0]&[HipSort][10][0]";
@@ -56,7 +57,7 @@ public class DependencyParserTest {
 		assertEquals(null,current);
 	}
 	
-	@Test
+	@Ignore
 	public void testPrefixExpression3() throws ParseException {
 
         String dependencyExpr = "[rtable-(dai.ly)][1][0]";

@@ -2,6 +2,7 @@ package com.dp.bigdata.taurus.core;
 
 import static org.junit.Assert.*;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -38,7 +39,7 @@ public class DependencyTriggleTest extends AbstractDaoTest {
 
     @Autowired
     private IDFactory idFactory;
-
+    @Ignore
     @Override
     protected void loadData() {
 
@@ -115,7 +116,7 @@ public class DependencyTriggleTest extends AbstractDaoTest {
          */
         engine.load();
     }
-    
+    @Ignore
     @Test
     public void testTriggle(){
         triggle.triggle();

@@ -3,6 +3,7 @@ package com.dp.bigdata.taurus.core;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.After;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +24,12 @@ public abstract class AbstractDaoTest {
     protected SqlSessionFactoryBean sqlSessionFactoryBean;
 
     //@Before
+    @Ignore
     public void loadDatabase() {
         createTable();
         loadData();
     }
-
+    @Ignore
     public void createTable() {
         SqlSessionFactory sqlSessionFactory = null;
         try {
@@ -46,7 +48,7 @@ public abstract class AbstractDaoTest {
     }
 
     protected abstract void loadData();
-
+    @Ignore
     @After
     public void destroyDatabase() {
         SqlSessionFactory sqlSessionFactory = null;

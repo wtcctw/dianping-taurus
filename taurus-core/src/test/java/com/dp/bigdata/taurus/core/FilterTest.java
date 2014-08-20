@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -37,7 +38,7 @@ public class FilterTest extends AbstractDaoTest{
     private MaximumConcurrentTaskFilter filter2;
     
     private List<AttemptContext> contexts = new ArrayList<AttemptContext>();
-
+    @Ignore
     @Override
     protected void loadData() {
         /*
@@ -144,8 +145,8 @@ public class FilterTest extends AbstractDaoTest{
         attempt8.setStatus(AttemptStatus.DEPENDENCY_PASS);
         contexts.add(new AttemptContext(attempt8 , task2));
     }
-    
-    
+
+    @Ignore
     @Test
     public void testFilter(){
         

@@ -2,6 +2,7 @@ package com.dp.bigdata.taurus.core;
 
 import static org.junit.Assert.*;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -14,7 +15,7 @@ public class IDFactoryTest extends AbstractDaoTest {
 
     @Autowired
     private IDFactory idFactory;
-
+    @Ignore
     @Test
     public void testNewTaskID() {
         String identity = "201210171442";
@@ -23,7 +24,7 @@ public class IDFactoryTest extends AbstractDaoTest {
         assertEquals("task_201210171442_0002", idFactory.newTaskID());
         assertEquals("task_201210171442_0003", idFactory.newTaskID());
     }
-
+    @Ignore
     @Test
     public void testNewInstanceID() {
         String taskID1 = "task_201210171442_0001";
@@ -36,7 +37,7 @@ public class IDFactoryTest extends AbstractDaoTest {
         assertEquals("instance_201210171442_0002_0003", idFactory.newInstanceID(taskID2));
 
     }
-
+    @Ignore
     @Test
     public void testNewAttemptID() {
         String instanceID1 = "instance_201210171442_0001_0001";
@@ -48,7 +49,7 @@ public class IDFactoryTest extends AbstractDaoTest {
         assertEquals("attempt_201210171442_0002_0001_0002", idFactory.newAttemptID(instanceID2));
         assertEquals("attempt_201210171442_0002_0001_0003", idFactory.newAttemptID(instanceID2));
     }
-
+    @Ignore
     @Override
     protected void loadData() {
         //do nothing

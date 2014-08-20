@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.Calendar;
 import java.util.List;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -42,7 +43,7 @@ public class CrontabTriggleTest extends AbstractDaoTest{
 
     private final String TASKID1 = "task_201210171442_0001";
     private final String TASKID2 = "task_201210171442_0002";
-
+    @Ignore
     @Override
     protected void loadData() {
         /*
@@ -72,7 +73,7 @@ public class CrontabTriggleTest extends AbstractDaoTest{
 
         engine.load();
     }
-    
+    @Ignore
     @Test
     public void testLoadData(){
         TaskExample tae = new TaskExample();
@@ -80,7 +81,7 @@ public class CrontabTriggleTest extends AbstractDaoTest{
         List<Task> tasks = taskMapper.selectByExample(tae);
         assertEquals(2, tasks.size());
     }
-
+    @Ignore
     @Test
     public void testTriggleFirstTime(){
         /*
@@ -95,7 +96,7 @@ public class CrontabTriggleTest extends AbstractDaoTest{
         assertEquals(1, attempts.size());
         cleanTableTaskAttempt();
     }
-    
+    @Ignore
     @Test
     public void testTriggleFromPrevious(){
         /*
@@ -123,7 +124,7 @@ public class CrontabTriggleTest extends AbstractDaoTest{
         assertEquals(5, attempts.size());
         cleanTableTaskAttempt();
     }
-    
+    @Ignore
     @Test
     public void testTriggleFromLastScheduleTime(){
         /*
