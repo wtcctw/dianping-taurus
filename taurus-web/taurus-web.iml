@@ -53,7 +53,7 @@
     <orderEntry type="library" name="Maven: javax.inject:javax.inject:1" level="project" />
     <orderEntry type="library" name="Maven: aopalliance:aopalliance:1.0" level="project" />
     <orderEntry type="library" name="Maven: com.github.sgroschupf:zkclient:0.1" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.zookeeper:zookeeper:3.4.5" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.zookeeper:zookeeper:3.3.3" level="project" />
     <orderEntry type="library" name="Maven: javax.mail:mail:1.4.1" level="project" />
     <orderEntry type="library" name="Maven: javax.activation:activation:1.1" level="project" />
     <orderEntry type="library" name="Maven: jline:jline:0.9.94" level="project" />
@@ -107,8 +107,6 @@
     <orderEntry type="library" name="Maven: hsqldb:hsqldb:1.8.0.10" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.jackson:jackson-mapper-asl:1.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.jackson:jackson-core-asl:1.0.1" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.6.2" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-log4j12:1.6.2" level="project" />
     <orderEntry type="library" name="Maven: org.restlet.jse:org.restlet.ext.jetty:2.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.jetty:jetty-ajp:7.6.5.v20120716" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.jetty:jetty-server:7.6.5.v20120716" level="project" />
@@ -120,6 +118,8 @@
     <orderEntry type="library" name="Maven: org.restlet.jse:org.restlet.ext.ssl:2.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.jsslutils:jsslutils:1.0.5" level="project" />
     <orderEntry type="library" name="Maven: org.restlet.jse:org.restlet.ext.slf4j:2.1.1" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.6.2" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-log4j12:1.6.2" level="project" />
     <orderEntry type="library" name="Maven: org.restlet.jse:org.restlet.ext.json:2.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.restlet.jse:org.restlet.lib.org.json:2.0" level="project" />
     <orderEntry type="library" name="Maven: org.restlet.jse:org.restlet.ext.spring:2.1.1" level="project" />
