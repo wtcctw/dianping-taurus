@@ -170,7 +170,5 @@
         </dependency>
 
 	</dependencies>
-	<build>
-		<finalName>taurus-web</finalName>
-	</build>
+
 </project>
