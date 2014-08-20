@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.dp.bigdata.taurus.web.servlet.LDAPAuthenticationService;
 import org.apache.commons.lang.StringUtils;
 import org.restlet.data.MediaType;
 import org.restlet.resource.ClientResource;

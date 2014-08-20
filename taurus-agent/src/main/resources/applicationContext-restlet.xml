@@ -6,6 +6,10 @@
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
 
+    <bean id="startRestLet" class="com.dp.bigdata.taurus.agent.StartServer" init-method="start" destroy-method="stop">
+        <property name="restlet" ref="component" />
+    </bean>
+
 	<bean id="component" class="org.restlet.ext.spring.SpringComponent">
 		<property name="server" ref="server" />
 		<property name="defaultTarget" ref="router" />
@@ -13,10 +17,11 @@
 
 	<bean id="component.context"
 		class="org.springframework.beans.factory.config.PropertyPathFactoryBean" />
-
+    <bean name="placeholder" lazy-init="false" class="com.dianping.lion.client.InitializeConfig">
+    </bean>
 	<bean id="server" class="org.restlet.ext.spring.SpringServer">
 		<constructor-arg value="http" />
-		<constructor-arg value="8080" />
+		<constructor-arg value="${taurus.agent.restlet.port}" />
 	</bean>
 
 	<bean name="router" class="org.restlet.ext.spring.SpringBeanRouter" />

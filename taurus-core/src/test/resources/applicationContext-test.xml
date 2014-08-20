@@ -11,7 +11,7 @@
 		<property name="driverClass" value="com.mysql.jdbc.Driver" />
 		<property name="jdbcUrl" value="jdbc:mysql://127.0.0.1:3306/TaurusCopy?characterEncoding=utf-8" />
 		<property name="user" value="root" />
-		<property name="password" value="123123" />
+		<property name="password" value="123456" />
 		<property name="minPoolSize" value="5" />
 		<property name="maxPoolSize" value="10" />
 		<property name="initialPoolSize" value="5" />

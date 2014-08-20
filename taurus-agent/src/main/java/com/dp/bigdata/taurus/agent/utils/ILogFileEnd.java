@@ -7,6 +7,5 @@ import org.restlet.resource.Get;
  * Created by mkirin on 14-8-6.
  */
 public interface ILogFileEnd {
-    @Get
-    public String retrieve() ;
+    public String isEnd(String attemptId) ;
 }

@@ -1,7 +1,7 @@
 package com.dp.bigdata.taurus.web.servlet;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.dianping.lion.EnvZooKeeperConfig;
+import com.dianping.lion.client.ConfigCache;
+import com.dianping.lion.client.LionException;
 import com.dp.bigdata.taurus.restlet.resource.IAttemptResource;
 import com.dp.bigdata.taurus.restlet.resource.ILogResource;
 import com.dp.bigdata.taurus.restlet.shared.AttemptDTO;
@@ -50,7 +53,32 @@ public class AttemptProxyServlet extends HttpServlet {
         ServletContext context = getServletContext();
         RESTLET_URL_BASE = context.getInitParameter("RESTLET_SERVER");
         ERROR_PAGE = context.getInitParameter("ERROR_PAGE");
-        AGENT_PORT = context.getInitParameter("AGENT_SERVER_PORT");
+        try {
+            AGENT_PORT = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.restlet.port");//context.getInitParameter("AGENT_SERVER_PORT");
+        } catch (LionException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static String getAgentRestService(String restUrl) {
+
+        InputStream inputStream = null;
+        String msgContent = "";
+        try {
+            URL url = new URL(restUrl);
+            inputStream = url.openStream();
+            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+            String line = "";
+
+            while ((line = br.readLine()) != null) {
+                msgContent += line +"\n";
+            }
+            inputStream.close();
+            return msgContent;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return msgContent;
     }
 
     @Override
@@ -147,8 +175,8 @@ public class AttemptProxyServlet extends HttpServlet {
 
                         ClientResource isNewAgentCr = new ClientResource(RESTLET_URL_BASE + "isexist/" + attemptID);
                         String isNew = isNewAgentCr.get().getText();
-                        if (isNew.equals("true")||isNew.equals("null")) {
-                            String oldUrl = "/attempts.do?id="+attemptID+"&action=view-log";
+                        if (isNew.equals("true")/*||isNew.equals("null")*/) {
+                            String oldUrl = "/attempts.do?id=" + attemptID + "&action=view-log";
                             response.sendRedirect(oldUrl);
 
 
@@ -157,27 +185,27 @@ public class AttemptProxyServlet extends HttpServlet {
 
                             if (lastTimeFileSize == 0 && !tureStatus.equals("RUNNING")) {    //如果任务真实状态不是运行中的，并且 文件偏移为0 ，说明是历史任务，直接全量获取日志
                                 url = "http://" + hostIp + ":" + AGENT_PORT
-                                        + "/api/getlog/"
+                                        + "/agentrest.do?action=getlog&date="
                                         + date
-                                        + "/" + attemptID
-                                        + "/" + lastTimeFileSize
-                                        + "/NORMAL"
-                                        + "/" + queryType;
+                                        + "&attemptId=" + attemptID
+                                        + "&file_offset=" + lastTimeFileSize
+                                        + "&flag=NORMAL"
+                                        + "&query_type=" + queryType;
                             } else {                                                        //增量获取日志
                                 url = "http://" + hostIp + ":" + AGENT_PORT
-                                        + "/api/getlog/"
+                                        + "/agentrest.do?action=getlog&date="
                                         + date
-                                        + "/" + attemptID
-                                        + "/" + lastTimeFileSize
-                                        + "/INC"
-                                        + "/" + queryType;
+                                        + "&attemptId=" + attemptID
+                                        + "&file_offset=" + lastTimeFileSize
+                                        + "&flag=INC"
+                                        + "&query_type=" + queryType;
 
                                 acceptContentWay = true;
                             }
 
-                            getLogCr = new ClientResource(url);
+                         //   getLogCr = new ClientResource(url);
 
-                            String context = getLogCr.get().getText();
+                            String context = getAgentRestService(url);//getLogCr.get().getText();
 
                             if (context != null) {
                                 lastTimeFileSize += context.length();
@@ -187,12 +215,17 @@ public class AttemptProxyServlet extends HttpServlet {
                                 }
                             }
 
-                            String isEndUrl = "http://" + hostIp
+                           /* String isEndUrl = "http://" + hostIp
                                     + ":" + AGENT_PORT
                                     + "/api/isend/" + attemptID;
 
                             getIsEndCr = new ClientResource(isEndUrl);
-                            isEnd = getIsEndCr.get().getText();
+                            isEnd = getIsEndCr.get().getText();*/
+                            String isEndUrl = "http://" + hostIp
+                                    + ":" + AGENT_PORT
+                                    + "/agentrest.do?action=isend&attemptId="
+                                    + attemptID;
+                             isEnd = getAgentRestService(isEndUrl);
 
                             if (acceptContentWay && isEnd.equals("false")) {
                                 request.getSession().setAttribute(fileSizeAttribute, ((Long) lastTimeFileSize).toString());
@@ -256,19 +289,22 @@ public class AttemptProxyServlet extends HttpServlet {
                 host = dto.getExecHost();
             }
 
-            ClientResource getLogCr = null;
-
+           // ClientResource getLogCr = null;
+            String respStr = "";
             if (host.isEmpty()) {
                 OutputStream output = response.getOutputStream();
                 output.close();
             } else {
-                String url = "http://" + host + ":" + AGENT_PORT + "/api/isend/" + attemptID;
-                getLogCr = new ClientResource(url);
+                //String url = "http://" + host + ":" + AGENT_PORT + "/api/isend/" + attemptID;
+                //getLogCr = new ClientResource(url);
+                String url= "http://" + host + ":" + AGENT_PORT + "/agentrest.do?action=isend&attemptId=" + attemptID;
+                respStr = getAgentRestService(url);
             }
 
-            Representation repLog = getLogCr.get(MediaType.TEXT_HTML);
+            //Representation repLog = getLogCr.get(MediaType.TEXT_HTML);
             OutputStream output = response.getOutputStream();
-            repLog.write(output);
+            //repLog.write(output);
+            output.write(respStr.getBytes());
             output.close();
         } else if (action.equals(STATUS)) {
             String taskStatus = "";
@@ -283,11 +319,11 @@ public class AttemptProxyServlet extends HttpServlet {
             OutputStream output = response.getOutputStream();
             output.write(taskStatus.getBytes());
             output.close();
-        }else if (action.equals(ISNEW)) {
+        } else if (action.equals(ISNEW)) {
             OutputStream output = response.getOutputStream();
             ClientResource isNewAgentCr = new ClientResource(RESTLET_URL_BASE + "isexist/" + attemptID);
             String isNew = isNewAgentCr.get().getText();
-            if (isNew == null){
+            if (isNew == null) {
                 isNew = " ";
             }
             output.write(isNew.getBytes());
@@ -295,4 +331,6 @@ public class AttemptProxyServlet extends HttpServlet {
         }
 
     }
+
+
 }

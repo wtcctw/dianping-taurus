@@ -41,46 +41,57 @@ public class TaurusAgentServer implements AgentServer{
 		}
 	}
 
-	public void start(){
-	    HeartbeatInfo info = new HeartbeatInfo();
-        info.setTime(new Date());
-        info.setAgentVersion(BaseEnvManager.AGENT_VERSION);
-        info.setConfigs(BaseEnvManager.CONFIGS);
-        info.setLinux(BaseEnvManager.ON_WINDOWS);
-        info.setUser(BaseEnvManager.USER);
-        info.setNeedUpdate(false);
-		deployer.connectToCluster(MachineType.AGENT, localIp);
-		scheduler.connectToCluster(MachineType.AGENT, localIp);
-		
-		
-	    DeploymentUtility.checkAndDeployTasks(localIp, deployer,true);
-		DeploymentUtility.checkAndUndeployTasks( localIp, deployer,true);
-		ScheduleUtility.checkAndRunTasks(executor, localIp, scheduler, true);
-		ScheduleUtility.checkAndKillTasks(executor, localIp, scheduler, true);
-		ScheduleUtility.checkAndOperate(executor, localIp, scheduler,true);
-		ScheduleUtility.startZombieThread(localIp, scheduler);
-		JarExecutor jarExecutor = new JarExecutor();
-		jarExecutor.monitor();
-		LOGGER.info("Taurus agent starts.");
+    private class AgentTask implements Runnable{
 
-		
-		while(true){
-			try {
-				Thread.sleep(interval);
-			} catch (InterruptedException e) { /*do nothing*/}
-			DeploymentUtility.checkAndDeployTasks(localIp, deployer, false);
-			DeploymentUtility.checkAndUndeployTasks(localIp, deployer, false);
-			ScheduleUtility.checkAndRunTasks(executor, localIp, scheduler, false);
-			ScheduleUtility.checkAndKillTasks(executor, localIp, scheduler, false);
-			ScheduleUtility.checkAndOperate(executor, localIp, scheduler,false);
-			scheduler.updateRealtimeHeartbeatInfo(MachineType.AGENT, localIp);
-			HeartbeatInfo newHeartbeatInfo = scheduler.getHeartbeatInfo(MachineType.AGENT, localIp);
-			if(newHeartbeatInfo != null&&newHeartbeatInfo.isNeedUpdate()){
-				info.setConfigs(newHeartbeatInfo.getConfigs());
-			}
-			scheduler.updateHeartbeatInfo(MachineType.AGENT, localIp, info);
-			scheduler.updateRealtimeHeartbeatInfo(MachineType.AGENT, localIp);
-		}
+        public void run(){
+            HeartbeatInfo info = new HeartbeatInfo();
+            info.setTime(new Date());
+            info.setAgentVersion(BaseEnvManager.AGENT_VERSION);
+            info.setConfigs(BaseEnvManager.CONFIGS);
+            info.setLinux(BaseEnvManager.ON_WINDOWS);
+            info.setUser(BaseEnvManager.USER);
+            info.setNeedUpdate(false);
+            deployer.connectToCluster(MachineType.AGENT, localIp);
+            scheduler.connectToCluster(MachineType.AGENT, localIp);
+
+
+            DeploymentUtility.checkAndDeployTasks(localIp, deployer,true);
+            DeploymentUtility.checkAndUndeployTasks( localIp, deployer,true);
+            ScheduleUtility.checkAndRunTasks(executor, localIp, scheduler, true);
+            ScheduleUtility.checkAndKillTasks(executor, localIp, scheduler, true);
+            ScheduleUtility.checkAndOperate(executor, localIp, scheduler,true);
+            ScheduleUtility.startZombieThread(localIp, scheduler);
+            JarExecutor jarExecutor = new JarExecutor();
+            jarExecutor.monitor();
+            LOGGER.info("Taurus agent starts.");
+
+            while(true){
+                try {
+                    Thread.sleep(interval);
+                } catch (InterruptedException e) { /*do nothing*/}
+                DeploymentUtility.checkAndDeployTasks(localIp, deployer, false);
+                DeploymentUtility.checkAndUndeployTasks(localIp, deployer, false);
+                ScheduleUtility.checkAndRunTasks(executor, localIp, scheduler, false);
+                ScheduleUtility.checkAndKillTasks(executor, localIp, scheduler, false);
+                ScheduleUtility.checkAndOperate(executor, localIp, scheduler,false);
+                scheduler.updateRealtimeHeartbeatInfo(MachineType.AGENT, localIp);
+                HeartbeatInfo newHeartbeatInfo = scheduler.getHeartbeatInfo(MachineType.AGENT, localIp);
+                if(newHeartbeatInfo != null&&newHeartbeatInfo.isNeedUpdate()){
+                    info.setConfigs(newHeartbeatInfo.getConfigs());
+                }
+                scheduler.updateHeartbeatInfo(MachineType.AGENT, localIp, info);
+                scheduler.updateRealtimeHeartbeatInfo(MachineType.AGENT, localIp);
+            }
+        }
+
+
+    }
+
+	public void start(){
+        Thread agentThread = new Thread(new AgentTask());
+        agentThread.setDaemon(true);
+        agentThread.setName("Thread-Agent");
+        agentThread.start();
 	}
 
 }

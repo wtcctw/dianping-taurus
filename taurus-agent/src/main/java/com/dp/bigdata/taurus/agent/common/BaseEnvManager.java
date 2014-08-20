@@ -33,17 +33,32 @@ public abstract class BaseEnvManager implements Runnable {
     static{
     	update();
     }
-    
+    private static String getRootPath() {
+        String result = BaseEnvManager.class.getResource("BaseEnvManager.class").toString();
+        int index = result.indexOf("WEB-INF");
+        result = result.substring(0, index);
+        if (result.startsWith("jar")) {
+            result = result.substring(10);
+        } else if (result.startsWith("file")) {
+            result = result.substring(6);
+        }
+        if (result.endsWith("/")) result = result.substring(0, result.length() - 1);//不包含最后的"/"
+        return "/" + result;
+
+    }
     public static void update(){
     	agentRoot = AgentEnvValue.getValue(AgentEnvValue.AGENT_ROOT_PATH, agentRoot);
+        String rootPath =  getRootPath();
+        rootPath += "/WEB-INF/classes";
+
         jobPath = AgentEnvValue.getValue(AgentEnvValue.JOB_PATH, jobPath);
         logPath = AgentEnvValue.getValue(AgentEnvValue.LOG_PATH, logPath);
-        hadoopAuthority = agentRoot + hadoopAuthority;
+        hadoopAuthority = rootPath + hadoopAuthority;
         logFileUpload = agentRoot + logFileUpload;
-        killJob = agentRoot + killJob;
+        killJob = rootPath + killJob;
         running = jobPath + running;
         hadoop = jobPath + hadoop;
-        env = agentRoot + env;
+        env = rootPath + env;
         homeDir = AgentEnvValue.getValue(AgentEnvValue.HOME_PATH, homeDir);
         needSudoAuthority = new Boolean(AgentEnvValue.getValue(AgentEnvValue.NEED_SUDO_AUTHORITY,
         		new Boolean(needSudoAuthority).toString()));

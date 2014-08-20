@@ -10,7 +10,7 @@ $(document).ready(function () {
     var is_new = is_new_agent();
     var error_panel=document.getElementById("error-panel");
     var log_panel = document.getElementById("spann");
-    if (is_new != "false"){
+    if (is_new == "true"){
         error_panel.style.display="none";
         log_panel.style.width="95%";
     }
