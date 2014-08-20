@@ -51,11 +51,13 @@ public class AttemptProxyServlet extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         ServletContext context = getServletContext();
-        RESTLET_URL_BASE = context.getInitParameter("RESTLET_SERVER");
+
         ERROR_PAGE = context.getInitParameter("ERROR_PAGE");
         try {
+            RESTLET_URL_BASE =ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.restlet.url");// context.getInitParameter("RESTLET_SERVER");
             AGENT_PORT = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.restlet.port");//context.getInitParameter("AGENT_SERVER_PORT");
         } catch (LionException e) {
+            RESTLET_URL_BASE = context.getInitParameter("RESTLET_SERVER");
             e.printStackTrace();
         }
     }
