@@ -46,11 +46,19 @@
 				}
 	  			if("200".equals(statusCode)){
 	  		%>
-	  				<div id="alertContainer" class="container"><div id="alertContainer" class="alert alert-success"><button type="button" class="close" data-dismiss="alert">×</button> <%=opChs %>成功</div></div>
+	  				<div id="alertContainer" class="container">
+                        <div id="alertContainerSuccess" class="alert alert-success">
+                            <button type="button" class="close" data-dismiss="alert">×</button> <%=opChs %>成功
+                        </div>
+                    </div>
 	  		<%
 	  			} else if("500".equals(statusCode)){
 	  		%>
-	  				<div id="alertContainer" class="container"><div id="alertContainer" class="alert alert-error"><button type="button" class="close" data-dismiss="alert">×</button> <%=opChs %>失败</div></div>
+	  				<div id="alertContainer" class="container">
+                        <div id="alertContainerError" class="alert alert-error">
+                            <button type="button" class="close" data-dismiss="alert">×</button> <%=opChs %>失败
+                        </div>
+                    </div>
 	  		<%  }
 	  		if(dto != null) {
 	  		%>
@@ -84,7 +92,7 @@
                   <%if(dto.isOnline()){%>
                   	<td>在线</td>
                   	<td><a id="down" title="这台agent将不在监控范围内，agent进程是否被kill并不能确定。" class="btn btn-primary btn-small" href="updateHost?hostName=<%=hostName%>&op=down">下线</a></td>
-                  <%} %><%else{%>
+                  <%}else{%>
                   	<td>下线</td>
                   	<td><a id="up"  title="这台agent将被纳入监控范围内，agent需要手动启动。" class="btn btn-primary btn-small" href="updateHost?hostName=<%=hostName%>&op=up">上线</a></td>
                   <%} %>
@@ -101,9 +109,11 @@
                 <tr class="info">
                   <td>4</td>
                   <td>版本</td>
-                  <td><%=dto.getInfo().getAgentVersion() %></td>
+                  <td><% if (dto.getInfo() == null){%>
+                     异常，无法获得版本号 <%}else{
+                          %><%=dto.getInfo().getAgentVersion() %><%}%></td>
                   <%if(dto.isConnected()){%>
-                  	<td><a id="restart" class="btn btn-primary btn-small" href="updateHost?hostName=<%=hostName%>&op=update">升级</a></td>
+                  	<td><a id="update" class="btn btn-primary btn-small" href="updateHost?hostName=<%=hostName%>&op=update">升级</a></td>
                   <%} else{%>
                   	<td>无法升级</td>
                   <%} %>

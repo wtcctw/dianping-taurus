@@ -16,6 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.dianping.lion.EnvZooKeeperConfig;
+import com.dianping.lion.client.ConfigCache;
+import com.dianping.lion.client.LionException;
 import com.dp.bigdata.taurus.web.servlet.*;
 import jxl.Sheet;
 import jxl.Workbook;
@@ -71,7 +74,14 @@ public class BatchTaskServlet extends HttpServlet{
         super.init(config);
         ServletContext context = getServletContext();
         XSL_UPLOAD_TMP_DIR = context.getInitParameter("XSL_UPLOAD_TMP_DIR");
-        RESTLET_SERVER = context.getInitParameter("RESTLET_SERVER") + "task";
+        String restLetServer;
+        try {
+            restLetServer = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.restlet.url");
+        } catch (LionException e) {
+            restLetServer = context.getInitParameter("RESTLET_SERVER");
+            e.printStackTrace();
+        }
+        RESTLET_SERVER = restLetServer + "task";
     }
 
 	@Override

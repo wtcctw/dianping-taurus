@@ -29,6 +29,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.dianping.lion.EnvZooKeeperConfig;
+import com.dianping.lion.client.ConfigCache;
+import com.dianping.lion.client.LionException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.Header;
@@ -64,7 +67,12 @@ public class CreateTaskServlet extends HttpServlet{
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         ServletContext context = getServletContext();
-        RESTLET_URL_BASE = context.getInitParameter("RESTLET_SERVER");
+        try {
+            RESTLET_URL_BASE = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.restlet.url");
+        } catch (LionException e) {
+            RESTLET_URL_BASE = context.getInitParameter("RESTLET_SERVER");
+            e.printStackTrace();
+        }
         targetUri = RESTLET_URL_BASE + targetUri;
         nameUri =  RESTLET_URL_BASE + nameUri;
     }
