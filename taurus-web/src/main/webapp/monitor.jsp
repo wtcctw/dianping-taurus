@@ -6,17 +6,6 @@
     <%@ include file="jsp/common-nav.jsp" %>
     <link rel="stylesheet" type="text/css" href="css/DT_bootstrap.css">
     <style>
-        .fail-tag {
-            font-size: 130%
-        }
-
-        .run-tag {
-            font-size: 130%
-        }
-
-        .timeout-tag {
-            font-size: 130%
-        }
 
         .time_inal {
             float: right
