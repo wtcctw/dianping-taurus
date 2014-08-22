@@ -162,9 +162,6 @@ public class AttemptProxyServlet extends HttpServlet {
                 String isEnd;                                 //标记任务是否执行完成
                 boolean acceptContentWay = false;             //false :NORMAL 全量接受；true：INC 增量接受
 
-                ClientResource getLogCr;
-                ClientResource getIsEndCr = null;
-
                 if (endTime == null) {
                     date = format.format(new Date());
                 } else {
@@ -193,7 +190,6 @@ public class AttemptProxyServlet extends HttpServlet {
                                         + "/agentrest.do?action=getlog&date="
                                         + date
                                         + "&attemptId=" + attemptID
-                                        + "&file_offset=" + lastTimeFileSize
                                         + "&flag=NORMAL"
                                         + "&query_type=" + queryType;
                             } else {                                                        //增量获取日志
@@ -201,7 +197,6 @@ public class AttemptProxyServlet extends HttpServlet {
                                         + "/agentrest.do?action=getlog&date="
                                         + date
                                         + "&attemptId=" + attemptID
-                                        + "&file_offset=" + lastTimeFileSize
                                         + "&flag=INC"
                                         + "&query_type=" + queryType;
 
@@ -220,12 +215,6 @@ public class AttemptProxyServlet extends HttpServlet {
                                 }
                             }
 
-                           /* String isEndUrl = "http://" + hostIp
-                                    + ":" + AGENT_PORT
-                                    + "/api/isend/" + attemptID;
-
-                            getIsEndCr = new ClientResource(isEndUrl);
-                            isEnd = getIsEndCr.get().getText();*/
                             String isEndUrl = "http://" + hostIp
                                     + ":" + AGENT_PORT
                                     + "/agentrest.do?action=isend&attemptId="
@@ -234,7 +223,7 @@ public class AttemptProxyServlet extends HttpServlet {
 
                             if (acceptContentWay && isEnd.equals("false")) {
                                 request.getSession().setAttribute(fileSizeAttribute, ((Long) lastTimeFileSize).toString());
-                            } else if (isEnd.equals("true")) {
+                            } else if (isEnd.trim().equals("true")) {
                                 request.getSession().setAttribute(fileSizeAttribute, "0");
                             }
 
@@ -303,7 +292,7 @@ public class AttemptProxyServlet extends HttpServlet {
                 //String url = "http://" + host + ":" + AGENT_PORT + "/api/isend/" + attemptID;
                 //getLogCr = new ClientResource(url);
                 String url= "http://" + host + ":" + AGENT_PORT + "/agentrest.do?action=isend&attemptId=" + attemptID;
-                respStr = getAgentRestService(url);
+                respStr = getAgentRestService(url).trim();
             }
 
             //Representation repLog = getLogCr.get(MediaType.TEXT_HTML);

@@ -112,7 +112,7 @@ public final class AgentEnvValue {
     public static String getVersion() {
         try {
             Properties props = new Properties();
-            InputStream in = ClassLoaderUtils.getDefaultClassLoader().getResourceAsStream(POM_PATH);
+            InputStream in = ClassLoaderUtils.getDefaultClassLoader().getResourceAsStream(CONF);
             props.load(in);
             String result = props.getProperty("version");
             in.close();

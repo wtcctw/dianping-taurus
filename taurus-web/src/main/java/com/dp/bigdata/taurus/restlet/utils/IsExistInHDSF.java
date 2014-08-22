@@ -23,7 +23,7 @@ public class IsExistInHDSF extends ServerResource implements IExistInHDFS {
         try {
             isexist = hdfsUtils.isExistFile(logPath);
         } catch (IOException e) {
-            return "null";
+            isexist = false;
         }
 
         return isexist ? "true" : "false";

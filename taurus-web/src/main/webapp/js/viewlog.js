@@ -3,10 +3,11 @@ var status;
 var error_log_rtn;
 var log_rtn;
 var result;
-
+var is_flash;
 $(document).ready(function () {
     attemptID = GetQueryString("id"); //通过表达式获得传递参数
     status = get_task_status();
+    is_flash = true;
     var is_new = is_new_agent();
     var error_panel=document.getElementById("error-panel");
     var log_panel = document.getElementById("spann");
@@ -107,6 +108,9 @@ function do_relash_task(){
         if(is_end == "false"){
             error_log_rtn = setInterval("fetch_errorLog()", 1500);
             log_rtn = setInterval("fetch_Log()", 1500);
+        }else{
+            fetch_errorLog();
+            fetch_Log();
         }
 
     }else
