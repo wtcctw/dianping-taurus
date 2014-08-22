@@ -193,6 +193,10 @@ function is_new_agent() {
     return ret;
 }
 
+window.onbeforeunload=function(){
+    if(status == "RUNNING"){
+        opener.document.location.reload();
+    }
 
-
+}
 
