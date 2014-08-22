@@ -29,18 +29,21 @@ public class RestServiceServlet extends HttpServlet {
             String flag = (String) request.getParameter("flag");               //这个主要是标志当web刷新时，任务还在执行，但是等请求的时候，任务已经结束的时间点
             String queryType = (String) request.getParameter("query_type");    //区分是log，还是error log
             String offSetType;
-            ServletContext application=this.getServletContext();
+            ServletContext application = this.getServletContext();
             if (queryType.equals("log")) {
                 offSetType = "logOffSet";
             } else {
                 offSetType = "errorOffSet";
             }
+            Object offsetObj = application.getAttribute(offSetType);
 
-           fileOffset = application.getAttribute(offSetType).toString();
 
-            if (fileOffset == null) {
+            if (offsetObj == null) {
                 fileOffset = "0";
+            } else {
+                fileOffset = offsetObj.toString();
             }
+
 
             System.out.println("query:" + queryType + "fileoffset:" + fileOffset);
 
@@ -51,8 +54,8 @@ public class RestServiceServlet extends HttpServlet {
 
             if (isEnd.equals("true")) {
 
-             application.setAttribute(offSetType, "0");
-            }else {
+                application.setAttribute(offSetType, "0");
+            } else {
                 long offsetSum = Long.parseLong(fileOffset) + respStr.length();
                 application.setAttribute(offSetType, offsetSum);
             }
