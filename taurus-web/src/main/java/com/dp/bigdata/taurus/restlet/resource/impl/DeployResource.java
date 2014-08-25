@@ -51,7 +51,7 @@ public class DeployResource extends ServerResource implements IDeployResource {
 	@Autowired
 	private HostMapper hostMapper;
 
-	private String webUrl = "taurus.dp";
+	private String webUrl;
 
 	private static final Log LOG = LogFactory.getLog(DeployResource.class);
 
