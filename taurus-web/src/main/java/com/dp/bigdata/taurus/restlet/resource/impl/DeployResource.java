@@ -15,6 +15,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import com.dianping.lion.EnvZooKeeperConfig;
+import com.dianping.lion.client.ConfigCache;
 import com.dp.bigdata.taurus.restlet.resource.IDeployResource;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.PostMethod;
@@ -51,7 +53,7 @@ public class DeployResource extends ServerResource implements IDeployResource {
 	@Autowired
 	private HostMapper hostMapper;
 
-	private String webUrl;
+	private String webUrl = "";
 
 	private static final Log LOG = LogFactory.getLog(DeployResource.class);
 
@@ -152,7 +154,9 @@ public class DeployResource extends ServerResource implements IDeployResource {
 			LOG.info(String.format("Start to depoly %s to %s", file, ip));
 			dr.status = DeployStatus.DEPLOYING;
 			path = deployer.deploy(ip, context);
-			String taurusUrl = String.format(createUrlPattern, webUrl, name, path, ip);
+
+            webUrl = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.deploy.weburl");
+            String taurusUrl = String.format(createUrlPattern, webUrl, name, path, ip);
 			String updateUrl = String.format(updateUrlPattern, webUrl, name, path);
 			callback(dr, callback, DeployStatus.SUCCESS, taurusUrl, updateUrl);
 			LOG.debug("deploy success");
