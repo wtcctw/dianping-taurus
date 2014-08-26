@@ -4,14 +4,15 @@ var error_log_rtn;
 var log_rtn;
 var result;
 var is_flash;
+var is_new;
 $(document).ready(function () {
     attemptID = GetQueryString("id"); //通过表达式获得传递参数
     status = get_task_status();
     is_flash = true;
-    var is_new = is_new_agent();
+    is_new = is_new_agent();
     var error_panel=document.getElementById("error-panel");
     var log_panel = document.getElementById("spann");
-    if (is_new == "true"){
+    if (is_new != "true"){
         error_panel.style.display="none";
         log_panel.style.width="95%";
     }
@@ -27,10 +28,15 @@ function GetQueryString(name) {
 
 function fetch_errorLog() {
     var $logContainer = $("#errolog");
-    var is_end = is_log_end();
-    if(is_end == "true"){
-        clearInterval(error_log_rtn);
+    if(is_new == "true"){
+        var is_end = is_log_end();
+        if(is_end == "true" ){
+            clearInterval(error_log_rtn);
+        }
+    }else{
+        return;
     }
+
     status = get_task_status();
 
     $.ajax({
@@ -65,9 +71,12 @@ function fetch_errorLog() {
 
 function fetch_Log() {
     var $logContainer = $("#strout")
-
-    var is_end = is_log_end();
-    if(is_end == "true"){
+    if(is_new == "true"){
+        var is_end = is_log_end();
+        if(is_end == "true" ){
+            clearInterval(log_rtn);
+        }
+    }else{
         clearInterval(log_rtn);
     }
 

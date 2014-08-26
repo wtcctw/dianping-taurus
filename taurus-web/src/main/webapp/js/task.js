@@ -13,6 +13,8 @@ $(document).ready(function() {
 			$("#upfile").hide();
 			$("#mainClassCG").show();
 			$("#beanCG").show();
+            $("#hadoopUser").hide();
+            $("#defaultUser").show();
 		} else if($(this).val() === 'hadoop'){
 			isSpringType = false;
 			$("#jarAddress").hide();
@@ -20,6 +22,8 @@ $(document).ready(function() {
 			$("#upfile").show();
 			$("#mainClassCG").hide();
 			$("#beanCG").hide();
+            $("#hadoopUser").show();
+            $("#defaultUser").hide();
 		} else{
 			isSpringType = false;
 			$("#jarAddress").hide();
@@ -27,9 +31,19 @@ $(document).ready(function() {
 			$("#upfile").show();
 			$("#mainClassCG").hide();
 			$("#beanCG").hide();
+            $("#hadoopUser").hide();
+            $("#defaultUser").show();
 		}
 	});
-	
+    if($("#taskType").val() === 'default'){
+        $("#hadoopUser").hide();
+        $("#defaultUser").show();
+    }else{
+        $("#hadoopUser").show();
+        $("#defaultUser").hide();
+    }
+
+
 	$("#addNewBeanbtn").click(function(e){
 		beanCounter = beanCounter + 1;
 		var html1 = "<div class='control-group' id=" + "'cgcron" + beanCounter +"'><label class='control-label' for='crontab" + beanCounter +"'>Crontab" + beanCounter +"*</label>"+

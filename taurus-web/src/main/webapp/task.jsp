@@ -83,7 +83,7 @@
 						<div class="control-group">
             				<label class="control-label"  for="hadoopName">hadoop用户名*</label>
             				<div class="controls">
-              					<input type="text" class="input-large field"  id="hadoopName" name="hadoopName"  placeholder="kerberos principle (wwwcron)">
+              					<input type="text" class="input-large field"  id="hadoopName" name="hadoopName" value="wwwcron" placeholder="kerberos principle (wwwcron)">
 								<a href="about.jsp#config">帮助</a>
             				</div>
           				</div>
@@ -92,7 +92,26 @@
                     <div id="host"  class="control-group">
                     	<label class="control-label"  for="hostname">部署的机器*</label>
                     	<div class="controls">
-    						<input type="text" id="hostname" name="hostname" class="input-big field"  value="<%=ip%>" placeholder="10.0.0.1">
+    						<select  id="hostname" name="hostname" class="input-big field" >
+                                <%
+                                    if(ip != null)
+                                        %>
+                                <option selected="selected"><%=ip%></option>
+                                <%
+                                %>
+                                <%
+
+                                 for (HostDTO hostip:hosts){
+                                     if (hostip.isConnected()){
+                                     %>
+
+                                <option><%=hostip.getIp()%></option>
+                                <% }
+                                }
+                                %>
+
+                            </select>
+                            <a>如果你要部署的主机ip不在这里说明，agent机器出现了故障，请联系运维哥哥</a>
     					</div>
 					</div>
                     </fieldset>
@@ -150,9 +169,12 @@
 
                 <div class="control-group">
             		<label class="control-label" for="proxyUser">以该用户身份运行（不可为root）*</label>
-            		<div class="controls">
-              			<input type="text" class="input-xxlarge field" id="proxyUser" name="proxyUser"  placeholder="执行作业的用户身份">
+            		<div class="controls" id="hadoopUser">
+              			<input type="text" class="input-xxlarge field" id="proxyUser" name="proxyUser"  placeholder="执行作业的用户身份" >
             		</div>
+                    <div class="controls" id="defaultUser">
+                        <input type="text" class="input-xxlarge field" id="proxyUser" name="proxyUser"  placeholder="执行作业的用户身份" value="nobody" disabled="disabled">
+                    </div>
           		</div>
                 <div class="control-group">
             		<label class="control-label" for="description">描述*</label>

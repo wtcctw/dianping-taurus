@@ -81,7 +81,7 @@ public class AttemptProxyServlet extends HttpServlet {
             inputStream.close();
             return msgContent;
         } catch (IOException e) {
-            e.printStackTrace();
+            msgContent= "null";
         }
         return msgContent;
     }
@@ -175,9 +175,9 @@ public class AttemptProxyServlet extends HttpServlet {
 
                     try {
 
-                        ClientResource isNewAgentCr = new ClientResource(RESTLET_URL_BASE + "isexist/" + attemptID);
-                        String isNew = isNewAgentCr.get().getText();
-                        if (isNew.equals("true")/*||isNew.equals("null")*/) {
+                        String isNewUrl= "http://" + hostIp + ":" + AGENT_PORT + "/agentrest.do?action=isnew";
+                        String isNew =  getAgentRestService(isNewUrl).trim();
+                        if (!isNew.equals("true")/*||isNew.equals("null")*/) {
                             String oldUrl = "/attempts.do?id=" + attemptID + "&action=view-log";
                             response.sendRedirect(oldUrl);
 
@@ -292,9 +292,11 @@ public class AttemptProxyServlet extends HttpServlet {
                 //String url = "http://" + host + ":" + AGENT_PORT + "/api/isend/" + attemptID;
                 //getLogCr = new ClientResource(url);
                 String url= "http://" + host + ":" + AGENT_PORT + "/agentrest.do?action=isend&attemptId=" + attemptID;
-                respStr = getAgentRestService(url).trim();
+                respStr = getAgentRestService(url);
             }
-
+            if (respStr .equals("null")){
+                respStr = "old";
+            }
             //Representation repLog = getLogCr.get(MediaType.TEXT_HTML);
             OutputStream output = response.getOutputStream();
             //repLog.write(output);
@@ -315,11 +317,21 @@ public class AttemptProxyServlet extends HttpServlet {
             output.close();
         } else if (action.equals(ISNEW)) {
             OutputStream output = response.getOutputStream();
-            ClientResource isNewAgentCr = new ClientResource(RESTLET_URL_BASE + "isexist/" + attemptID);
-            String isNew = isNewAgentCr.get().getText();
-            if (isNew == null) {
-                isNew = " ";
+            ClientResource attemptLogCr = new ClientResource(RESTLET_URL_BASE + "getattemptbyid/" + attemptID);
+            IAttemptResource attemptLogResource = attemptLogCr.wrap(IAttemptResource.class);
+            AttemptDTO dto = attemptLogResource.retrieve();
+            String isNew;
+            if (dto !=null){
+
+                String url= "http://" + dto.getExecHost() + ":" + AGENT_PORT + "/agentrest.do?action=isnew";
+                isNew =  getAgentRestService(url);
+                if (isNew.isEmpty()) {
+                    isNew = "null";
+                }
+            }else {
+                isNew = "null";
             }
+
             output.write(isNew.getBytes());
             output.close();
         }
