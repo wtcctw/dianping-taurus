@@ -94,6 +94,12 @@
                     	<div class="controls">
     						<select  id="hostname" name="hostname" class="input-big field" >
                                 <%
+                                    if(ip != null)
+                                        %>
+                                <option selected="selected"><%=ip%></option>
+                                <%
+                                %>
+                                <%
 
                                  for (HostDTO hostip:hosts){
                                      if (hostip.isConnected()){
