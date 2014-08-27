@@ -12,7 +12,9 @@ $(document).ready(function () {
     is_new = is_new_agent();
     var error_panel=document.getElementById("error-panel");
     var log_panel = document.getElementById("spann");
-    if (is_new != "true"){
+    if (is_new == "true"){
+
+    }else{
         error_panel.style.display="none";
         log_panel.style.width="95%";
     }
@@ -154,7 +156,7 @@ var ret="";
         }
 
     });
-    return ret;
+    return ret.trim();
 }
 
 
@@ -177,7 +179,7 @@ function get_task_status() {
         }
 
     });
-    return ret;
+    return ret.trim();
 }
 
 function is_new_agent() {
@@ -199,7 +201,7 @@ function is_new_agent() {
         }
 
     });
-    return ret;
+    return ret.trim();
 }
 
 window.onbeforeunload=function(){
