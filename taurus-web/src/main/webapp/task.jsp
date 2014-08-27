@@ -65,7 +65,6 @@
    						<select  id="taskType" name="taskType"  class="input-big  field" >
    							<option>default</option>
    							<option>hadoop</option>
-							<option>spring</option>
 						</select>
 						<a href="about.jsp#config">帮助</a>
                       	</div>
@@ -111,7 +110,7 @@
                                 %>
 
                             </select>
-                            <a>如果你要部署的主机ip不在这里说明，agent机器出现了故障，请联系运维哥哥</a>
+                            <a>如果你要部署的主机ip不在这里，说明agent机器出现了故障或者主机ip上没有部署agent，请联系运维哥哥</a>
     					</div>
 					</div>
                     </fieldset>
