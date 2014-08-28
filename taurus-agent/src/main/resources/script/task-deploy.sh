@@ -28,7 +28,7 @@ function extract () {
 
 source /etc/profile;
 source ~/.bash_profile;
-kinit -r 12l -k -t ../conf/taurus.keytab taurus@DIANPING.COM;
+kinit -r 12l -k -t ../taurus.keytab taurus@DIANPING.COM;
 kinit -R;
 path=`dirname $2`
 if [ -f $path ] ; then

@@ -51,7 +51,7 @@ public class PollingAgentMonitor implements AgentMonitor {
             int sessionTimeout = Integer.parseInt(props.getProperty("sessionTimeout"));
             zkClient = new ZkClient(connectString, sessionTimeout);
         } catch (Exception e) {
-            throw new RuntimeException("Error initialize zookeeper client");
+            throw new RuntimeException("Error initialize zookeeper client",e);
         }
     }
 
