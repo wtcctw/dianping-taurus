@@ -122,7 +122,7 @@
             </table>
             	</div>
             	<div class="tab-pane" id="config">
-            		hello	
+
             	</div>
             	<div class="tab-pane" id="statistics">
 					hello two
