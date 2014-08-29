@@ -62,7 +62,7 @@
 								<td>2013-08-20</td>
 							</tr>
 							<tr>
-								<td>增加Cat打点</a></td>
+								<td>增加Cat打点</td>
 								<td>2013-08-20</td>
 							</tr>
 						</tbody>

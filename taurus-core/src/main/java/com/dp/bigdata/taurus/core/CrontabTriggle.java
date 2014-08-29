@@ -90,7 +90,7 @@ public class CrontabTriggle implements Triggle {
                         nextFireTime = ce.getNextValidTimeAfter(nextFireTime);
                     }
                 }else {
-                    Cat.logEvent("Crontab.NextFireTimeNULL", task.getName());
+                    Cat.logEvent("Crontab.NextFireTimeIsNULL", task.getName());
                 }
 
 			} catch (Throwable t) {
