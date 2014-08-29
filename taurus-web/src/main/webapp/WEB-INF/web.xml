@@ -116,6 +116,13 @@
 		<servlet-class>com.dp.bigdata.taurus.web.servlet.HostServlet</servlet-class>
 	</servlet>
 
+    <servlet>
+        <description />
+        <display-name>Deploy Task</display-name>
+        <servlet-name>DeployServlet</servlet-name>
+        <servlet-class>com.dp.bigdata.taurus.web.servlet.DeployServlet</servlet-class>
+    </servlet>
+
 	<servlet-mapping>
 		<servlet-name>BatchTaskServlet</servlet-name>
 		<url-pattern>/batch_upload.do</url-pattern>
@@ -147,4 +154,8 @@
 		<servlet-name>HostServlet</servlet-name>
 		<url-pattern>/updateHost</url-pattern>
 	</servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeployServlet</servlet-name>
+        <url-pattern>/deploy</url-pattern>
+    </servlet-mapping>
 </web-app>
