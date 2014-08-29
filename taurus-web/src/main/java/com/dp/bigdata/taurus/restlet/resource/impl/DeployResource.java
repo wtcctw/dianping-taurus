@@ -18,10 +18,13 @@ import java.util.concurrent.TimeUnit;
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
 import com.dp.bigdata.taurus.restlet.resource.IDeployResource;
+import com.google.gson.JsonArray;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.json.JSONObject;
+import org.json.JSONString;
 import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.ext.json.JsonRepresentation;
@@ -81,6 +84,41 @@ public class DeployResource extends ServerResource implements IDeployResource {
 		this.webUrl = webUrl;
 	}
 
+    public String status(String deployId, String name){
+        Map<String, Object> result = new HashMap<String, Object>();
+        if (name != null) {
+            TaskExample example = new TaskExample();
+            example.createCriteria().andAppnameEqualTo(name).andStatusNotEqualTo(3);
+            List<Task> tasks = taskMapper.selectByExample(example);
+            if (tasks == null || tasks.size() == 0) {
+                HostExample he = new HostExample();
+                he.createCriteria().andIsonlineEqualTo(true);
+                List<Host> hosts = hostMapper.selectByExample(he);
+                List<String> ips = new ArrayList<String>();
+                for (Host host : hosts) {
+                    ips.add(host.getIp());
+                }
+                result.put("hosts", ips);
+            } else {
+                List<String> ips = new ArrayList<String>();
+                String hostIp = tasks.get(0).getHostname();
+                ips.add(hostIp);
+                result.put("hosts", ips);
+            }
+        } else {
+            DeployResult deployResult = deployResults.get(deployId);
+            if (deployResult == null) {
+                result.put("status", DeployStatus.UNKNOWN);
+            } else {
+                result.put("status", deployResult.status);
+                result.put("createurl", deployResult.createUrl);
+                result.put("updateurl", deployResult.updateUrl);
+            }
+        }
+        JSONObject jsonObject =  new JSONObject(result);
+        return jsonObject.toString();
+    }
+
 	@Override
 	@Get
 	public Representation status() {
@@ -118,7 +156,21 @@ public class DeployResource extends ServerResource implements IDeployResource {
 		}
 		return new JsonRepresentation(result);
 	}
+public void deployer(String deployId, String deployIp, String deployFile, String url, String appName){
 
+    final String id = deployId;
+    final String ip = deployIp;
+    final String file = deployFile;
+    final String callback = url;
+    final String name = appName;
+    setStatus(Status.SUCCESS_OK);
+    deployThreadPool.execute(new Runnable() {
+        @Override
+        public void run() {
+            deployInternal(ip, file, id, callback, name);
+        }
+    });
+}
 	@Override
 	@Post
 	public void deploy(final Representation re) {

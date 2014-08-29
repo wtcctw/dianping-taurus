@@ -132,7 +132,7 @@ function do_relash_task(){
 }
 
 function is_log_end() {
-var ret="";
+    var ret="";
     $.ajax({
         url : "attempts.do",
         data : {
@@ -146,7 +146,7 @@ var ret="";
             ret =  "null"
         },
         success: function (response) {
-           ret = response;
+            ret = response;
         }
 
     });
