@@ -146,13 +146,7 @@ var ret="";
             ret =  "null"
         },
         success: function (response) {
-            if(response == "true")
-            {
-                ret = "true";
-
-            }else{
-                ret = "false";
-            }
+           ret = response
         }
 
     });
