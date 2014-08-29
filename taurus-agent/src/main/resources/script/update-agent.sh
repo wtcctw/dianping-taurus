@@ -28,7 +28,7 @@ mv -f taurus-agent/bin/* ./bin/
 rm -rf taurus-agent
 
 dos2unix bin/start.sh
-dos2unix conf/agentConf.properties
+dos2unix agentConf.properties
 
 chmod 744 bin/start.sh
 

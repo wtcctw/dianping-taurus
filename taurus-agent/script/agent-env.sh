@@ -4,7 +4,7 @@ source /etc/profile
 cd `dirname $1`
 cd ..
 
-for cmd in `cat conf/agentConf.properties`;
+for cmd in `cat ../agentConf.properties`;
 do
 	if [[ $cmd != \#* ]]; then
 	export $cmd;

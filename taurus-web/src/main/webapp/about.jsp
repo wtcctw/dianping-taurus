@@ -438,7 +438,11 @@
 					如果是第一次安装，以root身份执行如下代码：
 					<div class="well">
 						<em>wget http://10.1.1.163:8000/install-new-agent.sh; <br />
+<<<<<<< HEAD
 							chmod 700 ./install-new-agent.sh; <br /> ./install-agent.sh nobody;
+=======
+							chmod 700 ./install-new-agent.sh; <br /> ./install-new-agent.sh nobody;
+>>>>>>> 0cf415c9b48dad7242d3c1637ee62ddd3878918c
 						</em>
 					</div>
 					以上会以nobody的身份启动taurus agent。
