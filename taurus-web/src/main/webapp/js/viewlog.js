@@ -5,8 +5,10 @@ var log_rtn;
 var result;
 var is_flash;
 var is_new;
+var old_status;
 $(document).ready(function () {
     attemptID = GetQueryString("id"); //通过表达式获得传递参数
+    old_status = GetQueryString("status");
     status = get_task_status();
     is_flash = true;
     is_new = is_new_agent();
@@ -132,7 +134,7 @@ function do_relash_task(){
 }
 
 function is_log_end() {
-var ret="";
+    var ret="";
     $.ajax({
         url : "attempts.do",
         data : {
@@ -199,7 +201,7 @@ function is_new_agent() {
 }
 
 window.onbeforeunload=function(){
-    if(status == "RUNNING"){
+    if(old_status == "RUNNING"){
         opener.document.location.reload();
     }
 

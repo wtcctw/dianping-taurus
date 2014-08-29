@@ -283,7 +283,6 @@ public class AttemptProxyServlet extends HttpServlet {
                 host = dto.getExecHost();
             }
 
-           // ClientResource getLogCr = null;
             String respStr = "";
             if (host.isEmpty()) {
                 OutputStream output = response.getOutputStream();
