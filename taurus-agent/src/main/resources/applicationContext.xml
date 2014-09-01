@@ -8,8 +8,6 @@
     <bean name="placeholder" lazy-init="false" class="com.dianping.lion.client.InitializeConfig">
         <property name="propertiesPath" value="config/applicationContext.properties" />
     </bean>
-    <bean id="startRestLet" class="com.dp.bigdata.taurus.agent.StartServer" init-method="start" >
-    </bean>
 </beans>
 
 

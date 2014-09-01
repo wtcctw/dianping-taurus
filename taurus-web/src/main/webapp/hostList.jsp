@@ -10,10 +10,18 @@
 			$('li[id="#host_<%=request.getParameter("hostName")%>"]').addClass("active");
 		});
 	</script>
+    <div class="well sidebar-nav" >
+    <ul class="nav nav-list">
+        <li class='nav-header'>  <h5>当前机器:</h5></li>
+        <li><font color=rgb(0,0,255)><strong><%=request.getParameter("hostName")%></strong></font></li>
+    </ul>
+        </div>
 		 <div class="well sidebar-nav" >
+
           <ul class="nav nav-list">
 	       <li class='nav-header'><h4>所有机器</h4></li>
-	       <%
+
+              <%
 	    		for (HostDTO dto : hosts) {
 			%>
 					<li class="text-right" id="host_<%=dto.getName()%>"><a href="hosts.jsp?hostName=<%=dto.getName()%> ">

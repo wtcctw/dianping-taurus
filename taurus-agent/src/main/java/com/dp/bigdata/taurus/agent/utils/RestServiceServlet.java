@@ -30,39 +30,43 @@ public class RestServiceServlet extends HttpServlet {
             String queryType = (String) request.getParameter("query_type");    //区分是log，还是error log
             String offSetType;
             ServletContext application = this.getServletContext();
-            if (queryType.equals("log")) {
-                offSetType = "logOffSet";
-            } else {
-                offSetType = "errorOffSet";
-            }
-            Object offsetObj = application.getAttribute(offSetType);
-
-
-            if (offsetObj == null) {
-                fileOffset = "0";
-            } else {
-                fileOffset = offsetObj.toString();
-            }
-
-
-            System.out.println("query:" + queryType + "fileoffset:" + fileOffset);
-
-            GetLogs getlogs = new GetLogs();
-            String respStr = getlogs.getLogs(date, attemptID, fileOffset, flag, queryType);
-            LogFileEnd logFileEnd = new LogFileEnd();
-            String isEnd = logFileEnd.isEnd(attemptID);
-
-            if (isEnd.equals("true")) {
-
-                application.setAttribute(offSetType, "0");
-            } else {
-                long offsetSum = Long.parseLong(fileOffset) + respStr.length();
-                application.setAttribute(offSetType, offsetSum);
-            }
-
-            System.out.println("end query:" + queryType + "fileoffset:" + fileOffset);
-
             OutputStream output = response.getOutputStream();
+            String respStr;
+            if (queryType.equals("agentlogs")){
+                GetLogs getlogs = new GetLogs();
+                respStr = getlogs.getLogs(date, attemptID, "0", "NORMAL", queryType);
+            }else{
+                if (queryType.equals("log")) {
+                    offSetType = "logOffSet";
+                } else  {
+                    offSetType = "errorOffSet";
+                }
+                Object offsetObj = application.getAttribute(offSetType);
+
+
+                if (offsetObj == null) {
+                    fileOffset = "0";
+                } else {
+                    fileOffset = offsetObj.toString();
+                }
+
+
+                System.out.println("query:" + queryType + "fileoffset:" + fileOffset);
+
+                GetLogs getlogs = new GetLogs();
+                respStr = getlogs.getLogs(date, attemptID, fileOffset, flag, queryType);
+                LogFileEnd logFileEnd = new LogFileEnd();
+                String isEnd = logFileEnd.isEnd(attemptID);
+
+                if (isEnd.equals("true")) {
+
+                    application.setAttribute(offSetType, "0");
+                } else {
+                    long offsetSum = Long.parseLong(fileOffset) + respStr.length();
+                    application.setAttribute(offSetType, offsetSum);
+                }
+
+            }
             output.write(respStr.getBytes());
             output.close();
         } else if (action.equals(ISEND)) {

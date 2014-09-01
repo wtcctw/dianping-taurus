@@ -35,6 +35,7 @@ function fetch_errorLog() {
     if(is_new == "true"){
         var is_end = is_log_end();
         if(is_end == "true" ){
+
             clearInterval(error_log_rtn);
         }
     }else{
@@ -145,7 +146,7 @@ function is_log_end() {
         type : 'POST',
         async:false,
         error: function(){
-            ret =  "null"
+            ret =  "null";
         },
         success: function (response) {
             ret = response;
