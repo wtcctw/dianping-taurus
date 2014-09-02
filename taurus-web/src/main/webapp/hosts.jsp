@@ -204,9 +204,11 @@
 
 
                     String state = hostDto.getStatus();
-                    if (hostDto.getExecHost().equals(hostName)) {
-                        if (startTime != null && state.equals("RUNNING") && (startTime.compareTo(now) <= 0 && (endTime == null || endTime.compareTo(now) >= 0))) {
+                    String exeHost=hostDto.getExecHost();
+                    if (hostName!=null && hostName.equals(exeHost)) {
+                        if (tasks!=null&&startTime != null && state.equals("RUNNING") && (startTime.compareTo(now) <= 0 && (endTime == null || endTime.compareTo(now) >= 0))) {
                             String taskName = "";
+
                             for (Task task : tasks) {
                                 if (task.getTaskid().equals(hostDto.getTaskID())) {
                                     taskName = task.getName();
@@ -277,7 +279,8 @@
 
             if (submitFailAttempts != null)
                 for (AttemptDTO hostDto : submitFailAttempts) {
-                    if (hostDto.getExecHost().equals(hostName)) {
+                    String exeHost=hostDto.getExecHost();
+                    if (hostName!=null && hostName.equals(exeHost)) {
                         String state = hostDto.getStatus();
 
                         if (taskTime != null) {
@@ -414,7 +417,8 @@
 
             if (failAttempts != null)
                 for (AttemptDTO hostDto : failAttempts) {
-                    if (hostDto.getExecHost().equals(hostName)) {
+                    String exeHost=hostDto.getExecHost();
+                    if (hostName!=null && hostName.equals(exeHost)) {
                         String state = hostDto.getStatus();
 
 
@@ -552,7 +556,8 @@
 
             if (dependencyTimeOutAttempts != null)
                 for (AttemptDTO hostDto : dependencyTimeOutAttempts) {
-                    if (hostDto.getExecHost().equals(hostName)) {
+                    String exeHost=hostDto.getExecHost();
+                    if (hostName!=null && hostName.equals(exeHost)) {
                         String state = hostDto.getStatus();
 
 
@@ -688,7 +693,8 @@
 
             if (timeOutAttempts != null)
                 for (AttemptDTO hostDto : timeOutAttempts) {
-                    if (hostDto.getExecHost().equals(hostName)){
+                    String exeHost=hostDto.getExecHost();
+                    if (hostName!=null && hostName.equals(exeHost)) {
                         String state = hostDto.getStatus();
 
                         if (taskTime != null) {
