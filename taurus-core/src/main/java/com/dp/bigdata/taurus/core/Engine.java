@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import com.dianping.lion.EnvZooKeeperConfig;
+import com.dianping.lion.client.ConfigCache;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -31,6 +33,8 @@ import com.dp.bigdata.taurus.zookeeper.execute.helper.ExecuteStatus;
 import com.dp.bigdata.taurus.zookeeper.execute.helper.ExecutorManager;
 import com.dp.bigdata.taurus.zookeeper.heartbeat.helper.AgentHandler;
 import com.dp.bigdata.taurus.zookeeper.heartbeat.helper.AgentMonitor;
+
+import javax.mail.MessagingException;
 
 /**
  * Engine is the default implementation of the <code>Scheduler</code>.
@@ -161,8 +165,22 @@ final public class Engine implements Scheduler {
 			@Override
 			public void disConnected(String ip) {
 				Cat.logEvent("DisConnected", ip);
+                String context = "您好，taurus-agent的job主机 ["
+                        + ip
+                        + "] 服务已经挂掉请重启，监控连接如下：http://taurus.dp/hosts.jsp?hostName="
+                        + ip
+                        +"，谢谢~";
+                try {
+                    String toMails = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.down.mail.to");
+                    String [] toLists = toMails.split(",");
+                    for (String to:toLists){
+                        MailHelper.sendMail(to,context);
+                    }
 
-				Host host = new Host();
+                } catch (Exception e) {
+                    Cat.logError(e);
+                }
+                Host host = new Host();
 				host.setName(ip);
 				host.setIp(ip);
 				host.setIsconnected(false);

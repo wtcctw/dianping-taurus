@@ -13,6 +13,7 @@
 
 
     </style>
+    <link rel="stylesheet" type="text/css" href="css/DT_bootstrap.css">
     <link href="css/viewlog.css" rel="stylesheet" type="text/css">
 </head>
 <body data-spy="scroll">
@@ -822,5 +823,10 @@
 </div>
 
 </body>
-<script src="js/hosts.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(".atip").tooltip();
+</script>
+<script src="js/hosts.js" type="text/javascript">
+
+</script>
 </html>

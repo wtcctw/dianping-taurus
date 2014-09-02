@@ -424,38 +424,23 @@
 					<div class="page-header">
 						<h1>安装agent</h1>
 					</div>
-					Taurus agent通常安装在/data/app/taurus-agent目录下，安装之前请确认之前是否安装过。<br />
-					如果需要更新可以执行以下命令,请根据之前的执行身份判断。
-					<div class="well">
-						<em>script/update-agent;</em>
-					</div>
-					或
-					<div class="well">
-						<em>sudo -u nobody -s script/update-agent.sh</em>
-					</div>
+					Taurus agent已经升级到0.5.0版本，这版的agent需要部署在tomcat下，所以安装前请确认job机器有tomcat。<br />
 					<hr style="padding:15px 0px">
 
 					如果是第一次安装，以root身份执行如下代码：
 					<div class="well">
-						<em>wget http://10.1.1.163:8000/install-new-agent.sh; <br />
-							chmod 700 ./install-new-agent.sh; <br /> ./install-new-agent.sh nobody;
+						<em>wget http://10.1.1.163:8000/install-new-agent-war.sh; <br />
+							chmod 700 ./install-new-agent-war.sh; <br /> ./install-new-agent-war.sh;
 						</em>
 					</div>
-					以上会以nobody的身份启动taurus agent。
-					<div class="well">
-						<em>ps -ef | grep taurus.agent </em>
-					</div>
-					可以查看进程是否存在
+					以上会初始化taurus agent的运行环境。
 					<hr style="padding:15px 0px">
 					如果希望在该agent上，以多种身份运行作业<br/>
 					修改配置文件conf/agentConf.properties
 					<div class="well">
 						<em> needSudoAuthority=true </em>
 					</div>
-					并以root身份执行：
-					<div class="well">
-						<em> bin/start.sh </em>
-					</div>
+					运维需要以root身份启动tomcat
 					<hr style="padding:15px 0px">
 					如果需要使用agent申请hadoop权限<br/>先修改配置文件conf/agentConf.properties
 					<div class="well">
