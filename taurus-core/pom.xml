@@ -20,6 +20,11 @@
 			<artifactId>taurus-zookeeper-helper</artifactId>
 			<version>0.5.0</version>
 		</dependency>
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4.1</version>
+        </dependency>
 		<dependency>
 			<groupId>org.mybatis</groupId>
 			<artifactId>mybatis</artifactId>

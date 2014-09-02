@@ -1,6 +1,9 @@
 package com.dp.bigdata.taurus.web.servlet;
 
 import com.dp.bigdata.taurus.restlet.resource.impl.DeployResource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -16,6 +19,12 @@ public class DeployServlet  extends HttpServlet {
     private static final String STATUS = "status";
     private static final String DEPLOY = "deploy";
 
+    private DeployResource deployResource;
+
+    @Override
+    public void init() throws ServletException {
+        deployResource = (DeployResource)WebApplicationContextUtils.getWebApplicationContext(getServletContext()).getBean("deployResource");
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -30,8 +39,8 @@ public class DeployServlet  extends HttpServlet {
         if (action.equals(STATUS)){
             String deployId = request.getParameter("deployId");
             String name = request.getParameter("appName");
-            DeployResource deployResource = new DeployResource();
             String status =   deployResource.status(deployId, name);
+
             OutputStream output = response.getOutputStream();
             output.write(status.getBytes());
             output.close();
@@ -41,7 +50,6 @@ public class DeployServlet  extends HttpServlet {
              String file = request.getParameter("file");
              String url = request.getParameter("url");
              String name = request.getParameter("name");
-            DeployResource deployResource = new DeployResource();
             deployResource.deployer(deployId, ip, file, url, name);
             OutputStream output = response.getOutputStream();
             output.close();

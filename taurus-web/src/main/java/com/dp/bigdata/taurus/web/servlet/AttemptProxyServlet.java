@@ -137,9 +137,29 @@ public class AttemptProxyServlet extends HttpServlet {
                 if (queryType.equals("log")) {
                     fileSizeAttribute = "lastTimeFileSize";
                     contentLenStr = (String) request.getSession().getAttribute(fileSizeAttribute);
-                } else {
+                } else if(queryType.equals("errorlog")){
                     fileSizeAttribute = "errorLastTimeFileSize";
                     contentLenStr = (String) request.getSession().getAttribute(fileSizeAttribute);
+                }else {
+                    fileSizeAttribute = "agentlogs";
+                    String hostName = request.getParameter("hostname");
+                    contentLenStr = (String) request.getSession().getAttribute(fileSizeAttribute);
+                   String  logurl = "http://" + hostName + ":" + AGENT_PORT
+                            + "/agentrest.do?action=getlog"
+                            + "&flag=NORMAL"
+                            + "&query_type=" + queryType;
+                    String context = getAgentRestService(logurl);
+                    String retStr;                                              //格式化日志 以便在web显示是换行的
+                    String logStr = context;
+                    OutputStream output = response.getOutputStream();
+
+                    if (logStr == null) {                                     //时间间隔短，日志尚未生成可能获得null
+                        retStr = " ";
+                    } else {
+                        retStr = logStr.replace("\n", "<br>");
+                    }
+                    output.write(retStr.getBytes());
+                    output.close();
                 }
 
                 if (contentLenStr == null) {

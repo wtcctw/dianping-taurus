@@ -9,20 +9,34 @@
 		$(document).ready(function() {
 			$('li[id="#host_<%=request.getParameter("hostName")%>"]').addClass("active");
 		});
+
 	</script>
+    <div class="well sidebar-nav" >
+    <ul class="nav nav-list">
+        <li class='nav-header'>  <h5>当前机器:</h5></li>
+        <li><font color=rgb(0,0,255)><strong><%=request.getParameter("hostName")%></strong></font></li>
+    </ul>
+        </div>
 		 <div class="well sidebar-nav" >
+
           <ul class="nav nav-list">
 	       <li class='nav-header'><h4>所有机器</h4></li>
-	       <%
+
+              <%
 	    		for (HostDTO dto : hosts) {
 			%>
-					<li class="text-right" id="host_<%=dto.getName()%>"><a href="hosts.jsp?hostName=<%=dto.getName()%> ">
+
 					<%if(!dto.isOnline()){ %>
+              <li class="text-right" id="host_<%=dto.getName()%>"><a class="atip"  data-toggle="tooltip" data-placement="right" data-original-title="状态：已下线" href="hosts.jsp?hostName=<%=dto.getName()%> ">
 					<font color=grey><strong><%=dto.getName()%></strong></font>
 					<%}else if(dto.isConnected()){ %>
-					<font color=green><strong><%=dto.getName()%></strong></font>
+                  <li class="text-right" id="host_<%=dto.getName()%>"><a class="atip"  data-toggle="tooltip" data-placement="right" data-original-title="状态：已连接" href="hosts.jsp?hostName=<%=dto.getName()%> ">
+
+                  <font color=green><strong><%=dto.getName()%></strong></font>
 					<%} else{ %>
-					<font color=red><strong><%=dto.getName()%></strong></font>
+                      <li class="text-right" id="host_<%=dto.getName()%>"><a class="atip"  data-toggle="tooltip" data-placement="right" data-original-title="状态：已失去联系，请联系运维重启agent" href="hosts.jsp?hostName=<%=dto.getName()%> ">
+
+                      <font color=red><strong><%=dto.getName()%></strong></font>
 					<%} %>
 					</a></li>
 			<%

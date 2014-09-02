@@ -66,7 +66,8 @@
    							<option>default</option>
    							<option>hadoop</option>
 						</select>
-						<a href="about.jsp#config">帮助</a>
+						<a href="about.jsp#config"  class="atip"  data-toggle="tooltip" data-placement="top" data-original-title="hadoop: 需要访问hadoop的作业。这种类型的作业，taurus会管理作业的hadoop ticket的申请和销毁。
+                            default: 上述两种类型以外所有类型。">帮助</a>
                       	</div>
                     </div>
                     <div id="jarAddress" style="display:none;">
@@ -82,8 +83,10 @@
 						<div class="control-group">
             				<label class="control-label"  for="hadoopName">hadoop用户名*</label>
             				<div class="controls">
-              					<input type="text" class="input-large field"  id="hadoopName" name="hadoopName" value="wwwcron" placeholder="kerberos principle (wwwcron)">
-								<a href="about.jsp#config">帮助</a>
+              					<input type="text" class="input-large field"  id="hadoopName" name="hadoopName"  placeholder="kerberos principle (wwwcron)">
+								<a href="about.jsp#config" class="atip"  data-toggle="tooltip" data-placement="top" data-original-title=" hadoop类型的作业，需要提供一个用于访问hadoop的principle name。
+                                为此，taurus需要读取这个principle的keytab文件，一般情况下这个keytab已经放到相应的目录。
+                                如果你不确定这一点，请联系我们。">帮助</a>
             				</div>
           				</div>
           			</div>
@@ -110,7 +113,7 @@
                                 %>
 
                             </select>
-                            <a>如果你要部署的主机ip不在这里，说明agent机器出现了故障或者主机ip上没有部署agent，请联系运维哥哥</a>
+                            <a  class="atip"  data-toggle="tooltip" data-placement="top" data-original-title="如果你要部署的主机ip不在这里，说明agent机器出现了故障或者主机ip上没有部署agent，请联系运维哥哥">提示</a>
     					</div>
 					</div>
                     </fieldset>
@@ -173,6 +176,7 @@
             		</div>
                     <div class="controls" id="defaultUser">
                         <input type="text" class="input-xxlarge field" id="proxyUser" name="proxyUser"  placeholder="执行作业的用户身份" value="nobody" disabled="disabled">
+                        <a class="atip"  data-toggle="tooltip" data-placement="top" data-original-title="如果你非要已其他身份运行，请联系李明【kirin.li@dianping.com】">帮助</a>
                     </div>
           		</div>
                 <div class="control-group">
@@ -301,7 +305,12 @@
 		ipList = ipList.substr(1);
       	userList = userList.substr(1);
       	groupList = groupList.substr(1);
-		
+        $(".atip").tooltip();
+        options={
+            delay: { show: 500, hide: 100 },
+            trigger:'click',
+        };
+        $(".optiontip").tooltip(options);
     </script> 
 	<script src="js/bwizard.js" type="text/javascript"></script>
     <script src="js/jquery.validate.min.js" type="text/javascript"></script>

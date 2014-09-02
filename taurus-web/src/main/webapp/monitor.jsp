@@ -45,7 +45,7 @@
 
 
 <ul class="run-tag">
-    <li><a>正在运行的任务<span class="label label-info">RUNNING</span></a></li>
+    <li><a class="atip"  data-toggle="tooltip" data-placement="right" data-original-title="正在运行的任务"><span class="label label-info">RUNNING</span></a></li>
 </ul>
 <ul class="breadcrumb">
     <table cellpadding="0" cellspacing="0" border="0"
@@ -165,12 +165,15 @@
 </ul>
 <div class="time_inal">
 
-    <a href="monitor.jsp?id=1&taskdate＝<%=df.format(new Date(time.getTime() - (countTotal+1)*hourTime))    %>">[-1h]的时间区间[<%=formatter.format(new Date(time.getTime() - (countTotal+1)*hourTime))%>~<%=formatter.format(new Date(time.getTime()- countTotal*hourTime))%>] </a>
-    |<a href="monitor.jsp?id=24&taskdate＝<%=df.format(new Date(new Date().getTime() -24*hourTime))    %>">[当天]的时间区间[<%=formatter.format(new Date(new Date().getTime() -24*hourTime))%>~<%=formatter.format(new Date())%>] </a>
+    <a class="atip"  data-toggle="tooltip" data-placement="top" data-original-title="当你点击了[-1h]后，在想切换到当前页面时，请点击[当天]，刷新页面无效噢～">[注意] </a>
+    &nbsp;&nbsp; |&nbsp;&nbsp;
+    <a class="atip" href="monitor.jsp?id=1&taskdate＝<%=df.format(new Date(time.getTime() - (countTotal+1)*hourTime))    %> "  data-toggle="tooltip" data-placement="top" data-original-title="时间区间[<%=formatter.format(new Date(time.getTime() - (countTotal+1)*hourTime))%>~<%=formatter.format(new Date(time.getTime()- countTotal*hourTime))%>]">[-1h] </a>
+    &nbsp;&nbsp; |&nbsp;&nbsp;
+    <a class="atip" href="monitor.jsp?id=24&taskdate＝<%=df.format(new Date(new Date().getTime() -24*hourTime))    %>"  data-toggle="tooltip" data-placement="top" data-original-title=" 时间区间[<%=formatter.format(new Date(new Date().getTime() -24*hourTime))%>~<%=formatter.format(new Date())%>]">[当天] </a>
 </div>
 
 <ul class="submit-fail-tag">
-    <li><a>提交失败的任务 <span class="label label-important">SUBMIT_FAIL</span></a></li>
+    <li><a class="atip"  data-toggle="tooltip" data-placement="right" data-original-title="提交失败的任务"><span class="label label-important">SUBMIT_FAIL</span></a></li>
 </ul>
 
 <ul class="breadcrumb">
@@ -304,7 +307,7 @@
 </ul>
 
 <ul class="fail-tag">
-    <li><a>失败的任务 <span class="label label-important">FAILED</span></a></li>
+    <li><a class="atip"  data-toggle="tooltip" data-placement="right" data-original-title="失败的任务"><span class="label label-important">FAILED</span></a></li>
 
 </ul>
 
@@ -439,7 +442,7 @@
 </ul>
 
 <ul class="dependency-timeout-tag">
-    <li><a>依赖超时的任务<span class="label label-important">DEPENDENCY_TIMEOUT</span></a></li>
+    <li><a class="atip"  data-toggle="tooltip" data-placement="right" data-original-title="依赖超时的任务"><span class="label label-important">DEPENDENCY_TIMEOUT</span></a></li>
 </ul>
 
 <ul class="breadcrumb">
@@ -573,7 +576,7 @@
 </ul>
 
 <ul class="timeout-tag">
-    <li><a>超时的任务<span class="label label-important">TIMEOUT</span></a></li>
+    <li><a class="atip"  data-toggle="tooltip" data-placement="right" data-original-title="超时的任务"><span class="label label-important">TIMEOUT</span></a></li>
 </ul>
 <ul class="breadcrumb">
     <table cellpadding="0" cellspacing="0" border="0"
@@ -721,7 +724,14 @@
         <a href="#" class="btn btn-danger" onClick="action_ok()">确定</a>
     </div>
 </div>
-
+<script type="text/javascript">
+    $(".atip").tooltip();
+    options={
+        delay: { show: 500, hide: 100 },
+        trigger:'click',
+    };
+    $(".optiontip").tooltip(options);
+</script>
 <script type="text/javascript" charset="utf-8" language="javascript" src="js/jquery.dataTables.js"></script>
 <script type="text/javascript" charset="utf-8" language="javascript" src="js/DT_bootstrap.js"></script>
 <script type="text/javascript" charset="utf-8" language="javascript" src="js/attempt.js"></script>

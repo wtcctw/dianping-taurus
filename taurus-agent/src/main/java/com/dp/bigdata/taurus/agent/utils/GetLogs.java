@@ -9,6 +9,7 @@ import java.io.*;
  */
 public class GetLogs  implements IGetLogs {
     public static String logPath = "/data/app/taurus-agent/logs";
+    public static String agentLogPath = "/data/app/taurus-agent/agent-logs";
     public static final String FILE_SEPRATOR = File.separator;
 
     @Override
@@ -27,9 +28,12 @@ public class GetLogs  implements IGetLogs {
 
         if (queryType.equals("log")) {
             logFilePath = logPath + FILE_SEPRATOR + date + FILE_SEPRATOR + attemptID + ".log";
-        } else {
+        } else if(queryType.equals("errorlog")) {
             logFilePath = logPath + FILE_SEPRATOR + date + FILE_SEPRATOR + attemptID + ".error";
+        }else {
+            logFilePath = agentLogPath + FILE_SEPRATOR +  "all.log";
         }
+
 
 
         String tmp;
