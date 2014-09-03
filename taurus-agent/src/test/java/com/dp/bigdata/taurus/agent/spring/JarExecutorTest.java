@@ -3,6 +3,8 @@ package com.dp.bigdata.taurus.agent.spring;
 import java.io.InputStream;
 import java.util.Properties;
 
+import com.dianping.lion.EnvZooKeeperConfig;
+import com.dianping.lion.client.ConfigCache;
 import org.I0Itec.zkclient.ZkClient;
 
 import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.ScheduleConf;
@@ -19,7 +21,7 @@ public class JarExecutorTest {
             InputStream in = ClassLoaderUtils.getDefaultClassLoader().getResourceAsStream(JarExecutor.ZKCONFIG);
             props.load(in);
             in.close();
-            String connectString = props.getProperty("connectionString");
+            String connectString = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.zookeeper.connectstring");//props.getProperty("connectionString");
             int sessionTimeout = Integer.parseInt(props.getProperty("sessionTimeout"));
             zkClient = new ZkClient(connectString, sessionTimeout);
 
