@@ -176,7 +176,7 @@
             		</div>
                     <div class="controls" id="defaultUser">
                         <input type="text" class="input-xxlarge field" id="proxyUser" name="proxyUser"  placeholder="执行作业的用户身份" value="nobody" disabled="disabled">
-                        <a class="atip"  data-toggle="tooltip" data-placement="top" data-original-title="如果你非要已其他身份运行，请联系李明【kirin.li@dianping.com】">帮助</a>
+                        <a class="atip"  data-toggle="tooltip" data-placement="top" data-original-title="如果你非要以其他身份运行，请联系李明【kirin.li@dianping.com】">帮助</a>
                     </div>
           		</div>
                 <div class="control-group">

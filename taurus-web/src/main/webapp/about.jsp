@@ -429,7 +429,7 @@
 
 					如果是第一次安装，以root身份执行如下代码：
 					<div class="well">
-						<em>wget http://10.1.1.163:8000/install-new-agent-war.sh; <br />
+						<em>wget http://10.1.1.171/install-new-agent-war.sh; <br />
 							chmod 700 ./install-new-agent-war.sh; <br /> ./install-new-agent-war.sh;
 						</em>
 					</div>
