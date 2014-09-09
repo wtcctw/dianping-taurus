@@ -220,7 +220,7 @@ public final class ExecuteTaskThread extends BaseEnvManager{
                     }
                     String postCmd = String.format(CLEAN_FILES_PATTERN,pidFile,kdestroyCommand);
                    
-                    cmdLine.addArgument(mainCmd + ";" + sotreRvCmd  + postCmd, false);
+                    cmdLine.addArgument(mainCmd + " ;" + sotreRvCmd  + postCmd, false);
                     
                     executor.execute(attemptID, 0, null, cmdLine, logFileStream, errorFileStream);
                     

@@ -35,7 +35,11 @@
 		<param-name>ERROR_PAGE</param-name>
 		<param-value>/error.jsp</param-value>
 	</context-param>
-	
+    <filter>
+        <filter-name>cat-filter</filter-name>
+        <filter-class>com.dianping.cat.servlet.CatFilter</filter-class>
+    </filter>
+
 	<filter>
 		<filter-name>AuthenticationFilter</filter-name>
 		<filter-class>com.dp.bigdata.taurus.web.servlet.filter.AuthenticationFilter</filter-class>
@@ -48,6 +52,15 @@
 			<param-value>/,/signin.jsp,/login.do,/index.jsp,</param-value>
 		</init-param>
 	</filter>
+
+
+    <filter-mapping>
+        <filter-name>cat-filter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+
 
 	<filter-mapping>
 		<filter-name>AuthenticationFilter</filter-name>
