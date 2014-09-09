@@ -24,17 +24,21 @@
 
               <%
 	    		for (HostDTO dto : hosts) {
+                    cr = new ClientResource(host + "host/" + dto.getName());
+                    IHostResource hostResource = cr.wrap(IHostResource.class);
+                    cr.accept(MediaType.APPLICATION_XML);
+                    HostDTO dtos = hostResource.retrieve();
 			%>
 
 					<%if(!dto.isOnline()){ %>
-              <li class="text-right" id="host_<%=dto.getName()%>"><a class="atip"  data-toggle="tooltip" data-placement="right" data-original-title="状态：已下线" href="hosts.jsp?hostName=<%=dto.getName()%> ">
+              <li class="text-right" id="host_<%=dto.getName()%>"><a class="atip"  data-toggle="tooltip" data-placement="right" data-original-title="状态：已下线|版本<% if (dtos.getInfo() != null) {%>  <%=dtos.getInfo().getAgentVersion()%> <%}else{%>异常<%}%>" href="hosts.jsp?hostName=<%=dto.getName()%> ">
 					<font color=grey><strong><%=dto.getName()%></strong></font>
 					<%}else if(dto.isConnected()){ %>
-                  <li class="text-right" id="host_<%=dto.getName()%>"><a class="atip"  data-toggle="tooltip" data-placement="right" data-original-title="状态：已连接" href="hosts.jsp?hostName=<%=dto.getName()%> ">
+                  <li class="text-right" id="host_<%=dto.getName()%>"><a class="atip"  data-toggle="tooltip" data-placement="right" data-original-title="状态：已连接|版本：<% if (dtos.getInfo() != null) {%> <%=dtos.getInfo().getAgentVersion()%> <%}else{%>异常<%}%>" href="hosts.jsp?hostName=<%=dto.getName()%> ">
 
                   <font color=green><strong><%=dto.getName()%></strong></font>
 					<%} else{ %>
-                      <li class="text-right" id="host_<%=dto.getName()%>"><a class="atip"  data-toggle="tooltip" data-placement="right" data-original-title="状态：已失去联系，请联系运维重启agent" href="hosts.jsp?hostName=<%=dto.getName()%> ">
+                      <li class="text-right" id="host_<%=dto.getName()%>"><a class="atip"  data-toggle="tooltip" data-placement="right" data-original-title="状态：已失去联系，请联系运维重启agent|版本：<% if (dtos.getInfo() != null) {%> <%=dtos.getInfo().getAgentVersion()%> <%}else{%>异常<%}%>" href="hosts.jsp?hostName=<%=dto.getName()%> ">
 
                       <font color=red><strong><%=dto.getName()%></strong></font>
 					<%} %>
