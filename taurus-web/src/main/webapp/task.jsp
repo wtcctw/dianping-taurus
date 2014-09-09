@@ -153,12 +153,14 @@
                 <div class="control-group">
             		<label class="control-label" for="taskCommand">命令*</label>
             		<div class="controls">
-              			<input type="text" class="input-xxlarge field" id="taskCommand" name="taskCommand"  placeholder="执行作业的命令">
+              			<input type="text" class="input-xxlarge field" id="taskCommand" name="taskCommand"  placeholder="执行作业的命令,命令结尾不要使用'&'或';'">
+                        <a  class="atip"  data-toggle="tooltip" data-placement="top" data-original-title="注意，命令结尾不要使用'&'或';' 否则会失败哦～ 请保持命令结尾没有这些字符">提示</a>
               			<%if(path!=null&&!path.equals("")){
               				%>
               				<br/><span>提示:已部署的作业文件的路径为<%=path%></span>
               			<%}%>
             		</div>
+
           		</div>
           		
           		<div id="beanCG" class="control-group">
