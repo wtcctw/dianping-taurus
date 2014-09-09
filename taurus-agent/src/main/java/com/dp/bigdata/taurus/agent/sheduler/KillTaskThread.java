@@ -86,7 +86,8 @@ public class KillTaskThread extends BaseEnvManager {
 				String pid = br.readLine();
 				br.close();
 				LOGGER.debug("Ready to kill " + attemptID + ", pid is " + pid);
-				String kill = String.format(KILL_COMMAND, killJob, pid, "9");
+                String killCMD = "sh " + killJob;
+				String kill = String.format(KILL_COMMAND, killCMD, pid, "9");
 				returnCode = executor.execute("kill", System.out, System.err, kill);
 				try {
 					new File(fileName).delete();
