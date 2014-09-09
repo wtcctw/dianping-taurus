@@ -436,28 +436,28 @@
 					以上会初始化taurus agent的运行环境。
 					<hr style="padding:15px 0px">
 					如果希望在该agent上，以多种身份运行作业<br/>
-					修改配置文件conf/agentConf.properties
+					修改配置文件/data/webapps/taurus-agent/current/taurus-agent.war/WEB-INF/classes/agentConf.properties
 					<div class="well">
 						<em> needSudoAuthority=true </em>
 					</div>
 					运维需要以root身份启动tomcat
 					<hr style="padding:15px 0px">
-					如果需要使用agent申请hadoop权限<br/>先修改配置文件conf/agentConf.properties
+					如果需要使用agent申请hadoop权限<br/>先修改配置文件/data/webapps/taurus-agent/current/taurus-agent.war/WEB-INF/classes/agentConf.properties
 					<div class="well">
-						<em> needHadoopAuthority=true<br /> homePath=${keytab-root}
+						<em> needHadoopAuthority=true
 						</em>
 					</div>
 					keytab文件存放规则为
 					<div class="well">
-						<em> ${keytab-root}/${hadoop-user-name}/.keytab </em>
+						<em> /data/home/${hadoop-user-name}/.keytab </em>
 					</div>
-					${keytab-root}是keytab文件的根路径。<br/>
+                    /data/home/是keytab文件的根路径,如果不存在请联系运维创建。<br/>
 					${hadoop-user-name}是hadoop中的用户身份。<br/>
 					例如，以wwwcron的身份访问hadoop<br/>
-					可以把wwwcron的keytab文件放在/data/app/taurus-agent/conf/keytab/wwwcron/.keytab<br/>
-					在conf/agentConf.properties中配置
+					可以把wwwcron的keytab文件放在/data/home/wwwcron/.keytab<br/>
+					在/data/webapps/taurus-agent/current/taurus-agent.war/WEB-INF/classes/agentConf.properties中配置
 					<div class="well">
-						<em> needHadoopAuthority=true<br /> homePath=/data/app/taurus-agent/conf/keytab
+						<em> needHadoopAuthority=true<br />
 						</em>
 					</div>
 					最后启动agent时，需要保证执行agent的用户是taurus-agent目录的所有者。
