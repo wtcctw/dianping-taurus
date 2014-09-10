@@ -34,11 +34,12 @@
     <li><a href="#" class="active">任务监控</a> <span class="divider">/</span></li>
 
     <%
-        if (!isAdmin) {
-            response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-            String newLocn = "notadmin.jsp";
-            response.setHeader("Location", newLocn);
-        }
+//        String admin = (String)request.getSession().getAttribute("Admin");
+//        if (admin== null || !admin.equals("true")) {
+//            response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+//            String newLocn = "notadmin.jsp";
+//            response.setHeader("Location", newLocn);
+//        }
 
 
         Date time = new Date();
