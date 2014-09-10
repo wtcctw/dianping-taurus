@@ -362,12 +362,12 @@
         from TaurusTaskAttempt where attemptid = #{attemptId}
     </select>
 
-    <select id="getAttemptByStatus" resultMap="BaseResultMap">
+    <select id="getAttempts" resultMap="BaseResultMap">
 
         select
          <include refid="Base_Column_List" />
         from TaurusTaskAttempt
-       where status =#{status}
+        where <![CDATA[( startTime >= #{now} and endTime >= #{now}) or status = 6]]>
     </select>
 
 </mapper>

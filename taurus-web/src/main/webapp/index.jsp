@@ -30,6 +30,14 @@
 								<th width="10%">发布时间</th>
 							</tr>
                             <tr>
+                                <td>job host监控细化，<a href="hosts.jsp">主机监控</a></td>
+                                <td>2014-09-05</td>
+                            </tr>
+                            <tr>
+                                <td>agent war包化，可以通过button部署</td>
+                                <td>2014-09-01</td>
+                            </tr>
+                            <tr>
                                 <td>新增实时查看正在运行的任务日志</td>
                                 <td>2014-08-05</td>
                             </tr>
