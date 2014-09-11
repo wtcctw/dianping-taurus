@@ -117,9 +117,6 @@ public class LoginServlet extends HttpServlet {
 			ClientResource cr = new ClientResource(USER_API);
 			IUsersResource resource = cr.wrap(IUsersResource.class);
 			UserDTO dto = new UserDTO();
-            if(dto.getGroup().equals("admin")){
-                session.setAttribute("Admin","true");
-            }
 			dto.setName(userName);
 			dto.setMail(user.getMail());
 			resource.createIfNotExist(dto);
