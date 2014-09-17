@@ -19,6 +19,9 @@ $(document).ready(function () {
     }else{
         error_panel.style.display="none";
         log_panel.style.width="95%";
+        clearInterval(log_rtn);
+        clearInterval(error_log_rtn);
+
     }
     do_relash_task();
 });
