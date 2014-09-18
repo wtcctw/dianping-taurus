@@ -256,6 +256,7 @@ public class AttemptProxyServlet extends HttpServlet {
                             } else {
                                 retStr = logStr.replace("\n", "<br>");
                             }
+                            System.out.println("#######"+queryType+"###Length: "+retStr.length());
                             output.write(retStr.getBytes());
                             output.close();
                         }
