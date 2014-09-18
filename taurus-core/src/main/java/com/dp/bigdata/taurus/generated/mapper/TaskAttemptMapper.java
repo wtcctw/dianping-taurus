@@ -102,5 +102,5 @@ public interface TaskAttemptMapper {
 
     public TaskAttempt getAttemptById(@Param("attemptId")String attemptId);
 
-    public ArrayList<TaskAttempt> getAttemptByStatus(@Param("status")Integer status);
+    public ArrayList<TaskAttempt> getAttempts(@Param("now")String now);
 }

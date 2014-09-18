@@ -8,6 +8,8 @@ import com.dp.bigdata.taurus.restlet.shared.AttemptDTO;
 import org.restlet.resource.ServerResource;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +23,11 @@ public class GetAttemptsByStatus extends ServerResource implements IGetAttemptsB
     public ArrayList<AttemptDTO> retrieve() {
         String status = (String) getRequestAttributes().get("status");
         ArrayList<AttemptDTO> attemptDTOs = new ArrayList<AttemptDTO>();
-        List<TaskAttempt> taskAttempts = taskAttemptMapper.getAttemptByStatus(Integer.parseInt(status));
+        try {
+            String time = URLDecoder.decode(status,"UTF-8");
+
+
+        List<TaskAttempt> taskAttempts = taskAttemptMapper.getAttempts(time);
         if (taskAttempts!=null){
             for (TaskAttempt taskAttempt : taskAttempts){
                 AttemptDTO dto = new AttemptDTO();
@@ -55,6 +61,10 @@ public class GetAttemptsByStatus extends ServerResource implements IGetAttemptsB
                 }
                 attemptDTOs.add(dto);
             }
+        }
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
         return attemptDTOs;
     }

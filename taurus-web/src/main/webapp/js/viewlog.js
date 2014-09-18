@@ -7,18 +7,55 @@ var is_flash;
 var is_new;
 var old_status;
 $(document).ready(function () {
+    $(".atip").tooltip();
+    options = {
+        delay: { show: 500, hide: 100 },
+        trigger: 'click'
+    };
+    $(".optiontip").tooltip(options);
+    $(function () {
+
+        $('.btn-toggle').click(function () {
+            var $this = $(this); //找到当前btn-toggle定义的按钮组
+
+            if ($this.find('.btn-danger').length > 0) {
+                $this.find('.btn').toggleClass('btn-default');
+                is_flash = false;
+            } else {
+                is_flash = true;
+            }
+
+            /*
+             *  这里我们可以修改btn定义不同的切换按钮样式：danger,info,success,primary
+             */
+
+            $this.find('.btn').toggleClass('btn-danger').toggleClass('active');
+
+        });
+
+    });
     attemptID = GetQueryString("id"); //通过表达式获得传递参数
     old_status = GetQueryString("status");
     status = get_task_status();
     is_flash = true;
     is_new = is_new_agent();
-    var error_panel=document.getElementById("error-panel");
+    var error_panel = document.getElementById("error-panel");
     var log_panel = document.getElementById("spann");
-    if (is_new == "true"){
+    var flash_btn = document.getElementById("flash_btn");
 
-    }else{
-        error_panel.style.display="none";
-        log_panel.style.width="95%";
+    if(status !="RUNNING"){
+        flash_btn.style.display = "none";
+    }
+
+    if (is_new == "true") {
+
+    } else {
+        error_panel.style.display = "none";
+        log_panel.style.width = "95%";
+        flash_btn.style.display = "none";
+        clearInterval(log_rtn);
+        clearInterval(error_log_rtn);
+
     }
     do_relash_task();
 });
@@ -26,62 +63,67 @@ $(document).ready(function () {
 function GetQueryString(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
     var r = window.location.search.substr(1).match(reg);
-    if (r != null) return unescape(r[2]); return null;
+    if (r != null) return unescape(r[2]);
+    return null;
 }
 
 
 function fetch_errorLog() {
     var $logContainer = $("#errolog");
-    if(is_new == "true"){
+    if (is_new == "true") {
         var is_end = is_log_end();
-        if(is_end == "true" ){
+        if (is_end == "true") {
 
             clearInterval(error_log_rtn);
         }
-    }else{
+        if(is_flash == false){
+            clearInterval(error_log_rtn);
+        }
+    } else {
         return;
     }
-
     status = get_task_status();
 
     $.ajax({
-        url : "attempts.do",
-        data : {
-            id : attemptID,
-            action : 'runlog',
-            querytype:'errorlog',
-            status:status
+        url: "attempts.do",
+        data: {
+            id: attemptID,
+            action: 'runlog',
+            querytype: 'errorlog',
+            status: status
         },
-        timeout : 1000000,
-        type : 'POST',
-        error: function(){
+        timeout: 1500,
+        type: 'POST',
+        error: function () {
             $logContainer.text("无数据");
         },
         success: function (response) {
-            result = response.replace("\n","<br>")
+            result = response.replace("\n", "<br>")
 
-            $logContainer.append("<div class=\"terminal-like\">"+response+"</div>");
+            $logContainer.append("<div class=\"terminal-like\">" + response + "</div>");
             $logContainer.scrollTop($logContainer.get(0).scrollHeight);
             $(".loading").hide();
         },
-        beforeSend:function(){//正在加载，显示“正在加载......”
+        beforeSend: function () {//正在加载，显示“正在加载......”
             $(".loading").show();
         }
 
     });
 
 
-
 }
 
 function fetch_Log() {
     var $logContainer = $("#strout")
-    if(is_new == "true"){
+    if (is_new == "true") {
         var is_end = is_log_end();
-        if(is_end == "true" ){
+        if (is_end == "true") {
             clearInterval(log_rtn);
         }
-    }else{
+        if(is_flash == false){
+            clearInterval(log_rtn);
+        }
+    } else {
         clearInterval(log_rtn);
     }
 
@@ -92,23 +134,23 @@ function fetch_Log() {
         data: {
             id: attemptID,
             action: 'runlog',
-            querytype:'log',
-            status:status
+            querytype: 'log',
+            status: status
         },
-        timeout: 1000000,
+        timeout: 1500,
         type: 'POST',
         error: function () {
             $logContainer.text("没有找到日志数据");
         },
         success: function (response) {
 
-            result = response.replace("\n","<br>");
+            result = response.replace("\n", "<br>");
 
-            $logContainer.append("<div class=\"terminal-like\">"+response+"</div>");
+            $logContainer.append("<div class=\"terminal-like\">" + response + "</div>");
             $logContainer.scrollTop($logContainer.get(0).scrollHeight);
             $(".loading").hide();
         },
-        beforeSend:function(){//正在加载，显示“正在加载......”
+        beforeSend: function () {//正在加载，显示“正在加载......”
             $(".loading").show();
         }
 
@@ -116,37 +158,37 @@ function fetch_Log() {
 
 }
 
-function do_relash_task(){
-    if(status == "RUNNING"){
+function do_relash_task() {
+
+    if (status == "RUNNING") {
         var is_end = is_log_end();
-        if(is_end == "false"){
+        if (is_end == "false") {
             error_log_rtn = setInterval("fetch_errorLog()", 1500);
             log_rtn = setInterval("fetch_Log()", 1500);
-        }else{
+        } else {
             fetch_errorLog();
             fetch_Log();
         }
 
-    }else
-    {
+    } else {
         fetch_errorLog();
         fetch_Log();
     }
 }
 
 function is_log_end() {
-    var ret="";
+    var ret = "";
     $.ajax({
-        url : "attempts.do",
-        data : {
-            id : attemptID,
-            action : 'isend'
+        url: "attempts.do",
+        data: {
+            id: attemptID,
+            action: 'isend'
         },
-        timeout : 10000,
-        type : 'POST',
-        async:false,
-        error: function(){
-            ret =  "null";
+        timeout: 1500,
+        type: 'POST',
+        async: false,
+        error: function () {
+            ret = "null";
         },
         success: function (response) {
            ret = response
@@ -158,18 +200,18 @@ function is_log_end() {
 
 
 function get_task_status() {
-    var ret="";
+    var ret = "";
     $.ajax({
-        url : "attempts.do",
-        data : {
-            id : attemptID,
-            action : 'status'
+        url: "attempts.do",
+        data: {
+            id: attemptID,
+            action: 'status'
         },
-        timeout : 10000,
-        type : 'POST',
-        async:false,
-        error: function(){
-            ret =  "null"
+        timeout: 1500,
+        type: 'POST',
+        async: false,
+        error: function () {
+            ret = "null"
         },
         success: function (response) {
             ret = response;
@@ -180,18 +222,18 @@ function get_task_status() {
 }
 
 function is_new_agent() {
-    var ret="";
+    var ret = "";
     $.ajax({
-        url : "attempts.do",
-        data : {
-            id : attemptID,
-            action : 'isnew'
+        url: "attempts.do",
+        data: {
+            id: attemptID,
+            action: 'isnew'
         },
-        timeout : 10000,
-        type : 'POST',
-        async:false,
-        error: function(){
-            ret =  "null"
+        timeout: 1500,
+        type: 'POST',
+        async: false,
+        error: function () {
+            ret = "null"
         },
         success: function (response) {
             ret = response;
@@ -201,10 +243,17 @@ function is_new_agent() {
     return ret.trim();
 }
 
-window.onbeforeunload=function(){
-    if(old_status == "RUNNING"){
+
+var unloadPageTip = function () {
+    if (old_status == "RUNNING") {
         opener.document.location.reload();
     }
 
-}
+    if (is_flash == true) {
+            return "本页面默认实时刷新，不用手动刷新哦，如果你不想页面自动刷新，请点【OFF】按钮";
+    }
 
+
+};
+
+window.onbeforeunload = unloadPageTip;

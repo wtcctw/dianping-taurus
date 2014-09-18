@@ -33,7 +33,16 @@
     <li><a href="./index.jsp">首页</a> <span class="divider">/</span></li>
     <li><a href="#" class="active">任务监控</a> <span class="divider">/</span></li>
 
-    <% Date time = new Date();
+    <%
+//        String admin = (String)request.getSession().getAttribute("Admin");
+//        if (admin== null || !admin.equals("true")) {
+//            response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+//            String newLocn = "notadmin.jsp";
+//            response.setHeader("Location", newLocn);
+//        }
+
+
+        Date time = new Date();
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHH");
         long hourTime = 60 * 60 * 1000;
         Integer countTotal = (Integer) request.getSession().getAttribute("count");
@@ -45,7 +54,8 @@
 
 
 <ul class="run-tag">
-    <li><a class="atip"  data-toggle="tooltip" data-placement="right" data-original-title="正在运行的任务"><span class="label label-info">RUNNING</span></a></li>
+    <li><a class="atip" data-toggle="tooltip" data-placement="right" data-original-title="正在运行的任务"><span
+            class="label label-info">RUNNING</span></a></li>
 </ul>
 <ul class="breadcrumb">
     <table cellpadding="0" cellspacing="0" border="0"
@@ -67,7 +77,7 @@
 
             ClientResource crTask = new ClientResource(host + "gettasks");
             IGetTasks taskResource = crTask.wrap(IGetTasks.class);
-            ArrayList<Task> tasks= taskResource.retrieve();
+            ArrayList<Task> tasks = taskResource.retrieve();
 
             String id = request.getParameter("id");
             String taskTime = "";
@@ -94,40 +104,21 @@
             }
 
 
-
-            cr = new ClientResource(url+6);
+            cr = new ClientResource(url + taskTime);
             IGetAttemptsByStatus resource = cr.wrap(IGetAttemptsByStatus.class);
             ArrayList<AttemptDTO> attempts = resource.retrieve();
 
-            if (attempts !=null)
-            for (AttemptDTO dto : attempts) {
-                Date startDate = dto.getStartTime();
-                String startTime;
-                if (startDate == null){
-                    startTime = null;
-                }else {
-                    startTime = formatter.format(startDate);
-                }
-
-                Date endDate = dto.getEndTime();
-                String endTime;
-                if (endDate == null)
-                {
-                    endTime=null;
-                }else{
-                    endTime = formatter.format(endDate);
-                }
-
-
-                String state = dto.getStatus();
-                if (startTime!=null &&state.equals("RUNNING")&& (startTime.compareTo(now) <=0 &&(endTime == null|| endTime.compareTo(now) >= 0))) {
-                    String taskName ="";
-                    for (Task task: tasks){
-                        if (task.getTaskid().equals(dto.getTaskID())){
-                            taskName = task.getName();
-                            break;
+            if (attempts != null)
+                for (AttemptDTO dto : attempts) {
+                    String state = dto.getStatus();
+                    if (state.equals("RUNNING")) {
+                        String taskName = "";
+                        for (Task task : tasks) {
+                            if (task.getTaskid().equals(dto.getTaskID())) {
+                                taskName = task.getName();
+                                break;
+                            }
                         }
-                    }
         %>
         <tr id="<%=dto.getAttemptID()%>">
             <td><%=dto.getTaskID()%>
@@ -165,15 +156,22 @@
 </ul>
 <div class="time_inal">
 
-    <a class="atip"  data-toggle="tooltip" data-placement="top" data-original-title="当你点击了[-1h]后，在想切换到当前页面时，请点击[当天]，刷新页面无效噢～">[注意] </a>
+    <a class="atip" data-toggle="tooltip" data-placement="top"
+       data-original-title="当你点击了[-1h]后，在想切换到当前页面时，请点击[当天]，刷新页面无效噢～">[注意] </a>
     &nbsp;&nbsp; |&nbsp;&nbsp;
-    <a class="atip" href="monitor.jsp?id=1&taskdate＝<%=df.format(new Date(time.getTime() - (countTotal+1)*hourTime))    %> "  data-toggle="tooltip" data-placement="top" data-original-title="时间区间[<%=formatter.format(new Date(time.getTime() - (countTotal+1)*hourTime))%>~<%=formatter.format(new Date(time.getTime()- countTotal*hourTime))%>]">[-1h] </a>
+    <a class="atip"
+       href="monitor.jsp?id=1&taskdate＝<%=df.format(new Date(time.getTime() - (countTotal+1)*hourTime))    %> "
+       data-toggle="tooltip" data-placement="top"
+       data-original-title="时间区间[<%=formatter.format(new Date(time.getTime() - (countTotal+1)*hourTime))%>~<%=formatter.format(new Date(time.getTime()- countTotal*hourTime))%>]">[-1h] </a>
     &nbsp;&nbsp; |&nbsp;&nbsp;
-    <a class="atip" href="monitor.jsp?id=24&taskdate＝<%=df.format(new Date(new Date().getTime() -24*hourTime))    %>"  data-toggle="tooltip" data-placement="top" data-original-title=" 时间区间[<%=formatter.format(new Date(new Date().getTime() -24*hourTime))%>~<%=formatter.format(new Date())%>]">[当天] </a>
+    <a class="atip" href="monitor.jsp?id=24&taskdate＝<%=df.format(new Date(new Date().getTime() -24*hourTime))    %>"
+       data-toggle="tooltip" data-placement="top"
+       data-original-title=" 时间区间[<%=formatter.format(new Date(new Date().getTime() -24*hourTime))%>~<%=formatter.format(new Date())%>]">[当天] </a>
 </div>
 
 <ul class="submit-fail-tag">
-    <li><a class="atip"  data-toggle="tooltip" data-placement="right" data-original-title="提交失败的任务"><span class="label label-important">SUBMIT_FAIL</span></a></li>
+    <li><a class="atip" data-toggle="tooltip" data-placement="right" data-original-title="提交失败的任务"><span
+            class="label label-important">SUBMIT_FAIL</span></a></li>
 </ul>
 
 <ul class="breadcrumb">
@@ -192,83 +190,20 @@
         </thead>
         <tbody>
         <%
-            ClientResource submitFailCr = new ClientResource(url+5);
-            IGetAttemptsByStatus submitFailResource = submitFailCr.wrap(IGetAttemptsByStatus.class);
-            ArrayList<AttemptDTO> submitFailAttempts = submitFailResource.retrieve();
+            for (AttemptDTO dto : attempts) {
+                String state = dto.getStatus();
 
-            if (submitFailAttempts != null)
-                for (AttemptDTO dto : submitFailAttempts) {
-                    String state = dto.getStatus();
-
-
-                    if (taskTime != null) {
-                        Date startDate = dto.getStartTime();
-                        String startTime;
-                        if (startDate == null){
-                            startTime = null;
-                        }else {
-                            startTime = formatter.format(startDate);
-                        }
-
-                        Date endDate = dto.getEndTime();
-                        String endTime;
-                        if (endDate == null)
-                        {
-                            endTime=null;
-                        }else{
-                            endTime = formatter.format(endDate);
-                        }
-
-                        if (startTime!=null && state.equals("SUBMIT_FAIL") && (startTime.compareTo(taskTime) >=0 || endTime.compareTo(taskTime) >= 0)) {
-                            String taskName ="";
-                            for (Task task: tasks){
-                                if (task.getTaskid().equals(dto.getTaskID())){
-                                    taskName = task.getName();
-                                    break;
-                                }
-                            }
-
-        %>
-        <tr id="<%=dto.getAttemptID()%>">
-            <td><%=dto.getTaskID()%>
-            </td>
-            <td><%=taskName%>
-            </td>
-            <%if (dto.getStartTime() != null) {%>
-            <td><%=formatter.format(dto.getStartTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (dto.getEndTime() != null) {%>
-            <td><%=formatter.format(dto.getEndTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (dto.getScheduleTime() != null) {%>
-            <td><%=formatter.format(dto.getScheduleTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-
-            <td>
-                <a target="_blank" href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
-            </td>
-
-        </tr>
-        <% }
-        } else {
-            if (state.equals("SUBMIT_FAIL")) {
-                String taskName ="";
-                for (Task task: tasks){
-                    if (task.getTaskid().equals(dto.getTaskID())){
+                String taskName = "";
+                for (Task task : tasks) {
+                    if (task.getTaskid().equals(dto.getTaskID())) {
                         taskName = task.getName();
                         break;
                     }
                 }
 
+                if (state.equals("SUBMIT_FAIL")) {
+
+
         %>
         <tr id="<%=dto.getAttemptID()%>">
             <td><%=dto.getTaskID()%>
@@ -293,6 +228,7 @@
             <%} else {%>
             <td>NULL</td>
             <%}%>
+
             <td>
                 <a target="_blank" href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
             </td>
@@ -300,14 +236,16 @@
         </tr>
         <% }
         }
+        %>
 
-        }%>
+
         </tbody>
     </table>
 </ul>
 
 <ul class="fail-tag">
-    <li><a class="atip"  data-toggle="tooltip" data-placement="right" data-original-title="失败的任务"><span class="label label-important">FAILED</span></a></li>
+    <li><a class="atip" data-toggle="tooltip" data-placement="right" data-original-title="失败的任务"><span
+            class="label label-important">FAILED</span></a></li>
 
 </ul>
 
@@ -327,41 +265,20 @@
         </thead>
         <tbody>
         <%
-            ClientResource failCr = new ClientResource(url+8);
-            IGetAttemptsByStatus failResource = failCr.wrap(IGetAttemptsByStatus.class);
-            ArrayList<AttemptDTO> failAttempts = failResource.retrieve();
 
-            if (failAttempts != null)
-            for (AttemptDTO dto : failAttempts) {
-               String state = dto.getStatus();
-
-
-                if (taskTime != null) {
-                    Date startDate = dto.getStartTime();
-                    String startTime;
-                    if (startDate == null){
-                        startTime = null;
-                    }else {
-                        startTime = formatter.format(startDate);
+            for (AttemptDTO dto : attempts) {
+                String state = dto.getStatus();
+                String taskName = "";
+                for (Task task : tasks) {
+                    if (task.getTaskid().equals(dto.getTaskID())) {
+                        taskName = task.getName();
+                        break;
                     }
+                }
 
-                    Date endDate = dto.getEndTime();
-                    String endTime;
-                    if (endDate == null)
-                    {
-                        endTime=null;
-                    }else{
-                        endTime = formatter.format(endDate);
-                    }
 
-                    if (startTime!=null && state.equals("FAILED") && (startTime.compareTo(taskTime) >=0 || endTime.compareTo(taskTime) >= 0)) {
-                        String taskName ="";
-                        for (Task task: tasks){
-                            if (task.getTaskid().equals(dto.getTaskID())){
-                                taskName = task.getName();
-                                break;
-                            }
-                        }
+                if (state.equals("FAILED")) {
+
 
         %>
         <tr id="<%=dto.getAttemptID()%>">
@@ -394,55 +311,15 @@
 
         </tr>
         <% }
-        } else {
-            if (state.equals("FAILED")) {
-                String taskName ="";
-                for (Task task: tasks){
-                    if (task.getTaskid().equals(dto.getTaskID())){
-                        taskName = task.getName();
-                        break;
-                    }
-                }
-
-        %>
-        <tr id="<%=dto.getAttemptID()%>">
-            <td><%=dto.getTaskID()%>
-            </td>
-            <td><%=taskName%>
-            </td>
-            <%if (dto.getStartTime() != null) {%>
-            <td><%=formatter.format(dto.getStartTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (dto.getEndTime() != null) {%>
-            <td><%=formatter.format(dto.getEndTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (dto.getScheduleTime() != null) {%>
-            <td><%=formatter.format(dto.getScheduleTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <td>
-               <a target="_blank" href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
-            </td>
-
-        </tr>
-        <% }
         }
-
-        }%>
+        %>
         </tbody>
     </table>
 </ul>
 
 <ul class="dependency-timeout-tag">
-    <li><a class="atip"  data-toggle="tooltip" data-placement="right" data-original-title="依赖超时的任务"><span class="label label-important">DEPENDENCY_TIMEOUT</span></a></li>
+    <li><a class="atip" data-toggle="tooltip" data-placement="right" data-original-title="依赖超时的任务"><span
+            class="label label-important">DEPENDENCY_TIMEOUT</span></a></li>
 </ul>
 
 <ul class="breadcrumb">
@@ -462,79 +339,17 @@
         </thead>
         <tbody>
         <%
-            ClientResource dependencyTimeOutCr = new ClientResource(url+3);
-            IGetAttemptsByStatus dependencyTimeOutResource = dependencyTimeOutCr.wrap(IGetAttemptsByStatus.class);
-            ArrayList<AttemptDTO> dependencyTimeOutAttempts = dependencyTimeOutResource.retrieve();
 
-            if (dependencyTimeOutAttempts !=null)
-                for (AttemptDTO dto : dependencyTimeOutAttempts) {
-                    String state = dto.getStatus();
-
-
-                    if (time != null) {
-                        Date startDate = dto.getStartTime();
-                        String startTime;
-                        if (startDate == null){
-                            startTime = null;
-                        }else {
-                            startTime = formatter.format(startDate);
-                        }
-
-                        Date endDate = dto.getEndTime();
-                        String endTime;
-                        if (endDate == null)
-                        {
-                            endTime=null;
-                        }else{
-                            endTime = formatter.format(endDate);
-                        }
-                        if (startTime!=null && state.equals("DEPENDENCY_TIMEOUT") && ( startTime.compareTo(taskTime) >= 0 || endTime.compareTo(taskTime) >= 0)) {
-                            String taskName ="";
-                            for (Task task: tasks){
-                                if (task.getTaskid().equals(dto.getTaskID())){
-                                    taskName = task.getName();
-                                    break;
-                                }
-                            }
-        %>
-        <tr id="<%=dto.getAttemptID()%>">
-            <td><%=dto.getTaskID()%>
-            </td>
-            <td><%=taskName%>
-            </td>
-            <%if (dto.getStartTime() != null) {%>
-            <td><%=formatter.format(dto.getStartTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (dto.getEndTime() != null) {%>
-            <td><%=formatter.format(dto.getEndTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (dto.getScheduleTime() != null) {%>
-            <td><%=formatter.format(dto.getScheduleTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <td>
-                <a target="_blank" href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
-            </td>
-
-        </tr>
-        <% }
-        } else {
-            if (state.equals("DEPENDENCY_TIMEOUT")) {
-                String taskName ="";
-                for (Task task: tasks){
-                    if (task.getTaskid().equals(dto.getTaskID())){
+            for (AttemptDTO dto : attempts) {
+                String taskName = "";
+                for (Task task : tasks) {
+                    if (task.getTaskid().equals(dto.getTaskID())) {
                         taskName = task.getName();
                         break;
                     }
                 }
+                String state = dto.getStatus();
+                if (state.equals("DEPENDENCY_TIMEOUT")) {
 
         %>
         <tr id="<%=dto.getAttemptID()%>">
@@ -560,8 +375,6 @@
             <%} else {%>
             <td>NULL</td>
             <%}%>
-            <!-- <td><%=dto.getExecHost()%></td> -->
-
             <td>
                 <a target="_blank" href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
             </td>
@@ -569,14 +382,14 @@
         </tr>
         <% }
         }
-
-        }%>
+        %>
         </tbody>
     </table>
 </ul>
 
 <ul class="timeout-tag">
-    <li><a class="atip"  data-toggle="tooltip" data-placement="right" data-original-title="超时的任务"><span class="label label-important">TIMEOUT</span></a></li>
+    <li><a class="atip" data-toggle="tooltip" data-placement="right" data-original-title="超时的任务"><span
+            class="label label-important">TIMEOUT</span></a></li>
 </ul>
 <ul class="breadcrumb">
     <table cellpadding="0" cellspacing="0" border="0"
@@ -595,79 +408,16 @@
         </thead>
         <tbody>
         <%
-            ClientResource timeOutCr = new ClientResource(url+9);
-            IGetAttemptsByStatus timeOutResource = timeOutCr.wrap(IGetAttemptsByStatus.class);
-            ArrayList<AttemptDTO> timeOutAttempts = timeOutResource.retrieve();
-
-            if (timeOutAttempts !=null)
-            for (AttemptDTO dto : timeOutAttempts) {
+            for (AttemptDTO dto : attempts) {
                 String state = dto.getStatus();
-
-
-                if (time != null) {
-                    Date startDate = dto.getStartTime();
-                    String startTime;
-                    if (startDate == null){
-                        startTime = null;
-                    }else {
-                        startTime = formatter.format(startDate);
-                    }
-
-                    Date endDate = dto.getEndTime();
-                    String endTime;
-                    if (endDate == null)
-                    {
-                        endTime=null;
-                    }else{
-                        endTime = formatter.format(endDate);
-                    }
-                    if (startTime!=null && state.equals("TIMEOUT") && ( startTime.compareTo(taskTime) >= 0 || endTime.compareTo(taskTime) >= 0)) {
-                        String taskName ="";
-                        for (Task task: tasks){
-                            if (task.getTaskid().equals(dto.getTaskID())){
-                                taskName = task.getName();
-                                break;
-                            }
-                        }
-        %>
-        <tr id="<%=dto.getAttemptID()%>">
-            <td><%=dto.getTaskID()%>
-            </td>
-            <td><%=taskName%>
-            </td>
-            <%if (dto.getStartTime() != null) {%>
-            <td><%=formatter.format(dto.getStartTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (dto.getEndTime() != null) {%>
-            <td><%=formatter.format(dto.getEndTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (dto.getScheduleTime() != null) {%>
-            <td><%=formatter.format(dto.getScheduleTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <td>
-                <a target="_blank" href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
-            </td>
-
-        </tr>
-        <% }
-        } else {
-            if (state.equals("TIMEOUT")) {
-                String taskName ="";
-                for (Task task: tasks){
-                    if (task.getTaskid().equals(dto.getTaskID())){
+                String taskName = "";
+                for (Task task : tasks) {
+                    if (task.getTaskid().equals(dto.getTaskID())) {
                         taskName = task.getName();
                         break;
                     }
                 }
+                if (state.equals("TIMEOUT")) {
 
         %>
         <tr id="<%=dto.getAttemptID()%>">
@@ -693,8 +443,6 @@
             <%} else {%>
             <td>NULL</td>
             <%}%>
-            <!-- <td><%=dto.getExecHost()%></td> -->
-
             <td>
                 <a target="_blank" href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
             </td>
@@ -702,8 +450,7 @@
         </tr>
         <% }
         }
-
-        }%>
+        %>
         </tbody>
     </table>
 </ul>
@@ -726,9 +473,9 @@
 </div>
 <script type="text/javascript">
     $(".atip").tooltip();
-    options={
+    options = {
         delay: { show: 500, hide: 100 },
-        trigger:'click',
+        trigger: 'click'
     };
     $(".optiontip").tooltip(options);
 </script>

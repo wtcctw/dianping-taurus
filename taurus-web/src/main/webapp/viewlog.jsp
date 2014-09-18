@@ -10,7 +10,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
-<body data-spy="scroll"><title>Taurus作业调度平台</title>
+<body data-spy="scroll" ><title>Taurus作业调度平台</title>
 <style>
     .run-tag {
         font-size: 130%
@@ -40,6 +40,9 @@
         *width: 49.75877432260411%;
     }
 
+    .flash_btn {
+        float: right
+    }
 </style>
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
@@ -66,7 +69,10 @@
     <li><a href="./index.jsp">首页</a> <span class="divider">/</span></li>
     <li><a href="./schedule.jsp">调度中心</a> <span class="divider">/</span></li>
     <li><a href="#" class="active">查看日志</a> <span class="divider">/</span></li>
+
 </ul>
+
+
 <div id="error-panel">
     <div class="spanm">
         <ul class="error-tag" id="error-tag">
@@ -82,7 +88,21 @@
 <div id="log-panel">
     <div class="spann" id="spann">
         <ul class="run-tag">
-            <li><a>日志信息<span class="label label-info">STDOUT</span></a></li>
+            <li><a>日志信息<span class="label label-info">STDOUT</span></a>
+
+                <div class="flash_btn" id="flash_btn">
+                    <a>实时刷新</a>
+
+                    <div class="btn-group btn-toggle">
+                        <button class="btn btn-xs btn-default active">ON</button>
+                        <button class="btn btn-xs btn-danger ">OFF</button>
+                    </div>
+                    <a class="atip" data-toggle="tooltip" data-placement="top"
+                       data-original-title="当你开启实时刷新后页面会自动刷新，不需要自己动手刷新页面喽～">[提示] </a>
+                </div>
+            </li>
+
+
         </ul>
         <div data-spy="scroll" data-offset="0" style="height: 510px; line-height: 20px; overflow: auto;"
              class="terminal terminal-like " id="strout">
