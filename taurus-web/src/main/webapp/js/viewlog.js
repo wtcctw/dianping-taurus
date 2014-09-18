@@ -158,8 +158,8 @@ function do_relash_task() {
     if (status == "RUNNING") {
         var is_end = is_log_end();
         if (is_end == "false") {
-            error_log_rtn = setInterval("fetch_errorLog()", 1500);
-            log_rtn = setInterval("fetch_Log()", 1500);
+            error_log_rtn = setInterval("fetch_errorLog()", 2500);
+            log_rtn = setInterval("fetch_Log()", 2500);
         } else {
             fetch_errorLog();
             fetch_Log();
