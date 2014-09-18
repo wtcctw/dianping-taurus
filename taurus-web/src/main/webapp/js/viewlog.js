@@ -244,7 +244,7 @@ var unloadPageTip = function () {
         opener.document.location.reload();
     }
 
-    if (is_flash == true && status == "RUNNING") {
+    if (is_new == "true" &&is_flash == true && status == "RUNNING") {
             return "本页面默认实时刷新，不用手动刷新哦，如果你不想页面自动刷新，请点【OFF】按钮";
     }
 
