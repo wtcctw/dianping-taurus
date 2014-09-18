@@ -41,11 +41,18 @@ $(document).ready(function () {
     is_new = is_new_agent();
     var error_panel = document.getElementById("error-panel");
     var log_panel = document.getElementById("spann");
+    var flash_btn = document.getElementById("flash_btn");
+
+    if(status !="RUNNING"){
+        flash_btn.style.display = "none";
+    }
+
     if (is_new == "true") {
 
     } else {
         error_panel.style.display = "none";
         log_panel.style.width = "95%";
+        flash_btn.style.display = "none";
         clearInterval(log_rtn);
         clearInterval(error_log_rtn);
 
