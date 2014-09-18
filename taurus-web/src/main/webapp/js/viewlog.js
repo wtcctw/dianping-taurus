@@ -92,7 +92,7 @@ function fetch_errorLog() {
             querytype: 'errorlog',
             status: status
         },
-        timeout: 1500,
+        timeout: 1000,
         type: 'POST',
         error: function () {
             $logContainer.text("无数据");
@@ -137,7 +137,7 @@ function fetch_Log() {
             querytype: 'log',
             status: status
         },
-        timeout: 1500,
+        timeout: 1000,
         type: 'POST',
         error: function () {
             $logContainer.text("没有找到日志数据");
@@ -184,7 +184,7 @@ function is_log_end() {
             id: attemptID,
             action: 'isend'
         },
-        timeout: 1500,
+        timeout: 1000,
         type: 'POST',
         async: false,
         error: function () {
@@ -207,7 +207,7 @@ function get_task_status() {
             id: attemptID,
             action: 'status'
         },
-        timeout: 1500,
+        timeout: 1000,
         type: 'POST',
         async: false,
         error: function () {
