@@ -82,15 +82,13 @@ function fetch_errorLog() {
     } else {
         return;
     }
-    status = get_task_status();
 
     $.ajax({
         url: "attempts.do",
         data: {
             id: attemptID,
             action: 'runlog',
-            querytype: 'errorlog',
-            status: status
+            querytype: 'errorlog'
         },
         timeout: 1000,
         type: 'POST',
@@ -127,15 +125,12 @@ function fetch_Log() {
         clearInterval(log_rtn);
     }
 
-    status = get_task_status();
-
     $.ajax({
         url: "attempts.do",
         data: {
             id: attemptID,
             action: 'runlog',
-            querytype: 'log',
-            status: status
+            querytype: 'log'
         },
         timeout: 1000,
         type: 'POST',
@@ -207,7 +202,7 @@ function get_task_status() {
             id: attemptID,
             action: 'status'
         },
-        timeout: 1000,
+        timeout: 100,
         type: 'POST',
         async: false,
         error: function () {
