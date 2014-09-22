@@ -226,7 +226,8 @@ public class AttemptProxyServlet extends HttpServlet {
                          //   getLogCr = new ClientResource(url);
 
                             String context = getAgentRestService(url);//getLogCr.get().getText();
-
+                            System.out.println("DEBUG+++++++: "+context);
+                            
                             if (context != null) {
                                 lastTimeFileSize += context.length();
                             } else {
