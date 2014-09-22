@@ -47,7 +47,7 @@ $(document).ready(function () {
     reflash_tip.style.display = "none";
     if(status !="RUNNING"){
         flash_btn.style.display = "none";
-        timeout = 15000;
+        timeout = 25000;
     }else{
         timeout = 1000;
     }
