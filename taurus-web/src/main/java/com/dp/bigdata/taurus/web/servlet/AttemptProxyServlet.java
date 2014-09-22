@@ -287,9 +287,9 @@ public class AttemptProxyServlet extends HttpServlet {
                     }
                 }
             } catch (Exception e) {
-                System.out.println("#######EX: "+e.getStackTrace());
+                System.out.println("#######EX: "+e.getMessage());
                 String exceptMessage = e.getMessage();
-                if (exceptMessage.equals("Connection Error")) {
+                if (exceptMessage!=null && exceptMessage.equals("Connection Error")) {
                     //说明agent端的restlet连不上：1.网络原因 .2agent 挂了
                     String responseStr = "<font color=red>【服务异常】- -# agent 连接有问题，请联系管理员</font>";
                     OutputStream output = response.getOutputStream();
