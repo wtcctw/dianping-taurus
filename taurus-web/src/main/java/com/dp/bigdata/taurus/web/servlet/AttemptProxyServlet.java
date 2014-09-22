@@ -227,7 +227,7 @@ public class AttemptProxyServlet extends HttpServlet {
 
                             String context = getAgentRestService(url);//getLogCr.get().getText();
                             System.out.println("DEBUG+++++++: "+context);
-                            
+
                             if (context != null) {
                                 lastTimeFileSize += context.length();
                             } else {
@@ -235,7 +235,7 @@ public class AttemptProxyServlet extends HttpServlet {
                                     context = "无日志数据";
                                 }
                             }
-
+                            System.out.println("DEBUG2+++++++: "+context);
                             String isEndUrl = "http://" + hostIp
                                     + ":" + AGENT_PORT
                                     + "/agentrest.do?action=isend&attemptId="
@@ -257,12 +257,14 @@ public class AttemptProxyServlet extends HttpServlet {
                             } else {
                                 retStr = logStr.replace("\n", "<br>");
                             }
+                            System.out.println("###DEBUG3: "+retStr);
                             System.out.println("#######"+queryType+"###Length: "+retStr.length());
                             output.write(retStr.getBytes());
                             output.close();
                         }
 
                     } catch (Exception e) {
+
                         String exceptMessage = e.getMessage();
                         if (exceptMessage.equals("Connection Error") || exceptMessage.equals("Not Found")) {
                             response.setContentType("text/html;charset=utf-8");
@@ -285,6 +287,7 @@ public class AttemptProxyServlet extends HttpServlet {
                     }
                 }
             } catch (Exception e) {
+                System.out.println("#######EX: "+e.getStackTrace());
                 String exceptMessage = e.getMessage();
                 if (exceptMessage.equals("Connection Error")) {
                     //说明agent端的restlet连不上：1.网络原因 .2agent 挂了
