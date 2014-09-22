@@ -6,6 +6,7 @@ var result;
 var is_flash;
 var is_new;
 var old_status;
+var timeout;
 $(document).ready(function () {
     $(".atip").tooltip();
     options = {
@@ -42,10 +43,15 @@ $(document).ready(function () {
     var error_panel = document.getElementById("error-panel");
     var log_panel = document.getElementById("spann");
     var flash_btn = document.getElementById("flash_btn");
-
+    var reflash_tip = document.getElementById("reflashtip");
+    reflash_tip.style.display = "none";
     if(status !="RUNNING"){
         flash_btn.style.display = "none";
+        timeout = 8000;
+    }else{
+        timeout = 1000;
     }
+
 
     if (is_new == "true") {
 
@@ -53,6 +59,12 @@ $(document).ready(function () {
         error_panel.style.display = "none";
         log_panel.style.width = "95%";
         flash_btn.style.display = "none";
+        if(status !="RUNNING"){
+            reflash_tip.style.display = "none";
+        }else {
+            reflash_tip.style.display = "block";
+        }
+
         clearInterval(log_rtn);
         clearInterval(error_log_rtn);
 
@@ -90,7 +102,7 @@ function fetch_errorLog() {
             action: 'runlog',
             querytype: 'errorlog'
         },
-        timeout: 1000,
+        timeout: timeout,
         type: 'POST',
         error: function () {
             $logContainer.text("无数据");
@@ -132,7 +144,7 @@ function fetch_Log() {
             action: 'runlog',
             querytype: 'log'
         },
-        timeout: 1000,
+        timeout: timeout,
         type: 'POST',
         error: function () {
             $logContainer.text("没有找到日志数据");

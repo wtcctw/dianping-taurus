@@ -85,7 +85,9 @@
                     if (state.equals("RUNNING") || state.equals("TIMEOUT")) {%>
 
                 <a href="#confirm" onClick="action($(this).parents('tr').attr('id'))">Kill</a>
+
                 <a target="_blank" href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
+
                 <%
                 } else {%>
                 <a target="_blank" href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>

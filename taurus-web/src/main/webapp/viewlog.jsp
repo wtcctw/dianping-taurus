@@ -43,6 +43,9 @@
     .flash_btn {
         float: right
     }
+    .reflashtip {
+        float: right
+    }
 </style>
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
@@ -99,6 +102,11 @@
                     </div>
                     <a class="atip" data-toggle="tooltip" data-placement="top"
                        data-original-title="当你开启实时刷新后页面会自动刷新，不需要自己动手刷新页面喽～">[提示] </a>
+                </div>
+                <div class="reflashtip" id="reflashtip" >
+
+                    <a class="atip" data-toggle="tooltip" data-placemsent="left"
+                       data-original-title="您的任务运行在老版本的agent上，此版本不支持实时查看日志，请等待任务完成后查看日志">[注意] </a>
                 </div>
             </li>
 
