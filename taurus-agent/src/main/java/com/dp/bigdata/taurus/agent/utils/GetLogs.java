@@ -2,6 +2,8 @@ package com.dp.bigdata.taurus.agent.utils;
 
 import org.restlet.resource.ServerResource;
 import java.io.*;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
 
 /**
  * Created by mkirin on 14-8-5.
@@ -46,7 +48,7 @@ public class GetLogs  implements IGetLogs {
             }
         } else {
 
-            final RandomAccessFile logFile = new RandomAccessFile(logFilePath, "rw");
+           /* final RandomAccessFile logFile = new RandomAccessFile(logFilePath, "rw");
             long fileLength = logFile.length();
             double fileSize = fileLength / 1024L / 1024L;
             if (fileSize > 1) {
@@ -54,6 +56,47 @@ public class GetLogs  implements IGetLogs {
             }
             while ((tmp = logFile.readLine()) != null) {
                 logStr += tmp + "\n";
+            }*/
+
+
+            final int BUFFER_SIZE = 0x100000;// 缓冲区大小为3M
+
+            File logFile = new File(logFilePath);
+
+            long maxSize =  1024L*1024L;
+            long fileLen = logFile.length();
+            long startPos =  0;
+            if (fileLen > maxSize){
+                startPos =  logFile.length() - maxSize;
+                fileLen = maxSize;
+            }
+            MappedByteBuffer inputBuffer = new RandomAccessFile(logFile, "r")
+                    .getChannel().map(FileChannel.MapMode.READ_ONLY,
+                            startPos , fileLen );
+
+            byte[] dst = new byte[BUFFER_SIZE];// 每次读出3M的内容
+
+            for (int offset = 0; offset < inputBuffer.capacity(); offset += BUFFER_SIZE) {
+
+                if (inputBuffer.capacity() - offset >= BUFFER_SIZE) {
+
+                    for (int i = 0; i < BUFFER_SIZE; i++)
+
+                        dst[i] = inputBuffer.get(offset + i);
+
+                } else {
+
+                    for (int i = 0; i < inputBuffer.capacity() - offset; i++)
+
+                        dst[i] = inputBuffer.get(offset + i);
+
+                }
+
+                int length = (inputBuffer.capacity() % BUFFER_SIZE == 0) ? BUFFER_SIZE
+                        : inputBuffer.capacity() % BUFFER_SIZE;
+
+                logStr += new String(dst, 0, length);
+
             }
 
         }
