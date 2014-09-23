@@ -224,7 +224,7 @@ public class AttemptProxyServlet extends HttpServlet {
                             }
 
                          //   getLogCr = new ClientResource(url);
-
+                            long start = System.currentTimeMillis();
                             String context = getAgentRestService(url);//getLogCr.get().getText();
 
                             if (context != null) {
@@ -256,7 +256,10 @@ public class AttemptProxyServlet extends HttpServlet {
                             } else {
                                 retStr = logStr.replace("\n", "<br>");
                             }
-                            System.out.println("#######"+queryType+"###Length: "+retStr.length());
+
+                            long end = System.currentTimeMillis();
+
+                            System.out.println("#######"+queryType+"###Length: "+retStr.length()+"#####TIME:"+(end - start) );
                             output.write(retStr.getBytes());
                             output.close();
                         }
