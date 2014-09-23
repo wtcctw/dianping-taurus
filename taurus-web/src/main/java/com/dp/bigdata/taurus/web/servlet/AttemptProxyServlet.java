@@ -254,7 +254,7 @@ public class AttemptProxyServlet extends HttpServlet {
                             if (logStr == null) {                                     //时间间隔短，日志尚未生成可能获得null
                                 retStr = " ";
                             } else {
-                                retStr = logStr.replace("\n", "<br>");
+                                retStr = logStr;
                             }
 
                             long end = System.currentTimeMillis();

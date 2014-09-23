@@ -47,7 +47,7 @@ $(document).ready(function () {
     reflash_tip.style.display = "none";
     if(status !="RUNNING"){
         flash_btn.style.display = "none";
-        timeout = 20000;
+        timeout = 2000;
     }else{
         timeout = 1000;
     }
@@ -108,9 +108,9 @@ function fetch_errorLog() {
             $logContainer.text("无数据");
         },
         success: function (response) {
-            result = response.replace("\n", "<br>")
+            result = response.replace(/[\n]/g, "<br>")
 
-            $logContainer.append("<div class=\"terminal-like\">" + response + "</div>");
+            $logContainer.append("<div class=\"terminal-like\">" + result + "</div>");
             $logContainer.scrollTop($logContainer.get(0).scrollHeight);
             $(".loading").hide();
         },
@@ -151,9 +151,9 @@ function fetch_Log() {
         },
         success: function (response) {
 
-            result = response.replace("\n", "<br>");
+            result = response.replace(/[\n]/g, "<br>")
 
-            $logContainer.append("<div class=\"terminal-like\">" + response + "</div>");
+            $logContainer.append("<div class=\"terminal-like\">" + result + "</div>");
             $logContainer.scrollTop($logContainer.get(0).scrollHeight);
             $(".loading").hide();
         },
