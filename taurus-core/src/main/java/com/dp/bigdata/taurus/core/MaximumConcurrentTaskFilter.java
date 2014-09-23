@@ -3,6 +3,9 @@ package com.dp.bigdata.taurus.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dianping.lion.EnvZooKeeperConfig;
+import com.dianping.lion.client.ConfigCache;
+import com.dianping.lion.client.LionException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.dianping.cat.Cat;
@@ -24,7 +27,13 @@ public class MaximumConcurrentTaskFilter implements Filter {
 
     public List<AttemptContext> filter(List<AttemptContext> contexts) {
         List<AttemptContext> results;
-        int max = scheduler.getMaxConcurrency() - scheduler.getAllRunningAttempt().size();
+        String maxJobNums;
+        try {
+            maxJobNums  =  ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.engine.maxtasknum");
+        } catch (LionException e) {
+            maxJobNums = "100";
+        }
+        int max = Integer.parseInt(maxJobNums) - scheduler.getAllRunningAttempt().size();
 
         if (max <= 0) {
             results = new ArrayList<AttemptContext>();
