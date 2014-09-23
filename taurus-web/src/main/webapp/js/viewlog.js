@@ -108,7 +108,7 @@ function fetch_errorLog() {
             $logContainer.text("无数据");
         },
         success: function (response) {
-            result = response.replace(/[\n]/g, "<br>")
+            result = response;//.replace(/[\n]/g, "<br>")
 
             $logContainer.append("<div class=\"terminal-like\">" + result + "</div>");
             $logContainer.scrollTop($logContainer.get(0).scrollHeight);
@@ -151,7 +151,7 @@ function fetch_Log() {
         },
         success: function (response) {
 
-            result = response.replace(/[\n]/g, "<br>")
+            result = response;
 
             $logContainer.append("<div class=\"terminal-like\">" + result + "</div>");
             $logContainer.scrollTop($logContainer.get(0).scrollHeight);

@@ -1,6 +1,8 @@
 package com.dp.bigdata.taurus.web.servlet;
 
 import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -19,6 +21,7 @@ import com.dianping.lion.client.LionException;
 import com.dp.bigdata.taurus.restlet.resource.IAttemptResource;
 import com.dp.bigdata.taurus.restlet.resource.ILogResource;
 import com.dp.bigdata.taurus.restlet.shared.AttemptDTO;
+import org.apache.commons.io.IOUtils;
 import org.restlet.data.MediaType;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
@@ -65,26 +68,34 @@ public class AttemptProxyServlet extends HttpServlet {
         }
     }
 
-    private static String getAgentRestService(String restUrl) {
+    public static String getAgentRestService(String restUrl) {
 
         InputStream inputStream = null;
         String msgContent = "";
-        try {
-            URL url = new URL(restUrl);
-            inputStream = url.openStream();
-            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-            String line = "";
 
-            while ((line = br.readLine()) != null) {
-                msgContent += line +"\n";
-            }
-            inputStream.close();
-            return msgContent;
+        URL getUrl = null;
+        try {
+            getUrl = new URL(restUrl);
+
+        HttpURLConnection connection = (HttpURLConnection) getUrl
+                .openConnection();
+        connection.connect();
+        StringWriter writer = new StringWriter();
+        inputStream =  connection.getInputStream();
+        IOUtils.copy(inputStream, writer, "UTF-8");
+         msgContent = writer.toString();
+
+
+        // 断开连接
+        connection.disconnect();
         } catch (IOException e) {
-            msgContent= "null";
+            e.printStackTrace();
         }
         return msgContent;
     }
+
+
+
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -256,10 +267,11 @@ public class AttemptProxyServlet extends HttpServlet {
                             String logStr = context;
                             OutputStream output = response.getOutputStream();
 
+
                             if (logStr == null) {                                     //时间间隔短，日志尚未生成可能获得null
                                 retStr = " ";
                             } else {
-                                retStr = logStr;
+                                retStr = logStr.replace("\n","<br>");
                             }
 
                             long end = System.currentTimeMillis();
