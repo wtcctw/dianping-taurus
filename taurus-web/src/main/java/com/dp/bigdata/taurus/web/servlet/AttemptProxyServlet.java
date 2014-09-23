@@ -226,7 +226,9 @@ public class AttemptProxyServlet extends HttpServlet {
                          //   getLogCr = new ClientResource(url);
                             long start = System.currentTimeMillis();
                             String context = getAgentRestService(url);//getLogCr.get().getText();
+                            long end1 = System.currentTimeMillis();
 
+                            System.out.println("#######"+queryType+"#####TIME1:"+(end1 - start) );
                             if (context != null) {
                                 lastTimeFileSize += context.length();
                             } else {
@@ -240,6 +242,9 @@ public class AttemptProxyServlet extends HttpServlet {
                                     + "/agentrest.do?action=isend&attemptId="
                                     + attemptID;
                              isEnd = getAgentRestService(isEndUrl);
+                            long end2 = System.currentTimeMillis();
+
+                            System.out.println("#######"+queryType+"#####TIME2:"+(end2 - start) );
 
                             if (acceptContentWay && isEnd.equals("false")) {
                                 request.getSession().setAttribute(fileSizeAttribute, ((Long) lastTimeFileSize).toString());
