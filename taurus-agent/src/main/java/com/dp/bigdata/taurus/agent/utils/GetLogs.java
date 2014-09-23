@@ -46,6 +46,7 @@ public class GetLogs  implements IGetLogs {
             while ((tmp = logFile.readLine()) != null) {
                 logStr += tmp + "\n";
             }
+            logFile.close();
         } else {
 
            /* final RandomAccessFile logFile = new RandomAccessFile(logFilePath, "rw");
@@ -99,7 +100,10 @@ public class GetLogs  implements IGetLogs {
 
             }
 
+
+
         }
+
         return logStr;
     }
 }
