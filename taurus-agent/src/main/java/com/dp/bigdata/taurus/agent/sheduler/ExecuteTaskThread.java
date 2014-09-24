@@ -55,13 +55,13 @@ public final class ExecuteTaskThread extends BaseEnvManager{
     private static final String MAIN_COMMAND_PATTERN = "echo $$ >%s; [ -f %s ] && cd %s; source %s %s; %s";
     private static final String STORE_RETURN_VALUE_PATTERN = "echo $? >%s;";
     private static final String CLEAN_FILES_PATTERN = "rm -f %s;%s";
-    private static final String KINIT_COMMAND_PATTERN = "kinit -r 12l -k -t %s/%s/.keytab %s@DIANPING.COM;kinit -R;";
+    private static final String KINIT_COMMAND_PATTERN = " kinit -r 12l -k -t %s/%s/.keytab %s@DIANPING.COM;kinit -R;";
     private static final String KDESTROY_COMMAND = "kdestroy;";
     private static final String HADOOP_NAME = "hadoopName";
     
     
     private String command_pattern;
-    private String krb5Path = "KRB5CCNAME=%s/%s";
+    private String krb5Path = " KRB5_CONFIG=%s;export KRB5CCNAME=%s/%s";
 
     ExecuteTaskThread(Executor executor, String localIp, ScheduleInfoChannel cs, String taskAttempt){
         this.executor = executor;
@@ -74,6 +74,7 @@ public final class ExecuteTaskThread extends BaseEnvManager{
             command_pattern = COMMAND_PATTERN_WITHOUT_SUDO;
             krb5Path = "export " + krb5Path + ";";
         }
+
     }
     
     @Override
@@ -187,7 +188,7 @@ public final class ExecuteTaskThread extends BaseEnvManager{
                 String krb5PathCommand = "";
                 CommandLine cmdLine;  
                 if(taskType!=null && taskType.equals("hadoop")){
-                    krb5PathCommand = String.format(krb5Path, hadoop,"krb5cc_"+attemptID);
+                    krb5PathCommand = String.format(krb5Path, krb5Conf,hadoop,"krb5cc_"+attemptID);
                     String kinitCommand = String.format(KINIT_COMMAND_PATTERN,homeDir,hadoopName,hadoopName);
                     kinitCommand = String.format(command_pattern, userName, krb5PathCommand,
                             kinitCommand);

@@ -18,6 +18,7 @@ public abstract class BaseEnvManager implements Runnable {
     public static String logFileUpload = "/script/log-upload.sh";
     public static String killJob = "/script/kill-tree.sh";
     public static String env = "/script/agent-env.sh";
+    public static String krb5Conf="/krb5.conf";
     public static String running = "/running";
     public static String hadoop = "/hadoop";
     public static String homeDir = "/home";
@@ -56,6 +57,7 @@ public abstract class BaseEnvManager implements Runnable {
         hadoopAuthority = rootPath + hadoopAuthority;
         logFileUpload = agentRoot + logFileUpload;
         killJob = rootPath + killJob;
+        krb5Conf = rootPath + krb5Conf;
         running = jobPath + running;
         hadoop = jobPath + hadoop;
         env = rootPath + env;
