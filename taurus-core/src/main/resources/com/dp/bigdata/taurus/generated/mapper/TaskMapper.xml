@@ -578,4 +578,8 @@
     <select id="getTasks" resultMap="BaseResultMap" >
         select * from TaurusTask
     </select>
+
+    <select id="getTasksByHost" resultMap="BaseResultMap">
+        select * from TaurusTask  where hostname = #{hostname}
+    </select>
 </mapper>

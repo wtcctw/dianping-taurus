@@ -61,7 +61,7 @@ public class TaskProxyServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action").toLowerCase();
-        String taskID = request.getParameter("id");
+        String taskID = request.getParameter("id").trim();
         
         ClientResource taskCr = new ClientResource(RESTLET_URL_BASE + "task/" + taskID);
         ITaskResource taskResource = taskCr.wrap(ITaskResource.class);

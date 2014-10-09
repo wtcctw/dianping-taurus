@@ -6,6 +6,8 @@ import com.dp.bigdata.taurus.generated.module.TaskAttemptExample;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface TaskAttemptMapper {
@@ -103,4 +105,8 @@ public interface TaskAttemptMapper {
     public TaskAttempt getAttemptById(@Param("attemptId")String attemptId);
 
     public ArrayList<TaskAttempt> getAttempts(@Param("now")String now);
+    public ArrayList  getTaskLoadHost(@Param("start")String satrt,@Param("end")String end);
+    public ArrayList getRunningTaskLoadHost();
+    public ArrayList getFailedTaskLoadHost(@Param("start")String satrt,@Param("end")String end);
+
 }

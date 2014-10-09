@@ -369,5 +369,19 @@
         from TaurusTaskAttempt
         where <![CDATA[( startTime >= #{now} and endTime >= #{now}) or status = 6]]>
     </select>
+    <select id="getTaskLoadHost" resultType="map">
+        select execHost,count(1) as totaltask from TaurusTaskAttempt
+        where <![CDATA[  startTime >=#{start} and  startTime <=#{end}]]>  group by execHost order by totaltask desc
 
+    </select>
+    <select id="getRunningTaskLoadHost" resultType="map">
+        select execHost,count(1) as totaltask from TaurusTaskAttempt where  status=6 group by execHost order by totaltask desc
+
+    </select>
+
+<select id="getFailedTaskLoadHost" resultType="map">
+    select execHost,count(1) as totaltask from TaurusTaskAttempt
+    where <![CDATA[ startTime >=#{start} and  startTime <=#{end} and status=8]]>  group by execHost order by totaltask desc
+
+</select>
 </mapper>

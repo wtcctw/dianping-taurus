@@ -71,6 +71,12 @@
           scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.GetAttemptsByStatus"/>
     <bean name="/api/gettasks" id="getTasks" autowire="byName"
           scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.GetTasks"/>
+    <bean name="/api/runtaskload" id="getRunTaskLoad" autowire="byName"
+          scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.RunTaskLoad"/>
+    <bean name="/api/totaltaskload/{starttime}/{endtime}" id="getTotalTaskLoad" autowire="byName"
+          scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.TotalTaskLoad"/>
+    <bean name="/api/failedtaskload/{starttime}/{endtime}" id="getFailedTaskLoad" autowire="byName"
+          scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.FailedTaskLoad"/>
 		<!-- Core Service -->
 		<bean id="hdfsUtils" class="com.dp.bigdata.taurus.restlet.utils.DefaultHdfsUtils"
 			init-method="init" />

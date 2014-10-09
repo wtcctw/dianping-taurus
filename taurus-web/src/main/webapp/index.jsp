@@ -1,102 +1,304 @@
 <!DOCTYPE html>
-<%@ page contentType="text/html;charset=utf-8"%>
-<html lang="en">
+<html>
 <head>
-	<%@ include file="jsp/common-header.jsp"%>
-	<%@ include file="jsp/common-nav.jsp"%>
+    <title>Taurus</title>
+    <meta charset="utf-8">
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <%@ include file="jsp/common-nav.jsp" %>
+    <!-- basic styles -->
+    <script type="text/javascript" src="resource/js/lib/jquery-1.9.1.min.js"></script>
+    <link href="lib/ace/css/bootstrap.min.css" rel="stylesheet"/>
+    <script src="lib/ace/js/ace-extra.min.js"></script>
+    <link rel="stylesheet" href="lib/ace/css/font-awesome.min.css"/>
+    <script src="lib/ace/js/ace-elements.min.js"></script>
+    <script src="lib/ace/js/ace.min.js"></script>
+    <script src="lib/ace/js/bootbox.min.js"></script>
+    <script type="text/javascript" src="resource/js/lib/raphael.2.1.0.min.js"></script>
+    <script type="text/javascript" src="resource/js/lib/justgage.1.0.1.min.js"></script>
+    <script type="text/javascript" src="resource/js/lib/Chart.js"></script>
+    <script type="text/javascript" src="lib/ace/js/jquery.flot.min.js"></script>
+    <script type="text/javascript" src="lib/ace/js/jquery.flot.pie.min.js"></script>
+    <script type="text/javascript" src="lib/ace/js/bootstrap-datepicker.min.js"></script>
+    <script type="text/javascript" src="lib/ace/js/daterangepicker.min.js"></script>
+    <script src="lib/ace/js/jquery.dataTables.min.js"></script>
+    <script src="lib/ace/js/jquery.dataTables.bootstrap.js"></script>
+    <script type="text/javascript" src="js/login.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+    <!-- page specific plugin styles -->
 
-	<link href="css/index.css" rel="stylesheet" type="text/css">
-	<link href="css/docs.css" rel="stylesheet">
+    <!-- fonts -->
+    <script src="lib/ace/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="lib/ace/css/ace-fonts.css"/>
+
+    <!-- ace styles -->
+
+    <link rel="stylesheet" href="lib/ace/css/ace.min.css"/>
+    <link rel="stylesheet" href="lib/ace/css/ace-rtl.min.css"/>
+    <link rel="stylesheet" href="lib/ace/css/ace-skins.min.css"/>
+
+    <link rel="stylesheet" href="resource/css/monitor-center.css">
+
 </head>
-<body data-spy="scroll" data-target=".bs-docs-sidebar">
-	<div class="container">
-		<div class="row">
-			<div class="span3 bs-docs-sidebar">
-				<ul class="nav nav-list bs-docs-sidenav affix">
-					<li class="active"><a href="#updated"><i
-							class="icon-chevron-right"></i> 服务器更新日志</a></li>
-					<li><a href="#author"><i class="icon-chevron-right"></i>开发人员</a></li>
-				</ul>
-			</div>
+<body>
 
-			<div class="span9">
-				<section id="updated">
-					<h1>服务器更新日志</h1>
-					<table class="table table-striped table-bordered table-condensed">
-						<tbody>
+<div class="common-header" id="common-header">
 
-							<tr class="text-success">
-								<th width="90%">最新发布功能描述</th>
-								<th width="10%">发布时间</th>
-							</tr>
-                            <tr>
-                                <td>job host监控细化，<a href="hosts.jsp">主机监控</a></td>
-                                <td>2014-09-05</td>
-                            </tr>
-                            <tr>
-                                <td>agent war包化，可以通过button部署</td>
-                                <td>2014-09-01</td>
-                            </tr>
-                            <tr>
-                                <td>新增实时查看正在运行的任务日志</td>
-                                <td>2014-08-05</td>
-                            </tr>
-                            <tr>
-                                <td>新增任务监控<a href="monitor.jsp">任务监控</a>页面</td>
-                                <td>2014-08-03</td>
-                            </tr>
-							<tr>
-								<td>重新组织了<a href="about.jsp">帮助</a>页面</td>
-								<td>2013-09-27</td>
-							</tr>
-							<tr>
-								<td>增加了<a href="user.jsp">用户设置</a>页面</td>
-								<td>2013-09-27</td>
-							</tr>
-							<tr>
-								<td>用户可以看到同组的所有人的作业</td>
-								<td>2013-09-27</td>
-							</tr>
-							<tr>
-								<td>修复了description显示为null和修改告警人的bug</td>
-								<td>2013-09-27</td>
-							</tr>
-							<tr>
-								<td>支持自动杀死Timeout作业。具体细节请看<a href="about.jsp#config">帮助</a></td>
-								<td>2013-08-20</td>
-							</tr>
-							<tr>
-								<td>修正Bugs。对杀死的作业设置返回值为-1。</td>
-								<td>2013-08-20</td>
-							</tr>
-							<tr>
-								<td>增加Cat打点</td>
-								<td>2013-08-20</td>
-							</tr>
-						</tbody>
-					</table>
-				</section>
+</div>
 
-				<section id="author">
-					<h1>开发者</h1>
-					<table class="table table-striped table-bordered table-condensed">
-						<tbody>
-							<tr>
-								<td>朱浩</td>
-								<td>hao.zhu@dianping.com</td>
-								<td>1815</td>
-							</tr>
-                            <tr>
-                                <td>李明</td>
-                                <td>kirin.li@dianping.com</td>
-                                <td>1815</td>
-                            </tr>
-						</tbody>
-					</table>
-				</section>
 
-			</div>
-		</div>
-	</div>
+<div class="main-content" style="opacity: 1;">
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('breadcrumbs', 'fixed')
+        } catch (e) {
+        }
+    </script>
+    <ul class="breadcrumb">
+        <li class="active">
+            <i class="icon-home home-icon"></i>
+            <a href="index.jsp">监控中心</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+<div class="row">
+
+<div class="col-sm-6">
+    <div class="widget-box">
+        <div class="widget-header widget-header-flat widget-header-small">
+            <h5 class="widget-title">
+                <i class="icon-signal"></i>
+                Job机器状态
+            </h5>
+
+            <div class="widget-toolbar">
+                <a href="#" data-action="collapse">
+                    <i class="icon-chevron-up"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="widget-body">
+            <div class="widget-main">
+                <div id="piechart-placeholder"></div>
+
+                <div class="hr hr8 hr-double"></div>
+
+                <div class="clearfix">
+                    <div class="col-sm-6">
+														<span class="grey">
+															<i class="icon-lightbulb green"></i>
+															&nbsp; 正常
+														</span>
+                        <h4 class="bigger pull-right" id="onlineNums"></h4>
+                    </div>
+
+                    <div class="col-sm-6">
+														<span class="grey">
+															<i class="icon-lightbulb red"></i>
+															&nbsp; 失联
+														</span>
+                        <h4 class="bigger pull-right " id="exceptionNums"></h4>
+                    </div>
+
+
+                    <!-- /section:custom/extra.grid -->
+                </div>
+            </div>
+            <!-- /.widget-main -->
+        </div>
+        <!-- /.widget-body -->
+    </div>
+    <!-- /.widget-box -->
+
+</div>
+<div class="col-sm-6">
+    <div class="widget-box">
+        <div class="widget-header widget-header-flat widget-header-small">
+            <h5 class="widget-title">
+                <i class="icon-signal"></i>
+                Job异常机器列表
+            </h5>
+
+            <div class="widget-toolbar">
+                <a href="#" data-action="collapse">
+                    <i class="icon-chevron-up"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="widget-body">
+            <div class="widget-main" id="exceptionJob">
+                <i class="icon-spinner icon-spin icon-large" ></i>
+            </div>
+            <!-- /.widget-main -->
+        </div>
+        <!-- /.widget-body -->
+    </div>
+    <!-- /.widget-box -->
+
+</div>
+<div class="col-sm-6">
+    <div class="widget-box">
+        <div class="widget-header widget-header-flat widget-header-small">
+            <h5 class="widget-title">
+                <i class=" icon-signal"></i>
+                主机CPU负载列表
+            </h5>
+
+            <div class="widget-toolbar">
+                <a href="#" data-action="collapse">
+                    <i class="icon-chevron-up"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="widget-body">
+
+            <div class="widget-main align-center" id="cpuload">
+                <i class="icon-spinner icon-spin icon-large" ></i>
+            </div>
+            <!-- /.widget-main -->
+        </div>
+        <!-- /.widget-body -->
+    </div>
+    <!-- /.widget-box -->
+
+</div>
+<div class="col-sm-6">
+    <div class="widget-box">
+        <div class="widget-header widget-header-flat widget-header-small">
+            <h5 class="widget-title">
+                <i class=" icon-signal"></i>
+                主机内存使用率列表
+            </h5>
+
+            <div class="widget-toolbar">
+                <a href="#" data-action="collapse">
+                    <i class="icon-chevron-up"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="widget-body">
+
+            <div class="widget-main align-center" id="memload" >
+                <i class="icon-spinner icon-spin icon-large" ></i>
+            </div>
+            <!-- /.widget-main -->
+        </div>
+        <!-- /.widget-body -->
+    </div>
+    <!-- /.widget-box -->
+
+</div>
+<div class="col-sm-6">
+    <div class="widget-box">
+        <div class="widget-header widget-header-flat widget-header-small">
+            <h5 class="widget-title">
+                <i class="icon-signal"></i>
+                执行任务总数排行
+            </h5>
+
+            <div class="widget-toolbar">
+                <a href="#" data-action="collapse">
+                    <i class="icon-chevron-up"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="widget-body">
+
+
+            <div class="widget-main" id="totalJob">
+                <span class="label " style="display: none">开始时间</span>
+
+                <div class="input-group" style="display: none">
+                    <input class="form-control date-picker ng-pristine ng-valid ng-valid-required"
+                           id="totalstarttime" type="text" data-date-format="yyyy-mm-dd"
+                           ng-model="startDate" required="">
+                                        <span class="input-group-addon"> <i class="icon-calendar bigger-110"></i>
+                                        </span>
+                </div>
+
+                <span class="label " style="display: none">结束时间</span>
+
+                <div class="input-group" style="display: none">
+                    <input class="form-control date-picker ng-pristine ng-valid ng-valid-required"
+                           id="totalendtime" type="text" data-date-format="yyyy-mm-dd" ng-model="startDate"
+                           required="">
+                                        <span class="input-group-addon"> <i class="icon-calendar bigger-110"></i>
+                                        </span>
+                </div>
+            </div>
+            <!-- /.widget-main -->
+        </div>
+        <!-- /.widget-body -->
+    </div>
+    <!-- /.widget-box -->
+
+</div>
+<div class="col-sm-6">
+    <div class="widget-box">
+        <div class="widget-header widget-header-flat widget-header-small">
+            <h5 class="widget-title">
+                <i class=" icon-signal"></i>
+                执行任务失败总数排行
+            </h5>
+
+            <div class="widget-toolbar">
+                <a href="#" data-action="collapse">
+                    <i class="icon-chevron-up"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="widget-body">
+
+            <div class="widget-main " id="failedJob">
+                <div class="col-sm-6" style="display: none">
+                    <span class="label ">开始时间</span>
+
+                    <div class="input-group">
+                        <input class="form-control date-picker ng-pristine ng-valid ng-valid-required"
+                               id="failstarttime" type="text" data-date-format="yyyy-mm-dd" ng-model="startDate"
+                               required="">
+                                        <span class="input-group-addon"> <i class="icon-calendar bigger-110"></i>
+                                        </span>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 " style="display: none">
+                    <span class="label col-sm-2">结束时间</span>
+
+                    <div class="input-group col-sm-6">
+
+                        <input class="form-control date-picker ng-pristine ng-valid ng-valid-required"
+                               id="failendtime" type="text" data-date-format="yyyy-mm-dd" ng-model="startDate"
+                               required="">
+                                        <span class="input-group-addon"> <i class="icon-calendar bigger-110"></i>
+                                        </span>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.widget-main -->
+        </div>
+        <!-- /.widget-body -->
+    </div>
+    <!-- /.widget-box -->
+
+</div>
+
+</div>
+
+
+</div>
+</div>
+<script type="text/javascript">
+
+</script>
 </body>
 </html>

@@ -1,0 +1,24 @@
+.mid-div{
+    width: 900px;
+    height: 330px;
+    margin: 0 auto;
+    margin-top: 30px;
+    text-align: center;
+}
+
+.mid-div-smallmargin{
+    width: 900px;
+    height: 330px;
+    margin: 0 auto;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.left-right-align{
+    float: left;
+    display: inline-block;
+}
+
+.clickable:hover{
+    cursor: pointer;
+}

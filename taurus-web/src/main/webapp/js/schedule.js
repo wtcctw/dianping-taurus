@@ -1,53 +1,77 @@
 var taskID;
 var action_chinese;
-$(document).ready(function() {
-	$(document).delegate('.detailBtn', 'click', function(e){
-		var anchor = this;
-		if(e.ctrlKey || e.metaKey){
-			return true;
-		}else{
-			e.preventDefault();
-		}
-		$.ajax({
-			type: "get",
-			url: anchor.href,
-			error: function(){
-				$("#alertContainer").html('<div id="alertContainer" class="alert alert-error"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>获取详情失败</strong></div>');
-				$(".alert").alert();
-			},
-			success: function(response, textStatus) {
-				$("#detailModal").html(response);
-				$("#detailModal").modal();
-			}
-		});
-	});
+jQuery(function($) {
+    $.ajax({
+        type: "get",
+        url: "jsp/common-header.jsp",
+        error: function () {
+        },
+        success: function (response, textStatus) {
+            $("#common-header").html(response);
+            $('li[id="schedule"]').addClass("active");
+        }
+
+
+    });
+	$(document).delegate('.detailBtn', 'click', function(e) {
+
+        var anchor = this;
+        if (e.ctrlKey || e.metaKey) {
+            return true;
+        } else {
+            e.preventDefault();
+        }
+        $.ajax({
+            type: "get",
+            url: anchor.href,
+            error: function () {
+                $("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>获取详情失败</strong></div>');
+                $(".alert").alert();
+            },
+            success: function (response, textStatus) {
+                $("#detailModal").html(response);
+                $("#detailModal").modal().css({
+                    backdrop:false
+
+
+                });
+
+
+            }
+
+
+        });
+    });
 });
+
 
 function action(id, index) {
 	action_chinese = $("#" + id + " .dropdown-menu li:nth-child(" + index + ") a").html();
+    action_chinese = action_chinese.trim();
 	taskID = id;
-	
+	var info;
 		if (action_chinese == '删除') {
-			$("#id_header").html("删除");
-			$("#id_body").html("确定要删除任务<strong>" + id + "</strong>");
+            info = "确定要删除任务<strong>" + id + "</strong>";
 		} else if (action_chinese == '暂停') {
-			$("#id_header").html("暂停");
-			$("#id_body").html("确定要暂停任务<strong>" + id + "</strong>");
+            info = "确定要暂停任务<strong>" + id + "</strong>";
 		} else if (action_chinese == '执行') {
-			$("#id_header").html("执行");
-			$("#id_body").html("确定要执行任务<strong>" + id + "</strong>");
+            info = "确定要执行任务<strong>" + id + "</strong>";
 		} else if (action_chinese == '恢复') {
-			$("#id_header").html("恢复");
-			$("#id_body").html("确定要恢复任务<strong>" + id + "</strong>");
+            info = "确定要恢复任务<strong>" + id + "</strong>";
 		}
-		$("#confirm").modal('toggle');
+    bootbox.confirm(info, function(result) {
+        if(result) {
+            action_ok();
+        }
+    });
+
 }
 
 
 function action_update(id) {
 	var btn = $('#updateBtn',$('#detailModal'));
 	var form =  $("#form_"+id);
-	if(btn.text() == "修改"){
+	if(btn.text().trim() == "修改"){
 		btn.html("保存");
 		$('.field',form).removeAttr("disabled", "disabled");
 		$('#alertUser',form).autocomplete({
@@ -122,7 +146,7 @@ function action_update(id) {
 	            enctype: 'application/x-www-form-urlencoded',
 	            error: function(data)
 	            {
-	            	$("#alertContainer").html('<div id="alertContainer" class="alert alert-error"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>'
+	            	$("#alertContainer").html('<div id="alertContainer" class="alert alert-info"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>'
 	    					+ '修改失败</strong></div>');
 	    			$(".alert").alert();
 	    			$("#detail_"+id).modal("hide");
@@ -131,7 +155,9 @@ function action_update(id) {
 	            success: function(data)
 	            {
 	            	$("#detail_"+id).modal("hide");
-	            	$('#modal-confirm').modal('toggle');
+                    bootbox.confirm("您的修改已经生效！", function(result) {
+                        window.location.reload();
+                    });
 	            },
 	            cache: false,
 		        contentType: 'application/xml',
@@ -159,7 +185,7 @@ function action_update(id) {
 		        },
 	           	error: function(data)
 	            {
-	            	$("#alertContainer").html('<div id="alertContainer" class="alert alert-error"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>'
+	            	$("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>'
 	    					+ '修改失败</strong></div>');
 	    			$(".alert").alert();
 	    			$("#detail_"+id).modal("hide");
@@ -168,7 +194,11 @@ function action_update(id) {
 	            success: function(data)
 	            {
 	            	$("#detail_"+id).modal("hide");
-	            	$('#modal-confirm').modal('toggle');
+                    bootbox.confirm("您的修改已经生效！", function(result) {
+                        if(result) {
+                            window.location.reload();
+                        }
+                    });
 	            },
 	            cache: false,
 		        contentType: false,
@@ -191,7 +221,7 @@ function action_ok() {
 		},
 		type : 'POST',
 		error: function(){
-			$("#alertContainer").html('<div id="alertContainer" class="alert alert-error"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>'
+			$("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>'
 					+ action_chinese + '失败</strong></div>');
 			$(".alert").alert();
 			$('#confirm').modal("hide");
@@ -235,3 +265,7 @@ function toAction(chinese){
 	}
 	return action;
 }
+
+
+
+

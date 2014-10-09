@@ -1,5 +1,6 @@
 package com.dp.bigdata.taurus.generated.mapper;
 
+import com.dp.bigdata.taurus.generated.module.Host;
 import com.dp.bigdata.taurus.generated.module.Task;
 import com.dp.bigdata.taurus.generated.module.TaskExample;
 
@@ -98,4 +99,5 @@ public interface TaskMapper {
     public Task getTaskByAttemptId(@Param("attemptId")String attemptId);
 
     public ArrayList<Task> getTasks();
+    ArrayList<Host> getTasksByHost(String hostname);
 }

@@ -2,9 +2,35 @@
 <%@ page contentType="text/html;charset=utf-8" %>
 <html lang="en">
 <head>
-    <%@ include file="jsp/common-header.jsp" %>
     <%@ include file="jsp/common-nav.jsp" %>
-    <link rel="stylesheet" type="text/css" href="css/DT_bootstrap.css">
+    <title>Taurus</title>
+    <meta charset="utf-8">
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- basic styles -->
+    <script type="text/javascript" src="resource/js/lib/jquery-1.9.1.min.js"></script>
+    <link href="lib/ace/css/bootstrap.min.css" rel="stylesheet"/>
+    <script src="lib/ace/js/ace-extra.min.js"></script>
+    <link rel="stylesheet" href="lib/ace/css/font-awesome.min.css"/>
+    <script src="lib/ace/js/ace-elements.min.js"></script>
+    <script src="lib/ace/js/ace.min.js"></script>
+    <script src="lib/ace/js/bootbox.min.js"></script>
+    <script type="text/javascript" src="resource/js/lib/raphael.2.1.0.min.js"></script>
+    <script type="text/javascript" src="resource/js/lib/justgage.1.0.1.min.js"></script>
+    <script type="text/javascript" src="resource/js/lib/Chart.js"></script>
+    <script type="text/javascript" src="js/login.js"></script>
+    <!-- page specific plugin styles -->
+
+    <!-- fonts -->
+    <script src="lib/ace/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="lib/ace/css/ace-fonts.css"/>
+
+    <!-- ace styles -->
+
+    <link rel="stylesheet" href="lib/ace/css/ace.min.css"/>
+    <link rel="stylesheet" href="lib/ace/css/ace-rtl.min.css"/>
+    <link rel="stylesheet" href="lib/ace/css/ace-skins.min.css"/>
     <style>
 
         .time_inal {
@@ -26,15 +52,36 @@
 <%@ page import="com.dp.bigdata.taurus.restlet.resource.*" %>
 <%@ page import="com.dp.bigdata.taurus.generated.module.Task" %>
 
-<div class="container" style="margin-top: 10px">
-<div id="alertContainer" class="container">
-</div>
-<ul class="breadcrumb">
-    <li><a href="./index.jsp">首页</a> <span class="divider">/</span></li>
-    <li><a href="#" class="active">任务监控</a> <span class="divider">/</span></li>
 
-    <%
-//        String admin = (String)request.getSession().getAttribute("Admin");
+<div class="common-header" id="common-header">
+
+</div>
+<div class="main-content">
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('breadcrumbs', 'fixed')
+        } catch (e) {
+        }
+    </script>
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="index.jsp">监控中心</a>
+        </li>
+        <li class="active">
+            <a href="monitor.jsp">任务监控</a>
+        </li>
+    </ul>
+</div>
+
+<div class="page-content">
+<div id="alertContainer" class="container col-sm-10">
+</div>
+
+
+<%
+    //        String admin = (String)request.getSession().getAttribute("Admin");
 //        if (admin== null || !admin.equals("true")) {
 //            response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
 //            String newLocn = "notadmin.jsp";
@@ -42,22 +89,20 @@
 //        }
 
 
-        Date time = new Date();
-        SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHH");
-        long hourTime = 60 * 60 * 1000;
-        Integer countTotal = (Integer) request.getSession().getAttribute("count");
-        if (countTotal == null)
-            countTotal = 0;
-    %>
+    Date time = new Date();
+    SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHH");
+    long hourTime = 60 * 60 * 1000;
+    Integer countTotal = (Integer) request.getSession().getAttribute("count");
+    if (countTotal == null)
+        countTotal = 0;
+%>
 
-</ul>
-
-
-<ul class="run-tag">
+<div class="row">
+<ul class="run-tag col-sm-12">
     <li><a class="atip" data-toggle="tooltip" data-placement="right" data-original-title="正在运行的任务"><span
             class="label label-info">RUNNING</span></a></li>
 </ul>
-<ul class="breadcrumb">
+<ul class="breadcrumb col-sm-12 ">
     <table cellpadding="0" cellspacing="0" border="0"
            class="table table-striped table-format table-hover" id="running">
         <thead>
@@ -67,7 +112,7 @@
             <th>实际启动时间</th>
             <th>实际结束时间</th>
             <th>预计调度时间</th>
-            <!-- <th>IP</th> -->
+            <th>IP</th>
             <th>查看日志</th>
 
         </tr>
@@ -143,6 +188,12 @@
             <%} else {%>
             <td>NULL</td>
             <%}%>
+            <%if (dto.getExecHost() != null) {%>
+            <td><%=dto.getExecHost()%>
+            </td>
+            <%} else {%>
+            <td>NULL</td>
+            <%}%>
             <td>
 
                 <a target="_blank" href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
@@ -154,7 +205,7 @@
         </tbody>
     </table>
 </ul>
-<div class="time_inal">
+<div class="time_inal ">
 
     <a class="atip" data-toggle="tooltip" data-placement="top"
        data-original-title="当你点击了[-1h]后，在想切换到当前页面时，请点击[当天]，刷新页面无效噢～">[注意] </a>
@@ -169,14 +220,14 @@
        data-original-title=" 时间区间[<%=formatter.format(new Date(new Date().getTime() -24*hourTime))%>~<%=formatter.format(new Date())%>]">[当天] </a>
 </div>
 
-<ul class="submit-fail-tag">
+<ul class="submit-fail-tag col-sm-12">
     <li><a class="atip" data-toggle="tooltip" data-placement="right" data-original-title="提交失败的任务"><span
             class="label label-important">SUBMIT_FAIL</span></a></li>
 </ul>
 
-<ul class="breadcrumb">
+<ul class="breadcrumb col-sm-12">
     <table cellpadding="0" cellspacing="0" border="0"
-           class="table table-striped table-format table-hover" id="submitfail">
+           class="table table-striped table-format table-hover" id="submitfail" style="width: 100%">
         <thead>
         <tr>
             <th>任务ID</th>
@@ -184,7 +235,7 @@
             <th>实际启动时间</th>
             <th>实际结束时间</th>
             <th>预计调度时间</th>
-            <!-- <th>IP</th> -->
+             <th>IP</th>
             <th>查看日志</th>
         </tr>
         </thead>
@@ -228,7 +279,12 @@
             <%} else {%>
             <td>NULL</td>
             <%}%>
-
+            <%if (dto.getExecHost() != null) {%>
+            <td><%=dto.getExecHost()%>
+            </td>
+            <%} else {%>
+            <td>NULL</td>
+            <%}%>
             <td>
                 <a target="_blank" href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
             </td>
@@ -243,15 +299,15 @@
     </table>
 </ul>
 
-<ul class="fail-tag">
+<ul class="fail-tag col-sm-12">
     <li><a class="atip" data-toggle="tooltip" data-placement="right" data-original-title="失败的任务"><span
             class="label label-important">FAILED</span></a></li>
 
 </ul>
 
-<ul class="breadcrumb">
+<ul class="breadcrumb col-sm-12">
     <table cellpadding="0" cellspacing="0" border="0"
-           class="table table-striped table-format table-hover" id="fail">
+           class="table table-striped table-format table-hover" id="fail" style="width: 100%">
         <thead>
         <tr>
             <th>任务ID</th>
@@ -259,7 +315,7 @@
             <th>实际启动时间</th>
             <th>实际结束时间</th>
             <th>预计调度时间</th>
-            <!-- <th>IP</th> -->
+             <th>IP</th>
             <th>查看日志</th>
         </tr>
         </thead>
@@ -304,7 +360,12 @@
             <%} else {%>
             <td>NULL</td>
             <%}%>
-
+            <%if (dto.getExecHost() != null) {%>
+            <td><%=dto.getExecHost()%>
+            </td>
+            <%} else {%>
+            <td>NULL</td>
+            <%}%>
             <td>
                 <a target="_blank" href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
             </td>
@@ -317,14 +378,14 @@
     </table>
 </ul>
 
-<ul class="dependency-timeout-tag">
+<ul class="dependency-timeout-tag col-sm-12">
     <li><a class="atip" data-toggle="tooltip" data-placement="right" data-original-title="依赖超时的任务"><span
             class="label label-important">DEPENDENCY_TIMEOUT</span></a></li>
 </ul>
 
-<ul class="breadcrumb">
+<ul class="breadcrumb col-sm-12">
     <table cellpadding="0" cellspacing="0" border="0"
-           class="table table-striped table-format table-hover" id="dependency-timeout">
+           class="table table-striped table-format table-hover" id="dependency-timeout" style="width: 100%">
         <thead>
         <tr>
             <th>任务ID</th>
@@ -332,7 +393,7 @@
             <th>实际启动时间</th>
             <th>实际结束时间</th>
             <th>预计调度时间</th>
-            <!-- <th>IP</th> -->
+             <th>IP</th>
             <th>查看日志</th>
 
         </tr>
@@ -375,6 +436,12 @@
             <%} else {%>
             <td>NULL</td>
             <%}%>
+            <%if (dto.getExecHost() != null) {%>
+            <td><%=dto.getExecHost()%>
+            </td>
+            <%} else {%>
+            <td>NULL</td>
+            <%}%>
             <td>
                 <a target="_blank" href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
             </td>
@@ -387,13 +454,13 @@
     </table>
 </ul>
 
-<ul class="timeout-tag">
+<ul class="timeout-tag col-sm-12">
     <li><a class="atip" data-toggle="tooltip" data-placement="right" data-original-title="超时的任务"><span
             class="label label-important">TIMEOUT</span></a></li>
 </ul>
-<ul class="breadcrumb">
+<ul class="breadcrumb col-sm-12">
     <table cellpadding="0" cellspacing="0" border="0"
-           class="table table-striped table-format table-hover" id="timeout">
+           class="table table-striped table-format table-hover " id="timeout" style="width: 100%">
         <thead>
         <tr>
             <th>任务ID</th>
@@ -401,7 +468,7 @@
             <th>实际启动时间</th>
             <th>实际结束时间</th>
             <th>预计调度时间</th>
-            <!-- <th>IP</th> -->
+            <th>IP</th>
             <th>查看日志</th>
 
         </tr>
@@ -443,6 +510,12 @@
             <%} else {%>
             <td>NULL</td>
             <%}%>
+            <%if (dto.getExecHost() != null) {%>
+            <td><%=dto.getExecHost()%>
+            </td>
+            <%} else {%>
+            <td>NULL</td>
+            <%}%>
             <td>
                 <a target="_blank" href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
             </td>
@@ -455,9 +528,8 @@
     </table>
 </ul>
 
-
 </div>
-
+</div>
 <div id="confirm" class="modal hide fade">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -471,13 +543,100 @@
         <a href="#" class="btn btn-danger" onClick="action_ok()">确定</a>
     </div>
 </div>
+</div>
 <script type="text/javascript">
+    $.ajax({
+        type: "get",
+        url: "jsp/common-header.jsp",
+        error: function () {
+        },
+        success: function (response, textStatus) {
+            $("#common-header").html(response);
+            $('li[id="monitor"]').addClass("active");
+        }
+
+
+    });
     $(".atip").tooltip();
     options = {
         delay: { show: 500, hide: 100 },
         trigger: 'click'
     };
     $(".optiontip").tooltip(options);
+    $('#running').dataTable({
+        bAutoWidth: true,
+        "aoColumns": [
+            { "sWidth": "15%" } ,
+            { "sWidth": "15%" },
+            { "sWidth": "15%" },
+            { "sWidth": "15%" },
+            { "sWidth": "15%" },
+            { "sWidth": "15%" },
+            { "sWidth": "10%" }
+
+        ],
+        bJQueryUI: true
+    });
+
+    $('#submitfail').dataTable({
+        bAutoWidth: true,
+        "aoColumns": [
+            { "sWidth": "15%" } ,
+            { "sWidth": "15%" },
+            { "sWidth": "15%" },
+            { "sWidth": "15%" },
+            { "sWidth": "15%" },
+            { "sWidth": "15%" },
+            { "sWidth": "10%" }
+
+        ],
+        bJQueryUI: true
+    });
+
+    $('#fail').dataTable({
+        bAutoWidth: true,
+        "aoColumns": [
+            { "sWidth": "15%" } ,
+            { "sWidth": "15%" },
+            { "sWidth": "15%" },
+            { "sWidth": "15%" },
+            { "sWidth": "15%" },
+            { "sWidth": "15%" },
+            { "sWidth": "10%" }
+
+        ],
+        bJQueryUI: true
+    });
+
+    $('#timeout').dataTable({
+        bAutoWidth: true,
+        "aoColumns": [
+            { "sWidth": "15%" } ,
+            { "sWidth": "15%" },
+            { "sWidth": "15%" },
+            { "sWidth": "15%" },
+            { "sWidth": "15%" },
+            { "sWidth": "15%" },
+            { "sWidth": "10%" }
+
+        ],
+        bJQueryUI: true
+    });
+    $('#dependency-timeout').dataTable({
+        bAutoWidth: true,
+        "aoColumns": [
+            { "sWidth": "15%" } ,
+            { "sWidth": "15%" },
+            { "sWidth": "15%" },
+            { "sWidth": "15%" },
+            { "sWidth": "15%" },
+            { "sWidth": "15%" },
+            { "sWidth": "10%" }
+
+        ],
+        bJQueryUI: true
+    });
+
 </script>
 <script type="text/javascript" charset="utf-8" language="javascript" src="js/jquery.dataTables.js"></script>
 <script type="text/javascript" charset="utf-8" language="javascript" src="js/DT_bootstrap.js"></script>

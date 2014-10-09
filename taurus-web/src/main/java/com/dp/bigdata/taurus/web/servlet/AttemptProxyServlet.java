@@ -205,15 +205,6 @@ public class AttemptProxyServlet extends HttpServlet {
                 } else {
 
                     try {
-
-                        String isNewUrl= "http://" + hostIp + ":" + AGENT_PORT + "/agentrest.do?action=isnew";
-                        String isNew =  getAgentRestService(isNewUrl).trim();
-                        if (!isNew.equals("true")/*||isNew.equals("null")*/) {
-                            String oldUrl = "/attempts.do?id=" + attemptID + "&action=view-log";
-                            response.sendRedirect(oldUrl);
-
-
-                        } else {
                             String url = "";                //请求agent restlet的URI
 
                             if (lastTimeFileSize == 0 && !tureStatus.equals("RUNNING")) {    //如果任务真实状态不是运行中的，并且 文件偏移为0 ，说明是历史任务，直接全量获取日志
@@ -234,7 +225,6 @@ public class AttemptProxyServlet extends HttpServlet {
                                 acceptContentWay = true;
                             }
 
-                         //   getLogCr = new ClientResource(url);
                             long start = System.currentTimeMillis();
                             String context = getAgentRestService(url);//getLogCr.get().getText();
                             long end1 = System.currentTimeMillis();
@@ -263,15 +253,15 @@ public class AttemptProxyServlet extends HttpServlet {
                                 request.getSession().setAttribute(fileSizeAttribute, "0");
                             }
 
-                            String retStr;                                              //格式化日志 以便在web显示是换行的
-                            String logStr = context;
+                            String retStr;
+                                                                   //格式化日志 以便在web显示是换行的
                             OutputStream output = response.getOutputStream();
 
 
-                            if (logStr == null) {                                     //时间间隔短，日志尚未生成可能获得null
+                            if (context == null) {                                     //时间间隔短，日志尚未生成可能获得null
                                 retStr = " ";
                             } else {
-                                retStr = logStr.replace("\n","<br>");
+                                retStr = context.replace("\n","<br>");
                             }
 
                             long end = System.currentTimeMillis();
@@ -279,8 +269,6 @@ public class AttemptProxyServlet extends HttpServlet {
                             System.out.println("#######"+queryType+"###Length: "+retStr.length()+"#####TIME:"+(end - start) );
                             output.write(retStr.getBytes());
                             output.close();
-                        }
-
                     } catch (Exception e) {
                         String exceptMessage = e.getMessage();
                         if (exceptMessage.equals("Connection Error") || exceptMessage.equals("Not Found")) {

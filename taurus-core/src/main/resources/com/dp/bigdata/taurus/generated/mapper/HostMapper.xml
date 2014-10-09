@@ -283,4 +283,6 @@
       isOnline = #{isonline,jdbcType=BIT}
     where name = #{name,jdbcType=VARCHAR}
   </update>
+
+
 </mapper>

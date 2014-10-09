@@ -20,7 +20,7 @@
 				<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 					class="icon-bar"></span>
 			</button>
-			<a class="brand" href="./index.jsp">Taurus</a>
+			<a class="brand" href="update.jsp">Taurus</a>
 		</div>
 	</div>
 </div>

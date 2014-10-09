@@ -94,7 +94,7 @@ $(document).ready(function(){
 	    success: function(label) {
 	    	label.addClass('valid').text('OK!')
 	    		.closest('.control-group').removeClass('error').addClass('success');
-	    },			
+	    },
 	});
 	$('#basic-form').validate({
 	    rules: {
@@ -209,11 +209,11 @@ $(document).ready(function(){
 			    	}
 			    },
 			    highlight: function(label) {
-			    	$(label).closest('.control-group').removeClass('success').addClass('error');
+			    	$(label).closest('.control-group').removeClass('success').addClass('help-block');
 			    },
 			    success: function(label) {
 			    	label.text('OK!').addClass('valid')
-			    		.closest('.control-group').removeClass('error').addClass('success');
+			    		.closest('.control-group').removeClass('help-block').addClass('success');
 			    },
 		  });
 	  }

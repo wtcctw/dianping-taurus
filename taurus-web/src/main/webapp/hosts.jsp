@@ -2,15 +2,42 @@
 <%@ page contentType="text/html;charset=utf-8" %>
 <html lang="en">
 <head>
-    <%@ include file="jsp/common-header.jsp" %>
     <%@ include file="jsp/common-nav.jsp" %>
+    <title>Taurus</title>
+    <meta charset="utf-8">
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- basic styles -->
+    <script type="text/javascript" src="resource/js/lib/jquery-1.9.1.min.js"></script>
+    <link href="lib/ace/css/bootstrap.min.css" rel="stylesheet"/>
+    <script src="lib/ace/js/ace-extra.min.js"></script>
+    <link rel="stylesheet" href="lib/ace/css/font-awesome.min.css"/>
+    <script src="lib/ace/js/ace-elements.min.js"></script>
+    <script src="lib/ace/js/ace.min.js"></script>
+    <script src="lib/ace/js/bootbox.min.js"></script>
+    <script type="text/javascript" src="resource/js/lib/raphael.2.1.0.min.js"></script>
+    <script type="text/javascript" src="resource/js/lib/justgage.1.0.1.min.js"></script>
+    <script type="text/javascript" src="resource/js/lib/Chart.js"></script>
+    <script type="text/javascript" src="js/login.js"></script>
+
+    <!-- page specific plugin styles -->
+
+    <!-- fonts -->
+    <script src="lib/ace/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="lib/ace/css/ace-fonts.css"/>
+
+    <!-- ace styles -->
+
+    <link rel="stylesheet" href="lib/ace/css/ace.min.css"/>
+    <link rel="stylesheet" href="lib/ace/css/ace-rtl.min.css"/>
+    <link rel="stylesheet" href="lib/ace/css/ace-skins.min.css"/>
     <style>
 
         .spann {
 
             width: 95%;
         }
-
 
     </style>
     <link rel="stylesheet" type="text/css" href="css/DT_bootstrap.css">
@@ -33,12 +60,17 @@
     ArrayList<HostDTO> hosts = hostsResource.retrieve();
 %>
 
-<div class="row-fluid">
+<div class="common-header" id="common-header">
 
- <div class="span2">
+</div>
+
+<div class="mid-div col-sm-12">
+<div class="page-content col-sm-12">
+<div class="sidebar col-sm-2 no-padding-left">
     <%@include file="hostList.jsp" %>
 </div>
-<div class="span10">
+<div class="main-content">
+<div class="page-content col-sm-12">
 <%
     String statusCode = (String) (request.getAttribute("statusCode"));
     String hostName = request.getParameter("hostName");
@@ -68,7 +100,7 @@
 } else if ("500".equals(statusCode)) {
 %>
 <div id="alertContainer" class="container">
-    <div id="alertContainerError" class="alert alert-error">
+    <div id="alertContainerError" class="alert alert-danger">
         <button type="button" class="close" data-dismiss="alert">×</button>
         <%=opChs %>失败
     </div>
@@ -79,16 +111,16 @@
 <ul class="nav nav-tabs">
 
     <li class="active"><a href="#state" data-toggle="tab">运行状态</a></li>
-    <li class=""><a href="#monitor" data-toggle="tab">任务监控</a></li>
+    <li class=""><a href="#taskmonitor" data-toggle="tab">任务监控</a></li>
 
     <li class=""><a href="#log" data-toggle="tab">日志</a></li>
     <li class=""><a href="#statistics" data-toggle="tab">统计</a></li>
 
 </ul>
 
-<div class="tab-content">
+<div class="tab-content col-sm-12">
 <div class="tab-pane active in" id="state">
-    <table class="table" id="host_state">
+    <table class="table table-striped table-bordered table-hover " id="host_state">
         <thead>
         <tr>
             <th>#</th>
@@ -110,11 +142,11 @@
             <td>机器状态</td>
             <%if (dto.isOnline()) {%>
             <td>在线</td>
-            <td><a id="down" title="这台agent将不在监控范围内，agent进程是否被kill并不能确定。" class="btn btn-primary btn-small"
+            <td><a id="down" title="这台agent将不在监控范围内，agent进程是否被kill并不能确定。" class="btn  btn-primary btn-minier"
                    href="updateHost?hostName=<%=hostName%>&op=down">下线</a></td>
             <%} else {%>
             <td>下线</td>
-            <td><a id="up" title="这台agent将被纳入监控范围内，agent需要手动启动。" class="btn btn-primary btn-small"
+            <td><a id="up" title="这台agent将被纳入监控范围内，agent需要手动启动。" class="btn btn-primary btn-minier"
                    href="updateHost?hostName=<%=hostName%>&op=up">上线</a></td>
             <%} %>
         </tr>
@@ -123,7 +155,7 @@
             <td>心跳状态</td>
             <%if (dto.isConnected()) {%>
             <td>正常</td>
-            <td><a id="restart" class="btn btn-primary btn-small"
+            <td><a id="restart" class="btn  btn-primary btn-minier"
                    href="updateHost?hostName=<%=hostName%>&op=restart">重启</a></td>
             <%} else {%>
             <td>异常</td>
@@ -138,21 +170,22 @@
                 } else {
                 %><%=dto.getInfo().getAgentVersion() %><%}%></td>
             <%if (dto.isConnected()) {%>
-            <td><a id="update" class="btn btn-primary btn-small"
-                   href="updateHost?hostName=<%=hostName%>&op=update">升级</a></td>
+            <td><a id="update" class="btn btn-primary btn-minier"
+                   href="http://code.dianpingoa.com/arch/taurus/rollout_branches">升级</a></td>
             <%} else {%>
-            <td>无法升级</td>
+            <td><a id="update" class="btn btn-primary btn-minier"
+                   href="http://code.dianpingoa.com/arch/taurus/rollout_branches">升级</a></td>
             <%} %>
         </tr>
         </tbody>
     </table>
 </div>
-<div class="tab-pane" id="monitor">
+<div class="tab-pane" id="taskmonitor">
 
-<ul class="run-tag">
+<ul class="run-tag col-sm-12">
     <li><a>正在运行的任务<span class="label label-info">RUNNING</span></a></li>
 </ul>
-<ul class="breadcrumb">
+<ul class="breadcrumb col-sm-12">
     <table cellpadding="0" cellspacing="0" border="0"
            class="table table-striped table-format table-hover" id="running">
         <thead>
@@ -204,9 +237,9 @@
 
 
                     String state = hostDto.getStatus();
-                    String exeHost=hostDto.getExecHost();
-                    if (hostName!=null && hostName.equals(exeHost)) {
-                        if (tasks!=null&&startTime != null && state.equals("RUNNING") && (startTime.compareTo(now) <= 0 && (endTime == null || endTime.compareTo(now) >= 0))) {
+                    String exeHost = hostDto.getExecHost();
+                    if (hostName != null && hostName.equals(exeHost)) {
+                        if (tasks != null && startTime != null && state.equals("RUNNING") && (startTime.compareTo(now) <= 0 && (endTime == null || endTime.compareTo(now) >= 0))) {
                             String taskName = "";
 
                             for (Task task : tasks) {
@@ -253,13 +286,13 @@
     </table>
 </ul>
 
-<ul class="submit-fail-tag">
+<ul class="submit-fail-tag col-sm-12">
     <li><a>提交失败的任务 <span class="label label-important">SUBMIT_FAIL</span></a></li>
 </ul>
 
-<ul class="breadcrumb">
+<ul class="breadcrumb col-sm-12">
     <table cellpadding="0" cellspacing="0" border="0"
-           class="table table-striped table-format table-hover" id="submitfail">
+           class="table table-striped table-format table-hover " id="submitfail">
         <thead>
         <tr>
             <th>任务ID</th>
@@ -279,8 +312,8 @@
 
             if (submitFailAttempts != null)
                 for (AttemptDTO hostDto : submitFailAttempts) {
-                    String exeHost=hostDto.getExecHost();
-                    if (hostName!=null && hostName.equals(exeHost)) {
+                    String exeHost = hostDto.getExecHost();
+                    if (hostName != null && hostName.equals(exeHost)) {
                         String state = hostDto.getStatus();
 
                         if (taskTime != null) {
@@ -390,14 +423,14 @@
     </table>
 </ul>
 
-<ul class="fail-tag">
+<ul class="fail-tag col-sm-12">
     <li><a>失败的任务 <span class="label label-important">FAILED</span></a></li>
 
 </ul>
 
-<ul class="breadcrumb">
+<ul class="breadcrumb col-sm-12">
     <table cellpadding="0" cellspacing="0" border="0"
-           class="table table-striped table-format table-hover" id="fail">
+           class="table table-striped table-format table-hover " id="fail">
         <thead>
         <tr>
             <th>任务ID</th>
@@ -417,8 +450,8 @@
 
             if (failAttempts != null)
                 for (AttemptDTO hostDto : failAttempts) {
-                    String exeHost=hostDto.getExecHost();
-                    if (hostName!=null && hostName.equals(exeHost)) {
+                    String exeHost = hostDto.getExecHost();
+                    if (hostName != null && hostName.equals(exeHost)) {
                         String state = hostDto.getStatus();
 
 
@@ -529,13 +562,13 @@
     </table>
 </ul>
 
-<ul class="dependency-timeout-tag">
+<ul class="dependency-timeout-tag col-sm-12">
     <li><a>依赖超时的任务<span class="label label-important">DEPENDENCY_TIMEOUT</span></a></li>
 </ul>
 
-<ul class="breadcrumb">
+<ul class="breadcrumb col-sm-12">
     <table cellpadding="0" cellspacing="0" border="0"
-           class="table table-striped table-format table-hover" id="dependency-timeout">
+           class="table table-striped table-format table-hover " id="dependency-timeout">
         <thead>
         <tr>
             <th>任务ID</th>
@@ -556,8 +589,8 @@
 
             if (dependencyTimeOutAttempts != null)
                 for (AttemptDTO hostDto : dependencyTimeOutAttempts) {
-                    String exeHost=hostDto.getExecHost();
-                    if (hostName!=null && hostName.equals(exeHost)) {
+                    String exeHost = hostDto.getExecHost();
+                    if (hostName != null && hostName.equals(exeHost)) {
                         String state = hostDto.getStatus();
 
 
@@ -667,12 +700,12 @@
     </table>
 </ul>
 
-<ul class="timeout-tag">
+<ul class="timeout-tag col-sm-12">
     <li><a>超时的任务<span class="label label-important">TIMEOUT</span></a></li>
 </ul>
-<ul class="breadcrumb">
+<ul class="breadcrumb col-sm-12">
     <table cellpadding="0" cellspacing="0" border="0"
-           class="table table-striped table-format table-hover" id="timeout">
+           class="table table-striped table-format table-hover " id="timeout">
         <thead>
         <tr>
             <th>任务ID</th>
@@ -693,8 +726,8 @@
 
             if (timeOutAttempts != null)
                 for (AttemptDTO hostDto : timeOutAttempts) {
-                    String exeHost=hostDto.getExecHost();
-                    if (hostName!=null && hostName.equals(exeHost)) {
+                    String exeHost = hostDto.getExecHost();
+                    if (hostName != null && hostName.equals(exeHost)) {
                         String state = hostDto.getStatus();
 
                         if (taskTime != null) {
@@ -811,7 +844,7 @@
                 <li><a>日志信息<span class="label label-info">STDOUT</span></a></li>
             </ul>
             <div data-spy="scroll" data-offset="0" style="height: 510px; line-height: 20px; overflow: auto;"
-                 class="terminal terminal-like " id="strout">
+                 class="terminal terminal-like col-sm-12" id="strout">
 
 
             </div>
@@ -825,12 +858,41 @@
 </div>
 </div>
 <% }%>
+
+</div>
 </div>
 </div>
 
 </body>
 <script type="text/javascript">
     $(".atip").tooltip();
+jQuery
+    $('#host_state').dataTable({
+        bAutoWidth: true,
+        bJQueryUI: true
+    });
+
+    $('#running').dataTable({
+        bAutoWidth: true,
+        bJQueryUI: true
+    });
+
+    $('#submitfail').dataTable({
+        bAutoWidth: true,
+        bJQueryUI: true
+    });
+
+    $('#fail').dataTable({
+        bAutoWidth: true,
+        bJQueryUI: true
+    });
+
+    $('#dependency-timeout').dataTable({
+        bAutoWidth: true,
+        bJQueryUI: true
+    });
+
+
 </script>
 <script src="js/hosts.js" type="text/javascript">
 

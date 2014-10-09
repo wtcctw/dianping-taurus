@@ -2,8 +2,12 @@ var attemptID;
 function action(id) {
 	attemptID = id;	
 	$("#id_header").html("Kill");
-	$("#id_body").html("确定要Kill任务<strong>" + id + "</strong>");
-	$("#confirm").modal('toggle');
+	var info = "确定要Kill任务<strong>" + id + "</strong>";
+    bootbox.confirm(info, function(result) {
+        if(result) {
+            action_ok();
+        }
+    });
 }
 
 function action_ok() {
@@ -25,6 +29,7 @@ function action_ok() {
 				$('#confirm').modal("hide");
 				$('#' + attemptID + ' td .label').addClass("label-important").removeClass('label-info');
 				$('#' + attemptID + ' td .label').html('KILLED');
-		}
+            location.reload();
+        }
 	});
 }

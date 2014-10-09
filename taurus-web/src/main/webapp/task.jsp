@@ -1,323 +1,453 @@
-<%@ page contentType="text/html;charset=utf-8"  pageEncoding="UTF-8"%>
+<%@ page contentType="text/html;charset=utf-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<%@ include file="jsp/common-header.jsp"%>
-	<%@ include file="jsp/common-nav.jsp"%>
-	<link href="css/bwizard.min.css" rel="stylesheet" />
+    <title>Taurus</title>
+    <meta charset="utf-8">
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <%@ include file="jsp/common-nav.jsp" %>
+    <!-- basic styles -->
+    <script type="text/javascript" src="resource/js/lib/jquery-1.9.1.min.js"></script>
+    <link href="lib/ace/css/bootstrap.min.css" rel="stylesheet"/>
+    <script src="lib/ace/js/ace-extra.min.js"></script>
+    <link rel="stylesheet" href="lib/ace/css/font-awesome.min.css"/>
+    <script src="lib/ace/js/ace-elements.min.js"></script>
+    <script src="lib/ace/js/ace.min.js"></script>
+    <script src="lib/ace/js/bootbox.min.js"></script>
+    <script type="text/javascript" src="resource/js/lib/raphael.2.1.0.min.js"></script>
+    <script type="text/javascript" src="resource/js/lib/justgage.1.0.1.min.js"></script>
+    <script type="text/javascript" src="js/login.js"></script>
+    <!-- page specific plugin styles -->
+
+    <!-- fonts -->
+    <script src="lib/ace/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="lib/ace/css/ace-fonts.css"/>
+
+    <!-- ace styles -->
+
+    <link rel="stylesheet" href="lib/ace/css/ace.min.css"/>
+    <link rel="stylesheet" href="lib/ace/css/ace-rtl.min.css"/>
+    <link rel="stylesheet" href="lib/ace/css/ace-skins.min.css"/>
+    <link href="css/bwizard.min.css" rel="stylesheet"/>
+    <style>
+    </style>
 </head>
 <body>
-	<%@page import="com.dp.bigdata.taurus.restlet.resource.IPoolsResource"%>
-	<%@page import="com.dp.bigdata.taurus.restlet.resource.IAttemptStatusResource"%>
-	<%@page import="com.dp.bigdata.taurus.restlet.resource.IUserGroupsResource"%>
-	<%@page import="com.dp.bigdata.taurus.restlet.resource.IHostsResource"%>
-	
-    <%@page import="com.dp.bigdata.taurus.restlet.shared.PoolDTO"%> 
-    <%@page import="com.dp.bigdata.taurus.restlet.shared.StatusDTO"%> 
-    <%@page import="com.dp.bigdata.taurus.restlet.shared.UserGroupDTO"%>
-    <%@page import="com.dp.bigdata.taurus.restlet.shared.HostDTO"%>
-    
-   	<%
-   		cr = new ClientResource(host + "pool");
-   		IPoolsResource poolResource = cr.wrap(IPoolsResource.class);
-   		cr.accept(MediaType.APPLICATION_XML);
-   		ArrayList<PoolDTO> pools = poolResource.retrieve();
-	   	int UNALLOCATED = 1;
-	   		
-	   	cr = new ClientResource(host + "host");
-   		IHostsResource hostResource = cr.wrap(IHostsResource.class);
-    	cr.accept(MediaType.APPLICATION_XML);
-   		ArrayList<HostDTO> hosts = hostResource.retrieve();
-	   		
-	   	cr = new ClientResource(host + "status");
-		IAttemptStatusResource attemptResource = cr.wrap(IAttemptStatusResource.class);
-		cr.accept(MediaType.APPLICATION_XML);
-		ArrayList<StatusDTO> statuses = attemptResource.retrieve();
-			
-		cr = new ClientResource(host + "group");
-		IUserGroupsResource groupResource = cr.wrap(IUserGroupsResource.class);
-		cr.accept(MediaType.APPLICATION_XML);
-		ArrayList<UserGroupDTO> groups = groupResource.retrieve();
-		String name = request.getParameter("appname");
-		String path = request.getParameter("path");
-		String ip = request.getParameter("ip");
-		if(name==null){
-			name="";
-		}
-		if(ip==null){
-			ip="";
-		}
-   	%>
-	<div class="container">
-		<div id="wizard">
-			<ol>
-				<li>作业部署</li>
-				<li>基本设置</li>
-				<li>其他设置</li>
-			</ol>
-			<div id="deploy">
-				<form id="deploy-form" class="form-horizontal">
-  					<fieldset>
-                    <legend>部署设置</legend>
-					<div class="control-group">
-						<label  class="control-label"  for="taskType">作业类型*</label>
-						<div class="controls">
-   						<select  id="taskType" name="taskType"  class="input-big  field" >
-   							<option>default</option>
-   							<option>hadoop</option>
-						</select>
-						<a href="about.jsp#config"  class="atip"  data-toggle="tooltip" data-placement="top" data-original-title="hadoop: 需要访问hadoop的作业。这种类型的作业，taurus会管理作业的hadoop ticket的申请和销毁。
+<%@page import="com.dp.bigdata.taurus.restlet.resource.IPoolsResource" %>
+<%@page import="com.dp.bigdata.taurus.restlet.resource.IAttemptStatusResource" %>
+<%@page import="com.dp.bigdata.taurus.restlet.resource.IUserGroupsResource" %>
+<%@page import="com.dp.bigdata.taurus.restlet.resource.IHostsResource" %>
+
+<%@page import="com.dp.bigdata.taurus.restlet.shared.PoolDTO" %>
+<%@page import="com.dp.bigdata.taurus.restlet.shared.StatusDTO" %>
+<%@page import="com.dp.bigdata.taurus.restlet.shared.UserGroupDTO" %>
+<%@page import="com.dp.bigdata.taurus.restlet.shared.HostDTO" %>
+
+<%
+    cr = new ClientResource(host + "pool");
+    IPoolsResource poolResource = cr.wrap(IPoolsResource.class);
+    cr.accept(MediaType.APPLICATION_XML);
+    ArrayList<PoolDTO> pools = poolResource.retrieve();
+    int UNALLOCATED = 1;
+
+    cr = new ClientResource(host + "host");
+    IHostsResource hostResource = cr.wrap(IHostsResource.class);
+    cr.accept(MediaType.APPLICATION_XML);
+    ArrayList<HostDTO> hosts = hostResource.retrieve();
+
+    cr = new ClientResource(host + "status");
+    IAttemptStatusResource attemptResource = cr.wrap(IAttemptStatusResource.class);
+    cr.accept(MediaType.APPLICATION_XML);
+    ArrayList<StatusDTO> statuses = attemptResource.retrieve();
+
+    cr = new ClientResource(host + "group");
+    IUserGroupsResource groupResource = cr.wrap(IUserGroupsResource.class);
+    cr.accept(MediaType.APPLICATION_XML);
+    ArrayList<UserGroupDTO> groups = groupResource.retrieve();
+    String name = request.getParameter("appname");
+    String path = request.getParameter("path");
+    String ip = request.getParameter("ip");
+    if (name == null) {
+        name = "";
+    }
+    if (ip == null) {
+        ip = "";
+    }
+%>
+
+<div class="common-header" id="common-header">
+
+</div>
+<div class="main-content" style="opacity: 1;">
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try {
+            ace.settings.check('breadcrumbs', 'fixed')
+        } catch (e) {
+        }
+    </script>
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="index.jsp">监控中心</a>
+        </li>
+        <li class="active">
+            <a href="task.jsp">新建任务</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+<div id="wizard">
+<ol>
+    <li>作业部署</li>
+    <li>基本设置</li>
+    <li>其他设置</li>
+</ol>
+<div id="deploy">
+    <form id="deploy-form" class="form-horizontal">
+        <fieldset>
+            <legend>部署设置</legend>
+            <div class="control-group">
+                <label class="label label-lg label-info arrowed-right col-sm-1" for="taskType">作业类型*</label>
+
+                <div class="controls col-sm-10">
+                    <select id="taskType" name="taskType" class="input-big  field" style="width: 300px">
+                        <option>default</option>
+                        <option>hadoop</option>
+                    </select>
+                    <a href="about.jsp#config" class="atip" data-toggle="tooltip" data-placement="top"
+                       data-original-title="hadoop: 需要访问hadoop的作业。这种类型的作业，taurus会管理作业的hadoop ticket的申请和销毁。
                             default: 上述两种类型以外所有类型。">帮助</a>
-                      	</div>
+                </div>
+            </div>
+            <br>
+
+            <div id="jarAddress" style="display:none;">
+                <div class="control-group">
+                    <label class="label label-lg label-info arrowed-right col-sm-1" for="taskUrl">Jar包ftp地址*</label>
+
+                    <div class="controls col-sm-10">
+                        <input type="text" class="input-xxlarge field" id="taskUrl" name="taskUrl"
+                               placeholder="ftp://10.1.1.81/{project-name}/{date}/{jarName}" style="width: 300px">
                     </div>
-                    <div id="jarAddress" style="display:none;">
-						<div class="control-group">
-            				<label class="control-label"  for="taskUrl">Jar包ftp地址*</label>
-            				<div class="controls">
-              					<input type="text" class="input-xxlarge field"  id="taskUrl" name="taskUrl"  placeholder="ftp://10.1.1.81/{project-name}/{date}/{jarName}">
-            				</div>
-          				</div>
-          			</div>
-          			
-					<div id="hadoopName" style="display:none;">
-						<div class="control-group">
-            				<label class="control-label"  for="hadoopName">hadoop用户名*</label>
-            				<div class="controls">
-              					<input type="text" class="input-large field"  id="hadoopName" name="hadoopName"  placeholder="kerberos principle (wwwcron)">
-								<a href="about.jsp#config" class="atip"  data-toggle="tooltip" data-placement="top" data-original-title=" hadoop类型的作业，需要提供一个用于访问hadoop的principle name。
+                </div>
+            </div>
+            <br>
+
+            <div id="hadoopName" style="display:none;">
+                <div class="control-group">
+                    <label class="label label-lg label-info arrowed-right col-sm-2" for="hadoopName">hadoop用户名*</label>
+
+                    <div class="controls col-sm-9">
+                        <input type="text" class="input-large field" id="hadoopName" name="hadoopName"
+                               placeholder="kerberos principle (wwwcron)">
+                        <a href="about.jsp#config" class="atip" data-toggle="tooltip" data-placement="top"
+                           data-original-title=" hadoop类型的作业，需要提供一个用于访问hadoop的principle name。
                                 为此，taurus需要读取这个principle的keytab文件，一般情况下这个keytab已经放到相应的目录。
                                 如果你不确定这一点，请联系我们。">帮助</a>
-            				</div>
-          				</div>
-          			</div>
-          			
-                    <div id="host"  class="control-group">
-                    	<label class="control-label"  for="hostname">部署的机器*</label>
-                    	<div class="controls">
-    						<select  id="hostname" name="hostname" class="input-big field" >
-                                <%
-                                    if(ip != null)
-                                        %>
-                                <option selected="selected"><%=ip%></option>
-                                <%
-                                %>
-                                <%
 
-                                 for (HostDTO hostip:hosts){
-                                     if (hostip.isConnected()){
-                                     %>
-
-                                <option><%=hostip.getIp()%></option>
-                                <% }
-                                }
-                                %>
-
-                            </select>
-                            <a  class="atip"  data-toggle="tooltip" data-placement="top" data-original-title="如果你要部署的主机ip不在这里，说明agent机器出现了故障或者主机ip上没有部署agent，请联系运维哥哥">提示</a>
-    					</div>
-					</div>
-                    </fieldset>
-				</form>
-			</div>
-				
-			<div id="base">
-			<form id="basic-form" class="form-horizontal">
-			<fieldset>
-					<legend>必要设置</legend>
-             	<div class="control-group">
-            		<label class="control-label"  for="taskName">名称*</label>
-            		<div class="controls">
-              			<input type="text" class="input-xxlarge field"  id="taskName" name="taskName" value="<%=name%>"  placeholder="作业的名称，可以作为被依赖的对象，不可修改">
-            		</div>
-          		</div>
-          		<div class="control-group" style='display:none'>
-            		<label class="control-label"  for="taskName">应用名称*</label>
-            		<div class="controls">
-              			<input type="text" class="input-xxlarge field"  id="appName" name="appName" value="<%=name%>"  >
-            		</div>
-          		</div>
-          		<div id="mainClassCG" class="control-group">
-            		<label class="control-label" for="mainClass">MainClass*</label>
-            		<div class="controls">
-              			<input type="text" class="input-xxlarge field required" id="mainClass" name="mainClass"  placeholder="mainClass">
-            		</div>
-          		</div>
-                <div class="control-group">
-            		<label class="control-label" for="crontab">Crontab*</label>
-            		<div class="controls">
-              			<input type="text" class="input-xxlarge field" id="crontab" name="crontab"  value="0 0 * * ?">
-              			<a href="about.jsp#crontab">帮助</a>
-            		</div>
-          		</div>
-          		
-                <div class="control-group">
-            		<label class="control-label" for="taskCommand">命令*</label>
-            		<div class="controls">
-              			<input type="text" class="input-xxlarge field" id="taskCommand" name="taskCommand"  placeholder="执行作业的命令,命令结尾不要使用'&'或';'">
-                        <a  class="atip"  data-toggle="tooltip" data-placement="top" data-original-title="注意，命令结尾不要使用'&'或';' 否则会失败哦～ 请保持命令结尾没有这些字符">提示</a>
-              			<%if(path!=null&&!path.equals("")){
-              				%>
-              				<br/><span>提示:已部署的作业文件的路径为<%=path%></span>
-              			<%}%>
-            		</div>
-
-          		</div>
-          		
-          		<div id="beanCG" class="control-group">
-          		    <label class="control-label" for="taskCommand"></label>
-          		    <div class="controls">
-          		        <button id="addNewBeanbtn" class="btn btn-small">增加Bean</button>
-          		        <button id="rmBeanbtn" class="btn btn-small" disabled>删除Bean</button>
-            		</div>
-          		</div>
-
-                <div class="control-group">
-            		<label class="control-label" for="proxyUser">以该用户身份运行（不可为root）*</label>
-            		<div class="controls" id="hadoopUser">
-              			<input type="text" class="input-xxlarge field" id="proxyUser" name="proxyUser"  placeholder="执行作业的用户身份" >
-            		</div>
-                    <div class="controls" id="defaultUser">
-                        <input type="text" class="input-xxlarge field" id="proxyUser" name="proxyUser"  placeholder="执行作业的用户身份" value="nobody" disabled="disabled">
-                        <a class="atip"  data-toggle="tooltip" data-placement="top" data-original-title="如果你非要以其他身份运行，请联系李明【kirin.li@dianping.com】">帮助</a>
                     </div>
-          		</div>
-                <div class="control-group">
-            		<label class="control-label" for="description">描述*</label>
-            		<div class="controls">
-              			<input type="text" class="input-xxlarge field" id="description" name="description" placeholder="请尽可能用中文描述作业的用途">
-            		</div>
-          		</div>
-                <input type="text" class="field" style="display:none" id="creator" name="creator" value="<%=currentUser%>">
-          	</fieldset>
-			</form>	
-			</div>
-			<div  id="extention">
-			<form id="extended-form" class="form-horizontal">
-				<fieldset>
-					<legend>可选设置</legend>
-					<div class="control-group">
-            			<label class="control-label" for="maxExecutionTime">最长执行时间（分钟）*</label>
-            			<div class="controls">
-              				<input type="number" class="input-small field" id="maxExecutionTime" name="maxExecutionTime" style="text-align:right" value=60>
-            				<a href="about.jsp#config">帮助</a>
-            			</div>
-          			</div>
-          			<div class="control-group">
-            			<label class="control-label" for="dependency" >依赖</label>
-            			<div class="controls">
-              				<input type="text" class="input-large field" id="dependency" name="dependency" placeholder="dependency expression"  value="">
-            				<a href="about.jsp#config">帮助</a>
-            			</div>
-          			</div>
-          			<div class="control-group">
-            			<label class="control-label" for="maxWaitTime">最长等待时间（分钟）*</label>
-            			<div class="controls">
-              				<input type="number" class="input-small field" id="maxWaitTime" name="maxWaitTime" style="text-align:right" value=60>
-            				<a href="about.jsp#config">帮助</a>
-            			</div>
-          			</div>
-          			
-          			<div class="control-group">
-            			<label class="control-label" for="retryTimes">重试次数*</label>
-            			<div class="controls">
-              				<input type="number" class="input-small field" id="retryTimes" name="retryTimes" style="text-align:right" value=0>
-            				<a href="about.jsp#config">帮助</a>
-            			</div>
-          			</div>
-          			<div class="control-group">
-            			<label class="control-label" for="multiInstance">自动kill timeout实例*</label>
-            			<div class="controls field" id="isAutoKill">
-				            <input type="radio" value="1" name="isAutoKill" checked> 是
-				            <input type="radio" value="0" name="isAutoKill"> 否
-				            <span class="label">不要轻易修改，除非你确定其含义：<a href="about.jsp#config">帮助</a></span>
-            			</div>
-          			</div>
-          			<p><span class="label">注意：使用以下配置项，你需要在用户<a href="user.jsp">用户设置</a>填写您的联系方式</span></p>
-          			<br/>
-          			<div class="control-group">
-            			<label class="control-label">选择何时收到报警</label>
-            			<div class="controls">
-            					<%
-            						for(StatusDTO status:statuses) {
-            					    	if(status.getStatus().equals("FAILED")||status.getStatus().equals("TIMEOUT")) {
-            					%>
-    									<input type="checkbox" class="input-large field alertCondition" id="alertCondition" name="<%=status.getStatus()%>" checked="checked"> <%=status.getCh_status()%>
-    								<%
-    									} else {
-    								%>
-    									<input type="checkbox" class="input-large field alertCondition" id="alertCondition" name="<%=status.getStatus()%>"> <%=status.getCh_status()%>
-    							<%
-    								}}
-    							%>
-            			</div>
-          			</div>
-          			
-          			<div class="control-group">
-            			<label class="control-label"  for="alertType">选择报警方式</label>
-            			<div class="controls">
-              				<select class="input-small field" id="alertType" name="alertType">
-              					<option id="1">邮件</option>
-               					<option id="2">短信</option>
-               					<option id="3">邮件和短信</option>
-              				</select>		
-            			</div>
-          			</div>
-          			
-          			<div class="control-group">
-            			<label class="control-label">选择报警接收人(分号分隔)</label>
-            			<div class="controls">
-              				<input type="text" class="input-large field" id="alertUser" name="alertUser"  value="<%=(String)session.getAttribute(com.dp.bigdata.taurus.web.servlet.LoginServlet.USER_NAME)%>;">
-            			</div>
-          			</div>
-          			
-          			<div class="control-group">
-            			<label class="control-label">选择报警接收组(分号分隔)</label>
-            			<div class="controls">
-              				<input type="text" class="input-large field" id="alertGroup" name="alertGroup" placeholder="group name split with ;">
-            			</div>
-          			</div>
-  				</fieldset>
-  			</form>	
-			</div>
-		</div>
-	</div>
-    <div id="confirm" class="modal hide fade">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" >&times;</button>
-        <h3 id="id_header"></h3>
-      </div>
-      <div class="modal-body">
-        <p id="id_body"></p>
-      </div>
-      <div class="modal-footer">
-      </div>
+                    <br>
+                    <br>
+                </div>
+            </div>
+
+            <div id="host" class="control-group">
+                <label class="label label-lg label-info arrowed-right col-sm-1" for="hostname">部署的机器*</label>
+
+                <div class="controls col-sm-10">
+                    <select id="hostname" name="hostname" class="input-big field" style="width: 300px">
+                        <%
+                            if (ip != null)
+                        %>
+                        <option selected="selected"><%=ip%>
+                        </option>
+                        <%
+                        %>
+                        <%
+
+                            for (HostDTO hostip : hosts) {
+                                if (hostip.isConnected()) {
+                        %>
+
+                        <option><%=hostip.getIp()%>
+                        </option>
+                        <% }
+                        }
+                        %>
+
+                    </select>
+                    <a class="atip" data-toggle="tooltip" data-placement="top"
+                       data-original-title="如果你要部署的主机ip不在这里，说明agent机器出现了故障或者主机ip上没有部署agent，请联系运维哥哥">提示</a>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+<div id="base">
+    <form id="basic-form" class="form-horizontal">
+        <fieldset>
+            <legend>必要设置</legend>
+            <div class="control-group">
+                <label class="label label-lg label-info arrowed-right col-sm-2" for="taskName">名称*</label>
+
+                <div class="controls col-sm-9">
+                    <input type="text" class="input-xxlarge field" id="taskName" name="taskName" value="<%=name%>"
+                           placeholder="作业的名称，可以作为被依赖的对象，不可修改">
+                </div>
+                <br>
+                <br>
+            </div>
+            <div class="control-group" style='display:none'>
+                <label class="label label-lg label-info arrowed-right col-sm-2" for="taskName">应用名称*</label>
+
+                <div class="controls controls col-sm-9">
+                    <input type="text" class="input-xxlarge field" id="appName" name="appName" value="<%=name%>">
+                </div>
+                <br>
+                <br>
+            </div>
+            <div id="mainClassCG" class="control-group">
+                <label class="label label-lg label-info arrowed-right col-sm-2" for="mainClass">MainClass*</label>
+
+                <div class="controls controls col-sm-9">
+                    <input type="text" class="input-xxlarge field required" id="mainClass" name="mainClass"
+                           placeholder="mainClass">
+                </div>
+                <br>
+                <br>
+            </div>
+            <div class="control-group">
+                <label class="label label-lg label-info arrowed-right col-sm-2" for="crontab">Crontab*</label>
+
+                <div class="controls col-sm-9">
+                    <input type="text" class="input-xxlarge field" id="crontab" name="crontab" value="0 0 * * ?">
+                    <a href="about.jsp#crontab">帮助</a>
+                </div>
+                <br>
+                <br>
+
+            </div>
+
+            <div class="control-group">
+                <label class="label label-lg label-info arrowed-right col-sm-2" for="taskCommand">命令*</label>
+
+                <div class="controls col-sm-9">
+                    <input type="text" class="input-xxlarge field" id="taskCommand" name="taskCommand"
+                           placeholder="执行作业的命令,命令结尾不要使用'&'或';'">
+                    <a class="atip" data-toggle="tooltip" data-placement="top"
+                       data-original-title="注意，命令结尾不要使用'&'或';' 否则会失败哦～ 请保持命令结尾没有这些字符">提示</a>
+                    <%
+                        if (path != null && !path.equals("")) {
+                    %>
+                    <br/><span>提示:已部署的作业文件的路径为<%=path%></span>
+                    <%}%>
+                </div>
+                <br>
+                <br>
+            </div>
+
+            <div id="beanCG" class="control-group">
+                <label class="label label-lg label-info arrowed-right col-sm-2" for="taskCommand"></label>
+
+                <div class="controls col-sm-9">
+                    <button id="addNewBeanbtn" class="btn btn-small">增加Bean</button>
+                    <button id="rmBeanbtn" class="btn btn-small" disabled>删除Bean</button>
+                </div>
+                <br>
+                <br>
+            </div>
+
+            <div class="control-group">
+                <label class="label label-lg label-info arrowed-right col-sm-2" for="proxyUser">运行身份（不可为root）*</label>
+
+                <div class="controls col-sm-9" id="hadoopUser">
+                    <input type="text" class="input-xxlarge field" id="proxyUser" name="proxyUser"
+                           placeholder="执行作业的用户身份">
+                </div>
+
+                <div class="controls col-sm-9" id="defaultUser">
+                    <input type="text" class="input-xxlarge field" id="proxyUser" name="proxyUser"
+                           placeholder="执行作业的用户身份" value="nobody" disabled="disabled">
+                    <a class="atip" data-toggle="tooltip" data-placement="top"
+                       data-original-title="如果你非要以其他身份运行，请联系李明【kirin.li@dianping.com】">帮助</a>
+                </div>
+                <br>
+                <br>
+            </div>
+            <div class="control-group">
+                <label class="label label-lg label-info arrowed-right col-sm-2" for="description">描述*</label>
+
+                <div class="controls col-sm-9">
+                    <input type="text" class="input-xxlarge field" id="description" name="description"
+                           placeholder="请尽可能用中文描述作业的用途">
+                </div>
+                <br>
+                <br>
+            </div>
+            <input type="text" class="field" style="display:none" id="creator" name="creator" value="<%=currentUser%>">
+        </fieldset>
+    </form>
+</div>
+<div id="extention">
+    <form id="extended-form" class="form-horizontal">
+        <fieldset>
+            <legend>可选设置</legend>
+            <div class="control-group">
+                <label class="label label-lg label-info arrowed-right col-sm-2"
+                       for="maxExecutionTime">最长执行时间（分钟）*</label>
+
+                <div class="controls">
+                    <input type="number" class="input-small field" id="maxExecutionTime" name="maxExecutionTime"
+                           style="text-align:right" value=60>
+                    <a href="about.jsp#config">帮助</a>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="label label-lg label-info arrowed-right col-sm-2" for="dependency">依赖</label>
+
+                <div class="controls">
+                    <input type="text" class="input-large field" id="dependency" name="dependency"
+                           placeholder="dependency expression" value="">
+                    <a href="about.jsp#config">帮助</a>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="label label-lg label-info arrowed-right col-sm-2" for="maxWaitTime">最长等待时间（分钟）*</label>
+
+                <div class="controls">
+                    <input type="number" class="input-small field" id="maxWaitTime" name="maxWaitTime"
+                           style="text-align:right" value=60>
+                    <a href="about.jsp#config">帮助</a>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="label label-lg label-info arrowed-right col-sm-2" for="retryTimes">重试次数*</label>
+
+                <div class="controls">
+                    <input type="number" class="input-small field" id="retryTimes" name="retryTimes"
+                           style="text-align:right" value=0>
+                    <a href="about.jsp#config">帮助</a>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="label label-lg label-info arrowed-right col-sm-2" for="multiInstance">自动kill
+                    timeout实例*</label>
+
+                <div class="controls field" id="isAutoKill">
+                    <input type="radio" value="1" name="isAutoKill" checked> 是
+                    <input type="radio" value="0" name="isAutoKill"> 否
+                    <span class="label">不要轻易修改，除非你确定其含义：<a href="about.jsp#config">帮助</a></span>
+                </div>
+            </div>
+            <br/>
+            <br/>
+
+            <p><span class="label">注意：使用以下配置项，你需要在用户<a href="user.jsp">用户设置</a>填写您的联系方式</span></p>
+
+            <div class="control-group">
+                <label class="label label-lg label-info arrowed-right col-sm-2">选择何时收到报警</label>
+
+                <div class="controls">
+                    <%
+                        for (StatusDTO status : statuses) {
+                            if (status.getStatus().equals("FAILED") || status.getStatus().equals("TIMEOUT")) {
+                    %>
+                    <label><input type="checkbox" class="ace ace-checkbox-2 field alertCondition" id="alertCondition"
+                                  name="<%=status.getStatus()%>" checked="checked"><span
+                            class="lbl"> <%=status.getCh_status()%></span></label>
+                    <%
+                    } else {
+                    %>
+                    <label><input type="checkbox" class="ace ace-checkbox-2 field alertCondition" id="alertCondition"
+                                  name="<%=status.getStatus()%>"> <span
+                            class="lbl"> <%=status.getCh_status()%></span></label>
+                    <%
+                            }
+                        }
+                    %>
+                </div>
+            </div>
+
+            <div class="control-group col-sm-12 no-padding-left">
+                <label class="label label-lg  label-info arrowed-right col-sm-2" for="alertType">选择报警方式</label>
+
+                <div class="controls">
+                    <select class="input-small field" id="alertType" name="alertType">
+                        <option id="1">邮件</option>
+                        <option id="2">短信</option>
+                        <option id="3">邮件和短信</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="label label-lg label-info arrowed-right col-sm-2">选择报警接收人(分号分隔)</label>
+
+                <div class="controls">
+                    <input type="text" class="input-large field" id="alertUser" name="alertUser"
+                           value="<%=(String)session.getAttribute(com.dp.bigdata.taurus.web.servlet.LoginServlet.USER_NAME)%>;">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="label label-lg label-info arrowed-right col-sm-2">选择报警接收组(分号分隔)</label>
+
+                <div class="controls">
+                    <input type="text" class="input-large field" id="alertGroup" name="alertGroup"
+                           placeholder="group name split with ;">
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+</div>
+</div>
+<div id="confirm" class="modal fade" role="dialog"
+     aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h3 id="id_header"></h3>
+        </div>
+        <div class="modal-body">
+            <p id="id_body"></p>
+        </div>
+        <div class="modal-footer">
+        </div>
     </div>
-   
-    <script type="text/javascript">  
-      	var userList="",groupList="",ipList="";
-      	<%for(UserDTO user:users) {%>
-      		userList=userList+",<%=user.getName()%>";
-      	<%}%>
-      	<%for(UserGroupDTO group:groups) {%>
-      		groupList=groupList+",<%=group.getName()%>";
-  		<%}%>
-  		<% for(HostDTO hostDto:hosts) {%>
-  			ipList=ipList+",<%=hostDto.getName()%>";
-		<%}%>
-		ipList = ipList.substr(1);
-      	userList = userList.substr(1);
-      	groupList = groupList.substr(1);
-        $(".atip").tooltip();
-        options={
-            delay: { show: 500, hide: 100 },
-            trigger:'click',
-        };
-        $(".optiontip").tooltip(options);
-    </script> 
-	<script src="js/bwizard.js" type="text/javascript"></script>
-    <script src="js/jquery.validate.min.js" type="text/javascript"></script>
-    <script src="js/taurus_validate.js" type="text/javascript"></script>
-    <script src="js/jquery.autocomplete.min.js" type="text/javascript"></script>
-	<script src="js/task.js" type="text/javascript"></script>
-</body> 
+    </div>
+</div>
+<script type="text/javascript">
+    var userList = "", groupList = "", ipList = "";
+    <%for(UserDTO user:users) {%>
+    userList = userList + ",<%=user.getName()%>";
+    <%}%>
+    <%for(UserGroupDTO group:groups) {%>
+    groupList = groupList + ",<%=group.getName()%>";
+    <%}%>
+    <% for(HostDTO hostDto:hosts) {%>
+    ipList = ipList + ",<%=hostDto.getName()%>";
+    <%}%>
+    ipList = ipList.substr(1);
+    userList = userList.substr(1);
+    groupList = groupList.substr(1);
+    $(".atip").tooltip();
+    options = {
+        delay: { show: 500, hide: 100 },
+        trigger: 'click'
+    };
+    $(".optiontip").tooltip(options);
+</script>
+<script src="js/bwizard.js" type="text/javascript"></script>
+<script src="lib/ace/js/jquery.validate.min.js" type="text/javascript"></script>
+<script src="js/taurus_validate.js" type="text/javascript"></script>
+<script src="js/jquery.autocomplete.min.js" type="text/javascript"></script>
+<script src="js/task.js" type="text/javascript"></script>
+</body>
 </html>

@@ -1,5 +1,19 @@
 var hostName;
 $(function () {
+        $.ajax({
+            type: "get",
+            url: "jsp/common-header.jsp",
+            error: function () {
+            },
+            success: function (response, textStatus) {
+                $("#common-header").html(response);
+                var sidebar = document.getElementById("sidebar");
+                sidebar.style.display="none";
+                $('li[id="host"]').addClass("active");
+            }
+
+
+        });
     hostName = GetQueryString("hostName");
     fetch_Log();
 
@@ -22,7 +36,7 @@ function fetch_Log() {
             querytype:'agentlogs',
             status:status
         },
-        timeout: 1000000,
+        timeout: 10000,
         type: 'POST',
         error: function () {
             $logContainer.text("没有找到日志数据");
