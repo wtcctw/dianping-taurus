@@ -43,11 +43,6 @@ public class MonitorServlet extends HttpServlet {
     private static final String HOSTTASK = "hosttask";
     private static final String HOSTLOAD = "hostload";
 
-    @Autowired
-    private TaskAttemptMapper taskAttemptMapper;
-    @Autowired
-    private TaskMapper taskMapper;
-
 
     @Override
     public void init(ServletConfig config) throws ServletException {
