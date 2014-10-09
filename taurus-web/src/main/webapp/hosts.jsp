@@ -126,7 +126,9 @@
             <th>#</th>
             <th>属性</th>
             <th>值</th>
+            <% if (isAdmin){%>
             <th>操作</th>
+            <%}%>
         </tr>
         </thead>
         <tbody>
@@ -135,19 +137,26 @@
             <td>机器IP</td>
             <td><%=hostName%>
             </td>
+            <% if (isAdmin){%>
             <td></td>
+            <%}%>
         </tr>
         <tr class="error">
             <td>2</td>
             <td>机器状态</td>
             <%if (dto.isOnline()) {%>
             <td>在线</td>
+            <% if (isAdmin){%>
+
             <td><a id="down" title="这台agent将不在监控范围内，agent进程是否被kill并不能确定。" class="btn  btn-primary btn-minier"
                    href="updateHost?hostName=<%=hostName%>&op=down">下线</a></td>
+            <%}%>
             <%} else {%>
             <td>下线</td>
+            <% if (isAdmin){%>
             <td><a id="up" title="这台agent将被纳入监控范围内，agent需要手动启动。" class="btn btn-primary btn-minier"
                    href="updateHost?hostName=<%=hostName%>&op=up">上线</a></td>
+            <%}%>
             <%} %>
         </tr>
         <tr class="warning">
@@ -155,8 +164,10 @@
             <td>心跳状态</td>
             <%if (dto.isConnected()) {%>
             <td>正常</td>
+            <% if (isAdmin){%>
             <td><a id="restart" class="btn  btn-primary btn-minier"
                    href="updateHost?hostName=<%=hostName%>&op=restart">重启</a></td>
+            <%}%>
             <%} else {%>
             <td>异常</td>
             <td>无法重启</td>
@@ -170,12 +181,15 @@
                 } else {
                 %><%=dto.getInfo().getAgentVersion() %><%}%></td>
             <%if (dto.isConnected()) {%>
-            <td><a id="update" class="btn btn-primary btn-minier"
-                   href="http://code.dianpingoa.com/arch/taurus/rollout_branches">升级</a></td>
-            <%} else {%>
+            <% if (isAdmin){%>
             <td><a id="update" class="btn btn-primary btn-minier"
                    href="http://code.dianpingoa.com/arch/taurus/rollout_branches">升级</a></td>
             <%} %>
+            <%} else {%>
+            <% if (isAdmin){%>
+            <td><a id="update" class="btn btn-primary btn-minier"
+                   href="http://code.dianpingoa.com/arch/taurus/rollout_branches">升级</a></td>
+            <%}} %>
         </tr>
         </tbody>
     </table>
@@ -866,31 +880,6 @@
 </body>
 <script type="text/javascript">
     $(".atip").tooltip();
-jQuery
-    $('#host_state').dataTable({
-        bAutoWidth: true,
-        bJQueryUI: true
-    });
-
-    $('#running').dataTable({
-        bAutoWidth: true,
-        bJQueryUI: true
-    });
-
-    $('#submitfail').dataTable({
-        bAutoWidth: true,
-        bJQueryUI: true
-    });
-
-    $('#fail').dataTable({
-        bAutoWidth: true,
-        bJQueryUI: true
-    });
-
-    $('#dependency-timeout').dataTable({
-        bAutoWidth: true,
-        bJQueryUI: true
-    });
 
 
 </script>

@@ -3,8 +3,6 @@ package com.dp.bigdata.taurus.restlet.resource.impl;
 import java.io.File;
 
 import com.dp.bigdata.taurus.restlet.resource.ILogResource;
-import com.dp.bigdata.taurus.restlet.utils.FilePathManager;
-import com.dp.bigdata.taurus.restlet.utils.HdfsUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.restlet.data.MediaType;
@@ -29,11 +27,6 @@ public class LogResource extends ServerResource implements ILogResource {
     @Autowired
     private Scheduler scheduler;
 
-    @Autowired
-    private FilePathManager pathManager;
-
-    @Autowired
-    private HdfsUtils hdfsUtils;
 
     @Override
     public void kill() {
@@ -61,23 +54,4 @@ public class LogResource extends ServerResource implements ILogResource {
     }
 
 
-    @Override
-    @Get
-    public FileRepresentation log() {
-        //String attemptID = "attempt_201209241101_0009_0001_0001";
-        String attemptID = (String) getRequest().getAttributes().get("attempt_id");
-        String logPath = pathManager.getRemoteLog(attemptID);
-        String localPath = pathManager.getLocalLogPath(attemptID);
-        File file = new File(localPath);
-        if (!file.exists()) {
-            try {
-                hdfsUtils.readFile(logPath, localPath);
-            } catch (Exception e) {
-                LOG.info("File not found");
-                setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-                return null;
-            }
-        }
-        return new FileRepresentation(file, MediaType.TEXT_HTML);
-    }
 }

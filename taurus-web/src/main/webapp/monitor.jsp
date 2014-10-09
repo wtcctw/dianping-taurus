@@ -236,7 +236,6 @@
             <th>实际结束时间</th>
             <th>预计调度时间</th>
              <th>IP</th>
-            <th>查看日志</th>
         </tr>
         </thead>
         <tbody>
@@ -285,9 +284,6 @@
             <%} else {%>
             <td>NULL</td>
             <%}%>
-            <td>
-                <a target="_blank" href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
-            </td>
 
         </tr>
         <% }
@@ -394,7 +390,6 @@
             <th>实际结束时间</th>
             <th>预计调度时间</th>
              <th>IP</th>
-            <th>查看日志</th>
 
         </tr>
         </thead>
@@ -442,9 +437,6 @@
             <%} else {%>
             <td>NULL</td>
             <%}%>
-            <td>
-                <a target="_blank" href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
-            </td>
 
         </tr>
         <% }
@@ -469,7 +461,6 @@
             <th>实际结束时间</th>
             <th>预计调度时间</th>
             <th>IP</th>
-            <th>查看日志</th>
 
         </tr>
         </thead>
@@ -516,9 +507,6 @@
             <%} else {%>
             <td>NULL</td>
             <%}%>
-            <td>
-                <a target="_blank" href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
-            </td>
 
         </tr>
         <% }

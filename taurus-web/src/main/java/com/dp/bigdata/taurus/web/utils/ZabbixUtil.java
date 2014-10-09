@@ -1,11 +1,9 @@
-package com.dp.bigdata.taurus.restlet.utils;
+package com.dp.bigdata.taurus.web.utils;
 
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
 import com.dianping.lion.client.LionException;
 import com.google.gson.JsonObject;
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,14 +13,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Map;
 
 
 /**
  * Created by kirinli on 14-9-30.
  */
 public class ZabbixUtil {
-    static final JsonFactory JSON_FACTORY = new JsonFactory();
     static final String CPU_KEY = "system.cpu.load[,avg1";
     static final String MEMERY_KEY = "vm.memory.size[free";
     static String authID = null;
@@ -82,13 +78,21 @@ public class ZabbixUtil {
 
 
         String result = execute("user.login", paramsJSON);
-        @SuppressWarnings("unchecked")
-        // Map<String, Object> jsonMap = (Map<String, Object>) JSONObject.parse(result);
-                Map<String, Object> jsonMap = (Map<String, Object>) new ObjectMapper().readValue(result, Map.class);
-        String authID = String.valueOf(jsonMap.get("result"));
-        System.out.println(authID);
+        try {
+            @SuppressWarnings("unchecked")
+            // Map<String, Object> jsonMap = (Map<String, Object>) JSONObject.parse(result);
+                    //Map<String, Object> jsonMap = (Map<String, Object>) new ().readValue(result, Map.class);
+                    JSONObject jsonMap = new JSONObject(result);
+            String authID = jsonMap.getString("result");
 
-        return authID;
+
+            System.out.println(authID);
+
+            return authID;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
@@ -146,10 +150,11 @@ public class ZabbixUtil {
 
             String result = execute("host.get", paramsJSON);
 
-            Map<String, Object> jsonMap = (Map<String, Object>) new ObjectMapper().readValue(result, Map.class);
-            String jsonData = String.valueOf(jsonMap.get("result")).replace("=", ":");
+            //Map<String, Object> jsonMap = (Map<String, Object>) new ObjectMapper().readValue(result, Map.class);
+            JSONObject jsonMap = new JSONObject(result);
+            String jsonData = jsonMap.getString("result").replace("=", ":");
             return jsonData;
-        } catch (IOException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
             return null;
         }
@@ -168,14 +173,15 @@ public class ZabbixUtil {
             paramsJSON.add("search", searchParams);
             String result = execute("item.get", paramsJSON);
 
-            Map<String, Object> jsonMap = (Map<String, Object>) new ObjectMapper().readValue(result, Map.class);
+            //  Map<String, Object> jsonMap = (Map<String, Object>) new ObjectMapper().readValue(result, Map.class);
 
-
-            String itemIdTemp = String.valueOf(jsonMap.get("result"));
-            String itemId = itemIdTemp.replace("[{", "").replace("}]", "").replace("itemid=", "");
+            JSONObject jsonMap = new JSONObject(result);
+            String itemIdTemp = jsonMap.getString("result");
+            JSONObject itemJson = new JSONObject(itemIdTemp.replace("[","").replace("]",""));
+            String itemId = itemJson.getString("itemid");
 
             return itemId;
-        } catch (IOException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
             return null;
         }
@@ -195,10 +201,10 @@ public class ZabbixUtil {
 
             String result = execute("history.get", paramsJSON);
 
-            Map<String, Object> jsonMap = (Map<String, Object>) new ObjectMapper().readValue(result, Map.class);
+          //  Map<String, Object> jsonMap = (Map<String, Object>) new ObjectMapper().readValue(result, Map.class);
+            JSONObject jsonMap = new JSONObject(result);
 
-
-            String returnValue = String.valueOf(jsonMap.get("result")).replace("[", "").replace("]", "");
+            String returnValue = jsonMap.getString("result").replace("[", "").replace("]", "");
 
             if (returnValue.isEmpty()) {
                 return null;
@@ -210,16 +216,16 @@ public class ZabbixUtil {
                 return null;
             }
 
-            String itemValue = itemArray[0].replace("{", "").replace("}", "");
+            String itemValue = itemArray[0] +"}";
 
             if (itemValue.isEmpty() || itemValue.split(",")[2].isEmpty()) {
                 return null;
             }
-
-            String value = itemValue.split(",")[2].replace("value=", "");
+            JSONObject valueJson = new JSONObject(itemValue);
+            String value = valueJson.getString("value");
 
             return value;
-        } catch (IOException e) {
+        }  catch (JSONException e) {
             e.printStackTrace();
             return null;
         }

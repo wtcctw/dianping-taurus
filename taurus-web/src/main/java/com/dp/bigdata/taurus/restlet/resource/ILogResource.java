@@ -11,8 +11,6 @@ import org.restlet.resource.Get;
  */
 public interface ILogResource {
 
-    @Get
-    public FileRepresentation log();
 
     @Delete
     public void kill();

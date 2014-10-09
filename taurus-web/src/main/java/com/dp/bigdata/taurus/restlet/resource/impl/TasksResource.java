@@ -75,9 +75,6 @@ public class TasksResource extends ServerResource implements ITasksResource {
 	private Scheduler scheduler;
 
 	@Autowired
-	private HdfsUtils hdfsUtils;
-
-	@Autowired
 	private AgentDeploymentUtils agentDeployUtils;
 
 	@Autowired
@@ -250,7 +247,6 @@ public class TasksResource extends ServerResource implements ITasksResource {
 			final String srcPath = filePathManager.getLocalPath(task.getFilename());
 			final String destPath = filePathManager.getRemotePath(task.getTaskid(), task.getFilename());
 			try {
-				hdfsUtils.writeFile(srcPath, destPath);
 				agentDeployUtils.notifyAllAgent(task.getTask(), DeployOptions.DEPLOY);
 			} catch (Exception e) {
 				LOG.error(e.getMessage(), e);

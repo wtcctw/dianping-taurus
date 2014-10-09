@@ -58,7 +58,6 @@ public class DefaultHdfsUtils implements HdfsUtils {
             System.out.println("LION CONGIG ERROR++++++++:"+e.getMessage());
         }catch (Exception e){
             e.printStackTrace();
-            System.out.println("DefaultHdfsUtils EERROR++++++++:"+e.getMessage());
         }
         conf.set("hadoop.security.authentication", "kerberos");
         conf.set("hadoop.security.authorization", "true");

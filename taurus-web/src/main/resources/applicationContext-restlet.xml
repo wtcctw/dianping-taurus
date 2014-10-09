@@ -78,8 +78,6 @@
     <bean name="/api/failedtaskload/{starttime}/{endtime}" id="getFailedTaskLoad" autowire="byName"
           scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.FailedTaskLoad"/>
 		<!-- Core Service -->
-		<bean id="hdfsUtils" class="com.dp.bigdata.taurus.restlet.utils.DefaultHdfsUtils"
-			init-method="init" />
 		<bean id="agentDeployUtils"
 			class="com.dp.bigdata.taurus.restlet.utils.DefaultAgentDeploymentUtils" />
 		<bean id="requestExtractor"

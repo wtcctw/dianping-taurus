@@ -10,8 +10,7 @@ import com.dp.bigdata.taurus.restlet.resource.IHostResource;
 import com.dp.bigdata.taurus.restlet.resource.IHostsResource;
 import com.dp.bigdata.taurus.restlet.resource.ITotalTaskLoad;
 import com.dp.bigdata.taurus.restlet.shared.HostDTO;
-import com.dp.bigdata.taurus.restlet.utils.JsonUtils;
-import com.dp.bigdata.taurus.restlet.utils.ZabbixUtil;
+import com.dp.bigdata.taurus.web.utils.ZabbixUtil;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.json.JSONArray;
@@ -30,8 +29,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by kirinli on 14-9-29.
@@ -171,7 +168,7 @@ public class MonitorServlet extends HttpServlet {
             JsonArray hostLoadJsonData = new JsonArray();
             OutputStream output = response.getOutputStream();
 
-            try {
+           try {
                 JSONArray hostJson = new JSONArray(jsonData);
                 int len = hostJson.length();
 

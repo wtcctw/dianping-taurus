@@ -71,6 +71,10 @@
 								<th width="10%">发布时间</th>
 							</tr>
                             <tr>
+                                <td>新版Taurus界面，新增监控中心</td>
+                                <td>2014-10-09</td>
+                            </tr>
+                            <tr>
                                 <td>job host监控细化，<a href="hosts.jsp">主机监控</a></td>
                                 <td>2014-09-05</td>
                             </tr>

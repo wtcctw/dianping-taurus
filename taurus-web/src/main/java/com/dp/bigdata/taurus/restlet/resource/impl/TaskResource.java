@@ -52,8 +52,6 @@ public class TaskResource extends ServerResource implements ITaskResource {
     @Autowired
     private UserGroupMapper userGroupMapper;
 
-    @Autowired
-    private HdfsUtils hdfsUtils;
 
     @Autowired
     private AgentDeploymentUtils agentDeployUtils;
@@ -154,8 +152,6 @@ public class TaskResource extends ServerResource implements ITaskResource {
             final String srcPath = filePathManager.getLocalPath(task.getFilename());
             final String destPath = filePathManager.getRemotePath(task.getTaskid(), task.getFilename());
             try {
-                hdfsUtils.removeFile(filePathManager.getRemotePath(task.getTaskid(), "*"));
-                hdfsUtils.writeFile(srcPath, destPath);
                 agentDeployUtils.notifyAllAgent(task.getTask(), DeployOptions.UNDEPLOY);
                 agentDeployUtils.notifyAllAgent(task.getTask(), DeployOptions.DEPLOY);
             } catch (Exception e) {
