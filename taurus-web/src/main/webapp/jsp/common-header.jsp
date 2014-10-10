@@ -75,7 +75,7 @@
         <li id="index">
             <a href="index.jsp">
                 <i class="icon-dashboard"></i>
-                <span class="menu-text">监控中心</span>
+                <span class="menu-text" id="userrolechange">监控中心</span>
             </a>
         </li>
 
@@ -138,3 +138,11 @@
     </script>
 
 </div>
+
+<script>
+var isAdmin = <%=isAdmin%>;
+if(!isAdmin){
+    $("#userrolechange").html("我的任务");
+}
+
+</script>

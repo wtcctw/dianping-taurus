@@ -49,7 +49,7 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home home-icon"></i>
-            <a href="index.jsp">监控中心</a>
+            <a href="index.jsp">HOME</a>
         </li>
         <li class="active">
             <a href="about.jsp.jsp">使用帮助</a>

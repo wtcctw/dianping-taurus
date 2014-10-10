@@ -91,7 +91,7 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home home-icon"></i>
-            <a href="index.jsp">监控中心</a>
+            <a href="index.jsp">HOME</a>
         </li>
         <li class="active">
             <a href="task.jsp">新建任务</a>
