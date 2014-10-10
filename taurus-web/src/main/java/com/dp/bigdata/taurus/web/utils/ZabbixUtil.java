@@ -36,9 +36,9 @@ public class ZabbixUtil {
         try {
 
             id = 0;
-            user = "kirin.li";//ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.zabbix.user");
+            user = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.zabbix.user");
             //密码
-            password = "767762405Li";//ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.zabbix.password");
+            password = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.zabbix.password");
             //请求URL
             url = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.zabbix.url");
             //zabbix API 版本
