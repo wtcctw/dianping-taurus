@@ -18,13 +18,11 @@ import java.util.concurrent.TimeUnit;
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
 import com.dp.bigdata.taurus.restlet.resource.IDeployResource;
-import com.google.gson.JsonArray;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
-import org.json.JSONString;
 import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.ext.json.JsonRepresentation;
@@ -45,7 +43,7 @@ import com.dp.bigdata.taurus.zookeeper.deploy.helper.Deployer;
 import com.dp.bigdata.taurus.zookeeper.deploy.helper.DeploymentContext;
 import com.dp.bigdata.taurus.zookeeper.deploy.helper.DeploymentException;
 
-public class DeployResource extends ServerResource implements IDeployResource {
+public class DeploysResource extends ServerResource implements IDeployResource {
 
 	@Autowired
 	private Deployer deployer;
@@ -58,7 +56,7 @@ public class DeployResource extends ServerResource implements IDeployResource {
 
 	private String webUrl = "";
 
-	private static final Log LOG = LogFactory.getLog(DeployResource.class);
+	private static final Log LOG = LogFactory.getLog(DeploysResource.class);
 
 	private static final String createUrlPattern = "http://%s/task.jsp?appname=%s&path=%s&ip=%s";
 

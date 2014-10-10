@@ -385,6 +385,6 @@
 
 </select>
     <select id="getUserTasks" resultType="map">
-        select a.name,b.status from TaurusTask a join TaurusTaskAttempt b on a.taskID=b.taskID where <![CDATA[ a.creator=#{user} and b.status =  and b.startTime >=#{start} and  startTime <= #{end}]]>
+        select a.name,count(Concat(a.name,b.status)) AS num  from TaurusTask a join TaurusTaskAttempt b on a.taskID=b.taskID where <![CDATA[ a.creator=#{user} and b.status in (#{status})   and b.startTime >=#{start} and  startTime <= #{end}]]>
     </select>
 </mapper>

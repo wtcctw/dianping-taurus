@@ -33,9 +33,7 @@
 	<bean name="/api/attempt/{attempt_id}" id="attemptResource"
 		autowire="byName" scope="prototype"
 		class="com.dp.bigdata.taurus.restlet.resource.impl.LogResource" />
-	<bean name="/api/status" id="attemptStatusResource" autowire="byName"
-		scope="prototype"
-		class="com.dp.bigdata.taurus.restlet.resource.impl.AttemptStatusResource" />
+
 	<bean name="/api/attempt" id="attemptsResource" autowire="byName"
 		scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.AttemptsResource" />
 	<bean name="/api/host/{hostname}" id="hostResource" autowire="byName"
@@ -57,10 +55,7 @@
 		class="com.dp.bigdata.taurus.restlet.resource.impl.UserGroupMappingsResource" />
 	<bean name="/api/user/{user_name}" id="userResource" autowire="byName"
 		scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.UserResource" />
-	<bean name="/api/deploy" id="deployResource" autowire="byName"
-		scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.DeployResource">
-		<property name="webUrl" value="taurus.dp" />
-	</bean>
+
 	<bean name="/api/hostip" id="hostIpResource" autowire="byName"
 		scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.HostIpResource"/>
     <bean name="/api/isexist/{attempt_id}" id="isExistHDFS" autowire="byName"
@@ -77,6 +72,14 @@
           scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.TotalTaskLoad"/>
     <bean name="/api/failedtaskload/{starttime}/{endtime}" id="getFailedTaskLoad" autowire="byName"
           scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.FailedTaskLoad"/>
+    <bean name="/api/usertasks/{username}/{starttime}/{endtime}" id="getUserTasks" autowire="byName"
+          scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.UserTasks"/>
+    <bean name="/api/deploy" id="deployResource" autowire="byName"
+          scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.DeploysResource">
+        <property name="webUrl" value="taurus.dp" />
+    </bean>
+    <bean name="/api/status" id="attemptStatusResource" autowire="byName"
+          scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.AttemptStatusResource" />
 		<!-- Core Service -->
 		<bean id="agentDeployUtils"
 			class="com.dp.bigdata.taurus.restlet.utils.DefaultAgentDeploymentUtils" />

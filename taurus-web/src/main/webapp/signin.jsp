@@ -21,6 +21,7 @@
     <!-- page specific plugin scripts -->
     <script src="lib/ace/js/jquery.dataTables.min.js"></script>
     <script src="lib/ace/js/jquery.dataTables.bootstrap.js"></script>
+    <script src="lib/ace/js/jquery.validate.min.js"></script>
     <!-- page specific plugin styles -->
 
     <!-- fonts -->
@@ -60,7 +61,8 @@
                     </div>
 
                     <div class="space-6"></div>
-
+                    <div id="alertContainer" class="container">
+                    </div>
                     <div class="position-relative">
                         <div id="login-box" class="login-box visible widget-box no-border">
                             <div class="widget-body">
@@ -72,13 +74,13 @@
 
                                     <div class="space-6"></div>
 
-                                    <form>
+                                    <form id="signupForm">
                                         <fieldset>
 
 
                                             <label class="block clearfix">
 														<span class="block input-icon input-icon-right">
-															<input type="text" class="form-control" id="username"
+															<input type="text" class="form-control required"  id="username"
                                                                    placeholder="Domain accout"/>
 															<i class="ace-icon icon-user green"></i>
 														</span>
@@ -86,7 +88,7 @@
 
                                             <label class="block clearfix">
 														<span class="block input-icon input-icon-right">
-															<input type="password" id="password" class="form-control"
+															<input type="password" id="password" class="form-control required"
                                                                    placeholder="Password"
                                                                    onKeyPress="EnterTo('<%=url%>')"/>
 															<i class="ace-icon icon-lock"></i>
@@ -137,5 +139,10 @@
 <!-- /.main-container -->
 
 <!-- /container -->
+<script>
+    $().ready(function() {
+        $("#signupForm").validate();
+    });
+</script>
 </body>
 </html>

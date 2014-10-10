@@ -20,27 +20,36 @@ public class UserTasks extends ServerResource implements IUserTasks {
 
     @Override
     public String retrieve() {
-        String userTasksInfo = "";
         JSONArray jsonData = new JSONArray();
         try {
             String user = (String) getRequestAttributes().get("username");
             String start = (String) getRequestAttributes().get("starttime");
             String end = (String) getRequestAttributes().get("endtime");
-            List<HashMap<String, Integer>> tasks = taskAttemptMapper.getUserTasks(user,start, end);
+            List<HashMap<String, Integer>> successTasks = taskAttemptMapper.getUserTasks(user, start, end, "7");
+            List<HashMap<String, Integer>> failedTasks = taskAttemptMapper.getUserTasks(user,start, end,"3,5,8,9,10,11");
 
-
-            for (HashMap<String, Integer> task : tasks) {
+            for (HashMap<String, Integer> task : successTasks) {
 
                 JSONObject json = new JSONObject();
-                json.put("execHost", task.get("execHost"));
-                json.put("totaltask", task.get("totaltask"));
-                userTasksInfo += task.get("execHost") + ":" + task.get("totaltask") + ",";
+                json.put("taskName", task.get("name"));
+                json.put("nums", task.get("num"));
+                json.put("status", "success");
                 jsonData.put(json);
 
 
             }
-            if (!userTasksInfo.isEmpty()) {
-                userTasksInfo = userTasksInfo.substring(0, userTasksInfo.length() - 1);
+            for (HashMap<String, Integer> task : failedTasks) {
+                if (task.get("name") == null){
+                    break;
+                }
+
+                JSONObject json = new JSONObject();
+                json.put("taskName", task.get("name"));
+                json.put("nums", task.get("num"));
+                json.put("status", "failed");
+                jsonData.put(json);
+
+
             }
         } catch (JSONException e) {
             e.printStackTrace();

@@ -112,7 +112,7 @@ $(document).ready(function(){
 	    		required: true
 	    	},
 			proxyUser: {
-				notRoot: $("#creator").val()!="renyuan.sun"
+				notRoot: $("#creator").val()!="kirin.li"
 			},
 	    	description: {
 	    		required: true,

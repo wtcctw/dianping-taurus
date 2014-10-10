@@ -47,7 +47,7 @@
 </div>
 
 
-<div class="main-content" style="opacity: 1;">
+<div class="main-content  " style="opacity: 1;">
 <div class="breadcrumbs" id="breadcrumbs">
     <script type="text/javascript">
         try {
@@ -316,8 +316,9 @@
                 </div>
 
                 <div class="widget-body">
-                    <div class="widget-main">
-                        <div id="mytask"></div>
+                    <div class="widget-main" id="user-widget-main">
+
+                        <div id="mytasks"></div>
 
                         <div class="hr hr8 hr-double"></div>
 
@@ -354,7 +355,7 @@
                 <div class="widget-header widget-header-flat widget-header-small">
                     <h5 class="widget-title">
                         <i class="icon-signal"></i>
-                        Job异常机器列表
+                        我的组的任务成功率
                     </h5>
 
                     <div class="widget-toolbar">
@@ -365,8 +366,32 @@
                 </div>
 
                 <div class="widget-body">
-                    <div class="widget-main" id="exceptionJob">
-                        <i class="icon-spinner icon-spin icon-large"></i>
+                    <div class="widget-main" id="group-widget-main">
+
+                        <div id="grouptasks"></div>
+
+                        <div class="hr hr8 hr-double"></div>
+
+                        <div class="clearfix">
+                            <div class="col-sm-6">
+														<span class="grey">
+															<i class="icon-lightbulb green"></i>
+															&nbsp; 成功
+														</span>
+                                <h4 class="bigger pull-right" id="groupsucctask"></h4>
+                            </div>
+
+                            <div class="col-sm-6">
+														<span class="grey">
+															<i class="icon-lightbulb red"></i>
+															&nbsp; 失败
+														</span>
+                                <h4 class="bigger pull-right " id="groupfailtask"></h4>
+                            </div>
+
+
+                            <!-- /section:custom/extra.grid -->
+                        </div>
                     </div>
                     <!-- /.widget-main -->
                 </div>
@@ -383,6 +408,7 @@
 </div>
 <script type="text/javascript">
     var isAdmin = <%=isAdmin%>;
+    var username = "<%=currentUser%>";
     if(isAdmin){
         var user = document.getElementById("user");
         user.style.display="none";

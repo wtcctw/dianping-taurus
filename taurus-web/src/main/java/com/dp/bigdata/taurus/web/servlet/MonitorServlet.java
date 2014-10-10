@@ -5,10 +5,7 @@ import com.dianping.lion.client.ConfigCache;
 import com.dianping.lion.client.LionException;
 import com.dp.bigdata.taurus.generated.mapper.TaskAttemptMapper;
 import com.dp.bigdata.taurus.generated.mapper.TaskMapper;
-import com.dp.bigdata.taurus.restlet.resource.IFailedTaskLoad;
-import com.dp.bigdata.taurus.restlet.resource.IHostResource;
-import com.dp.bigdata.taurus.restlet.resource.IHostsResource;
-import com.dp.bigdata.taurus.restlet.resource.ITotalTaskLoad;
+import com.dp.bigdata.taurus.restlet.resource.*;
 import com.dp.bigdata.taurus.restlet.shared.HostDTO;
 import com.dp.bigdata.taurus.web.utils.ZabbixUtil;
 import com.google.gson.JsonArray;
@@ -38,7 +35,7 @@ public class MonitorServlet extends HttpServlet {
     private String AGENT_PORT;
     private static final String HOST = "host";
     private static final String TOTALTASKLOAD = "totaltaskload";
-    private static final String RUNNINGTASKLOAD = "runningtaskload";
+    private static final String GROUPTASK = "grouptask";
     private static final String FAILEDTASKLOAD = "failedtaskload";
     private static final String USERTASK = "usertask";
     private static final String HOSTLOAD = "hostload";
@@ -158,33 +155,33 @@ public class MonitorServlet extends HttpServlet {
             output.write(jsonString.getBytes());
             output.close();
 
-        }else if (HOSTLOAD.equals(action)) {
+        } else if (HOSTLOAD.equals(action)) {
             String jsonData = ZabbixUtil.getHosts();
             JsonArray hostLoadJsonData = new JsonArray();
             OutputStream output = response.getOutputStream();
 
-           try {
+            try {
                 JSONArray hostJson = new JSONArray(jsonData);
                 int len = hostJson.length();
 
-                for (int i = 0 ; i < len; i++){
+                for (int i = 0; i < len; i++) {
                     JSONObject jsonObject = (JSONObject) hostJson.get(i);
                     String hostId = jsonObject.getString("hostid");
                     String name = jsonObject.getString("name");
-                    String cpuLoad = ZabbixUtil.getCpuLoadInfo(hostId) ;
+                    String cpuLoad = ZabbixUtil.getCpuLoadInfo(hostId);
                     String memeryLoad = ZabbixUtil.getMemeryLoadInfo(hostId);
-                    if (memeryLoad != null){
+                    if (memeryLoad != null) {
                         Float memLoadFloat = Float.parseFloat(memeryLoad);
-                        memeryLoad= (int)(memLoadFloat / (1024*1024)) +"MB";
-                    }else{
-                        memeryLoad ="异常数据";
+                        memeryLoad = (int) (memLoadFloat / (1024 * 1024)) + "MB";
+                    } else {
+                        memeryLoad = "异常数据";
                     }
 
                     JsonObject hostLoadJson = new JsonObject();
-                    hostLoadJson.addProperty("hostId",hostId);
-                    hostLoadJson.addProperty("hostName",name);
-                    hostLoadJson.addProperty("cpuLoad",cpuLoad);
-                    hostLoadJson.addProperty("memLoad",memeryLoad);
+                    hostLoadJson.addProperty("hostId", hostId);
+                    hostLoadJson.addProperty("hostName", name);
+                    hostLoadJson.addProperty("cpuLoad", cpuLoad);
+                    hostLoadJson.addProperty("memLoad", memeryLoad);
                     hostLoadJsonData.add(hostLoadJson);
                 }
 
@@ -194,8 +191,31 @@ public class MonitorServlet extends HttpServlet {
             String jsonString = hostLoadJsonData.toString();
             output.write(jsonString.getBytes());
             output.close();
-        }else if (USERTASK.equals(action)){
+        } else if (USERTASK.equals(action)) {
+            OutputStream output = response.getOutputStream();
+            String username = request.getParameter("username");
+            String start = request.getParameter("start");
+            String end = request.getParameter("end");
 
+            cr = new ClientResource(RESTLET_URL_BASE + "usertasks/" + username + "/" + start + "/" +end);
+            IUserTasks userTasks = cr.wrap(IUserTasks.class);
+            cr.accept(MediaType.APPLICATION_XML);
+            String jsonString =userTasks.retrieve();
+            output.write(jsonString.getBytes());
+            output.close();
+
+        }else if (GROUPTASK.equals(action)){
+            OutputStream output = response.getOutputStream();
+            String username = request.getParameter("username");
+            String start = request.getParameter("start");
+            String end = request.getParameter("end");
+
+            cr = new ClientResource(RESTLET_URL_BASE + "usertasks/" + username + "/" + start + "/" +end);
+            IUserTasks userTasks = cr.wrap(IUserTasks.class);
+            cr.accept(MediaType.APPLICATION_XML);
+            String jsonString =userTasks.retrieve();
+            output.write(jsonString.getBytes());
+            output.close();
         }
     }
 }

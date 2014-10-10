@@ -1,4 +1,14 @@
 function login(url){
+    if($('#username').val()==""&&$('#password').val()==""){
+        $('#alertContainer').html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>用户名和密码不能为空！</strong></div>');
+        return;
+    }else if($('#username').val()==""){
+        $('#alertContainer').html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>用户名不能为空！</strong></div>');
+        return;
+    }else if($('#password').val()==""){
+        $('#alertContainer').html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>密码不能为空！</strong></div>');
+        return;
+    }
 	$.ajax({
 		url: 'login.do',
 		data: {
@@ -8,7 +18,7 @@ function login(url){
 		type:"POST",
 		statusCode:{
 			401 : function(){
-				$('#alertContainer').html('<div id="alertContainer" class="alert alert-error"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>用户名或密码错误，登陆失败！</strong></div>');
+				$('#alertContainer').html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>用户名或密码错误，登陆失败！</strong></div>');
 				$(".alert").alert();
 			},
 			200 : function(){
