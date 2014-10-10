@@ -139,7 +139,7 @@ public class AttemptProxyServlet extends HttpServlet {
 
             String queryType = request.getParameter("querytype");   //区分js请求是log，还是error log
 
-            Date endTime = null;                                    //这个是取该任务的最后执行日期的日志，如果是RUNNING，endTime为空，则取当天日志
+            Date startTime = null;
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             ClientResource attemptLogCr = new ClientResource(RESTLET_URL_BASE + "getattemptbyid/" + attemptID);
 
@@ -184,7 +184,7 @@ public class AttemptProxyServlet extends HttpServlet {
 
                 if (dto != null) {
                     hostIp = dto.getExecHost();
-                    endTime = dto.getEndTime();
+                    startTime = dto.getStartTime();
                     tureStatus = dto.getStatus();
 
                 }
@@ -193,10 +193,10 @@ public class AttemptProxyServlet extends HttpServlet {
                 String isEnd;                                 //标记任务是否执行完成
                 boolean acceptContentWay = false;             //false :NORMAL 全量接受；true：INC 增量接受
 
-                if (endTime == null) {
+                if (startTime == null) {
                     date = format.format(new Date());
                 } else {
-                    date = format.format(endTime);
+                    date = format.format(startTime);
                 }
 
                 if (hostIp.isEmpty()) {

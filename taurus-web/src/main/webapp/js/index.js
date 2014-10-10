@@ -68,269 +68,405 @@ $(function () {
 
 
     });
-
-
-    var onlineNums = 0;
-    var exceptionNums = 0;
-    var onlineLists = null;
-    var exceptionLists = null;
-    $.ajax({
-        async: false,
-        data: {
-            action: "host",
-            gettype: "all"
-        },
-        type: "POST",
-        url: "/monitor",
-        error: function () {
-        },
-        success: function (response, textStatus) {
-            var ips = response.split("#");
-
-            if (ips[0].trim == "NULL") {
-                onlineNums = 0;
-                onLineBody = "";
-            } else {
-                onlineLists = ips[0].split(",");
-                onLineBody = ips[0].replace(/[,]/g, "\n");
-                ;
-                onlineNums = onlineLists.length;
-            }
-            if (ips[1].trim == "NULL") {
-                exceptionNums = 0;
-                exceptionBody = "";
-            } else {
-                exceptionLists = ips[1].split(",");
-                exceptionNums = exceptionLists.length;
-                exceptionBody = ips[1].replace(/[,]/g, "\n")
-            }
-            $("#onlineNums").html(onlineNums.toString());
-            $("#exceptionNums").html(exceptionNums.toString());
-
-        }
-
-
-    });
-    for (var i = 0; i < exceptionNums; i++) {
-        body += "<tr>" +
-            "<td>" + exceptionLists[i] + "</td>" +
-            "<td><a id='down' title='查看job机详情' class='btn  btn-primary btn-minier' href='hosts.jsp?hostName=" + exceptionLists[i] + "'>详情</a></td>"
-        "</tr>"
-    }
-    var htmlContent = ' <table  class="table table-striped ">'
-        + '        <tbody>'
-        + body
-        + '        </tbody>'
-        + '    </table>'
-        + '    <div class="controller">'
-        + '    </div>';
-
-    $("#exceptionJob").html(htmlContent);
-    var placeholder = $('#piechart-placeholder').css({'width': '90%', 'min-height': '200px'});
-    var data = [
-        { label: "正常", data: onlineNums, color: "#68BC31"},
-        { label: "失联", data: exceptionNums, color: "#AF4E96"}
-    ]
-    Number.prototype.toFixed = function (fractionDigits) {
-        return  (parseInt(this * Math.pow(10, fractionDigits) + 0.5) / Math.pow(10, fractionDigits)).toString();
-    }
-
-    function drawPieChart(placeholder, data, position) {
-        $.plot(placeholder, data, {
-            series: {
-                pie: {
-                    show: true,
-                    tilt: 1,
-                    highlight: {
-                        opacity: 0.25
-                    },
-                    stroke: {
-                        color: '#fff',
-                        width: 2
-                    },
-                    startAngle: 2
-                }
+    if(isAdmin){
+        var onlineNums = 0;
+        var exceptionNums = 0;
+        var onlineLists = null;
+        var exceptionLists = null;
+        $.ajax({
+            async: false,
+            data: {
+                action: "host",
+                gettype: "all"
             },
-            legend: {
-                show: true,
-                position: position || "ne",
-                labelBoxBorderColor: null,
-                margin: [-30, 15]
+            type: "POST",
+            url: "/monitor",
+            error: function () {
             },
-            grid: {
-                hoverable: true,
-                clickable: true
-            }
-        })
-    }
+            success: function (response, textStatus) {
+                var ips = response.split("#");
 
-    drawPieChart(placeholder, data);
-
-    /**
-     we saved the drawing function and the data to redraw with different position later when switching to RTL mode dynamically
-     so that's not needed actually.
-     */
-    placeholder.data('chart', data);
-    placeholder.data('draw', drawPieChart);
-
-
-    //pie chart tooltip example
-    var $tooltip = $("<div class='tooltip top in'><div class='tooltip-inner'></div></div>").hide().appendTo('body');
-    var previousPoint = null;
-
-    placeholder.on('plothover', function (event, pos, item) {
-        if (item) {
-            if (previousPoint != item.seriesIndex) {
-                previousPoint = item.seriesIndex;
-
-                if (item.series['label'] == "正常") {
-                    tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%\n' + onLineBody;
-                } else if (item.series['label'] == "失联") {
-                    tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%\n' + exceptionBody;
+                if (ips[0].trim == "NULL") {
+                    onlineNums = 0;
+                    onLineBody = "";
+                } else {
+                    onlineLists = ips[0].split(",");
+                    onLineBody = ips[0].replace(/[,]/g, "\n");
+                    ;
+                    onlineNums = onlineLists.length;
                 }
-                else {
-                    tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%'
-
+                if (ips[1].trim == "NULL") {
+                    exceptionNums = 0;
+                    exceptionBody = "";
+                } else {
+                    exceptionLists = ips[1].split(",");
+                    exceptionNums = exceptionLists.length;
+                    exceptionBody = ips[1].replace(/[,]/g, "\n")
                 }
+                $("#onlineNums").html(onlineNums.toString());
+                $("#exceptionNums").html(exceptionNums.toString());
 
-                $tooltip.show().children(0).text(tip);
             }
-            $tooltip.css({top: pos.pageY + 10, left: pos.pageX + 10});
-        } else {
-            $tooltip.hide();
-            previousPoint = null;
-        }
-
-    });
-
-    var starttime = GetDateStr(-1);
-    var endtime = GetDateStr(1);
-
-    var totalBody = "";
-
-    $.ajax({
-        async: false,
-        data: {
-            action: "totaltaskload",
-            start: starttime,
-            end: endtime
-        },
-        type: "POST",
-        url: "/monitor",
-        error: function () {
-        },
-        success: function (response, textStatus) {
-            var jsonarray = $.parseJSON(response);
-            $.each(jsonarray, function (i, item) {
-                totalBody += "<tr>" +
-                    "<td>" + item.execHost + "</td>" +
-                    "<td>" + item.totaltask + "</td>"
-                "</tr>"
-            });
-
-        }
 
 
-    });
-    var topLists = ' <table  class="table table-striped table-bordered table-hover ">'
-        + '<thead><tr><th>IP</th>  <th>执行任务数</th> </tr> </thead>'
-        + '        <tbody>'
-        + totalBody
-        + '        </tbody>'
-        + '    </table>'
-        + '    <div class="controller">'
-        + '    </div>';
-    $("#totalJob").html(topLists);
-    var failBody = "";
-
-    $.ajax({
-        async: false,
-        data: {
-            action: "failedtaskload",
-            start: starttime,
-            end: endtime
-        },
-        type: "POST",
-        url: "/monitor",
-        error: function () {
-        },
-        success: function (response, textStatus) {
-            var jsonarray = $.parseJSON(response);
-            $.each(jsonarray, function (i, item) {
-                failBody += "<tr>" +
-                    "<td>" + item.execHost + "</td>" +
-                    "<td>" + item.totaltask + "</td>"
-                "</tr>"
-            });
-
-        }
-
-
-    });
-    topLists = ' <table  class="table table-striped table-bordered table-hover ">'
-        + '<thead><tr><th>IP</th>  <th>执行任务数</th> </tr> </thead>'
-        + '        <tbody>'
-        + failBody
-        + '        </tbody>'
-        + '    </table>'
-        + '    <div class="controller">'
-        + '    </div>';
-    $("#failedJob").append(topLists);
-
-})
-
-
-var cpuLoadBody = "";
-var memLoadBody = "";
-$.ajax({
-    async: true,
-    data: {
-        action: "hostload"
-    },
-    type: "POST",
-    url: "/monitor",
-    error: function () {
-    },
-    success: function (response, textStatus) {
-        var jsonarray = $.parseJSON(response);
-        $.each(jsonarray, function (i, item) {
-            cpuLoadBody += "<tr>" +
-                "<td>" + item.hostName + "</td>" +
-                "<td>" + item.cpuLoad + "</td>"
-            "</tr>";
-
-            memLoadBody += "<tr>" +
-                "<td>" + item.hostName + "</td>" +
-                "<td>" +item.memLoad+ "</td>"
-            "</tr>";
         });
-        var topCpuLoadLists = ' <table  class="table table-striped table-bordered table-hover " id="cputable">'
-            + '<thead><tr><th>主机名</th>  <th>CPU负载(load average)</th> </tr> </thead>'
+        for (var i = 0; i < exceptionNums; i++) {
+            body += "<tr>" +
+                "<td>" + exceptionLists[i] + "</td>" +
+                "<td><a id='down' title='查看job机详情' class='btn  btn-primary btn-minier' href='hosts.jsp?hostName=" + exceptionLists[i] + "'>详情</a></td>"
+            "</tr>"
+        }
+        var htmlContent = ' <table  class="table table-striped ">'
             + '        <tbody>'
-            + cpuLoadBody
+            + body
             + '        </tbody>'
             + '    </table>'
             + '    <div class="controller">'
             + '    </div>';
-        $("#cpuload").html(topCpuLoadLists);
-        $("#cpuload").removeClass("align-center");
-        cpuTableStyle();
-        var topMemLoadLists = ' <table  class="table table-striped table-bordered table-hover " id="memtable">'
-            + '<thead><tr><th>主机名</th>  <th>内存剩余(free)</th> </tr> </thead>'
-            + '        <tbody>'
-            + memLoadBody
-            + '        </tbody>'
-            + '    </table>'
-            + '    <div class="controller">'
-            + '    </div>';
-        $("#memload").html(topMemLoadLists);
-        $("#memload").removeClass("align-center");
 
-        memTableStyle();
+        $("#exceptionJob").html(htmlContent);
+        var placeholder = $('#piechart-placeholder').css({'width': '90%', 'min-height': '200px'});
+        var data = [
+            { label: "正常", data: onlineNums, color: "#68BC31"},
+            { label: "失联", data: exceptionNums, color: "#AF4E96"}
+        ]
+        Number.prototype.toFixed = function (fractionDigits) {
+            return  (parseInt(this * Math.pow(10, fractionDigits) + 0.5) / Math.pow(10, fractionDigits)).toString();
+        }
+
+        function drawPieChart(placeholder, data, position) {
+            $.plot(placeholder, data, {
+                series: {
+                    pie: {
+                        show: true,
+                        tilt: 1,
+                        highlight: {
+                            opacity: 0.25
+                        },
+                        stroke: {
+                            color: '#fff',
+                            width: 2
+                        },
+                        startAngle: 2
+                    }
+                },
+                legend: {
+                    show: true,
+                    position: position || "ne",
+                    labelBoxBorderColor: null,
+                    margin: [-30, 15]
+                },
+                grid: {
+                    hoverable: true,
+                    clickable: true
+                }
+            })
+        }
+
+        drawPieChart(placeholder, data);
+
+        /**
+         we saved the drawing function and the data to redraw with different position later when switching to RTL mode dynamically
+         so that's not needed actually.
+         */
+        placeholder.data('chart', data);
+        placeholder.data('draw', drawPieChart);
+
+
+        //pie chart tooltip example
+        var $tooltip = $("<div class='tooltip top in'><div class='tooltip-inner'></div></div>").hide().appendTo('body');
+        var previousPoint = null;
+
+        placeholder.on('plothover', function (event, pos, item) {
+            if (item) {
+                if (previousPoint != item.seriesIndex) {
+                    previousPoint = item.seriesIndex;
+
+                    if (item.series['label'] == "正常") {
+                        tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%\n' + onLineBody;
+                    } else if (item.series['label'] == "失联") {
+                        tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%\n' + exceptionBody;
+                    }
+                    else {
+                        tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%'
+
+                    }
+
+                    $tooltip.show().children(0).text(tip);
+                }
+                $tooltip.css({top: pos.pageY + 10, left: pos.pageX + 10});
+            } else {
+                $tooltip.hide();
+                previousPoint = null;
+            }
+
+        });
+
+        var starttime = GetDateStr(-1);
+        var endtime = GetDateStr(1);
+
+        var totalBody = "";
+
+        $.ajax({
+            async: false,
+            data: {
+                action: "totaltaskload",
+                start: starttime,
+                end: endtime
+            },
+            type: "POST",
+            url: "/monitor",
+            error: function () {
+            },
+            success: function (response, textStatus) {
+                var jsonarray = $.parseJSON(response);
+                $.each(jsonarray, function (i, item) {
+                    totalBody += "<tr>" +
+                        "<td>" + item.execHost + "</td>" +
+                        "<td>" + item.totaltask + "</td>"
+                    "</tr>"
+                });
+
+            }
+
+
+        });
+        var topLists = ' <table  class="table table-striped table-bordered table-hover ">'
+            + '<thead><tr><th>IP</th>  <th>执行任务数</th> </tr> </thead>'
+            + '        <tbody>'
+            + totalBody
+            + '        </tbody>'
+            + '    </table>'
+            + '    <div class="controller">'
+            + '    </div>';
+        $("#totalJob").html(topLists);
+        var failBody = "";
+
+        $.ajax({
+            async: false,
+            data: {
+                action: "failedtaskload",
+                start: starttime,
+                end: endtime
+            },
+            type: "POST",
+            url: "/monitor",
+            error: function () {
+            },
+            success: function (response, textStatus) {
+                var jsonarray = $.parseJSON(response);
+                $.each(jsonarray, function (i, item) {
+                    failBody += "<tr>" +
+                        "<td>" + item.execHost + "</td>" +
+                        "<td>" + item.totaltask + "</td>"
+                    "</tr>"
+                });
+
+            }
+
+
+        });
+        topLists = ' <table  class="table table-striped table-bordered table-hover ">'
+            + '<thead><tr><th>IP</th>  <th>执行任务数</th> </tr> </thead>'
+            + '        <tbody>'
+            + failBody
+            + '        </tbody>'
+            + '    </table>'
+            + '    <div class="controller">'
+            + '    </div>';
+        $("#failedJob").append(topLists);
+
+
+
+    var cpuLoadBody = "";
+    var memLoadBody = "";
+    $.ajax({
+        async: true,
+        data: {
+            action: "hostload"
+        },
+        type: "POST",
+        url: "/monitor",
+        error: function () {
+        },
+        success: function (response, textStatus) {
+            var jsonarray = $.parseJSON(response);
+            $.each(jsonarray, function (i, item) {
+                cpuLoadBody += "<tr>" +
+                    "<td>" + item.hostName + "</td>" +
+                    "<td>" + item.cpuLoad + "</td>"
+                "</tr>";
+
+                memLoadBody += "<tr>" +
+                    "<td>" + item.hostName + "</td>" +
+                    "<td>" +item.memLoad+ "</td>"
+                "</tr>";
+            });
+            var topCpuLoadLists = ' <table  class="table table-striped table-bordered table-hover " id="cputable">'
+                + '<thead><tr><th>主机名</th>  <th>CPU负载(load average)</th> </tr> </thead>'
+                + '        <tbody>'
+                + cpuLoadBody
+                + '        </tbody>'
+                + '    </table>'
+                + '    <div class="controller">'
+                + '    </div>';
+            $("#cpuload").html(topCpuLoadLists);
+            $("#cpuload").removeClass("align-center");
+            cpuTableStyle();
+            var topMemLoadLists = ' <table  class="table table-striped table-bordered table-hover " id="memtable">'
+                + '<thead><tr><th>主机名</th>  <th>内存剩余(free)</th> </tr> </thead>'
+                + '        <tbody>'
+                + memLoadBody
+                + '        </tbody>'
+                + '    </table>'
+                + '    <div class="controller">'
+                + '    </div>';
+            $("#memload").html(topMemLoadLists);
+            $("#memload").removeClass("align-center");
+
+            memTableStyle();
+        }
+
+
+    });
+    }else{
+        var succNums = 0;
+        var failedNums = 0;
+        var succLists = null;
+        var failedLists = null;
+        $.ajax({
+            async: false,
+            data: {
+                action: "usertask",
+                gettype: "all"
+            },
+            type: "POST",
+            url: "/monitor",
+            error: function () {
+            },
+            success: function (response, textStatus) {
+                var ips = response.split("#");
+
+                if (ips[0].trim == "NULL") {
+                    onlineNums = 0;
+                    onLineBody = "";
+                } else {
+                    onlineLists = ips[0].split(",");
+                    onLineBody = ips[0].replace(/[,]/g, "\n");
+                    ;
+                    onlineNums = onlineLists.length;
+                }
+                if (ips[1].trim == "NULL") {
+                    exceptionNums = 0;
+                    exceptionBody = "";
+                } else {
+                    exceptionLists = ips[1].split(",");
+                    exceptionNums = exceptionLists.length;
+                    exceptionBody = ips[1].replace(/[,]/g, "\n")
+                }
+                $("#onlineNums").html(onlineNums.toString());
+                $("#exceptionNums").html(exceptionNums.toString());
+
+            }
+
+
+        });
+        for (var i = 0; i < exceptionNums; i++) {
+            body += "<tr>" +
+                "<td>" + exceptionLists[i] + "</td>" +
+                "<td><a id='down' title='查看job机详情' class='btn  btn-primary btn-minier' href='hosts.jsp?hostName=" + exceptionLists[i] + "'>详情</a></td>"
+            "</tr>"
+        }
+        var htmlContent = ' <table  class="table table-striped ">'
+            + '        <tbody>'
+            + body
+            + '        </tbody>'
+            + '    </table>'
+            + '    <div class="controller">'
+            + '    </div>';
+
+        $("#exceptionJob").html(htmlContent);
+        var placeholder = $('#piechart-placeholder').css({'width': '90%', 'min-height': '200px'});
+        var data = [
+            { label: "正常", data: onlineNums, color: "#68BC31"},
+            { label: "失联", data: exceptionNums, color: "#AF4E96"}
+        ]
+        Number.prototype.toFixed = function (fractionDigits) {
+            return  (parseInt(this * Math.pow(10, fractionDigits) + 0.5) / Math.pow(10, fractionDigits)).toString();
+        }
+
+        function drawPieChart(placeholder, data, position) {
+            $.plot(placeholder, data, {
+                series: {
+                    pie: {
+                        show: true,
+                        tilt: 1,
+                        highlight: {
+                            opacity: 0.25
+                        },
+                        stroke: {
+                            color: '#fff',
+                            width: 2
+                        },
+                        startAngle: 2
+                    }
+                },
+                legend: {
+                    show: true,
+                    position: position || "ne",
+                    labelBoxBorderColor: null,
+                    margin: [-30, 15]
+                },
+                grid: {
+                    hoverable: true,
+                    clickable: true
+                }
+            })
+        }
+
+        drawPieChart(placeholder, data);
+
+        /**
+         we saved the drawing function and the data to redraw with different position later when switching to RTL mode dynamically
+         so that's not needed actually.
+         */
+        placeholder.data('chart', data);
+        placeholder.data('draw', drawPieChart);
+
+
+        //pie chart tooltip example
+        var $tooltip = $("<div class='tooltip top in'><div class='tooltip-inner'></div></div>").hide().appendTo('body');
+        var previousPoint = null;
+
+        placeholder.on('plothover', function (event, pos, item) {
+            if (item) {
+                if (previousPoint != item.seriesIndex) {
+                    previousPoint = item.seriesIndex;
+
+                    if (item.series['label'] == "正常") {
+                        tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%\n' + onLineBody;
+                    } else if (item.series['label'] == "失联") {
+                        tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%\n' + exceptionBody;
+                    }
+                    else {
+                        tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%'
+
+                    }
+
+                    $tooltip.show().children(0).text(tip);
+                }
+                $tooltip.css({top: pos.pageY + 10, left: pos.pageX + 10});
+            } else {
+                $tooltip.hide();
+                previousPoint = null;
+            }
+
+        });
+
     }
 
 
-});
+
 
 
 function GetDateStr(AddDayCount) {
@@ -355,5 +491,6 @@ jQuery(function ($) {
     $('#failendtime').datepicker({autoclose: true}).next().on(ace.click_event, function () {
         $(this).prev().focus();
     });
+});
 });
 

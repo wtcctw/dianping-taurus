@@ -384,4 +384,7 @@
     where <![CDATA[ startTime >=#{start} and  startTime <=#{end} and status=8]]>  group by execHost order by totaltask desc
 
 </select>
+    <select id="getUserTasks" resultMap="map">
+        select a.name,b.status from TaurusTask a join TaurusTaskAttempt b on a.taskID=b.taskID where <![CDATA[ a.creator=#{user} and b.status =  and b.startTime >=#{start} and  startTime <= #{end}]]>
+    </select>
 </mapper>

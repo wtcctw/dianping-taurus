@@ -40,7 +40,7 @@ public class MonitorServlet extends HttpServlet {
     private static final String TOTALTASKLOAD = "totaltaskload";
     private static final String RUNNINGTASKLOAD = "runningtaskload";
     private static final String FAILEDTASKLOAD = "failedtaskload";
-    private static final String HOSTTASK = "hosttask";
+    private static final String USERTASK = "usertask";
     private static final String HOSTLOAD = "hostload";
 
 
@@ -194,6 +194,8 @@ public class MonitorServlet extends HttpServlet {
             String jsonString = hostLoadJsonData.toString();
             output.write(jsonString.getBytes());
             output.close();
+        }else if (USERTASK.equals(action)){
+
         }
     }
 }
