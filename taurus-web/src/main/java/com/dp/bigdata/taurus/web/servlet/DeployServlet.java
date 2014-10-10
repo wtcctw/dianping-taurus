@@ -1,6 +1,6 @@
 package com.dp.bigdata.taurus.web.servlet;
 
-import com.dp.bigdata.taurus.restlet.resource.impl.DeploysResource;
+import com.dp.bigdata.taurus.restlet.resource.impl.DeployResource;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.ServletException;
@@ -17,11 +17,11 @@ public class DeployServlet  extends HttpServlet {
     private static final String STATUS = "status";
     private static final String DEPLOY = "deploy";
 
-    private DeploysResource deployResource;
+    private DeployResource deployResource;
 
     @Override
     public void init() throws ServletException {
-        deployResource = (DeploysResource)WebApplicationContextUtils.getWebApplicationContext(getServletContext()).getBean("deployResource");
+        deployResource = (DeployResource)WebApplicationContextUtils.getWebApplicationContext(getServletContext()).getBean("deployResource");
     }
 
     @Override

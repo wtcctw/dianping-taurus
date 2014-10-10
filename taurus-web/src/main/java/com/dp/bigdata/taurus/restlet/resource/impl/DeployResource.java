@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -43,7 +42,7 @@ import com.dp.bigdata.taurus.zookeeper.deploy.helper.Deployer;
 import com.dp.bigdata.taurus.zookeeper.deploy.helper.DeploymentContext;
 import com.dp.bigdata.taurus.zookeeper.deploy.helper.DeploymentException;
 
-public class DeploysResource extends ServerResource implements IDeployResource {
+public class DeployResource extends ServerResource implements IDeployResource {
 
 	@Autowired
 	private Deployer deployer;
@@ -56,7 +55,7 @@ public class DeploysResource extends ServerResource implements IDeployResource {
 
 	private String webUrl = "";
 
-	private static final Log LOG = LogFactory.getLog(DeploysResource.class);
+	private static final Log LOG = LogFactory.getLog(DeployResource.class);
 
 	private static final String createUrlPattern = "http://%s/task.jsp?appname=%s&path=%s&ip=%s";
 

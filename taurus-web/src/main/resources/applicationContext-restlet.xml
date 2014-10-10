@@ -75,7 +75,7 @@
     <bean name="/api/usertasks/{username}/{starttime}/{endtime}" id="getUserTasks" autowire="byName"
           scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.UserTasks"/>
     <bean name="/api/deploy" id="deployResource" autowire="byName"
-          scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.DeploysResource">
+          scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.DeployResource">
         <property name="webUrl" value="taurus.dp" />
     </bean>
     <bean name="/api/status" id="attemptStatusResource" autowire="byName"
