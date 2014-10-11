@@ -94,7 +94,7 @@ $(document).ready(function () {
                     onLineBody = "";
                 } else {
                     onlineLists = ips[0].split(",");
-                    onLineBody = ips[0].replace(/[,]/g, "<br>");
+                    onLineBody = "<i class='icon-lightbulb green'></i>" +ips[0].replace(/[,]/g, "<br><i class='icon-lightbulb green'></i>");
                     ;
                     onlineNums = onlineLists.length;
                 }
@@ -104,7 +104,7 @@ $(document).ready(function () {
                 } else {
                     exceptionLists = ips[1].split(",");
                     exceptionNums = exceptionLists.length;
-                    exceptionBody = ips[1].replace(/[,]/g, "<br>")
+                    exceptionBody = "<i class='icon-lightbulb red'></i>" +ips[1].replace(/[,]/g, "<br><i class='icon-lightbulb red'></i>")
                 }
                 $("#onlineNums").html(onlineNums.toString());
                 $("#exceptionNums").html(exceptionNums.toString());
@@ -177,7 +177,7 @@ $(document).ready(function () {
 
 
         //pie chart tooltip example
-        var tooltip = $("<div class='tooltip top in'><div class='tooltip-inner'></div></div>").hide().appendTo('body');
+        var tooltip = $("<div class='tooltip top in align-left'><div class='tooltip-inner align-left'></div></div>").hide().appendTo('body');
         var previousPoint = null;
 
         placeholder.on('plothover', function (event, pos, item) {
@@ -413,7 +413,7 @@ $(document).ready(function () {
 
 
             //pie chart tooltip example
-            var tooltip = $("<div class='tooltip top in'><div class='tooltip-inner'></div></div>").hide().appendTo('body');
+            var tooltip = $("<div class='tooltip top in align-left'><div class='tooltip-inner align-left'></div></div>").hide().appendTo('body');
             var previousPoint = null;
 
             placeholder.on('plothover', function (event, pos, item) {
