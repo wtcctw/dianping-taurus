@@ -170,8 +170,10 @@
             <%}%>
             <%} else {%>
             <td>异常</td>
+            <% if (isAdmin){%>
             <td>无法重启</td>
-            <%} %>
+
+            <%} }%>
         </tr>
         <tr class="info">
             <td>4</td>

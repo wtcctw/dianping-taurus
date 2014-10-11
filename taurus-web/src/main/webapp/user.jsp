@@ -12,11 +12,13 @@
     <link href="lib/ace/css/bootstrap.min.css" rel="stylesheet"/>
     <script src="lib/ace/js/ace-extra.min.js"></script>
     <link rel="stylesheet" href="lib/ace/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="css/jquery-ui.min.css"/>
     <script src="lib/ace/js/ace-elements.min.js"></script>
     <script src="lib/ace/js/ace.min.js"></script>
     <script src="lib/ace/js/bootbox.min.js"></script>
     <script type="text/javascript" src="resource/js/lib/raphael.2.1.0.min.js"></script>
     <script type="text/javascript" src="resource/js/lib/justgage.1.0.1.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/login.js"></script>
     <!-- page specific plugin styles -->
 
@@ -30,6 +32,10 @@
     <link rel="stylesheet" href="lib/ace/css/ace-rtl.min.css"/>
     <link rel="stylesheet" href="lib/ace/css/ace-skins.min.css"/>
     <link href="css/bwizard.min.css" rel="stylesheet"/>
+    <style>
+        label.error{margin-left: 10px; color: red;}
+        label.success{margin-left: 10px; color: green;}
+    </style>
 </head>
 <body>
 <%@page import="java.util.Map" %>
@@ -96,7 +102,7 @@
         <%} %>
         <div class="container" style="margin-top: 10px">
             <div class="row">
-                <div class="col-sm-3 padding-14">
+                <div class="col-sm-5 padding-14">
                     <form class='form-horizontal' id= 'user-form' >
                         <fieldset>
                             <div style='display:none'>
@@ -154,7 +160,7 @@
                         }
                     %>
                 </div>
-                <div class="col-sm-9" style="opacity: 0.5">
+                <div class="col-sm-7" style="opacity: 0.5">
 
 
                     分组情况请参考下面的列表：<br/>
@@ -199,7 +205,6 @@
     groupList = groupList.substr(1);
 </script>
 <script src="js/jquery.validate.min.js" type="text/javascript"></script>
-<script src="js/jquery.autocomplete.min.js" type="text/javascript"></script>
 <script src="js/user.js" type="text/javascript"></script>
 
 

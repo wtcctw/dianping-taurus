@@ -38,10 +38,7 @@ $(document).ready(function() {
 		return false;
 	});
 	$('#groupName').autocomplete({
-        width: 448,
-        delimiter: /(,|;)\s*/,
-        zIndex: 9999,
-        lookup: groupList.split(',')
+       source: groupList.split(',')
     });
 	
 	  $('#user-form').validate({
@@ -55,8 +52,8 @@ $(document).ready(function() {
 		    	$(label).closest('.control-group').removeClass('success').addClass('error');
 		    },
 		    success: function(label) {
-		    	label.text('OK!').addClass('valid')
-		    		.closest('.control-group').removeClass('error').addClass('success');
+                label.closest('.control-group').removeClass('error');
+                label.closest('.control-group').addClass('success');
 		    },
 	  });
 	

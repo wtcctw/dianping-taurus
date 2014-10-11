@@ -92,8 +92,6 @@ $(document).ready(function(){
 	    	$(label).closest('.control-group').removeClass('success').addClass('error');
 	    },
 	    success: function(label) {
-	    	label.addClass('valid').text('OK!')
-	    		.closest('.control-group').removeClass('error').addClass('success');
 	    },
 	});
 	$('#basic-form').validate({
@@ -112,7 +110,7 @@ $(document).ready(function(){
 	    		required: true
 	    	},
 			proxyUser: {
-				notRoot: $("#creator").val()!="kirin.li"
+				notRoot: $("#creator").val()!="renyuan.sun"
 			},
 	    	description: {
 	    		required: true,
@@ -122,8 +120,6 @@ $(document).ready(function(){
 	    	$(label).closest('.control-group').removeClass('success').addClass('error');
 	    },
 	    success: function(label) {
-	    	label.addClass('valid').text('OK!')
-	    		.closest('.control-group').removeClass('error').addClass('success');
 	    },
 	  });
 	  
@@ -155,8 +151,6 @@ $(document).ready(function(){
 	    	$(label).closest('.control-group').removeClass('success').addClass('error');
 	    },
 	    success: function(label) {
-	    	label.text('OK!').addClass('valid')
-	    		.closest('.control-group').removeClass('error').addClass('success');
 	    },
 	  });
 	  
@@ -212,8 +206,6 @@ $(document).ready(function(){
 			    	$(label).closest('.control-group').removeClass('success').addClass('help-block');
 			    },
 			    success: function(label) {
-			    	label.text('OK!').addClass('valid')
-			    		.closest('.control-group').removeClass('help-block').addClass('success');
 			    },
 		  });
 	  }

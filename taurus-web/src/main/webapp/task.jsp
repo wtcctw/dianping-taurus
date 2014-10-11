@@ -30,7 +30,9 @@
     <link rel="stylesheet" href="lib/ace/css/ace-rtl.min.css"/>
     <link rel="stylesheet" href="lib/ace/css/ace-skins.min.css"/>
     <link href="css/bwizard.min.css" rel="stylesheet"/>
-    <style>
+        <style>
+        label.error{margin-left: 10px; color: red;}
+        label.success{margin-left: 10px; color: green;}
     </style>
 </head>
 <body>
