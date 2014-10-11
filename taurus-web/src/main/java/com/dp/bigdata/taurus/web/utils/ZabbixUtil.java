@@ -52,13 +52,21 @@ public class ZabbixUtil {
         }
 
     }
-
+    public static void init(){
+        try {
+            authID = user_login();
+            id = 0;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public static JsonObject paramJson(String method, JsonObject paramsJSON) {
         JsonObject authRequestJSON = new JsonObject();
         authRequestJSON.addProperty("jsonrpc", "2.0");
         authRequestJSON.addProperty("method", method);
         authRequestJSON.add("params", paramsJSON);
         authRequestJSON.addProperty("id", id);
+
         authRequestJSON.addProperty("auth", authID);
 
 

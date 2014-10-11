@@ -21,24 +21,24 @@ jQuery(function ($) {
             return ((a < b) ? 1 : ((a > b) ? -1 : 0));
         }
     });
+
     cpuTableStyle = function () {
         $('#cputable').dataTable({
-            bAutoWidth: true,
+            "bAutoWidth": true,
             "bPaginate": false,
             "bFilter": false,
-            "bLengthChange": true,
             "bInfo": false,
+            "bLengthChange": true,
             "aoColumns": [
                 null,
                 { "sType": "html-percent", "aTargets": [2] }
             ]
-
         });
     };
 
     memTableStyle = function () {
         $('#memtable').dataTable({
-            bAutoWidth: true,
+            "bAutoWidth": true,
             "bPaginate": false,
             "bFilter": false,
             "bInfo": false,
@@ -53,7 +53,9 @@ jQuery(function ($) {
     };
 
 })
-$(function () {
+$(document).ready(function () {
+
+
 
     $.ajax({
 
@@ -68,7 +70,7 @@ $(function () {
 
 
     });
-    if (isAdmin) {
+    //if (isAdmin) {
         var onlineNums = 0;
         var exceptionNums = 0;
         var onlineLists = null;
@@ -82,6 +84,7 @@ $(function () {
             type: "POST",
             url: "/monitor",
             error: function () {
+
             },
             success: function (response, textStatus) {
                 var ips = response.split("#");
@@ -91,7 +94,7 @@ $(function () {
                     onLineBody = "";
                 } else {
                     onlineLists = ips[0].split(",");
-                    onLineBody = ips[0].replace(/[,]/g, "\n");
+                    onLineBody = ips[0].replace(/[,]/g, "<br>");
                     ;
                     onlineNums = onlineLists.length;
                 }
@@ -101,7 +104,7 @@ $(function () {
                 } else {
                     exceptionLists = ips[1].split(",");
                     exceptionNums = exceptionLists.length;
-                    exceptionBody = ips[1].replace(/[,]/g, "\n")
+                    exceptionBody = ips[1].replace(/[,]/g, "<br>")
                 }
                 $("#onlineNums").html(onlineNums.toString());
                 $("#exceptionNums").html(exceptionNums.toString());
@@ -174,7 +177,7 @@ $(function () {
 
 
         //pie chart tooltip example
-        var $tooltip = $("<div class='tooltip top in'><div class='tooltip-inner'></div></div>").hide().appendTo('body');
+        var tooltip = $("<div class='tooltip top in'><div class='tooltip-inner'></div></div>").hide().appendTo('body');
         var previousPoint = null;
 
         placeholder.on('plothover', function (event, pos, item) {
@@ -183,20 +186,20 @@ $(function () {
                     previousPoint = item.seriesIndex;
 
                     if (item.series['label'] == "正常") {
-                        tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%\n' + onLineBody;
+                        tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%<br>' + onLineBody;
                     } else if (item.series['label'] == "失联") {
-                        tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%\n' + exceptionBody;
+                        tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%<br>' + exceptionBody;
                     }
                     else {
                         tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%'
 
                     }
 
-                    $tooltip.show().children(0).text(tip);
+                    tooltip.show().children(0).html(tip);
                 }
-                $tooltip.css({top: pos.pageY + 10, left: pos.pageX + 10});
+                tooltip.css({top: pos.pageY + 10, left: pos.pageX + 10});
             } else {
-                $tooltip.hide();
+                tooltip.hide();
                 previousPoint = null;
             }
 
@@ -275,61 +278,10 @@ $(function () {
             + '    <div class="controller">'
             + '    </div>';
         $("#failedJob").append(topLists);
+    reflash(null);
 
 
-        var cpuLoadBody = "";
-        var memLoadBody = "";
-        $.ajax({
-            async: true,
-            data: {
-                action: "hostload"
-            },
-            type: "POST",
-            url: "/monitor",
-            error: function () {
-            },
-            success: function (response, textStatus) {
-                var jsonarray = $.parseJSON(response);
-                $.each(jsonarray, function (i, item) {
-                    cpuLoadBody += "<tr>" +
-                        "<td>" + item.hostName + "</td>" +
-                        "<td>" + item.cpuLoad + "</td>"
-                    "</tr>";
-
-                    memLoadBody += "<tr>" +
-                        "<td>" + item.hostName + "</td>" +
-                        "<td>" + item.memLoad + "</td>"
-                    "</tr>";
-                });
-                var topCpuLoadLists = ' <table  class="table table-striped table-bordered table-hover " id="cputable">'
-                    + '<thead><tr><th>主机名</th>  <th>CPU负载(load average)</th> </tr> </thead>'
-                    + '        <tbody>'
-                    + cpuLoadBody
-                    + '        </tbody>'
-                    + '    </table>'
-                    + '    <div class="controller">'
-                    + '    </div>';
-                $("#cpuload").html(topCpuLoadLists);
-                $("#cpuload").removeClass("align-center");
-                cpuTableStyle();
-                var topMemLoadLists = ' <table  class="table table-striped table-bordered table-hover " id="memtable">'
-                    + '<thead><tr><th>主机名</th>  <th>内存剩余(free)</th> </tr> </thead>'
-                    + '        <tbody>'
-                    + memLoadBody
-                    + '        </tbody>'
-                    + '    </table>'
-                    + '    <div class="controller">'
-                    + '    </div>';
-                $("#memload").html(topMemLoadLists);
-                $("#memload").removeClass("align-center");
-
-                memTableStyle();
-            }
-
-
-        });
-    } else
-    {
+  //  } else {
         var succNums = 0;
         var failedNums = 0;
         var succTaskNums = 0;
@@ -355,26 +307,38 @@ $(function () {
                 $("#user-widget-main").addClass("align-center");
             },
             success: function (response, textStatus) {
-
+                var userTaskListBody="";
                 var jsonarray = $.parseJSON(response);
                 $.each(jsonarray, function (i, item) {
+
                     if (item.status == "success" && item.nums != 0) {
                         succNums += item.nums;
 
                         succLists[succTaskNums] = item.taskName;
                         succTaskNums++;
-                        succBody += item.taskName + "\n"
+                        succBody += "<i class='icon-tasks'></i>"+item.taskName  + ": " +item.nums + "<br>"
+                        userTaskListBody += "<tr>" +
+                            "<td>" + item.taskName + "</td>" +
+                            "<td>成功</td>" +
+                            "<td>"+item.nums +"</td>"+
+                            "</tr>";
 
                     } else {
                         if (item.nums != 0) {
                             failedNums += item.nums;
                             failedLists[failedNums] = item.taskName;
-                            failedNums++;
-                            failBody += item.taskName + "\n"
+                            failedTaskNums++;
+                            failedBody += "<i class='icon-tasks'></i>"+item.taskName  + ": " +item.nums + "<br>"
+                            userTaskListBody += "<tr>" +
+                                "<td>" + item.taskName + "</td>" +
+                                "<td>失败</td>" +
+                                "<td>"+item.nums +"</td>"+
+                                "</tr>";
                         }
 
                     }
                 });
+
                 if (succNums != 0 || failedNums != 0) {
                     $("#succtask").html(succNums.toString());
                     $("#failtask").html(failedNums.toString());
@@ -382,6 +346,13 @@ $(function () {
                     $("#user-widget-main").html("<i class='icon-info-sign icon-large red '>今天没有任务调度～</i>");
                     $("#user-widget-main").addClass("align-center");
                 }
+                var topUserTaskLists = ' <table  class="table table-striped table-bordered table-hover " id="userTaskTable">'
+                    + '<thead><tr><th>任务名</th>  <th>状态</th> <th>次数</th> </tr> </thead>'
+                    + '        <tbody>'
+                    + userTaskListBody
+                    + '        </tbody>'
+                    + '    </table>'
+                $("#mytasklist").html(topUserTaskLists);
 
             }
 
@@ -392,19 +363,7 @@ $(function () {
             $("#user-widget-main").addClass("align-center");
         } else
         {
-            var userbody = "";
-            for (var i = 0; i < failedNums; i++) {
-                userbody += "<tr>" +
-                    "<td>" + failedLists[i] + "</td>" +
-                    "</tr>"
-            }
-            var htmlContent = ' <table  class="table table-striped ">'
-                + '        <tbody>'
-                + userbody
-                + '        </tbody>'
-                + '    </table>';
 
-            $("#failedTasks").html(htmlContent);
             var placeholder = $('#mytasks').css({'width': '90%', 'min-height': '200px'});
             var data = [
                 { label: "正常", data: succNums, color: "#68BC31"},
@@ -454,7 +413,7 @@ $(function () {
 
 
             //pie chart tooltip example
-            var $tooltip = $("<div class='tooltip top in'><div class='tooltip-inner'></div></div>").hide().appendTo('body');
+            var tooltip = $("<div class='tooltip top in'><div class='tooltip-inner'></div></div>").hide().appendTo('body');
             var previousPoint = null;
 
             placeholder.on('plothover', function (event, pos, item) {
@@ -463,20 +422,20 @@ $(function () {
                         previousPoint = item.seriesIndex;
 
                         if (item.series['label'] == "正常") {
-                            tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%\n' + succBody;
+                            tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%<br>' + succBody;
                         } else if (item.series['label'] == "失败") {
-                            tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%\n' + failBody;
+                            tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%<br>' + failedBody;
                         }
                         else {
                             tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%'
 
                         }
 
-                        $tooltip.show().children(0).text(tip);
+                        tooltip.show().children(0).html(tip);
                     }
-                    $tooltip.css({top: pos.pageY + 10, left: pos.pageX + 10});
+                    tooltip.css({top: pos.pageY + 10, left: pos.pageX + 10});
                 } else {
-                    $tooltip.hide();
+                    tooltip.hide();
                     previousPoint = null;
                 }
 
@@ -511,34 +470,59 @@ $(function () {
                 $("#group-widget-main").addClass("align-center");
             },
             success: function (response, textStatus) {
-
+                var groupTaskListBody = "";
                 var jsonarray = $.parseJSON(response);
                 $.each(jsonarray, function (i, item) {
+                    var usericon = "";
+                    if(username == item.creator){
+                        usericon = "&nbsp;&nbsp;<i class='icon-user green'></i>";
+                    }else{
+                        usericon = "&nbsp;&nbsp;<i class='icon-user'></i>";
+                    }
                     if (item.status == "success" && item.nums != 0) {
                         groupSuccNums += item.nums;
 
                         groupSuccLists[groupSuccTaskNums] = item.taskName;
                         groupSuccTaskNums++;
-                        groupSuccBody += item.taskName + "\n"
 
+                        groupSuccBody += "<i class='icon-tasks'></i>"+item.taskName  + ": " +item.nums + usericon + item.creator + "<br>"
+                        groupTaskListBody += "<tr>" +
+                            "<td>" + item.taskName + "</td>" +
+                            "<td>成功</td>" +
+                            "<td>"+item.nums +"</td>"+
+                            "<td>"+item.creator +"</td>"+
+                            "</tr>";
                     } else {
                         if (item.nums != 0) {
                             groupFailedNums += item.nums;
                             groupFailedLists[failedNums] = item.taskName;
-                            groupFailedNums++;
-                            groupFailBody += item.taskName + "\n"
+                            groupFailedTaskNums++;
+                            groupFailedBody += "<i class='icon-tasks'></i>"+ item.taskName  + ": " +item.nums +usericon + item.creator +"<br>"
+                            groupTaskListBody += "<tr>" +
+                                "<td>" + item.taskName + "</td>" +
+                                "<td>失败</td>" +
+                                "<td>"+item.nums +"</td>"+
+                                "<td>"+item.creator +"</td>"+
+                                "</tr>";
                         }
 
                     }
+
                 });
-                if (succNums != 0 || failedNums != 0) {
-                    $("#groupsucctask").html(succNums.toString());
-                    $("#groupfailtask").html(failedNums.toString());
+                if (groupSuccNums != 0 || groupFailedNums != 0) {
+                    $("#groupsucctask").html(groupSuccNums.toString());
+                    $("#groupfailtask").html(groupFailedNums.toString());
                 } else {
                     $("#group-widget-main").html("<i class='icon-info-sign icon-large red '>今天没有任务调度～</i>");
                     $("#group-widget-main").addClass("align-center");
                 }
-
+                var topGroupTaskLists = ' <table  class="table table-striped table-bordered table-hover " id="groupTaskTable">'
+                    + '<thead><tr><th>任务名</th>  <th>状态</th> <th>次数</th> <th>创建者</th> </tr> </thead>'
+                    + '        <tbody>'
+                    + groupTaskListBody
+                    + '        </tbody>'
+                    + '    </table>'
+                $("#grouptasklist").html(topGroupTaskLists);
 
             }
 
@@ -547,8 +531,8 @@ $(function () {
         if (groupSuccNums != 0 || groupFailedNums != 0) {
             var placeholder = $('#grouptasks').css({'width': '90%', 'min-height': '200px'});
             var data = [
-                { label: "正常", data: succNums, color: "#68BC31"},
-                { label: "失败", data: failedNums, color: "#AF4E96"}
+                { label: "正常", data: groupSuccNums, color: "#68BC31"},
+                { label: "失败", data: groupFailedNums, color: "#AF4E96"}
             ]
             Number.prototype.toFixed = function (fractionDigits) {
                 return  (parseInt(this * Math.pow(10, fractionDigits) + 0.5) / Math.pow(10, fractionDigits)).toString();
@@ -594,7 +578,7 @@ $(function () {
 
 
             //pie chart tooltip example
-            var $tooltip = $("<div class='tooltip top in'><div class='tooltip-inner'></div></div>").hide().appendTo('body');
+            var tooltip = $("<div class='tooltip top in align-left'><div class='tooltip-inner align-left'></div></div>").hide().appendTo('body');
             var previousPoint = null;
 
             placeholder.on('plothover', function (event, pos, item) {
@@ -603,20 +587,20 @@ $(function () {
                         previousPoint = item.seriesIndex;
 
                         if (item.series['label'] == "正常") {
-                            tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%\n' + succBody;
+                            tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%<br>' + groupSuccBody;
                         } else if (item.series['label'] == "失败") {
-                            tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%\n' + failBody;
+                            tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%<br>' + groupFailedBody;
                         }
                         else {
                             tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%'
 
                         }
 
-                        $tooltip.show().children(0).text(tip);
+                        tooltip.show().children(0).html(tip);
                     }
-                    $tooltip.css({top: pos.pageY + 10, left: pos.pageX + 10});
+                    tooltip.css({top: pos.pageY + 10, left: pos.pageX + 10});
                 } else {
-                    $tooltip.hide();
+                    tooltip.hide();
                     previousPoint = null;
                 }
 
@@ -627,14 +611,66 @@ $(function () {
 
         }
 
-    }
+   // }
 
 
 
+    function reflash(queryType) {
+    var cpuLoadBody = "";
+    var memLoadBody = "";
+    $.ajax({
+        async: true,
+        data: {
+            action: "hostload",
+            queryType:queryType
+
+        },
+        type: "POST",
+        url: "/monitor",
+        error: function () {
+            $("#cpuload").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
+            $("#cpuload").addClass("align-center");
+            $("#memload").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
+            $("#memload").addClass("align-center");
+        },
+        success: function (response, textStatus) {
+            var jsonarray = $.parseJSON(response);
+            $.each(jsonarray, function (i, item) {
+                cpuLoadBody += "<tr>" +
+                    "<td>" + item.hostName + "</td>" +
+                    "<td>" + item.cpuLoad + "</td>"
+                "</tr>";
+
+                memLoadBody += "<tr>" +
+                    "<td>" + item.hostName + "</td>" +
+                    "<td>" + item.memLoad + "</td>"
+                "</tr>";
+            });
+            var topCpuLoadLists = ' <table  class="table table-striped table-bordered table-hover " id="cputable">'
+                + '<thead><tr><th>主机名</th>  <th>CPU负载(load average)</th> </tr> </thead>'
+                + '        <tbody>'
+                + cpuLoadBody
+                + '        </tbody>'
+                + '    </table>';
+            $("#cpuload").html(topCpuLoadLists);
+            $("#cpuload").removeClass("align-center");
+
+            var topMemLoadLists = ' <table  class="table table-striped table-bordered table-hover " id="memtable">'
+                + '<thead><tr><th>主机名</th>  <th>内存剩余(free)</th> </tr> </thead>'
+                + '        <tbody>'
+                + memLoadBody
+                + '        </tbody>'
+                + '    </table>';
+            $("#memload").html(topMemLoadLists);
+            $("#memload").removeClass("align-center");
+            cpuTableStyle();
+            memTableStyle();
+        }
 
 
+    });
 
-
+}
 
 function GetDateStr(AddDayCount) {
     var dd = new Date();

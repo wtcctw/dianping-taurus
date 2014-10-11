@@ -64,6 +64,167 @@
 </div>
 <div class="page-content">
 <div class="row">
+<div id="user">
+    <div class="col-sm-12">
+        <div class="col-sm-6">
+            <div class="widget-box">
+                <div class="widget-header widget-header-flat widget-header-small">
+                    <h5 class="widget-title">
+                        <i class="icon-signal"></i>
+                        我的任务成功率
+                    </h5>
+
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="collapse">
+                            <i class="icon-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="widget-body">
+                    <div class="widget-main" id="user-widget-main">
+
+                        <div id="mytasks"><i class="icon-spinner icon-spin icon-large"></i></div>
+
+                        <div class="hr hr8 hr-double"></div>
+
+                        <div class="clearfix">
+                            <div class="col-sm-6">
+														<span class="grey">
+															<i class="icon-lightbulb green"></i>
+															&nbsp; 成功
+														</span>
+                                <h4 class="bigger pull-right" id="succtask"></h4>
+                            </div>
+
+                            <div class="col-sm-6">
+														<span class="grey">
+															<i class="icon-lightbulb red"></i>
+															&nbsp; 失败
+														</span>
+                                <h4 class="bigger pull-right " id="failtask"></h4>
+                            </div>
+
+
+                            <!-- /section:custom/extra.grid -->
+                        </div>
+                    </div>
+                    <!-- /.widget-main -->
+                </div>
+                <!-- /.widget-body -->
+            </div>
+            <!-- /.widget-box -->
+
+        </div>
+        <div class="col-sm-6">
+            <div class="widget-box">
+                <div class="widget-header widget-header-flat widget-header-small">
+                    <h5 class="widget-title">
+                        <i class="icon-signal"></i>
+                        我的组的任务成功率
+                    </h5>
+
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="collapse">
+                            <i class="icon-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="widget-body">
+                    <div class="widget-main" id="group-widget-main">
+
+                        <div id="grouptasks"><i class="icon-spinner icon-spin icon-large"></i></div>
+
+                        <div class="hr hr8 hr-double"></div>
+
+                        <div class="clearfix">
+                            <div class="col-sm-6">
+														<span class="grey">
+															<i class="icon-lightbulb green"></i>
+															&nbsp; 成功
+														</span>
+                                <h4 class="bigger pull-right" id="groupsucctask"></h4>
+                            </div>
+
+                            <div class="col-sm-6">
+														<span class="grey">
+															<i class="icon-lightbulb red"></i>
+															&nbsp; 失败
+														</span>
+                                <h4 class="bigger pull-right " id="groupfailtask"></h4>
+                            </div>
+
+
+                            <!-- /section:custom/extra.grid -->
+                        </div>
+                    </div>
+                    <!-- /.widget-main -->
+                </div>
+                <!-- /.widget-body -->
+            </div>
+            <!-- /.widget-box -->
+
+        </div>
+    </div>
+    <div class="col-sm-12">
+        <div class="col-sm-6">
+            <div class="widget-box">
+                <div class="widget-header widget-header-flat widget-header-small">
+                    <h5 class="widget-title">
+                        <i class=" icon-signal"></i>
+                        我的任务执行详情
+                    </h5>
+
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="collapse">
+                            <i class="icon-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="widget-body">
+
+                    <div class="widget-main align-center" id="mytasklist">
+                        <i class="icon-spinner icon-spin icon-large"></i>
+                    </div>
+                    <!-- /.widget-main -->
+                </div>
+                <!-- /.widget-body -->
+            </div>
+            <!-- /.widget-box -->
+
+        </div>
+        <div class="col-sm-6">
+            <div class="widget-box">
+                <div class="widget-header widget-header-flat widget-header-small">
+                    <h5 class="widget-title">
+                        <i class=" icon-signal"></i>
+                        我所在组的任务执行详情
+                    </h5>
+
+                    <div class="widget-toolbar">
+
+                        <a href="#" data-action="collapse">
+                            <i class="icon-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="widget-body">
+
+                    <div class="widget-main align-center" id="grouptasklist">
+                        <i class="icon-spinner icon-spin icon-large"></i>
+                    </div>
+                    <!-- /.widget-main -->
+                </div>
+                <!-- /.widget-body -->
+            </div>
+            <!-- /.widget-box -->
+
+        </div>
+    </div>
+</div>
 <div id="admin">
 <div class="col-sm-12">
     <div class="col-sm-6">
@@ -83,7 +244,7 @@
 
             <div class="widget-body">
                 <div class="widget-main">
-                    <div id="piechart-placeholder"></div>
+                    <div id="piechart-placeholder"><i class="icon-spinner icon-spin icon-large"></i></div>
 
                     <div class="hr hr8 hr-double"></div>
 
@@ -143,18 +304,22 @@
     </div>
 </div>
 <div class="col-sm-12">
-    <div class="col-sm-6">
-        <div class="widget-box">
+    <div class="col-sm-6" id="cpuwidget">
+        <div class="widget-box" >
             <div class="widget-header widget-header-flat widget-header-small">
                 <h5 class="widget-title">
                     <i class=" icon-signal"></i>
                     主机CPU负载列表
                 </h5>
 
+
                 <div class="widget-toolbar">
                     <a href="#" data-action="collapse">
                         <i class="icon-chevron-up"></i>
                     </a>
+                </div>
+                <div class="widget-toolbar">
+                    <a id='cpureeflash' title='更新数据,刷新时间间隔1分钟' onclick="reflash('reflash');" href="#cpuwidget" ><i class="icon-refresh"></i></a>
                 </div>
             </div>
 
@@ -170,7 +335,7 @@
         <!-- /.widget-box -->
 
     </div>
-    <div class="col-sm-6">
+    <div class="col-sm-6" id="memwidget">
         <div class="widget-box">
             <div class="widget-header widget-header-flat widget-header-small">
                 <h5 class="widget-title">
@@ -178,10 +343,16 @@
                     主机内存使用率列表
                 </h5>
 
+
+
                 <div class="widget-toolbar">
                     <a href="#" data-action="collapse">
                         <i class="icon-chevron-up"></i>
                     </a>
+                </div>
+                <div class="widget-toolbar">
+                    <a id='reflash' title='更新数据,刷新时间间隔1分钟' onclick="reflash('reflash');" href="#memwidget"> <i
+                            class="icon-refresh"></i></a>
                 </div>
             </div>
 
@@ -298,110 +469,7 @@
     </div>
 </div>
 </div>
-<div id="user">
-    <div class="col-sm-12">
-        <div class="col-sm-6">
-            <div class="widget-box">
-                <div class="widget-header widget-header-flat widget-header-small">
-                    <h5 class="widget-title">
-                        <i class="icon-signal"></i>
-                        我的任务成功率
-                    </h5>
 
-                    <div class="widget-toolbar">
-                        <a href="#" data-action="collapse">
-                            <i class="icon-chevron-up"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="widget-body">
-                    <div class="widget-main" id="user-widget-main">
-
-                        <div id="mytasks"></div>
-
-                        <div class="hr hr8 hr-double"></div>
-
-                        <div class="clearfix">
-                            <div class="col-sm-6">
-														<span class="grey">
-															<i class="icon-lightbulb green"></i>
-															&nbsp; 成功
-														</span>
-                                <h4 class="bigger pull-right" id="succtask"></h4>
-                            </div>
-
-                            <div class="col-sm-6">
-														<span class="grey">
-															<i class="icon-lightbulb red"></i>
-															&nbsp; 失败
-														</span>
-                                <h4 class="bigger pull-right " id="failtask"></h4>
-                            </div>
-
-
-                            <!-- /section:custom/extra.grid -->
-                        </div>
-                    </div>
-                    <!-- /.widget-main -->
-                </div>
-                <!-- /.widget-body -->
-            </div>
-            <!-- /.widget-box -->
-
-        </div>
-        <div class="col-sm-6">
-            <div class="widget-box">
-                <div class="widget-header widget-header-flat widget-header-small">
-                    <h5 class="widget-title">
-                        <i class="icon-signal"></i>
-                        我的组的任务成功率
-                    </h5>
-
-                    <div class="widget-toolbar">
-                        <a href="#" data-action="collapse">
-                            <i class="icon-chevron-up"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="widget-body">
-                    <div class="widget-main" id="group-widget-main">
-
-                        <div id="grouptasks"></div>
-
-                        <div class="hr hr8 hr-double"></div>
-
-                        <div class="clearfix">
-                            <div class="col-sm-6">
-														<span class="grey">
-															<i class="icon-lightbulb green"></i>
-															&nbsp; 成功
-														</span>
-                                <h4 class="bigger pull-right" id="groupsucctask"></h4>
-                            </div>
-
-                            <div class="col-sm-6">
-														<span class="grey">
-															<i class="icon-lightbulb red"></i>
-															&nbsp; 失败
-														</span>
-                                <h4 class="bigger pull-right " id="groupfailtask"></h4>
-                            </div>
-
-
-                            <!-- /section:custom/extra.grid -->
-                        </div>
-                    </div>
-                    <!-- /.widget-main -->
-                </div>
-                <!-- /.widget-body -->
-            </div>
-            <!-- /.widget-box -->
-
-        </div>
-    </div>
-</div>
 
 </div>
 </div>
@@ -409,14 +477,74 @@
 <script type="text/javascript">
     var isAdmin = <%=isAdmin%>;
     var username = "<%=currentUser%>";
-    if(isAdmin){
-        var user = document.getElementById("user");
-        user.style.display="none";
-    }else{
-        var admin = document.getElementById("admin");
-        admin.style.display="none";
+    if (isAdmin) {
+        // var user = document.getElementById("user");
+        //user.style.display="none";
+    } else {
+        //var admin = document.getElementById("admin");
+        //admin.style.display="none";
     }
+    function reflash(queryType) {
+        var cpuLoadBody = "";
+        var memLoadBody = "";
+        $("#cpuload").html(" <i class='icon-spinner icon-spin icon-large'></i>");
+        $("#cpuload").addClass("align-center");
+        $("#memload").html("<i class='icon-spinner icon-spin icon-large'></i>");
+        $("#memload").addClass("align-center");
 
+        $.ajax({
+            async: true,
+            data: {
+                action: "hostload",
+                queryType: queryType
+
+            },
+            type: "POST",
+            url: "/monitor",
+            error: function () {
+                $("#cpuload").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
+                $("#cpuload").addClass("align-center");
+                $("#memload").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
+                $("#memload").addClass("align-center");
+            },
+            success: function (response, textStatus) {
+                var jsonarray = $.parseJSON(response);
+                $.each(jsonarray, function (i, item) {
+                    cpuLoadBody += "<tr>" +
+                            "<td>" + item.hostName + "</td>" +
+                            "<td>" + item.cpuLoad + "</td>"
+                    "</tr>";
+
+                    memLoadBody += "<tr>" +
+                            "<td>" + item.hostName + "</td>" +
+                            "<td>" + item.memLoad + "</td>"
+                    "</tr>";
+                });
+                var topCpuLoadLists = ' <table  class="table table-striped table-bordered table-hover " id="cputable">'
+                        + '<thead><tr><th>主机名</th>  <th>CPU负载(load average)</th> </tr> </thead>'
+                        + '        <tbody>'
+                        + cpuLoadBody
+                        + '        </tbody>'
+                        + '    </table>';
+                $("#cpuload").html(topCpuLoadLists);
+                $("#cpuload").removeClass("align-center");
+
+                var topMemLoadLists = ' <table  class="table table-striped table-bordered table-hover " id="memtable">'
+                        + '<thead><tr><th>主机名</th>  <th>内存剩余(free)</th> </tr> </thead>'
+                        + '        <tbody>'
+                        + memLoadBody
+                        + '        </tbody>'
+                        + '    </table>';
+                $("#memload").html(topMemLoadLists);
+                $("#memload").removeClass("align-center");
+                cpuTableStyle();
+                memTableStyle();
+            }
+
+
+        });
+
+    }
 </script>
 </body>
 </html>

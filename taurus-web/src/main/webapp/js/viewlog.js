@@ -146,6 +146,7 @@ function do_relash_task() {
         if (is_end == "false") {
             error_log_rtn = setInterval("fetch_errorLog()", 2500);
             log_rtn = setInterval("fetch_Log()", 2500);
+            setTimeout("close_reflash()",5*60*1000)
         } else {
             fetch_errorLog();
             fetch_Log();
@@ -155,6 +156,10 @@ function do_relash_task() {
         fetch_errorLog();
         fetch_Log();
     }
+}
+function close_reflash() {
+    clearInterval(log_rtn);
+    clearInterval(error_log_rtn);
 }
 
 function is_log_end() {

@@ -1,5 +1,6 @@
 package com.dp.bigdata.taurus.generated.mapper;
 
+import com.dp.bigdata.taurus.generated.module.GroupTaskExample;
 import com.dp.bigdata.taurus.generated.module.Task;
 import com.dp.bigdata.taurus.generated.module.TaskAttempt;
 import com.dp.bigdata.taurus.generated.module.TaskAttemptExample;
@@ -109,4 +110,5 @@ public interface TaskAttemptMapper {
     public ArrayList getRunningTaskLoadHost();
     public ArrayList getFailedTaskLoadHost(@Param("start")String start,@Param("end")String end);
     public ArrayList getUserTasks(@Param("user")String user,@Param("start")String start,@Param("end")String end ,@Param("status")String status );
+    public ArrayList<GroupTaskExample>  getGroupTasks(@Param("user")String user,@Param("start")String start,@Param("end")String end ,@Param("status")String status );
 }

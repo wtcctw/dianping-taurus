@@ -18,7 +18,6 @@
     <script src="lib/ace/js/bootbox.min.js"></script>
     <script type="text/javascript" src="resource/js/lib/raphael.2.1.0.min.js"></script>
     <script type="text/javascript" src="resource/js/lib/justgage.1.0.1.min.js"></script>
-    <script type="text/javascript" src="resource/js/lib/Chart.js"></script>
     <!-- page specific plugin scripts -->
     <script src="lib/ace/js/jquery.dataTables.min.js"></script>
     <script src="lib/ace/js/jquery.dataTables.bootstrap.js"></script>

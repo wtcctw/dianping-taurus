@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dp.bigdata.taurus.generated.mapper.TaskAttemptMapper">
+    <resultMap id="GroupTaskResultMap" type="com.dp.bigdata.taurus.generated.module.GroupTaskExample">
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="num" jdbcType="INTEGER" property="num"/>
+        <result column="creator" jdbcType="VARCHAR" property="creator"/>
+    </resultMap>
   <resultMap id="BaseResultMap" type="com.dp.bigdata.taurus.generated.module.TaskAttempt">
     <!--
       WARNING - @mbggenerated
@@ -385,6 +390,24 @@
 
 </select>
     <select id="getUserTasks" resultType="map">
-        select a.name,count(Concat(a.name,b.status)) AS num  from TaurusTask a join TaurusTaskAttempt b on a.taskID=b.taskID where <![CDATA[ a.creator=#{user} and b.status in (#{status})   and b.startTime >=#{start} and  startTime <= #{end}]]>
+        select a.name,count(1) AS num from TaurusTask a join TaurusTaskAttempt b on a.taskID=b.taskID  where <![CDATA[ a.creator=#{user} and b.status = #{status}   and b.startTime >=#{start} and  startTime <= #{end}]]> group by a.name
+    </select>
+
+    <select id="getGroupTasks" resultMap="GroupTaskResultMap">
+        select d.name,count(1) as num,d.creator from
+        (
+        select a.*,b.groupID from
+        (
+        select a.taskID,a.creator,a.name,b.id as userID ,c.status from
+        TaurusTask a join TaurusUser b on a.creator=b.name
+        join TaurusTaskAttempt c on a.taskID=c.taskID
+        where <![CDATA[  c.startTime >=#{start}and  c.startTime <= #{end}  and c.status = #{status}]]>
+        ) a
+        join TaurusUserGroupMapping  b on a.userID=b.userID
+
+        where groupID in( select  b.groupID from TaurusUser a
+        join TaurusUserGroupMapping  b on a.id=b.userID  and a.name=#{user} )
+        )d
+        group by d.name,d.creator
     </select>
 </mapper>
