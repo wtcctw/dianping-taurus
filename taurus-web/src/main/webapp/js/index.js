@@ -91,7 +91,7 @@ $(document).ready(function () {
 
                 if (ips[0].trim() == "NULL") {
                     onlineNums = 0;
-                    onLineBody = "";
+                    onLineBody = " <i class='icon-info-sign icon-large red '>没有正常机器</i>";
                 } else {
                     onlineLists = ips[0].split(",");
                     onLineBody = "<i class='icon-lightbulb green'></i>" +ips[0].replace(/[,]/g, "<br><i class='icon-lightbulb green'></i>");
@@ -100,7 +100,7 @@ $(document).ready(function () {
                 }
                 if (ips[1].trim() == "NULL") {
                     exceptionNums = 0;
-                    exceptionBody = "";
+                    exceptionBody = " <i class='icon-info-sign icon-large green '>当前状态很好，没有异常JOB机器</i>";
                 } else {
                     exceptionLists = ips[1].split(",");
                     exceptionNums = exceptionLists.length;
@@ -113,19 +113,26 @@ $(document).ready(function () {
 
 
         });
-        for (var i = 0; i < exceptionNums; i++) {
-            body += "<tr>" +
-                "<td>" + exceptionLists[i] + "</td>" +
-                "<td><a id='down' title='查看job机详情' class='btn  btn-primary btn-minier' href='hosts.jsp?hostName=" + exceptionLists[i] + "'>详情</a></td>"
-            "</tr>"
+    var htmlContent ="";
+    if(exceptionNums == 0){
+        htmlContent = "<i class='icon-info-sign icon-large green '>当前状态很好，没有异常JOB机器</i> " ;
+        }else{
+            for (var i = 0; i < exceptionNums; i++) {
+                body += "<tr>" +
+                    "<td>" + exceptionLists[i] + "</td>" +
+                    "<td><a id='down' title='查看job机详情' class='btn  btn-primary btn-minier' href='hosts.jsp?hostName=" + exceptionLists[i] + "'>详情</a></td>"
+                "</tr>"
+            }
+        htmlContent= ' <table  class="table table-striped ">'
+                + '        <tbody>'
+                + body
+                + '        </tbody>'
+                + '    </table>'
+                + '    <div class="controller">'
+                + '    </div>';
+
+
         }
-        var htmlContent = ' <table  class="table table-striped ">'
-            + '        <tbody>'
-            + body
-            + '        </tbody>'
-            + '    </table>'
-            + '    <div class="controller">'
-            + '    </div>';
 
         $("#exceptionJob").html(htmlContent);
         var placeholder = $('#piechart-placeholder').css({'width': '90%', 'min-height': '200px'});
@@ -220,6 +227,8 @@ $(document).ready(function () {
             type: "POST",
             url: "/monitor",
             error: function () {
+                $("#totalJob").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
+                $("#totalJob").addClass("align-center");
             },
             success: function (response, textStatus) {
                 var jsonarray = $.parseJSON(response);
@@ -255,6 +264,8 @@ $(document).ready(function () {
             type: "POST",
             url: "/monitor",
             error: function () {
+                $("#failedJob").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
+                $("#failedJob").addClass("align-center");
             },
             success: function (response, textStatus) {
                 var jsonarray = $.parseJSON(response);
