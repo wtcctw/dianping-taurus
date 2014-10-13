@@ -89,7 +89,7 @@ $(document).ready(function () {
             success: function (response, textStatus) {
                 var ips = response.split("#");
 
-                if (ips[0].trim == "NULL") {
+                if (ips[0].trim() == "NULL") {
                     onlineNums = 0;
                     onLineBody = "";
                 } else {
@@ -98,7 +98,7 @@ $(document).ready(function () {
                     ;
                     onlineNums = onlineLists.length;
                 }
-                if (ips[1].trim == "NULL") {
+                if (ips[1].trim() == "NULL") {
                     exceptionNums = 0;
                     exceptionBody = "";
                 } else {
