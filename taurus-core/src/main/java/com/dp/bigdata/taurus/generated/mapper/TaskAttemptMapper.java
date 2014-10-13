@@ -109,6 +109,6 @@ public interface TaskAttemptMapper {
     public ArrayList  getTaskLoadHost(@Param("start")String start,@Param("end")String end);
     public ArrayList getRunningTaskLoadHost();
     public ArrayList getFailedTaskLoadHost(@Param("start")String start,@Param("end")String end);
-    public ArrayList getUserTasks(@Param("user")String user,@Param("start")String start,@Param("end")String end ,@Param("status")String status );
-    public ArrayList<GroupTaskExample>  getGroupTasks(@Param("user")String user,@Param("start")String start,@Param("end")String end ,@Param("status")String status );
+    public ArrayList getUserTasks(@Param("user")String user,@Param("start")String start,@Param("end")String end ,@Param("status")int[] ids);
+    public ArrayList<GroupTaskExample>  getGroupTasks(@Param("user")String user,@Param("start")String start,@Param("end")String end ,@Param("status")int[] ids );
 }

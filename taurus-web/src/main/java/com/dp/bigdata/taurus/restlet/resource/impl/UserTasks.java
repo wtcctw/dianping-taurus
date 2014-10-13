@@ -27,12 +27,10 @@ public class UserTasks extends ServerResource implements IUserTasks {
             String user = (String) getRequestAttributes().get("username");
             String start = (String) getRequestAttributes().get("starttime");
             String end = (String) getRequestAttributes().get("endtime");
-            List<HashMap<String, Integer>> successTasks = taskAttemptMapper.getUserTasks(user, start, end, "7");
-            List<HashMap<String, Integer>> failedTasks = taskAttemptMapper.getUserTasks(user,start, end,"8");
-            List<HashMap<String, Integer>> depentencyTimeOutFailedTasks = taskAttemptMapper.getUserTasks(user,start, end,"3");
-            List<HashMap<String, Integer>> sumitFailedTasks = taskAttemptMapper.getUserTasks(user,start, end,"5");
-            List<HashMap<String, Integer>> timeOutTasks = taskAttemptMapper.getUserTasks(user,start, end,"9");
-            List<HashMap<String, Integer>> unkownTasks = taskAttemptMapper.getUserTasks(user,start, end,"11");
+            int[] successStatus = {7};
+            int[] failedStatus = {3,5,8,9,11};
+            List<HashMap<String, Integer>> successTasks = taskAttemptMapper.getUserTasks(user, start, end, successStatus);
+            List<HashMap<String, Integer>> failedTasks = taskAttemptMapper.getUserTasks(user,start, end,failedStatus);
 
             for (HashMap<String, Integer> task : successTasks) {
 
@@ -45,61 +43,6 @@ public class UserTasks extends ServerResource implements IUserTasks {
 
             }
             for (HashMap<String, Integer> task : failedTasks) {
-                if (task.get("name") == null){
-                    break;
-                }
-
-                JSONObject json = new JSONObject();
-                json.put("taskName", task.get("name"));
-                json.put("nums", task.get("num"));
-                json.put("status", "failed");
-                jsonData.put(json);
-
-
-            }
-            for (HashMap<String, Integer> task : depentencyTimeOutFailedTasks) {
-                if (task.get("name") == null){
-                    break;
-                }
-
-                JSONObject json = new JSONObject();
-                json.put("taskName", task.get("name"));
-                json.put("nums", task.get("num"));
-                json.put("status", "failed");
-                jsonData.put(json);
-
-
-            }
-
-            for (HashMap<String, Integer> task : timeOutTasks) {
-                if (task.get("name") == null){
-                    break;
-                }
-
-                JSONObject json = new JSONObject();
-                json.put("taskName", task.get("name"));
-                json.put("nums", task.get("num"));
-                json.put("status", "failed");
-                jsonData.put(json);
-
-
-            }
-
-            for (HashMap<String, Integer> task : sumitFailedTasks) {
-                if (task.get("name") == null){
-                    break;
-                }
-
-                JSONObject json = new JSONObject();
-                json.put("taskName", task.get("name"));
-                json.put("nums", task.get("num"));
-                json.put("status", "failed");
-                jsonData.put(json);
-
-
-            }
-
-            for (HashMap<String, Integer> task : unkownTasks) {
                 if (task.get("name") == null){
                     break;
                 }

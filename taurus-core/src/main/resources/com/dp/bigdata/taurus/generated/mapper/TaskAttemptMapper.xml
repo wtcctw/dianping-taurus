@@ -390,7 +390,7 @@
 
 </select>
     <select id="getUserTasks" resultType="map">
-        select a.name,count(1) AS num from TaurusTask a join TaurusTaskAttempt b on a.taskID=b.taskID  where <![CDATA[ a.creator=#{user} and b.status = #{status}   and b.startTime >=#{start} and  startTime <= #{end}]]> group by a.name
+        select a.name,count(1) AS num from TaurusTask a join TaurusTaskAttempt b on a.taskID=b.taskID  where <![CDATA[ a.creator=#{user} and b.status in (#{status, typeHandler=com.dp.bigdata.taurus.generated.module.InHandler})   and b.startTime >=#{start} and  startTime <= #{end}]]> group by a.name
     </select>
 
     <select id="getGroupTasks" resultMap="GroupTaskResultMap">
@@ -401,7 +401,7 @@
         select a.taskID,a.creator,a.name,b.id as userID ,c.status from
         TaurusTask a join TaurusUser b on a.creator=b.name
         join TaurusTaskAttempt c on a.taskID=c.taskID
-        where <![CDATA[  c.startTime >=#{start}and  c.startTime <= #{end}  and c.status = #{status}]]>
+        where <![CDATA[  c.startTime >=#{start}and  c.startTime <= #{end}  and c.status in (#{status, typeHandler=com.dp.bigdata.taurus.generated.module.InHandler})]]>
         ) a
         join TaurusUserGroupMapping  b on a.userID=b.userID
 

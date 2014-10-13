@@ -27,12 +27,10 @@ public class GroupTasks extends ServerResource implements IGroupTasks {
             String user = (String) getRequestAttributes().get("username");
             String start = (String) getRequestAttributes().get("starttime");
             String end = (String) getRequestAttributes().get("endtime");
-            ArrayList<GroupTaskExample> successTasks = taskAttemptMapper.getGroupTasks(user, start, end, "7");
-            ArrayList<GroupTaskExample> failedTasks = taskAttemptMapper.getGroupTasks(user,start, end,"8");
-            ArrayList<GroupTaskExample> depentencyTimeOutFailedTasks = taskAttemptMapper.getGroupTasks(user,start, end,"3");
-            ArrayList<GroupTaskExample> sumitFailedTasks = taskAttemptMapper.getGroupTasks(user,start, end,"5");
-            ArrayList<GroupTaskExample> timeOutTasks = taskAttemptMapper.getGroupTasks(user,start, end,"9");
-            ArrayList<GroupTaskExample> unkownTasks = taskAttemptMapper.getGroupTasks(user,start, end,"11");
+            int[] successStatus = {7};
+            int[] failedStatus = {3,5,8,9,11};
+            ArrayList<GroupTaskExample> successTasks = taskAttemptMapper.getGroupTasks(user, start, end,successStatus);
+            ArrayList<GroupTaskExample> failedTasks = taskAttemptMapper.getGroupTasks(user,start, end,failedStatus);
 
             for (GroupTaskExample task : successTasks) {
 
@@ -46,65 +44,6 @@ public class GroupTasks extends ServerResource implements IGroupTasks {
 
             }
             for (GroupTaskExample task : failedTasks) {
-                if (task.getNum() == null){
-                    break;
-                }
-
-                JSONObject json = new JSONObject();
-                json.put("taskName", task.getName());
-                json.put("nums", task.getNum());
-                json.put("status", "failed");
-                json.put("creator", task.getCreator());
-                jsonData.put(json);
-
-
-            }
-            for (GroupTaskExample task : depentencyTimeOutFailedTasks) {
-                if (task.getNum() == null){
-                    break;
-                }
-
-                JSONObject json = new JSONObject();
-                json.put("taskName", task.getName());
-                json.put("nums", task.getNum());
-                json.put("status", "failed");
-                json.put("creator", task.getCreator());
-                jsonData.put(json);
-
-
-            }
-
-            for (GroupTaskExample task : sumitFailedTasks) {
-                if (task.getNum() == null){
-                    break;
-                }
-
-                JSONObject json = new JSONObject();
-                json.put("taskName", task.getName());
-                json.put("nums", task.getNum());
-                json.put("status", "failed");
-                json.put("creator", task.getCreator());
-                jsonData.put(json);
-
-
-            }
-
-            for (GroupTaskExample task : timeOutTasks) {
-                if (task.getNum() == null){
-                    break;
-                }
-
-                JSONObject json = new JSONObject();
-                json.put("taskName", task.getName());
-                json.put("nums", task.getNum());
-                json.put("status", "failed");
-                json.put("creator", task.getCreator());
-                jsonData.put(json);
-
-
-            }
-
-            for (GroupTaskExample task : unkownTasks) {
                 if (task.getNum() == null){
                     break;
                 }
