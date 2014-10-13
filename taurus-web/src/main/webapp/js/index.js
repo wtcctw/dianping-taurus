@@ -76,7 +76,6 @@ $(document).ready(function () {
         var onlineLists = null;
         var exceptionLists = null;
         $.ajax({
-            async: false,
             data: {
                 action: "host",
                 gettype: "all"
@@ -108,109 +107,110 @@ $(document).ready(function () {
                 }
                 $("#onlineNums").html(onlineNums.toString());
                 $("#exceptionNums").html(exceptionNums.toString());
+                var htmlContent ="";
+                if(exceptionNums == 0){
+                    htmlContent = "<i class='icon-info-sign icon-large green '>当前状态很好，没有异常JOB机器</i> " ;
+                }else{
+                    for (var i = 0; i < exceptionNums; i++) {
+                        body += "<tr>" +
+                            "<td>" + exceptionLists[i] + "</td>" +
+                            "<td><a id='down' title='查看job机详情' class='btn  btn-primary btn-minier' href='hosts.jsp?hostName=" + exceptionLists[i] + "'>详情</a></td>"
+                        "</tr>"
+                    }
+                    htmlContent= ' <table  class="table table-striped ">'
+                        + '        <tbody>'
+                        + body
+                        + '        </tbody>'
+                        + '    </table>'
+                        + '    <div class="controller">'
+                        + '    </div>';
+
+
+                }
+
+                $("#exceptionJob").html(htmlContent);
+                var placeholder = $('#piechart-placeholder').css({'width': '90%', 'min-height': '200px'});
+                var data = [
+                    { label: "正常", data: onlineNums, color: "#68BC31"},
+                    { label: "失联", data: exceptionNums, color: "#AF4E96"}
+                ]
+                Number.prototype.toFixed = function (fractionDigits) {
+                    return  (parseInt(this * Math.pow(10, fractionDigits) + 0.5) / Math.pow(10, fractionDigits)).toString();
+                }
+
+                function drawPieChart(placeholder, data, position) {
+                    $.plot(placeholder, data, {
+                        series: {
+                            pie: {
+                                show: true,
+                                tilt: 1,
+                                highlight: {
+                                    opacity: 0.25
+                                },
+                                stroke: {
+                                    color: '#fff',
+                                    width: 2
+                                },
+                                startAngle: 2
+                            }
+                        },
+                        legend: {
+                            show: true,
+                            position: position || "ne",
+                            labelBoxBorderColor: null,
+                            margin: [-30, 15]
+                        },
+                        grid: {
+                            hoverable: true,
+                            clickable: true
+                        }
+                    })
+                }
+
+                drawPieChart(placeholder, data);
+
+                /**
+                 we saved the drawing function and the data to redraw with different position later when switching to RTL mode dynamically
+                 so that's not needed actually.
+                 */
+                placeholder.data('chart', data);
+                placeholder.data('draw', drawPieChart);
+
+
+                //pie chart tooltip example
+                var tooltip = $("<div class='tooltip top in align-left'><div class='tooltip-inner align-left'></div></div>").hide().appendTo('body');
+                var previousPoint = null;
+
+                placeholder.on('plothover', function (event, pos, item) {
+                    if (item) {
+                        if (previousPoint != item.seriesIndex) {
+                            previousPoint = item.seriesIndex;
+
+                            if (item.series['label'] == "正常") {
+                                tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%<br>' + onLineBody;
+                            } else if (item.series['label'] == "失联") {
+                                tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%<br>' + exceptionBody;
+                            }
+                            else {
+                                tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%'
+
+                            }
+
+                            tooltip.show().children(0).html(tip);
+                        }
+                        tooltip.css({top: pos.pageY + 10, left: pos.pageX + 10});
+                    } else {
+                        tooltip.hide();
+                        previousPoint = null;
+                    }
+
+                });
 
             }
 
 
         });
-    var htmlContent ="";
-    if(exceptionNums == 0){
-        htmlContent = "<i class='icon-info-sign icon-large green '>当前状态很好，没有异常JOB机器</i> " ;
-        }else{
-            for (var i = 0; i < exceptionNums; i++) {
-                body += "<tr>" +
-                    "<td>" + exceptionLists[i] + "</td>" +
-                    "<td><a id='down' title='查看job机详情' class='btn  btn-primary btn-minier' href='hosts.jsp?hostName=" + exceptionLists[i] + "'>详情</a></td>"
-                "</tr>"
-            }
-        htmlContent= ' <table  class="table table-striped ">'
-                + '        <tbody>'
-                + body
-                + '        </tbody>'
-                + '    </table>'
-                + '    <div class="controller">'
-                + '    </div>';
 
-
-        }
-
-        $("#exceptionJob").html(htmlContent);
-        var placeholder = $('#piechart-placeholder').css({'width': '90%', 'min-height': '200px'});
-        var data = [
-            { label: "正常", data: onlineNums, color: "#68BC31"},
-            { label: "失联", data: exceptionNums, color: "#AF4E96"}
-        ]
-        Number.prototype.toFixed = function (fractionDigits) {
-            return  (parseInt(this * Math.pow(10, fractionDigits) + 0.5) / Math.pow(10, fractionDigits)).toString();
-        }
-
-        function drawPieChart(placeholder, data, position) {
-            $.plot(placeholder, data, {
-                series: {
-                    pie: {
-                        show: true,
-                        tilt: 1,
-                        highlight: {
-                            opacity: 0.25
-                        },
-                        stroke: {
-                            color: '#fff',
-                            width: 2
-                        },
-                        startAngle: 2
-                    }
-                },
-                legend: {
-                    show: true,
-                    position: position || "ne",
-                    labelBoxBorderColor: null,
-                    margin: [-30, 15]
-                },
-                grid: {
-                    hoverable: true,
-                    clickable: true
-                }
-            })
-        }
-
-        drawPieChart(placeholder, data);
-
-        /**
-         we saved the drawing function and the data to redraw with different position later when switching to RTL mode dynamically
-         so that's not needed actually.
-         */
-        placeholder.data('chart', data);
-        placeholder.data('draw', drawPieChart);
-
-
-        //pie chart tooltip example
-        var tooltip = $("<div class='tooltip top in align-left'><div class='tooltip-inner align-left'></div></div>").hide().appendTo('body');
-        var previousPoint = null;
-
-        placeholder.on('plothover', function (event, pos, item) {
-            if (item) {
-                if (previousPoint != item.seriesIndex) {
-                    previousPoint = item.seriesIndex;
-
-                    if (item.series['label'] == "正常") {
-                        tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%<br>' + onLineBody;
-                    } else if (item.series['label'] == "失联") {
-                        tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%<br>' + exceptionBody;
-                    }
-                    else {
-                        tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%'
-
-                    }
-
-                    tooltip.show().children(0).html(tip);
-                }
-                tooltip.css({top: pos.pageY + 10, left: pos.pageX + 10});
-            } else {
-                tooltip.hide();
-                previousPoint = null;
-            }
-
-        });
 
         var starttime = GetDateStr(-1);
         var endtime = GetDateStr(1);
@@ -218,7 +218,6 @@ $(document).ready(function () {
         var totalBody = "";
 
         $.ajax({
-            async: false,
             data: {
                 action: "totaltaskload",
                 start: starttime,
@@ -238,24 +237,23 @@ $(document).ready(function () {
                         "<td>" + item.totaltask + "</td>"
                     "</tr>"
                 });
-
+                var topLists = ' <table  class="table table-striped table-bordered table-hover ">'
+                    + '<thead><tr><th>IP</th>  <th>执行任务数</th> </tr> </thead>'
+                    + '        <tbody>'
+                    + totalBody
+                    + '        </tbody>'
+                    + '    </table>'
+                    + '    <div class="controller">'
+                    + '    </div>';
+                $("#totalJob").html(topLists);
             }
 
 
         });
-        var topLists = ' <table  class="table table-striped table-bordered table-hover ">'
-            + '<thead><tr><th>IP</th>  <th>执行任务数</th> </tr> </thead>'
-            + '        <tbody>'
-            + totalBody
-            + '        </tbody>'
-            + '    </table>'
-            + '    <div class="controller">'
-            + '    </div>';
-        $("#totalJob").html(topLists);
+
         var failBody = "";
 
         $.ajax({
-            async: false,
             data: {
                 action: "failedtaskload",
                 start: starttime,
@@ -275,20 +273,20 @@ $(document).ready(function () {
                         "<td>" + item.totaltask + "</td>"
                     "</tr>"
                 });
-
+              var  topLists = ' <table  class="table table-striped table-bordered table-hover ">'
+                    + '<thead><tr><th>IP</th>  <th>执行任务数</th> </tr> </thead>'
+                    + '        <tbody>'
+                    + failBody
+                    + '        </tbody>'
+                    + '    </table>'
+                    + '    <div class="controller">'
+                    + '    </div>';
+                $("#failedJob").append(topLists);
             }
 
 
         });
-        topLists = ' <table  class="table table-striped table-bordered table-hover ">'
-            + '<thead><tr><th>IP</th>  <th>执行任务数</th> </tr> </thead>'
-            + '        <tbody>'
-            + failBody
-            + '        </tbody>'
-            + '    </table>'
-            + '    <div class="controller">'
-            + '    </div>';
-        $("#failedJob").append(topLists);
+
     reflash(null);
 
 
@@ -304,7 +302,6 @@ $(document).ready(function () {
         var starttime = GetDateStr(-1);
         var endtime = GetDateStr(1);
         $.ajax({
-            async: false,
             data: {
                 action: "usertask",
                 username:username,
@@ -365,94 +362,96 @@ $(document).ready(function () {
                     + '    </table>'
                 $("#mytasklist").html(topUserTaskLists);
 
+                if (succNums == 0 && failedNums == 0) {
+                    $("#user-widget-main").html("<i class='icon-info-sign icon-large red'>今天没有任务调度～</i>");
+                    $("#user-widget-main").addClass("align-center");
+                } else
+                {
+
+                    var placeholder = $('#mytasks').css({'width': '90%', 'min-height': '200px'});
+                    var data = [
+                        { label: "正常", data: succNums, color: "#68BC31"},
+                        { label: "失败", data: failedNums, color: "#AF4E96"}
+                    ]
+                    Number.prototype.toFixed = function (fractionDigits) {
+                        return  (parseInt(this * Math.pow(10, fractionDigits) + 0.5) / Math.pow(10, fractionDigits)).toString();
+                    }
+
+                    function drawPieChart(placeholder, data, position) {
+                        $.plot(placeholder, data, {
+                            series: {
+                                pie: {
+                                    show: true,
+                                    tilt: 1,
+                                    highlight: {
+                                        opacity: 0.25
+                                    },
+                                    stroke: {
+                                        color: '#fff',
+                                        width: 2
+                                    },
+                                    startAngle: 2
+                                }
+                            },
+                            legend: {
+                                show: true,
+                                position: position || "ne",
+                                labelBoxBorderColor: null,
+                                margin: [-30, 15]
+                            },
+                            grid: {
+                                hoverable: true,
+                                clickable: true
+                            }
+                        })
+                    }
+
+                    drawPieChart(placeholder, data);
+
+                    /**
+                     we saved the drawing function and the data to redraw with different position later when switching to RTL mode dynamically
+                     so that's not needed actually.
+                     */
+                    placeholder.data('chart', data);
+                    placeholder.data('draw', drawPieChart);
+
+
+                    //pie chart tooltip example
+                    var tooltip = $("<div class='tooltip top in align-left'><div class='tooltip-inner align-left'></div></div>").hide().appendTo('body');
+                    var previousPoint = null;
+
+                    placeholder.on('plothover', function (event, pos, item) {
+                        if (item) {
+                            if (previousPoint != item.seriesIndex) {
+                                previousPoint = item.seriesIndex;
+
+                                if (item.series['label'] == "正常") {
+                                    tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%<br>' + succBody;
+                                } else if (item.series['label'] == "失败") {
+                                    tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%<br>' + failedBody;
+                                }
+                                else {
+                                    tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%'
+
+                                }
+
+                                tooltip.show().children(0).html(tip);
+                            }
+                            tooltip.css({top: pos.pageY + 10, left: pos.pageX + 10});
+                        } else {
+                            tooltip.hide();
+                            previousPoint = null;
+                        }
+
+                    });
+
+                }
+
             }
 
 
         });
-        if (succNums == 0 && failedNums == 0) {
-            $("#user-widget-main").html("<i class='icon-info-sign icon-large red'>今天没有任务调度～</i>");
-            $("#user-widget-main").addClass("align-center");
-        } else
-        {
 
-            var placeholder = $('#mytasks').css({'width': '90%', 'min-height': '200px'});
-            var data = [
-                { label: "正常", data: succNums, color: "#68BC31"},
-                { label: "失败", data: failedNums, color: "#AF4E96"}
-            ]
-            Number.prototype.toFixed = function (fractionDigits) {
-                return  (parseInt(this * Math.pow(10, fractionDigits) + 0.5) / Math.pow(10, fractionDigits)).toString();
-            }
-
-            function drawPieChart(placeholder, data, position) {
-                $.plot(placeholder, data, {
-                    series: {
-                        pie: {
-                            show: true,
-                            tilt: 1,
-                            highlight: {
-                                opacity: 0.25
-                            },
-                            stroke: {
-                                color: '#fff',
-                                width: 2
-                            },
-                            startAngle: 2
-                        }
-                    },
-                    legend: {
-                        show: true,
-                        position: position || "ne",
-                        labelBoxBorderColor: null,
-                        margin: [-30, 15]
-                    },
-                    grid: {
-                        hoverable: true,
-                        clickable: true
-                    }
-                })
-            }
-
-            drawPieChart(placeholder, data);
-
-            /**
-             we saved the drawing function and the data to redraw with different position later when switching to RTL mode dynamically
-             so that's not needed actually.
-             */
-            placeholder.data('chart', data);
-            placeholder.data('draw', drawPieChart);
-
-
-            //pie chart tooltip example
-            var tooltip = $("<div class='tooltip top in align-left'><div class='tooltip-inner align-left'></div></div>").hide().appendTo('body');
-            var previousPoint = null;
-
-            placeholder.on('plothover', function (event, pos, item) {
-                if (item) {
-                    if (previousPoint != item.seriesIndex) {
-                        previousPoint = item.seriesIndex;
-
-                        if (item.series['label'] == "正常") {
-                            tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%<br>' + succBody;
-                        } else if (item.series['label'] == "失败") {
-                            tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%<br>' + failedBody;
-                        }
-                        else {
-                            tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%'
-
-                        }
-
-                        tooltip.show().children(0).html(tip);
-                    }
-                    tooltip.css({top: pos.pageY + 10, left: pos.pageX + 10});
-                } else {
-                    tooltip.hide();
-                    previousPoint = null;
-                }
-
-            });
-
-        }
 
 
 
@@ -534,93 +533,93 @@ $(document).ready(function () {
                     + '        </tbody>'
                     + '    </table>'
                 $("#grouptasklist").html(topGroupTaskLists);
+                if (groupSuccNums != 0 || groupFailedNums != 0) {
+                    var placeholder = $('#grouptasks').css({'width': '90%', 'min-height': '200px'});
+                    var data = [
+                        { label: "正常", data: groupSuccNums, color: "#68BC31"},
+                        { label: "失败", data: groupFailedNums, color: "#AF4E96"}
+                    ]
+                    Number.prototype.toFixed = function (fractionDigits) {
+                        return  (parseInt(this * Math.pow(10, fractionDigits) + 0.5) / Math.pow(10, fractionDigits)).toString();
+                    }
 
+                    function drawPieChart(placeholder, data, position) {
+                        $.plot(placeholder, data, {
+                            series: {
+                                pie: {
+                                    show: true,
+                                    tilt: 1,
+                                    highlight: {
+                                        opacity: 0.25
+                                    },
+                                    stroke: {
+                                        color: '#fff',
+                                        width: 2
+                                    },
+                                    startAngle: 2
+                                }
+                            },
+                            legend: {
+                                show: true,
+                                position: position || "ne",
+                                labelBoxBorderColor: null,
+                                margin: [-30, 15]
+                            },
+                            grid: {
+                                hoverable: true,
+                                clickable: true
+                            }
+                        })
+                    }
+
+                    drawPieChart(placeholder, data);
+
+                    /**
+                     we saved the drawing function and the data to redraw with different position later when switching to RTL mode dynamically
+                     so that's not needed actually.
+                     */
+                    placeholder.data('chart', data);
+                    placeholder.data('draw', drawPieChart);
+
+
+                    //pie chart tooltip example
+                    var tooltip = $("<div class='tooltip top in align-left'><div class='tooltip-inner align-left'></div></div>").hide().appendTo('body');
+                    var previousPoint = null;
+
+                    placeholder.on('plothover', function (event, pos, item) {
+                        if (item) {
+                            if (previousPoint != item.seriesIndex) {
+                                previousPoint = item.seriesIndex;
+
+                                if (item.series['label'] == "正常") {
+                                    tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%<br>' + groupSuccBody;
+                                } else if (item.series['label'] == "失败") {
+                                    tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%<br>' + groupFailedBody;
+                                }
+                                else {
+                                    tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%'
+
+                                }
+
+                                tooltip.show().children(0).html(tip);
+                            }
+                            tooltip.css({top: pos.pageY + 10, left: pos.pageX + 10});
+                        } else {
+                            tooltip.hide();
+                            previousPoint = null;
+                        }
+
+                    });
+                } else {
+                    $("#group-widget-main").html("<i class='icon-info-sign icon-large red'>今天没有任务调度～</i>");
+                    $("#group-widget-main").addClass("align-center");
+
+                }
             }
 
 
         });
-        if (groupSuccNums != 0 || groupFailedNums != 0) {
-            var placeholder = $('#grouptasks').css({'width': '90%', 'min-height': '200px'});
-            var data = [
-                { label: "正常", data: groupSuccNums, color: "#68BC31"},
-                { label: "失败", data: groupFailedNums, color: "#AF4E96"}
-            ]
-            Number.prototype.toFixed = function (fractionDigits) {
-                return  (parseInt(this * Math.pow(10, fractionDigits) + 0.5) / Math.pow(10, fractionDigits)).toString();
-            }
 
-            function drawPieChart(placeholder, data, position) {
-                $.plot(placeholder, data, {
-                    series: {
-                        pie: {
-                            show: true,
-                            tilt: 1,
-                            highlight: {
-                                opacity: 0.25
-                            },
-                            stroke: {
-                                color: '#fff',
-                                width: 2
-                            },
-                            startAngle: 2
-                        }
-                    },
-                    legend: {
-                        show: true,
-                        position: position || "ne",
-                        labelBoxBorderColor: null,
-                        margin: [-30, 15]
-                    },
-                    grid: {
-                        hoverable: true,
-                        clickable: true
-                    }
-                })
-            }
-
-            drawPieChart(placeholder, data);
-
-            /**
-             we saved the drawing function and the data to redraw with different position later when switching to RTL mode dynamically
-             so that's not needed actually.
-             */
-            placeholder.data('chart', data);
-            placeholder.data('draw', drawPieChart);
-
-
-            //pie chart tooltip example
-            var tooltip = $("<div class='tooltip top in align-left'><div class='tooltip-inner align-left'></div></div>").hide().appendTo('body');
-            var previousPoint = null;
-
-            placeholder.on('plothover', function (event, pos, item) {
-                if (item) {
-                    if (previousPoint != item.seriesIndex) {
-                        previousPoint = item.seriesIndex;
-
-                        if (item.series['label'] == "正常") {
-                            tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%<br>' + groupSuccBody;
-                        } else if (item.series['label'] == "失败") {
-                            tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%<br>' + groupFailedBody;
-                        }
-                        else {
-                            tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%'
-
-                        }
-
-                        tooltip.show().children(0).html(tip);
-                    }
-                    tooltip.css({top: pos.pageY + 10, left: pos.pageX + 10});
-                } else {
-                    tooltip.hide();
-                    previousPoint = null;
-                }
-
-            });
-        } else {
-            $("#group-widget-main").html("<i class='icon-info-sign icon-large red'>今天没有任务调度～</i>");
-            $("#group-widget-main").addClass("align-center");
-
-        }
 
    // }
 
