@@ -29,7 +29,12 @@
     ArrayList<UserDTO> users = userResource.retrieve();
     for (UserDTO user : users) {
         if (user.getName().equals(currentUser)) {
-            isAdmin = "admin".equals(user.getGroup());
+            if ("admin".equals(user.getGroup()) || "monitor".equals(user.getGroup()) || "OP".equals(user.getGroup())) {
+                isAdmin = true;
+            } else {
+                isAdmin = false;
+            }
+
         }
     }
 %>

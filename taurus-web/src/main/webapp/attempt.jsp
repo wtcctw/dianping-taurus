@@ -39,6 +39,7 @@
                 com.dp.bigdata.taurus.restlet.resource.IAttemptsResource,
                 com.dp.bigdata.taurus.restlet.shared.AttemptDTO,
                 java.text.SimpleDateFormat" %>
+<%@ page import="com.dp.bigdata.taurus.web.servlet.AttemptProxyServlet" %>
 
 <div class="common-header" id="common-header">
 
@@ -137,11 +138,13 @@
                                 if (state.equals("RUNNING") || state.equals("TIMEOUT")) {%>
 
                             <a href="#confirm" onClick="action($(this).parents('tr').attr('id'))">Kill</a>
-
+                            <%  boolean isViewLog = AttemptProxyServlet.isHostOverLoad(dto.getExecHost());
+                                if(!isViewLog){%>
                             <a target="_blank"
                                href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
 
                             <%
+                                }
                             } else {%>
                             <a target="_blank"
                                href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>

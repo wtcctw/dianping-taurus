@@ -477,9 +477,9 @@
 <script type="text/javascript">
     var isAdmin = <%=isAdmin%>;
     var username = "<%=currentUser%>";
-    if (isAdmin) {
-        // var user = document.getElementById("user");
-        //user.style.display="none";
+    if (isAdmin && username !="kirin.li") {
+         var user = document.getElementById("user");
+             user.style.display="none";
     } else {
         //var admin = document.getElementById("admin");
         //admin.style.display="none";

@@ -51,6 +51,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="com.dp.bigdata.taurus.restlet.resource.*" %>
 <%@ page import="com.dp.bigdata.taurus.generated.module.Task" %>
+<%@ page import="com.dp.bigdata.taurus.web.servlet.AttemptProxyServlet" %>
 
 
 <div class="common-header" id="common-header">
@@ -193,14 +194,18 @@
             </td>
             <%} else {%>
             <td>NULL</td>
-            <%}%>
+            <%}
+                boolean isViewLog = AttemptProxyServlet.isHostOverLoad(dto.getExecHost());
+                if(isViewLog){
+
+            %>
             <td>
 
                 <a target="_blank" href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
             </td>
 
         </tr>
-        <% }
+        <% }}
         } %>
         </tbody>
     </table>

@@ -99,7 +99,7 @@ org.eclipse.jdt.core.compiler.compliance=1.6
 		</dependency>
 	</dependencies>
 	<distributionManagement>
-		<repository>
+		<repository>key
 			<id>dianping.repo</id>
 			<url>http://192.168.8.45:8080/artifactory/dianping-releases</url>
 		</repository>
