@@ -475,6 +475,21 @@
 </div>
 </div>
 <script type="text/javascript">
+
+    $.ajax({
+
+        type: "get",
+        url: "jsp/common-header.jsp",
+        error: function () {
+        },
+        success: function (response, textStatus) {
+            $("#common-header").html(response);
+            $('li[id="index"]').addClass("active");
+        }
+
+
+    });
+
     var isAdmin = <%=isAdmin%>;
     var username = "<%=currentUser%>";
     if (isAdmin && username !="kirin.li") {

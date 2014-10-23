@@ -17,12 +17,14 @@
     <script src="lib/ace/js/bootbox.min.js"></script>
     <script type="text/javascript" src="resource/js/lib/raphael.2.1.0.min.js"></script>
     <script type="text/javascript" src="resource/js/lib/justgage.1.0.1.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/login.js"></script>
     <!-- page specific plugin styles -->
 
     <!-- fonts -->
     <script src="lib/ace/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="lib/ace/css/ace-fonts.css"/>
+    <link rel="stylesheet" href="css/jquery-ui.min.css"/>
 
     <!-- ace styles -->
 
@@ -449,7 +451,6 @@
 <script src="js/bwizard.js" type="text/javascript"></script>
 <script src="lib/ace/js/jquery.validate.min.js" type="text/javascript"></script>
 <script src="js/taurus_validate.js" type="text/javascript"></script>
-<script src="js/jquery.autocomplete.min.js" type="text/javascript"></script>
 <script src="js/task.js" type="text/javascript"></script>
 </body>
 </html>

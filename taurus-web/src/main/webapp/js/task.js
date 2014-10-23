@@ -159,22 +159,17 @@ $(document).ready(function() {
 	    });
 	}
 	
-	$('#hostname').autocomplete({
-        width: 448,
-        delimiter: /(,|;)\s*/,
-        zIndex: 9999,
-        lookup: ipList.split(',')});
-	$('#alertUser').autocomplete({
-        width: 448,
-        delimiter: /(,|;)\s*/,
-        zIndex: 9999,
-        lookup: userList.split(',')});
-	$('#alertGroup').autocomplete({
-        width: 448,
-        delimiter: /(,|;)\s*/,
-        zIndex: 9999,
-        lookup: groupList.split(',')});
-        	
+
+    $('#hostname').autocomplete({
+        source: ipList.split(',')
+    });
+    $('#alertUser').autocomplete({
+        source: userList.split(',')
+    });
+    $('#alertGroup').autocomplete({
+        source: groupList.split(',')
+    });
+
 	$("#submitButton").click(function(e) {
 		if($("#submitButton").attr("disabled") == "disabled") {
 			return false;

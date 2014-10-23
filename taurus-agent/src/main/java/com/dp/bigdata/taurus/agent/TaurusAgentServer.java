@@ -1,7 +1,9 @@
 package com.dp.bigdata.taurus.agent;
 
+import java.io.IOException;
 import java.util.Date;
 
+import org.apache.commons.exec.CommandLine;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -88,10 +90,22 @@ public class TaurusAgentServer implements AgentServer{
     }
 
 	public void start(){
+        clearZombieJob(); //清除僵尸进程
         Thread agentThread = new Thread(new AgentTask());
         agentThread.setDaemon(true);
         agentThread.setName("Thread-Agent");
         agentThread.start();
 	}
 
+    public void clearZombieJob(){
+        CommandLine cmdLine;
+        cmdLine = new CommandLine("bash");
+        cmdLine.addArgument("-c");
+         cmdLine.addArgument(String.format(BaseEnvManager.clearZombie, BaseEnvManager.agentRoot, BaseEnvManager.agentRoot), false);
+        try {
+            executor.execute("clearZombieJob", 0, null, cmdLine, null, null);
+        } catch (IOException e) {
+            LOGGER.error("Clear Zombie Job ERROR, DETAIL INFO:" + e);
+        }
+    }
 }

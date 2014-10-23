@@ -57,19 +57,7 @@ $(document).ready(function () {
 
 
 
-    $.ajax({
 
-        type: "get",
-        url: "jsp/common-header.jsp",
-        error: function () {
-        },
-        success: function (response, textStatus) {
-            $("#common-header").html(response);
-            $('li[id="index"]').addClass("active");
-        }
-
-
-    });
     //if (isAdmin) {
         var onlineNums = 0;
         var exceptionNums = 0;
@@ -368,7 +356,7 @@ $(document).ready(function () {
                 } else
                 {
 
-                    var placeholder = $('#mytasks').css({'width': '90%', 'min-height': '200px'});
+                    var placeholder = $('#mytasks').css({'width': '90%', 'height': '200px'});
                     var data = [
                         { label: "正常", data: succNums, color: "#68BC31"},
                         { label: "失败", data: failedNums, color: "#AF4E96"}

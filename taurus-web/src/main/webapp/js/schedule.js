@@ -1,18 +1,7 @@
 var taskID;
 var action_chinese;
 jQuery(function($) {
-    $.ajax({
-        type: "get",
-        url: "jsp/common-header.jsp",
-        error: function () {
-        },
-        success: function (response, textStatus) {
-            $("#common-header").html(response);
-            $('li[id="schedule"]').addClass("active");
-        }
 
-
-    });
 	$(document).delegate('.detailBtn', 'click', function(e) {
 
         var anchor = this;

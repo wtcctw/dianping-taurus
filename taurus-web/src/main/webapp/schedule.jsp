@@ -248,6 +248,18 @@
 
 <script type="text/javascript">
     jQuery(function ($) {
+        $.ajax({
+            type: "get",
+            url: "jsp/common-header.jsp",
+            error: function () {
+            },
+            success: function (response, textStatus) {
+                $("#common-header").html(response);
+                $('li[id="schedule"]').addClass("active");
+            }
+
+
+        });
         var oTable1 =
                 $('#example').dataTable({
                     bAutoWidth: true,
