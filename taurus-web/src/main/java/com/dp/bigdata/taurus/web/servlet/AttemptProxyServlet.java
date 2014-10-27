@@ -149,7 +149,7 @@ public class AttemptProxyServlet extends HttpServlet {
                         if (jo.get("hostName") != null){
                             zabbixHostName = jo.get("hostName").toString();
                         }
-                        
+
                         if (zabbixHostName != null || zabbixHostName.isEmpty()){
                             if (zabbixHostName.equals(hostName)){
                                 String cpuLoad = "";
@@ -158,7 +158,13 @@ public class AttemptProxyServlet extends HttpServlet {
                                 }
 
                                 if (cpuLoad != null || cpuLoad.isEmpty()){
-                                    Double highValue = Double.parseDouble(cpuLoad);
+                                    Double highValue;
+                                    if (cpuLoad.trim().equals("null") ){
+                                        highValue = 10.0;
+                                    }else {
+                                        highValue = Double.parseDouble(cpuLoad);
+                                    }
+
                                     if (highValue <= 1.0){
                                         result = false;
                                     }else {
