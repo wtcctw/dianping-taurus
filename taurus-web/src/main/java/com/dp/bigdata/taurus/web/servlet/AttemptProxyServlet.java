@@ -141,11 +141,12 @@ public class AttemptProxyServlet extends HttpServlet {
                         JSONObject jo = (JSONObject) jsonArray.get(i);
                         if (jo == null){
                             result = true;
+                            return result;
                         }
-                        String zabbixHostName =  jo.get("hostName").toString();
+                        String zabbixHostName =  (String)jo.get("hostName");
                         if (zabbixHostName != null || zabbixHostName.isEmpty()){
                             if (zabbixHostName.equals(hostName)){
-                                String cpuLoad = jo.get("cpuLoad").toString();
+                                String cpuLoad = (String)jo.get("cpuLoad");
                                 if (cpuLoad != null || cpuLoad.isEmpty()){
                                     Double highValue = Double.parseDouble(cpuLoad);
                                     if (highValue <= 1.0){
