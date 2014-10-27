@@ -142,10 +142,10 @@ public class AttemptProxyServlet extends HttpServlet {
                         if (jo == null){
                             result = true;
                         }
-                        String zabbixHostName = (String) jo.get("hostName");
+                        String zabbixHostName =  jo.get("hostName").toString();
                         if (zabbixHostName != null || zabbixHostName.isEmpty()){
                             if (zabbixHostName.equals(hostName)){
-                                String cpuLoad = (String) jo.get("cpuLoad");
+                                String cpuLoad = jo.get("cpuLoad").toString();
                                 if (cpuLoad != null || cpuLoad.isEmpty()){
                                     Double highValue = Double.parseDouble(cpuLoad);
                                     if (highValue <= 1.0){
