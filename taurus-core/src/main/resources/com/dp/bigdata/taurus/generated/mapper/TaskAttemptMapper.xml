@@ -410,4 +410,12 @@
         )d
         group by d.name,d.creator
     </select>
+
+    <delete id="deleteDependencyPassTask" parameterType="String">
+        delete from TaurusTaskAttempt where taskID = #{taskId} and status = #{status}
+    </delete>
+
+    <select id="isExitTaskId" parameterType="String" resultType="map">
+        select taskID from TaurusTaskAttempt where taskID = #{taskId} limit 1
+    </select>
 </mapper>

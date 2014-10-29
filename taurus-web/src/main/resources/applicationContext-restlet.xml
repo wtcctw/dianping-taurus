@@ -70,6 +70,8 @@
           scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.RunTaskLoad"/>
     <bean name="/api/totaltaskload/{starttime}/{endtime}" id="getTotalTaskLoad" autowire="byName"
           scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.TotalTaskLoad"/>
+    <bean name="/api/deletedependency/{taskid}/{status}" id="deletedependency" autowire="byName"
+          scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.ClearDependencyPassTask"/>
     <bean name="/api/failedtaskload/{starttime}/{endtime}" id="getFailedTaskLoad" autowire="byName"
           scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.FailedTaskLoad"/>
     <bean name="/api/usertasks/{username}/{starttime}/{endtime}" id="getUserTasks" autowire="byName"

@@ -613,6 +613,9 @@ $(document).ready(function () {
 
 
 
+
+
+
     function reflash(queryType) {
     var cpuLoadBody = "";
     var memLoadBody = "";

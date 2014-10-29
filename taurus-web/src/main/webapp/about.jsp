@@ -59,7 +59,7 @@
 <div class="page-content ">
 <div class="row">
 <div class="col-sm-12">
-    <ul class="nav nav-tabs">
+    <ul class="nav nav-tabs ">
         <li><a href="#q1"><i class="icon-chevron-down"></i>
             taurus能干什么？</a></li>
         <li><a href="#q2"><i class="icon-chevron-down"></i>

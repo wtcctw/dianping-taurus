@@ -71,6 +71,18 @@
 								<th width="10%">发布时间</th>
 							</tr>
                             <tr>
+                                <td>新增 <a href="cronbuilder.jsp">cron 生成器</a></td>
+                                <td>2014-10-28</td>
+                            </tr>
+                            <tr>
+                                <td>新增job主机负载内存监控</td>
+                                <td>2014-10-20</td>
+                            </tr>
+                            <tr>
+                                <td>新增组任务情况监控</td>
+                                <td>2014-10-15</td>
+                            </tr>
+                            <tr>
                                 <td>新版Taurus界面，新增我的任务</td>
                                 <td>2014-10-09</td>
                             </tr>

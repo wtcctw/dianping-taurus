@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <title>Taurus</title>
     <meta charset="utf-8">
-    <meta name="description" content=""/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="overview &amp; stats" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <%@ include file="jsp/common-nav.jsp" %>
+
+    <!-- bootstrap & fontawesome -->
     <!-- basic styles -->
     <script type="text/javascript" src="resource/js/lib/jquery-1.9.1.min.js"></script>
     <link href="lib/ace/css/bootstrap.min.css" rel="stylesheet"/>
@@ -368,6 +371,36 @@
         <!-- /.widget-box -->
 
     </div>
+</div>
+
+<div class="col-sm-12" style="display: none">
+    <div class="widget-box">
+        <div class="widget-header widget-header-flat widget-header-small">
+            <h5 class="widget-title">
+                <i class="icon-signal"></i>
+                Job主机任务详情
+            </h5>
+
+            <div class="widget-toolbar">
+                <a href="#" data-action="collapse">
+                    <i class="icon-chevron-up"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="widget-body">
+            <div class="widget-main">
+                <div id="job-placeholder"><i class="icon-spinner icon-spin icon-large"></i></div>
+
+                <div class="hr hr8 hr-double"></div>
+
+            </div>
+            <!-- /.widget-main -->
+        </div>
+        <!-- /.widget-body -->
+    </div>
+    <!-- /.widget-box -->
+
 </div>
 <div class="col-sm-12">
     <div class="col-sm-6">
