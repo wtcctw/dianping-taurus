@@ -84,11 +84,11 @@
 <div class="tab-pane active" id="mintab">
     <div title="" class="panel-body panel-body-noheader panel-body-noborder" style="width: 830px; height: 320px;">
 
-        <div class="radio">
+        <div class="line">
             <input type="radio" checked="checked" name="min" onclick="everyTime(this)">
             分钟 允许的通配符[, - * /]
         </div>
-        <div class="radio">
+        <div class="line">
             <input type="radio" name="min" onclick="cycle(this)">
             周期从
             <span class="spinner" style="width: 58px; height: 20px;"><input
