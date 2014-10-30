@@ -58,14 +58,19 @@
                             <span class="white" id="id-text2">任务调度系统</span>
                         </h1>
                         <h4 class="blue" id="id-company-text">&copy; dianping.com</h4>
+                        <br>
+
                     </div>
+
 
                     <div class="space-6"></div>
                     <div id="alertContainer" class="container">
                     </div>
                     <div class="position-relative">
                         <div id="login-box" class="login-box visible widget-box no-border">
+
                             <div class="widget-body">
+
                                 <div class="widget-main">
                                     <h4 class="header blue lighter bigger">
                                         <i class="ace-icon icon-coffee green"></i>
@@ -130,6 +135,18 @@
 
                 </div>
             </div>
+            <ul>
+                <li>
+                    <a href="http://alpha.taurus.dp/">Alpha 环境</a>
+                </li>
+                <li>
+                    <a href="http://beta.taurus.dp/">Beta 环境</a>
+                </li>
+                <li>
+                    <a href="http://taurus.dp/">线上环境</a>
+                </li>
+
+            </ul>
             <!-- /.col -->
         </div>
         <!-- /.row -->

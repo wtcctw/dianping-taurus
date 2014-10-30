@@ -88,6 +88,20 @@
     <div id="login">
         <h3>一、Login</h3>
         <hr style="padding:15px 0px">
+        <h4>Taurus 各环境入口</h4>
+        <ul>
+            <li>
+                <a href="http://alpha.taurus.dp/">Alpha 环境:alpha.taurus.dp/</a>
+            </li>
+            <li>
+                <a href="http://beta.taurus.dp/">Beta 环境:beta.taurus.dp/</a>
+            </li>
+            <li>
+                <a href="http://taurus.dp/">线上环境:taurus.dp/</a>
+            </li>
+
+        </ul>
+        <h4>Taurus 登陆</h4>
         Taurus 登陆采用域账户登录，如下图所示：
         <img src="img/login.png" style="width: 800px;height: 500px"/>
     </div>
