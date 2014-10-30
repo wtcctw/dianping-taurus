@@ -14,7 +14,7 @@ $(document).ready(function () {
         },
         success: function (response, textStatus) {
             $("#common-header").html(response);
-            var sidebar = document.getElementById("sidebar");
+            var sidebar = document.getElementById("sidebar2");
             sidebar.style.display="none";
             $('li[id="schedule"]').addClass("active");
             $('#menu-toggler').on(ace.click_event, function() {
