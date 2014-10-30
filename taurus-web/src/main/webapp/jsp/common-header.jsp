@@ -111,6 +111,12 @@
                 <span class="menu-text"> 主机监控 </span>
             </a>
         </li>
+        <li id="cron">
+            <a href="cronbuilder.jsp" target="_self">
+                <i class="icon-indent-right"></i>
+                <span class="menu-text"> Cron 生成器</span>
+            </a>
+        </li>
         <li id="user">
             <a href="user.jsp" target="_self">
                 <i class="icon-user"></i>
