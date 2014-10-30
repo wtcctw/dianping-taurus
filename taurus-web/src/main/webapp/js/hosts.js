@@ -7,13 +7,14 @@ $(function () {
             },
             success: function (response, textStatus) {
                 $("#common-header").html(response);
-                var sidebar = document.getElementById("sidebar2");
+                var sidebar = document.getElementById("sidebar");
                 sidebar.style.display="none";
                 $('li[id="host"]').addClass("active");
                 $('#menu-toggler').on(ace.click_event, function() {
+                    sidebar.style.display="block";
                     $('#sidebar').toggleClass('display');
                     $(this).toggleClass('display');
-                    sidebar.style.display="block";
+
                     return false;
                 });
             }

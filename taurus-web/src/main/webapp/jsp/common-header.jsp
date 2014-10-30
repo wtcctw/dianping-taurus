@@ -70,7 +70,7 @@
     </div>
     <!-- /.container -->
 </div>
-<div class="sidebar " id="sidebar2">
+<div class="sidebar " id="sidebar">
     <script type="text/javascript">
         try {
             ace.settings.check('sidebar', 'fixed')
