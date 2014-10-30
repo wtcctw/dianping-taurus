@@ -17,10 +17,16 @@ $(document).ready(function () {
             var sidebar = document.getElementById("sidebar");
             sidebar.style.display="none";
             $('li[id="schedule"]').addClass("active");
+            $('#menu-toggler').on(ace.click_event, function() {
+                $('#sidebar').toggleClass('display');
+                $(this).toggleClass('display');
+                return false;
+            });
         }
 
 
     });
+
     $(".atip").tooltip();
     options = {
         delay: { show: 500, hide: 100 },

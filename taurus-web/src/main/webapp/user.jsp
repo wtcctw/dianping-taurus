@@ -203,6 +203,7 @@
     isAdmin = <%=isAdmin%>;
     userList = userList.substr(1);
     groupList = groupList.substr(1);
+
 </script>
 <script src="js/jquery.validate.min.js" type="text/javascript"></script>
 <script src="js/user.js" type="text/javascript"></script>

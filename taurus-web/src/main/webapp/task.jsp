@@ -446,6 +446,7 @@
         delay: { show: 500, hide: 100 },
         trigger: 'click'
     };
+
     $(".optiontip").tooltip(options);
 </script>
 <script src="js/bwizard.js" type="text/javascript"></script>

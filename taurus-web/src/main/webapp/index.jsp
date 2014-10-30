@@ -518,10 +518,16 @@
         success: function (response, textStatus) {
             $("#common-header").html(response);
             $('li[id="index"]').addClass("active");
+            $('#menu-toggler').on(ace.click_event, function() {
+                $('#sidebar').toggleClass('display');
+                $(this).toggleClass('display');
+                return false;
+            });
         }
 
 
     });
+
 
     var isAdmin = <%=isAdmin%>;
     var username = "<%=currentUser%>";

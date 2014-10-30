@@ -1,9 +1,7 @@
-﻿﻿﻿<%@ page contentType="text/html;charset=utf-8" %>
+﻿﻿<%@ page contentType="text/html;charset=utf-8" %>
 <%@ include file="common-nav.jsp" %>
 
-    <!-- #section:basics/sidebar.mobile.toggle -->
-
-<div class="navbar navbar-default navbar-fixed-top" id="navbar">
+<div class="navbar navbar-default" id="navbar">
     <script type="text/javascript">
         try {
             ace.settings.check('navbar', 'fixed')
@@ -11,7 +9,8 @@
         }
     </script>
 
-    <div class="navbar-container " id="navbar-container">
+    <div class="navbar-container" id="navbar-container">
+        <div class="navbar-header pull-left">
 
             <a href="index.jsp" class="navbar-brand">
                 <i class="icon-tasks"></i>
@@ -23,17 +22,17 @@
         <div class="navbar-header">
             <span style="margin:10px;font-size: 16px" class="label label-transparent">任务调度系统</span>
         </div>
-    <button type="button" class="navbar-toggle pull-center" id="menu-toggler">
-        <span class="sr-only">Toggle sidebar</span>
 
-        <span class="icon-bar"></span>
-
-        <span class="icon-bar"></span>
-
-        <span class="icon-bar"></span>
-    </button>
         <!-- /.navbar-header -->
+        <button type="button" class="navbar-toggle pull-left" id="menu-toggler">
+            <span class="sr-only">Toggle sidebar</span>
 
+            <span class="icon-bar"></span>
+
+            <span class="icon-bar"></span>
+
+            <span class="icon-bar"></span>
+        </button>
         <div class="navbar-header pull-right" role="navigation">
             <ul class="nav ace-nav">
                 <li class="light-blue">
@@ -66,11 +65,12 @@
             </ul>
             <!-- /.ace-nav -->
         </div>
-
+        <!--    <div class="pull-right" style="margin:10px;color: white;">本周值班: {{duty}} {{tel}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>-->
         <!-- /.navbar-header -->
     </div>
     <!-- /.container -->
-<div class="sidebar sidebar-fixed" id="sidebar">
+</div>
+<div class="sidebar " id="sidebar2">
     <script type="text/javascript">
         try {
             ace.settings.check('sidebar', 'fixed')
@@ -111,12 +111,6 @@
                 <span class="menu-text"> 主机监控 </span>
             </a>
         </li>
-        <li id="cron">
-            <a href="cronbuilder.jsp" target="_self">
-                <i class="icon-indent-right"></i>
-                <span class="menu-text"> Cron 生成器</span>
-            </a>
-        </li>
         <li id="user">
             <a href="user.jsp" target="_self">
                 <i class="icon-user"></i>
@@ -153,15 +147,11 @@
 
 </div>
 
-
 <script>
 var isAdmin = <%=isAdmin%>;
 if(!isAdmin){
     $("#userrolechange").html("我的任务");
 }
-$('#menu-toggler').on(ace.click_event, function() {
-    $('#sidebar').toggleClass('display');
-    $(this).toggleClass('display');
-    return false;
-});
+
+
 </script>

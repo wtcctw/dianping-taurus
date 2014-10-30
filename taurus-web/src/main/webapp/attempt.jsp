@@ -194,6 +194,11 @@
 
 
         });
+        $('#menu-toggler').on(ace.click_event, function() {
+            $('#sidebar').toggleClass('display');
+            $(this).toggleClass('display');
+            return false;
+        });
     })
 </script>
 

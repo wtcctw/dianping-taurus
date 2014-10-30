@@ -256,10 +256,17 @@
             success: function (response, textStatus) {
                 $("#common-header").html(response);
                 $('li[id="schedule"]').addClass("active");
+                $('#menu-toggler').on(ace.click_event, function() {
+                    $('#sidebar').toggleClass('display');
+                    $(this).toggleClass('display');
+                    return false;
+                });
+
             }
 
 
         });
+
         var oTable1 =
                 $('#example').dataTable({
                     bAutoWidth: true,

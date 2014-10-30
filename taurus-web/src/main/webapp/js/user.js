@@ -14,6 +14,11 @@ $(document).ready(function() {
         success: function (response, textStatus) {
             $("#common-header").html(response);
             $('li[id="user"]').addClass("active");
+            $('#menu-toggler').on(ace.click_event, function() {
+                $('#sidebar').toggleClass('display');
+                $(this).toggleClass('display');
+                return false;
+            });
         }
 
 

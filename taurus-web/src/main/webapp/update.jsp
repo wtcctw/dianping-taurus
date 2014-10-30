@@ -159,10 +159,16 @@
             success: function (response, textStatus) {
                 $("#common-header").html(response);
                 $('li[id="update"]').addClass("active");
+                $('#menu-toggler').on(ace.click_event, function() {
+                    $('#sidebar2').toggleClass('display');
+                    $(this).toggleClass('display');
+                    return false;
+                });
             }
 
 
         });
+
     });
 </script>
 </body>

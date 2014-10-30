@@ -7,13 +7,20 @@ $(function () {
             },
             success: function (response, textStatus) {
                 $("#common-header").html(response);
-                var sidebar = document.getElementById("sidebar");
+                var sidebar = document.getElementById("sidebar2");
                 sidebar.style.display="none";
                 $('li[id="host"]').addClass("active");
+                $('#menu-toggler').on(ace.click_event, function() {
+                    $('#sidebar').toggleClass('display');
+                    $(this).toggleClass('display');
+                    sidebar.style.display="block";
+                    return false;
+                });
             }
 
 
         });
+
     hostName = GetQueryString("hostName");
     fetch_Log();
 
