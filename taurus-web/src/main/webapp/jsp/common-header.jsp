@@ -9,7 +9,7 @@
         }
     </script>
 
-    <div class="navbar-container" id="navbar-container">
+    <div class="navbar-container" id="navbar-container" style="height: 30px">
         <div class="navbar-header pull-left">
 
             <a href="index.jsp" class="navbar-brand">
