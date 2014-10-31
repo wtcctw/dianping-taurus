@@ -43,6 +43,9 @@ public class MonitorServlet extends HttpServlet {
     private static final String HOSTLOAD = "hostload";
     private static final String SQLQUERY = "sqlquery";
     private static final String JOBDETAIL = "jobdetail";
+    private static final int SERVICE_EXCEPTION = -1;
+    private static final int TASKID_IS_NOT_FOUND = -2;
+    private static final int STATUS_IS_NOT_RIGHT = -3;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -204,10 +207,16 @@ public class MonitorServlet extends HttpServlet {
             output.close();
         } else if (SQLQUERY.equals(action)) {
             String user = (String) request.getSession().getAttribute("taurus-user");
+            String adminUser;
+            try {
+                adminUser= ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.dbadmin.user");
+            } catch (LionException e) {
+                adminUser = "kirin.li";
+            }
             OutputStream output = response.getOutputStream();
             String reusult_str = "";
 
-            if (user.equals("kirin.li")) {
+            if (adminUser.contains(user)) {
                 String taskId = request.getParameter("taskId");
                 String status = request.getParameter("status");
 
@@ -217,13 +226,13 @@ public class MonitorServlet extends HttpServlet {
                 int result = clearTasks.retrieve();
 
                 switch (result) {
-                    case -1:
+                    case SERVICE_EXCEPTION:
                         reusult_str = "后台服务异常!";
                         break;
-                    case -2:
+                    case TASKID_IS_NOT_FOUND:
                         reusult_str = "taskId 不存在!";
                         break;
-                    case -3:
+                    case STATUS_IS_NOT_RIGHT:
                         reusult_str = "status 错误!";
                         break;
                     default:

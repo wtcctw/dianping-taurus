@@ -35,17 +35,13 @@ public class Test {
         return theString;
     }
     public static void main(String[] args) {
-        String ret="";
-        long start = System.currentTimeMillis();
-        try {
-            ret = readContentFromGet();
-            System.out.println(ret);
-        } catch (IOException e) {
-            e.printStackTrace();
+        String ret="kirin.li,ling.su";
+        String sub ="ling.su";
+        if (ret.contains(sub)){
+            System.out.println("############");
         }
-        long end1 = System.currentTimeMillis();
 
-        System.out.println("############TIME1:"+(end1 - start) );
+
 
     }
 }

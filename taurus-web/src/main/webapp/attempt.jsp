@@ -40,6 +40,8 @@
                 com.dp.bigdata.taurus.restlet.shared.AttemptDTO,
                 java.text.SimpleDateFormat" %>
 <%@ page import="com.dp.bigdata.taurus.web.servlet.AttemptProxyServlet" %>
+<%@ page import="com.dp.bigdata.taurus.restlet.resource.IGetTasks" %>
+<%@ page import="com.dp.bigdata.taurus.generated.module.Task" %>
 
 <div class="common-header" id="common-header">
 
@@ -78,10 +80,11 @@
                     <thead>
                     <tr>
                         <th>ID</th>
+                        <th>任务名</th>
                         <th>实际启动时间</th>
                         <th>实际结束时间</th>
                         <th>预计调度时间</th>
-                        <!-- <th>IP</th> -->
+                        <th>IP</th>
                         <th>返回值</th>
                         <th>状态</th>
                         <th>-</th>
@@ -89,6 +92,10 @@
                     </thead>
                     <tbody>
                     <%
+                        ClientResource crTask = new ClientResource(host + "gettasks");
+                        IGetTasks taskResource = crTask.wrap(IGetTasks.class);
+                        ArrayList<Task> tasks = taskResource.retrieve();
+
                         String taskID = request.getParameter("taskID");
                         String url = host + "attempt?task_id=" + taskID;
                         cr = new ClientResource(url);
@@ -100,10 +107,23 @@
                         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
                         for (AttemptDTO dto : attempts) {
                             String state = dto.getStatus();
+                            String taskName = "";
+                            for (Task task : tasks) {
+                                if (task.getTaskid().equals(dto.getTaskID())) {
+                                    taskName = task.getName();
+                                    break;
+                                }
+                            }
                     %>
                     <tr id="<%=dto.getAttemptID()%>">
                         <td><%=dto.getId()%>
                         </td>
+                        <%if (taskName != null) {%>
+                        <td><%=taskName%>
+                        </td>
+                        <%} else {%>
+                        <td>NULL</td>
+                        <%}%>
                         <%if (dto.getStartTime() != null) {%>
                         <td><%=formatter.format(dto.getStartTime())%>
                         </td>
@@ -118,6 +138,12 @@
                         <%}%>
                         <%if (dto.getScheduleTime() != null) {%>
                         <td><%=formatter.format(dto.getScheduleTime())%>
+                        </td>
+                        <%} else {%>
+                        <td>NULL</td>
+                        <%}%>
+                        <%if (dto.getExecHost() != null) {%>
+                        <td><%=dto.getExecHost()%>
                         </td>
                         <%} else {%>
                         <td>NULL</td>

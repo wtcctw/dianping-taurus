@@ -2,15 +2,10 @@ package com.dp.bigdata.taurus.restlet.resource.impl;
 
 import com.dp.bigdata.taurus.generated.mapper.TaskAttemptMapper;
 import com.dp.bigdata.taurus.restlet.resource.IClearDependencyPassTask;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.restlet.resource.ServerResource;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by kirinli on 14/10/28.
@@ -20,9 +15,14 @@ public class ClearDependencyPassTask extends ServerResource implements IClearDep
     @Autowired
     private TaskAttemptMapper taskAttemptMapper;
 
+    private static final int SERVICE_EXCEPTION = -1;
+    private static final int TASKID_IS_NOT_FOUND = -2;
+    private static final int STATUS_IS_NOT_RIGHT = -3;
+
+
     @Override
     public int retrieve() {
-        int result = -1;
+        int result = 0;
         try {
             String taskId = (String) getRequestAttributes().get("taskid");
             String status_str = (String) getRequestAttributes().get("status");
@@ -30,19 +30,19 @@ public class ClearDependencyPassTask extends ServerResource implements IClearDep
                 int status = Integer.parseInt(status_str);
                 HashMap<String, String> taskIdMap = taskAttemptMapper.isExitTaskId(taskId);
                 if (taskIdMap == null || taskIdMap.size() == 0){
-                    return  -2;
+                    return  TASKID_IS_NOT_FOUND;
                 }
 
                 result   = taskAttemptMapper.deleteDependencyPassTask(taskId,status);
             }else {
-                return -3;
+                return STATUS_IS_NOT_RIGHT;
             }
 
 
 
 
         } catch (Exception e) {
-            result = -1;
+            result = SERVICE_EXCEPTION;
         }
         return result;
     }

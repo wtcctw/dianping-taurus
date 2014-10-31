@@ -308,6 +308,83 @@
     </table>
 </ul>
 
+<ul class="dependency-tag col-sm-12">
+    <li><a class="atip" data-toggle="tooltip" data-placement="right" data-original-title="拥堵的任务"><span
+            class="label label-important">DEPENDENCY_PASS</span></a></li>
+
+</ul>
+
+<ul class="breadcrumb col-sm-12">
+    <table cellpadding="0" cellspacing="0" border="0"
+           class="table table-striped table-format table-hover" id="dependency" style="width: 100%">
+        <thead>
+        <tr>
+            <th>任务ID</th>
+            <th>任务名称</th>
+            <th>实际启动时间</th>
+            <th>实际结束时间</th>
+            <th>预计调度时间</th>
+            <th>IP</th>
+        </tr>
+        </thead>
+        <tbody>
+        <%
+
+            for (AttemptDTO dto : attempts) {
+                String state = dto.getStatus();
+                String taskName = "";
+                for (Task task : tasks) {
+                    if (task.getTaskid().equals(dto.getTaskID())) {
+                        taskName = task.getName();
+                        break;
+                    }
+                }
+
+
+                if (state.equals("DEPENDENCY_PASS")) {
+
+
+        %>
+        <tr id="<%=dto.getAttemptID()%>">
+            <td><%=dto.getTaskID()%>
+            </td>
+            <td><%=taskName%>
+            </td>
+            <%if (dto.getStartTime() != null) {%>
+            <td><%=formatter.format(dto.getStartTime())%>
+            </td>
+            <%} else {%>
+            <td>NULL</td>
+            <%}%>
+            <%if (dto.getEndTime() != null) {%>
+            <td><%=formatter.format(dto.getEndTime())%>
+            </td>
+            <%} else {%>
+            <td>NULL</td>
+            <%}%>
+            <%if (dto.getScheduleTime() != null) {%>
+            <td><%=formatter.format(dto.getScheduleTime())%>
+            </td>
+            <%} else {%>
+            <td>NULL</td>
+            <%}%>
+            <%if (dto.getExecHost() != null) {%>
+            <td><%=dto.getExecHost()%>
+            </td>
+            <%} else {%>
+            <td>NULL</td>
+            <%}%>
+
+        </tr>
+        <% }
+        }
+        %>
+        </tbody>
+    </table>
+</ul>
+
+
+
 <ul class="fail-tag col-sm-12">
     <li><a class="atip" data-toggle="tooltip" data-placement="right" data-original-title="失败的任务"><span
             class="label label-important">FAILED</span></a></li>
