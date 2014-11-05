@@ -10,6 +10,7 @@ import com.dp.bigdata.taurus.restlet.shared.HostDTO;
 import com.dp.bigdata.taurus.web.utils.ReFlashHostLoadTask;
 import com.dp.bigdata.taurus.web.utils.ReFlashHostLoadTaskTimer;
 import com.dp.bigdata.taurus.web.utils.ZabbixUtil;
+import com.dp.bigdata.taurus.zookeeper.common.infochannel.ZooKeeperCleaner;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.json.JSONArray;
@@ -18,6 +19,7 @@ import org.json.JSONObject;
 import org.restlet.data.MediaType;
 import org.restlet.resource.ClientResource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -43,6 +45,8 @@ public class MonitorServlet extends HttpServlet {
     private static final String HOSTLOAD = "hostload";
     private static final String SQLQUERY = "sqlquery";
     private static final String JOBDETAIL = "jobdetail";
+    private static final String CLEARZOOKEEPERNODES = "clearzknodes";
+
     private static final int SERVICE_EXCEPTION = -1;
     private static final int TASKID_IS_NOT_FOUND = -2;
     private static final int STATUS_IS_NOT_RIGHT = -3;
@@ -50,6 +54,8 @@ public class MonitorServlet extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,
+                config.getServletContext());
         ReFlashHostLoadTaskTimer.getReFlashHostLoadManager().start();
         ServletContext context = getServletContext();
         try {
@@ -258,6 +264,24 @@ public class MonitorServlet extends HttpServlet {
             String jsonString = userTasks.retrieve();
             output.write(jsonString.getBytes());
             output.close();
+        }else if (CLEARZOOKEEPERNODES.equals(action)){
+            OutputStream output = response.getOutputStream();
+            String start_str = request.getParameter("start");
+            String end_str = request.getParameter("end");
+
+           try{
+               int start = Integer.parseInt(start_str);
+               int end = Integer.parseInt(end_str);
+
+               ZooKeeperCleaner.clearNodes(start,end);
+               output.write("success".getBytes());
+               output.close();
+           }catch (Exception e){
+               output.write("failed".getBytes());
+               output.close();
+           }
+
+
         }
     }
 

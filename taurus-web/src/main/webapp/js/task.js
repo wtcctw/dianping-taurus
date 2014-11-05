@@ -1,23 +1,13 @@
 var isSpringType = false;
 var beanCounter = 0;
 $(document).ready(function() {
-    $.ajax({
-        type: "get",
-        url: "jsp/common-header.jsp",
-        error: function () {
-        },
-        success: function (response, textStatus) {
-            $("#common-header").html(response);
-            $('li[id="task"]').addClass("active");
-            $('#menu-toggler').on(ace.click_event, function() {
-                $('#sidebar').toggleClass('display');
-                $(this).toggleClass('display');
-                return false;
-            });
-        }
-
-
+    $('li[id="task"]').addClass("active");
+    $('#menu-toggler').on(ace.click_event, function() {
+        $('#sidebar').toggleClass('display');
+        $(this).toggleClass('display');
+        return false;
     });
+
 	$("#wizard").bwizard();
 	$("#mainClassCG").hide();
 	$("#beanCG").hide();	

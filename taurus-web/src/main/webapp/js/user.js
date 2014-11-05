@@ -6,23 +6,13 @@ $.validator.addMethod("notAdmin",function(value,element,params){
 },"嘿嘿，你懂的");	   
 
 $(document).ready(function() {
-    $.ajax({
-        type: "get",
-        url: "jsp/common-header.jsp",
-        error: function () {
-        },
-        success: function (response, textStatus) {
-            $("#common-header").html(response);
-            $('li[id="user"]').addClass("active");
-            $('#menu-toggler').on(ace.click_event, function() {
-                $('#sidebar').toggleClass('display');
-                $(this).toggleClass('display');
-                return false;
-            });
-        }
-
-
+    $('li[id="user"]').addClass("active");
+    $('#menu-toggler').on(ace.click_event, function() {
+        $('#sidebar').toggleClass('display');
+        $(this).toggleClass('display');
+        return false;
     });
+
 	$("#submit").click(function(e){
 		if(!($("#user-form").validate().form())){
 			return false;

@@ -1,12 +1,10 @@
 package com.dp.bigdata.taurus.restlet;
 
 import com.dp.bigdata.taurus.alert.TaurusAlert;
+import com.dp.bigdata.taurus.restlet.utils.ClearLogsTimerManager;
 import org.restlet.Component;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
 
-import com.dianping.cat.Cat;
 import com.dp.bigdata.taurus.core.Engine;
 
 /**
@@ -31,6 +29,7 @@ public class TaurusServer {
             restlet.start();
             alert.start(-1);
             engine.start();
+            ClearLogsTimerManager.getClearLogsTimerManager().start();
         } catch (Exception e) {
             e.printStackTrace();
         }

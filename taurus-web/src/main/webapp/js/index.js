@@ -454,7 +454,6 @@ $(document).ready(function () {
         var starttime = GetDateStr(-1);
         var endtime = GetDateStr(1);
         $.ajax({
-            async: false,
             data: {
                 action: "grouptask",
                 username:username,

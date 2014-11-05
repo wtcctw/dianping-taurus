@@ -7,26 +7,14 @@ var is_flash;
 var old_status;
 var timeout;
 $(document).ready(function () {
-    $.ajax({
-        type: "get",
-        url: "jsp/common-header.jsp",
-        error: function () {
-        },
-        success: function (response, textStatus) {
-            $("#common-header").html(response);
-
-            var sidebar = document.getElementById("sidebar");
-            sidebar.style.display="none";
-            $('li[id="schedule"]').addClass("active");
-            $('#menu-toggler').on(ace.click_event, function() {
-                sidebar.style.display="block";
-                $('#sidebar').toggleClass('display');
-                $(this).toggleClass('display');
-                return false;
-            });
-        }
-
-
+    var sidebar = document.getElementById("sidebar");
+    sidebar.style.display="none";
+    $('li[id="schedule"]').addClass("active");
+    $('#menu-toggler').on(ace.click_event, function() {
+        sidebar.style.display="block";
+        $('#sidebar').toggleClass('display');
+        $(this).toggleClass('display');
+        return false;
     });
 
     $(".atip").tooltip();

@@ -29,7 +29,12 @@ public class ZooKeeperCleaner {
 		injector = Guice.createInjector(new ReadInfoChannelModule());
 		readChannel = injector.getInstance(TaurusZKScheduleInfoChannel.class);
 	}
-	
+	public static void clearNodes(int start,int end){
+        ZooKeeperCleaner cleaner = new ZooKeeperCleaner();
+        for(int i = start; i <= end; i ++){
+            cleaner.run(i);
+        }
+    }
 	public void run(int offset) {
 	    Date date = new Date();
 	    Calendar calendar = Calendar.getInstance();
@@ -39,7 +44,7 @@ public class ZooKeeperCleaner {
 	    String dateString = format.format(calendar.getTime());
 	    List<String> ipList = null;
         try {
-            ipList = readChannel.getChildrenNodeName(null, SCHEDULE_PATH);
+            ipList = readChannel.getChildrenNodeName(SCHEDULE_PATH);
             
         } catch (KeeperException e) {
             LOGGER.error(e,e);
@@ -51,8 +56,22 @@ public class ZooKeeperCleaner {
         for(String ip:ipList) {
             List<String> attemptList = null;
             try {
-                attemptList = readChannel.getChildrenNodeName(null, SCHEDULE_PATH + "/" + ip + "/" + dateString);
-                
+                if (readChannel.existPath(SCHEDULE_PATH + "/" + ip + "/" + dateString)){
+                    attemptList = readChannel.getChildrenNodeName(SCHEDULE_PATH + "/" + ip + "/" + dateString);
+                    if (attemptList != null){
+
+                    }for(String attemptId:attemptList){
+
+                        if(!zkChannel.rmrPath("/"+ SCHEDULE_PATH + "/" + ip + "/" + attemptId)){
+                            LOGGER.error("faile to delete " + SCHEDULE_PATH + "/" + ip + "/" + attemptId);
+                        }
+                        LOGGER.info("success to delete " + SCHEDULE_PATH + "/" + ip + "/" + attemptId);
+                    }
+                    zkChannel.rmrPath("/"+ SCHEDULE_PATH + "/" + ip + "/" + dateString);
+                    LOGGER.info("success to delete " + "/"+ SCHEDULE_PATH + "/" + ip + "/" + dateString);
+                }
+
+
             } catch (KeeperException e) {
                 LOGGER.error(e,e);
                 continue;
@@ -60,14 +79,7 @@ public class ZooKeeperCleaner {
                 LOGGER.error(e,e);
                 continue;
             }
-            for(String attemptId:attemptList){
-                
-                if(!zkChannel.rmrPath("/"+ SCHEDULE_PATH + "/" + ip + "/" + attemptId)){
-                    LOGGER.error("faile to delete " + SCHEDULE_PATH + "/" + ip + "/" + attemptId);
-                }
-                
-            }
-            zkChannel.rmrPath("/"+ SCHEDULE_PATH + "/" + ip + "/" + dateString);
+
             
         }
 		
@@ -104,31 +116,13 @@ public class ZooKeeperCleaner {
                 LOGGER.error("args error",e);
             }
 		}
-		if(args.length == 2 && args[0] != null && args[1] != null){
-		    int start = 0;
-		    int end = -1;
-            try { 
-                start = Integer.parseInt(args[0]);
-                end  = Integer.parseInt(args[1]);
-            } catch(Exception e) {
-                LOGGER.error("args error",e);
-            }
-            for(int i = start; i <= end; i ++){
-                cleaner.run(i);
-            }
-            return;
+        int start = -500;
+        int end = -1;
+        for(int i = start; i <= end; i ++){
+            cleaner.run(i);
         }
-		cleaner.run(offset);
-		
-//		cleaner.set();
-//		if(args.length == 1 && args[0] != null)
-//		{
-//		    System.out.println(args[0]);
-//		    cleaner.read(args[0]);
-//		}
-		cleaner.read("taurus/schedules/10.1.1.161//status");
-//		cleaner.read("taurus/schedules/192.168.7.80/attempt_201209241101_0009_1439_0001/status");
-//		cleaner.read("taurus/schedules/192.168.7.80/attempt_201209241101_0009_1440_0001/status");
+
+
 
 	}
 	
