@@ -227,7 +227,7 @@
             <a href="index.jsp">HOME</a>
         </li>
         <li class="active">
-            <a href="monitor1.jsp">任务监控</a>
+            <a href="monitor.jsp">任务监控</a>
         </li>
     </ul>
 </div>
@@ -468,7 +468,7 @@
     };
     $(".optiontip").tooltip(options);
     var hourTime = "<%= hourTime%>";
-    var id = "<%= id%>";
+    var id = "<%= request.getParameter("id")%>";
     $(document).ready(function () {
         $.ajax({
             data: {
