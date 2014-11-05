@@ -133,7 +133,7 @@
             </a>
         </li>
         <li id="monitor">
-            <a href="monitor.jsp" target="_self">
+            <a href="monitor1.jsp" target="_self">
                 <i class="icon-trello"></i>
                 <span class="menu-text"> 任务监控 </span>
             </a>
@@ -412,9 +412,11 @@
             <h4>答：</h4><br>
 
             <div class="well">
-                <font color="#5f9ea0">确保你的项目有以下文件 如下图<br>
+                <font color="#5f9ea0">脚本程序确保你的项目有以下文件zipfile.json 如下图<br>
                     <img src="img/zipfile.jpg" style="width: 800px;height: 340px"/>
                     <br>
+                    <font color="#5f9ea0">php程序确保你的项目有以下文件config.json 如下图<br>
+                        <img src="img/config.png" style="width: 800px;height: 340px"/>
                     <br>
                     剩余操作和Q1相同，如有疑问请联系运维。
                 </font>

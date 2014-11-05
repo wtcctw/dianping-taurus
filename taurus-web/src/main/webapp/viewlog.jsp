@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <title>Taurus</title>
-
+    <%@ include file="jsp/common-nav.jsp" %>
     <meta charset="utf-8">
     <meta name="description" content=""/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -132,7 +132,7 @@
             </a>
         </li>
         <li id="monitor">
-            <a href="monitor.jsp" target="_self">
+            <a href="monitor1.jsp" target="_self">
                 <i class="icon-trello"></i>
                 <span class="menu-text"> 任务监控 </span>
             </a>

@@ -158,7 +158,7 @@
             </a>
         </li>
         <li id="monitor">
-            <a href="monitor.jsp" target="_self">
+            <a href="monitor1.jsp" target="_self">
                 <i class="icon-trello"></i>
                 <span class="menu-text"> 任务监控 </span>
             </a>

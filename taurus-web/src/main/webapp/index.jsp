@@ -143,7 +143,7 @@
             </a>
         </li>
         <li id="monitor">
-            <a href="monitor.jsp" target="_self">
+            <a href="monitor1.jsp" target="_self">
                 <i class="icon-trello"></i>
                 <span class="menu-text"> 任务监控 </span>
             </a>
@@ -223,7 +223,7 @@
 </div>
 <div class="page-content">
 <div class="row">
-<div id="user">
+<div id="userpanel">
     <div class="col-sm-12">
         <div class="col-sm-6">
             <div class="widget-box">
@@ -675,7 +675,7 @@
     var isAdmin = <%=isAdmin%>;
     var username = "<%=currentUser%>";
     if (isAdmin && username !="kirin.li") {
-         var user = document.getElementById("user");
+         var user = document.getElementById("userpanel");
              user.style.display="none";
     } else {
         //var admin = document.getElementById("admin");

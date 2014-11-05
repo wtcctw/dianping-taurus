@@ -133,7 +133,7 @@
             </a>
         </li>
         <li id="monitor">
-            <a href="monitor.jsp" target="_self">
+            <a href="monitor1.jsp" target="_self">
                 <i class="icon-trello"></i>
                 <span class="menu-text"> 任务监控 </span>
             </a>
@@ -257,7 +257,7 @@
                                 <td>2014-08-05</td>
                             </tr>
                             <tr>
-                                <td>新增任务监控<a href="monitor.jsp">任务监控</a>页面</td>
+                                <td>新增任务监控<a href="monitor1.jsp">任务监控</a>页面</td>
                                 <td>2014-08-03</td>
                             </tr>
 							<tr>

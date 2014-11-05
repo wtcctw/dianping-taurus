@@ -5,8 +5,11 @@ import com.dianping.lion.client.ConfigCache;
 import com.dianping.lion.client.LionException;
 import com.dp.bigdata.taurus.generated.mapper.TaskAttemptMapper;
 import com.dp.bigdata.taurus.generated.mapper.TaskMapper;
+import com.dp.bigdata.taurus.generated.module.Task;
 import com.dp.bigdata.taurus.restlet.resource.*;
+import com.dp.bigdata.taurus.restlet.shared.AttemptDTO;
 import com.dp.bigdata.taurus.restlet.shared.HostDTO;
+import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
 import com.dp.bigdata.taurus.web.utils.ReFlashHostLoadTask;
 import com.dp.bigdata.taurus.web.utils.ReFlashHostLoadTaskTimer;
 import com.dp.bigdata.taurus.web.utils.ZabbixUtil;
@@ -29,7 +32,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by kirinli on 14-9-29.
@@ -38,14 +43,22 @@ public class MonitorServlet extends HttpServlet {
     private String RESTLET_URL_BASE;
     private String AGENT_PORT;
     private static final String HOST = "host";
-    private static final String TOTALTASKLOAD = "totaltaskload";
-    private static final String GROUPTASK = "grouptask";
-    private static final String FAILEDTASKLOAD = "failedtaskload";
-    private static final String USERTASK = "usertask";
-    private static final String HOSTLOAD = "hostload";
-    private static final String SQLQUERY = "sqlquery";
-    private static final String JOBDETAIL = "jobdetail";
-    private static final String CLEARZOOKEEPERNODES = "clearzknodes";
+    private static final String TOTAL_TASK_LOAD = "totaltaskload";
+    private static final String GROUP_TASK = "grouptask";
+    private static final String FAILED_TASK_LOAD = "failedtaskload";
+    private static final String USER_TASK = "usertask";
+    private static final String HOST_LOAD = "hostload";
+    private static final String SQL_QUERY = "sqlquery";
+    private static final String JOB_DETAIL = "jobdetail";
+    private static final String CLEAR_ZOOKEEPER_NODES = "clearzknodes";
+    private static final String RUNNING_TASKS = "runningtasks";
+    private static final String FAILED_TASKS = "failedtasks";
+    private static final String SUBMIT_FAIL_TASK = "submitfail";
+    private static final String DEPENDENCY_PASS_TASK = "dependencypass";
+    private static final String DEPENDENCY_TIMEOUT_TASK = "dependencytimeout";
+    private static final String TIMEOUT_TASK = "timeout";
+    private static final String SCHEDULE = "schedule";
+
 
     private static final int SERVICE_EXCEPTION = -1;
     private static final int TASKID_IS_NOT_FOUND = -2;
@@ -145,7 +158,7 @@ public class MonitorServlet extends HttpServlet {
                 output.close();
 
             }
-        } else if (TOTALTASKLOAD.equals(action)) {
+        } else if (TOTAL_TASK_LOAD.equals(action)) {
             OutputStream output = response.getOutputStream();
             String start = request.getParameter("start");
             String end = request.getParameter("end");
@@ -157,7 +170,7 @@ public class MonitorServlet extends HttpServlet {
             output.write(jsonString.getBytes());
             output.close();
 
-        } else if (FAILEDTASKLOAD.equals(action)) {
+        } else if (FAILED_TASK_LOAD.equals(action)) {
             OutputStream output = response.getOutputStream();
             String start = request.getParameter("start");
             String end = request.getParameter("end");
@@ -169,7 +182,7 @@ public class MonitorServlet extends HttpServlet {
             output.write(jsonString.getBytes());
             output.close();
 
-        } else if (HOSTLOAD.equals(action)) {
+        } else if (HOST_LOAD.equals(action)) {
             OutputStream output = response.getOutputStream();
 
             String queryType = request.getParameter("queryType");
@@ -186,7 +199,7 @@ public class MonitorServlet extends HttpServlet {
 
             output.write(jsonString.getBytes());
             output.close();
-        } else if (USERTASK.equals(action)) {
+        } else if (USER_TASK.equals(action)) {
             OutputStream output = response.getOutputStream();
             String username = request.getParameter("username");
             String start = request.getParameter("start");
@@ -199,7 +212,7 @@ public class MonitorServlet extends HttpServlet {
             output.write(jsonString.getBytes());
             output.close();
 
-        } else if (GROUPTASK.equals(action)) {
+        } else if (GROUP_TASK.equals(action)) {
             OutputStream output = response.getOutputStream();
             String username = request.getParameter("username");
             String start = request.getParameter("start");
@@ -211,11 +224,11 @@ public class MonitorServlet extends HttpServlet {
             String jsonString = userTasks.retrieve();
             output.write(jsonString.getBytes());
             output.close();
-        } else if (SQLQUERY.equals(action)) {
+        } else if (SQL_QUERY.equals(action)) {
             String user = (String) request.getSession().getAttribute("taurus-user");
             String adminUser;
             try {
-                adminUser= ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.dbadmin.user");
+                adminUser = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.dbadmin.user");
             } catch (LionException e) {
                 adminUser = "kirin.li";
             }
@@ -226,7 +239,7 @@ public class MonitorServlet extends HttpServlet {
                 String taskId = request.getParameter("taskId");
                 String status = request.getParameter("status");
 
-                cr = new ClientResource(RESTLET_URL_BASE + "deletedependency/" + taskId + "/"+status);
+                cr = new ClientResource(RESTLET_URL_BASE + "deletedependency/" + taskId + "/" + status);
                 IClearDependencyPassTask clearTasks = cr.wrap(IClearDependencyPassTask.class);
                 cr.accept(MediaType.APPLICATION_XML);
                 int result = clearTasks.retrieve();
@@ -246,14 +259,14 @@ public class MonitorServlet extends HttpServlet {
                         break;
 
                 }
-            }else {
+            } else {
                 reusult_str = "无权限执行操作!";
             }
 
 
             output.write(reusult_str.getBytes());
             output.close();
-        }else if (JOBDETAIL.equals(action)){
+        } else if (JOB_DETAIL.equals(action)) {
             OutputStream output = response.getOutputStream();
             String start = request.getParameter("start");
             String end = request.getParameter("end");
@@ -264,24 +277,777 @@ public class MonitorServlet extends HttpServlet {
             String jsonString = userTasks.retrieve();
             output.write(jsonString.getBytes());
             output.close();
-        }else if (CLEARZOOKEEPERNODES.equals(action)){
+        } else if (CLEAR_ZOOKEEPER_NODES.equals(action)) {
             OutputStream output = response.getOutputStream();
             String start_str = request.getParameter("start");
             String end_str = request.getParameter("end");
 
-           try{
-               int start = Integer.parseInt(start_str);
-               int end = Integer.parseInt(end_str);
+            try {
+                int start = Integer.parseInt(start_str);
+                int end = Integer.parseInt(end_str);
 
-               ZooKeeperCleaner.clearNodes(start,end);
-               output.write("success".getBytes());
-               output.close();
-           }catch (Exception e){
-               output.write("failed".getBytes());
-               output.close();
-           }
+                ZooKeeperCleaner.clearNodes(start, end);
+                output.write("success".getBytes());
+                output.close();
+            } catch (Exception e) {
+                output.write("failed".getBytes());
+                output.close();
+            }
 
 
+        } else if (RUNNING_TASKS.equals(action)) {
+            OutputStream output = response.getOutputStream();
+            String hourTimeStr = request.getParameter("hourTime");
+            long hourTime = 60 * 60 * 1000;
+            if (hourTimeStr != null && hourTimeStr.isEmpty()) {
+                hourTime = Long.parseLong(hourTimeStr);
+
+            }
+
+            ClientResource crTask = new ClientResource(RESTLET_URL_BASE + "gettasks");
+            IGetTasks taskResource = crTask.wrap(IGetTasks.class);
+            ArrayList<Task> tasks = taskResource.retrieve();
+
+
+            String id = request.getParameter("id");
+            String taskTime = "";
+
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            String url = RESTLET_URL_BASE + "getattemptsbystatus/";
+
+            if (id == null) {
+
+                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
+
+            } else if (id.equals("1")) {
+                Integer count = (Integer) request.getSession().getAttribute("count");
+                if (count == null)
+                    count = 0;
+                Integer changeCount = count + 1;
+                request.getSession().setAttribute("count", changeCount);
+
+                taskTime = formatter.format(new Date(new Date().getTime() - (count + 1) * hourTime));
+            } else if (id.equals("24")) {
+                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
+                request.getSession().setAttribute("count", 0);
+            }
+
+
+            cr = new ClientResource(url + taskTime);
+            IGetAttemptsByStatus resource = cr.wrap(IGetAttemptsByStatus.class);
+            ArrayList<AttemptDTO> attempts = resource.retrieve();
+
+            String result = "";
+            if (attempts != null)
+                for (AttemptDTO dto : attempts) {
+                    String state = dto.getStatus();
+                    if (state.equals("RUNNING")) {
+                        String taskName = "";
+                        for (Task task : tasks) {
+                            if (task.getTaskid().equals(dto.getTaskID())) {
+                                taskName = task.getName();
+                                break;
+                            }
+                        }
+
+                        result += " <tr id = " + dto.getAttemptID() + " >"
+                                + "<td >"
+                                + dto.getTaskID()
+                                + "</td >"
+                                + "<td >"
+                                + taskName
+                                + "</td >";
+
+
+                        if (dto.getStartTime() != null) {
+                            result += "<td >"
+                                    + formatter.format(dto.getStartTime())
+                                    + "</td >";
+
+                        } else {
+                            result += "<td >"
+                                    + "NULL"
+                                    + "</td >";
+                        }
+
+                        if (dto.getEndTime() != null) {
+                            result += "<td >"
+                                    + formatter.format(dto.getEndTime())
+                                    + "</td >";
+                        } else {
+                            result += "<td >"
+                                    + "NULL"
+                                    + "</td >";
+                        }
+                        if (dto.getScheduleTime() != null) {
+                            result += "<td >"
+                                    + formatter.format(dto.getScheduleTime())
+                                    + "</td >";
+                        } else {
+                            result += "<td >"
+                                    + "NULL"
+                                    + "</td >";
+                        }
+                        if (dto.getExecHost() != null) {
+                            result += "<td >"
+                                    + dto.getExecHost()
+                                    + "</td >";
+                        } else {
+                            result += "<td >"
+                                    + "NULL"
+                                    + "</td >";
+                        }
+                        boolean isViewLog = AttemptProxyServlet.isHostOverLoad(dto.getExecHost());
+                        if (!isViewLog) {
+
+                            result += "<td >"
+                                    + " <a target = \"_blank\"\n" +
+                                    "                            href = \"viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>\" > 日志 </a >"
+                                    + "</td >";
+
+
+                        } else {
+                            result += "<td >"
+                                    + "Job机负载过高，无法查看实时日志"
+                                    + "</td >";
+
+                        }
+                        result += "</tr>";
+                    }
+                }
+            output.write(result.getBytes());
+            output.close();
+
+        } else if (FAILED_TASKS.equals(action)) {
+
+            OutputStream output = response.getOutputStream();
+            String hourTimeStr = request.getParameter("hourTime");
+            long hourTime = 60 * 60 * 1000;
+            if (hourTimeStr != null && hourTimeStr.isEmpty()) {
+                hourTime = Long.parseLong(hourTimeStr);
+
+            }
+
+            ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
+            if (tasks == null) {
+                ClientResource crTask = new ClientResource(RESTLET_URL_BASE + "gettasks");
+                IGetTasks taskResource = crTask.wrap(IGetTasks.class);
+                tasks = taskResource.retrieve();
+                ReFlashHostLoadTask.allTasks = tasks;
+                ReFlashHostLoadTask.lastReadDataTime = new Date().getTime();
+            }
+
+
+            String id = request.getParameter("id");
+            String taskTime = "";
+
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            String url = RESTLET_URL_BASE + "getattemptsbystatus/";
+
+            if (id == null) {
+
+                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
+
+            } else if (id.equals("1")) {
+                Integer count = (Integer) request.getSession().getAttribute("count");
+                if (count == null)
+                    count = 0;
+                Integer changeCount = count + 1;
+                request.getSession().setAttribute("count", changeCount);
+
+                taskTime = formatter.format(new Date(new Date().getTime() - (count + 1) * hourTime));
+            } else if (id.equals("24")) {
+                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
+                request.getSession().setAttribute("count", 0);
+            } else {
+                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
+            }
+
+
+            cr = new ClientResource(url + taskTime);
+            IGetAttemptsByStatus resource = cr.wrap(IGetAttemptsByStatus.class);
+            ArrayList<AttemptDTO> attempts = resource.retrieve();
+
+            String result = "";
+            if (attempts != null)
+                for (AttemptDTO dto : attempts) {
+                    String state = dto.getStatus();
+
+
+                    if (state.equals("FAILED")) {
+                        String taskName = "";
+                        for (Task task : tasks) {
+                            if (task.getTaskid().equals(dto.getTaskID())) {
+                                taskName = task.getName();
+                                break;
+                            }
+                        }
+                        result += " <tr id = " + dto.getAttemptID() + " >"
+                                + "<td >"
+                                + dto.getTaskID()
+                                + "</td >"
+                                + "<td >"
+                                + taskName
+                                + "</td >";
+
+
+                        if (dto.getStartTime() != null) {
+                            result += "<td >"
+                                    + formatter.format(dto.getStartTime())
+                                    + "</td >";
+
+                        } else {
+                            result += "<td >"
+                                    + "NULL"
+                                    + "</td >";
+                        }
+
+                        if (dto.getEndTime() != null) {
+                            result += "<td >"
+                                    + formatter.format(dto.getEndTime())
+                                    + "</td >";
+                        } else {
+                            result += "<td >"
+                                    + "NULL"
+                                    + "</td >";
+                        }
+                        if (dto.getScheduleTime() != null) {
+                            result += "<td >"
+                                    + formatter.format(dto.getScheduleTime())
+                                    + "</td >";
+                        } else {
+                            result += "<td >"
+                                    + "NULL"
+                                    + "</td >";
+                        }
+                        if (dto.getExecHost() != null) {
+                            result += "<td >"
+                                    + dto.getExecHost()
+                                    + "</td >";
+                        } else {
+                            result += "<td >"
+                                    + "NULL"
+                                    + "</td >";
+                        }
+
+                        result += "<td >"
+                                + "  <a target=\"_blank\" href=\"viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>\">日志</a>"
+                                + "</td >";
+
+
+                        result += "</tr>";
+                    }
+                }
+            output.write(result.getBytes());
+            output.close();
+
+        } else if (SUBMIT_FAIL_TASK.equals(action)) {
+            OutputStream output = response.getOutputStream();
+            String hourTimeStr = request.getParameter("hourTime");
+            long hourTime = 60 * 60 * 1000;
+            if (hourTimeStr != null && hourTimeStr.isEmpty()) {
+                hourTime = Long.parseLong(hourTimeStr);
+
+            }
+
+            ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
+            if (tasks == null) {
+                ClientResource crTask = new ClientResource(RESTLET_URL_BASE + "gettasks");
+                IGetTasks taskResource = crTask.wrap(IGetTasks.class);
+                tasks = taskResource.retrieve();
+                ReFlashHostLoadTask.allTasks = tasks;
+                ReFlashHostLoadTask.lastReadDataTime = new Date().getTime();
+            }
+
+
+            String id = request.getParameter("id");
+            String taskTime = "";
+
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            String url = RESTLET_URL_BASE + "getattemptsbystatus/";
+
+            if (id == null) {
+
+                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
+
+            } else if (id.equals("1")) {
+                Integer count = (Integer) request.getSession().getAttribute("count");
+                if (count == null)
+                    count = 0;
+                Integer changeCount = count + 1;
+                request.getSession().setAttribute("count", changeCount);
+
+                taskTime = formatter.format(new Date(new Date().getTime() - (count + 1) * hourTime));
+            } else if (id.equals("24")) {
+                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
+                request.getSession().setAttribute("count", 0);
+            } else {
+                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
+            }
+
+
+            cr = new ClientResource(url + taskTime);
+            IGetAttemptsByStatus resource = cr.wrap(IGetAttemptsByStatus.class);
+            ArrayList<AttemptDTO> attempts = resource.retrieve();
+
+            String result = "";
+            if (attempts != null)
+                for (AttemptDTO dto : attempts) {
+                    String state = dto.getStatus();
+
+
+                    if (state.equals("SUBMIT_FAIL")) {
+                        String taskName = "";
+                        for (Task task : tasks) {
+                            if (task.getTaskid().equals(dto.getTaskID())) {
+                                taskName = task.getName();
+                                break;
+                            }
+                        }
+                        result += " <tr id = " + dto.getAttemptID() + " >"
+                                + "<td >"
+                                + dto.getTaskID()
+                                + "</td >"
+                                + "<td >"
+                                + taskName
+                                + "</td >";
+
+
+                        if (dto.getStartTime() != null) {
+                            result += "<td >"
+                                    + formatter.format(dto.getStartTime())
+                                    + "</td >";
+
+                        } else {
+                            result += "<td >"
+                                    + "NULL"
+                                    + "</td >";
+                        }
+
+                        if (dto.getEndTime() != null) {
+                            result += "<td >"
+                                    + formatter.format(dto.getEndTime())
+                                    + "</td >";
+                        } else {
+                            result += "<td >"
+                                    + "NULL"
+                                    + "</td >";
+                        }
+                        if (dto.getScheduleTime() != null) {
+                            result += "<td >"
+                                    + formatter.format(dto.getScheduleTime())
+                                    + "</td >";
+                        } else {
+                            result += "<td >"
+                                    + "NULL"
+                                    + "</td >";
+                        }
+                        if (dto.getExecHost() != null) {
+                            result += "<td >"
+                                    + dto.getExecHost()
+                                    + "</td >";
+                        } else {
+                            result += "<td >"
+                                    + "NULL"
+                                    + "</td >";
+                        }
+
+                        result += "</tr>";
+                    }
+                }
+            output.write(result.getBytes());
+            output.close();
+
+
+        } else if (DEPENDENCY_PASS_TASK.equals(action)) {
+
+            OutputStream output = response.getOutputStream();
+            String hourTimeStr = request.getParameter("hourTime");
+            long hourTime = 60 * 60 * 1000;
+            if (hourTimeStr != null && hourTimeStr.isEmpty()) {
+                hourTime = Long.parseLong(hourTimeStr);
+
+            }
+
+            ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
+            if (tasks == null) {
+                ClientResource crTask = new ClientResource(RESTLET_URL_BASE + "gettasks");
+                IGetTasks taskResource = crTask.wrap(IGetTasks.class);
+                tasks = taskResource.retrieve();
+                ReFlashHostLoadTask.allTasks = tasks;
+                ReFlashHostLoadTask.lastReadDataTime = new Date().getTime();
+            }
+
+
+            String id = request.getParameter("id");
+            String taskTime = "";
+
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            String url = RESTLET_URL_BASE + "getattemptsbystatus/";
+
+            if (id == null) {
+
+                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
+
+            } else if (id.equals("1")) {
+                Integer count = (Integer) request.getSession().getAttribute("count");
+                if (count == null)
+                    count = 0;
+                Integer changeCount = count + 1;
+                request.getSession().setAttribute("count", changeCount);
+
+                taskTime = formatter.format(new Date(new Date().getTime() - (count + 1) * hourTime));
+            } else if (id.equals("24")) {
+                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
+                request.getSession().setAttribute("count", 0);
+            } else {
+                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
+            }
+
+
+            cr = new ClientResource(url + taskTime);
+            IGetAttemptsByStatus resource = cr.wrap(IGetAttemptsByStatus.class);
+            ArrayList<AttemptDTO> attempts = resource.retrieve();
+
+            String result = "";
+            if (attempts != null)
+                for (AttemptDTO dto : attempts) {
+                    String state = dto.getStatus();
+
+
+                    if (state.equals("SUBMIT_FAIL")) {
+                        String taskName = "";
+                        for (Task task : tasks) {
+                            if (task.getTaskid().equals(dto.getTaskID())) {
+                                taskName = task.getName();
+                                break;
+                            }
+                        }
+                        result += " <tr id = " + dto.getAttemptID() + " >"
+                                + "<td >"
+                                + dto.getTaskID()
+                                + "</td >"
+                                + "<td >"
+                                + taskName
+                                + "</td >";
+
+
+                        if (dto.getStartTime() != null) {
+                            result += "<td >"
+                                    + formatter.format(dto.getStartTime())
+                                    + "</td >";
+
+                        } else {
+                            result += "<td >"
+                                    + "NULL"
+                                    + "</td >";
+                        }
+
+                        if (dto.getEndTime() != null) {
+                            result += "<td >"
+                                    + formatter.format(dto.getEndTime())
+                                    + "</td >";
+                        } else {
+                            result += "<td >"
+                                    + "NULL"
+                                    + "</td >";
+                        }
+                        if (dto.getScheduleTime() != null) {
+                            result += "<td >"
+                                    + formatter.format(dto.getScheduleTime())
+                                    + "</td >";
+                        } else {
+                            result += "<td >"
+                                    + "NULL"
+                                    + "</td >";
+                        }
+                        if (dto.getExecHost() != null) {
+                            result += "<td >"
+                                    + dto.getExecHost()
+                                    + "</td >";
+                        } else {
+                            result += "<td >"
+                                    + "NULL"
+                                    + "</td >";
+                        }
+
+                        result += "</tr>";
+                    }
+                }
+            output.write(result.getBytes());
+            output.close();
+
+        } else if (DEPENDENCY_TIMEOUT_TASK.equals(action)) {
+
+            OutputStream output = response.getOutputStream();
+            String hourTimeStr = request.getParameter("hourTime");
+            long hourTime = 60 * 60 * 1000;
+            if (hourTimeStr != null && hourTimeStr.isEmpty()) {
+                hourTime = Long.parseLong(hourTimeStr);
+
+            }
+
+            ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
+            if (tasks == null) {
+                ClientResource crTask = new ClientResource(RESTLET_URL_BASE + "gettasks");
+                IGetTasks taskResource = crTask.wrap(IGetTasks.class);
+                tasks = taskResource.retrieve();
+                ReFlashHostLoadTask.allTasks = tasks;
+                ReFlashHostLoadTask.lastReadDataTime = new Date().getTime();
+            }
+
+
+            String id = request.getParameter("id");
+            String taskTime = "";
+
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            String url = RESTLET_URL_BASE + "getattemptsbystatus/";
+
+            if (id == null) {
+
+                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
+
+            } else if (id.equals("1")) {
+                Integer count = (Integer) request.getSession().getAttribute("count");
+                if (count == null)
+                    count = 0;
+                Integer changeCount = count + 1;
+                request.getSession().setAttribute("count", changeCount);
+
+                taskTime = formatter.format(new Date(new Date().getTime() - (count + 1) * hourTime));
+            } else if (id.equals("24")) {
+                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
+                request.getSession().setAttribute("count", 0);
+            } else {
+                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
+            }
+
+
+            cr = new ClientResource(url + taskTime);
+            IGetAttemptsByStatus resource = cr.wrap(IGetAttemptsByStatus.class);
+            ArrayList<AttemptDTO> attempts = resource.retrieve();
+
+            String result = "";
+            if (attempts != null)
+                for (AttemptDTO dto : attempts) {
+                    String state = dto.getStatus();
+
+
+                    if (state.equals("DEPENDENCY_TIMEOUT")) {
+                        String taskName = "";
+                        for (Task task : tasks) {
+                            if (task.getTaskid().equals(dto.getTaskID())) {
+                                taskName = task.getName();
+                                break;
+                            }
+                        }
+                        result += " <tr id = " + dto.getAttemptID() + " >"
+                                + "<td >"
+                                + dto.getTaskID()
+                                + "</td >"
+                                + "<td >"
+                                + taskName
+                                + "</td >";
+
+
+                        if (dto.getStartTime() != null) {
+                            result += "<td >"
+                                    + formatter.format(dto.getStartTime())
+                                    + "</td >";
+
+                        } else {
+                            result += "<td >"
+                                    + "NULL"
+                                    + "</td >";
+                        }
+
+                        if (dto.getEndTime() != null) {
+                            result += "<td >"
+                                    + formatter.format(dto.getEndTime())
+                                    + "</td >";
+                        } else {
+                            result += "<td >"
+                                    + "NULL"
+                                    + "</td >";
+                        }
+                        if (dto.getScheduleTime() != null) {
+                            result += "<td >"
+                                    + formatter.format(dto.getScheduleTime())
+                                    + "</td >";
+                        } else {
+                            result += "<td >"
+                                    + "NULL"
+                                    + "</td >";
+                        }
+                        if (dto.getExecHost() != null) {
+                            result += "<td >"
+                                    + dto.getExecHost()
+                                    + "</td >";
+                        } else {
+                            result += "<td >"
+                                    + "NULL"
+                                    + "</td >";
+                        }
+
+                        result += "</tr>";
+                    }
+                }
+            output.write(result.getBytes());
+            output.close();
+
+        } else if (TIMEOUT_TASK.equals(action)) {
+            OutputStream output = response.getOutputStream();
+            String hourTimeStr = request.getParameter("hourTime");
+            long hourTime = 60 * 60 * 1000;
+            if (hourTimeStr != null && hourTimeStr.isEmpty()) {
+                hourTime = Long.parseLong(hourTimeStr);
+
+            }
+
+            ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
+            if (tasks == null) {
+                ClientResource crTask = new ClientResource(RESTLET_URL_BASE + "gettasks");
+                IGetTasks taskResource = crTask.wrap(IGetTasks.class);
+                tasks = taskResource.retrieve();
+                ReFlashHostLoadTask.allTasks = tasks;
+                ReFlashHostLoadTask.lastReadDataTime = new Date().getTime();
+            }
+
+
+            String id = request.getParameter("id");
+            String taskTime = "";
+
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            String url = RESTLET_URL_BASE + "getattemptsbystatus/";
+
+            if (id == null) {
+
+                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
+
+            } else if (id.equals("1")) {
+                Integer count = (Integer) request.getSession().getAttribute("count");
+                if (count == null)
+                    count = 0;
+                Integer changeCount = count + 1;
+                request.getSession().setAttribute("count", changeCount);
+
+                taskTime = formatter.format(new Date(new Date().getTime() - (count + 1) * hourTime));
+            } else if (id.equals("24")) {
+                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
+                request.getSession().setAttribute("count", 0);
+            } else {
+                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
+            }
+
+
+            cr = new ClientResource(url + taskTime);
+            IGetAttemptsByStatus resource = cr.wrap(IGetAttemptsByStatus.class);
+            ArrayList<AttemptDTO> attempts = resource.retrieve();
+
+            String result = "";
+            if (attempts != null)
+                for (AttemptDTO dto : attempts) {
+                    String state = dto.getStatus();
+
+
+                    if (state.equals("TIMEOUT")) {
+                        String taskName = "";
+                        for (Task task : tasks) {
+                            if (task.getTaskid().equals(dto.getTaskID())) {
+                                taskName = task.getName();
+                                break;
+                            }
+                        }
+                        result += " <tr id = " + dto.getAttemptID() + " >"
+                                + "<td >"
+                                + dto.getTaskID()
+                                + "</td >"
+                                + "<td >"
+                                + taskName
+                                + "</td >";
+
+
+                        if (dto.getStartTime() != null) {
+                            result += "<td >"
+                                    + formatter.format(dto.getStartTime())
+                                    + "</td >";
+
+                        } else {
+                            result += "<td >"
+                                    + "NULL"
+                                    + "</td >";
+                        }
+
+                        if (dto.getEndTime() != null) {
+                            result += "<td >"
+                                    + formatter.format(dto.getEndTime())
+                                    + "</td >";
+                        } else {
+                            result += "<td >"
+                                    + "NULL"
+                                    + "</td >";
+                        }
+                        if (dto.getScheduleTime() != null) {
+                            result += "<td >"
+                                    + formatter.format(dto.getScheduleTime())
+                                    + "</td >";
+                        } else {
+                            result += "<td >"
+                                    + "NULL"
+                                    + "</td >";
+                        }
+                        if (dto.getExecHost() != null) {
+                            result += "<td >"
+                                    + dto.getExecHost()
+                                    + "</td >";
+                        } else {
+                            result += "<td >"
+                                    + "NULL"
+                                    + "</td >";
+                        }
+
+                        result += "</tr>";
+                    }
+                }
+            output.write(result.getBytes());
+            output.close();
+        } else if (SCHEDULE.equals(action)) {
+            OutputStream output = response.getOutputStream();
+            String task_api = RESTLET_URL_BASE + "task";
+            String name = request.getParameter("name");
+            String path = request.getParameter("path");
+            String appname = request.getParameter("appname");
+            String currentUser = request.getParameter("currentUser");
+            JsonArray jsonArray = new JsonArray();
+            if (name != null && !name.isEmpty()) {
+                task_api = task_api + "?name=" + name;
+            } else if (appname != null) {
+                task_api = task_api + "?appname=" + appname;
+            } else if (currentUser != null) {
+                task_api = task_api + "?user=" + currentUser;
+            }
+            cr = new ClientResource(task_api);
+            ITasksResource resource = cr.wrap(ITasksResource.class);
+            cr.accept(MediaType.APPLICATION_XML);
+            ArrayList<TaskDTO> tasks = resource.retrieve();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            for (TaskDTO dto : tasks) {
+                JsonObject jsonObject = new JsonObject();
+                String state = dto.getStatus();
+                jsonObject.addProperty("state",state);
+
+                jsonObject.addProperty("taskId", dto.getTaskid());
+                jsonObject.addProperty("taskName",dto.getName());
+                jsonObject.addProperty("hostName", dto.getHostname());
+                jsonObject.addProperty("creator",dto.getCreator());
+                jsonObject.addProperty("proxyUser",dto.getProxyuser());
+                jsonObject.addProperty("addTime",formatter.format(dto.getAddtime()));
+                jsonObject.addProperty("crontab",dto.getCrontab());
+                jsonArray.add(jsonObject);
+            }
+
+            output.write(jsonArray.toString().getBytes());
+            output.close();
         }
     }
 

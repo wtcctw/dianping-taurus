@@ -51,7 +51,7 @@ public class AttemptProxyServlet extends HttpServlet {
     private static final String LOG = "view-log";
     private static final String ISVIEWLOG = "isviewlog";
 
-    private String RESTLET_URL_BASE;
+    public static String RESTLET_URL_BASE;
     private String ERROR_PAGE;
     private String AGENT_PORT;
 
@@ -411,7 +411,7 @@ public class AttemptProxyServlet extends HttpServlet {
             }
 
             String respStr = "";
-            if (host.isEmpty()) {
+            if (host == null || host.isEmpty()) {
                 OutputStream output = response.getOutputStream();
                 output.close();
             } else {

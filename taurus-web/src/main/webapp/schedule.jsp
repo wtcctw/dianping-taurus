@@ -136,7 +136,7 @@
             </a>
         </li>
         <li id="monitor">
-            <a href="monitor.jsp" target="_self">
+            <a href="monitor1.jsp" target="_self">
                 <i class="icon-trello"></i>
                 <span class="menu-text"> 任务监控 </span>
             </a>
@@ -191,7 +191,7 @@
 
 <script>
     var isAdmin = <%=isAdmin%>;
-    if(!isAdmin){
+    if (!isAdmin) {
         $("#userrolechange").html("我的任务");
     }
 
@@ -201,30 +201,30 @@
 
 <div class="main-content">
 
-<div class="breadcrumbs" id="breadcrumbs">
-    <script type="text/javascript">
-        try {
-            ace.settings.check('breadcrumbs', 'fixed')
-        } catch (e) {
-        }
-    </script>
-    <ul class="breadcrumb">
-        <li>
-            <i class="icon-home home-icon"></i>
-            <a href="index.jsp">HOME</a>
-        </li>
-        <li class="active">
-            <a href="schedule.jsp">调度中心</a>
-        </li>
-    </ul>
-</div>
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try {
+                ace.settings.check('breadcrumbs', 'fixed')
+            } catch (e) {
+            }
+        </script>
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home home-icon"></i>
+                <a href="index.jsp">HOME</a>
+            </li>
+            <li class="active">
+                <a href="schedule.jsp">调度中心</a>
+            </li>
+        </ul>
+    </div>
 
 
-<%@page import="com.dp.bigdata.taurus.restlet.resource.ITasksResource" %>
-<%@page import="com.dp.bigdata.taurus.restlet.shared.TaskDTO" %>
-<%@page import="java.text.SimpleDateFormat" %>
+    <%@page import="com.dp.bigdata.taurus.restlet.resource.ITasksResource" %>
+    <%@page import="com.dp.bigdata.taurus.restlet.shared.TaskDTO" %>
+    <%@page import="java.text.SimpleDateFormat" %>
 
-<div class="page-content ">
+    <div class="page-content ">
         <div id="alertContainer" class="col-sm-12"></div>
         <div class="row">
             <div class="span3 hide">
@@ -272,108 +272,25 @@
                 </div>
             </div>
             <div class="col-sm-12">
-                <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-hover"
-                       width="100%" id="example">
-                    <thead>
-                    <tr>
-                        <th class="hide">ID</th>
-                        <th width="15%">名称</th>
-                        <th>IP</th>
-                        <th>调度人</th>
-                        <th>调度身份</th>
-                        <th class="hide">组</th>
-                        <th>创建时间</th>
-                        <th>Crontab</th>
-                        <th>状态</th>
-                        <th class="center">-</th>
-                        <th class="center">-</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <% String task_api = host + "task";
-                        String name = request.getParameter("name");
-                        String path = request.getParameter("path");
-                        String appname = request.getParameter("appname");
-                        if (name != null && !name.isEmpty()) {
-                            task_api = task_api + "?name=" + name;
-                        } else if (appname != null) {
-                            task_api = task_api + "?appname=" + appname;
-                        } else if (currentUser != null) {
-                            task_api = task_api + "?user=" + currentUser;
-                        }
-                        if (path != null && !path.equals("")) {
-                    %>
-                    <span style="color:red">提示:已部署的作业文件的路径为<%=path%></span>
-                    <% }
-                        cr = new ClientResource(task_api);
-                        ITasksResource resource = cr.wrap(ITasksResource.class);
-                        cr.accept(MediaType.APPLICATION_XML);
-                        ArrayList<TaskDTO> tasks = resource.retrieve();
-                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                        for (TaskDTO dto : tasks) {
-                            String state = dto.getStatus();
-                            boolean isRunning = true;
-                            if (state.equals("SUSPEND")) {
-                                isRunning = false;
-                            }
-                            if (isRunning) {
-                    %>
-                    <tr id="<%=dto.getTaskid()%>">
-                            <% } else { %>
-                    <tr id="<%=dto.getTaskid()%>" class="error">
-                        <%}%>
-                        <td class="hide"><%=dto.getTaskid()%>
-                        </td>
-                        <td class="fixLength-td"><%=dto.getName()%>
-                        </td>
-                        <td><%=dto.getHostname()%>
-                        </td>
-                        <td><%=dto.getCreator()%>
-                        </td>
-                        <td><%=dto.getProxyuser()%>
-                        </td>
-                        <td class="hide">arch(mock)</td>
-                        <td><%=formatter.format(dto.getAddtime())%>
-                        </td>
-                        <td><%=dto.getCrontab()%>
-                        </td>
-                        <td><%if (isRunning) {%>
-                            <span class="label label-info"><%=state%></span>
-                            <%} else {%>
-                            <span class="label label-important"><%=state%></span>
-                            <%}%>
-                        </td>
-                        <td>
-                            <div class="btn-group">
-                                <button class="btn btn-success dropdown-toggle" data-toggle="dropdown">
-                                    Action <span class="icon-angle-down"></span></button>
-                                <ul class="dropdown-menu">
-                                    <li><a href="#confirm"
-                                           onClick="action($(this).parents('tr').find('td')[0].textContent,1)">删除</a>
-                                    </li>
-                                    <% if (isRunning) {%>
-                                    <li><a href="#confirm"
-                                           onClick="action($(this).parents('tr').find('td')[0].textContent,2)">暂停</a>
-                                    </li>
-                                    <%} else { %>
-                                    <li><a href="#confirm"
-                                           onClick="action($(this).parents('tr').find('td')[0].textContent,2)">恢复</a>
-                                    </li>
-                                    <%}%>
-                                    <li><a href="#confirm"
-                                           onClick="action($(this).parents('tr').find('td')[0].textContent,3)">执行</a>
-                                    </li>
-                                    <li><a class="detailBtn" href="task_form.jsp?task_id=<%=dto.getTaskid()%>">详细</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </td>
-                        <td><a id="attempts" class="btn btn-primary btn-small"
-                               href="attempt.jsp?taskID=<%=dto.getTaskid()%>">运行历史</a></td>
-                    </tr>
-                    <% } %>
-                    </tbody>
-                </table>
+                <% String task_api = host + "task";
+                    String name = request.getParameter("name");
+                    String path = request.getParameter("path");
+                    String appname = request.getParameter("appname");
+                    if (name != null && !name.isEmpty()) {
+                        task_api = task_api + "?name=" + name;
+                    } else if (appname != null) {
+                        task_api = task_api + "?appname=" + appname;
+                    } else if (currentUser != null) {
+                        task_api = task_api + "?user=" + currentUser;
+                    }
+                    if (path != null && !path.equals("")) {
+                %>
+                <span style="color:red">提示:已部署的作业文件的路径为<%=path%></span>
+                <% }%>
+
+                <div id="schedule_content">
+                </div>
+
 
             </div>
         </div>
@@ -396,7 +313,7 @@
 <!-- detailModal -->
 
 <div class="modal fade" id="detailModal" role="dialog"
-     aria-hidden="true" >
+     aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
         </div>
@@ -408,13 +325,155 @@
     jQuery(function ($) {
 
         $('li[id="schedule"]').addClass("active");
-        $('#menu-toggler').on(ace.click_event, function() {
+        $('#menu-toggler').on(ace.click_event, function () {
             $('#sidebar').toggleClass('display');
             $(this).toggleClass('display');
             return false;
         });
 
-        var oTable1 =
+        var name = <%=request.getParameter("name")%>;
+        var path = <%=request.getParameter("path")%>;
+        var appname = <%=request.getParameter("appname")%>;
+        var currentUser = "<%= currentUser%>";
+        var scheduleBody = "";
+        $.ajax({
+            data: {
+                action: "schedule",
+                name: name,
+                path: path,
+                appname: appname,
+                currentUser: currentUser
+            },
+            type: "POST",
+            url: "/monitor",
+            error: function () {
+                $("#schedule_content").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
+                $("#schedule_content").addClass("align-center");
+            },
+            success: function (response, textStatus) {
+
+
+                var jsonarray = $.parseJSON(response);
+                scheduleBody += " <table cellpadding='0' cellspacing='0' border='0' class='table table-striped table-bordered table-hover' width='100%' id='example'>"
+                        + "<thead>"
+                        + "<tr>"
+                        + "<th class='hide'>ID</th>"
+                        + "<th width='15%'>名称</th>"
+                        + "<th>IP</th>"
+                        + "<th>调度人</th>"
+                        + "<th>调度身份</th>"
+                        + "<th class='hide'>组</th>"
+                        + "<th>创建时间</th>"
+                        + "<th>Crontab</th>"
+                        + "<th>状态</th>"
+                        + "<th class='center'>-</th>"
+                        + "<th class='center'>-</th>"
+                        + "</tr>"
+                        + " </thead>"
+                        + "<tbody>";
+
+
+                $.each(jsonarray, function (i, item) {
+                    var state = item.state;
+                    var isRunning = true;
+                    if (state == "SUSPEND") {
+                        isRunning = false;
+                    }
+
+                    if (isRunning) {
+                        scheduleBody += "<tr id='" + item.taskId + "'>"
+                                + "<td class='hide'>" + item.taskId + "</td>"
+                                + "<td class='fixLength-td'>"
+                                + item.taskName
+                                + "</td>"
+                                + "<td>"
+                                + item.hostName
+                                + "</td>"
+                                + "<td>"
+                                + item.creator
+                                + "</td>"
+                                + "<td>"
+                                + item.proxyUser
+                                + "</td>"
+                                + "<td class='hide'>arch(mock)</td>"
+                                + "<td>"
+                                + item.addTime
+                                + "</td>"
+                                + "<td>"
+                                + item.crontab
+                                + "</td>"
+                                + "<td>"
+                                + "<span class='label label-info'>"
+                                + item.state
+                                + "</span>"
+                                + "</td>"
+                                + "<td>"
+                                + "<div class='btn-group'>"
+                                + "<button class='btn btn-success dropdown-toggle' data-toggle='dropdown'>"
+                                + "Action"
+                                + "<span class='icon-angle-down'></span></button>"
+                                + "<ul class='dropdown-menu'>"
+                                + "<li><a href='#confirm' onClick='action($(this).parents('tr').find('td')[0].textContent,1)'>删除</a></li>"
+                                + "<li><a href='#confirm' onClick='action($(this).parents('tr').find('td')[0].textContent,2)'>暂停</a></li>"
+                                + "<li><a href='#confirm' onClick='action($(this).parents('tr').find('td')[0].textContent,3)'>执行</a></li>"
+                                + "<li><a class='detailBtn' href='task_form.jsp?task_id="
+                                + item.taskId
+                                + "'>详细</a></li></ul></div>"
+                        +"</td>"
+                        + "<td><a id='attempts' class='btn btn-primary btn-small' href='attempt.jsp?taskID=" + item.taskId + "'>运行历史</a></td></tr>";
+                    } else {
+                        scheduleBody += "<tr id='" + item.taskId + "' class='error'>"
+                                     +"<td class='hide'>" + item.taskId + "</td>"
+                                + "<td class='fixLength-td'>"
+                                + item.taskName
+                                + "</td>"
+                                + "<td>"
+                                + item.hostName
+                                + "</td>"
+                                + "<td>"
+                                + item.creator
+                                + "</td>"
+                                + "<td>"
+                                + item.proxyUser
+                                + "</td>"
+                                + "<td class='hide'>arch(mock)</td>"
+                                + "<td>"
+                                + item.addTime
+                                + "</td>"
+                                + "<td>"
+                                + item.crontab
+                                + "</td>"
+                                +"<td>"
+                                +"<span class='label label-important'>"
+                                + item.state
+                                + "</span>"
+                                +"</td>"
+                                +"<td>"
+                                + "<div class='btn-group'>"
+                                + "<button class='btn btn-success dropdown-toggle' data-toggle='dropdown'>"
+                                + "Action"
+                                + "<span class='icon-angle-down'></span></button>"
+                                + "<ul class='dropdown-menu'>"
+                                + "<li><a href='#confirm' onClick='action($(this).parents('tr').find('td')[0].textContent,1)'>删除</a></li>"
+                                +"<li><a href='#confirm' onClick='action($(this).parents('tr').find('td')[0].textContent,2)'>恢复</a></li>"
+                                +"<li><a href='#confirm' onClick='action($(this).parents('tr').find('td')[0].textContent,3)'>执行</a></li>"
+                                + "<li><a class='detailBtn' href='task_form.jsp?task_id="
+                                + item.taskId
+                                + "'>详细</a></li></ul></div>"
+                        +"</td>"
+                        + "<td><a id='attempts' class='btn btn-primary btn-small' href='attempt.jsp?taskID=" + item.taskId + "'>运行历史</a></td></tr>"
+
+                    }
+
+
+
+
+
+                });
+                scheduleBody +="</tbody> </table>";
+                console.log(scheduleBody);
+                $("#schedule_load").html("");
+                $("#schedule_content").html(scheduleBody);
                 $('#example').dataTable({
                     bAutoWidth: true,
                     "bPaginate": true,
@@ -434,6 +493,12 @@
 
 
                 });
+            }
+
+
+        });
+
+
 
 
     })
