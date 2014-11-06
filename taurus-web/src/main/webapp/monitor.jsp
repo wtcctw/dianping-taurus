@@ -36,6 +36,13 @@
         .time_inal {
             float: right
         }
+        .scrollup {
+            opacity: 0.3;
+            position: fixed;
+            bottom: 50px;
+            right: 100px;
+            display: none;
+        }
     </style>
 </head>
 <body data-spy="scroll">
@@ -237,24 +244,6 @@
 </div>
 
 
-<%
-    //        String admin = (String)request.getSession().getAttribute("Admin");
-//        if (admin== null || !admin.equals("true")) {
-//            response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-//            String newLocn = "notadmin.jsp";
-//            response.setHeader("Location", newLocn);
-//        }
-
-
-    Date time = new Date();
-    SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHH");
-    long hourTime = 60 * 60 * 1000;
-    Integer countTotal = (Integer) request.getSession().getAttribute("count");
-    if (countTotal == null)
-        countTotal = 0;
-    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-
-%>
 
 <div class="row">
 <ul class="run-tag col-sm-12">
@@ -285,18 +274,106 @@
     </table>
 </ul>
 <div class="time_inal ">
+    <%
+        Date time = new Date();
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHH");
+        long hourTime = 60 * 60 * 1000;
 
-    <a class="atip" data-toggle="tooltip" data-placement="top"
-       data-original-title="当你点击了[-1h]后，在想切换到当前页面时，请点击[当天]，刷新页面无效噢～">[注意] </a>
-    &nbsp;&nbsp; |&nbsp;&nbsp;
-    <a class="atip"
-       href="monitor.jsp?id=1&taskdate＝<%=df.format(new Date(time.getTime() - (countTotal+1)*hourTime))    %> "
-       data-toggle="tooltip" data-placement="top"
-       data-original-title="时间区间[<%=formatter.format(new Date(time.getTime() - (countTotal+1)*hourTime))%>~<%=formatter.format(new Date(time.getTime()- countTotal*hourTime))%>]">[-1h] </a>
-    &nbsp;&nbsp; |&nbsp;&nbsp;
-    <a class="atip" href="monitor.jsp?id=24&taskdate＝<%=df.format(new Date(new Date().getTime() -24*hourTime))    %>"
-       data-toggle="tooltip" data-placement="top"
-       data-original-title=" 时间区间[<%=formatter.format(new Date(new Date().getTime() -24*hourTime))%>~<%=formatter.format(new Date())%>]">[当天] </a>
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+        String step_str = request.getParameter("step");
+        String now = request.getParameter("date");
+        System.out.println(step_str+"#"+now);
+        int step = -24;
+    %>
+
+    <div >
+        <a class="atip" data-toggle="tooltip" data-placement="top"
+           data-original-title="当你点击了[-1h]|[-1d]|[-1w]|[-1m]后，在想切换到当前页面时，请点击[当天]，刷新页面无效噢～">[注意] </a>
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+
+
+        <a class="atip"
+           href="monitor.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date())%>"
+           data-toggle="tooltip" data-placement="top"
+           data-original-title=" 时间区间[<%=formatter.format(new Date(new Date().getTime() -24*hourTime))%>~<%=formatter.format(new Date())%>]">[当天] </a>
+        <a class="atip" data-toggle="tooltip" data-placement="top"
+           data-original-title="查看历史数据">[历史模式] </a>
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        <a class="atip"
+                <% if (now == null) {
+                    now = df.format(time);
+                }
+                    step = -720;
+                %>
+           href="monitor.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+           data-toggle="tooltip" data-placement="top"
+           data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime)) %>~<%=formatter.format(new Date(df.parse(now).getTime()))%>]">[-1m] </a>
+        &nbsp;&nbsp; |&nbsp;&nbsp;
+        <a class="atip"
+                <% if (now == null) {
+                    now = df.format(time);
+                }
+                    step = -168;
+                %>
+           href="monitor.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+           data-toggle="tooltip" data-placement="top"
+           data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>
+    ~<%=formatter.format(new Date(df.parse(now).getTime()))%>]">[-1w] </a>
+        &nbsp;&nbsp; |&nbsp;&nbsp;
+        <a class="atip"
+                <% if (now == null) {
+                    now = df.format(time);
+                }
+                    step = -24;
+                %>
+           href="monitor.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%>"
+           data-toggle="tooltip" data-placement="top"
+           data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>
+    ~<%=formatter.format(new Date(df.parse(now).getTime()))%>]">[-1d] </a>
+
+        &nbsp;&nbsp; |&nbsp;&nbsp;
+        <a class="atip"  <% if (now == null) {
+            now = df.format(time);
+        }
+            step = 24;
+            if (df.parse(now).after(time)) {%>
+           href="monitor.jsp?step=-24&date＝<%=df.format(time)%> "
+                <% } else {%>
+           href="monitor.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+                <% }
+                %>
+           data-toggle="tooltip" data-placement="top"
+           data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime()))%>~<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>]">[+1d] </a>
+        &nbsp;&nbsp; |&nbsp;&nbsp;
+        <a class="atip"  <% if (now == null) {
+            now = df.format(time);
+        }
+            step = 168;
+            if (df.parse(now).after(time)) {%>
+           href="monitor.jsp?step=-24&op=day&date＝<%=df.format(time)%> "
+                <% } else {%>
+           href="monitor.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+                <% }
+                %>
+           data-toggle="tooltip" data-placement="top"
+           data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime()))%>~<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>]">[+1w] </a>
+        &nbsp;&nbsp; |&nbsp;&nbsp;
+        <a class="atip"  <% if (now == null) {
+            now = df.format(time);
+        }
+            step = 720;
+            if (df.parse(now).after(time)) {%>
+           href="monitor.jsp?step=-24&op=day&date＝<%=df.format(time)%> "
+                <% } else {%>
+           href="monitor.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+                <% }
+                %>
+           data-toggle="tooltip" data-placement="top"
+           data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime()))%>~<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>]">[+1m] </a>
+    </div>
+
+
 </div>
 
 <ul class="submit-fail-tag col-sm-12">
@@ -453,6 +530,9 @@
     </div>
 </div>
 </div>
+<a href="#" class="scrollup" style="display: inline;">
+    <img src="img/ScrollTopArrow.png" width="50" height="50">
+</a>
 <script type="text/javascript">
     $('li[id="monitor"]').addClass("active");
     $('#menu-toggler').on(ace.click_event, function() {
@@ -460,15 +540,110 @@
         $(this).toggleClass('display');
         return false;
     });
+    $(window).scroll(function () {
+        if ($(this).scrollTop() > 100) {
+            $('.scrollup').fadeIn();
+        } else {
+            $('.scrollup').fadeOut();
+        }
+    });
 
+    $('.scrollup').click(function () {
+        $("html, body").scrollTop(0);
+        return false;
+    });
     $(".atip").tooltip();
     options = {
         delay: { show: 500, hide: 100 },
         trigger: 'click'
     };
     $(".optiontip").tooltip(options);
-    var hourTime = "<%= hourTime%>";
+    function GetDateStr(dd, AddDayCount) {
+        dd.setDate(dd.getDate() + AddDayCount);//获取AddDayCount天后的日期
+        var y = dd.getFullYear();
+        var m = dd.getMonth() + 1;//获取当前月份的日期
+        var d = dd.getDate();
+        return y + "-" + m + "-" + d;
+    }
+    <%String now_str = request.getParameter("date");
+    if (now_str == null || now_str.isEmpty()){
+    now_str= df.format(time);
+    }
+    %>
+    var now_s = "<%=formatter.format( df.parse(now_str))%>";
+    var now = new Date(Date.parse(now_s.replace(/-/g, "/")));
     var id = "<%= request.getParameter("id")%>";
+    var step = "<%=request.getParameter("step")%>";
+    <%String op_str = request.getParameter("op");
+    if(op_str==null || op_str.isEmpty()){
+    op_str="day";
+    }%>
+    var op="<%=op_str%>";
+    var starttime;
+    var endtime ;
+    if(step == null || step=="null"){
+        starttime = GetDateStr(now,-1);
+        if(op == "day"){
+            endtime = GetDateStr(now,1);
+        }else{
+            endtime = GetDateStr(new Date(),1);
+        }
+
+    }else if(step == "-24"){
+        starttime = GetDateStr(now,-1);
+        if(op == "day"){
+            endtime = GetDateStr(now,1);
+        }else{
+            endtime = GetDateStr(new Date(),1);
+        }
+    }else if(step == "-168"){
+        starttime = GetDateStr(now,-7);
+        if(op == "day"){
+            endtime = GetDateStr(now,1);
+        }else{
+            endtime = GetDateStr(new Date(),1);
+        }
+    }else if(step == "-720"){
+        starttime = GetDateStr(now,-30);
+        if(op == "day"){
+            endtime = GetDateStr(now,1);
+        }else{
+            endtime = GetDateStr(new Date(),1);
+        }
+    }else if(step == "24"){
+        if(op == "day"){
+            starttime = GetDateStr(now,0);
+            endtime = GetDateStr(now,1);
+        }else{
+            starttime = GetDateStr(now,0);
+            endtime = GetDateStr(new Date(),1);
+        }
+
+
+    }else if(step == "168"){
+        if(op == "day"){
+            starttime = GetDateStr(now,0);
+            endtime = GetDateStr(now,7);
+        }else{
+            starttime = GetDateStr(now,7);
+            endtime = GetDateStr(new Date(),1);
+        }
+
+    }else if(step == "720"){
+        if(op == "day"){
+            starttime = GetDateStr(now,0);
+            endtime = GetDateStr(now,30);
+        }else{
+            starttime = GetDateStr(now,30);
+            endtime = GetDateStr(new Date(),1);
+        }
+
+    }else {
+        starttime = GetDateStr(now,-1);
+        endtime = GetDateStr(now,1);
+    }
+
+
     $(document).ready(function () {
         $.ajax({
             data: {
@@ -491,7 +666,8 @@
         $.ajax({
             data: {
                 action: "submitfail",
-                hourTime:hourTime,
+                start:starttime,
+                end:endtime,
                 id:id
             },
             type: "POST",
@@ -511,7 +687,8 @@
         $.ajax({
             data: {
                 action: "dependencypass",
-                hourTime:hourTime,
+                start:starttime,
+                end:endtime,
                 id:id
             },
             type: "POST",
@@ -531,7 +708,8 @@
         $.ajax({
             data: {
                 action: "failedtasks",
-                hourTime:hourTime,
+                start:starttime,
+                end:endtime,
                 id:id
             },
             type: "POST",
@@ -550,7 +728,8 @@
         $.ajax({
             data: {
                 action: "dependencytimeout",
-                hourTime:hourTime,
+                start:starttime,
+                end:endtime,
                 id:id
             },
             type: "POST",
@@ -569,7 +748,8 @@
         $.ajax({
             data: {
                 action: "timeout",
-                hourTime:hourTime,
+                start:starttime,
+                end:endtime,
                 id:id
             },
             type: "POST",

@@ -402,8 +402,9 @@ public class MonitorServlet extends HttpServlet {
                         if (!isViewLog) {
 
                             result += "<td >"
-                                    + " <a target = \"_blank\"\n" +
-                                    "                            href = \"viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>\" > 日志 </a >"
+                                    + "  <a target=\"_blank\" href=\"viewlog.jsp?id="
+                                    + dto.getAttemptID()+"&status="+dto.getStatus()
+                                    +"\">日志</a>"
                                     + "</td >";
 
 
@@ -422,12 +423,8 @@ public class MonitorServlet extends HttpServlet {
         } else if (FAILED_TASKS.equals(action)) {
 
             OutputStream output = response.getOutputStream();
-            String hourTimeStr = request.getParameter("hourTime");
-            long hourTime = 60 * 60 * 1000;
-            if (hourTimeStr != null && hourTimeStr.isEmpty()) {
-                hourTime = Long.parseLong(hourTimeStr);
-
-            }
+            String start = request.getParameter("start");
+            String end = request.getParameter("end");
 
             ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
             if (tasks == null) {
@@ -439,30 +436,11 @@ public class MonitorServlet extends HttpServlet {
             }
 
 
-            String id = request.getParameter("id");
-            String taskTime = "";
+            String taskTime = start;
 
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             String url = RESTLET_URL_BASE + "getattemptsbystatus/";
 
-            if (id == null) {
-
-                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
-
-            } else if (id.equals("1")) {
-                Integer count = (Integer) request.getSession().getAttribute("count");
-                if (count == null)
-                    count = 0;
-                Integer changeCount = count + 1;
-                request.getSession().setAttribute("count", changeCount);
-
-                taskTime = formatter.format(new Date(new Date().getTime() - (count + 1) * hourTime));
-            } else if (id.equals("24")) {
-                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
-                request.getSession().setAttribute("count", 0);
-            } else {
-                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
-            }
 
 
             cr = new ClientResource(url + taskTime);
@@ -532,7 +510,9 @@ public class MonitorServlet extends HttpServlet {
                         }
 
                         result += "<td >"
-                                + "  <a target=\"_blank\" href=\"viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>\">日志</a>"
+                                + "  <a target=\"_blank\" href=\"viewlog.jsp?id="
+                                + dto.getAttemptID()+"&status="+dto.getStatus()
+                                +"\">日志</a>"
                                 + "</td >";
 
 
@@ -544,12 +524,8 @@ public class MonitorServlet extends HttpServlet {
 
         } else if (SUBMIT_FAIL_TASK.equals(action)) {
             OutputStream output = response.getOutputStream();
-            String hourTimeStr = request.getParameter("hourTime");
-            long hourTime = 60 * 60 * 1000;
-            if (hourTimeStr != null && hourTimeStr.isEmpty()) {
-                hourTime = Long.parseLong(hourTimeStr);
-
-            }
+            String start = request.getParameter("start");
+            String end = request.getParameter("end");
 
             ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
             if (tasks == null) {
@@ -561,30 +537,11 @@ public class MonitorServlet extends HttpServlet {
             }
 
 
-            String id = request.getParameter("id");
-            String taskTime = "";
+            String taskTime = start;
 
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             String url = RESTLET_URL_BASE + "getattemptsbystatus/";
 
-            if (id == null) {
-
-                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
-
-            } else if (id.equals("1")) {
-                Integer count = (Integer) request.getSession().getAttribute("count");
-                if (count == null)
-                    count = 0;
-                Integer changeCount = count + 1;
-                request.getSession().setAttribute("count", changeCount);
-
-                taskTime = formatter.format(new Date(new Date().getTime() - (count + 1) * hourTime));
-            } else if (id.equals("24")) {
-                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
-                request.getSession().setAttribute("count", 0);
-            } else {
-                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
-            }
 
 
             cr = new ClientResource(url + taskTime);
@@ -663,12 +620,8 @@ public class MonitorServlet extends HttpServlet {
         } else if (DEPENDENCY_PASS_TASK.equals(action)) {
 
             OutputStream output = response.getOutputStream();
-            String hourTimeStr = request.getParameter("hourTime");
-            long hourTime = 60 * 60 * 1000;
-            if (hourTimeStr != null && hourTimeStr.isEmpty()) {
-                hourTime = Long.parseLong(hourTimeStr);
-
-            }
+            String start = request.getParameter("start");
+            String end = request.getParameter("end");
 
             ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
             if (tasks == null) {
@@ -680,30 +633,11 @@ public class MonitorServlet extends HttpServlet {
             }
 
 
-            String id = request.getParameter("id");
-            String taskTime = "";
+            String taskTime = start;
 
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             String url = RESTLET_URL_BASE + "getattemptsbystatus/";
 
-            if (id == null) {
-
-                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
-
-            } else if (id.equals("1")) {
-                Integer count = (Integer) request.getSession().getAttribute("count");
-                if (count == null)
-                    count = 0;
-                Integer changeCount = count + 1;
-                request.getSession().setAttribute("count", changeCount);
-
-                taskTime = formatter.format(new Date(new Date().getTime() - (count + 1) * hourTime));
-            } else if (id.equals("24")) {
-                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
-                request.getSession().setAttribute("count", 0);
-            } else {
-                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
-            }
 
 
             cr = new ClientResource(url + taskTime);
@@ -781,12 +715,8 @@ public class MonitorServlet extends HttpServlet {
         } else if (DEPENDENCY_TIMEOUT_TASK.equals(action)) {
 
             OutputStream output = response.getOutputStream();
-            String hourTimeStr = request.getParameter("hourTime");
-            long hourTime = 60 * 60 * 1000;
-            if (hourTimeStr != null && hourTimeStr.isEmpty()) {
-                hourTime = Long.parseLong(hourTimeStr);
-
-            }
+            String start = request.getParameter("start");
+            String end = request.getParameter("end");
 
             ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
             if (tasks == null) {
@@ -798,30 +728,11 @@ public class MonitorServlet extends HttpServlet {
             }
 
 
-            String id = request.getParameter("id");
-            String taskTime = "";
+            String taskTime = start;
 
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             String url = RESTLET_URL_BASE + "getattemptsbystatus/";
 
-            if (id == null) {
-
-                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
-
-            } else if (id.equals("1")) {
-                Integer count = (Integer) request.getSession().getAttribute("count");
-                if (count == null)
-                    count = 0;
-                Integer changeCount = count + 1;
-                request.getSession().setAttribute("count", changeCount);
-
-                taskTime = formatter.format(new Date(new Date().getTime() - (count + 1) * hourTime));
-            } else if (id.equals("24")) {
-                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
-                request.getSession().setAttribute("count", 0);
-            } else {
-                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
-            }
 
 
             cr = new ClientResource(url + taskTime);
@@ -898,13 +809,8 @@ public class MonitorServlet extends HttpServlet {
 
         } else if (TIMEOUT_TASK.equals(action)) {
             OutputStream output = response.getOutputStream();
-            String hourTimeStr = request.getParameter("hourTime");
-            long hourTime = 60 * 60 * 1000;
-            if (hourTimeStr != null && hourTimeStr.isEmpty()) {
-                hourTime = Long.parseLong(hourTimeStr);
-
-            }
-
+            String start = request.getParameter("start");
+            String end = request.getParameter("end");
             ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
             if (tasks == null) {
                 ClientResource crTask = new ClientResource(RESTLET_URL_BASE + "gettasks");
@@ -915,30 +821,10 @@ public class MonitorServlet extends HttpServlet {
             }
 
 
-            String id = request.getParameter("id");
-            String taskTime = "";
+            String taskTime = start;
 
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             String url = RESTLET_URL_BASE + "getattemptsbystatus/";
-
-            if (id == null) {
-
-                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
-
-            } else if (id.equals("1")) {
-                Integer count = (Integer) request.getSession().getAttribute("count");
-                if (count == null)
-                    count = 0;
-                Integer changeCount = count + 1;
-                request.getSession().setAttribute("count", changeCount);
-
-                taskTime = formatter.format(new Date(new Date().getTime() - (count + 1) * hourTime));
-            } else if (id.equals("24")) {
-                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
-                request.getSession().setAttribute("count", 0);
-            } else {
-                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
-            }
 
 
             cr = new ClientResource(url + taskTime);
