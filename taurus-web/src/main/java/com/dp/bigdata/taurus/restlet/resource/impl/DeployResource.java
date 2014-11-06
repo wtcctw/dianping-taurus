@@ -241,7 +241,7 @@ public void deployer(String deployId, String deployIp, String deployFile, String
 		dr.updateUrl = updateUrl;
 		HttpClient client = new HttpClient();
 		PostMethod method = new PostMethod(callback);
-		LOG.info("callback:" + callback);
+		LOG.info("callback:" + callback +" params: {status: "+String.valueOf(statusCode)+ ", createurl:"+createUrl + ", updateurl:"+ updateUrl);
 		method.addParameter("status", String.valueOf(statusCode));
 		if (createUrl != null) {
 			method.addParameter("createurl", createUrl);
