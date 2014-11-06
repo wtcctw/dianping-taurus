@@ -229,6 +229,18 @@
 								<th width="10%">发布时间</th>
 							</tr>
                             <tr>
+                                <td>优化界面访问速度</td>
+                                <td>2014-11-06</td>
+                            </tr>
+                            <tr>
+                                <td>新增查看历史数据</td>
+                                <td>2014-11-06</td>
+                            </tr>
+                            <tr>
+                                <td>新增定期和手工清理zookeeper节点功能</td>
+                                <td>2014-11-05</td>
+                            </tr>
+                            <tr>
                                 <td>新增 <a href="cronbuilder.jsp">cron 生成器</a></td>
                                 <td>2014-10-28</td>
                             </tr>
