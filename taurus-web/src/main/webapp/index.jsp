@@ -1,11 +1,14 @@
+<%@ page import="java.util.Date" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="java.sql.Time" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <title>Taurus</title>
     <meta charset="utf-8">
-    <meta name="description" content="overview &amp; stats" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <meta name="description" content="overview &amp; stats"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
     <%@ include file="jsp/common-nav.jsp" %>
 
     <!-- bootstrap & fontawesome -->
@@ -41,6 +44,19 @@
     <link rel="stylesheet" href="lib/ace/css/ace-skins.min.css"/>
 
     <link rel="stylesheet" href="resource/css/monitor-center.css">
+    <style>
+        .dayreport{
+            float:left
+        }
+        .tip{
+            text-align:center;
+            margin:0 auto;
+
+        }
+        .historyreport{
+            float:right
+        }
+    </style>
 
 </head>
 <body>
@@ -198,7 +214,7 @@
 
 <script>
     var isAdmin = <%=isAdmin%>;
-    if(!isAdmin){
+    if (!isAdmin) {
         $("#userrolechange").html("我的任务");
     }
 
@@ -223,6 +239,187 @@
 </div>
 <div class="page-content">
 <div class="row">
+<div class="time_inal ">
+    <%
+        Date time = new Date();
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHH");
+        long hourTime = 60 * 60 * 1000;
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+        String step_str = request.getParameter("step");
+        String now = request.getParameter("date");
+        System.out.println(step_str+"#"+now);
+        int step = -24;
+    %>
+
+    <div class="col-sm-5">
+    <a class="atip" data-toggle="tooltip" data-placement="top"
+       data-original-title="查看一天内的数据">[天] </a>
+    &nbsp;&nbsp;|&nbsp;&nbsp;
+    <a class="atip"
+            <% if (now == null) {
+                now = df.format(time);
+            }
+                step = -720;
+            %>
+       href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+       data-toggle="tooltip" data-placement="top"
+       data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime)) %>~<%=formatter.format(new Date(df.parse(now).getTime()))%>]">[-1m] </a>
+    &nbsp;&nbsp; |&nbsp;&nbsp;
+    <a class="atip"
+            <% if (now == null) {
+                now = df.format(time);
+            }
+                step = -168;
+            %>
+       href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+       data-toggle="tooltip" data-placement="top"
+       data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>
+    ~<%=formatter.format(new Date(df.parse(now).getTime()))%>]">[-1w] </a>
+    &nbsp;&nbsp; |&nbsp;&nbsp;
+    <a class="atip"
+            <% if (now == null) {
+                now = df.format(time);
+            }
+                step = -24;
+            %>
+       href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%>"
+       data-toggle="tooltip" data-placement="top"
+       data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>
+    ~<%=formatter.format(new Date(df.parse(now).getTime()))%>]">[-1d] </a>
+
+    &nbsp;&nbsp; |&nbsp;&nbsp;
+    <a class="atip"  <% if (now == null) {
+        now = df.format(time);
+    }
+        step = 24;
+        if (df.parse(now).after(time)) {%>
+       href="index.jsp?step=-24&date＝<%=df.format(time)%> "
+            <% } else {%>
+       href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+            <% }
+            %>
+       data-toggle="tooltip" data-placement="top"
+       data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime()))%>~<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>]">[+1d] </a>
+    &nbsp;&nbsp; |&nbsp;&nbsp;
+    <a class="atip"  <% if (now == null) {
+        now = df.format(time);
+    }
+        step = 168;
+        if (df.parse(now).after(time)) {%>
+       href="index.jsp?step=-24&op=day&date＝<%=df.format(time)%> "
+            <% } else {%>
+       href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+            <% }
+            %>
+       data-toggle="tooltip" data-placement="top"
+       data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime()))%>~<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>]">[+1w] </a>
+    &nbsp;&nbsp; |&nbsp;&nbsp;
+    <a class="atip"  <% if (now == null) {
+        now = df.format(time);
+    }
+        step = 720;
+        if (df.parse(now).after(time)) {%>
+       href="index.jsp?step=-24&op=day&date＝<%=df.format(time)%> "
+            <% } else {%>
+       href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+            <% }
+            %>
+       data-toggle="tooltip" data-placement="top"
+       data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime()))%>~<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>]">[+1m] </a>
+    </div>
+
+    <div class="col-sm-2">
+    <a class="atip" data-toggle="tooltip" data-placement="top"
+       data-original-title="当你点击了[-1h]|[-1d]|[-1w]|[-1m]后，在想切换到当前页面时，请点击[当天]，刷新页面无效噢～">[注意] </a>
+    &nbsp;&nbsp;|&nbsp;&nbsp;
+
+
+    <a class="atip"
+       href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date())%>"
+       data-toggle="tooltip" data-placement="top"
+       data-original-title=" 时间区间[<%=formatter.format(new Date(new Date().getTime() -24*hourTime))%>~<%=formatter.format(new Date())%>]">[当天] </a>
+    </div>
+    <div class="col-sm-5 historyreport">
+
+    <a class="atip" data-toggle="tooltip" data-placement="top"
+       data-original-title="查看到今天所有的数据">[历史数据] </a>
+    &nbsp;&nbsp;|&nbsp;&nbsp;
+    <a class="atip"
+            <% if (now == null) {
+                now = df.format(time);
+            }
+                step = -720;
+            %>
+       href="index.jsp?step=<%=step%>&op=history&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+       data-toggle="tooltip" data-placement="top"
+       data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime)) %>~<%=formatter.format(new Date())%>]">[-1m] </a>
+    &nbsp;&nbsp; |&nbsp;&nbsp;
+    <a class="atip"
+            <% if (now == null) {
+                now = df.format(time);
+            }
+                step = -168;
+            %>
+       href="index.jsp?step=<%=step%>&op=history&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+       data-toggle="tooltip" data-placement="top"
+       data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>
+    ~<%=formatter.format(new Date())%>]">[-1w] </a>
+    &nbsp;&nbsp; |&nbsp;&nbsp;
+    <a class="atip"
+            <% if (now == null) {
+                now = df.format(time);
+            }
+                step = -24;
+            %>
+       href="index.jsp?step=<%=step%>&op=history&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%>"
+       data-toggle="tooltip" data-placement="top"
+       data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>
+    ~<%=formatter.format(new Date())%>]">[-1d] </a>
+    &nbsp;&nbsp; |&nbsp;&nbsp;
+
+
+    <a class="atip"  <% if (now == null) {
+        now = df.format(time);
+    }
+        step = 24;
+        if (df.parse(now).after(time)) {%>
+       href="index.jsp?step=-24&date＝<%=df.format(time)%> "
+            <% } else {%>
+       href="index.jsp?step=<%=step%>&op=history&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+            <% }
+            %>
+       data-toggle="tooltip" data-placement="top"
+       data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>~<%=formatter.format(new Date())%>]">[+1d] </a>
+    &nbsp;&nbsp; |&nbsp;&nbsp;
+    <a class="atip"  <% if (now == null) {
+        now = df.format(time);
+    }
+        step = 168;
+        if (df.parse(now).after(time)) {%>
+       href="index.jsp?step=-24&op=history&date＝<%=df.format(time)%> "
+            <% } else {%>
+       href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+            <% }
+            %>
+       data-toggle="tooltip" data-placement="top"
+       data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>~<%=formatter.format(new Date())%>]">[+1w] </a>
+    &nbsp;&nbsp; |&nbsp;&nbsp;
+    <a class="atip"  <% if (now == null) {
+        now = df.format(time);
+    }
+        step = 720;
+        if (df.parse(now).after(time)) {%>
+       href="index.jsp?step=-24&op=history&date＝<%=df.format(time)%> "
+            <% } else {%>
+       href="index.jsp?step=<%=step%>&op=history&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+            <% }
+            %>
+       data-toggle="tooltip" data-placement="top"
+       data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>~<%=formatter.format(new Date())%>]">[+1m] </a>
+    </div>
+</div>
 <div id="userpanel">
     <div class="col-sm-12">
         <div class="col-sm-6">
@@ -464,7 +661,7 @@
 </div>
 <div class="col-sm-12">
     <div class="col-sm-6" id="cpuwidget">
-        <div class="widget-box" >
+        <div class="widget-box">
             <div class="widget-header widget-header-flat widget-header-small">
                 <h5 class="widget-title">
                     <i class=" icon-signal"></i>
@@ -478,7 +675,8 @@
                     </a>
                 </div>
                 <div class="widget-toolbar">
-                    <a id='cpureeflash' title='更新数据,刷新时间间隔1分钟' onclick="reflash('reflash');" href="#cpuwidget" ><i class="icon-refresh"></i></a>
+                    <a id='cpureeflash' title='更新数据,刷新时间间隔1分钟' onclick="reflash('reflash');" href="#cpuwidget"><i
+                            class="icon-refresh"></i></a>
                 </div>
             </div>
 
@@ -501,7 +699,6 @@
                     <i class=" icon-signal"></i>
                     主机内存使用率列表
                 </h5>
-
 
 
                 <div class="widget-toolbar">
@@ -665,22 +862,48 @@
 </div>
 <script type="text/javascript">
     $('li[id="index"]').addClass("active");
-    $('#menu-toggler').on(ace.click_event, function() {
+    $('#menu-toggler').on(ace.click_event, function () {
         $('#sidebar').toggleClass('display');
         $(this).toggleClass('display');
         return false;
     });
 
-
+    $(".atip").tooltip();
+    options = {
+        delay: { show: 500, hide: 100 },
+        trigger: 'click'
+    };
+    function GetDateStr(dd, AddDayCount) {
+        dd.setDate(dd.getDate() + AddDayCount);//获取AddDayCount天后的日期
+        var y = dd.getFullYear();
+        var m = dd.getMonth() + 1;//获取当前月份的日期
+        var d = dd.getDate();
+        return y + "-" + m + "-" + d;
+    }
+    <%String now_str = request.getParameter("date");
+    if (now_str == null || now_str.isEmpty()){
+    now_str= df.format(time);
+    }
+    %>
+    var now_s = "<%=formatter.format( df.parse(now_str))%>";
+    var now = new Date(Date.parse(now_s.replace(/-/g, "/")));
+    var id = "<%=request.getParameter("step")%>";
+    <%String op_str = request.getParameter("op");
+    if(op_str==null || op_str.isEmpty()){
+    op_str="day";
+    }%>
+    var op="<%=op_str%>";
     var isAdmin = <%=isAdmin%>;
     var username = "<%=currentUser%>";
-    if (isAdmin && username !="kirin.li") {
-         var user = document.getElementById("userpanel");
-             user.style.display="none";
+    if (isAdmin && username != "kirin.li") {
+        var user = document.getElementById("userpanel");
+        user.style.display = "none";
     } else {
         //var admin = document.getElementById("admin");
         //admin.style.display="none";
     }
+
+
     function reflash(queryType) {
         var cpuLoadBody = "";
         var memLoadBody = "";
@@ -688,6 +911,7 @@
         $("#cpuload").addClass("align-center");
         $("#memload").html("<i class='icon-spinner icon-spin icon-large'></i>");
         $("#memload").addClass("align-center");
+
 
         $.ajax({
             async: true,

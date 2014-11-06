@@ -6,6 +6,7 @@ var memTableStyle;
 var cpuTableStyle;
 
 jQuery(function ($) {
+
     jQuery.extend(jQuery.fn.dataTableExt.oSort, {
         "html-percent-pre": function (a) {
             var x = String(a).replace(/<[\s\S]*?>/g, "");    //去除html标记
@@ -55,7 +56,69 @@ jQuery(function ($) {
 })
 $(document).ready(function () {
 
+    var starttime;
+    var endtime ;
+    if(id == null || id=="null"){
+        starttime = GetDateStr(now,-1);
+        if(op == "day"){
+            endtime = GetDateStr(now,1);
+        }else{
+            endtime = GetDateStr(new Date(),1);
+        }
 
+    }else if(id == "-24"){
+        starttime = GetDateStr(now,-1);
+        if(op == "day"){
+            endtime = GetDateStr(now,1);
+        }else{
+            endtime = GetDateStr(new Date(),1);
+        }
+    }else if(id == "-168"){
+        starttime = GetDateStr(now,-7);
+        if(op == "day"){
+            endtime = GetDateStr(now,1);
+        }else{
+            endtime = GetDateStr(new Date(),1);
+        }
+    }else if(id == "-720"){
+        starttime = GetDateStr(now,-30);
+        if(op == "day"){
+            endtime = GetDateStr(now,1);
+        }else{
+            endtime = GetDateStr(new Date(),1);
+        }
+    }else if(id == "24"){
+        if(op == "day"){
+            starttime = GetDateStr(now,0);
+            endtime = GetDateStr(now,1);
+        }else{
+            starttime = GetDateStr(now,0);
+            endtime = GetDateStr(new Date(),1);
+        }
+
+
+    }else if(id == "168"){
+        if(op == "day"){
+            starttime = GetDateStr(now,0);
+            endtime = GetDateStr(now,7);
+        }else{
+            starttime = GetDateStr(now,7);
+            endtime = GetDateStr(new Date(),1);
+        }
+
+    }else if(id == "720"){
+        if(op == "day"){
+            starttime = GetDateStr(now,0);
+            endtime = GetDateStr(now,30);
+        }else{
+            starttime = GetDateStr(now,30);
+            endtime = GetDateStr(new Date(),1);
+        }
+
+    }else {
+        starttime = GetDateStr(now,-1);
+        endtime = GetDateStr(now,1);
+    }
 
 
     //if (isAdmin) {
@@ -200,8 +263,6 @@ $(document).ready(function () {
         });
 
 
-        var starttime = GetDateStr(-1);
-        var endtime = GetDateStr(1);
 
         var totalBody = "";
 
@@ -287,8 +348,6 @@ $(document).ready(function () {
         var failedLists = new Array();;
         var succBody = "";
         var failedBody = "";
-        var starttime = GetDateStr(-1);
-        var endtime = GetDateStr(1);
         $.ajax({
             data: {
                 action: "usertask",
@@ -451,8 +510,6 @@ $(document).ready(function () {
         var groupFailedLists = new Array();;
         var groupSuccBody = "";
         var groupFailedBody = "";
-        var starttime = GetDateStr(-1);
-        var endtime = GetDateStr(1);
         $.ajax({
             data: {
                 action: "grouptask",
@@ -672,14 +729,7 @@ $(document).ready(function () {
 
 }
 
-function GetDateStr(AddDayCount) {
-    var dd = new Date();
-    dd.setDate(dd.getDate() + AddDayCount);//获取AddDayCount天后的日期
-    var y = dd.getFullYear();
-    var m = dd.getMonth() + 1;//获取当前月份的日期
-    var d = dd.getDate();
-    return y + "-" + m + "-" + d;
-}
+
 jQuery(function ($) {
     $('#totalstarttime').datepicker({autoclose: true}).next().on(ace.click_event, function () {
         $(this).prev().focus();

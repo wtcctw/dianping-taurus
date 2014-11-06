@@ -1020,12 +1020,15 @@ public class MonitorServlet extends HttpServlet {
             String appname = request.getParameter("appname");
             String currentUser = request.getParameter("currentUser");
             JsonArray jsonArray = new JsonArray();
-            if (name != null && !name.isEmpty()) {
-                task_api = task_api + "?name=" + name;
-            } else if (appname != null) {
-                task_api = task_api + "?appname=" + appname;
-            } else if (currentUser != null) {
+            if (currentUser != null) {
                 task_api = task_api + "?user=" + currentUser;
+            }
+
+            if (name != null && !name.isEmpty() && !name.equals("null")) {
+                task_api = task_api + "&name=" + name;
+            }
+            if (appname != null && !appname.equals("null")) {
+                task_api = task_api + "&appname=" + appname;
             }
             cr = new ClientResource(task_api);
             ITasksResource resource = cr.wrap(ITasksResource.class);

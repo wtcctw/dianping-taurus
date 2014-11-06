@@ -31,6 +31,15 @@
     <link rel="stylesheet" href="lib/ace/css/ace-skins.min.css"/>
 
     <link href="css/docs.css" rel="stylesheet">
+    <style>
+        .scrollup {
+            opacity: 0.3;
+            position: fixed;
+            bottom: 50px;
+            right: 100px;
+            display: none;
+        }
+    </style>
 </head>
 
 <body data-spy="scroll" data-target=".bs-docs-sidebar">
@@ -98,11 +107,13 @@
             </ul>
             <!-- /.ace-nav -->
         </div>
-        <!--    <div class="pull-right" style="margin:10px;color: white;">本周值班: {{duty}} {{tel}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>-->
+
         <!-- /.navbar-header -->
     </div>
     <!-- /.container -->
 </div>
+
+
 <div class="sidebar " id="sidebar">
     <script type="text/javascript">
         try {
@@ -212,6 +223,7 @@
         </li>
     </ul>
 </div>
+
 <div class="page-content ">
 <div class="row">
 <div class="col-sm-12">
@@ -871,6 +883,10 @@
 
 </div>
 </div>
+
+<a href="#" class="scrollup" style="display: inline;">
+    <img src="img/ScrollTopArrow.png" width="50" height="50">
+</a>
 </div>
 
 <script>
@@ -880,6 +896,20 @@
         $(this).toggleClass('display');
         return false;
     });
+
+    $(window).scroll(function () {
+        if ($(this).scrollTop() > 100) {
+            $('.scrollup').fadeIn();
+        } else {
+            $('.scrollup').fadeOut();
+        }
+    });
+
+    $('.scrollup').click(function () {
+        $("html, body").scrollTop(0);
+        return false;
+    });
+
 </script>
 </body>
 </html>
