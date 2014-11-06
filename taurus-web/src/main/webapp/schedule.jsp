@@ -320,9 +320,9 @@
             return false;
         });
 
-        var name = <%=request.getParameter("name")%>;
-        var path = <%=request.getParameter("path")%>;
-        var appname = <%=request.getParameter("appname")%>;
+        var name = "<%=request.getParameter("name")%>";
+        var path = "<%=request.getParameter("path")%>";
+        var appname ="<%=request.getParameter("appname")%>";
         var currentUser = "<%= currentUser%>";
         var scheduleBody = "";
         $.ajax({
