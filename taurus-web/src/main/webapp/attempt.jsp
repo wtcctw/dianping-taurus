@@ -236,18 +236,19 @@
                     <i class="icon-spinner icon-spin icon-large"></i>
                 </div>
 
-                <div id="confirm" class="modal hide fade">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <h3 id="id_header"></h3>
-                            </div>
-                            <div class="modal-body">
-                                <p id="id_body"></p>
-                            </div>
-                            <div class="modal-footer">
-                            </div>
+
+            </div>
+            <div id="confirm" class="modal hide fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h3 id="id_header"></h3>
+                        </div>
+                        <div class="modal-body">
+                            <p id="id_body"></p>
+                        </div>
+                        <div class="modal-footer">
                         </div>
                     </div>
                 </div>
@@ -345,7 +346,7 @@
                     }
 
                     if(state == "RUNNING"||state == "TIMEOUT"){
-                        attemptBody += "<td><a href='#confirm' onClick='action($(this).parents('tr').attr('id'))'>Kill</a>";
+                        attemptBody += "<td><a href='#confirm' onClick=\"action($(this).parents('tr').attr('id'))\">Kill</a>";
                         if(item.isViewLog){
                             attemptBody += " <a target='_blank'  href='viewlog.jsp?id="
                                     +item.attemptId

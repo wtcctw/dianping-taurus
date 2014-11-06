@@ -8,10 +8,10 @@ var old_status;
 var timeout;
 $(document).ready(function () {
     var sidebar = document.getElementById("sidebar");
-    sidebar.style.display="none";
+    sidebar.style.display = "none";
     $('li[id="schedule"]').addClass("active");
-    $('#menu-toggler').on(ace.click_event, function() {
-        sidebar.style.display="block";
+    $('#menu-toggler').on(ace.click_event, function () {
+        sidebar.style.display = "block";
         $('#sidebar').toggleClass('display');
         $(this).toggleClass('display');
         return false;
@@ -24,7 +24,7 @@ $(document).ready(function () {
     };
     $(".optiontip").tooltip(options);
     $(function () {
-        $('#id-button-borders').attr('checked' , 'checked').on('click', function(){
+        $('#id-button-borders').attr('checked', 'checked').on('click', function () {
             $('#default-buttons .btn').toggleClass('no-border');
 
         });
@@ -58,11 +58,14 @@ function GetQueryString(name) {
 
 function fetch_errorLog() {
     var $logContainer = $("#errolog");
-    var is_end = is_log_end();
-    if (is_end == "true") {
+    if (status == "RUNNING") {
+        var is_end = is_log_end();
+        if (is_end == "true") {
 
-        clearInterval(error_log_rtn);
+            clearInterval(error_log_rtn);
+        }
     }
+
     is_flash = $('#id-button-borders')[0].checked;
     if (is_flash == false) {
         clearInterval(error_log_rtn);
@@ -97,10 +100,12 @@ function fetch_errorLog() {
 }
 
 function fetch_Log() {
-    var $logContainer = $("#strout")
-    var is_end = is_log_end();
-    if (is_end == "true") {
-        clearInterval(log_rtn);
+    var $logContainer = $("#strout");
+    if (status == "RUNNING") {
+        var is_end = is_log_end();
+        if (is_end == "true") {
+            clearInterval(log_rtn);
+        }
     }
     is_flash = $('#id-button-borders')[0].checked;
     if (is_flash == false) {
@@ -142,7 +147,7 @@ function do_relash_task() {
         if (is_end == "false") {
             error_log_rtn = setInterval("fetch_errorLog()", 10000);
             log_rtn = setInterval("fetch_Log()", 10000);
-            setTimeout("close_reflash()",10*60*1000)
+            setTimeout("close_reflash()", 10 * 60 * 1000)
         } else {
             fetch_errorLog();
             fetch_Log();

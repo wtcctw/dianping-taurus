@@ -11,7 +11,6 @@
     <script type="text/javascript" src="resource/js/lib/jquery-1.9.1.min.js"></script>
     <link href="lib/ace/css/bootstrap.min.css" rel="stylesheet"/>
     <script src="lib/ace/js/ace-extra.min.js"></script>
-    <link rel="stylesheet" href="lib/ace/css/font-awesome.min.css"/>
     <script src="lib/ace/js/ace-elements.min.js"></script>
     <script src="lib/ace/js/ace.min.js"></script>
     <script src="lib/ace/js/bootbox.min.js"></script>
@@ -30,7 +29,6 @@
     <link rel="stylesheet" href="lib/ace/css/ace.min.css"/>
     <link rel="stylesheet" href="lib/ace/css/ace-rtl.min.css"/>
     <link rel="stylesheet" href="lib/ace/css/ace-skins.min.css"/>
-    <link href="css/bwizard.min.css" rel="stylesheet"/>
 </head>
 <body>
 <div class="navbar navbar-default" id="navbar">
