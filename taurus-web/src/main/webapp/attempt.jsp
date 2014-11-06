@@ -231,111 +231,11 @@
         </div>
         <div class="row">
             <div class="col-sm-12">
-                <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-hover"
-                       width="100%" id="example">
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>任务名</th>
-                        <th>实际启动时间</th>
-                        <th>实际结束时间</th>
-                        <th>预计调度时间</th>
-                        <th>IP</th>
-                        <th>返回值</th>
-                        <th>状态</th>
-                        <th>-</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <%
-                        ClientResource crTask = new ClientResource(host + "gettasks");
-                        IGetTasks taskResource = crTask.wrap(IGetTasks.class);
-                        ArrayList<Task> tasks = taskResource.retrieve();
 
-                        String taskID = request.getParameter("taskID");
-                        String url = host + "attempt?task_id=" + taskID;
-                        cr = new ClientResource(url);
-                        cr.setRequestEntityBuffering(true);
-                        IAttemptsResource resource = cr.wrap(IAttemptsResource.class);
-                        cr.accept(MediaType.APPLICATION_XML);
-                        ArrayList<AttemptDTO> attempts = resource.retrieve();
+                <div id="attempt_content" class="align-center">
+                    <i class="icon-spinner icon-spin icon-large"></i>
+                </div>
 
-                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                        for (AttemptDTO dto : attempts) {
-                            String state = dto.getStatus();
-                            String taskName = "";
-                            for (Task task : tasks) {
-                                if (task.getTaskid().equals(dto.getTaskID())) {
-                                    taskName = task.getName();
-                                    break;
-                                }
-                            }
-                    %>
-                    <tr id="<%=dto.getAttemptID()%>">
-                        <td><%=dto.getId()%>
-                        </td>
-                        <%if (taskName != null) {%>
-                        <td><%=taskName%>
-                        </td>
-                        <%} else {%>
-                        <td>NULL</td>
-                        <%}%>
-                        <%if (dto.getStartTime() != null) {%>
-                        <td><%=formatter.format(dto.getStartTime())%>
-                        </td>
-                        <%} else {%>
-                        <td>NULL</td>
-                        <%}%>
-                        <%if (dto.getEndTime() != null) {%>
-                        <td><%=formatter.format(dto.getEndTime())%>
-                        </td>
-                        <%} else {%>
-                        <td>NULL</td>
-                        <%}%>
-                        <%if (dto.getScheduleTime() != null) {%>
-                        <td><%=formatter.format(dto.getScheduleTime())%>
-                        </td>
-                        <%} else {%>
-                        <td>NULL</td>
-                        <%}%>
-                        <%if (dto.getExecHost() != null) {%>
-                        <td><%=dto.getExecHost()%>
-                        </td>
-                        <%} else {%>
-                        <td>NULL</td>
-                        <%}%>
-                        <td><%=dto.getReturnValue()%>
-                        </td>
-                        <td><%if (state.equals("RUNNING")) {%>
-                            <span class="label label-info"><%=state%></span>
-                            <%} else if (state.equals("SUCCEEDED")) {%>
-                            <span class="label label-success"><%=state%></span>
-                            <%} else {%>
-                            <span class="label label-important"><%=state%></span>
-                            <%}%>
-                        </td>
-
-                        <td>
-                            <%
-                                if (state.equals("RUNNING") || state.equals("TIMEOUT")) {%>
-
-                            <a href="#confirm" onClick="action($(this).parents('tr').attr('id'))">Kill</a>
-                            <%  boolean isViewLog = AttemptProxyServlet.isHostOverLoad(dto.getExecHost());
-                                if(!isViewLog){%>
-                            <a target="_blank"
-                               href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
-
-                            <%
-                                }
-                            } else {%>
-                            <a target="_blank"
-                               href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
-                            <%}%>
-                        </td>
-                    </tr>
-                    <% }%>
-                    </tbody>
-                </table>
                 <div id="confirm" class="modal hide fade">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -358,11 +258,7 @@
 
 <script type="text/javascript">
     jQuery(function ($) {
-        var oTable1 =
-                $('#example').dataTable({
-                    bAutoWidth: true,
-                    "bPaginate": true
-                });
+
 
         $('li[id="schedule"]').addClass("active");
         $('#menu-toggler').on(ace.click_event, function() {
@@ -370,7 +266,117 @@
             $(this).toggleClass('display');
             return false;
         });
-    })
+        var taskID = "<%=request.getParameter("taskID")%>";
+        var attemptBody="";
+        $.ajax({
+            data: {
+                action: "attempt",
+                taskID:taskID
+            },
+            type: "POST",
+            url: "/monitor",
+            error: function () {
+                $("#attempt_content").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
+                $("#attempt_content").addClass("align-center");
+            },
+            success: function (response, textStatus) {
+
+                var jsonarray = $.parseJSON(response);
+                attemptBody += " <table cellpadding='0' cellspacing='0' border='0' class='table table-striped table-bordered table-hover' width='100%' id='example'>"
+                        + "<thead>"
+                        + "<tr>"
+                        + "<th>ID</th>"
+                        + "<th>任务名</th>"
+                        + "<th>实际启动时间</th>"
+                        + "<th>实际结束时间</th>"
+                        + " <th>预计调度时间</th>"
+                        + "<th>IP</th>"
+                        + "<th>返回值</th>"
+                        + "<th>状态</th>"
+                        + "<th class='center'>-</th>"
+                        + "</tr>"
+                        + " </thead>"
+                        + "<tbody>";
+
+
+                $.each(jsonarray, function (i, item) {
+                    var state = item.state;
+
+                        attemptBody += "<tr id='" + item.attemptId + "'>"
+                                + "<td >" + item.id + "</td>"
+                                + "<td>"
+                                + item.taskName
+                                + "</td>"
+                                + "<td>"
+                                + item.startTime
+                                + "</td>"
+                                + "<td>"
+                                + item.endTime
+                                + "</td>"
+                                + "<td>"
+                                + item.scheduleTime
+                                + "</td>"
+                                + "<td>"
+                                + item.exeHost
+                                + "</td>"
+                                + "<td>"
+                                + item.returnValue
+                                + "</td>";
+
+                    if(state == "RUNNING"){
+                        attemptBody +=  "<td>"
+                                + "<span class='label label-info'>"
+                                + state
+                                + "</span>"
+                                + "</td>";
+                    } else if(item.state == "SUCCEEDED") {
+                        attemptBody +=  "<td>"
+                                + "<span class='label label-success'>"
+                                + state
+                                + "</span>"
+                                + "</td>";
+
+                    }else{
+                        attemptBody +=  "<td>"
+                                + "<span class='label label-important'>"
+                                + state
+                                + "</span>"
+                                + "</td>";
+                    }
+
+                    if(state == "RUNNING"||state == "TIMEOUT"){
+                        attemptBody += "<td><a href='#confirm' onClick='action($(this).parents('tr').attr('id'))'>Kill</a>";
+                        if(item.isViewLog){
+                            attemptBody += " <a target='_blank'  href='viewlog.jsp?id="
+                                    +item.attemptId
+                                    +"&status="
+                                    +state
+                                    +"'>日志</a>";
+                        }
+                        attemptBody +="</td>"
+                    }else{
+                        attemptBody += "<td> <a target='_blank'  href='viewlog.jsp?id="
+                        +item.attemptId
+                        +"&status="
+                        +state
+                        +"'>日志</a></td>";
+                    }
+
+
+
+                    attemptBody +="</tr>"
+
+                });
+                attemptBody +="</tbody> </table>";
+                $("#attempt_content").html(attemptBody);
+                $("#attempt_content").removeClass("align-center");
+                $('#example').dataTable({
+                    bAutoWidth: true,
+                    "bPaginate": true
+                });
+            }
+    });
+    });
 </script>
 
 <script type="text/javascript" charset="utf-8" language="javascript" src="js/attempt.js"></script>

@@ -58,6 +58,7 @@ public class MonitorServlet extends HttpServlet {
     private static final String DEPENDENCY_TIMEOUT_TASK = "dependencytimeout";
     private static final String TIMEOUT_TASK = "timeout";
     private static final String SCHEDULE = "schedule";
+    private static final String ATTEMPT = "attempt";
 
 
     private static final int SERVICE_EXCEPTION = -1;
@@ -1048,6 +1049,83 @@ public class MonitorServlet extends HttpServlet {
 
             output.write(jsonArray.toString().getBytes());
             output.close();
+        }else if (ATTEMPT.equals(action)){
+            OutputStream output = response.getOutputStream();
+            ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
+            if (tasks == null) {
+                ClientResource crTask = new ClientResource(RESTLET_URL_BASE + "gettasks");
+                IGetTasks taskResource = crTask.wrap(IGetTasks.class);
+                tasks = taskResource.retrieve();
+                ReFlashHostLoadTask.allTasks = tasks;
+                ReFlashHostLoadTask.lastReadDataTime = new Date().getTime();
+            }
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            JsonArray jsonArray = new JsonArray();
+            String taskID = request.getParameter("taskID");
+            String url = RESTLET_URL_BASE + "attempt?task_id=" + taskID;
+            cr = new ClientResource(url);
+            cr.setRequestEntityBuffering(true);
+            IAttemptsResource resource = cr.wrap(IAttemptsResource.class);
+            cr.accept(MediaType.APPLICATION_XML);
+            ArrayList<AttemptDTO> attempts = resource.retrieve();
+
+            for (AttemptDTO dto : attempts) {
+                JsonObject jsonObject = new JsonObject();
+
+                String state = dto.getStatus();
+                jsonObject.addProperty("state", state);
+
+                String taskName = "";
+                for (Task task : tasks) {
+                    if (task.getTaskid().equals(dto.getTaskID())) {
+                        taskName = task.getName();
+                        break;
+                    }
+                }
+
+                jsonObject.addProperty("attemptId", dto.getAttemptID());
+                jsonObject.addProperty("id", dto.getId());
+                if (taskName != null) {
+                    jsonObject.addProperty("taskName", taskName);
+                } else {
+                    jsonObject.addProperty("taskName", "NULL");
+                }
+
+                if (dto.getStartTime() != null) {
+                    jsonObject.addProperty("startTime", formatter.format(dto.getStartTime()));
+                } else {
+                    jsonObject.addProperty("startTime", "NULL");
+                }
+
+                if (dto.getEndTime() != null) {
+                    jsonObject.addProperty("endTime", formatter.format(dto.getEndTime()));
+                } else {
+                    jsonObject.addProperty("endTime", "NULL");
+                }
+
+                if (dto.getScheduleTime() != null) {
+                    jsonObject.addProperty("scheduleTime", formatter.format(dto.getScheduleTime()));
+                } else {
+                    jsonObject.addProperty("scheduleTime", "NULL");
+                }
+                if (dto.getExecHost() != null) {
+                    jsonObject.addProperty("exeHost", dto.getExecHost());
+                } else {
+                    jsonObject.addProperty("exeHost", "NULL");
+                }
+                jsonObject.addProperty("returnValue", dto.getReturnValue());
+                boolean isViewLog = AttemptProxyServlet.isHostOverLoad(dto.getExecHost());
+                jsonObject.addProperty("isViewLog",isViewLog);
+
+                jsonArray.add(jsonObject);
+
+            }
+
+            output.write(jsonArray.toString().getBytes());
+            output.close();
+
+
+
         }
     }
 

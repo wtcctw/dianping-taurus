@@ -220,9 +220,6 @@
     </div>
 
 
-    <%@page import="com.dp.bigdata.taurus.restlet.resource.ITasksResource" %>
-    <%@page import="com.dp.bigdata.taurus.restlet.shared.TaskDTO" %>
-    <%@page import="java.text.SimpleDateFormat" %>
 
     <div class="page-content ">
         <div id="alertContainer" class="col-sm-12"></div>
@@ -272,23 +269,15 @@
                 </div>
             </div>
             <div class="col-sm-12">
-                <% String task_api = host + "task";
-                    String name = request.getParameter("name");
+                <%
                     String path = request.getParameter("path");
-                    String appname = request.getParameter("appname");
-                    if (name != null && !name.isEmpty()) {
-                        task_api = task_api + "?name=" + name;
-                    } else if (appname != null) {
-                        task_api = task_api + "?appname=" + appname;
-                    } else if (currentUser != null) {
-                        task_api = task_api + "?user=" + currentUser;
-                    }
                     if (path != null && !path.equals("")) {
                 %>
                 <span style="color:red">提示:已部署的作业文件的路径为<%=path%></span>
                 <% }%>
 
-                <div id="schedule_content">
+                <div id="schedule_content" class="align-center">
+                    <i class="icon-spinner icon-spin icon-large"></i>
                 </div>
 
 
@@ -474,6 +463,7 @@
                 console.log(scheduleBody);
                 $("#schedule_load").html("");
                 $("#schedule_content").html(scheduleBody);
+                $("#schedule_content").removeClass("align-center");
                 $('#example').dataTable({
                     bAutoWidth: true,
                     "bPaginate": true,
