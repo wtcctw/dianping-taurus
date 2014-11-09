@@ -28,7 +28,7 @@ public class UserTasks extends ServerResource implements IUserTasks {
             String start = (String) getRequestAttributes().get("starttime");
             String end = (String) getRequestAttributes().get("endtime");
             int[] successStatus = {7};
-            int[] failedStatus = {3,5,8,9,11};
+            int[] failedStatus = {8};
             List<HashMap<String, Integer>> successTasks = taskAttemptMapper.getUserTasks(user, start, end, successStatus);
             List<HashMap<String, Integer>> failedTasks = taskAttemptMapper.getUserTasks(user,start, end,failedStatus);
 
