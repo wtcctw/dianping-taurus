@@ -28,7 +28,7 @@ public class GroupTasks extends ServerResource implements IGroupTasks {
             String start = (String) getRequestAttributes().get("starttime");
             String end = (String) getRequestAttributes().get("endtime");
             int[] successStatus = {7};
-            int[] failedStatus = {3,5,8,9,11};
+            int[] failedStatus = {8};
             ArrayList<GroupTaskExample> successTasks = taskAttemptMapper.getGroupTasks(user, start, end,successStatus);
             ArrayList<GroupTaskExample> failedTasks = taskAttemptMapper.getGroupTasks(user,start, end,failedStatus);
 
