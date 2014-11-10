@@ -852,6 +852,20 @@
     </div>
     以上会初始化taurus agent的运行环境。
     <hr style="padding:15px 0px">
+<h4>运维操作</h4>
+    在老cmdb中首先把服务器加入服务器列表，点deploy manage 然后输入taurus-agnet按回车,如下图所示
+    <br><br>
+    <img src="img/cmdb1.png" style="width: 876px;height: 455px"/>
+    <br><br>
+    添加服务器 如下图所示：
+    <br><br>
+    <img src="img/cmdb2.jpg" style="width: 876px;height: 455px"/>
+    <br><br>
+    添加完之后点下面的提交按钮，然后点旁边灰度定义按钮，进入后选择新增灰度组，然后默认组名为应用名，然后主机列表勾选刚刚加入的应用服务器。
+    <br><br>
+    <img src="img/cmdb3.jpg" style="width: 876px;height: 455px"/>
+    <br><br>
+    <hr style="padding:15px 0px">
     如果希望在该agent上，以多种身份运行作业<br/>
     修改配置文件/data/webapps/taurus-agent/current/taurus-agent.war/WEB-INF/classes/agentConf.properties
     <div class="well">
