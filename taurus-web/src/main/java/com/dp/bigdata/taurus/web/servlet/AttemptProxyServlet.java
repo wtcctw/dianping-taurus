@@ -85,7 +85,7 @@ public class AttemptProxyServlet extends HttpServlet {
 
         HttpURLConnection connection = (HttpURLConnection) getUrl
                 .openConnection();
-            connection.setConnectTimeout(500);
+            connection.setConnectTimeout(1000);
         connection.connect();
         StringWriter writer = new StringWriter();
         inputStream =  connection.getInputStream();
