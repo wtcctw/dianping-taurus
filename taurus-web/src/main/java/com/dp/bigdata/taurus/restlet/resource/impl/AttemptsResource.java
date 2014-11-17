@@ -28,7 +28,7 @@ public class AttemptsResource extends ServerResource implements IAttemptsResourc
     private static final String INDEX = "index";
     private static final String PAGESIZE = "pageSize";
 
-    private static final int DEFAULT_PAGE_SIZE = 500;
+    private static final int DEFAULT_PAGE_SIZE = 100;
 
     ArrayList<AttemptDTO> attempts = new ArrayList<AttemptDTO>();
 
