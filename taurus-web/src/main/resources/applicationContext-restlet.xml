@@ -34,6 +34,10 @@
 		autowire="byName" scope="prototype"
 		class="com.dp.bigdata.taurus.restlet.resource.impl.LogResource" />
 
+    <bean name="/api/updatecreator/{creator}/{taskName}" id="updateCreator"
+          autowire="byName" scope="prototype"
+          class="com.dp.bigdata.taurus.restlet.resource.impl.UpdateCreator" />
+
 	<bean name="/api/attempt" id="attemptsResource" autowire="byName"
 		scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.AttemptsResource" />
 	<bean name="/api/host/{hostname}" id="hostResource" autowire="byName"

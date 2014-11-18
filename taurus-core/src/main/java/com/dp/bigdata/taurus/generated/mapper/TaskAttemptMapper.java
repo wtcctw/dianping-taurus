@@ -113,5 +113,6 @@ public interface TaskAttemptMapper {
     public ArrayList getUserTasks(@Param("user")String user,@Param("start")String start,@Param("end")String end ,@Param("status")int[] ids);
     public ArrayList<GroupTaskExample>  getGroupTasks(@Param("user")String user,@Param("start")String start,@Param("end")String end ,@Param("status")int[] ids );
     public HashMap<String, String> isExitTaskId(@Param("taskId")String taskId);
+
     public int deleteDependencyPassTask(@Param("taskId")String taskId,@Param("status")int status);
 }

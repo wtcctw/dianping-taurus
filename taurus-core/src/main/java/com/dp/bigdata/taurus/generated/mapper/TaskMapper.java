@@ -5,6 +5,7 @@ import com.dp.bigdata.taurus.generated.module.Task;
 import com.dp.bigdata.taurus.generated.module.TaskExample;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -100,4 +101,6 @@ public interface TaskMapper {
 
     public ArrayList<Task> getTasks();
     ArrayList<Host> getTasksByHost(String hostname);
+    public HashMap<String, String> isExitTaskName(@Param("taskName")String taskName);
+    int updateCreator(@Param("creator")String creator,@Param("taskName")String taskName);
 }

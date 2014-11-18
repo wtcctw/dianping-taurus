@@ -335,7 +335,7 @@
 
 
                                 <div class="col-sm-12">
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-3">
                                         <label class="label label-lg label-info arrowed-right">start(负数):</label>
                                     </div>
                                     <div class="col-sm-8">
@@ -345,7 +345,7 @@
 
                                 </div>
                                 <div class="col-sm-12">
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-3">
                                         <label class="label label-lg label-info arrowed-right">end(负数):</label>
                                     </div>
                                     <div class="col-sm-8">
@@ -397,6 +397,100 @@
 
 
                                 <div id="clearoutput"><i class="icon-spinner icon-spin icon-large"></i></div>
+
+                                <!-- /section:custom/extra.grid -->
+                            </div>
+                        </div>
+                        <!-- /.widget-main -->
+                    </div>
+                    <!-- /.widget-body -->
+                    <!-- /.widget-box -->
+
+                </div>
+            </div>
+            <div id="adjustcreator" class="col-sm-12">
+                <div class="col-sm-6">
+                    <div class="widget-box">
+                        <div class="widget-header widget-header-flat widget-header-small">
+                            <h5 class="widget-title">
+                                <i class="icon-signal"></i>
+                                迁移job 修改调度人操作
+                            </h5>
+
+                            <div class="widget-toolbar">
+                                <a href="#" data-action="collapse">
+                                    <i class="icon-chevron-up"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="widget-body">
+                            <div class="widget-main" id="adjustcreator-widget-main" style="height: 150px">
+
+
+                                <div class="col-sm-12">
+                                    <div class="col-sm-3">
+                                        <label class="label label-lg label-info arrowed-right">TaskName:</label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input id="taskName" type="text" class="form-control">
+                                    </div>
+
+
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="col-sm-3">
+                                        <label class="label label-lg label-info arrowed-right">新的调度人</label>
+                                    </div>
+                                    <div class="col-sm-9">
+                                        <input
+                                                id="creator" name="value" type="text" class="ui-spinner-input"
+                                                >
+                                    </div>
+
+
+                                </div>
+
+                                <div class="col-sm-12">
+
+
+                                    <div class="col-sm-8">
+
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <button class="btn btn-info" type="button" id="creatorbtn">
+                                            <i class="ace-icon fa fa-check bigger-110"></i>
+                                            执行
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.widget-main -->
+                    </div>
+                    <!-- /.widget-body -->
+                </div>
+                <!-- /.widget-box -->
+                <div class="col-sm-6">
+                    <div class="widget-box">
+                        <div class="widget-header widget-header-flat widget-header-small">
+                            <h5 class="widget-title">
+                                <i class="icon-signal"></i>
+                                执行结果
+                            </h5>
+
+                            <div class="widget-toolbar">
+                                <a href="#" data-action="collapse">
+                                    <i class="icon-chevron-up"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="widget-body">
+                            <div class="widget-main" id="adjustout-widget-main">
+
+
+                                <div id="adjustout"><i class="icon-spinner icon-spin icon-large"></i></div>
 
                                 <!-- /section:custom/extra.grid -->
                             </div>

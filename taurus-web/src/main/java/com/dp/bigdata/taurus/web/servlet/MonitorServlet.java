@@ -59,6 +59,8 @@ public class MonitorServlet extends HttpServlet {
     private static final String TIMEOUT_TASK = "timeout";
     private static final String SCHEDULE = "schedule";
     private static final String ATTEMPT = "attempt";
+    private static final String UPDATE_CREATOR = "updatecreator";
+
 
 
     private static final int SERVICE_EXCEPTION = -1;
@@ -280,6 +282,16 @@ public class MonitorServlet extends HttpServlet {
             output.close();
         } else if (CLEAR_ZOOKEEPER_NODES.equals(action)) {
             OutputStream output = response.getOutputStream();
+            String user = (String) request.getSession().getAttribute("taurus-user");
+            String adminUser;
+            try {
+                adminUser = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.dbadmin.user");
+            } catch (LionException e) {
+                adminUser = "kirin.li";
+            }
+            String reusult_str = "";
+
+            if (adminUser.contains(user)) {
             String start_str = request.getParameter("start");
             String end_str = request.getParameter("end");
 
@@ -288,12 +300,60 @@ public class MonitorServlet extends HttpServlet {
                 int end = Integer.parseInt(end_str);
 
                 ZooKeeperCleaner.clearNodes(start, end);
-                output.write("success".getBytes());
-                output.close();
+                reusult_str = "清理成功！";
             } catch (Exception e) {
                 output.write("failed".getBytes());
                 output.close();
             }
+            } else {
+                reusult_str = "无权限执行操作!";
+            }
+            output.write(reusult_str.getBytes());
+            output.close();
+
+        }else if (UPDATE_CREATOR.equals(action)) {
+            OutputStream output = response.getOutputStream();
+            String taskName = request.getParameter("taskName");
+            String creator = request.getParameter("creator");
+
+            String user = (String) request.getSession().getAttribute("taurus-user");
+            String adminUser;
+            try {
+                adminUser = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.dbadmin.user");
+            } catch (LionException e) {
+                adminUser = "kirin.li";
+            }
+            String reusult_str = "";
+
+            if (adminUser.contains(user)) {
+
+                cr = new ClientResource(RESTLET_URL_BASE + "updatecreator/" + creator + "/" + taskName);
+                IClearDependencyPassTask clearTasks = cr.wrap(IClearDependencyPassTask.class);
+                cr.accept(MediaType.APPLICATION_XML);
+                int result = clearTasks.retrieve();
+
+                switch (result) {
+                    case SERVICE_EXCEPTION:
+                        reusult_str = "后台服务异常!";
+                        break;
+                    case TASKID_IS_NOT_FOUND:
+                        reusult_str = "taskName 不存在!";
+                        break;
+                    case STATUS_IS_NOT_RIGHT:
+                        reusult_str = "creator 错误!";
+                        break;
+                    default:
+                        reusult_str = "执行成功~";
+                        break;
+
+                }
+            } else {
+                reusult_str = "无权限执行操作!";
+            }
+
+
+            output.write(reusult_str.getBytes());
+            output.close();
 
 
         } else if (RUNNING_TASKS.equals(action)) {
