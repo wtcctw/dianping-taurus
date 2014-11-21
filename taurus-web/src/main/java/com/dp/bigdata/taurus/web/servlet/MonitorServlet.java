@@ -16,6 +16,8 @@ import com.dp.bigdata.taurus.web.utils.ZabbixUtil;
 import com.dp.bigdata.taurus.zookeeper.common.infochannel.ZooKeeperCleaner;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,11 +37,13 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Logger;
 
 /**
  * Created by kirinli on 14-9-29.
  */
 public class MonitorServlet extends HttpServlet {
+    private static final Log LOGGER = LogFactory.getLog(MonitorServlet.class);
     private String RESTLET_URL_BASE;
     private String AGENT_PORT;
     private static final String HOST = "host";
@@ -361,6 +365,8 @@ public class MonitorServlet extends HttpServlet {
             OutputStream output = response.getOutputStream();
             String taskName = request.getParameter("taskName");
             String creator = request.getParameter("creator");
+            String currentUser = request.getParameter("currentUser");
+            String oldcreators = request.getParameter("oldcreators");
 
 
             String reusult_str = "";
@@ -383,6 +389,9 @@ public class MonitorServlet extends HttpServlet {
                         break;
                     default:
                         reusult_str = "执行成功~";
+                        String logInfo = "####RESGIN OP ####:用户【" + currentUser + "】把任务名为：【 " + taskName + "】的任务原对应调度人分别为【" + oldcreators + "】 都指派给了 【" + creator + "】";
+                        LOGGER.info(logInfo);
+                        System.out.println(logInfo);
                         break;
 
                 }

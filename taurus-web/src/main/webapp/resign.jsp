@@ -302,7 +302,8 @@
                     <i class="ace-icon fa fa-check bigger-110"></i>
                     交接任务
                 </button>
-
+                <a class="atip tooltip-info" data-toggle="tooltip" data-placement="bottom"
+                   data-original-title="此操作为危险操作，你所做的所有操作将审计下来，如果不是你的任务，你指派给了其他人，在没有项目组的人授权情况下是违规的！！！">[警告] </a>
             </div>
             <%
                 }%>
@@ -370,7 +371,7 @@
                     <td class="hide"><%=dto.getTaskid()%>
                     </td>
                     <td class="fixLength-td"><input type="checkbox" class="field taskcheckbox"
-                                                    id="taskcheckbox" name="taskcheckbox" value="<%=dto.getName()%>"
+                                                    id="<%=dto.getCreator()%>" name="taskcheckbox" value="<%=dto.getName()%>"
                             ><%=dto.getName()%>
                     </td>
                     <td><%=dto.getHostname()%>
@@ -526,6 +527,9 @@
 </script>
 <script src="js/jquery.validate.min.js" type="text/javascript"></script>
 <script src="js/resign.js" type="text/javascript"></script>
+<script>
+    var currentUser = "<%=currentUser%>"
+</script>
 
 
 </body>

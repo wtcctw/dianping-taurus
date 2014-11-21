@@ -19,21 +19,27 @@ $(document).ready(function () {
     });
     $( "#creatorbtn" ).on('click', function(e) {
         var taskName="";
+        var oldcreators="";
         var creator = $('input[name="creator"]:checked').val();
         $('input[name="taskcheckbox"]:checked').each(function(){
             taskName+=$(this).val()+",";
         })
         taskName = taskName.substr(0,taskName.length - 1);
-
+        $('input[name="taskcheckbox"]:checked').each(function(){
+            oldcreators+=$(this).attr("id")+",";
+        })
+        oldcreators = oldcreators.substr(0,oldcreators.length - 1);
         if(taskName != null && creator != null && taskName!="" && creator!=""){
-            bootbox.confirm("危险操作，你确定把job名为:"+taskName+"的job的调度人修改为:"+creator+"？", function(result) {
+            bootbox.confirm("<i class='icon-info-sign icon-large red '>你确定把job名为:"+taskName+"的job的调度人修改为:"+creator+"？</i>"+"<i class='icon-info-sign icon-large red  '>此操作为危险操作，你所做的操作将被系统记录</i>" , function(result) {
                 if(result){
                     $.ajax({
                         async: false,
                         data: {
                             action: "resign",
                             taskName:taskName,
-                            creator:creator
+                            creator:creator,
+                            currentUser:currentUser,
+                            oldcreators:oldcreators
                         },
                         type: "POST",
                         url: "/monitor",
