@@ -25,13 +25,27 @@ public class UpdateCreator  extends ServerResource implements IUpdateCreator{
         try {
             String taskName = (String) getRequestAttributes().get("taskName");
             String creator = (String) getRequestAttributes().get("creator");
-            if (creator != null && !creator.isEmpty()){
-                HashMap<String, String> taskIdMap = taskMapper.isExitTaskName(taskName);
-                if (taskIdMap == null || taskIdMap.size() == 0){
-                    return  TASKID_IS_NOT_FOUND;
+            String op = (String)getRequestAttributes().get("op");
+            if (creator != null && taskName != null && !creator.isEmpty() && !taskName.isEmpty()){
+                if ("update".equals(op)){
+                    HashMap<String, String> taskIdMap = taskMapper.isExitTaskName(taskName);
+                    if (taskIdMap == null || taskIdMap.size() == 0){
+                        return  TASKID_IS_NOT_FOUND;
+                    }
+                    result = taskMapper.updateCreator(creator,taskName);
+                }else if ("resign".equals(op)){
+                    String[] taskList = taskName.split(",");
+
+                    for (int i = 0; i < taskList.length; i++ ){
+                        String taskNameTmp = taskList[i];
+                        if (!taskNameTmp.isEmpty()){
+                            result = taskMapper.updateCreator(creator,taskNameTmp);
+                        }
+
+                    }
                 }
 
-                result   = taskMapper.updateCreator(creator,taskName);
+
             }else {
                 return CREATOR_IS_NOT_RIGHT;
             }

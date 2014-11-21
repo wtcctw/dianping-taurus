@@ -156,6 +156,12 @@
                 <span class="menu-text"> 用户设置 </span>
             </a>
         </li>
+        <li id="resign">
+            <a href="resign.jsp" target="_self">
+                <i class="icon-retweet"></i>
+                <span class="menu-text"> 任务交接 </span>
+            </a>
+        </li>
         <li id="update">
             <a href="update.jsp" target="_self">
                 <i class="icon-tag"></i>
@@ -228,6 +234,10 @@
 								<th width="90%">最新发布功能描述</th>
 								<th width="10%">发布时间</th>
 							</tr>
+                            <tr>
+                                <td>新增 <a href="resign.jsp"> 任务交接 </a>功能</td>
+                                <td>2014-11-21</td>
+                            </tr>
                             <tr>
                                 <td>优化界面访问速度</td>
                                 <td>2014-11-06</td>

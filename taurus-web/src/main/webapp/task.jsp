@@ -184,7 +184,7 @@
                 <span class="menu-text"> 任务监控 </span>
             </a>
         </li>
-        <li id="host">
+        <li id="hosts">
             <a href="hosts.jsp" target="_self">
                 <i class="icon-desktop"></i>
                 <span class="menu-text"> 主机监控 </span>
@@ -200,6 +200,18 @@
             <a href="user.jsp" target="_self">
                 <i class="icon-user"></i>
                 <span class="menu-text"> 用户设置 </span>
+            </a>
+        </li>
+        <li id="resign">
+            <a href="resign.jsp" target="_self">
+                <i class="icon-retweet"></i>
+                <span class="menu-text"> 任务交接 </span>
+            </a>
+        </li>
+        <li id="resign">
+            <a href="resign.jsp" target="_self">
+                <i class="icon-retweet"></i>
+                <span class="menu-text"> 任务交接 </span>
             </a>
         </li>
         <li id="update">

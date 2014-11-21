@@ -153,6 +153,12 @@
                 <span class="menu-text"> 用户设置 </span>
             </a>
         </li>
+        <li id="resign">
+            <a href="resign.jsp" target="_self">
+                <i class="icon-retweet"></i>
+                <span class="menu-text"> 任务交接 </span>
+            </a>
+        </li>
         <li id="update">
             <a href="update.jsp" target="_self">
                 <i class="icon-tag"></i>

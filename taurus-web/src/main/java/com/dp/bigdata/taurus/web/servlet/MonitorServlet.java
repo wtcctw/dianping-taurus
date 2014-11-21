@@ -60,6 +60,7 @@ public class MonitorServlet extends HttpServlet {
     private static final String SCHEDULE = "schedule";
     private static final String ATTEMPT = "attempt";
     private static final String UPDATE_CREATOR = "updatecreator";
+    private static final String RESIGN = "resign";
 
 
 
@@ -327,7 +328,7 @@ public class MonitorServlet extends HttpServlet {
 
             if (adminUser.contains(user)) {
 
-                cr = new ClientResource(RESTLET_URL_BASE + "updatecreator/" + creator + "/" + taskName);
+                cr = new ClientResource(RESTLET_URL_BASE + "updatecreator/" + creator + "/" + taskName + "/update");
                 IClearDependencyPassTask clearTasks = cr.wrap(IClearDependencyPassTask.class);
                 cr.accept(MediaType.APPLICATION_XML);
                 int result = clearTasks.retrieve();
@@ -350,6 +351,41 @@ public class MonitorServlet extends HttpServlet {
             } else {
                 reusult_str = "无权限执行操作!";
             }
+
+
+            output.write(reusult_str.getBytes());
+            output.close();
+
+
+        }else if (RESIGN.equals(action)) {
+            OutputStream output = response.getOutputStream();
+            String taskName = request.getParameter("taskName");
+            String creator = request.getParameter("creator");
+
+
+            String reusult_str = "";
+
+
+                cr = new ClientResource(RESTLET_URL_BASE + "updatecreator/" + creator.trim() + "/" + taskName.trim() + "/resign" );
+                IClearDependencyPassTask clearTasks = cr.wrap(IClearDependencyPassTask.class);
+                cr.accept(MediaType.APPLICATION_XML);
+                int result = clearTasks.retrieve();
+
+                switch (result) {
+                    case SERVICE_EXCEPTION:
+                        reusult_str = "后台服务异常!";
+                        break;
+                    case TASKID_IS_NOT_FOUND:
+                        reusult_str = "taskName 不存在!";
+                        break;
+                    case STATUS_IS_NOT_RIGHT:
+                        reusult_str = "creator 错误!";
+                        break;
+                    default:
+                        reusult_str = "执行成功~";
+                        break;
+
+                }
 
 
             output.write(reusult_str.getBytes());
