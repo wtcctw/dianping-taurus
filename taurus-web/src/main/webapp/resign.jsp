@@ -383,14 +383,14 @@
                 </td>
                 <td><%=dto.getCreator()%>
                 </td>
-                <td><%=dto.getProxyuser()%>
+                <td class="hide"><%=dto.getProxyuser()%>
                 </td>
                 <td class="hide">arch(mock)</td>
                 <td class="hide"><%=formatter.format(dto.getAddtime())%>
                 </td>
                 <td><%=dto.getCrontab()%>
                 </td>
-                <td class="hide"><%if (isRunning) {%>
+                <td><%if (isRunning) {%>
                     <span class="label label-info"><%=state%></span>
                     <%} else {%>
                     <span class="label label-important"><%=state%></span>
