@@ -42,6 +42,16 @@
             margin-left: 10px;
             color: green;
         }
+        .creatorbtn{
+            float: left;
+        }
+        .scrollup {
+            opacity: 0.3;
+            position: fixed;
+            bottom: 50px;
+            right: 100px;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -243,207 +253,257 @@
     </ul>
 </div>
 <div class="page-content">
-    <%
-        cr = new ClientResource(host + "group");
-        IUserGroupsResource groupResource = cr.wrap(IUserGroupsResource.class);
-        cr.accept(MediaType.APPLICATION_XML);
-        ArrayList<UserGroupDTO> groups = groupResource.retrieve();
+<%
+    cr = new ClientResource(host + "group");
+    IUserGroupsResource groupResource = cr.wrap(IUserGroupsResource.class);
+    cr.accept(MediaType.APPLICATION_XML);
+    ArrayList<UserGroupDTO> groups = groupResource.retrieve();
 
-        Map<String, String> map = new HashMap<String, String>();
-        String userGroup = "";
+    Map<String, String> map = new HashMap<String, String>();
+    String userGroup = "";
 
-        for (UserDTO user : users) {
-            String group = user.getGroup();
-            if (group == null || group.equals("")) {
-                group = "未分组";
-            }
-            if (map.containsKey(group)) {
-                map.put(group, map.get(group) + ", " + user.getName());
-            } else {
-                map.put(group, user.getName());
-            }
-            if (user.getName().equals(currentUser)) {
-                if (user.getGroup() == null || user.getGroup().equals("")) {
-                    userGroup = "null";
-    %>
-    <div id="alertContainer" class="container col-sm-12">
-        <div id="alertContainer" class="alert alert-danger">
-            <button type="button" class="close" data-dismiss="alert">×</button>
-            你未设分组，不能交接任务，请到<a href="user.jsp">用户设置</a>中设置自己的分组~
-        </div>
+    for (UserDTO user : users) {
+        String group = user.getGroup();
+        if (group == null || group.equals("")) {
+            group = "未分组";
+        }
+        if (map.containsKey(group)) {
+            map.put(group, map.get(group) + ", " + user.getName());
+        } else {
+            map.put(group, user.getName());
+        }
+        if (user.getName().equals(currentUser)) {
+            if (user.getGroup() == null || user.getGroup().equals("")) {
+                userGroup = "null";
+%>
+<div id="alertContainer" class="container col-sm-12">
+    <div id="alertContainer" class="alert alert-danger">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        你未设分组，不能交接任务，请到<a href="user.jsp">用户设置</a>中设置自己的分组~
     </div>
-    <%} else {%>
-    <div id="alertContainer" class="container col-sm-12"></div>
-    <%} %>
+</div>
+<%} else {%>
+<div id="alertContainer" class="container col-sm-12"></div>
+<%} %>
 
 
-    <div class="container" style="margin-top: 10px">
-        <div class="row">
-            <div class="col-sm-8 padding-14">
-                选择你要交接的任务：<br/>
+<div class="container" style="margin-top: 10px">
+    <div class="row">
+        <div class="col-sm-8 padding-14">
 
-                    <% String task_api = host + "task";
-                        String name = request.getParameter("name");
-                        String path = request.getParameter("path");
-                        String appname = request.getParameter("appname");
-                        if (name != null && !name.isEmpty()) {
-                            task_api = task_api + "?name=" + name;
-                        } else if (appname != null) {
-                            task_api = task_api + "?appname=" + appname;
-                        } else if (currentUser != null) {
-                            task_api = task_api + "?user=" + currentUser;
-                        }
-                        if (path != null && !path.equals("")) {
-                    %>
-                    <% }
-                        cr = new ClientResource(task_api);
-                        ITasksResource resource = cr.wrap(ITasksResource.class);
-                        cr.accept(MediaType.APPLICATION_XML);
-                        ArrayList<TaskDTO> tasks = resource.retrieve();
-                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            <%
+                if (!userGroup.equals("null")) {
+            %>
+            <div class=" creatorbtn">
+                <a class="atip tooltip-info" data-toggle="tooltip" data-placement="bottom"
+                   data-original-title="你只能把自己组的任务指派给自己组的成员，如果你需要交接给别的组请联系 李明 【kirin.li@dianping.com】">[提示] </a>
+                选择你要交接的任务：
+                <button class="btn btn-info" type="button" id="creatorbtn">
+                    <i class="ace-icon fa fa-check bigger-110"></i>
+                    交接任务
+                </button>
 
-                        if (tasks == null|| tasks.size() == 0) {%>
+            </div>
+            <%
+                }%>
+            <br/>
 
-                    <div class="align-center">
-                        <i class='icon-info-sign icon-large red '>你没有创建任何任务～</i>
-                    </div>
 
-                    <% }else {%>
-                <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-hover"
-                       width="100%" id="example">
-                    <thead>
-                    <tr>
-                        <th class="hide">ID</th>
-                        <th width="15%">名称</th>
-                        <th>IP</th>
-                        <th>调度人</th>
-                        <th>调度身份</th>
-                        <th class="hide">组</th>
-                        <th>创建时间</th>
-                        <th>Crontab</th>
-                        <th>状态</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <%}
-                        for (TaskDTO dto : tasks) {
-                            String state = dto.getStatus();
-                            boolean isRunning = true;
-                            if (state.equals("SUSPEND")) {
-                                isRunning = false;
-                            }
-                            if (isRunning) {
-                    %>
+            <% String task_api = host + "task";
+                String name = request.getParameter("name");
+                String path = request.getParameter("path");
+                String appname = request.getParameter("appname");
+                if (name != null && !name.isEmpty()) {
+                    task_api = task_api + "?name=" + name;
+                } else if (appname != null) {
+                    task_api = task_api + "?appname=" + appname;
+                } else if (currentUser != null) {
+                    task_api = task_api + "?user=" + currentUser;
+                }
+                if (path != null && !path.equals("")) {
+            %>
+            <% }
+                cr = new ClientResource(task_api);
+                ITasksResource resource = cr.wrap(ITasksResource.class);
+                cr.accept(MediaType.APPLICATION_XML);
+                ArrayList<TaskDTO> tasks = resource.retrieve();
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
-                    <tr id="<%=dto.getTaskid()%>">
-                            <% } else { %>
-                    <tr id="<%=dto.getTaskid()%>" class="error">
-                        <%}%>
-                        <td class="hide"><%=dto.getTaskid()%>
-                        </td>
-                        <td class="fixLength-td"><input type="checkbox" class="field taskcheckbox"
-                                                        id="taskcheckbox" name="taskcheckbox" value="<%=dto.getName()%>"
-                                ><%=dto.getName()%>
-                        </td>
-                        <td><%=dto.getHostname()%>
-                        </td>
-                        <td><%=dto.getCreator()%>
-                        </td>
-                        <td><%=dto.getProxyuser()%>
-                        </td>
-                        <td class="hide">arch(mock)</td>
-                        <td><%=formatter.format(dto.getAddtime())%>
-                        </td>
-                        <td><%=dto.getCrontab()%>
-                        </td>
-                        <td><%if (isRunning) {%>
-                            <span class="label label-info"><%=state%></span>
-                            <%} else {%>
-                            <span class="label label-important"><%=state%></span>
-                            <%}%>
-                        </td>
+                if (tasks == null || tasks.size() == 0) {%>
 
-                    </tr>
-                    <% } %>
-                    </tbody>
-                </table>
+            <div class="align-center">
+                <i class='icon-info-sign icon-large red '>你没有创建任何任务～</i>
+            </div>
+
+            <% } else {%>
+            <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-hover"
+                   width="100%" id="example">
+                <thead>
+                <tr>
+                    <th class="hide">ID</th>
+                    <th width="15%">名称</th>
+                    <th>IP</th>
+                    <th>调度人</th>
+                    <th>调度身份</th>
+                    <th class="hide">组</th>
+                    <th>创建时间</th>
+                    <th>Crontab</th>
+                    <th>状态</th>
+                </tr>
+                </thead>
+                <tbody>
                 <%
-                            userGroup = user.getGroup();
+                    }
+                    for (TaskDTO dto : tasks) {
+                        String state = dto.getStatus();
+                        boolean isRunning = true;
+                        if (state.equals("SUSPEND")) {
+                            isRunning = false;
+                        }
+                        if (isRunning) {
+                %>
+
+                <tr id="<%=dto.getTaskid()%>">
+                        <% } else { %>
+                <tr id="<%=dto.getTaskid()%>" class="error">
+                    <%}%>
+                    <td class="hide"><%=dto.getTaskid()%>
+                    </td>
+                    <td class="fixLength-td"><input type="checkbox" class="field taskcheckbox"
+                                                    id="taskcheckbox" name="taskcheckbox" value="<%=dto.getName()%>"
+                            ><%=dto.getName()%>
+                    </td>
+                    <td><%=dto.getHostname()%>
+                    </td>
+                    <td><%=dto.getCreator()%>
+                    </td>
+                    <td><%=dto.getProxyuser()%>
+                    </td>
+                    <td class="hide">arch(mock)</td>
+                    <td><%=formatter.format(dto.getAddtime())%>
+                    </td>
+                    <td><%=dto.getCrontab()%>
+                    </td>
+                    <td><%if (isRunning) {%>
+                        <span class="label label-info"><%=state%></span>
+                        <%} else {%>
+                        <span class="label label-important"><%=state%></span>
+                        <%}%>
+                    </td>
+
+                </tr>
+                <% } %>
+                </tbody>
+            </table>
+            <%
+                        userGroup = user.getGroup();
+                    }
+                }
+            %>
+        </div>
+        <div class="col-sm-4" style="opacity: 0.5">
+
+            <%
+                if (userGroup.equals("null")) {
+            %>
+            你未设置分组！
+            <%
+            } else {
+            %>
+
+
+            选择你要指派的人：<br/>
+            <%
+            if (!userGroup.equals("admin")) { %>
+            组名：<%=userGroup%> <br>
+            <table class="table table-striped table-bordered table-condensed">
+                <tr>
+                    <th align="left" width="85%">成员</th>
+                </tr>
+                <%
+
+
+                        for (String group : map.keySet()) {
+                            if (group.equals(userGroup)) {
+                %>
+
+
+                <%
+                    String groupUsers = map.get(group);
+                    String[] userList = groupUsers.split(",");
+
+                    for (int i = 0; i < userList.length; i++) {
+                        String creator = userList[i];
+                %>
+                <tr>
+                    <td align="left">
+                        <input type="radio" value="<%=creator%>" name="creator"><%=creator%>
+                    </td>
+                </tr>
+                <%
+                    }
+
+                %>
+
+
+                <%
                         }
                     }
-                %>
-            </div>
-            <div class="col-sm-4" style="opacity: 0.5">
-
-                <%
-                    if (userGroup.equals("null")) {
-                %>
-                你未设置分组！
-                <%
                 } else {
-                %>
-
-
-                选择你要指派的人：<br/>
-
-                组名：<%=userGroup%> <br>
+                            %>
                 <table class="table table-striped table-bordered table-condensed">
                     <tr>
                         <th align="left" width="85%">成员</th>
+                        <th align="left" width="85%">组名</th>
                     </tr>
-                    <%
-                        for (String group : map.keySet()) {
-                            if (group.equals(userGroup)) {
-                    %>
+                <%
+                    for (String group : map.keySet()) {
+                %>
 
 
-                    <%
-                        String groupUsers = map.get(group);
-                        String[] userList = groupUsers.split(",");
+                <%
+                    String groupUsers = map.get(group);
+                    String[] userList = groupUsers.split(",");
 
-                        for (int i = 0; i < userList.length; i++) {
-                            String creator = userList[i];
-                    %>
-                    <tr>
-                        <td align="left">
-                            <input type="radio" value="<%=creator%>" name="creator"><%=creator%>
-                        </td>
-                    </tr>
-                    <%
-                        }
-
-                    %>
-
-
-                    <%
-                            }
-                        }
-                    %>
-
-                </table>
+                    for (int i = 0; i < userList.length; i++) {
+                        String creator = userList[i];
+                %>
+                <tr>
+                    <td align="left">
+                        <input type="radio" value="<%=creator%>" name="creator"><%=creator%>
+                    </td>
+                    <td align="left">
+                        <%=group%>
+                    </td>
+                </tr>
                 <%
                     }
+
                 %>
-            </div>
-        </div>
-        <%
-            if (!userGroup.equals("null")) {
-        %>
-        <div class="col-sm-4">
-            <button class="btn btn-info" type="button" id="creatorbtn">
-                <i class="ace-icon fa fa-check bigger-110"></i>
-                交接任务
-            </button>
 
-        </div>
-        <%
-            }%>
 
-        <div class="col-sm-8" id="adjustout"></div>
+                <%
+                        }
+                    }
+                %>
+
+            </table>
+            <%
+                }
+            %>
+        </div>
     </div>
 
+
+    <div class="col-sm-8" id="adjustout"></div>
 </div>
+
 </div>
+
+</div>
+<a href="#" class="scrollup" style="display: inline;">
+    <img src="img/ScrollTopArrow.png" width="50" height="50">
+</a>
 <script type="text/javascript">
     $('li[id="resign"]').addClass("active");
     $('#menu-toggler').on(ace.click_event, function () {

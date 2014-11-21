@@ -4,7 +4,19 @@
 
 $(document).ready(function () {
 
+    $(".atip").tooltip();
+    $(window).scroll(function () {
+        if ($(this).scrollTop() > 100) {
+            $('.scrollup').fadeIn();
+        } else {
+            $('.scrollup').fadeOut();
+        }
+    });
 
+    $('.scrollup').click(function () {
+        $("html, body").scrollTop(0);
+        return false;
+    });
     $( "#creatorbtn" ).on('click', function(e) {
         var taskName="";
         var creator = $('input[name="creator"]:checked').val();
@@ -31,8 +43,12 @@ $(document).ready(function () {
                         },
                         success: function (response, textStatus) {
 
-                            $("#adjustout").html("<i class='icon-info-sign icon-large red '>"+response+"</i>");
-                            $("#adjustout").addClass("align-center");
+
+                            bootbox.confirm("<i class='icon-info-sign icon-large red '>"+response+"</i>", function(result) {
+                                if(result) {
+                                    window.location.reload();
+                                }
+                            });
                         }
 
 
