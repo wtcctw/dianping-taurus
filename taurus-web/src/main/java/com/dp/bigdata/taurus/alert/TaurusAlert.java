@@ -12,6 +12,9 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.mail.MessagingException;
 
+import com.dianping.lion.EnvZooKeeperConfig;
+import com.dianping.lion.client.ConfigCache;
+import com.dianping.lion.client.LionException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -229,6 +232,14 @@ public class TaurusAlert {
 			Task task = taskMapper.selectByPrimaryKey(attempt.getTaskid());
 			StringBuilder sbMailContent = new StringBuilder();
 
+            String domain ="";
+            try {
+                domain = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.deploy.weburl");
+            } catch (LionException e) {
+                domain="taurus.dp";
+                e.printStackTrace();
+            }
+
 			sbMailContent.append("<table>");
 			sbMailContent.append("<tr>");
 			sbMailContent.append("<td>任务名</td><td>" + task.getName() + "</td>");
@@ -237,7 +248,7 @@ public class TaurusAlert {
 			sbMailContent.append("<td>任务状态</td><td> " + AttemptStatus.getInstanceRunState(attempt.getStatus()) + "</td>");
 			sbMailContent.append("</tr>");
 			sbMailContent.append("<tr>");//
-			sbMailContent.append("<td>日志查看</td><td>" + "http://taurus.dp/viewlog.jsp?id="+ attempt.getAttemptid() +"&status="+AttemptStatus.getInstanceRunState(attempt.getStatus())+"</td>");
+			sbMailContent.append("<td>日志查看</td><td>" + "http://"+domain+"/viewlog.jsp?id="+ attempt.getAttemptid() +"&status="+AttemptStatus.getInstanceRunState(attempt.getStatus())+"</td>");
 			sbMailContent.append("</tr>");
 			sbMailContent.append("</table>");
 
