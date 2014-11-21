@@ -236,9 +236,8 @@ public class TaurusAlert {
 			sbMailContent.append("<tr>");
 			sbMailContent.append("<td>任务状态</td><td> " + AttemptStatus.getInstanceRunState(attempt.getStatus()) + "</td>");
 			sbMailContent.append("</tr>");
-			sbMailContent.append("<tr>");
-			sbMailContent.append("<td>日志查看</td><td>" + "http://taurus.dp/attempts.do?id=" + attempt.getAttemptid()
-			      + "&action=view-log</td>");
+			sbMailContent.append("<tr>");//
+			sbMailContent.append("<td>日志查看</td><td>" + "http://taurus.dp/viewlog.jsp?id="+ attempt.getAttemptid() +"&status="+AttemptStatus.getInstanceRunState(attempt.getStatus())+"</td>");
 			sbMailContent.append("</tr>");
 			sbMailContent.append("</table>");
 
