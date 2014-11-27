@@ -523,34 +523,7 @@ public class MonitorServlet extends HttpServlet {
             IGetTasks taskResource = crTask.wrap(IGetTasks.class);
             ArrayList<Task> tasks = taskResource.retrieve();
 
-
-            String id = request.getParameter("id");
-            String taskTime = "";
-
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            String url = RESTLET_URL_BASE + "getattemptsbystatus/";
-
-            if (id == null) {
-
-                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
-
-            } else if (id.equals("1")) {
-                Integer count = (Integer) request.getSession().getAttribute("count");
-                if (count == null)
-                    count = 0;
-                Integer changeCount = count + 1;
-                request.getSession().setAttribute("count", changeCount);
-
-                taskTime = formatter.format(new Date(new Date().getTime() - (count + 1) * hourTime));
-            } else if (id.equals("24")) {
-                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
-                request.getSession().setAttribute("count", 0);
-            }
-
-
-            cr = new ClientResource(url + taskTime);
-            IGetAttemptsByStatus resource = cr.wrap(IGetAttemptsByStatus.class);
-            ArrayList<AttemptDTO> attempts = resource.retrieve();
 
             String result = "";
             if (attempts != null)
