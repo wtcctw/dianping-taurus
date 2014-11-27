@@ -646,6 +646,21 @@
 
     $(document).ready(function () {
         $.ajax({
+            async: false,
+            data: {
+                action: "reflash_attempts",
+                start:starttime
+            },
+            type: "POST",
+            url: "/monitor",
+            error: function () {
+            },
+            success: function (response, textStatus) {
+            }
+
+
+        });
+        $.ajax({
             data: {
                 action: "runningtasks"
 
@@ -666,8 +681,6 @@
         $.ajax({
             data: {
                 action: "submitfail",
-                start:starttime,
-                end:endtime,
                 id:id
             },
             type: "POST",
@@ -687,8 +700,6 @@
         $.ajax({
             data: {
                 action: "dependencypass",
-                start:starttime,
-                end:endtime,
                 id:id
             },
             type: "POST",
@@ -708,8 +719,6 @@
         $.ajax({
             data: {
                 action: "failedtasks",
-                start:starttime,
-                end:endtime,
                 id:id
             },
             type: "POST",
@@ -728,8 +737,6 @@
         $.ajax({
             data: {
                 action: "dependencytimeout",
-                start:starttime,
-                end:endtime,
                 id:id
             },
             type: "POST",
@@ -748,8 +755,6 @@
         $.ajax({
             data: {
                 action: "timeout",
-                start:starttime,
-                end:endtime,
                 id:id
             },
             type: "POST",

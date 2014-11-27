@@ -66,7 +66,10 @@ public class MonitorServlet extends HttpServlet {
     private static final String ATTEMPT = "attempt";
     private static final String UPDATE_CREATOR = "updatecreator";
     private static final String RESIGN = "resign";
+    private static final String REFLASH_ATTEMPTS = "reflash_attempts";
 
+    private  static ArrayList<AttemptDTO> attempts;
+    private static boolean is_flash = false;
 
 
     private static final int SERVICE_EXCEPTION = -1;
@@ -401,9 +404,9 @@ public class MonitorServlet extends HttpServlet {
                         reusult_str = "执行成功~";
                         //替换告警人
 
-                        String [] tmpUserList = alertUser.split(",");
+                        String [] tmpUserList = alertUser.split(","); //现有的alert user
                         String [] tmpJobIdList = jobId.split(",");
-                        String [] oldCreatorsList = oldcreators.split(",");
+                        String [] oldCreatorsList = oldcreators.split(","); //之前的用户
 
 
                         for (int i = 0; i < tmpJobIdList.length; i++){
@@ -442,6 +445,7 @@ public class MonitorServlet extends HttpServlet {
                             }else {
                                 for (int j = 0; j < tmpUsers.length; j++){
                                     String user = tmpUsers[j];
+
                                     cr = new ClientResource(RESTLET_URL_BASE + "getuserid/" + user.trim() );
                                     getUserId = cr.wrap(IGetUserId.class);
                                     cr.accept(MediaType.APPLICATION_XML);
@@ -489,7 +493,24 @@ public class MonitorServlet extends HttpServlet {
             output.close();
 
 
-        } else if (RUNNING_TASKS.equals(action)) {
+        } else if(REFLASH_ATTEMPTS.equals(action)){
+            OutputStream output = response.getOutputStream();
+            String start = request.getParameter("start");
+            String taskTime = start;
+
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            String url = RESTLET_URL_BASE + "getattemptsbystatus/";
+
+
+
+            cr = new ClientResource(url + taskTime);
+            IGetAttemptsByStatus resource = cr.wrap(IGetAttemptsByStatus.class);
+            attempts = resource.retrieve();
+
+            output.write("success".getBytes());
+            output.close();
+
+        }else if (RUNNING_TASKS.equals(action)) {
             OutputStream output = response.getOutputStream();
             String hourTimeStr = request.getParameter("hourTime");
             long hourTime = 60 * 60 * 1000;
@@ -616,8 +637,6 @@ public class MonitorServlet extends HttpServlet {
         } else if (FAILED_TASKS.equals(action)) {
 
             OutputStream output = response.getOutputStream();
-            String start = request.getParameter("start");
-            String end = request.getParameter("end");
 
             ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
             if (tasks == null) {
@@ -629,16 +648,8 @@ public class MonitorServlet extends HttpServlet {
             }
 
 
-            String taskTime = start;
 
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            String url = RESTLET_URL_BASE + "getattemptsbystatus/";
-
-
-
-            cr = new ClientResource(url + taskTime);
-            IGetAttemptsByStatus resource = cr.wrap(IGetAttemptsByStatus.class);
-            ArrayList<AttemptDTO> attempts = resource.retrieve();
 
             String result = "";
             if (attempts != null)
@@ -717,8 +728,6 @@ public class MonitorServlet extends HttpServlet {
 
         } else if (SUBMIT_FAIL_TASK.equals(action)) {
             OutputStream output = response.getOutputStream();
-            String start = request.getParameter("start");
-            String end = request.getParameter("end");
 
             ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
             if (tasks == null) {
@@ -730,16 +739,7 @@ public class MonitorServlet extends HttpServlet {
             }
 
 
-            String taskTime = start;
-
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            String url = RESTLET_URL_BASE + "getattemptsbystatus/";
-
-
-
-            cr = new ClientResource(url + taskTime);
-            IGetAttemptsByStatus resource = cr.wrap(IGetAttemptsByStatus.class);
-            ArrayList<AttemptDTO> attempts = resource.retrieve();
 
             String result = "";
             if (attempts != null)
@@ -813,8 +813,6 @@ public class MonitorServlet extends HttpServlet {
         } else if (DEPENDENCY_PASS_TASK.equals(action)) {
 
             OutputStream output = response.getOutputStream();
-            String start = request.getParameter("start");
-            String end = request.getParameter("end");
 
             ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
             if (tasks == null) {
@@ -826,16 +824,8 @@ public class MonitorServlet extends HttpServlet {
             }
 
 
-            String taskTime = start;
 
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            String url = RESTLET_URL_BASE + "getattemptsbystatus/";
-
-
-
-            cr = new ClientResource(url + taskTime);
-            IGetAttemptsByStatus resource = cr.wrap(IGetAttemptsByStatus.class);
-            ArrayList<AttemptDTO> attempts = resource.retrieve();
 
             String result = "";
             if (attempts != null)
@@ -908,8 +898,6 @@ public class MonitorServlet extends HttpServlet {
         } else if (DEPENDENCY_TIMEOUT_TASK.equals(action)) {
 
             OutputStream output = response.getOutputStream();
-            String start = request.getParameter("start");
-            String end = request.getParameter("end");
 
             ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
             if (tasks == null) {
@@ -921,16 +909,8 @@ public class MonitorServlet extends HttpServlet {
             }
 
 
-            String taskTime = start;
 
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            String url = RESTLET_URL_BASE + "getattemptsbystatus/";
-
-
-
-            cr = new ClientResource(url + taskTime);
-            IGetAttemptsByStatus resource = cr.wrap(IGetAttemptsByStatus.class);
-            ArrayList<AttemptDTO> attempts = resource.retrieve();
 
             String result = "";
             if (attempts != null)
@@ -1002,8 +982,6 @@ public class MonitorServlet extends HttpServlet {
 
         } else if (TIMEOUT_TASK.equals(action)) {
             OutputStream output = response.getOutputStream();
-            String start = request.getParameter("start");
-            String end = request.getParameter("end");
             ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
             if (tasks == null) {
                 ClientResource crTask = new ClientResource(RESTLET_URL_BASE + "gettasks");
@@ -1014,15 +992,8 @@ public class MonitorServlet extends HttpServlet {
             }
 
 
-            String taskTime = start;
 
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            String url = RESTLET_URL_BASE + "getattemptsbystatus/";
-
-
-            cr = new ClientResource(url + taskTime);
-            IGetAttemptsByStatus resource = cr.wrap(IGetAttemptsByStatus.class);
-            ArrayList<AttemptDTO> attempts = resource.retrieve();
 
             String result = "";
             if (attempts != null)
