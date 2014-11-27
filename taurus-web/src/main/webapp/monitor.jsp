@@ -36,6 +36,13 @@
         .time_inal {
             float: right
         }
+        .scrollup {
+            opacity: 0.3;
+            position: fixed;
+            bottom: 50px;
+            right: 100px;
+            display: none;
+        }
     </style>
 </head>
 <body data-spy="scroll">
@@ -175,12 +182,6 @@
                 <span class="menu-text"> 用户设置 </span>
             </a>
         </li>
-        <li id="resign">
-            <a href="resign.jsp" target="_self">
-                <i class="icon-retweet"></i>
-                <span class="menu-text"> 任务交接 </span>
-            </a>
-        </li>
         <li id="update">
             <a href="update.jsp" target="_self">
                 <i class="icon-tag"></i>
@@ -243,22 +244,6 @@
 </div>
 
 
-<%
-    //        String admin = (String)request.getSession().getAttribute("Admin");
-//        if (admin== null || !admin.equals("true")) {
-//            response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-//            String newLocn = "notadmin.jsp";
-//            response.setHeader("Location", newLocn);
-//        }
-
-
-    Date time = new Date();
-    SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHH");
-    long hourTime = 60 * 60 * 1000;
-    Integer countTotal = (Integer) request.getSession().getAttribute("count");
-    if (countTotal == null)
-        countTotal = 0;
-%>
 
 <div class="row">
 <ul class="run-tag col-sm-12">
@@ -280,119 +265,115 @@
 
         </tr>
         </thead>
-        <tbody>
-        <%
+        <tbody id="running_body">
+        <div id="running_load">
+            <i class="icon-spinner icon-spin icon-large"></i>
+        </div>
 
-            ClientResource crTask = new ClientResource(host + "gettasks");
-            IGetTasks taskResource = crTask.wrap(IGetTasks.class);
-            ArrayList<Task> tasks = taskResource.retrieve();
-
-            String id = request.getParameter("id");
-            String taskTime = "";
-
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            String url = host + "getattemptsbystatus/";
-
-            String now = formatter.format(new Date());
-            if (id == null) {
-
-                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
-
-            } else if (id.equals("1")) {
-                Integer count = (Integer) request.getSession().getAttribute("count");
-                if (count == null)
-                    count = 0;
-                Integer changeCount = count + 1;
-                request.getSession().setAttribute("count", changeCount);
-
-                taskTime = formatter.format(new Date(new Date().getTime() - (count + 1) * hourTime));
-            } else if (id.equals("24")) {
-                taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
-                request.getSession().setAttribute("count", 0);
-            }
-
-
-            cr = new ClientResource(url + taskTime);
-            IGetAttemptsByStatus resource = cr.wrap(IGetAttemptsByStatus.class);
-            ArrayList<AttemptDTO> attempts = resource.retrieve();
-
-            if (attempts != null)
-                for (AttemptDTO dto : attempts) {
-                    String state = dto.getStatus();
-                    if (state.equals("RUNNING")) {
-                        String taskName = "";
-                        for (Task task : tasks) {
-                            if (task.getTaskid().equals(dto.getTaskID())) {
-                                taskName = task.getName();
-                                break;
-                            }
-                        }
-        %>
-        <tr id="<%=dto.getAttemptID()%>">
-            <td><%=dto.getTaskID()%>
-            </td>
-            <td><%=taskName%>
-            </td>
-            <%if (dto.getStartTime() != null) {%>
-            <td><%=formatter.format(dto.getStartTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (dto.getEndTime() != null) {%>
-            <td><%=formatter.format(dto.getEndTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (dto.getScheduleTime() != null) {%>
-            <td><%=formatter.format(dto.getScheduleTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (dto.getExecHost() != null) {%>
-            <td><%=dto.getExecHost()%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}
-                boolean isViewLog = AttemptProxyServlet.isHostOverLoad(dto.getExecHost());
-                if(!isViewLog){
-
-            %>
-            <td>
-
-                <a target="_blank" href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
-            </td>
-
-        </tr>
-        <% }else{
-            %>
-        <td>
-
-            Job机负载过高，无法查看实时日志
-        </td>
-
-        <%}
-        }
-        } %>
         </tbody>
     </table>
 </ul>
 <div class="time_inal ">
+    <%
+        Date time = new Date();
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHH");
+        long hourTime = 60 * 60 * 1000;
 
-    <a class="atip" data-toggle="tooltip" data-placement="top"
-       data-original-title="当你点击了[-1h]后，在想切换到当前页面时，请点击[当天]，刷新页面无效噢～">[注意] </a>
-    &nbsp;&nbsp; |&nbsp;&nbsp;
-    <a class="atip"
-       href="monitor.jsp?id=1&taskdate＝<%=df.format(new Date(time.getTime() - (countTotal+1)*hourTime))    %> "
-       data-toggle="tooltip" data-placement="top"
-       data-original-title="时间区间[<%=formatter.format(new Date(time.getTime() - (countTotal+1)*hourTime))%>~<%=formatter.format(new Date(time.getTime()- countTotal*hourTime))%>]">[-1h] </a>
-    &nbsp;&nbsp; |&nbsp;&nbsp;
-    <a class="atip" href="monitor.jsp?id=24&taskdate＝<%=df.format(new Date(new Date().getTime() -24*hourTime))    %>"
-       data-toggle="tooltip" data-placement="top"
-       data-original-title=" 时间区间[<%=formatter.format(new Date(new Date().getTime() -24*hourTime))%>~<%=formatter.format(new Date())%>]">[当天] </a>
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+        String step_str = request.getParameter("step");
+        String now = request.getParameter("date");
+        System.out.println(step_str+"#"+now);
+        int step = -24;
+    %>
+
+    <div >
+        <a class="atip" data-toggle="tooltip" data-placement="top"
+           data-original-title="当你点击了[-1h]|[-1d]|[-1w]|[-1m]后，在想切换到当前页面时，请点击[当天]，刷新页面无效噢～">[注意] </a>
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+
+
+        <a class="atip"
+           href="monitor.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date())%>"
+           data-toggle="tooltip" data-placement="top"
+           data-original-title=" 时间区间[<%=formatter.format(new Date(new Date().getTime() -24*hourTime))%>~<%=formatter.format(new Date())%>]">[当天] </a>
+        <a class="atip" data-toggle="tooltip" data-placement="top"
+           data-original-title="查看历史数据">[历史模式] </a>
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        <a class="atip"
+                <% if (now == null) {
+                    now = df.format(time);
+                }
+                    step = -720;
+                %>
+           href="monitor.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+           data-toggle="tooltip" data-placement="top"
+           data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime)) %>~<%=formatter.format(new Date(df.parse(now).getTime()))%>]">[-1m] </a>
+        &nbsp;&nbsp; |&nbsp;&nbsp;
+        <a class="atip"
+                <% if (now == null) {
+                    now = df.format(time);
+                }
+                    step = -168;
+                %>
+           href="monitor.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+           data-toggle="tooltip" data-placement="top"
+           data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>
+    ~<%=formatter.format(new Date(df.parse(now).getTime()))%>]">[-1w] </a>
+        &nbsp;&nbsp; |&nbsp;&nbsp;
+        <a class="atip"
+                <% if (now == null) {
+                    now = df.format(time);
+                }
+                    step = -24;
+                %>
+           href="monitor.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%>"
+           data-toggle="tooltip" data-placement="top"
+           data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>
+    ~<%=formatter.format(new Date(df.parse(now).getTime()))%>]">[-1d] </a>
+
+        &nbsp;&nbsp; |&nbsp;&nbsp;
+        <a class="atip"  <% if (now == null) {
+            now = df.format(time);
+        }
+            step = 24;
+            if (df.parse(now).after(time)) {%>
+           href="monitor.jsp?step=-24&date＝<%=df.format(time)%> "
+                <% } else {%>
+           href="monitor.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+                <% }
+                %>
+           data-toggle="tooltip" data-placement="top"
+           data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime()))%>~<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>]">[+1d] </a>
+        &nbsp;&nbsp; |&nbsp;&nbsp;
+        <a class="atip"  <% if (now == null) {
+            now = df.format(time);
+        }
+            step = 168;
+            if (df.parse(now).after(time)) {%>
+           href="monitor.jsp?step=-24&op=day&date＝<%=df.format(time)%> "
+                <% } else {%>
+           href="monitor.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+                <% }
+                %>
+           data-toggle="tooltip" data-placement="top"
+           data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime()))%>~<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>]">[+1w] </a>
+        &nbsp;&nbsp; |&nbsp;&nbsp;
+        <a class="atip"  <% if (now == null) {
+            now = df.format(time);
+        }
+            step = 720;
+            if (df.parse(now).after(time)) {%>
+           href="monitor.jsp?step=-24&op=day&date＝<%=df.format(time)%> "
+                <% } else {%>
+           href="monitor.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+                <% }
+                %>
+           data-toggle="tooltip" data-placement="top"
+           data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime()))%>~<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>]">[+1m] </a>
+    </div>
+
+
 </div>
 
 <ul class="submit-fail-tag col-sm-12">
@@ -413,58 +394,11 @@
              <th>IP</th>
         </tr>
         </thead>
-        <tbody>
-        <%
-            for (AttemptDTO dto : attempts) {
-                String state = dto.getStatus();
+        <tbody id="submit_body">
 
-                String taskName = "";
-                for (Task task : tasks) {
-                    if (task.getTaskid().equals(dto.getTaskID())) {
-                        taskName = task.getName();
-                        break;
-                    }
-                }
-
-                if (state.equals("SUBMIT_FAIL")) {
-
-
-        %>
-        <tr id="<%=dto.getAttemptID()%>">
-            <td><%=dto.getTaskID()%>
-            </td>
-            <td><%=taskName%>
-            </td>
-            <%if (dto.getStartTime() != null) {%>
-            <td><%=formatter.format(dto.getStartTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (dto.getEndTime() != null) {%>
-            <td><%=formatter.format(dto.getEndTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (dto.getScheduleTime() != null) {%>
-            <td><%=formatter.format(dto.getScheduleTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (dto.getExecHost() != null) {%>
-            <td><%=dto.getExecHost()%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-
-        </tr>
-        <% }
-        }
-        %>
-
+        <div id="submit_load">
+            <i class="icon-spinner icon-spin icon-large"></i>
+        </div>
 
         </tbody>
     </table>
@@ -489,58 +423,10 @@
             <th>IP</th>
         </tr>
         </thead>
-        <tbody>
-        <%
-
-            for (AttemptDTO dto : attempts) {
-                String state = dto.getStatus();
-                String taskName = "";
-                for (Task task : tasks) {
-                    if (task.getTaskid().equals(dto.getTaskID())) {
-                        taskName = task.getName();
-                        break;
-                    }
-                }
-
-
-                if (state.equals("DEPENDENCY_PASS")) {
-
-
-        %>
-        <tr id="<%=dto.getAttemptID()%>">
-            <td><%=dto.getTaskID()%>
-            </td>
-            <td><%=taskName%>
-            </td>
-            <%if (dto.getStartTime() != null) {%>
-            <td><%=formatter.format(dto.getStartTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (dto.getEndTime() != null) {%>
-            <td><%=formatter.format(dto.getEndTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (dto.getScheduleTime() != null) {%>
-            <td><%=formatter.format(dto.getScheduleTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (dto.getExecHost() != null) {%>
-            <td><%=dto.getExecHost()%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-
-        </tr>
-        <% }
-        }
-        %>
+        <tbody id="dependency_body">
+        <div id="dependency_load">
+            <i class="icon-spinner icon-spin icon-large"></i>
+        </div>
         </tbody>
     </table>
 </ul>
@@ -567,61 +453,10 @@
             <th>查看日志</th>
         </tr>
         </thead>
-        <tbody>
-        <%
-
-            for (AttemptDTO dto : attempts) {
-                String state = dto.getStatus();
-                String taskName = "";
-                for (Task task : tasks) {
-                    if (task.getTaskid().equals(dto.getTaskID())) {
-                        taskName = task.getName();
-                        break;
-                    }
-                }
-
-
-                if (state.equals("FAILED")) {
-
-
-        %>
-        <tr id="<%=dto.getAttemptID()%>">
-            <td><%=dto.getTaskID()%>
-            </td>
-            <td><%=taskName%>
-            </td>
-            <%if (dto.getStartTime() != null) {%>
-            <td><%=formatter.format(dto.getStartTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (dto.getEndTime() != null) {%>
-            <td><%=formatter.format(dto.getEndTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (dto.getScheduleTime() != null) {%>
-            <td><%=formatter.format(dto.getScheduleTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (dto.getExecHost() != null) {%>
-            <td><%=dto.getExecHost()%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <td>
-                <a target="_blank" href="viewlog.jsp?id=<%=dto.getAttemptID()%>&status=<%=dto.getStatus()%>">日志</a>
-            </td>
-
-        </tr>
-        <% }
-        }
-        %>
+        <tbody id="failed_body">
+        <div id="failed_load">
+            <i class="icon-spinner icon-spin icon-large"></i>
+        </div>
         </tbody>
     </table>
 </ul>
@@ -645,55 +480,10 @@
 
         </tr>
         </thead>
-        <tbody>
-        <%
-
-            for (AttemptDTO dto : attempts) {
-                String taskName = "";
-                for (Task task : tasks) {
-                    if (task.getTaskid().equals(dto.getTaskID())) {
-                        taskName = task.getName();
-                        break;
-                    }
-                }
-                String state = dto.getStatus();
-                if (state.equals("DEPENDENCY_TIMEOUT")) {
-
-        %>
-        <tr id="<%=dto.getAttemptID()%>">
-            <td><%=dto.getTaskID()%>
-            </td>
-            <td><%=taskName%>
-            </td>
-            <%if (dto.getStartTime() != null) {%>
-            <td><%=formatter.format(dto.getStartTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (dto.getEndTime() != null) {%>
-            <td><%=formatter.format(dto.getEndTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (dto.getScheduleTime() != null) {%>
-            <td><%=formatter.format(dto.getScheduleTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (dto.getExecHost() != null) {%>
-            <td><%=dto.getExecHost()%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-
-        </tr>
-        <% }
-        }
-        %>
+        <tbody id="dependency_timeout_body">
+        <div id="dependency_timeout_load">
+            <i class="icon-spinner icon-spin icon-large"></i>
+        </div>
         </tbody>
     </table>
 </ul>
@@ -716,54 +506,10 @@
 
         </tr>
         </thead>
-        <tbody>
-        <%
-            for (AttemptDTO dto : attempts) {
-                String state = dto.getStatus();
-                String taskName = "";
-                for (Task task : tasks) {
-                    if (task.getTaskid().equals(dto.getTaskID())) {
-                        taskName = task.getName();
-                        break;
-                    }
-                }
-                if (state.equals("TIMEOUT")) {
-
-        %>
-        <tr id="<%=dto.getAttemptID()%>">
-            <td><%=dto.getTaskID()%>
-            </td>
-            <td><%=taskName%>
-            </td>
-            <%if (dto.getStartTime() != null) {%>
-            <td><%=formatter.format(dto.getStartTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (dto.getEndTime() != null) {%>
-            <td><%=formatter.format(dto.getEndTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (dto.getScheduleTime() != null) {%>
-            <td><%=formatter.format(dto.getScheduleTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (dto.getExecHost() != null) {%>
-            <td><%=dto.getExecHost()%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-
-        </tr>
-        <% }
-        }
-        %>
+        <tbody id="timeout_body">
+        <div id="timeout_load">
+            <i class="icon-spinner icon-spin icon-large"></i>
+        </div>
         </tbody>
     </table>
 </ul>
@@ -784,6 +530,9 @@
     </div>
 </div>
 </div>
+<a href="#" class="scrollup" style="display: inline;">
+    <img src="img/ScrollTopArrow.png" width="50" height="50">
+</a>
 <script type="text/javascript">
     $('li[id="monitor"]').addClass("active");
     $('#menu-toggler').on(ace.click_event, function() {
@@ -791,85 +540,236 @@
         $(this).toggleClass('display');
         return false;
     });
+    $(window).scroll(function () {
+        if ($(this).scrollTop() > 100) {
+            $('.scrollup').fadeIn();
+        } else {
+            $('.scrollup').fadeOut();
+        }
+    });
 
+    $('.scrollup').click(function () {
+        $("html, body").scrollTop(0);
+        return false;
+    });
     $(".atip").tooltip();
     options = {
         delay: { show: 500, hide: 100 },
         trigger: 'click'
     };
     $(".optiontip").tooltip(options);
-    $('#running').dataTable({
-        bAutoWidth: true,
-        "aoColumns": [
-            { "sWidth": "15%" } ,
-            { "sWidth": "15%" },
-            { "sWidth": "15%" },
-            { "sWidth": "15%" },
-            { "sWidth": "15%" },
-            { "sWidth": "15%" },
-            { "sWidth": "10%" }
+    function GetDateStr(dd, AddDayCount) {
+        dd.setDate(dd.getDate() + AddDayCount);//获取AddDayCount天后的日期
+        var y = dd.getFullYear();
+        var m = dd.getMonth() + 1;//获取当前月份的日期
+        var d = dd.getDate();
+        return y + "-" + m + "-" + d;
+    }
+    <%String now_str = request.getParameter("date");
+    if (now_str == null || now_str.isEmpty()){
+    now_str= df.format(time);
+    }
+    %>
+    var now_s = "<%=formatter.format( df.parse(now_str))%>";
+    var now = new Date(Date.parse(now_s.replace(/-/g, "/")));
+    var id = "<%= request.getParameter("id")%>";
+    var step = "<%=request.getParameter("step")%>";
+    <%String op_str = request.getParameter("op");
+    if(op_str==null || op_str.isEmpty()){
+    op_str="day";
+    }%>
+    var op="<%=op_str%>";
+    var starttime;
+    var endtime ;
+    if(step == null || step=="null"){
+        starttime = GetDateStr(now,-1);
+        if(op == "day"){
+            endtime = GetDateStr(now,1);
+        }else{
+            endtime = GetDateStr(new Date(),1);
+        }
 
-        ],
-        bJQueryUI: true
-    });
+    }else if(step == "-24"){
+        starttime = GetDateStr(now,-1);
+        if(op == "day"){
+            endtime = GetDateStr(now,1);
+        }else{
+            endtime = GetDateStr(new Date(),1);
+        }
+    }else if(step == "-168"){
+        starttime = GetDateStr(now,-7);
+        if(op == "day"){
+            endtime = GetDateStr(now,1);
+        }else{
+            endtime = GetDateStr(new Date(),1);
+        }
+    }else if(step == "-720"){
+        starttime = GetDateStr(now,-30);
+        if(op == "day"){
+            endtime = GetDateStr(now,1);
+        }else{
+            endtime = GetDateStr(new Date(),1);
+        }
+    }else if(step == "24"){
+        if(op == "day"){
+            starttime = GetDateStr(now,0);
+            endtime = GetDateStr(now,1);
+        }else{
+            starttime = GetDateStr(now,0);
+            endtime = GetDateStr(new Date(),1);
+        }
 
-    $('#submitfail').dataTable({
-        bAutoWidth: true,
-        "aoColumns": [
-            { "sWidth": "15%" } ,
-            { "sWidth": "15%" },
-            { "sWidth": "15%" },
-            { "sWidth": "15%" },
-            { "sWidth": "15%" },
-            { "sWidth": "15%" },
-            { "sWidth": "10%" }
 
-        ],
-        bJQueryUI: true
-    });
+    }else if(step == "168"){
+        if(op == "day"){
+            starttime = GetDateStr(now,0);
+            endtime = GetDateStr(now,7);
+        }else{
+            starttime = GetDateStr(now,7);
+            endtime = GetDateStr(new Date(),1);
+        }
 
-    $('#fail').dataTable({
-        bAutoWidth: true,
-        "aoColumns": [
-            { "sWidth": "15%" } ,
-            { "sWidth": "15%" },
-            { "sWidth": "15%" },
-            { "sWidth": "15%" },
-            { "sWidth": "15%" },
-            { "sWidth": "15%" },
-            { "sWidth": "10%" }
+    }else if(step == "720"){
+        if(op == "day"){
+            starttime = GetDateStr(now,0);
+            endtime = GetDateStr(now,30);
+        }else{
+            starttime = GetDateStr(now,30);
+            endtime = GetDateStr(new Date(),1);
+        }
 
-        ],
-        bJQueryUI: true
-    });
+    }else {
+        starttime = GetDateStr(now,-1);
+        endtime = GetDateStr(now,1);
+    }
 
-    $('#timeout').dataTable({
-        bAutoWidth: true,
-        "aoColumns": [
-            { "sWidth": "15%" } ,
-            { "sWidth": "15%" },
-            { "sWidth": "15%" },
-            { "sWidth": "15%" },
-            { "sWidth": "15%" },
-            { "sWidth": "15%" },
-            { "sWidth": "10%" }
 
-        ],
-        bJQueryUI: true
-    });
-    $('#dependency-timeout').dataTable({
-        bAutoWidth: true,
-        "aoColumns": [
-            { "sWidth": "15%" } ,
-            { "sWidth": "15%" },
-            { "sWidth": "15%" },
-            { "sWidth": "15%" },
-            { "sWidth": "15%" },
-            { "sWidth": "15%" },
-            { "sWidth": "10%" }
+    $(document).ready(function () {
+        $.ajax({
+            async: false,
+            data: {
+                action: "reflash_attempts",
+                start:starttime
+            },
+            type: "POST",
+            url: "/monitor",
+            error: function () {
+            },
+            success: function (response, textStatus) {
+            }
 
-        ],
-        bJQueryUI: true
+
+        });
+        $.ajax({
+            data: {
+                action: "runningtasks"
+
+            },
+            type: "POST",
+            url: "/monitor",
+            error: function () {
+                $("#running_body").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
+                $("#running_body").addClass("align-center");
+            },
+            success: function (response, textStatus) {
+                $("#running_load").html("");
+                $("#running_body").html(response);
+            }
+
+
+        });
+        $.ajax({
+            data: {
+                action: "submitfail",
+                id:id
+            },
+            type: "POST",
+            url: "/monitor",
+            error: function () {
+                $("#submit_body").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
+                $("#submit_body").addClass("align-center");
+            },
+            success: function (response, textStatus) {
+                $("#submit_load").html("");
+                $("#submit_body").html(response);
+            }
+
+
+        });
+
+        $.ajax({
+            data: {
+                action: "dependencypass",
+                id:id
+            },
+            type: "POST",
+            url: "/monitor",
+            error: function () {
+                $("#dependency_body").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
+                $("#dependency_body").addClass("align-center");
+            },
+            success: function (response, textStatus) {
+                $("#dependency_load").html("");
+                $("#dependency_body").html(response);
+            }
+
+
+        });
+
+        $.ajax({
+            data: {
+                action: "failedtasks",
+                id:id
+            },
+            type: "POST",
+            url: "/monitor",
+            error: function () {
+                $("#failed_body").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
+                $("#failed_body").addClass("align-center");
+            },
+            success: function (response, textStatus) {
+                $("#failed_load").html("");
+                $("#failed_body").html(response);
+            }
+
+
+        });
+        $.ajax({
+            data: {
+                action: "dependencytimeout",
+                id:id
+            },
+            type: "POST",
+            url: "/monitor",
+            error: function () {
+                $("#dependency_timeout_body").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
+                $("#dependency_timeout_body").addClass("align-center");
+            },
+            success: function (response, textStatus) {
+                $("#dependency_timeout_load").html("");
+                $("#dependency_timeout_body").html(response);
+            }
+
+
+        });
+        $.ajax({
+            data: {
+                action: "timeout",
+                id:id
+            },
+            type: "POST",
+            url: "/monitor",
+            error: function () {
+                $("#timeout_body").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
+                $("#timeout_body").addClass("align-center");
+            },
+            success: function (response, textStatus) {
+                $("#timeout_load").html("");
+                $("#timeout_body").html(response);
+            }
+
+
+        });
     });
 
 </script>
