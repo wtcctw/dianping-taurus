@@ -806,7 +806,7 @@ public class MonitorServlet extends HttpServlet {
                     String state = dto.getStatus();
 
 
-                    if (state.equals("SUBMIT_FAIL")) {
+                    if (state.equals("DEPENDENCY_PASS")) {
                         String taskName = "";
                         for (Task task : tasks) {
                             if (task.getTaskid().equals(dto.getTaskID())) {
