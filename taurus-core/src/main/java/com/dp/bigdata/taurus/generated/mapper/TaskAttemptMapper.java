@@ -107,6 +107,7 @@ public interface TaskAttemptMapper {
     public TaskAttempt getAttemptById(@Param("attemptId")String attemptId);
 
     public ArrayList<TaskAttempt> getAttempts(@Param("now")String now);
+    public ArrayList<TaskAttempt> getAttemptsByStatus(@Param("now")String now,@Param("status")String status);
     public ArrayList  getTaskLoadHost(@Param("start")String start,@Param("end")String end);
     public ArrayList getRunningTaskLoadHost();
     public ArrayList getFailedTaskLoadHost(@Param("start")String start,@Param("end")String end);

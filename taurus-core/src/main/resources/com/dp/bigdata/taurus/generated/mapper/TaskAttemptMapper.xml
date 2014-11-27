@@ -372,7 +372,14 @@
         select
          <include refid="Base_Column_List" />
         from TaurusTaskAttempt
-        where <![CDATA[( startTime >= #{now} and endTime >= #{now}) or status = 6]]>
+        where <![CDATA[( (startTime >= #{now} and endTime >= #{now}) and status != 7) or status = 6]]>
+    </select>
+    <select id="getAttemptsByStatus" resultMap="BaseResultMap">
+
+        select
+        <include refid="Base_Column_List" />
+        from TaurusTaskAttempt
+        where <![CDATA[( startTime >= #{now} and endTime >= #{now}) and status = #{status}]]>
     </select>
     <select id="getTaskLoadHost" resultType="map">
         select execHost,count(1) as totaltask from TaurusTaskAttempt
