@@ -2,6 +2,8 @@ package com.dp.bigdata.taurus.generated.mapper;
 
 import com.dp.bigdata.taurus.generated.module.User;
 import com.dp.bigdata.taurus.generated.module.UserExample;
+
+import java.util.HashMap;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -93,4 +95,5 @@ public interface UserMapper {
      * @mbggenerated Thu May 15 16:53:11 HKT 2014
      */
     int updateByPrimaryKey(User record);
+    int getUserId(@Param("userName")String userName);
 }

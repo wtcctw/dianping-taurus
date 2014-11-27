@@ -315,4 +315,7 @@
       conditions = #{conditions,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+    <update id="updateAlert" parameterType="String">
+        update  TaurusAlertRule set userID = #{userId} where TaurusAlertRule.jobID = #{jobId}
+    </update>
 </mapper>

@@ -20,14 +20,17 @@ $(document).ready(function () {
     $( "#creatorbtn" ).on('click', function(e) {
         var taskName="";
         var oldcreators="";
+        var jobId ="";
+        var alertUser = "";
         var creator = $('input[name="creator"]:checked').val();
         $('input[name="taskcheckbox"]:checked').each(function(){
-            taskName+=$(this).val()+",";
+            taskName += $(this).val()+",";
+            oldcreators += $(this).attr("id")+",";
+            jobId += $(this).attr("alertId")+",";
+            alertUser += $(this).attr("alertUser")+",";
         })
         taskName = taskName.substr(0,taskName.length - 1);
-        $('input[name="taskcheckbox"]:checked').each(function(){
-            oldcreators+=$(this).attr("id")+",";
-        })
+
         oldcreators = oldcreators.substr(0,oldcreators.length - 1);
         if(taskName != null && creator != null && taskName!="" && creator!=""){
             bootbox.confirm("<i class='icon-info-sign icon-large red '>你确定把job名为:"+taskName+"的job的调度人修改为:"+creator+"？</i>"+"<i class='icon-info-sign icon-large red  '>此操作为危险操作，你所做的操作将被系统记录</i>" , function(result) {
@@ -39,7 +42,10 @@ $(document).ready(function () {
                             taskName:taskName,
                             creator:creator,
                             currentUser:currentUser,
-                            oldcreators:oldcreators
+                            oldcreators:oldcreators,
+                            jobId:jobId,
+                            userId:userId,
+                            alertUser:alertUser
                         },
                         type: "POST",
                         url: "/monitor",

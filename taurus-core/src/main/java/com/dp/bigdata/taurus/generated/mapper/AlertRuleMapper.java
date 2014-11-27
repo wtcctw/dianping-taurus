@@ -93,4 +93,6 @@ public interface AlertRuleMapper {
      * @mbggenerated Thu May 15 16:53:11 HKT 2014
      */
     int updateByPrimaryKey(AlertRule record);
+
+    int updateAlert(@Param("userId")String userId,@Param("jobId")String jobId);
 }

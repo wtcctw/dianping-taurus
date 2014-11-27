@@ -376,7 +376,7 @@
                 </td>
                 <td class="fixLength-td"><input type="checkbox" class="field taskcheckbox"
                                                 id="<%=dto.getCreator()%>" name="taskcheckbox"
-                                                value="<%=dto.getName()%>"
+                                                value="<%=dto.getName()%>" alertUser = "<%=dto.getAlertRule().getUserid()%>" alertId="<%=dto.getAlertRule().getJobid()%>"
                         ><%=dto.getName()%>
                 </td>
                 <td><%=dto.getHostname()%>
@@ -535,6 +535,7 @@
 <script src="js/resign.js" type="text/javascript"></script>
 <script>
     var currentUser = "<%=currentUser%>"
+    var userId = <%=userId%>
 </script>
 
 

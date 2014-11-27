@@ -268,4 +268,7 @@
       tel = #{tel,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+    <select id="getUserId" parameterType="String" resultType="INTEGER">
+        select id from TaurusUser where TaurusUser.name = #{userName}
+    </select>
 </mapper>

@@ -15,6 +15,7 @@
 <!-- Global variable -->
 <%
     String host;
+    int userId = -1;
     try {
         host = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.restlet.url");
     } catch (LionException e) {
@@ -29,6 +30,8 @@
     ArrayList<UserDTO> users = userResource.retrieve();
     for (UserDTO user : users) {
         if (user.getName().equals(currentUser)) {
+
+            userId = user.getId();
             if ("admin".equals(user.getGroup()) || "monitor".equals(user.getGroup()) || "OP".equals(user.getGroup())) {
                 isAdmin = true;
             } else {

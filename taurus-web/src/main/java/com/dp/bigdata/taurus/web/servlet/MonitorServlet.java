@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.InetAddress;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -367,7 +368,9 @@ public class MonitorServlet extends HttpServlet {
             String creator = request.getParameter("creator");
             String currentUser = request.getParameter("currentUser");
             String oldcreators = request.getParameter("oldcreators");
-
+            String userId = request.getParameter("userId");
+            String jobId = request.getParameter("jobId");
+            String alertUser = request.getParameter("alertUser");
 
             String reusult_str = "";
 
@@ -376,6 +379,13 @@ public class MonitorServlet extends HttpServlet {
                 IClearDependencyPassTask clearTasks = cr.wrap(IClearDependencyPassTask.class);
                 cr.accept(MediaType.APPLICATION_XML);
                 int result = clearTasks.retrieve();
+
+
+            cr = new ClientResource(RESTLET_URL_BASE + "getuserid/" + creator.trim() );
+            IGetUserId getUserId = cr.wrap(IGetUserId.class);
+            cr.accept(MediaType.APPLICATION_XML);
+           int creatorId =  getUserId.retrieve();
+
 
                 switch (result) {
                     case SERVICE_EXCEPTION:
@@ -389,7 +399,85 @@ public class MonitorServlet extends HttpServlet {
                         break;
                     default:
                         reusult_str = "执行成功~";
-                        String logInfo = "####RESGIN OP ####:用户【" + currentUser + "】把任务名为：【 " + taskName + "】的任务原对应调度人分别为【" + oldcreators + "】 都指派给了 【" + creator + "】";
+                        //替换告警人
+
+                        String [] tmpUserList = alertUser.split(",");
+                        String [] tmpJobIdList = jobId.split(",");
+                        String [] oldCreatorsList = oldcreators.split(",");
+
+
+                        for (int i = 0; i < tmpJobIdList.length; i++){
+
+                            String tmpJobId = tmpJobIdList[i];
+                            String tmpUserId = tmpUserList[i];
+                            String older = oldCreatorsList[i];
+
+                            boolean isHaveAlert = false;
+
+                            if (tmpUserId.indexOf(creator) > -1){
+                                isHaveAlert = true;
+                            }
+
+                            String[] tmpUsers = tmpUserId.split(";");
+                            String newUserId = "";
+                            if (isHaveAlert){
+                                for (int j = 0; j < tmpUsers.length; j++){
+                                    String user = tmpUsers[j];
+                                    cr = new ClientResource(RESTLET_URL_BASE + "getuserid/" + user.trim() );
+                                    getUserId = cr.wrap(IGetUserId.class);
+                                    cr.accept(MediaType.APPLICATION_XML);
+                                    int userIdAlert =  getUserId.retrieve();
+                                    if (j == tmpUsers.length - 1){
+                                        if (!user.equals(older)){
+                                            newUserId += userIdAlert;
+                                        }
+                                    }else {
+                                        if (!user.equals(older)){
+                                            newUserId += userIdAlert + ";";
+                                        }
+                                    }
+
+
+                                }
+                            }else {
+                                for (int j = 0; j < tmpUsers.length; j++){
+                                    String user = tmpUsers[j];
+                                    cr = new ClientResource(RESTLET_URL_BASE + "getuserid/" + user.trim() );
+                                    getUserId = cr.wrap(IGetUserId.class);
+                                    cr.accept(MediaType.APPLICATION_XML);
+
+                                    int userIdAlert =  getUserId.retrieve();
+
+                                    if (j == tmpUsers.length - 1){
+                                        if (user.equals(older)){
+                                            newUserId += creatorId;
+                                        }else {
+                                            newUserId += userIdAlert;
+                                        }
+                                    }else {
+                                        if (user.equals(older)){
+                                            newUserId += creatorId + ";";
+                                        }else {
+                                            newUserId += userIdAlert + ";";
+                                        }
+                                    }
+
+
+
+
+                                }
+                            }
+
+                            cr = new ClientResource(RESTLET_URL_BASE + "updatealert/" + newUserId.trim() + "/" + tmpJobId.trim() + "" );
+                            IUpdateAlertRule updateAlertRule = cr.wrap(IUpdateAlertRule.class);
+                            cr.accept(MediaType.APPLICATION_XML);
+                            updateAlertRule.retrieve();
+
+
+
+                        }
+                        String clientIp = getIpAddr(request);
+                        String logInfo = "####RESGIN OP #### IP:" + clientIp + " 用户【" + currentUser + "】把任务名为：【 " + taskName + "】的任务原对应调度人分别为【" + oldcreators + "】 都指派给了 【" + creator + "】";
                         LOGGER.info(logInfo);
                         System.out.println(logInfo);
                         break;
@@ -1122,6 +1210,19 @@ public class MonitorServlet extends HttpServlet {
 
         }
     }
+    public String getIpAddr(HttpServletRequest request) {
+        String ip = request.getHeader("x-forwarded-for");
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
 
+        return ip;
+    }
 
 }
