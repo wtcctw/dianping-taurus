@@ -27,10 +27,18 @@ public class UserTasks extends ServerResource implements IUserTasks {
             String user = (String) getRequestAttributes().get("username");
             String start = (String) getRequestAttributes().get("starttime");
             String end = (String) getRequestAttributes().get("endtime");
+
             int[] successStatus = {7};
             int[] failedStatus = {8};
+            int[] killStatus = {10};
+            int[] timeoutStatus = {9};
+            int[] congestStatus = {2};
+
             List<HashMap<String, Integer>> successTasks = taskAttemptMapper.getUserTasks(user, start, end, successStatus);
             List<HashMap<String, Integer>> failedTasks = taskAttemptMapper.getUserTasks(user,start, end,failedStatus);
+            List<HashMap<String, Integer>> killTasks = taskAttemptMapper.getUserTasks(user,start, end,killStatus);
+            List<HashMap<String, Integer>> timeoutTasks = taskAttemptMapper.getUserTasks(user,start, end,timeoutStatus);
+            List<HashMap<String, Integer>> congestTasks = taskAttemptMapper.getUserTasks(user,start, end,congestStatus);
 
             for (HashMap<String, Integer> task : successTasks) {
 
@@ -56,10 +64,50 @@ public class UserTasks extends ServerResource implements IUserTasks {
 
             }
 
+            for (HashMap<String, Integer> task : killTasks) {
+                if (task.get("name") == null){
+                    break;
+                }
+
+                JSONObject json = new JSONObject();
+                json.put("taskName", task.get("name"));
+                json.put("nums", task.get("num"));
+                json.put("status", "killed");
+                jsonData.put(json);
+
+
+            }
+            for (HashMap<String, Integer> task : timeoutTasks) {
+                if (task.get("name") == null){
+                    break;
+                }
+
+                JSONObject json = new JSONObject();
+                json.put("taskName", task.get("name"));
+                json.put("nums", task.get("num"));
+                json.put("status", "timeout");
+                jsonData.put(json);
+
+
+            }
+
+            for (HashMap<String, Integer> task : congestTasks) {
+                if (task.get("name") == null){
+                    break;
+                }
+
+                JSONObject json = new JSONObject();
+                json.put("taskName", task.get("name"));
+                json.put("nums", task.get("num"));
+                json.put("status", "congest");
+                jsonData.put(json);
+
+
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        System.out.println(jsonData.toString());
         return jsonData.toString();
     }
 }

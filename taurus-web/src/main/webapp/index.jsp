@@ -451,20 +451,42 @@
                         <div class="hr hr8 hr-double"></div>
 
                         <div class="clearfix">
-                            <div class="col-sm-6">
+                            <div class="col-sm-4">
 														<span class="grey">
 															<i class="icon-lightbulb green"></i>
 															&nbsp; 成功
 														</span>
-                                <h4 class="bigger pull-right" id="succtask"></h4>
+                                <h4 class="smaller pull-right" id="succtask"></h4>
                             </div>
 
-                            <div class="col-sm-6">
+                            <div class="col-sm-4">
 														<span class="grey">
 															<i class="icon-lightbulb red"></i>
 															&nbsp; 失败
 														</span>
-                                <h4 class="bigger pull-right " id="failtask"></h4>
+                                <h4 class="smaller pull-right " id="failtask"></h4>
+                            </div>
+                            <div class="col-sm-4">
+														<span class="grey">
+															<i class="icon-lightbulb red"></i>
+															&nbsp; 杀死
+														</span>
+                                <h4 class="smaller pull-right " id="killtask"></h4>
+                            </div>
+                            <div class="col-sm-4">
+														<span class="grey">
+															<i class="icon-lightbulb btn-yellow"></i>
+															&nbsp; 超时
+														</span>
+                                <h4 class="smaller pull-right " id="timeouttask"></h4>
+                            </div>
+                            <div class="col-sm-4">
+														<span class="grey">
+															<i class="icon-lightbulb "></i>
+															&nbsp; 拥堵
+                                                            <h4 class="smaller pull-right " id="congesttask"></h4>
+														</span>
+
                             </div>
 
 
@@ -501,22 +523,42 @@
                         <div class="hr hr8 hr-double"></div>
 
                         <div class="clearfix">
-                            <div class="col-sm-6">
+                            <div class="col-sm-4">
 														<span class="grey">
 															<i class="icon-lightbulb green"></i>
 															&nbsp; 成功
 														</span>
-                                <h4 class="bigger pull-right" id="groupsucctask"></h4>
+                                <h4 class="smaller pull-right" id="groupsucctask"></h4>
                             </div>
 
-                            <div class="col-sm-6">
+                            <div class="col-sm-4">
 														<span class="grey">
 															<i class="icon-lightbulb red"></i>
 															&nbsp; 失败
 														</span>
-                                <h4 class="bigger pull-right " id="groupfailtask"></h4>
+                                <h4 class="smaller pull-right " id="groupfailtask"></h4>
                             </div>
-
+                            <div class="col-sm-4">
+														<span class="grey">
+															<i class="icon-lightbulb red"></i>
+															&nbsp; 杀死
+														</span>
+                                <h4 class="smaller pull-right " id="groupkilltask"></h4>
+                            </div>
+                            <div class="col-sm-4">
+														<span class="grey">
+															<i class="icon-lightbulb btn-yellow"></i>
+															&nbsp; 超时
+														</span>
+                                <h4 class="smaller pull-right " id="grouptimouttask"></h4>
+                            </div>
+                            <div class="col-sm-4">
+														<span class="grey">
+															<i class="icon-lightbulb"></i>
+															&nbsp; 拥堵
+														</span>
+                                <h4 class="smaller pull-right " id="groupcongesttask"></h4>
+                            </div>
 
                             <!-- /section:custom/extra.grid -->
                         </div>
