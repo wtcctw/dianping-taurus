@@ -1,5 +1,9 @@
 package com.dp.bigdata.taurus.core;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -165,16 +169,30 @@ final public class Engine implements Scheduler {
 			@Override
 			public void disConnected(String ip) {
 				Cat.logEvent("DisConnected", ip);
-                String context = "您好，taurus-agent的job主机 ["
+                String exceptContext = "您好，taurus-agent的job主机 ["
                         + ip
                         + "] 服务已经挂掉请重启，监控连接如下：http://taurus.dp/hosts.jsp?hostName="
                         + ip
                         +"，谢谢~";
+
+                String context = "您好，taurus-agent的job主机 ["
+                        + ip
+                        + "] 心跳异常，监控连接如下：http://taurus.dp/hosts.jsp?hostName="
+                        + ip
+                        +"，谢谢~";
                 try {
-                    String toMails = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.down.mail.to");
-                    String [] toLists = toMails.split(",");
-                    for (String to:toLists){
-                        MailHelper.sendMail(to,context);
+                    String url = "http://"+ip+":8080/agentrest.do?action=isnew";
+                    String isAlive = get_data(url);
+                    if (isAlive!= null && isAlive.equals("true")){
+                       MailHelper.sendMail("kirin.li@dianping.com",context);
+                    }else
+                    {
+                        String toMails = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.down.mail.to");
+                        String [] toLists = toMails.split(",");
+                        for (String to:toLists){
+                            MailHelper.sendMail(to,exceptContext);
+                        }
+
                     }
 
                 } catch (Exception e) {
@@ -669,4 +687,22 @@ final public class Engine implements Scheduler {
 			return null;
 		}
 	}
+
+    public static String get_data(String url) {
+        try {
+            URL httpUrl = new URL(url);
+            HttpURLConnection conn = (HttpURLConnection) httpUrl.openConnection();
+            conn.setDoOutput(true);
+            conn.setConnectTimeout(1000);
+            conn.connect();
+
+            //返回
+            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String result = reader.readLine();
+            return result.trim();
+        } catch (Exception e) {
+
+            return null;
+        }
+    }
 }

@@ -18,7 +18,7 @@ public interface Scheduler {
 	/**
 	 * Schedule interval is 10 seconds.
 	 */
-	long SCHDUELE_INTERVAL = 1000 * 10;
+	long SCHDUELE_INTERVAL = 1000 * 3;
 
 	/**
 	 * Submit a new task into Engine, waiting to be scheduled.
