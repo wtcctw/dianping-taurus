@@ -225,7 +225,7 @@
             <a href="index.jsp">HOME</a>
         </li>
         <li class="active">
-            <a href="about.jsp.jsp">使用帮助</a>
+            <a href="about.jsp">使用帮助</a>
         </li>
     </ul>
 </div>
