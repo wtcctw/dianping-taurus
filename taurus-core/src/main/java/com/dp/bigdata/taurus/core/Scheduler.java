@@ -16,9 +16,9 @@ import com.dp.bigdata.taurus.generated.module.TaskAttempt;
 public interface Scheduler {
 
 	/**
-	 * Schedule interval is 10 seconds.
+	 * Schedule interval is 0.5 seconds.
 	 */
-	long SCHDUELE_INTERVAL = 1000 * 3;
+	long SCHDUELE_INTERVAL = 500;
 
 	/**
 	 * Submit a new task into Engine, waiting to be scheduled.
