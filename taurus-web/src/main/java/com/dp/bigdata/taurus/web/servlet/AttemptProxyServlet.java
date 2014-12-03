@@ -166,7 +166,7 @@ public class AttemptProxyServlet extends HttpServlet {
                                         highValue = Double.parseDouble(cpuLoad);
                                     }
 
-                                    if (highValue <= 1.0){
+                                    if (highValue <= 4.0){
                                         result = false;
                                     }else {
                                         result = true;

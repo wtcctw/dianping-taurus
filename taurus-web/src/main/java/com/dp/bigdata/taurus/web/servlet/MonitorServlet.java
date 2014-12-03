@@ -946,7 +946,11 @@ public class MonitorServlet extends HttpServlet {
                                     + "NULL"
                                     + "</td >";
                         }
-
+                        result += "<td >"
+                                + "  <a target=\"_blank\" href=\"viewlog.jsp?id="
+                                + dto.getAttemptID()+"&status="+dto.getStatus()
+                                +"\">日志</a>"
+                                + "</td >";
                         result += "</tr>";
                     }
                 }
@@ -1029,6 +1033,12 @@ public class MonitorServlet extends HttpServlet {
                                     + "NULL"
                                     + "</td >";
                         }
+
+                        result += "<td >"
+                                + "  <a target=\"_blank\" href=\"viewlog.jsp?id="
+                                + dto.getAttemptID()+"&status="+dto.getStatus()
+                                +"\">日志</a>"
+                                + "</td >";
 
                         result += "</tr>";
                     }
