@@ -19,7 +19,7 @@ function action_ok() {
 		},
 		type : 'POST',
 		error: function(){
-				$("#alertContainer").html('<div id="alertContainer" class="alert alert-error"><button type="button" class="close" data-dismiss="alert">&times;</button> Kill <strong>' + attemptID + '</strong>失败</div>');
+				$("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> Kill <strong>' + attemptID + '</strong>失败</div>');
 				$(".alert").alert();
 				$('#confirm').modal("hide");
 		},
