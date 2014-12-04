@@ -115,7 +115,7 @@ final public class Engine implements Scheduler {
 		// load all tasks
 		TaskExample example = new TaskExample();
 		example.or().andStatusEqualTo(TaskStatus.RUNNING);
-		//example.or().andStatusEqualTo(TaskStatus.SUSPEND);
+		example.or().andStatusEqualTo(TaskStatus.SUSPEND);
 		List<Task> tasks = taskMapper.selectByExample(example);
 		for (Task task : tasks) {
 			tmp_registedTasks.put(task.getTaskid(), task);
