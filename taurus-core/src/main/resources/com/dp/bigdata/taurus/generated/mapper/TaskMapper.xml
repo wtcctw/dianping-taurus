@@ -575,6 +575,11 @@
         where  b.attemptid = #{attemptId}
     </select>
 
+    <select id="getTaskById" parameterType="String" resultMap="BaseResultMap" >
+        select a.* from TaurusTask a
+        where  a.taskID= #{taskId}
+    </select>
+
     <select id="getTasks" resultMap="BaseResultMap" >
         select * from TaurusTask
     </select>

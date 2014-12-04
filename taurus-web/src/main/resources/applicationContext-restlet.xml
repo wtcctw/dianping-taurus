@@ -23,10 +23,11 @@
 	<bean name="router" class="org.restlet.ext.spring.SpringBeanRouter" />
 
 	<!-- Singleton instance of RESTful Resource -->
+    <bean name="/api/task/{task_id}" id="taskResource" autowire="byName"
+          scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.TaskResource" />
 	<bean name="/api/task" id="tasksResource" autowire="byName" scope="prototype"
 		class="com.dp.bigdata.taurus.restlet.resource.impl.TasksResource" />
-	<bean name="/api/task/{task_id}" id="taskResource" autowire="byName"
-		scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.TaskResource" />
+
     <bean name="/api/getuserid/{userName}" id="getUserId" autowire="byName"
           scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.GetUserId" />
 	<bean name="/api/manualtask/{task_id}" id="manualTaskResource"

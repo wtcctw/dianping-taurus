@@ -3,6 +3,7 @@ package com.dp.bigdata.taurus.restlet.resource.impl;
 import java.util.List;
 import java.util.Map;
 
+import com.dp.bigdata.taurus.generated.mapper.TaskMapper;
 import com.dp.bigdata.taurus.restlet.resource.ITaskResource;
 import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
 import com.dp.bigdata.taurus.restlet.utils.*;
@@ -48,6 +49,8 @@ public class TaskResource extends ServerResource implements ITaskResource {
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private TaskMapper taskMapper;
 
     @Autowired
     private UserGroupMapper userGroupMapper;
@@ -75,6 +78,10 @@ public class TaskResource extends ServerResource implements ITaskResource {
         }
         Map<String ,Task> map = scheduler.getAllRegistedTask();
         Task task = map.get(taskID);
+        if (task == null){
+            task = taskMapper.getTaskById(taskID);
+        }
+
         if (task == null) {
             setStatus(Status.CLIENT_ERROR_NOT_FOUND);
             LOG.info("Cannot find the task by taskID = " + taskID);
@@ -187,6 +194,11 @@ public class TaskResource extends ServerResource implements ITaskResource {
 
         try {
             Task task = scheduler.getAllRegistedTask().get(taskID);
+
+            if (task == null){
+                task = taskMapper.getTaskById(taskID);
+            }
+
             if (task == null) {
                 setStatus(Status.CLIENT_ERROR_NOT_FOUND);
                 return;

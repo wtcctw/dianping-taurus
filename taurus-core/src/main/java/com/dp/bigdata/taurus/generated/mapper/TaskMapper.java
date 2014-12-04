@@ -98,6 +98,7 @@ public interface TaskMapper {
      */
     int updateByPrimaryKey(Task record);
     public Task getTaskByAttemptId(@Param("attemptId")String attemptId);
+    public Task getTaskById(@Param("taskId")String taskId);
 
     public ArrayList<Task> getTasks();
     ArrayList<Host> getTasksByHost(String hostname);
