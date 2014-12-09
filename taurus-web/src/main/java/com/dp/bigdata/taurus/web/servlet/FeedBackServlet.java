@@ -54,7 +54,7 @@ public class FeedBackServlet  extends HttpServlet {
                             + " <p style=\"text-align:right\">❃ 点评工具组 ❃</p>";
             String to="";
             try {
-                to = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.down.mail.to");
+                to = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.feedback.mail.to");
             } catch (LionException e) {
                 e.printStackTrace();
                 to = "kirin.li@dianping.com";
