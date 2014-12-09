@@ -35,7 +35,7 @@
         .scrollup {
             opacity: 0.3;
             position: fixed;
-            bottom: 50px;
+            bottom: 150px;
             right: 100px;
             display: none;
         }
@@ -107,6 +107,8 @@
             </ul>
             <!-- /.ace-nav -->
         </div>
+        <div class="pull-right" style="margin:10px;color: white;"><i class="icon-group"> Taurus后援QQ群：155326270 </i></div>
+        <div class="pull-right ng-binding" style="margin:10px;color: white;" ng-bind="monitorMessage"><i class="icon-user-md">开发者：李明 </i> <i class="icon-phone">: 13661871541</i></div>
 
         <!-- /.navbar-header -->
     </div>
@@ -171,6 +173,12 @@
             <a href="resign.jsp" target="_self">
                 <i class="icon-retweet"></i>
                 <span class="menu-text"> 任务交接 </span>
+            </a>
+        </li>
+        <li id="feedback">
+            <a href="feedback.jsp" target="_self">
+                <i class="icon-comments"></i>
+                <span class="menu-text"> 我要反馈 </span>
             </a>
         </li>
         <li id="update">
@@ -905,7 +913,7 @@
 </div>
 
 <a href="#" class="scrollup" style="display: inline;">
-    <img src="img/ScrollTopArrow.png" width="50" height="50">
+    <img src="img/betop.png" width="66" height="67">
 </a>
 </div>
 

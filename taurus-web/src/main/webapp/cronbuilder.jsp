@@ -110,8 +110,9 @@
             </ul>
             <!-- /.ace-nav -->
         </div>
-        <!--    <div class="pull-right" style="margin:10px;color: white;">本周值班: {{duty}} {{tel}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>-->
-        <!-- /.navbar-header -->
+        <div class="pull-right" style="margin:10px;color: white;"><i class="icon-group"> Taurus后援QQ群：155326270 </i></div>
+        <div class="pull-right ng-binding" style="margin:10px;color: white;" ng-bind="monitorMessage"><i class="icon-user-md">开发者：李明 </i> <i class="icon-phone">: 13661871541</i></div>
+
     </div>
     <!-- /.container -->
 </div>
@@ -172,6 +173,12 @@
             <a href="resign.jsp" target="_self">
                 <i class="icon-retweet"></i>
                 <span class="menu-text"> 任务交接 </span>
+            </a>
+        </li>
+        <li id="feedback">
+            <a href="feedback.jsp" target="_self">
+                <i class="icon-comments"></i>
+                <span class="menu-text"> 我要反馈 </span>
             </a>
         </li>
         <li id="update">

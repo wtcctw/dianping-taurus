@@ -3,21 +3,23 @@
 <html lang="en">
 <head>
     <title>Taurus</title>
-    <%@ include file="jsp/common-nav.jsp" %>
     <meta charset="utf-8">
     <meta name="description" content=""/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <%@ include file="jsp/common-nav.jsp" %>
     <!-- basic styles -->
     <script type="text/javascript" src="resource/js/lib/jquery-1.9.1.min.js"></script>
     <link href="lib/ace/css/bootstrap.min.css" rel="stylesheet"/>
     <script src="lib/ace/js/ace-extra.min.js"></script>
+    <link rel="stylesheet" href="lib/ace/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="css/jquery-ui.min.css"/>
     <script src="lib/ace/js/ace-elements.min.js"></script>
     <script src="lib/ace/js/ace.min.js"></script>
     <script src="lib/ace/js/bootbox.min.js"></script>
     <script type="text/javascript" src="resource/js/lib/raphael.2.1.0.min.js"></script>
     <script type="text/javascript" src="resource/js/lib/justgage.1.0.1.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/login.js"></script>
-    <script type="text/javascript" src="js/viewlog.js"></script>
     <!-- page specific plugin styles -->
 
     <!-- fonts -->
@@ -29,8 +31,40 @@
     <link rel="stylesheet" href="lib/ace/css/ace.min.css"/>
     <link rel="stylesheet" href="lib/ace/css/ace-rtl.min.css"/>
     <link rel="stylesheet" href="lib/ace/css/ace-skins.min.css"/>
+    <link href="css/bwizard.min.css" rel="stylesheet"/>
+    <style>
+        label.error {
+            margin-left: 10px;
+            color: red;
+        }
+
+        label.success {
+            margin-left: 10px;
+            color: green;
+        }
+
+        .tips {
+            background: #ebf4f8;
+            color: #888;
+            border-top: 1px #f6f1dc solid;
+            padding: 11px 26px 11px 5px;
+        }
+
+        .tip-title {
+            padding-top: 20px;
+            color: #888;
+            font-weight: normal;
+            font-size: 13px;
+        }
+
+        #contentnum {
+            color: red;
+        }
+    </style>
 </head>
 <body>
+
+
 <div class="navbar navbar-default" id="navbar">
     <script type="text/javascript">
         try {
@@ -95,8 +129,10 @@
             </ul>
             <!-- /.ace-nav -->
         </div>
-        <div class="pull-right" style="margin:10px;color: white;"><i class="icon-group"> Taurus后援QQ群：155326270 </i></div>
-        <div class="pull-right ng-binding" style="margin:10px;color: white;" ng-bind="monitorMessage"><i class="icon-user-md">开发者：李明 </i> <i class="icon-phone">: 13661871541</i></div>
+        <div class="pull-right" style="margin:10px;color: white;"><i class="icon-group"> Taurus后援QQ群：155326270 </i>
+        </div>
+        <div class="pull-right ng-binding" style="margin:10px;color: white;" ng-bind="monitorMessage"><i
+                class="icon-user-md">开发者：李明 </i> <i class="icon-phone">: 13661871541</i></div>
 
     </div>
     <!-- /.container -->
@@ -198,65 +234,108 @@
 
 <script>
     var isAdmin = <%=isAdmin%>;
-    if(!isAdmin){
+    if (!isAdmin) {
         $("#userrolechange").html("我的任务");
     }
 
 
 </script>
 
-
+<div class="main-content ">
+    <div class="breadcrumbs" id="breadcrumbs">
+        <script type="text/javascript">
+            try {
+                ace.settings.check('breadcrumbs', 'fixed')
+            } catch (e) {
+            }
+        </script>
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home home-icon"></i>
+                <a href="index.jsp">HOME</a>
+            </li>
+            <li class="active">
+                <a href="feedback.jsp">我要反馈</a>
+            </li>
+        </ul>
+    </div>
     <div class="page-content">
         <div class="row">
-            <div class="col-sm-6">
-            <div id="error-panel" >
-                <div class="spanm col-sm-12">
-                    <ul class="error-tag" id="error-tag">
-                        <li><a>错误信息<span class="label label-important">STDERR</span></a></li>
-                    </ul>
-                    <div data-spy="scroll" data-offset="0"  style="cursor: text; margin-top: 5px; background-color: #3A1042; color: #e6e6e6; font-size: 12px;  height: 650px; overflow-x: auto;"   id="errolog">
+            <div class="col-sm-12">
+                <div class="content-wrap">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-7">
 
+                        <div class="content-body">
 
-                    </div>
-                </div>
-            </div>
-            </div>
-            <div class="col-sm-6">
+                            <div class="tips col-sm-12">
+                                <i class="icon-lightbulb bigger-210 blue"></i>
+                                感谢你使用Taurus !请告诉我们你的意见和建议，我会及时响应你的反馈，并不断完善Taurus。<br>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                联系方式：
 
-            <div id="log-panel" >
-                <div class="spann col-sm-12" id="spann">
-                    <div class="col-sm-4">
-                    <ul class="run-tag ">
-                        <li><a>日志信息<span class="label label-info">STDOUT</span></a>
-                        </li>
-                    </ul>
-                    </div>
-                    <div class="flash_btn col-sm-6" id="flash_btn">
-                       <div class="col-sm-8">
-                        <label class="label " >实时刷新:</label>
-                            <input id="id-button-borders" checked="checked" type="checkbox" class="ace ace-switch ace-switch-5">
-                            <span class="lbl middle"></span>
+                                <div class="col-sm-12">
+                                    <div class="col-sm-1"></div>
+                                    <div class="col-sm-4"><i class="icon-user-md">&nbsp;&nbsp; 李明 </i></div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="col-sm-1"></div>
+                                    <div class="col-sm-4"><i class="icon-phone">&nbsp;&nbsp; 13661871541</i></div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="col-sm-1"></div>
+                                    <div class="col-sm-4"><i class="icon-envelope">&nbsp;&nbsp;&nbsp;kirin.li@dianping.com</i>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="col-sm-1"></div>
+                                    <div class="col-sm-4"><i class="icon-group"><strong>
+                                        &nbsp;&nbsp;155326270</strong></i></div>
+                                </div>
+
+                            </div>
+
+                            <div id="alertContainer" class="container"></div>
+                            <h5 class="tip-title">请详细描述你遇到的问题、意见及建议:</h5>
+
+                            <textarea id="feedback-content" class="feedback-content"
+                                      style="width:100%; height:240px; resize: none; border-radius: 4px;"></textarea>
+                            <br>
+
+                            <div>
+                                <div class="limit"
+                                     style="float: left; margin-right: 20px; line-height: 34px; color: black;"></div>
+
+                                <div class="btn-wrap" style="float: right">
+                                    <a id="submit-btn" class="btn btn-sm btn-primary" data-loading-text="正在反馈...">反馈
+                                        <i class="icon-ok bigger-110"></i>
+                                    </a>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-sm-4">
-                           <a class="atip tooltip-info" data-toggle="tooltip" data-placement="left"
-                           data-original-title="当你开启实时刷新后页面会自动刷新，不需要自己动手刷新页面喽～">[提示] </a>
-                        </div>
-                     </div>
-                    <div class="reflashtip col-sm-2" id="reflashtip">
-
-                        <a class="atip tooltip-info" data-toggle="tooltip" data-placement="left"
-                           data-original-title="您的任务运行在老版本的agent上，此版本不支持实时查看日志，请等待任务完成后查看日志">[注意] </a>
                     </div>
-
-                    <div data-spy="scroll" class="col-sm-12" data-offset="0" style="cursor: text; margin-top: 5px; background-color: #3A1042; color: #e6e6e6; font-size: 12px;  height: 650px; overflow-x: auto;" id="strout">
-
-
-                    </div>
+                    <div class="col-sm-3"></div>
                 </div>
             </div>
         </div>
-        </div>
+
     </div>
+</div>
+<script type="text/javascript">
+
+    $('li[id="feedback"]').addClass("active");
+    $('#menu-toggler').on(ace.click_event, function () {
+        $('#sidebar').toggleClass('display');
+        $(this).toggleClass('display');
+        return false;
+    });
+    var user = "<%=currentUser%>";
+
+</script>
+<script src="js/jquery.validate.min.js" type="text/javascript"></script>
+<script src="js/feedback.js" type="text/javascript"></script>
+
+
 </body>
 
 </html>

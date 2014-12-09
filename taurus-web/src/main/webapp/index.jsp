@@ -56,6 +56,13 @@
         .historyreport{
             float:right
         }
+        .scrollup {
+            opacity: 0.3;
+            position: fixed;
+            bottom: 150px;
+            right: 100px;
+            display: none;
+        }
     </style>
 
 </head>
@@ -81,6 +88,7 @@
         <div class="navbar-header">
             <span style="margin:10px;font-size: 16px" class="label label-transparent">任务调度系统</span>
         </div>
+
 
         <!-- /.navbar-header -->
         <button type="button" class="navbar-toggle pull-left" id="menu-toggler">
@@ -124,8 +132,9 @@
             </ul>
             <!-- /.ace-nav -->
         </div>
-        <!--    <div class="pull-right" style="margin:10px;color: white;">本周值班: {{duty}} {{tel}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>-->
-        <!-- /.navbar-header -->
+        <div class="pull-right" style="margin:10px;color: white;"><i class="icon-group"> Taurus后援QQ群：155326270 </i></div>
+        <div class="pull-right ng-binding" style="margin:10px;color: white;" ng-bind="monitorMessage"><i class="icon-user-md">开发者：李明 </i> <i class="icon-phone">: 13661871541</i></div>
+
     </div>
     <!-- /.container -->
 </div>
@@ -186,6 +195,12 @@
             <a href="resign.jsp" target="_self">
                 <i class="icon-retweet"></i>
                 <span class="menu-text"> 任务交接 </span>
+            </a>
+        </li>
+        <li id="feedback">
+            <a href="feedback.jsp" target="_self">
+                <i class="icon-comments"></i>
+                <span class="menu-text"> 我要反馈 </span>
             </a>
         </li>
         <li id="update">
@@ -908,6 +923,9 @@
 </div>
 </div>
 </div>
+<a href="#" class="scrollup" style="display: inline;">
+    <img src="img/betop.png" width="66" height="67">
+</a>
 <script type="text/javascript">
     $('li[id="index"]').addClass("active");
     $('#menu-toggler').on(ace.click_event, function () {
@@ -921,6 +939,18 @@
         delay: { show: 500, hide: 100 },
         trigger: 'click'
     };
+    $(window).scroll(function () {
+        if ($(this).scrollTop() > 100) {
+            $('.scrollup').fadeIn();
+        } else {
+            $('.scrollup').fadeOut();
+        }
+    });
+
+    $('.scrollup').click(function () {
+        $("html, body").scrollTop(0);
+        return false;
+    });
     function GetDateStr(dd, AddDayCount) {
         dd.setDate(dd.getDate() + AddDayCount);//获取AddDayCount天后的日期
         var y = dd.getFullYear();

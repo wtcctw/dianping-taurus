@@ -202,43 +202,81 @@ function action_update(id) {
 }
 
 function action_ok() {
-	$.ajax({
-		url : "tasks.do",
-		data : {
-			action : toAction(action_chinese),
-			id : taskID
-		},
-		type : 'POST',
-		error: function(){
-			$("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>'
-					+ action_chinese + '失败</strong></div>');
-			$(".alert").alert();
-			$('#confirm').modal("hide");
-		},
-		success: function(){
-			if(action_chinese == '执行') {
-				$("#alertContainer").html('<div id="alertContainer" class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>开始执行..</strong></div>');
-			} else {
-				$("#alertContainer").html('<div id="alertContainer" class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>'
-						+ action_chinese + '成功</strong></div>');
-			}
-			$(".alert").alert();
-			$('#confirm').modal("hide");
-			if(action_chinese == '删除'){
-				$('#' + taskID).remove();
-			}else if(action_chinese == '暂停'){
-				$('#' + taskID).addClass("error");
-				$('#' + taskID + ' td .label').addClass("label-important").removeClass('label-info');
-				$('#' + taskID + ' td .label').html('SUSPEND');
-				$('#' + taskID + ' .dropdown-menu li:nth-child(2) a').html("恢复");
-			}else if(action_chinese == '恢复'){
-				$('#' + taskID).removeClass("error");
-				$('#' + taskID + ' td .label').addClass("label-info").removeClass('label-important');
-				$('#' + taskID + ' td .label').html('RUNNING');
-				$('#' + taskID + ' .dropdown-menu li:nth-child(2) a').html("暂停");
-			}
-		}
-	});
+    if(action_chinese == '执行') {
+        var isExistRunningTask =""
+        $.ajax({
+            url: "attempts.do",
+            data: {
+                action: "runningtask",
+                taskId: taskID
+            }
+            ,
+            timeout: 1000,
+            type: 'POST',
+            async: false,
+            error: function () {
+                isExistRunningTask = "null";
+        },
+        success: function (response) {
+            isExistRunningTask = response
+        }
+        });
+
+        if(isExistRunningTask == "true"){
+            bootbox.confirm("该任务正在运行中，是否再一次执行？", function(result) {
+                if(result) {
+                    do_action();
+                }
+            });
+        }else{
+            do_action();
+        }
+
+    }else{
+        do_action();
+    }
+
+
+}
+
+function do_action(){
+    $.ajax({
+        url : "tasks.do",
+        data : {
+            action : toAction(action_chinese),
+            id : taskID
+        },
+        type : 'POST',
+        error: function(){
+            $("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>'
+                + action_chinese + '失败</strong></div>');
+            $(".alert").alert();
+            $('#confirm').modal("hide");
+        },
+        success: function(){
+            if(action_chinese == '执行') {
+                $("#alertContainer").html('<div id="alertContainer" class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>开始执行..</strong></div>');
+            } else {
+                $("#alertContainer").html('<div id="alertContainer" class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>'
+                    + action_chinese + '成功</strong></div>');
+            }
+            $(".alert").alert();
+            $('#confirm').modal("hide");
+            if(action_chinese == '删除'){
+                $('#' + taskID).remove();
+            }else if(action_chinese == '暂停'){
+                $('#' + taskID).addClass("error");
+                $('#' + taskID + ' td .label').addClass("label-important").removeClass('label-info');
+                $('#' + taskID + ' td .label').html('SUSPEND');
+                $('#' + taskID + ' .dropdown-menu li:nth-child(2) a').html("恢复");
+            }else if(action_chinese == '恢复'){
+                $('#' + taskID).removeClass("error");
+                $('#' + taskID + ' td .label').addClass("label-info").removeClass('label-important');
+                $('#' + taskID + ' td .label').html('RUNNING');
+                $('#' + taskID + ' .dropdown-menu li:nth-child(2) a').html("暂停");
+            }
+        }
+    });
 }
 
 function toAction(chinese){

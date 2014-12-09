@@ -5,7 +5,7 @@ public class MailInfo {
 	private String user = "info@51ping.com";	//user name
 	private String password = "chinese1";				//password for current user
 	private String from = "info@51ping.com";	//mail sender
-	private String to = "renyuan.sun@dianping.com";		//mail receiver
+	private String to = "kirin.li@dianping.com";		//mail receiver
 	private String subject = "Hello Mail";				//mail title
 	private String content = "hello";					//mail content
 	private String format = "text/plain";							//mail is displayed in this format

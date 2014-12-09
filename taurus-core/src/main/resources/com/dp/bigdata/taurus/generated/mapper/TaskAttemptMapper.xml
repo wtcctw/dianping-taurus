@@ -425,4 +425,8 @@
     <select id="isExitTaskId" parameterType="String" resultType="map">
         select taskID from TaurusTaskAttempt where taskID = #{taskId} limit 1
     </select>
+
+    <select id="isExitRunningTask"  resultMap="BaseResultMap">
+        select TaurusTaskAttempt.taskID from TaurusTaskAttempt where TaurusTaskAttempt.status = 6 and TaurusTaskAttempt.taskID = #{taskId} limit 1
+    </select>
 </mapper>

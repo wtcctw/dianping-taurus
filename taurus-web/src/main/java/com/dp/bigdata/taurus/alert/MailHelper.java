@@ -55,6 +55,15 @@ public class MailHelper{
 		transport.sendMessage(message,message.getAllRecipients());
 		transport.close();
 	}
+
+    public static void sendMail(String to, String subject, String content) throws MessagingException {
+        MailInfo mail = new MailInfo();
+        mail.setTo(to);
+        mail.setContent(content);
+        mail.setFormat("text/html");
+        mail.setSubject(subject);
+        MailHelper.sendMail(mail);
+    }
 }
 
    

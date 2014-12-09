@@ -141,6 +141,11 @@
         <servlet-class>com.dp.bigdata.taurus.web.servlet.MonitorServlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>FeedBackServlet</servlet-name>
+        <servlet-class>com.dp.bigdata.taurus.web.servlet.FeedBackServlet</servlet-class>
+    </servlet>
+
 	<servlet-mapping>
 		<servlet-name>BatchTaskServlet</servlet-name>
 		<url-pattern>/batch_upload.do</url-pattern>
@@ -179,6 +184,10 @@
     <servlet-mapping>
         <servlet-name>MonitorServlet</servlet-name>
         <url-pattern>/monitor</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FeedBackServlet</servlet-name>
+        <url-pattern>/feedback</url-pattern>
     </servlet-mapping>
     <jsp-config>
         <jsp-property-group>

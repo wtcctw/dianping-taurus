@@ -19,7 +19,9 @@ import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
 import com.dianping.lion.client.LionException;
 import com.dp.bigdata.taurus.restlet.resource.IAttemptResource;
+import com.dp.bigdata.taurus.restlet.resource.IExistTaskRunning;
 import com.dp.bigdata.taurus.restlet.resource.ILogResource;
+import com.dp.bigdata.taurus.restlet.resource.impl.ExistTaskRunning;
 import com.dp.bigdata.taurus.restlet.shared.AttemptDTO;
 import com.dp.bigdata.taurus.web.utils.ReFlashHostLoadTask;
 import com.google.gson.JsonArray;
@@ -50,6 +52,7 @@ public class AttemptProxyServlet extends HttpServlet {
     private static final String STATUS = "status";
     private static final String LOG = "view-log";
     private static final String ISVIEWLOG = "isviewlog";
+    private static final String ISEXIST_RUNNING_TASK = "runningtask";
 
     public static String RESTLET_URL_BASE;
     private String ERROR_PAGE;
@@ -474,6 +477,17 @@ public class AttemptProxyServlet extends HttpServlet {
             }
 
             output.write(isView.getBytes());
+            output.close();
+        }else if(ISEXIST_RUNNING_TASK.equals(action)){
+            OutputStream output = response.getOutputStream();
+
+            String taskId = request.getParameter("taskId");
+
+            ClientResource runningTaskCr = new ClientResource(RESTLET_URL_BASE + "runningtask/" + taskId);
+            IExistTaskRunning taskRunningResource = runningTaskCr.wrap(IExistTaskRunning.class);
+            String isExist = taskRunningResource.retrieve();
+
+            output.write(isExist.getBytes());
             output.close();
         }
 
