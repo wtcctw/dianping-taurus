@@ -223,7 +223,7 @@ function action_ok() {
         });
 
         if(isExistRunningTask == "true"){
-            bootbox.confirm("该任务正在运行中，是否再一次执行？", function(result) {
+            bootbox.confirm("<i class='icon-info red'>该任务正在运行中，是否再一次执行？</i>", function(result) {
                 if(result) {
                     do_action();
                 }
