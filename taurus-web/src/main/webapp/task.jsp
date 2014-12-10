@@ -144,8 +144,11 @@
             </ul>
             <!-- /.ace-nav -->
         </div>
-        <div class="pull-right" style="margin:10px;color: white;"><i class="icon-group"> Taurus后援QQ群：155326270 </i></div>
-        <div class="pull-right ng-binding" style="margin:10px;color: white;" ng-bind="monitorMessage"><i class="icon-user-md">开发者：李明 </i> <i class="icon-phone">: 13661871541</i></div>
+        <div class="pull-right" style="margin:10px;color: white;">
+            <a target="_blank" style="margin:10px;color: white;"  href="http://shang.qq.com/wpa/qunwpa?idkey=6a730c052b1b42ce027179ba1f1568d0e5e598c456ccb6798be582b9a9c931f7"><img border="0" src="img/group.png" width="20" height="20" alt="Taurus后援团" title="Taurus后援团">点我加入Taurus后援团 155326270</a>
+        </div>
+
+        <div class="pull-right ng-binding" style="margin:10px;color: white;" ng-bind="monitorMessage"><i class="icon-user-md">开发者：李明  <a target="_blank" style="margin:10px;color: white;" href="http://wpa.qq.com/msgrd?v=3&uin=767762405&site=qq&menu=yes"><img border="0" src="img/qq.png"  width="20" height="20" color="white" alt="点我报错" title="点我报错"/>点我报错</a></i> <i class="icon-phone">: 13661871541</i></div>
 
     </div>
     <!-- /.container -->

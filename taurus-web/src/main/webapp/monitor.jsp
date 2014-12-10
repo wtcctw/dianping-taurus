@@ -47,19 +47,8 @@
     </style>
 </head>
 <body data-spy="scroll">
-<%@page import="org.restlet.data.MediaType,
-                org.restlet.resource.ClientResource,
-                com.dp.bigdata.taurus.restlet.shared.AttemptDTO,
-                java.text.SimpleDateFormat" %>
+<%@page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.Date" %>
-<%@ page import="com.dp.bigdata.taurus.restlet.resource.impl.TaskResource" %>
-<%@ page import="com.dp.bigdata.taurus.restlet.shared.TaskDTO" %>
-<%@ page import="com.dp.bigdata.taurus.core.InstanceID" %>
-<%@ page import="org.restlet.data.Form" %>
-<%@ page import="java.util.List" %>
-<%@ page import="com.dp.bigdata.taurus.restlet.resource.*" %>
-<%@ page import="com.dp.bigdata.taurus.generated.module.Task" %>
-<%@ page import="com.dp.bigdata.taurus.web.servlet.AttemptProxyServlet" %>
 
 <div class="navbar navbar-default" id="navbar">
     <script type="text/javascript">
@@ -715,7 +704,7 @@ $(document).ready(function () {
         success: function (response, textStatus) {
             $("#submit_load").html("");
             $("#submit_body").html(response);
-            $("#submitFeedBtn").on('click', function (e) {
+            $(".feedBtn").on('click', function (e) {
 
                 var anchor = this;
                 if (e.ctrlKey || e.metaKey) {
@@ -744,35 +733,7 @@ $(document).ready(function () {
 
                 });
             });
-            $("#submitFeedQQBtn").on('click', function (e) {
 
-                var anchor = this;
-                if (e.ctrlKey || e.metaKey) {
-                    return true;
-                } else {
-                    e.preventDefault();
-                }
-                $.ajax({
-                    type: "get",
-                    url: anchor.href,
-                    error: function () {
-                        $("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>报错失败</strong></div>');
-                        $(".alert").alert();
-                    },
-                    success: function (response, textStatus) {
-                        $("#feedModal").html(response);
-                        $("#feedModal").modal().css({
-                            backdrop: false
-
-
-                        });
-
-
-                    }
-
-
-                });
-            });
         }
 
 
@@ -792,37 +753,9 @@ $(document).ready(function () {
         success: function (response, textStatus) {
             $("#dependency_load").html("");
             $("#dependency_body").html(response);
-            $("#denpencyFeedBtn").on('click', function (e) {
-
-                var anchor = this;
-                if (e.ctrlKey || e.metaKey) {
-                    return true;
-                } else {
-                    e.preventDefault();
-                }
-                $.ajax({
-                    type: "get",
-                    url: anchor.href,
-                    error: function () {
-                        $("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>报错失败</strong></div>');
-                        $(".alert").alert();
-                    },
-                    success: function (response, textStatus) {
-                        $("#feedModal").html(response);
-                        $("#feedModal").modal().css({
-                            backdrop: false
 
 
-                        });
-
-
-                    }
-
-
-                });
-            });
-
-            $("#denpencyFeedQQBtn").on('click', function (e) {
+            $(".feedBtn").on('click', function (e) {
 
                 var anchor = this;
                 if (e.ctrlKey || e.metaKey) {
@@ -870,7 +803,7 @@ $(document).ready(function () {
         success: function (response, textStatus) {
             $("#failed_load").html("");
             $("#failed_body").html(response);
-            $("#failedFeedBtn").on('click', function (e) {
+            $(".feedBtn").on('click', function (e) {
 
                 var anchor = this;
                 if (e.ctrlKey || e.metaKey) {
@@ -900,35 +833,7 @@ $(document).ready(function () {
                 });
             });
 
-            $("#failedFeedQQBtn").on('click', function (e) {
 
-                var anchor = this;
-                if (e.ctrlKey || e.metaKey) {
-                    return true;
-                } else {
-                    e.preventDefault();
-                }
-                $.ajax({
-                    type: "get",
-                    url: anchor.href,
-                    error: function () {
-                        $("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>报错失败</strong></div>');
-                        $(".alert").alert();
-                    },
-                    success: function (response, textStatus) {
-                        $("#feedModal").html(response);
-                        $("#feedModal").modal().css({
-                            backdrop: false
-
-
-                        });
-
-
-                    }
-
-
-                });
-            });
         }
 
 
@@ -947,7 +852,7 @@ $(document).ready(function () {
         success: function (response, textStatus) {
             $("#dependency_timeout_load").html("");
             $("#dependency_timeout_body").html(response);
-            $("#denpencyTimeoutFeedBtn").on('click', function (e) {
+            $(".feedBtn").on('click', function (e) {
 
                 var anchor = this;
                 if (e.ctrlKey || e.metaKey) {
@@ -977,35 +882,7 @@ $(document).ready(function () {
                 });
             });
 
-            $("#denpencyTimeoutFeedQQBtn").on('click', function (e) {
 
-                var anchor = this;
-                if (e.ctrlKey || e.metaKey) {
-                    return true;
-                } else {
-                    e.preventDefault();
-                }
-                $.ajax({
-                    type: "get",
-                    url: anchor.href,
-                    error: function () {
-                        $("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>报错失败</strong></div>');
-                        $(".alert").alert();
-                    },
-                    success: function (response, textStatus) {
-                        $("#feedModal").html(response);
-                        $("#feedModal").modal().css({
-                            backdrop: false
-
-
-                        });
-
-
-                    }
-
-
-                });
-            });
         }
 
 
@@ -1024,7 +901,7 @@ $(document).ready(function () {
         success: function (response, textStatus) {
             $("#timeout_load").html("");
             $("#timeout_body").html(response);
-            $("#timeOutFeedBtn").on('click', function (e) {
+            $(".feedBtn").on('click', function (e) {
 
                 var anchor = this;
                 if (e.ctrlKey || e.metaKey) {
@@ -1053,35 +930,7 @@ $(document).ready(function () {
 
                 });
             });
-            $("#timeOutFeedQQBtn").on('click', function (e) {
 
-                var anchor = this;
-                if (e.ctrlKey || e.metaKey) {
-                    return true;
-                } else {
-                    e.preventDefault();
-                }
-                $.ajax({
-                    type: "get",
-                    url: anchor.href,
-                    error: function () {
-                        $("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>报错失败</strong></div>');
-                        $(".alert").alert();
-                    },
-                    success: function (response, textStatus) {
-                        $("#feedModal").html(response);
-                        $("#feedModal").modal().css({
-                            backdrop: false
-
-
-                        });
-
-
-                    }
-
-
-                });
-            });
         }
 
 
