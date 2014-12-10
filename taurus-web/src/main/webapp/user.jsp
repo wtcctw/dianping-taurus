@@ -264,8 +264,8 @@
                     map.put(group, user.getName());
                 }
                 if (user.getName().equals(currentUser)) {
-                    if (user.getGroup() == null || user.getMail() == null || user.getTel() == null
-                            || user.getGroup().equals("") || user.getMail().equals("") || user.getTel().equals("")) {
+                    if (user.getGroup() == null || user.getMail() == null || user.getTel() == null ||user.getQq() == null
+                            || user.getGroup().equals("") || user.getMail().equals("") || user.getTel().equals("")||user.getQq().equals("")) {
         %>
         <div id="alertContainer" class="container col-sm-12">
             <div id="alertContainer" class="alert alert-danger">
@@ -318,6 +318,18 @@
                                     <%} else { %>
                                     <input type="text" class="input-large field" id="tel" name="tel"
                                            value="<%=user.getTel()%>">
+                                    <%} %>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="tel">QQ</label>
+
+                                <div class="controls">
+                                    <% if (user.getQq() == null) {%>
+                                    <input type="text" class="input-large field" id="qq" name="qq" value="">
+                                    <%} else { %>
+                                    <input type="text" class="input-large field" id="qq" name="qq"
+                                           value="<%=user.getQq()%>">
                                     <%} %>
                                 </div>
                             </div>

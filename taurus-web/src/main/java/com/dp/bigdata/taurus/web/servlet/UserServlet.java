@@ -59,7 +59,7 @@ public class UserServlet extends HttpServlet {
 
 	private enum UserProperty {
 		ID("id"), USERNAME("userName"), GROUPNAME("groupName"), EMAIL("email"), TEL(
-				"tel");
+				"tel"),QQ("qq");
 
 		private String name;
 

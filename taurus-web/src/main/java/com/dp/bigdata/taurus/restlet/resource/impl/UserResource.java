@@ -50,6 +50,7 @@ public class UserResource extends ServerResource implements IUserResource {
 	private static final String EMAIL="email";
 	private static final String GROUP="groupName";
 	private static final String NAME="userName";
+    private static final String QQ="qq";
 	
 	@Get
 	@Override
@@ -103,7 +104,10 @@ public class UserResource extends ServerResource implements IUserResource {
 				groupName = value;
 			} else if(key.equals(NAME)){
 				user.setName(value);
-			}
+			}else if(key.equals(QQ)){
+                user.setQq(value);
+            }
+
 		}
 		
 		userMapper.updateByPrimaryKey(user.getUser());

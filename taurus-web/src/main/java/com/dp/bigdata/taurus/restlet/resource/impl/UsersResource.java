@@ -42,7 +42,7 @@ public class UsersResource extends ServerResource implements IUsersResource {
         List<User> users = userMapper.selectByExample(example);
         ArrayList<UserDTO> userDtos = new ArrayList<UserDTO>();
         for (User user : users) {
-        	UserDTO userDto = new UserDTO(user.getId(), user.getName(), user.getMail(), user.getTel());
+        	UserDTO userDto = new UserDTO(user.getId(), user.getName(), user.getMail(), user.getTel(),user.getQq());
             userDtos.add(userDto);
             UserGroupMappingExample mappingExample = new UserGroupMappingExample();
             mappingExample.or().andUseridEqualTo(user.getId());

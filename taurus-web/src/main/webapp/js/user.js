@@ -21,7 +21,7 @@ $(document).ready(function() {
 			url: 'saveUser',
 	        type: 'POST',
 			error: function(){
-				$("#alertContainer").html('<div id="alertContainer" class="alert alert-error"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>保存失败</strong></div>');
+				$("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>保存失败</strong></div>');
 				$(".alert").alert();
 			},
 			success: function(response, textStatus) {

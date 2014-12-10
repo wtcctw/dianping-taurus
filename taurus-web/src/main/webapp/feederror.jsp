@@ -1,3 +1,5 @@
+<%@ page import="com.dp.bigdata.taurus.restlet.resource.ITaskResource" %>
+<%@ page import="com.dp.bigdata.taurus.restlet.shared.TaskDTO" %>
 <%@ page contentType="text/html;charset=utf-8" %>
 <%@ include file="jsp/common-nav.jsp" %>
 
@@ -9,7 +11,10 @@
     String ip = request.getParameter("ip");
     String state = request.getParameter("status");
     String feedType = request.getParameter("feedtype");
+    String from = request.getParameter("from");
     String logUrl = "";
+    String creator="";
+    String qq = "";
 %>
 <div class="modal-dialog " style="width: 900px">
     <div class="modal-content">
@@ -131,6 +136,27 @@
             %>
             <p>任务日志: <%=logUrl%>
             </p>
+            <%
+                if (from!= null && from.equals("monitor")){
+                    cr = new ClientResource(host + "task/" + taskId);
+                    ITaskResource taskResource = cr.wrap(ITaskResource.class);
+                    cr.accept(MediaType.APPLICATION_XML);
+                    TaskDTO dto = taskResource.retrieve();
+                     creator = dto.getCreator();
+                    qq="";
+                    for (UserDTO user : users) {
+                        if (user.getName().equals(creator)) {
+                            qq = user.getQq();
+                            break;
+                        }
+
+                    }
+                    %>
+            <p>错误将报给: <%=creator%>, 他的QQ：<%=qq%>
+            </p>
+                <%}
+
+            %>
             <hr>
             <%}%>
         </div>
@@ -212,9 +238,34 @@
                     + "报错人: <%=currentUser%> \n"
                     + "任务日志: <%=logUrl%>";
 
-            window.open('http://wpa.qq.com/msgrd?v=3&uin=767762405&site=qq&menu=yes', 'newwindow', 'height=200,width=100,top=0,left=0,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no')
+            <%
+            if (from!= null && from.equals("mointor")){
 
-        }
+                %>
+
+            var qq = "<%=qq%>"
+            if(qq !=null && qq!=""){
+                window.open('http://wpa.qq.com/msgrd?v=3&uin=767762405&site=qq&menu=yes', 'newwindow', 'height=200,width=100,top=0,left=0,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no')
+            }else{
+                bootbox.confirm("报错失败<hr><i class='icon-info red'>用户<%=creator%> 没有设置QQ号，无法使用QQ报错，请使用邮件报错</i>", function (result) {
+                    if (result) {
+                        ;
+                    }
+                });
+            }
+            <%
+            }else{
+             %>
+                window.open('http://wpa.qq.com/msgrd?v=3&uin=767762405&site=qq&menu=yes', 'newwindow', 'height=200,width=100,top=0,left=0,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no')
+            }
+            <%
+            }
+
+
+    %>
+
+
+
 
 
     }

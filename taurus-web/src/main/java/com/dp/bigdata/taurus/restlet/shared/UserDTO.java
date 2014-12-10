@@ -20,16 +20,18 @@ public class UserDTO implements Serializable {
     private String mail;
     private String tel;
     private String group;
+    private String qq;
     
     public UserDTO(){
     }
 
-    public UserDTO(int id, String name, String mail, String tel) {
+    public UserDTO(int id, String name, String mail, String tel,String qq) {
         super();
         this.id = id;
         this.name = name;
         this.mail = mail;
         this.tel = tel;
+        this.qq = qq;
     }
 
     public int getId() {
@@ -67,10 +69,16 @@ public class UserDTO implements Serializable {
 	public void setGroup(String group) {
 		this.group = group;
 	}
-	
-	
-	
-	public void setId(int id) {
+
+    public String getQq() {
+        return qq;
+    }
+
+    public void setQq(String qq) {
+        this.qq = qq;
+    }
+
+    public void setId(int id) {
 		this.id = id;
 	}
 
@@ -80,6 +88,7 @@ public class UserDTO implements Serializable {
 		user.setMail(mail);
 		user.setName(name);
 		user.setTel(tel);
+        user.setQq(qq);
 		return user;
 	}
     

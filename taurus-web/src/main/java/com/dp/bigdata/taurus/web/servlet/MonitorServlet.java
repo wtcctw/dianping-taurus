@@ -715,6 +715,7 @@ public class MonitorServlet extends HttpServlet {
                                 +"&taskId="
                                 + dto.getTaskID()
                                 +"&feedtype=qq"
+                                +"&from=monitor"
                                 +"'><img border='0' src='img/qq.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a></td>";
 
 
@@ -823,6 +824,7 @@ public class MonitorServlet extends HttpServlet {
                                 +"&taskId="
                                 + dto.getTaskID()
                                 +"&feedtype=qq"
+                                +"&from=monitor"
                                 +"'><img border='0' src='img/qq.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a></td>";
                         result += "</tr>";
                     }
@@ -933,6 +935,7 @@ public class MonitorServlet extends HttpServlet {
                                 +"&taskId="
                                 + dto.getTaskID()
                                 +"&feedtype=qq"
+                                +"&from=monitor"
                                 +"'><img border='0' src='img/qq.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a></td>";
 
                         result += "</tr>";
@@ -1048,6 +1051,7 @@ public class MonitorServlet extends HttpServlet {
                                 +"&taskId="
                                 + dto.getTaskID()
                                 +"&feedtype=qq"
+                                +"&from=monitor"
                                 +"'><img border='0' src='img/qq.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a></td>";
 
                         result += "</tr>";
@@ -1163,6 +1167,7 @@ public class MonitorServlet extends HttpServlet {
                                 +"&taskId="
                                 + dto.getTaskID()
                                 +"&feedtype=qq"
+                                +"&from=monitor"
                                 +"'><img border='0' src='img/qq.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a></td>";
 
                         result += "</tr>";
