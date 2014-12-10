@@ -59,3 +59,7 @@ function EnterTo(url){
 		login(url);
 	}
 }
+
+function close_tool(){
+    $(".feedTool").hide();
+}

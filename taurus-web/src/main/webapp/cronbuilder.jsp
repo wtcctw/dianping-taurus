@@ -16,6 +16,7 @@
     <script src="lib/ace/js/ace.min.js"></script>
     <script src="lib/ace/js/bootbox.min.js"></script>
     <script src="resource/js/lib/jquery.easyui.min.js"></script>
+    <script src="js/login.js"></script>
     <!-- page specific plugin styles -->
 
     <!-- fonts -->
@@ -27,7 +28,7 @@
     <link rel="stylesheet" href="lib/ace/css/ace.min.css"/>
     <link rel="stylesheet" href="lib/ace/css/ace-rtl.min.css"/>
     <link rel="stylesheet" href="lib/ace/css/ace-skins.min.css"/>
-
+    <link rel="stylesheet" href="css/common.css">
     <script src="js/cron.js" type="text/javascript"></script>
     <style type="text/css">
         .line {
@@ -111,10 +112,17 @@
             <!-- /.ace-nav -->
         </div>
         <div class="pull-right" style="margin:10px;color: white;">
-            <a target="_blank" style="margin:10px;color: white;"  href="http://shang.qq.com/wpa/qunwpa?idkey=6a730c052b1b42ce027179ba1f1568d0e5e598c456ccb6798be582b9a9c931f7"><img border="0" src="img/group.png" width="20" height="20" alt="Taurus后援团" title="Taurus后援团">点我加入Taurus后援团 155326270</a>
+            <a target="_blank" style="margin:10px;color: white;"
+               href="http://shang.qq.com/wpa/qunwpa?idkey=6a730c052b1b42ce027179ba1f1568d0e5e598c456ccb6798be582b9a9c931f7"><img
+                    border="0" src="img/group.png" width="20" height="20" alt="Taurus后援团" title="Taurus后援团">点我加入Taurus后援团
+                155326270</a>
         </div>
 
-        <div class="pull-right ng-binding" style="margin:10px;color: white;" ng-bind="monitorMessage"><i class="icon-user-md">开发者：李明  <a target="_blank" style="margin:10px;color: white;" href="http://wpa.qq.com/msgrd?v=3&uin=767762405&site=qq&menu=yes"><img border="0" src="img/qq.png"  width="20" height="20" color="white" alt="点我报错" title="点我报错"/>点我报错</a></i> <i class="icon-phone">: 13661871541</i></div>
+        <div class="pull-right ng-binding" style="margin:10px;color: white;" ng-bind="monitorMessage"><i
+                class="icon-user-md">开发者：李明 <a target="_blank" style="margin:10px;color: white;"
+                                               href="http://wpa.qq.com/msgrd?v=3&uin=767762405&site=qq&menu=yes"><img
+                border="0" src="img/qq.png" width="20" height="20" color="white" alt="点我报错" title="点我报错"/>点我报错</a></i>
+            <i class="icon-phone">: 13661871541</i></div>
 
     </div>
     <!-- /.container -->
@@ -216,7 +224,7 @@
 
 <script>
     var isAdmin = <%=isAdmin%>;
-    if(!isAdmin){
+    if (!isAdmin) {
         $("#userrolechange").html("我的任务");
     }
 
@@ -241,7 +249,7 @@
 
 <div class="page-content">
 <div class="row">
-<div  class="col-sm-12">
+<div class="col-sm-12">
 <ul class="nav nav-tabs">
     <li class="active"><a data-toggle="tab" data-toggle="tab" href="#mintab"><span class="tabs-title">分钟</span><span
             class="tabs-icon"></span></a></li>
@@ -787,7 +795,8 @@
         </tr>
         <tr>
             <td>UI结果:</td>
-            <td colspan="6"><input type="text" class="input" name="showvalue"  style="width: 100%;" value="" readonly="readonly" id="showvalue">
+            <td colspan="6"><input type="text" class="input" name="showvalue" style="width: 100%;" value=""
+                                   readonly="readonly" id="showvalue">
             </td>
         </tr>
 
@@ -795,16 +804,26 @@
             <td>Cron 表达式:</td>
             <td colspan="6"><input type="text" name="cronvalue" style="width: 100%;" value="* * * * ?" id="cronvalue">
             </td>
-            <td><button class="btn btn-info" type="button"  id="btnFan" onclick="btnFan()"><i class="ace-icon fa fa-check bigger-110"></i>反解析到UI</button></td>
+            <td>
+                <button class="btn btn-info" type="button" id="btnFan" onclick="btnFan()"><i
+                        class="ace-icon fa fa-check bigger-110"></i>反解析到UI
+                </button>
+            </td>
         </tr>
         </tbody>
     </table>
 </fieldset>
+<div class="feedTool">
+
+    <a target="_blank" style="color: white;" href="http://wpa.qq.com/msgrd?v=3&uin=767762405&site=qq&menu=yes"><img border="0" src="img/qq.png"  width="80" height="80" color="white" alt="点我报错" title="点我报错"/></a>
+    <a target="_blank" style="float:right; padding-right:16px;color: white;" href="javascript:close_tool()"><img border="0" src="img/x_alt.png"  width="20" height="20" color="white" alt="关闭挂件" title="关闭挂件"/></a>
+    <p style="text-align: center; padding-right:32px;color: firebrick">点我报错</p>
+</div>
 <div style="text-align: center; margin-top: 5px;">
     <script type="text/javascript">
 
         $('li[id="cron"]').addClass("active");
-        $('#menu-toggler').on(ace.click_event, function() {
+        $('#menu-toggler').on(ace.click_event, function () {
             $('#sidebar').toggleClass('display');
             $(this).toggleClass('display');
             return false;

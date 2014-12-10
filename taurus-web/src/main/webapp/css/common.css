@@ -1,0 +1,13 @@
+.scrollup {
+    opacity: 0.3;
+    position: fixed;
+    bottom: 150px;
+    right: 100px;
+    display: none;
+}
+.feedTool {
+    position: fixed;
+    top: 10%;
+    bottom: auto;
+    right: 0px;
+}

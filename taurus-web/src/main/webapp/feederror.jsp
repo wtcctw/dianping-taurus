@@ -9,7 +9,7 @@
     String ip = request.getParameter("ip");
     String state = request.getParameter("status");
     String feedType = request.getParameter("feedtype");
-
+    String logUrl = "";
 %>
 <div class="modal-dialog " style="width: 900px">
     <div class="modal-content">
@@ -35,10 +35,10 @@
         </div>
         <div class="modal-header" style="height: 50px">
             <button type="button" class="close smaller" data-dismiss="modal">x</button>
-            <h4 id="myModalLabel" class="smaller">Task运行报错</h4>
+            <h4 id="myModalLabel" class="smaller">Taurus 任务报错</h4>
         </div>
         <div class="modal-body">
-            <%if(feedType.equals("mail")){%>
+            <%if (feedType.equals("mail")) {%>
             <form id="form_<%=attemptId%>" class="form-horizontal task-form">
                 <fieldset>
 
@@ -92,30 +92,46 @@
                            value="<%=currentUser%>">
                 </fieldset>
             </form>
-            <%}else{%>
+            <%} else {%>
             <h3><i class="icon-info red">请把下面内容复制,然后点击【报错】按钮，在弹出的QQ对话框中粘贴报错内容</i>
             </h3>
             <hr>
-                <p>任务名称：<%=taskName%></p>
-                <p>任务ID：<%=taskId%></p>
-                <p>AttemptId :<%=attemptId%></p>
-                <p>任务状态：<%=state%></p>
+            <p>任务名称：<%=taskName%>
+            </p>
+
+            <p>任务ID：<%=taskId%>
+            </p>
+
+            <p>AttemptId :<%=attemptId%>
+            </p>
+
+            <p>任务状态：<%=state%>
+            </p>
+
+            <p>部署主机：<%=ip%>
+            </p>
+
+            <p>报错人: <%=currentUser%>
+            </p>
+
             <%
-                String domain ="";
+                String domain = "";
                 try {
                     domain = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.deploy.weburl");
                 } catch (LionException e) {
-                    domain="taurus.dp";
+                    domain = "taurus.dp";
                     e.printStackTrace();
                 }
-                String logUrl =  "http://"
+                logUrl = "http://"
                         + domain
                         + "/viewlog.jsp?id="
                         + attemptId
                         + "&status="
                         + state;
             %>
-                <p>任务日志: <%=logUrl%></p>
+            <p>任务日志: <%=logUrl%>
+            </p>
+            <hr>
             <%}%>
         </div>
         <div class="modal-footer">
@@ -145,8 +161,9 @@
     var feedtype = "<%=feedType%>"
 
 
+
     function action_feed() {
-        if(feedtype == "mail"){
+        if (feedtype == "mail") {
             var mailTo = $("#alertUser").val();
 
             var feedResult = "";
@@ -186,8 +203,16 @@
                     }
                 });
             }
-        }else{
-            window.open('http://wpa.qq.com/msgrd?v=3&uin=767762405&site=qq&menu=yes','newwindow','height=200,width=100,top=0,left=0,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no')
+        } else {
+            var feedcontent = "任务名称：" + taskName + "\n"
+                    + "任务ID：" + taskId + "\n"
+                    + "AttemptId :" + attemptId + "\n"
+                    +"任务状态: " + status + "\n"
+                    + "部署主机：" + ip + "\n"
+                    + "报错人: <%=currentUser%> \n"
+                    + "任务日志: <%=logUrl%>";
+
+            window.open('http://wpa.qq.com/msgrd?v=3&uin=767762405&site=qq&menu=yes', 'newwindow', 'height=200,width=100,top=0,left=0,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no')
 
         }
 
