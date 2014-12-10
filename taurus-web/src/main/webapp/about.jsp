@@ -268,6 +268,22 @@
 <div class="col-sm-12 padding-14">
 <section id="new">
     <div class="page-header">
+        <h1>最新功能:我要报错&&我要反馈</h1>
+        <hr>
+<h2>我要报错</h2>
+        <img src="img/qq.png" style="float:left;width: 300px;height: 300px"/>
+        <img src="img/feedQQ.png" style="float:right;width: 720px;height: 300px"/>
+
+        <img src="img/feederror.png" style="width: 1020px;height: 250px"/>
+        <hr>
+        <h2>我要反馈</h2>
+        <div>
+        <img src="img/feedback.png" style="width: 720px;height: 560px"/>
+</div>
+        <hr>
+
+        <p style="font-size: 14px; color:#ff7f50;" ><h1>快来体验！！！</h1></p>
+        <hr>
         <h1>入门导引</h1>
     </div>
     <div id="login">

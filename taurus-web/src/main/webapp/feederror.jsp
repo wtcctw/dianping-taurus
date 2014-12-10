@@ -187,7 +187,8 @@
                 });
             }
         }else{
-            window.location.href="http://wpa.qq.com/msgrd?v=3&uin=767762405&site=qq&menu=yes";
+            window.open('http://wpa.qq.com/msgrd?v=3&uin=767762405&site=qq&menu=yes','newwindow','height=200,width=100,top=0,left=0,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no')
+
         }
 
 
