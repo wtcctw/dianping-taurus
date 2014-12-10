@@ -35,6 +35,13 @@
     <style>
         label.error{margin-left: 10px; color: red;}
         label.success{margin-left: 10px; color: green;}
+        .scrollup {
+            opacity: 0.3;
+            position: fixed;
+            bottom: 150px;
+            right: 100px;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -363,7 +370,22 @@
         </div>
     </div>
 </div>
+<a href="#" class="scrollup" style="display: inline;">
+    <img src="img/betop.png" width="66" height="67">
+</a>
 <script type="text/javascript">
+    $(window).scroll(function () {
+        if ($(this).scrollTop() > 100) {
+            $('.scrollup').fadeIn();
+        } else {
+            $('.scrollup').fadeOut();
+        }
+    });
+
+    $('.scrollup').click(function () {
+        $("html, body").scrollTop(0);
+        return false;
+    });
     var userList = "", groupList = "", isAdmin;
     <%for(UserDTO user:users) {%>
     userList = userList + ",<%=user.getName()%>";

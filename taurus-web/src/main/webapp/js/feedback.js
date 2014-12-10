@@ -79,11 +79,11 @@ function checkTextareaLen() {
 function checkTextareaNum() {
     var content = $("#feedback-content").val();
     $('div .limit').css('color', 'black').html('您还可以输入<em id="contentnum"></em>个字');
-    if (content.length < 3200) {
-        $("#contentnum").html(3200 - content.length);
+    if (content.length < 2000) {
+        $("#contentnum").html(2000 - content.length);
     } else {
         $("#contentnum").html(0);
-        $("#feedback-content").val(content.substring(0, 3200));
+        $("#feedback-content").val(content.substring(0, 2000));
         document.getElementById('feedback-content').scrollTop = document.getElementById('feedback-content').scrollHeight;
     }
 }

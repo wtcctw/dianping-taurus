@@ -11,6 +11,7 @@
     <script type="text/javascript" src="resource/js/lib/jquery-1.9.1.min.js"></script>
     <link href="lib/ace/css/bootstrap.min.css" rel="stylesheet"/>
     <script src="lib/ace/js/ace-extra.min.js"></script>
+    <link rel="stylesheet" href="lib/ace/css/font-awesome.min.css"/>
     <script src="lib/ace/js/ace-elements.min.js"></script>
     <script src="lib/ace/js/ace.min.js"></script>
     <script src="lib/ace/js/bootbox.min.js"></script>
@@ -96,7 +97,7 @@
             <!-- /.ace-nav -->
         </div>
         <div class="pull-right" style="margin:10px;color: white;"><i class="icon-group"> Taurus后援QQ群：155326270 </i></div>
-        <div class="pull-right ng-binding" style="margin:10px;color: white;" ng-bind="monitorMessage"><i class="icon-user-md">开发者：李明 </i> <i class="icon-phone">: 13661871541</i></div>
+        <div class="pull-right ng-binding" style="margin:10px;color: white;"><i class="icon-user-md">开发者：李明 </i> <i class="icon-phone">: 13661871541</i></div>
 
     </div>
     <!-- /.container -->

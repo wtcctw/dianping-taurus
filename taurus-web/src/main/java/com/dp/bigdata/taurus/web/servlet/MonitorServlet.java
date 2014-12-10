@@ -692,6 +692,31 @@ public class MonitorServlet extends HttpServlet {
                                 +"\">日志</a>"
                                 + "</td >";
 
+                        result += "<td> <a id ='failedFeedBtn' class='feedBtn'  href='feederror.jsp?id="
+                                +dto.getAttemptID()
+                                +"&status="
+                                + dto.getStatus()
+                                +"&taskName="
+                                + taskName
+                                +"&ip="
+                                + dto.getExecHost()
+                                +"&taskId="
+                                + dto.getTaskID()
+                                +"&feedtype=mail"
+                                +"'><i class='icon-envelope'></i></a> |"
+                                +"<a id ='failedFeedQQBtn' class='feedBtn'  href='feederror.jsp?id="
+                                +dto.getAttemptID()
+                                +"&status="
+                                + dto.getStatus()
+                                +"&taskName="
+                                + taskName
+                                +"&ip="
+                                + dto.getExecHost()
+                                +"&taskId="
+                                + dto.getTaskID()
+                                +"&feedtype=qq"
+                                +"'><img border='0' src='img/qq.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a></td>";
+
 
                         result += "</tr>";
                     }
@@ -775,7 +800,30 @@ public class MonitorServlet extends HttpServlet {
                                     + "NULL"
                                     + "</td >";
                         }
-
+                        result += "<td> <a id ='submitFeedBtn' class='feedBtn'  href='feederror.jsp?id="
+                                +dto.getAttemptID()
+                                +"&status="
+                                + dto.getStatus()
+                                +"&taskName="
+                                + taskName
+                                +"&ip="
+                                + dto.getExecHost()
+                                +"&taskId="
+                                + dto.getTaskID()
+                                +"&feedtype=mail"
+                                +"'><i class='icon-envelope'></i></a> |"
+                                +"<a id ='submitFeedQQBtn' class='feedBtn'  href='feederror.jsp?id="
+                                +dto.getAttemptID()
+                                +"&status="
+                                + dto.getStatus()
+                                +"&taskName="
+                                + taskName
+                                +"&ip="
+                                + dto.getExecHost()
+                                +"&taskId="
+                                + dto.getTaskID()
+                                +"&feedtype=qq"
+                                +"'><img border='0' src='img/qq.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a></td>";
                         result += "</tr>";
                     }
                 }
@@ -861,6 +909,31 @@ public class MonitorServlet extends HttpServlet {
                                     + "NULL"
                                     + "</td >";
                         }
+
+                        result += "<td> <a id ='denpencyFeedBtn' class='feedBtn'  href='feederror.jsp?id="
+                                +dto.getAttemptID()
+                                +"&status="
+                                + dto.getStatus()
+                                +"&taskName="
+                                + taskName
+                                +"&ip="
+                                + dto.getExecHost()
+                                +"&taskId="
+                                + dto.getTaskID()
+                                +"&feedtype=mail"
+                                +"'><i class='icon-envelope'></i></a> |"
+                                +"<a id ='denpencyFeedQQBtn' class='feedBtn'  href='feederror.jsp?id="
+                                +dto.getAttemptID()
+                                +"&status="
+                                + dto.getStatus()
+                                +"&taskName="
+                                + taskName
+                                +"&ip="
+                                + dto.getExecHost()
+                                +"&taskId="
+                                + dto.getTaskID()
+                                +"&feedtype=qq"
+                                +"'><img border='0' src='img/qq.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a></td>";
 
                         result += "</tr>";
                     }
@@ -951,6 +1024,32 @@ public class MonitorServlet extends HttpServlet {
                                 + dto.getAttemptID()+"&status="+dto.getStatus()
                                 +"\">日志</a>"
                                 + "</td >";
+
+                        result += "<td> <a id ='denpencyTimeoutFeedBtn' class='feedBtn'  href='feederror.jsp?id="
+                                +dto.getAttemptID()
+                                +"&status="
+                                + dto.getStatus()
+                                +"&taskName="
+                                + taskName
+                                +"&ip="
+                                + dto.getExecHost()
+                                +"&taskId="
+                                + dto.getTaskID()
+                                +"&feedtype=mail"
+                                +"'><i class='icon-envelope'></i></a> |"
+                                +"<a id ='denpencyTimeoutFeedQQBtn' class='feedBtn'  href='feederror.jsp?id="
+                                +dto.getAttemptID()
+                                +"&status="
+                                + dto.getStatus()
+                                +"&taskName="
+                                + taskName
+                                +"&ip="
+                                + dto.getExecHost()
+                                +"&taskId="
+                                + dto.getTaskID()
+                                +"&feedtype=qq"
+                                +"'><img border='0' src='img/qq.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a></td>";
+
                         result += "</tr>";
                     }
                 }
@@ -1039,6 +1138,32 @@ public class MonitorServlet extends HttpServlet {
                                 + dto.getAttemptID()+"&status="+dto.getStatus()
                                 +"\">日志</a>"
                                 + "</td >";
+
+                        result += "<td> "
+                                +"<a id ='timeOutFeedBtn' class='feedBtn'  href='feederror.jsp?id="
+                                +dto.getAttemptID()
+                                +"&status="
+                                + dto.getStatus()
+                                +"&taskName="
+                                + taskName
+                                +"&ip="
+                                + dto.getExecHost()
+                                +"&taskId="
+                                + dto.getTaskID()
+                                +"&feedtype=mail"
+                                +"'><i class='icon-envelope'></i></a> |"
+                                +"<a id ='timeOutFeedQQBtn' class='feedBtn'  href='feederror.jsp?id="
+                                +dto.getAttemptID()
+                                +"&status="
+                                + dto.getStatus()
+                                +"&taskName="
+                                + taskName
+                                +"&ip="
+                                + dto.getExecHost()
+                                +"&taskId="
+                                + dto.getTaskID()
+                                +"&feedtype=qq"
+                                +"'><img border='0' src='img/qq.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a></td>";
 
                         result += "</tr>";
                     }

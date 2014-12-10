@@ -36,10 +36,11 @@
         .time_inal {
             float: right
         }
+
         .scrollup {
             opacity: 0.3;
             position: fixed;
-            bottom: 50px;
+            bottom: 150px;
             right: 100px;
             display: none;
         }
@@ -124,8 +125,10 @@
             </ul>
             <!-- /.ace-nav -->
         </div>
-        <div class="pull-right" style="margin:10px;color: white;"><i class="icon-group"> Taurus后援QQ群：155326270 </i></div>
-        <div class="pull-right ng-binding" style="margin:10px;color: white;" ng-bind="monitorMessage"><i class="icon-user-md">开发者：李明 </i> <i class="icon-phone">: 13661871541</i></div>
+        <div class="pull-right" style="margin:10px;color: white;"><i class="icon-group"> Taurus后援QQ群：155326270 </i>
+        </div>
+        <div class="pull-right ng-binding" style="margin:10px;color: white;" ng-bind="monitorMessage"><i
+                class="icon-user-md">开发者：李明 </i> <i class="icon-phone">: 13661871541</i></div>
 
     </div>
     <!-- /.container -->
@@ -221,7 +224,7 @@
 
 <script>
     var isAdmin = <%=isAdmin%>;
-    if(!isAdmin){
+    if (!isAdmin) {
         $("#userrolechange").html("我的任务");
     }
 
@@ -249,7 +252,6 @@
 <div class="page-content">
 <div id="alertContainer" class="container col-sm-10">
 </div>
-
 
 
 <div class="row">
@@ -290,11 +292,11 @@
 
         String step_str = request.getParameter("step");
         String now = request.getParameter("date");
-        System.out.println(step_str+"#"+now);
+        System.out.println(step_str + "#" + now);
         int step = -24;
     %>
 
-    <div >
+    <div>
         <a class="atip" data-toggle="tooltip" data-placement="top"
            data-original-title="当你点击了[-1h]|[-1d]|[-1w]|[-1m]后，在想切换到当前页面时，请点击[当天]，刷新页面无效噢～">[注意] </a>
         &nbsp;&nbsp;|&nbsp;&nbsp;
@@ -398,7 +400,8 @@
             <th>实际启动时间</th>
             <th>实际结束时间</th>
             <th>预计调度时间</th>
-             <th>IP</th>
+            <th>IP</th>
+            <th>我要报错</th>
         </tr>
         </thead>
         <tbody id="submit_body">
@@ -428,6 +431,7 @@
             <th>实际结束时间</th>
             <th>预计调度时间</th>
             <th>IP</th>
+            <th>我要报错</th>
         </tr>
         </thead>
         <tbody id="dependency_body">
@@ -437,7 +441,6 @@
         </tbody>
     </table>
 </ul>
-
 
 
 <ul class="fail-tag col-sm-12">
@@ -456,8 +459,9 @@
             <th>实际启动时间</th>
             <th>实际结束时间</th>
             <th>预计调度时间</th>
-             <th>IP</th>
+            <th>IP</th>
             <th>查看日志</th>
+            <th>我要报错</th>
         </tr>
         </thead>
         <tbody id="failed_body">
@@ -483,8 +487,9 @@
             <th>实际启动时间</th>
             <th>实际结束时间</th>
             <th>预计调度时间</th>
-             <th>IP</th>
+            <th>IP</th>
             <th>查看日志</th>
+            <th>我要报错</th>
 
         </tr>
         </thead>
@@ -512,6 +517,7 @@
             <th>预计调度时间</th>
             <th>IP</th>
             <th>查看日志</th>
+            <th>我要报错</th>
 
         </tr>
         </thead>
@@ -539,247 +545,548 @@
     </div>
 </div>
 </div>
+<div class="modal fade" id="feedModal" role="dialog"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
 <a href="#" class="scrollup" style="display: inline;">
-    <img src="img/ScrollTopArrow.png" width="50" height="50">
+    <img src="img/betop.png" width="66" height="67">
 </a>
 <script type="text/javascript">
-    $('li[id="monitor"]').addClass("active");
-    $('#menu-toggler').on(ace.click_event, function() {
-        $('#sidebar').toggleClass('display');
-        $(this).toggleClass('display');
-        return false;
-    });
-    $(window).scroll(function () {
-        if ($(this).scrollTop() > 100) {
-            $('.scrollup').fadeIn();
-        } else {
-            $('.scrollup').fadeOut();
-        }
-    });
-
-    $('.scrollup').click(function () {
-        $("html, body").scrollTop(0);
-        return false;
-    });
-    $(".atip").tooltip();
-    options = {
-        delay: { show: 500, hide: 100 },
-        trigger: 'click'
-    };
-    $(".optiontip").tooltip(options);
-    function GetDateStr(dd, AddDayCount) {
-        dd.setDate(dd.getDate() + AddDayCount);//获取AddDayCount天后的日期
-        var y = dd.getFullYear();
-        var m = dd.getMonth() + 1;//获取当前月份的日期
-        var d = dd.getDate();
-        return y + "-" + m + "-" + d;
+$('li[id="monitor"]').addClass("active");
+$('#menu-toggler').on(ace.click_event, function () {
+    $('#sidebar').toggleClass('display');
+    $(this).toggleClass('display');
+    return false;
+});
+$(window).scroll(function () {
+    if ($(this).scrollTop() > 100) {
+        $('.scrollup').fadeIn();
+    } else {
+        $('.scrollup').fadeOut();
     }
-    <%String now_str = request.getParameter("date");
-    if (now_str == null || now_str.isEmpty()){
-    now_str= df.format(time);
+});
+
+$('.scrollup').click(function () {
+    $("html, body").scrollTop(0);
+    return false;
+});
+$(".atip").tooltip();
+options = {
+    delay: { show: 500, hide: 100 },
+    trigger: 'click'
+};
+$(".optiontip").tooltip(options);
+function GetDateStr(dd, AddDayCount) {
+    dd.setDate(dd.getDate() + AddDayCount);//获取AddDayCount天后的日期
+    var y = dd.getFullYear();
+    var m = dd.getMonth() + 1;//获取当前月份的日期
+    var d = dd.getDate();
+    return y + "-" + m + "-" + d;
+}
+<%String now_str = request.getParameter("date");
+if (now_str == null || now_str.isEmpty()){
+now_str= df.format(time);
+}
+%>
+var now_s = "<%=formatter.format( df.parse(now_str))%>";
+var now = new Date(Date.parse(now_s.replace(/-/g, "/")));
+var id = "<%= request.getParameter("id")%>";
+var step = "<%=request.getParameter("step")%>";
+<%String op_str = request.getParameter("op");
+if(op_str==null || op_str.isEmpty()){
+op_str="day";
+}%>
+var op = "<%=op_str%>";
+var starttime;
+var endtime;
+if (step == null || step == "null") {
+    starttime = GetDateStr(now, -1);
+    if (op == "day") {
+        endtime = GetDateStr(now, 1);
+    } else {
+        endtime = GetDateStr(new Date(), 1);
     }
-    %>
-    var now_s = "<%=formatter.format( df.parse(now_str))%>";
-    var now = new Date(Date.parse(now_s.replace(/-/g, "/")));
-    var id = "<%= request.getParameter("id")%>";
-    var step = "<%=request.getParameter("step")%>";
-    <%String op_str = request.getParameter("op");
-    if(op_str==null || op_str.isEmpty()){
-    op_str="day";
-    }%>
-    var op="<%=op_str%>";
-    var starttime;
-    var endtime ;
-    if(step == null || step=="null"){
-        starttime = GetDateStr(now,-1);
-        if(op == "day"){
-            endtime = GetDateStr(now,1);
-        }else{
-            endtime = GetDateStr(new Date(),1);
-        }
 
-    }else if(step == "-24"){
-        starttime = GetDateStr(now,-1);
-        if(op == "day"){
-            endtime = GetDateStr(now,1);
-        }else{
-            endtime = GetDateStr(new Date(),1);
-        }
-    }else if(step == "-168"){
-        starttime = GetDateStr(now,-7);
-        if(op == "day"){
-            endtime = GetDateStr(now,1);
-        }else{
-            endtime = GetDateStr(new Date(),1);
-        }
-    }else if(step == "-720"){
-        starttime = GetDateStr(now,-30);
-        if(op == "day"){
-            endtime = GetDateStr(now,1);
-        }else{
-            endtime = GetDateStr(new Date(),1);
-        }
-    }else if(step == "24"){
-        if(op == "day"){
-            starttime = GetDateStr(now,0);
-            endtime = GetDateStr(now,1);
-        }else{
-            starttime = GetDateStr(now,0);
-            endtime = GetDateStr(new Date(),1);
-        }
-
-
-    }else if(step == "168"){
-        if(op == "day"){
-            starttime = GetDateStr(now,0);
-            endtime = GetDateStr(now,7);
-        }else{
-            starttime = GetDateStr(now,7);
-            endtime = GetDateStr(new Date(),1);
-        }
-
-    }else if(step == "720"){
-        if(op == "day"){
-            starttime = GetDateStr(now,0);
-            endtime = GetDateStr(now,30);
-        }else{
-            starttime = GetDateStr(now,30);
-            endtime = GetDateStr(new Date(),1);
-        }
-
-    }else {
-        starttime = GetDateStr(now,-1);
-        endtime = GetDateStr(now,1);
+} else if (step == "-24") {
+    starttime = GetDateStr(now, -1);
+    if (op == "day") {
+        endtime = GetDateStr(now, 1);
+    } else {
+        endtime = GetDateStr(new Date(), 1);
+    }
+} else if (step == "-168") {
+    starttime = GetDateStr(now, -7);
+    if (op == "day") {
+        endtime = GetDateStr(now, 1);
+    } else {
+        endtime = GetDateStr(new Date(), 1);
+    }
+} else if (step == "-720") {
+    starttime = GetDateStr(now, -30);
+    if (op == "day") {
+        endtime = GetDateStr(now, 1);
+    } else {
+        endtime = GetDateStr(new Date(), 1);
+    }
+} else if (step == "24") {
+    if (op == "day") {
+        starttime = GetDateStr(now, 0);
+        endtime = GetDateStr(now, 1);
+    } else {
+        starttime = GetDateStr(now, 0);
+        endtime = GetDateStr(new Date(), 1);
     }
 
 
-    $(document).ready(function () {
-        $.ajax({
-            async: false,
-            data: {
-                action: "reflash_attempts",
-                start:starttime
-            },
-            type: "POST",
-            url: "/monitor",
-            error: function () {
-            },
-            success: function (response, textStatus) {
-            }
+} else if (step == "168") {
+    if (op == "day") {
+        starttime = GetDateStr(now, 0);
+        endtime = GetDateStr(now, 7);
+    } else {
+        starttime = GetDateStr(now, 7);
+        endtime = GetDateStr(new Date(), 1);
+    }
+
+} else if (step == "720") {
+    if (op == "day") {
+        starttime = GetDateStr(now, 0);
+        endtime = GetDateStr(now, 30);
+    } else {
+        starttime = GetDateStr(now, 30);
+        endtime = GetDateStr(new Date(), 1);
+    }
+
+} else {
+    starttime = GetDateStr(now, -1);
+    endtime = GetDateStr(now, 1);
+}
 
 
-        });
-        $.ajax({
-            data: {
-                action: "runningtasks"
+$(document).ready(function () {
+    $.ajax({
+        async: false,
+        data: {
+            action: "reflash_attempts",
+            start: starttime
+        },
+        type: "POST",
+        url: "/monitor",
+        error: function () {
+        },
+        success: function (response, textStatus) {
 
-            },
-            type: "POST",
-            url: "/monitor",
-            error: function () {
-                $("#running_body").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
-                $("#running_body").addClass("align-center");
-            },
-            success: function (response, textStatus) {
-                $("#running_load").html("");
-                $("#running_body").html(response);
-            }
+        }
 
 
-        });
-        $.ajax({
-            data: {
-                action: "submitfail",
-                id:id
-            },
-            type: "POST",
-            url: "/monitor",
-            error: function () {
-                $("#submit_body").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
-                $("#submit_body").addClass("align-center");
-            },
-            success: function (response, textStatus) {
-                $("#submit_load").html("");
-                $("#submit_body").html(response);
-            }
-
-
-        });
-
-        $.ajax({
-            data: {
-                action: "dependencypass",
-                id:id
-            },
-            type: "POST",
-            url: "/monitor",
-            error: function () {
-                $("#dependency_body").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
-                $("#dependency_body").addClass("align-center");
-            },
-            success: function (response, textStatus) {
-                $("#dependency_load").html("");
-                $("#dependency_body").html(response);
-            }
-
-
-        });
-
-        $.ajax({
-            data: {
-                action: "failedtasks",
-                id:id
-            },
-            type: "POST",
-            url: "/monitor",
-            error: function () {
-                $("#failed_body").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
-                $("#failed_body").addClass("align-center");
-            },
-            success: function (response, textStatus) {
-                $("#failed_load").html("");
-                $("#failed_body").html(response);
-            }
-
-
-        });
-        $.ajax({
-            data: {
-                action: "dependencytimeout",
-                id:id
-            },
-            type: "POST",
-            url: "/monitor",
-            error: function () {
-                $("#dependency_timeout_body").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
-                $("#dependency_timeout_body").addClass("align-center");
-            },
-            success: function (response, textStatus) {
-                $("#dependency_timeout_load").html("");
-                $("#dependency_timeout_body").html(response);
-            }
-
-
-        });
-        $.ajax({
-            data: {
-                action: "timeout",
-                id:id
-            },
-            type: "POST",
-            url: "/monitor",
-            error: function () {
-                $("#timeout_body").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
-                $("#timeout_body").addClass("align-center");
-            },
-            success: function (response, textStatus) {
-                $("#timeout_load").html("");
-                $("#timeout_body").html(response);
-            }
-
-
-        });
     });
+    $.ajax({
+        data: {
+            action: "runningtasks"
+
+        },
+        type: "POST",
+        url: "/monitor",
+        error: function () {
+            $("#running_body").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
+            $("#running_body").addClass("align-center");
+        },
+        success: function (response, textStatus) {
+            $("#running_load").html("");
+            $("#running_body").html(response);
+        }
+
+
+    });
+    $.ajax({
+        data: {
+            action: "submitfail",
+            id: id
+        },
+        type: "POST",
+        url: "/monitor",
+        error: function () {
+            $("#submit_body").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
+            $("#submit_body").addClass("align-center");
+        },
+        success: function (response, textStatus) {
+            $("#submit_load").html("");
+            $("#submit_body").html(response);
+            $("#submitFeedBtn").on('click', function (e) {
+
+                var anchor = this;
+                if (e.ctrlKey || e.metaKey) {
+                    return true;
+                } else {
+                    e.preventDefault();
+                }
+                $.ajax({
+                    type: "get",
+                    url: anchor.href,
+                    error: function () {
+                        $("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>报错失败</strong></div>');
+                        $(".alert").alert();
+                    },
+                    success: function (response, textStatus) {
+                        $("#feedModal").html(response);
+                        $("#feedModal").modal().css({
+                            backdrop: false
+
+
+                        });
+
+
+                    }
+
+
+                });
+            });
+            $("#submitFeedQQBtn").on('click', function (e) {
+
+                var anchor = this;
+                if (e.ctrlKey || e.metaKey) {
+                    return true;
+                } else {
+                    e.preventDefault();
+                }
+                $.ajax({
+                    type: "get",
+                    url: anchor.href,
+                    error: function () {
+                        $("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>报错失败</strong></div>');
+                        $(".alert").alert();
+                    },
+                    success: function (response, textStatus) {
+                        $("#feedModal").html(response);
+                        $("#feedModal").modal().css({
+                            backdrop: false
+
+
+                        });
+
+
+                    }
+
+
+                });
+            });
+        }
+
+
+    });
+
+    $.ajax({
+        data: {
+            action: "dependencypass",
+            id: id
+        },
+        type: "POST",
+        url: "/monitor",
+        error: function () {
+            $("#dependency_body").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
+            $("#dependency_body").addClass("align-center");
+        },
+        success: function (response, textStatus) {
+            $("#dependency_load").html("");
+            $("#dependency_body").html(response);
+            $("#denpencyFeedBtn").on('click', function (e) {
+
+                var anchor = this;
+                if (e.ctrlKey || e.metaKey) {
+                    return true;
+                } else {
+                    e.preventDefault();
+                }
+                $.ajax({
+                    type: "get",
+                    url: anchor.href,
+                    error: function () {
+                        $("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>报错失败</strong></div>');
+                        $(".alert").alert();
+                    },
+                    success: function (response, textStatus) {
+                        $("#feedModal").html(response);
+                        $("#feedModal").modal().css({
+                            backdrop: false
+
+
+                        });
+
+
+                    }
+
+
+                });
+            });
+
+            $("#denpencyFeedQQBtn").on('click', function (e) {
+
+                var anchor = this;
+                if (e.ctrlKey || e.metaKey) {
+                    return true;
+                } else {
+                    e.preventDefault();
+                }
+                $.ajax({
+                    type: "get",
+                    url: anchor.href,
+                    error: function () {
+                        $("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>报错失败</strong></div>');
+                        $(".alert").alert();
+                    },
+                    success: function (response, textStatus) {
+                        $("#feedModal").html(response);
+                        $("#feedModal").modal().css({
+                            backdrop: false
+
+
+                        });
+
+
+                    }
+
+
+                });
+            });
+        }
+
+
+    });
+
+    $.ajax({
+        data: {
+            action: "failedtasks",
+            id: id
+        },
+        type: "POST",
+        url: "/monitor",
+        error: function () {
+            $("#failed_body").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
+            $("#failed_body").addClass("align-center");
+        },
+        success: function (response, textStatus) {
+            $("#failed_load").html("");
+            $("#failed_body").html(response);
+            $("#failedFeedBtn").on('click', function (e) {
+
+                var anchor = this;
+                if (e.ctrlKey || e.metaKey) {
+                    return true;
+                } else {
+                    e.preventDefault();
+                }
+                $.ajax({
+                    type: "get",
+                    url: anchor.href,
+                    error: function () {
+                        $("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>报错失败</strong></div>');
+                        $(".alert").alert();
+                    },
+                    success: function (response, textStatus) {
+                        $("#feedModal").html(response);
+                        $("#feedModal").modal().css({
+                            backdrop: false
+
+
+                        });
+
+
+                    }
+
+
+                });
+            });
+
+            $("#failedFeedQQBtn").on('click', function (e) {
+
+                var anchor = this;
+                if (e.ctrlKey || e.metaKey) {
+                    return true;
+                } else {
+                    e.preventDefault();
+                }
+                $.ajax({
+                    type: "get",
+                    url: anchor.href,
+                    error: function () {
+                        $("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>报错失败</strong></div>');
+                        $(".alert").alert();
+                    },
+                    success: function (response, textStatus) {
+                        $("#feedModal").html(response);
+                        $("#feedModal").modal().css({
+                            backdrop: false
+
+
+                        });
+
+
+                    }
+
+
+                });
+            });
+        }
+
+
+    });
+    $.ajax({
+        data: {
+            action: "dependencytimeout",
+            id: id
+        },
+        type: "POST",
+        url: "/monitor",
+        error: function () {
+            $("#dependency_timeout_body").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
+            $("#dependency_timeout_body").addClass("align-center");
+        },
+        success: function (response, textStatus) {
+            $("#dependency_timeout_load").html("");
+            $("#dependency_timeout_body").html(response);
+            $("#denpencyTimeoutFeedBtn").on('click', function (e) {
+
+                var anchor = this;
+                if (e.ctrlKey || e.metaKey) {
+                    return true;
+                } else {
+                    e.preventDefault();
+                }
+                $.ajax({
+                    type: "get",
+                    url: anchor.href,
+                    error: function () {
+                        $("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>报错失败</strong></div>');
+                        $(".alert").alert();
+                    },
+                    success: function (response, textStatus) {
+                        $("#feedModal").html(response);
+                        $("#feedModal").modal().css({
+                            backdrop: false
+
+
+                        });
+
+
+                    }
+
+
+                });
+            });
+
+            $("#denpencyTimeoutFeedQQBtn").on('click', function (e) {
+
+                var anchor = this;
+                if (e.ctrlKey || e.metaKey) {
+                    return true;
+                } else {
+                    e.preventDefault();
+                }
+                $.ajax({
+                    type: "get",
+                    url: anchor.href,
+                    error: function () {
+                        $("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>报错失败</strong></div>');
+                        $(".alert").alert();
+                    },
+                    success: function (response, textStatus) {
+                        $("#feedModal").html(response);
+                        $("#feedModal").modal().css({
+                            backdrop: false
+
+
+                        });
+
+
+                    }
+
+
+                });
+            });
+        }
+
+
+    });
+    $.ajax({
+        data: {
+            action: "timeout",
+            id: id
+        },
+        type: "POST",
+        url: "/monitor",
+        error: function () {
+            $("#timeout_body").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
+            $("#timeout_body").addClass("align-center");
+        },
+        success: function (response, textStatus) {
+            $("#timeout_load").html("");
+            $("#timeout_body").html(response);
+            $("#timeOutFeedBtn").on('click', function (e) {
+
+                var anchor = this;
+                if (e.ctrlKey || e.metaKey) {
+                    return true;
+                } else {
+                    e.preventDefault();
+                }
+                $.ajax({
+                    type: "get",
+                    url: anchor.href,
+                    error: function () {
+                        $("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>报错失败</strong></div>');
+                        $(".alert").alert();
+                    },
+                    success: function (response, textStatus) {
+                        $("#feedModal").html(response);
+                        $("#feedModal").modal().css({
+                            backdrop: false
+
+
+                        });
+
+
+                    }
+
+
+                });
+            });
+            $("#timeOutFeedQQBtn").on('click', function (e) {
+
+                var anchor = this;
+                if (e.ctrlKey || e.metaKey) {
+                    return true;
+                } else {
+                    e.preventDefault();
+                }
+                $.ajax({
+                    type: "get",
+                    url: anchor.href,
+                    error: function () {
+                        $("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>报错失败</strong></div>');
+                        $(".alert").alert();
+                    },
+                    success: function (response, textStatus) {
+                        $("#feedModal").html(response);
+                        $("#feedModal").modal().css({
+                            backdrop: false
+
+
+                        });
+
+
+                    }
+
+
+                });
+            });
+        }
+
+
+    });
+});
 
 </script>
 <script type="text/javascript" charset="utf-8" language="javascript" src="js/jquery.dataTables.js"></script>

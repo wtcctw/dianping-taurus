@@ -34,14 +34,7 @@
     <link rel="stylesheet" href="lib/ace/css/ace-skins.min.css"/>
 </head>
 <body data-spy="scroll">
-<%@page import="org.restlet.data.MediaType,
-                org.restlet.resource.ClientResource,
-                com.dp.bigdata.taurus.restlet.resource.IAttemptsResource,
-                com.dp.bigdata.taurus.restlet.shared.AttemptDTO,
-                java.text.SimpleDateFormat" %>
-<%@ page import="com.dp.bigdata.taurus.web.servlet.AttemptProxyServlet" %>
-<%@ page import="com.dp.bigdata.taurus.restlet.resource.IGetTasks" %>
-<%@ page import="com.dp.bigdata.taurus.generated.module.Task" %>
+
 <div class="navbar navbar-default" id="navbar">
     <script type="text/javascript">
         try {
@@ -269,7 +262,13 @@
         </div>
     </div>
 </div>
-
+<div class="modal fade" id="feedModal" role="dialog"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        </div>
+    </div>
+</div>
 <script type="text/javascript">
     jQuery(function ($) {
 
@@ -308,6 +307,7 @@
                         + "<th>返回值</th>"
                         + "<th>状态</th>"
                         + "<th class='center'>-</th>"
+                        + "<th class='center'>报错</th>"
                         + "</tr>"
                         + " </thead>"
                         + "<tbody>";
@@ -374,6 +374,31 @@
                         +"&status="
                         +state
                         +"'>日志</a></td>";
+
+                        attemptBody += "<td> <a id ='feedBtn' class='feedBtn'  href='feederror.jsp?id="
+                                +item.attemptId
+                                +"&status="
+                                +state
+                                +"&taskName="
+                                +item.taskName
+                                +"&ip="
+                                +item.exeHost
+                                +"&taskId="
+                                +taskID
+                                +"&feedtype=mail"
+                                +"'><i class='icon-envelope'></i></a> |";
+                        attemptBody += "<a id ='feedQQBtn' class='feedBtn'  href='feederror.jsp?id="
+                                +item.attemptId
+                                +"&status="
+                                +state
+                                +"&taskName="
+                                +item.taskName
+                                +"&ip="
+                                +item.exeHost
+                                +"&taskId="
+                                +taskID
+                                +"&feedtype=qq"
+                                +"'><img border='0' src='img/qq.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a></td>"
                     }
 
 
@@ -388,8 +413,69 @@
                     bAutoWidth: true,
                     "bPaginate": true
                 });
+                $("#feedBtn").on('click', function(e) {
+
+                    var anchor = this;
+                    if (e.ctrlKey || e.metaKey) {
+                        return true;
+                    } else {
+                        e.preventDefault();
+                    }
+                    $.ajax({
+                        type: "get",
+                        url: anchor.href,
+                        error: function () {
+                            $("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>报错失败</strong></div>');
+                            $(".alert").alert();
+                        },
+                        success: function (response, textStatus) {
+                            $("#feedModal").html(response);
+                            $("#feedModal").modal().css({
+                                backdrop:false
+
+
+                            });
+
+
+                        }
+
+
+                    });
+                });
+                $("#feedQQBtn").on('click', function(e) {
+
+                    var anchor = this;
+                    if (e.ctrlKey || e.metaKey) {
+                        return true;
+                    } else {
+                        e.preventDefault();
+                    }
+                    $.ajax({
+                        type: "get",
+                        url: anchor.href,
+                        error: function () {
+                            $("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>报错失败</strong></div>');
+                            $(".alert").alert();
+                        },
+                        success: function (response, textStatus) {
+                            $("#feedModal").html(response);
+                            $("#feedModal").modal().css({
+                                backdrop:false
+
+
+                            });
+
+
+                        }
+
+
+                    });
+                });
             }
     });
+
+
+
     });
 </script>
 
