@@ -240,7 +240,6 @@
 
             if (from != null && from == "monitor") {
 
-                alert(qq);
                 if (qq != null && qq != "") {
                     window.open('http://wpa.qq.com/msgrd?v=3&uin='+ qq +'&site=qq&menu=yes', 'newwindow', 'height=200,width=100,top=0,left=0,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no')
                 } else {
