@@ -124,9 +124,11 @@
                 try {
                     domain = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.deploy.weburl");
                 } catch (LionException e) {
-                    domain = "taurus.dp";
+
                     e.printStackTrace();
+                    domain = "taurus.dp";
                 }
+
                 logUrl = "http://"
                         + domain
                         + "/viewlog.jsp?id="
@@ -143,14 +145,15 @@
                     cr.accept(MediaType.APPLICATION_XML);
                     TaskDTO dto = taskResource.retrieve();
                      creator = dto.getCreator();
-                    qq="";
-                    for (UserDTO user : users) {
-                        if (user.getName().equals(creator)) {
-                            qq = user.getQq();
-                            break;
-                        }
-
+                    UserDTO userDTO = userMap.get(creator);
+                    if (userDTO != null){
+                        qq= userDTO.getQq();
+                    }else
+                    {
+                        qq = "";
                     }
+
+
                     %>
             <p>错误将报给: <%=creator%>, 他的QQ：<%=qq%>
             </p>
@@ -185,7 +188,8 @@
     var status = "<%=state%>";
     var ip = "<%=ip%>";
     var feedtype = "<%=feedType%>"
-
+    var from = "<%=from%>";
+    var qq = "<%=qq%>";
 
 
     function action_feed() {
@@ -230,43 +234,27 @@
                 });
             }
         } else {
-            var feedcontent = "任务名称：" + taskName + "\n"
-                    + "任务ID：" + taskId + "\n"
-                    + "AttemptId :" + attemptId + "\n"
-                    +"任务状态: " + status + "\n"
-                    + "部署主机：" + ip + "\n"
-                    + "报错人: <%=currentUser%> \n"
-                    + "任务日志: <%=logUrl%>";
 
-            <%
-            if (from!= null && from.equals("mointor")){
 
-                %>
 
-            var qq = "<%=qq%>"
-            if(qq !=null && qq!=""){
-                window.open('http://wpa.qq.com/msgrd?v=3&uin=767762405&site=qq&menu=yes', 'newwindow', 'height=200,width=100,top=0,left=0,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no')
-            }else{
-                bootbox.confirm("报错失败<hr><i class='icon-info red'>用户<%=creator%> 没有设置QQ号，无法使用QQ报错，请使用邮件报错</i>", function (result) {
-                    if (result) {
-                        ;
-                    }
-                });
-            }
-            <%
-            }else{
-             %>
+
+            if (from != null && from == "monitor") {
+
+                alert(qq);
+                if (qq != null && qq != "") {
+                    window.open('http://wpa.qq.com/msgrd?v=3&uin='+ qq +'&site=qq&menu=yes', 'newwindow', 'height=200,width=100,top=0,left=0,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no')
+                } else {
+                    bootbox.confirm("报错失败<hr><i class='icon-info red'>用户<%=creator%> 没有设置QQ号，无法使用QQ报错，请使用邮件报错</i>", function (result) {
+                        if (result) {
+                            ;
+                        }
+                    });
+                }
+
+            } else {
                 window.open('http://wpa.qq.com/msgrd?v=3&uin=767762405&site=qq&menu=yes', 'newwindow', 'height=200,width=100,top=0,left=0,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no')
             }
-            <%
-            }
-
-
-    %>
-
-
-
-
+        }
 
     }
 

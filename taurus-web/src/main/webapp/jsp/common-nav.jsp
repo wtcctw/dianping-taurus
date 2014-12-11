@@ -6,6 +6,7 @@
 <%@ page import="com.dianping.lion.client.ConfigCache" %>
 <%@ page import="com.dianping.lion.EnvZooKeeperConfig" %>
 <%@ page import="com.dianping.lion.client.LionException" %>
+<%@ page import="java.util.HashMap" %>
 <%
     String currentUser = (String) session.getAttribute(com.dp.bigdata.taurus.web.servlet.LoginServlet.USER_NAME);
     if (currentUser != null) {
@@ -28,7 +29,9 @@
     IUsersResource userResource = cr.wrap(IUsersResource.class);
     cr.accept(MediaType.APPLICATION_XML);
     ArrayList<UserDTO> users = userResource.retrieve();
+    HashMap<String, UserDTO>  userMap = new HashMap<String, UserDTO>();
     for (UserDTO user : users) {
+        userMap.put(user.getName(),user);
         if (user.getName().equals(currentUser)) {
 
             userId = user.getId();

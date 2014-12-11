@@ -28,7 +28,7 @@ jQuery(function ($) {
             "bAutoWidth": true,
             "bPaginate": true,
             "bFilter": false,
-            "bInfo": false,
+            "bInfo": true,
             "bLengthChange": true,
             "aoColumns": [
                 null,
@@ -42,7 +42,7 @@ jQuery(function ($) {
             "bAutoWidth": true,
             "bPaginate": true,
             "bFilter": false,
-            "bInfo": false,
+            "bInfo": true,
             "bLengthChange": true,
             "aoColumns": [
                 null,
@@ -57,7 +57,7 @@ jQuery(function ($) {
             "bAutoWidth": true,
             "bPaginate": true,
             "bFilter": false,
-            "bInfo": false,
+            "bInfo": true,
             "bLengthChange": true,
             "aoColumns": [
                 { "sType": "html-percent", "aTargets": [1] },
@@ -75,7 +75,7 @@ jQuery(function ($) {
             "bAutoWidth": true,
             "bPaginate": true,
             "bFilter": false,
-            "bInfo": false,
+            "bInfo": true,
             "bLengthChange": true,
             "aoColumns": [
                 null,
@@ -92,7 +92,7 @@ jQuery(function ($) {
             "bAutoWidth": true,
             "bPaginate": true,
             "bFilter": false,
-            "bInfo": false,
+            "bInfo": true,
             "bLengthChange": true,
             "aoColumns": [
                 null,
@@ -110,7 +110,7 @@ jQuery(function ($) {
             "bAutoWidth": true,
             "bPaginate": true,
             "bFilter": false,
-            "bInfo": false,
+            "bInfo": true,
             "bLengthChange": true,
             "aoColumns": [
                 null,
@@ -126,7 +126,7 @@ jQuery(function ($) {
             "bAutoWidth": true,
             "bPaginate": true,
             "bFilter": false,
-            "bInfo": false,
+            "bInfo": true,
             "bLengthChange": true,
             "aoColumns": [
                 null,
@@ -142,7 +142,7 @@ jQuery(function ($) {
             "bAutoWidth": true,
             "bPaginate": true,
             "bFilter": false,
-            "bInfo": false,
+            "bInfo": true,
             "bLengthChange": true,
             "aoColumns": [
                 null,

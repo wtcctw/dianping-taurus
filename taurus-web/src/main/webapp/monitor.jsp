@@ -169,6 +169,12 @@
                 <span class="menu-text"> 用户设置 </span>
             </a>
         </li>
+        <li id="resign">
+            <a href="resign.jsp" target="_self">
+                <i class="icon-retweet"></i>
+                <span class="menu-text"> 任务交接 </span>
+            </a>
+        </li>
         <li id="feedback">
             <a href="feedback.jsp" target="_self">
                 <i class="icon-comments"></i>
@@ -656,6 +662,7 @@ if (step == null || step == "null") {
 
 
 $(document).ready(function () {
+    var load_count = 5;
     $.ajax({
         async: false,
         data: {
@@ -704,35 +711,40 @@ $(document).ready(function () {
         success: function (response, textStatus) {
             $("#submit_load").html("");
             $("#submit_body").html(response);
-            $(".feedBtn").on('click', function (e) {
 
-                var anchor = this;
-                if (e.ctrlKey || e.metaKey) {
-                    return true;
-                } else {
-                    e.preventDefault();
-                }
-                $.ajax({
-                    type: "get",
-                    url: anchor.href,
-                    error: function () {
-                        $("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>报错失败</strong></div>');
-                        $(".alert").alert();
-                    },
-                    success: function (response, textStatus) {
-                        $("#feedModal").html(response);
-                        $("#feedModal").modal().css({
-                            backdrop: false
+            load_count = load_count - 1;
+            if(load_count == 0){
+                $(".feedBtn").on('click', function (e) {
 
-
-                        });
-
-
+                    var anchor = this;
+                    if (e.ctrlKey || e.metaKey) {
+                        return true;
+                    } else {
+                        e.preventDefault();
                     }
+                    $.ajax({
+                        type: "get",
+                        url: anchor.href,
+                        error: function () {
+                            $("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>报错失败</strong></div>');
+                            $(".alert").alert();
+                        },
+                        success: function (response, textStatus) {
+                            $("#feedModal").html(response);
+                            $("#feedModal").modal().css({
+                                backdrop: false
 
 
+                            });
+
+
+                        }
+
+
+                    });
                 });
-            });
+            }
+
 
         }
 
@@ -755,35 +767,38 @@ $(document).ready(function () {
             $("#dependency_body").html(response);
 
 
-            $(".feedBtn").on('click', function (e) {
+            load_count = load_count - 1;
+            if(load_count == 0){
+                $(".feedBtn").on('click', function (e) {
 
-                var anchor = this;
-                if (e.ctrlKey || e.metaKey) {
-                    return true;
-                } else {
-                    e.preventDefault();
-                }
-                $.ajax({
-                    type: "get",
-                    url: anchor.href,
-                    error: function () {
-                        $("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>报错失败</strong></div>');
-                        $(".alert").alert();
-                    },
-                    success: function (response, textStatus) {
-                        $("#feedModal").html(response);
-                        $("#feedModal").modal().css({
-                            backdrop: false
-
-
-                        });
-
-
+                    var anchor = this;
+                    if (e.ctrlKey || e.metaKey) {
+                        return true;
+                    } else {
+                        e.preventDefault();
                     }
+                    $.ajax({
+                        type: "get",
+                        url: anchor.href,
+                        error: function () {
+                            $("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>报错失败</strong></div>');
+                            $(".alert").alert();
+                        },
+                        success: function (response, textStatus) {
+                            $("#feedModal").html(response);
+                            $("#feedModal").modal().css({
+                                backdrop: false
 
 
+                            });
+
+
+                        }
+
+
+                    });
                 });
-            });
+            }
         }
 
 
@@ -803,35 +818,38 @@ $(document).ready(function () {
         success: function (response, textStatus) {
             $("#failed_load").html("");
             $("#failed_body").html(response);
-            $(".feedBtn").on('click', function (e) {
+            load_count = load_count - 1;
+            if(load_count == 0){
+                $(".feedBtn").on('click', function (e) {
 
-                var anchor = this;
-                if (e.ctrlKey || e.metaKey) {
-                    return true;
-                } else {
-                    e.preventDefault();
-                }
-                $.ajax({
-                    type: "get",
-                    url: anchor.href,
-                    error: function () {
-                        $("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>报错失败</strong></div>');
-                        $(".alert").alert();
-                    },
-                    success: function (response, textStatus) {
-                        $("#feedModal").html(response);
-                        $("#feedModal").modal().css({
-                            backdrop: false
-
-
-                        });
-
-
+                    var anchor = this;
+                    if (e.ctrlKey || e.metaKey) {
+                        return true;
+                    } else {
+                        e.preventDefault();
                     }
+                    $.ajax({
+                        type: "get",
+                        url: anchor.href,
+                        error: function () {
+                            $("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>报错失败</strong></div>');
+                            $(".alert").alert();
+                        },
+                        success: function (response, textStatus) {
+                            $("#feedModal").html(response);
+                            $("#feedModal").modal().css({
+                                backdrop: false
 
 
+                            });
+
+
+                        }
+
+
+                    });
                 });
-            });
+            }
 
 
         }
@@ -852,35 +870,38 @@ $(document).ready(function () {
         success: function (response, textStatus) {
             $("#dependency_timeout_load").html("");
             $("#dependency_timeout_body").html(response);
-            $(".feedBtn").on('click', function (e) {
+            load_count = load_count - 1;
+            if(load_count == 0){
+                $(".feedBtn").on('click', function (e) {
 
-                var anchor = this;
-                if (e.ctrlKey || e.metaKey) {
-                    return true;
-                } else {
-                    e.preventDefault();
-                }
-                $.ajax({
-                    type: "get",
-                    url: anchor.href,
-                    error: function () {
-                        $("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>报错失败</strong></div>');
-                        $(".alert").alert();
-                    },
-                    success: function (response, textStatus) {
-                        $("#feedModal").html(response);
-                        $("#feedModal").modal().css({
-                            backdrop: false
-
-
-                        });
-
-
+                    var anchor = this;
+                    if (e.ctrlKey || e.metaKey) {
+                        return true;
+                    } else {
+                        e.preventDefault();
                     }
+                    $.ajax({
+                        type: "get",
+                        url: anchor.href,
+                        error: function () {
+                            $("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>报错失败</strong></div>');
+                            $(".alert").alert();
+                        },
+                        success: function (response, textStatus) {
+                            $("#feedModal").html(response);
+                            $("#feedModal").modal().css({
+                                backdrop: false
 
 
+                            });
+
+
+                        }
+
+
+                    });
                 });
-            });
+            }
 
 
         }
@@ -901,35 +922,38 @@ $(document).ready(function () {
         success: function (response, textStatus) {
             $("#timeout_load").html("");
             $("#timeout_body").html(response);
-            $(".feedBtn").on('click', function (e) {
+            load_count = load_count - 1;
+            if(load_count == 0){
+                $(".feedBtn").on('click', function (e) {
 
-                var anchor = this;
-                if (e.ctrlKey || e.metaKey) {
-                    return true;
-                } else {
-                    e.preventDefault();
-                }
-                $.ajax({
-                    type: "get",
-                    url: anchor.href,
-                    error: function () {
-                        $("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>报错失败</strong></div>');
-                        $(".alert").alert();
-                    },
-                    success: function (response, textStatus) {
-                        $("#feedModal").html(response);
-                        $("#feedModal").modal().css({
-                            backdrop: false
-
-
-                        });
-
-
+                    var anchor = this;
+                    if (e.ctrlKey || e.metaKey) {
+                        return true;
+                    } else {
+                        e.preventDefault();
                     }
+                    $.ajax({
+                        type: "get",
+                        url: anchor.href,
+                        error: function () {
+                            $("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>报错失败</strong></div>');
+                            $(".alert").alert();
+                        },
+                        success: function (response, textStatus) {
+                            $("#feedModal").html(response);
+                            $("#feedModal").modal().css({
+                                backdrop: false
 
 
+                            });
+
+
+                        }
+
+
+                    });
                 });
-            });
+            }
 
         }
 
