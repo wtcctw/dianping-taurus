@@ -194,7 +194,12 @@
             </a>
         </li>
 
-
+        <li id="power">
+            <a href="#" target="_self">
+                <i class="icon-copyright-mark"></i>
+                <span class="menu-text"> © 点评工具组 </span>
+            </a>
+        </li>
     </ul>
     <!-- /.nav-list -->
 
