@@ -195,8 +195,7 @@
         </li>
         <li id="power">
             <a href="#" target="_self">
-                <i class="icon-copyright-mark"></i>
-                <span class="menu-text"> © 点评工具组 </span>
+                <span class="menu-text" style="padding-left: 10px"> ©&nbsp;&nbsp;&nbsp;&nbsp;点评工具组 </span>
             </a>
         </li>
 
