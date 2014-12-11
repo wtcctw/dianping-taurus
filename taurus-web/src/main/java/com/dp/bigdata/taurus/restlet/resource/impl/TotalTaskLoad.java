@@ -19,6 +19,7 @@ public class TotalTaskLoad extends ServerResource implements ITotalTaskLoad {
     @Autowired
     private TaskAttemptMapper taskAttemptMapper;
 
+
     @Override
     public String retrieve() {
         String hostInfo = "";

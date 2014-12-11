@@ -50,6 +50,7 @@ public class MonitorServlet extends HttpServlet {
     private static final String HOST = "host";
     private static final String TOTAL_TASK_LOAD = "totaltaskload";
     private static final String GROUP_TASK = "grouptask";
+    private static final String TOTAL_TASK = "totaltask";
     private static final String FAILED_TASK_LOAD = "failedtaskload";
     private static final String USER_TASK = "usertask";
     private static final String HOST_LOAD = "hostload";
@@ -231,9 +232,20 @@ public class MonitorServlet extends HttpServlet {
             String end = request.getParameter("end");
 
             cr = new ClientResource(RESTLET_URL_BASE + "grouptasks/" + username + "/" + start + "/" + end);
-            IUserTasks userTasks = cr.wrap(IUserTasks.class);
+            IGroupTasks groupTasks = cr.wrap(IGroupTasks.class);
             cr.accept(MediaType.APPLICATION_XML);
-            String jsonString = userTasks.retrieve();
+            String jsonString = groupTasks.retrieve();
+            output.write(jsonString.getBytes());
+            output.close();
+        }else if (TOTAL_TASK.equals(action)) {
+            OutputStream output = response.getOutputStream();
+            String start = request.getParameter("start");
+            String end = request.getParameter("end");
+
+            cr = new ClientResource(RESTLET_URL_BASE + "totaltasks/"   + start + "/" + end);
+            ITotalTask totalTasks = cr.wrap(ITotalTask.class);
+            cr.accept(MediaType.APPLICATION_XML);
+            String jsonString = totalTasks.retrieve();
             output.write(jsonString.getBytes());
             output.close();
         } else if (SQL_QUERY.equals(action)) {

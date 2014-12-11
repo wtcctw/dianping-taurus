@@ -46,16 +46,18 @@
     <link rel="stylesheet" href="resource/css/monitor-center.css">
     <link rel="stylesheet" href="css/common.css">
     <style>
-        .dayreport{
-            float:left
+        .dayreport {
+            float: left
         }
-        .tip{
-            text-align:center;
-            margin:0 auto;
+
+        .tip {
+            text-align: center;
+            margin: 0 auto;
 
         }
-        .historyreport{
-            float:right
+
+        .historyreport {
+            float: right
         }
 
     </style>
@@ -128,10 +130,17 @@
             <!-- /.ace-nav -->
         </div>
         <div class="pull-right" style="margin:10px;color: white;">
-                <a target="_blank" style="margin:10px;color: white;"  href="http://shang.qq.com/wpa/qunwpa?idkey=6a730c052b1b42ce027179ba1f1568d0e5e598c456ccb6798be582b9a9c931f7"><img border="0" src="img/group.png" width="20" height="20" alt="Taurus后援团" title="Taurus后援团">点我加入Taurus后援团 155326270</a>
+            <a target="_blank" style="margin:10px;color: white;"
+               href="http://shang.qq.com/wpa/qunwpa?idkey=6a730c052b1b42ce027179ba1f1568d0e5e598c456ccb6798be582b9a9c931f7"><img
+                    border="0" src="img/group.png" width="20" height="20" alt="Taurus后援团" title="Taurus后援团">点我加入Taurus后援团
+                155326270</a>
         </div>
 
-        <div class="pull-right ng-binding" style="margin:10px;color: white;" ng-bind="monitorMessage"><i class="icon-user-md">开发者：李明  <a target="_blank" style="margin:10px;color: white;" href="http://wpa.qq.com/msgrd?v=3&uin=767762405&site=qq&menu=yes"><img border="0" src="img/qq.png"  width="20" height="20" color="white" alt="点我报错" title="点我报错"/>点我报错</a></i> <i class="icon-phone">: 13661871541</i></div>
+        <div class="pull-right ng-binding" style="margin:10px;color: white;" ng-bind="monitorMessage"><i
+                class="icon-user-md">开发者：李明 <a target="_blank" style="margin:10px;color: white;"
+                                               href="http://wpa.qq.com/msgrd?v=3&uin=767762405&site=qq&menu=yes"><img
+                border="0" src="img/qq.png" width="20" height="20" color="white" alt="点我报错" title="点我报错"/>点我报错</a></i>
+            <i class="icon-phone">: 13661871541</i></div>
 
     </div>
     <!-- /.container -->
@@ -268,185 +277,185 @@
 
         String step_str = request.getParameter("step");
         String now = request.getParameter("date");
-        System.out.println(step_str+"#"+now);
+        System.out.println(step_str + "#" + now);
         int step = -24;
     %>
 
     <div class="col-sm-5">
-    <a class="atip" data-toggle="tooltip" data-placement="top"
-       data-original-title="查看一天内的数据">[天] </a>
-    &nbsp;&nbsp;|&nbsp;&nbsp;
-    <a class="atip"
-            <% if (now == null) {
-                now = df.format(time);
-            }
-                step = -720;
-            %>
-       href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
-       data-toggle="tooltip" data-placement="top"
-       data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime)) %>~<%=formatter.format(new Date(df.parse(now).getTime()))%>]">[-1m] </a>
-    &nbsp;&nbsp; |&nbsp;&nbsp;
-    <a class="atip"
-            <% if (now == null) {
-                now = df.format(time);
-            }
-                step = -168;
-            %>
-       href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
-       data-toggle="tooltip" data-placement="top"
-       data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>
+        <a class="atip" data-toggle="tooltip" data-placement="top"
+           data-original-title="查看一天内的数据">[天] </a>
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        <a class="atip"
+                <% if (now == null) {
+                    now = df.format(time);
+                }
+                    step = -720;
+                %>
+           href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+           data-toggle="tooltip" data-placement="top"
+           data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime)) %>~<%=formatter.format(new Date(df.parse(now).getTime()))%>]">[-1m] </a>
+        &nbsp;&nbsp; |&nbsp;&nbsp;
+        <a class="atip"
+                <% if (now == null) {
+                    now = df.format(time);
+                }
+                    step = -168;
+                %>
+           href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+           data-toggle="tooltip" data-placement="top"
+           data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>
     ~<%=formatter.format(new Date(df.parse(now).getTime()))%>]">[-1w] </a>
-    &nbsp;&nbsp; |&nbsp;&nbsp;
-    <a class="atip"
-            <% if (now == null) {
-                now = df.format(time);
-            }
-                step = -24;
-            %>
-       href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%>"
-       data-toggle="tooltip" data-placement="top"
-       data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>
+        &nbsp;&nbsp; |&nbsp;&nbsp;
+        <a class="atip"
+                <% if (now == null) {
+                    now = df.format(time);
+                }
+                    step = -24;
+                %>
+           href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%>"
+           data-toggle="tooltip" data-placement="top"
+           data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>
     ~<%=formatter.format(new Date(df.parse(now).getTime()))%>]">[-1d] </a>
 
-    &nbsp;&nbsp; |&nbsp;&nbsp;
-    <a class="atip"  <% if (now == null) {
-        now = df.format(time);
-    }
-        step = 24;
-        if (df.parse(now).after(time)) {%>
-       href="index.jsp?step=-24&date＝<%=df.format(time)%> "
-            <% } else {%>
-       href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
-            <% }
-            %>
-       data-toggle="tooltip" data-placement="top"
-       data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime()))%>~<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>]">[+1d] </a>
-    &nbsp;&nbsp; |&nbsp;&nbsp;
-    <a class="atip"  <% if (now == null) {
-        now = df.format(time);
-    }
-        step = 168;
-        if (df.parse(now).after(time)) {%>
-       href="index.jsp?step=-24&op=day&date＝<%=df.format(time)%> "
-            <% } else {%>
-       href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
-            <% }
-            %>
-       data-toggle="tooltip" data-placement="top"
-       data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime()))%>~<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>]">[+1w] </a>
-    &nbsp;&nbsp; |&nbsp;&nbsp;
-    <a class="atip"  <% if (now == null) {
-        now = df.format(time);
-    }
-        step = 720;
-        if (df.parse(now).after(time)) {%>
-       href="index.jsp?step=-24&op=day&date＝<%=df.format(time)%> "
-            <% } else {%>
-       href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
-            <% }
-            %>
-       data-toggle="tooltip" data-placement="top"
-       data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime()))%>~<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>]">[+1m] </a>
+        &nbsp;&nbsp; |&nbsp;&nbsp;
+        <a class="atip"  <% if (now == null) {
+            now = df.format(time);
+        }
+            step = 24;
+            if (df.parse(now).after(time)) {%>
+           href="index.jsp?step=-24&date＝<%=df.format(time)%> "
+                <% } else {%>
+           href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+                <% }
+                %>
+           data-toggle="tooltip" data-placement="top"
+           data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime()))%>~<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>]">[+1d] </a>
+        &nbsp;&nbsp; |&nbsp;&nbsp;
+        <a class="atip"  <% if (now == null) {
+            now = df.format(time);
+        }
+            step = 168;
+            if (df.parse(now).after(time)) {%>
+           href="index.jsp?step=-24&op=day&date＝<%=df.format(time)%> "
+                <% } else {%>
+           href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+                <% }
+                %>
+           data-toggle="tooltip" data-placement="top"
+           data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime()))%>~<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>]">[+1w] </a>
+        &nbsp;&nbsp; |&nbsp;&nbsp;
+        <a class="atip"  <% if (now == null) {
+            now = df.format(time);
+        }
+            step = 720;
+            if (df.parse(now).after(time)) {%>
+           href="index.jsp?step=-24&op=day&date＝<%=df.format(time)%> "
+                <% } else {%>
+           href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+                <% }
+                %>
+           data-toggle="tooltip" data-placement="top"
+           data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime()))%>~<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>]">[+1m] </a>
     </div>
 
     <div class="col-sm-2">
-    <a class="atip" data-toggle="tooltip" data-placement="top"
-       data-original-title="当你点击了[-1h]|[-1d]|[-1w]|[-1m]后，在想切换到当前页面时，请点击[当天]，刷新页面无效噢～">[注意] </a>
-    &nbsp;&nbsp;|&nbsp;&nbsp;
+        <a class="atip" data-toggle="tooltip" data-placement="top"
+           data-original-title="当你点击了[-1h]|[-1d]|[-1w]|[-1m]后，在想切换到当前页面时，请点击[当天]，刷新页面无效噢～">[注意] </a>
+        &nbsp;&nbsp;|&nbsp;&nbsp;
 
 
-    <a class="atip"
-       href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date())%>"
-       data-toggle="tooltip" data-placement="top"
-       data-original-title=" 时间区间[<%=formatter.format(new Date(new Date().getTime() -24*hourTime))%>~<%=formatter.format(new Date())%>]">[当天] </a>
+        <a class="atip"
+           href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date())%>"
+           data-toggle="tooltip" data-placement="top"
+           data-original-title=" 时间区间[<%=formatter.format(new Date(new Date().getTime() -24*hourTime))%>~<%=formatter.format(new Date())%>]">[当天] </a>
     </div>
     <div class="col-sm-5 historyreport">
 
-    <a class="atip" data-toggle="tooltip" data-placement="top"
-       data-original-title="查看到今天所有的数据">[历史数据] </a>
-    &nbsp;&nbsp;|&nbsp;&nbsp;
-    <a class="atip"
-            <% if (now == null) {
-                now = df.format(time);
-            }
-                step = -720;
-            %>
-       href="index.jsp?step=<%=step%>&op=history&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
-       data-toggle="tooltip" data-placement="top"
-       data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime)) %>~<%=formatter.format(new Date())%>]">[-1m] </a>
-    &nbsp;&nbsp; |&nbsp;&nbsp;
-    <a class="atip"
-            <% if (now == null) {
-                now = df.format(time);
-            }
-                step = -168;
-            %>
-       href="index.jsp?step=<%=step%>&op=history&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
-       data-toggle="tooltip" data-placement="top"
-       data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>
+        <a class="atip" data-toggle="tooltip" data-placement="top"
+           data-original-title="查看到今天所有的数据">[历史数据] </a>
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        <a class="atip"
+                <% if (now == null) {
+                    now = df.format(time);
+                }
+                    step = -720;
+                %>
+           href="index.jsp?step=<%=step%>&op=history&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+           data-toggle="tooltip" data-placement="top"
+           data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime)) %>~<%=formatter.format(new Date())%>]">[-1m] </a>
+        &nbsp;&nbsp; |&nbsp;&nbsp;
+        <a class="atip"
+                <% if (now == null) {
+                    now = df.format(time);
+                }
+                    step = -168;
+                %>
+           href="index.jsp?step=<%=step%>&op=history&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+           data-toggle="tooltip" data-placement="top"
+           data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>
     ~<%=formatter.format(new Date())%>]">[-1w] </a>
-    &nbsp;&nbsp; |&nbsp;&nbsp;
-    <a class="atip"
-            <% if (now == null) {
-                now = df.format(time);
-            }
-                step = -24;
-            %>
-       href="index.jsp?step=<%=step%>&op=history&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%>"
-       data-toggle="tooltip" data-placement="top"
-       data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>
+        &nbsp;&nbsp; |&nbsp;&nbsp;
+        <a class="atip"
+                <% if (now == null) {
+                    now = df.format(time);
+                }
+                    step = -24;
+                %>
+           href="index.jsp?step=<%=step%>&op=history&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%>"
+           data-toggle="tooltip" data-placement="top"
+           data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>
     ~<%=formatter.format(new Date())%>]">[-1d] </a>
-    &nbsp;&nbsp; |&nbsp;&nbsp;
+        &nbsp;&nbsp; |&nbsp;&nbsp;
 
 
-    <a class="atip"  <% if (now == null) {
-        now = df.format(time);
-    }
-        step = 24;
-        if (df.parse(now).after(time)) {%>
-       href="index.jsp?step=-24&date＝<%=df.format(time)%> "
-            <% } else {%>
-       href="index.jsp?step=<%=step%>&op=history&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
-            <% }
-            %>
-       data-toggle="tooltip" data-placement="top"
-       data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>~<%=formatter.format(new Date())%>]">[+1d] </a>
-    &nbsp;&nbsp; |&nbsp;&nbsp;
-    <a class="atip"  <% if (now == null) {
-        now = df.format(time);
-    }
-        step = 168;
-        if (df.parse(now).after(time)) {%>
-       href="index.jsp?step=-24&op=history&date＝<%=df.format(time)%> "
-            <% } else {%>
-       href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
-            <% }
-            %>
-       data-toggle="tooltip" data-placement="top"
-       data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>~<%=formatter.format(new Date())%>]">[+1w] </a>
-    &nbsp;&nbsp; |&nbsp;&nbsp;
-    <a class="atip"  <% if (now == null) {
-        now = df.format(time);
-    }
-        step = 720;
-        if (df.parse(now).after(time)) {%>
-       href="index.jsp?step=-24&op=history&date＝<%=df.format(time)%> "
-            <% } else {%>
-       href="index.jsp?step=<%=step%>&op=history&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
-            <% }
-            %>
-       data-toggle="tooltip" data-placement="top"
-       data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>~<%=formatter.format(new Date())%>]">[+1m] </a>
+        <a class="atip"  <% if (now == null) {
+            now = df.format(time);
+        }
+            step = 24;
+            if (df.parse(now).after(time)) {%>
+           href="index.jsp?step=-24&date＝<%=df.format(time)%> "
+                <% } else {%>
+           href="index.jsp?step=<%=step%>&op=history&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+                <% }
+                %>
+           data-toggle="tooltip" data-placement="top"
+           data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>~<%=formatter.format(new Date())%>]">[+1d] </a>
+        &nbsp;&nbsp; |&nbsp;&nbsp;
+        <a class="atip"  <% if (now == null) {
+            now = df.format(time);
+        }
+            step = 168;
+            if (df.parse(now).after(time)) {%>
+           href="index.jsp?step=-24&op=history&date＝<%=df.format(time)%> "
+                <% } else {%>
+           href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+                <% }
+                %>
+           data-toggle="tooltip" data-placement="top"
+           data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>~<%=formatter.format(new Date())%>]">[+1w] </a>
+        &nbsp;&nbsp; |&nbsp;&nbsp;
+        <a class="atip"  <% if (now == null) {
+            now = df.format(time);
+        }
+            step = 720;
+            if (df.parse(now).after(time)) {%>
+           href="index.jsp?step=-24&op=history&date＝<%=df.format(time)%> "
+                <% } else {%>
+           href="index.jsp?step=<%=step%>&op=history&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+                <% }
+                %>
+           data-toggle="tooltip" data-placement="top"
+           data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>~<%=formatter.format(new Date())%>]">[+1m] </a>
     </div>
 </div>
-<div id="userpanel">
+<div id="total">
     <div class="col-sm-12">
-        <div class="col-sm-6">
+        <div class="col-sm-12">
             <div class="widget-box">
                 <div class="widget-header widget-header-flat widget-header-small">
                     <h5 class="widget-title">
-                        <i class="icon-signal"></i>
-                        我的任务成功率
+                        <i class="icon-dashboard"></i>
+                        所有的任务成功率
                     </h5>
 
                     <div class="widget-toolbar">
@@ -457,81 +466,9 @@
                 </div>
 
                 <div class="widget-body">
-                    <div class="widget-main" id="user-widget-main">
+                    <div class="widget-main" id="total-widget-main">
 
-                        <div id="mytasks"><i class="icon-spinner icon-spin icon-large"></i></div>
-
-                        <div class="hr hr8 hr-double"></div>
-
-                        <div class="clearfix">
-                            <div class="col-sm-4">
-														<span class="grey">
-															<i class="icon-lightbulb green"></i>
-															&nbsp; 成功
-														</span>
-                                <h4 class="smaller pull-right" id="succtask"></h4>
-                            </div>
-
-                            <div class="col-sm-4">
-														<span class="grey">
-															<i class="icon-lightbulb red"></i>
-															&nbsp; 失败
-														</span>
-                                <h4 class="smaller pull-right " id="failtask"></h4>
-                            </div>
-                            <div class="col-sm-4">
-														<span class="grey">
-															<i class="icon-lightbulb red"></i>
-															&nbsp; 杀死
-														</span>
-                                <h4 class="smaller pull-right " id="killtask"></h4>
-                            </div>
-                            <div class="col-sm-4">
-														<span class="grey">
-															<i class="icon-lightbulb btn-yellow"></i>
-															&nbsp; 超时
-														</span>
-                                <h4 class="smaller pull-right " id="timeouttask"></h4>
-                            </div>
-                            <div class="col-sm-4">
-														<span class="grey">
-															<i class="icon-lightbulb "></i>
-															&nbsp; 拥堵
-                                                            <h4 class="smaller pull-right " id="congesttask"></h4>
-														</span>
-
-                            </div>
-
-
-                            <!-- /section:custom/extra.grid -->
-                        </div>
-                    </div>
-                    <!-- /.widget-main -->
-                </div>
-                <!-- /.widget-body -->
-            </div>
-            <!-- /.widget-box -->
-
-        </div>
-        <div class="col-sm-6">
-            <div class="widget-box">
-                <div class="widget-header widget-header-flat widget-header-small">
-                    <h5 class="widget-title">
-                        <i class="icon-signal"></i>
-                        我的组的任务成功率
-                    </h5>
-
-                    <div class="widget-toolbar">
-                        <a href="#" data-action="collapse">
-                            <i class="icon-chevron-up"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="widget-body">
-                    <div class="widget-main" id="group-widget-main">
-
-                        <div id="grouptasks"><i class="icon-spinner icon-spin icon-large"></i></div>
+                        <div id="totaltasks"><i class="icon-spinner icon-spin icon-large"></i></div>
 
                         <div class="hr hr8 hr-double"></div>
 
@@ -541,7 +478,7 @@
 															<i class="icon-lightbulb green"></i>
 															&nbsp; 成功
 														</span>
-                                <h4 class="smaller pull-right" id="groupsucctask"></h4>
+                                <h4 class="smaller pull-right" id="totalsucctask"></h4>
                             </div>
 
                             <div class="col-sm-4">
@@ -549,28 +486,28 @@
 															<i class="icon-lightbulb red"></i>
 															&nbsp; 失败
 														</span>
-                                <h4 class="smaller pull-right " id="groupfailtask"></h4>
+                                <h4 class="smaller pull-right " id="totalfailtask"></h4>
                             </div>
                             <div class="col-sm-4">
 														<span class="grey">
 															<i class="icon-lightbulb red"></i>
 															&nbsp; 杀死
 														</span>
-                                <h4 class="smaller pull-right " id="groupkilltask"></h4>
+                                <h4 class="smaller pull-right " id="totalkilltask"></h4>
                             </div>
                             <div class="col-sm-4">
 														<span class="grey">
 															<i class="icon-lightbulb btn-yellow"></i>
 															&nbsp; 超时
 														</span>
-                                <h4 class="smaller pull-right " id="grouptimouttask"></h4>
+                                <h4 class="smaller pull-right " id="totaltimouttask"></h4>
                             </div>
                             <div class="col-sm-4">
 														<span class="grey">
 															<i class="icon-lightbulb"></i>
 															&nbsp; 拥堵
 														</span>
-                                <h4 class="smaller pull-right " id="groupcongesttask"></h4>
+                                <h4 class="smaller pull-right " id="totalcongesttask"></h4>
                             </div>
 
                             <!-- /section:custom/extra.grid -->
@@ -583,41 +520,12 @@
             <!-- /.widget-box -->
 
         </div>
-    </div>
-    <div class="col-sm-12">
-        <div class="col-sm-6">
+        <div class="col-sm-12">
             <div class="widget-box">
                 <div class="widget-header widget-header-flat widget-header-small">
                     <h5 class="widget-title">
-                        <i class=" icon-signal"></i>
-                        我的任务执行详情
-                    </h5>
-
-                    <div class="widget-toolbar">
-                        <a href="#" data-action="collapse">
-                            <i class="icon-chevron-up"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="widget-body">
-
-                    <div class="widget-main align-center" id="mytasklist">
-                        <i class="icon-spinner icon-spin icon-large"></i>
-                    </div>
-                    <!-- /.widget-main -->
-                </div>
-                <!-- /.widget-body -->
-            </div>
-            <!-- /.widget-box -->
-
-        </div>
-        <div class="col-sm-6">
-            <div class="widget-box">
-                <div class="widget-header widget-header-flat widget-header-small">
-                    <h5 class="widget-title">
-                        <i class=" icon-signal"></i>
-                        我所在组的任务执行详情
+                        <i class=" icon-list-alt"></i>
+                        所有任务的执行详情
                     </h5>
 
                     <div class="widget-toolbar">
@@ -630,7 +538,7 @@
 
                 <div class="widget-body">
 
-                    <div class="widget-main align-center" id="grouptasklist">
+                    <div class="widget-main " id="totaltasklist">
                         <i class="icon-spinner icon-spin icon-large"></i>
                     </div>
                     <!-- /.widget-main -->
@@ -641,6 +549,210 @@
 
         </div>
     </div>
+
+</div>
+<div id="userpanel">
+<div class="col-sm-12">
+    <div class="col-sm-6">
+        <div class="widget-box">
+            <div class="widget-header widget-header-flat widget-header-small">
+                <h5 class="widget-title">
+                    <i class="icon-bell-alt"></i>
+                    我的任务成功率
+                </h5>
+
+                <div class="widget-toolbar">
+                    <a href="#" data-action="collapse">
+                        <i class="icon-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="widget-body">
+                <div class="widget-main" id="user-widget-main">
+
+                    <div id="mytasks"><i class="icon-spinner icon-spin icon-large"></i></div>
+
+                    <div class="hr hr8 hr-double"></div>
+
+                    <div class="clearfix">
+                        <div class="col-sm-4">
+														<span class="grey">
+															<i class="icon-lightbulb green"></i>
+															&nbsp; 成功
+														</span>
+                            <h4 class="smaller pull-right" id="succtask"></h4>
+                        </div>
+
+                        <div class="col-sm-4">
+														<span class="grey">
+															<i class="icon-lightbulb red"></i>
+															&nbsp; 失败
+														</span>
+                            <h4 class="smaller pull-right " id="failtask"></h4>
+                        </div>
+                        <div class="col-sm-4">
+														<span class="grey">
+															<i class="icon-lightbulb red"></i>
+															&nbsp; 杀死
+														</span>
+                            <h4 class="smaller pull-right " id="killtask"></h4>
+                        </div>
+                        <div class="col-sm-4">
+														<span class="grey">
+															<i class="icon-lightbulb btn-yellow"></i>
+															&nbsp; 超时
+														</span>
+                            <h4 class="smaller pull-right " id="timeouttask"></h4>
+                        </div>
+                        <div class="col-sm-4">
+														<span class="grey">
+															<i class="icon-lightbulb "></i>
+															&nbsp; 拥堵
+                                                            <h4 class="smaller pull-right " id="congesttask"></h4>
+														</span>
+
+                        </div>
+
+
+                        <!-- /section:custom/extra.grid -->
+                    </div>
+                </div>
+                <!-- /.widget-main -->
+            </div>
+            <!-- /.widget-body -->
+        </div>
+        <!-- /.widget-box -->
+
+    </div>
+    <div class="col-sm-6">
+        <div class="widget-box">
+            <div class="widget-header widget-header-flat widget-header-small">
+                <h5 class="widget-title">
+                    <i class="icon-bullseye"></i>
+                    我的组的任务成功率
+                </h5>
+
+                <div class="widget-toolbar">
+                    <a href="#" data-action="collapse">
+                        <i class="icon-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="widget-body">
+                <div class="widget-main" id="group-widget-main">
+
+                    <div id="grouptasks"><i class="icon-spinner icon-spin icon-large"></i></div>
+
+                    <div class="hr hr8 hr-double"></div>
+
+                    <div class="clearfix">
+                        <div class="col-sm-4">
+														<span class="grey">
+															<i class="icon-lightbulb green"></i>
+															&nbsp; 成功
+														</span>
+                            <h4 class="smaller pull-right" id="groupsucctask"></h4>
+                        </div>
+
+                        <div class="col-sm-4">
+														<span class="grey">
+															<i class="icon-lightbulb red"></i>
+															&nbsp; 失败
+														</span>
+                            <h4 class="smaller pull-right " id="groupfailtask"></h4>
+                        </div>
+                        <div class="col-sm-4">
+														<span class="grey">
+															<i class="icon-lightbulb red"></i>
+															&nbsp; 杀死
+														</span>
+                            <h4 class="smaller pull-right " id="groupkilltask"></h4>
+                        </div>
+                        <div class="col-sm-4">
+														<span class="grey">
+															<i class="icon-lightbulb btn-yellow"></i>
+															&nbsp; 超时
+														</span>
+                            <h4 class="smaller pull-right " id="grouptimouttask"></h4>
+                        </div>
+                        <div class="col-sm-4">
+														<span class="grey">
+															<i class="icon-lightbulb"></i>
+															&nbsp; 拥堵
+														</span>
+                            <h4 class="smaller pull-right " id="groupcongesttask"></h4>
+                        </div>
+
+                        <!-- /section:custom/extra.grid -->
+                    </div>
+                </div>
+                <!-- /.widget-main -->
+            </div>
+            <!-- /.widget-body -->
+        </div>
+        <!-- /.widget-box -->
+
+    </div>
+</div>
+<div class="col-sm-12">
+    <div class="col-sm-6">
+        <div class="widget-box">
+            <div class="widget-header widget-header-flat widget-header-small">
+                <h5 class="widget-title">
+                    <i class=" icon-list-ol"></i>
+                    我的任务执行详情
+                </h5>
+
+                <div class="widget-toolbar">
+                    <a href="#" data-action="collapse">
+                        <i class="icon-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="widget-body">
+
+                <div class="widget-main align-center" id="mytasklist">
+                    <i class="icon-spinner icon-spin icon-large"></i>
+                </div>
+                <!-- /.widget-main -->
+            </div>
+            <!-- /.widget-body -->
+        </div>
+        <!-- /.widget-box -->
+
+    </div>
+    <div class="col-sm-6">
+        <div class="widget-box">
+            <div class="widget-header widget-header-flat widget-header-small">
+                <h5 class="widget-title">
+                    <i class=" icon-list-ul"></i>
+                    我所在组的任务执行详情
+                </h5>
+
+                <div class="widget-toolbar">
+
+                    <a href="#" data-action="collapse">
+                        <i class="icon-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="widget-body">
+
+                <div class="widget-main align-center" id="grouptasklist">
+                    <i class="icon-spinner icon-spin icon-large"></i>
+                </div>
+                <!-- /.widget-main -->
+            </div>
+            <!-- /.widget-body -->
+        </div>
+        <!-- /.widget-box -->
+
+    </div>
+</div>
 </div>
 <div id="admin">
 <div class="col-sm-12">
@@ -648,7 +760,7 @@
         <div class="widget-box">
             <div class="widget-header widget-header-flat widget-header-small">
                 <h5 class="widget-title">
-                    <i class="icon-signal"></i>
+                    <i class="icon-eye-open"></i>
                     Job机器状态
                 </h5>
 
@@ -693,11 +805,11 @@
         <!-- /.widget-box -->
 
     </div>
-    <div class="col-sm-6">
+    <div class="col-sm-6" >
         <div class="widget-box">
             <div class="widget-header widget-header-flat widget-header-small">
                 <h5 class="widget-title">
-                    <i class="icon-signal"></i>
+                    <i class="icon-eye-close"></i>
                     Job异常机器列表
                 </h5>
 
@@ -709,7 +821,7 @@
             </div>
 
             <div class="widget-body">
-                <div class="widget-main" id="exceptionJob">
+                <div class="widget-main" id="exceptionJob" style="height: 283px">
                     <i class="icon-spinner icon-spin icon-large"></i>
                 </div>
                 <!-- /.widget-main -->
@@ -725,7 +837,7 @@
         <div class="widget-box">
             <div class="widget-header widget-header-flat widget-header-small">
                 <h5 class="widget-title">
-                    <i class=" icon-signal"></i>
+                    <i class=" icon-time"></i>
                     主机CPU负载列表
                 </h5>
 
@@ -757,7 +869,7 @@
         <div class="widget-box">
             <div class="widget-header widget-header-flat widget-header-small">
                 <h5 class="widget-title">
-                    <i class=" icon-signal"></i>
+                    <i class=" icon-tint"></i>
                     主机内存使用率列表
                 </h5>
 
@@ -791,7 +903,7 @@
     <div class="widget-box">
         <div class="widget-header widget-header-flat widget-header-small">
             <h5 class="widget-title">
-                <i class="icon-signal"></i>
+                <i class="icon-screenshot"></i>
                 Job主机任务详情
             </h5>
 
@@ -821,7 +933,7 @@
         <div class="widget-box">
             <div class="widget-header widget-header-flat widget-header-small">
                 <h5 class="widget-title">
-                    <i class="icon-signal"></i>
+                    <i class="icon-fire"></i>
                     执行任务总数排行
                 </h5>
 
@@ -835,26 +947,8 @@
             <div class="widget-body">
 
 
-                <div class="widget-main" id="totalJob">
-                    <span class="label " style="display: none">开始时间</span>
-
-                    <div class="input-group" style="display: none">
-                        <input class="form-control date-picker ng-pristine ng-valid ng-valid-required"
-                               id="totalstarttime" type="text" data-date-format="yyyy-mm-dd"
-                               ng-model="startDate" required="">
-                                        <span class="input-group-addon"> <i class="icon-calendar bigger-110"></i>
-                                        </span>
-                    </div>
-
-                    <span class="label " style="display: none">结束时间</span>
-
-                    <div class="input-group" style="display: none">
-                        <input class="form-control date-picker ng-pristine ng-valid ng-valid-required"
-                               id="totalendtime" type="text" data-date-format="yyyy-mm-dd" ng-model="startDate"
-                               required="">
-                                        <span class="input-group-addon"> <i class="icon-calendar bigger-110"></i>
-                                        </span>
-                    </div>
+                <div class="widget-main align-center" id="totalJob">
+                    <i class="icon-spinner icon-spin icon-large"></i>
                 </div>
                 <!-- /.widget-main -->
             </div>
@@ -867,7 +961,7 @@
         <div class="widget-box">
             <div class="widget-header widget-header-flat widget-header-small">
                 <h5 class="widget-title">
-                    <i class=" icon-signal"></i>
+                    <i class=" icon-sort-by-order"></i>
                     执行任务失败总数排行
                 </h5>
 
@@ -880,32 +974,9 @@
 
             <div class="widget-body">
 
-                <div class="widget-main " id="failedJob">
-                    <div class="col-sm-6" style="display: none">
-                        <span class="label ">开始时间</span>
+                <div class="widget-main align-center" id="failedJob">
 
-                        <div class="input-group">
-                            <input class="form-control date-picker ng-pristine ng-valid ng-valid-required"
-                                   id="failstarttime" type="text" data-date-format="yyyy-mm-dd" ng-model="startDate"
-                                   required="">
-                                        <span class="input-group-addon"> <i class="icon-calendar bigger-110"></i>
-                                        </span>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-6 " style="display: none">
-                        <span class="label col-sm-2">结束时间</span>
-
-                        <div class="input-group col-sm-6">
-
-                            <input class="form-control date-picker ng-pristine ng-valid ng-valid-required"
-                                   id="failendtime" type="text" data-date-format="yyyy-mm-dd" ng-model="startDate"
-                                   required="">
-                                        <span class="input-group-addon"> <i class="icon-calendar bigger-110"></i>
-                                        </span>
-                        </div>
-                    </div>
-
+                        <i class="icon-spinner icon-spin icon-large"></i>
                 </div>
                 <!-- /.widget-main -->
             </div>
@@ -924,10 +995,14 @@
 <a href="#" class="scrollup" style="display: inline;">
     <img src="img/betop.png" width="66" height="67">
 </a>
+
 <div class="feedTool">
 
-    <a target="_blank" style="color: white;" href="http://wpa.qq.com/msgrd?v=3&uin=767762405&site=qq&menu=yes"><img border="0" src="img/qq.png"  width="80" height="80" color="white" alt="点我报错" title="点我报错"/></a>
-    <a target="_blank" style="float:right; padding-right:16px;color: white;" href="javascript:close_tool()"><img border="0" src="img/x_alt.png"  width="20" height="20" color="white" alt="关闭挂件" title="关闭挂件"/></a>
+    <a target="_blank" style="color: white;" href="http://wpa.qq.com/msgrd?v=3&uin=767762405&site=qq&menu=yes"><img
+            border="0" src="img/qq.png" width="80" height="80" color="white" alt="点我报错" title="点我报错"/></a>
+    <a target="_blank" style="float:right; padding-right:16px;color: white;" href="javascript:close_tool()"><img
+            border="0" src="img/x_alt.png" width="20" height="20" color="white" alt="关闭挂件" title="关闭挂件"/></a>
+
     <p style="text-align: center; padding-right:32px;color: firebrick">点我报错</p>
 </div>
 
@@ -975,7 +1050,7 @@
     if(op_str==null || op_str.isEmpty()){
     op_str="day";
     }%>
-    var op="<%=op_str%>";
+    var op = "<%=op_str%>";
     var isAdmin = <%=isAdmin%>;
     var username = "<%=currentUser%>";
     if (isAdmin && username != "kirin.li") {

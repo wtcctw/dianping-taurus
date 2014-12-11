@@ -6,6 +6,12 @@
         <result column="num" jdbcType="INTEGER" property="num"/>
         <result column="creator" jdbcType="VARCHAR" property="creator"/>
     </resultMap>
+    <resultMap id="TotalTaskResultMap" type="com.dp.bigdata.taurus.generated.module.TotalTaskExample">
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="num" jdbcType="INTEGER" property="num"/>
+        <result column="creator" jdbcType="VARCHAR" property="creator"/>
+        <result column="group" jdbcType="VARCHAR" property="group"/>
+    </resultMap>
   <resultMap id="BaseResultMap" type="com.dp.bigdata.taurus.generated.module.TaskAttempt">
     <!--
       WARNING - @mbggenerated
@@ -397,7 +403,7 @@
 
 </select>
     <select id="getUserTasks" resultType="map">
-        select a.name,count(1) AS num from TaurusTask a join TaurusTaskAttempt b on a.taskID=b.taskID  where <![CDATA[ a.creator=#{user} and b.status in (#{status, typeHandler=com.dp.bigdata.taurus.generated.module.InHandler})   and b.startTime >=#{start} and  startTime <= #{end}]]> group by a.name
+        select a.name,count(1) AS num from TaurusTask a join TaurusTaskAttempt b on a.taskID=b.taskID  where <![CDATA[ a.creator=#{user} and b.status = #{status, typeHandler=com.dp.bigdata.taurus.generated.module.InHandler}   and b.startTime >=#{start} and  startTime <= #{end}]]> group by a.name
     </select>
 
     <select id="getGroupTasks" resultMap="GroupTaskResultMap">
@@ -408,7 +414,7 @@
         select a.taskID,a.creator,a.name,b.id as userID ,c.status from
         TaurusTask a join TaurusUser b on a.creator=b.name
         join TaurusTaskAttempt c on a.taskID=c.taskID
-        where <![CDATA[  c.startTime >=#{start}and  c.startTime <= #{end}  and c.status in (#{status, typeHandler=com.dp.bigdata.taurus.generated.module.InHandler})]]>
+        where <![CDATA[  c.startTime >=#{start}and  c.startTime <= #{end}  and c.status = #{status, typeHandler=com.dp.bigdata.taurus.generated.module.InHandler}]]>
         ) a
         join TaurusUserGroupMapping  b on a.userID=b.userID
 
@@ -416,6 +422,21 @@
         join TaurusUserGroupMapping  b on a.id=b.userID  and a.name=#{user} )
         )d
         group by d.name,d.creator
+    </select>
+
+    <select id="getTotalTasks" resultMap="GroupTaskResultMap">
+        select f.name,count(1) as num,f.creator from
+        (
+        select a.* from
+        (
+        select a.taskID,a.creator,a.name, b.id as userID ,c.status  from
+        TaurusTask a join TaurusUser b on a.creator=b.name
+        join TaurusTaskAttempt c on a.taskID=c.taskID
+        where  <![CDATA[  c.startTime >=#{start}and  c.startTime <= #{end}  and c.status =#{status, typeHandler=com.dp.bigdata.taurus.generated.module.InHandler}]]>
+        ) a
+
+        )f
+        group by f.name,f.creator
     </select>
 
     <delete id="deleteDependencyPassTask" parameterType="String">

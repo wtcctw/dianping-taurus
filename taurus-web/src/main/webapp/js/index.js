@@ -26,7 +26,7 @@ jQuery(function ($) {
     cpuTableStyle = function () {
         $('#cputable').dataTable({
             "bAutoWidth": true,
-            "bPaginate": false,
+            "bPaginate": true,
             "bFilter": false,
             "bInfo": false,
             "bLengthChange": true,
@@ -40,13 +40,113 @@ jQuery(function ($) {
     memTableStyle = function () {
         $('#memtable').dataTable({
             "bAutoWidth": true,
-            "bPaginate": false,
+            "bPaginate": true,
             "bFilter": false,
             "bInfo": false,
             "bLengthChange": true,
             "aoColumns": [
                 null,
                 { "sType": "html-percent", "aTargets": [2] }
+            ]
+
+
+        });
+    };
+    totalTaskStyle = function () {
+        $('#totalTaskTable').dataTable({
+            "bAutoWidth": true,
+            "bPaginate": true,
+            "bFilter": false,
+            "bInfo": false,
+            "bLengthChange": true,
+            "aoColumns": [
+                { "sType": "html-percent", "aTargets": [1] },
+                { "sType": "html-percent", "aTargets": [2] },
+                { "sType": "html-percent", "aTargets": [3] },
+                { "sType": "html-percent", "aTargets": [4] },
+                { "sType": "html-percent", "aTargets": [5] }
+            ]
+
+
+        });
+    };
+    userTaskStyle = function () {
+        $('#userTaskTable').dataTable({
+            "bAutoWidth": true,
+            "bPaginate": true,
+            "bFilter": false,
+            "bInfo": false,
+            "bLengthChange": true,
+            "aoColumns": [
+                null,
+                { "sType": "html-percent", "aTargets": [1] },
+                { "sType": "html-percent", "aTargets": [2] }
+            ]
+
+
+        });
+    };
+
+    groupTaskStyle = function () {
+        $('#groupTaskTable').dataTable({
+            "bAutoWidth": true,
+            "bPaginate": true,
+            "bFilter": false,
+            "bInfo": false,
+            "bLengthChange": true,
+            "aoColumns": [
+                null,
+                { "sType": "html-percent", "aTargets": [1] },
+                { "sType": "html-percent", "aTargets": [2] },
+                { "sType": "html-percent", "aTargets": [3] }
+            ]
+
+
+        });
+    };
+
+    failedJobStyle = function () {
+        $('#failedJobTable').dataTable({
+            "bAutoWidth": true,
+            "bPaginate": true,
+            "bFilter": false,
+            "bInfo": false,
+            "bLengthChange": true,
+            "aoColumns": [
+                null,
+                null
+            ]
+
+
+        });
+    };
+
+    totalJobStyle = function () {
+        $("#totalJobTable").dataTable({
+            "bAutoWidth": true,
+            "bPaginate": true,
+            "bFilter": false,
+            "bInfo": false,
+            "bLengthChange": true,
+            "aoColumns": [
+                null,
+                null
+            ]
+
+
+        });
+    };
+
+    jobStateStyle = function () {
+        $("#jobStateTable").dataTable({
+            "bAutoWidth": true,
+            "bPaginate": true,
+            "bFilter": false,
+            "bInfo": false,
+            "bLengthChange": true,
+            "aoColumns": [
+                null,
+                null
             ]
 
 
@@ -168,7 +268,8 @@ $(document).ready(function () {
                         "<td><a id='down' title='查看job机详情' class='btn  btn-primary btn-minier' href='hosts.jsp?hostName=" + exceptionLists[i] + "'>详情</a></td>"
                     "</tr>"
                 }
-                htmlContent = ' <table  class="table table-striped ">'
+                htmlContent = ' <table  class="table table-striped " id = "jobStateTable">'
+                    +'<thead><td>IP</td><td>操作</td></thead>'
                     + '        <tbody>'
                     + body
                     + '        </tbody>'
@@ -180,6 +281,7 @@ $(document).ready(function () {
             }
 
             $("#exceptionJob").html(htmlContent);
+            jobStateStyle();
             var placeholder = $('#piechart-placeholder').css({'width': '90%', 'min-height': '200px'});
             var data = [
                 { label: "正常", data: onlineNums, color: "#68BC31"},
@@ -282,18 +384,18 @@ $(document).ready(function () {
             $.each(jsonarray, function (i, item) {
                 totalBody += "<tr>" +
                     "<td>" + item.execHost + "</td>" +
-                    "<td>" + item.totaltask + "</td>"
-                "</tr>"
+                    "<td>" + item.totaltask + "</td>"+"</tr>"
             });
-            var topLists = ' <table  class="table table-striped table-bordered table-hover ">'
+            var topLists = ' <table  class="table table-striped table-bordered table-hover " id="totalJobTable">'
                 + '<thead><tr><th>IP</th>  <th>执行任务数</th> </tr> </thead>'
                 + '        <tbody>'
                 + totalBody
                 + '        </tbody>'
-                + '    </table>'
-                + '    <div class="controller">'
-                + '    </div>';
+                + '    </table>';
+
             $("#totalJob").html(topLists);
+
+            totalJobStyle();
         }
 
 
@@ -315,21 +417,28 @@ $(document).ready(function () {
         },
         success: function (response, textStatus) {
             var jsonarray = $.parseJSON(response);
-            $.each(jsonarray, function (i, item) {
-                failBody += "<tr>" +
-                    "<td>" + item.execHost + "</td>" +
-                    "<td>" + item.totaltask + "</td>"
-                "</tr>"
-            });
-            var topLists = ' <table  class="table table-striped table-bordered table-hover ">'
-                + '<thead><tr><th>IP</th>  <th>执行任务数</th> </tr> </thead>'
-                + '        <tbody>'
-                + failBody
-                + '        </tbody>'
-                + '    </table>'
-                + '    <div class="controller">'
-                + '    </div>';
-            $("#failedJob").append(topLists);
+            var topLists = ""
+            if(jsonarray != null&& jsonarray.length > 0){
+                $.each(jsonarray, function (i, item) {
+                    failBody += "<tr>" +
+                        "<td>" + item.execHost + "</td>" +
+                        "<td>" + item.totaltask + "</td>"+"</tr>";
+                });
+                topLists = ' <table  class="table table-striped table-bordered table-hover " id = "failedJobTable">'
+                    + '<thead><tr><th>IP</th>  <th>执行任务数</th> </tr> </thead>'
+                    + '        <tbody>'
+                    + failBody
+                    + '        </tbody>'
+                    + '    </table>';
+            }else{
+                topLists="<i class='icon-info-sign icon-large green '>没有执行失败的任务！</i> ";
+            }
+
+
+
+            $("#failedJob").html(topLists);
+
+            failedJobStyle();
         }
 
 
@@ -465,6 +574,7 @@ $(document).ready(function () {
                 + '        </tbody>'
                 + '    </table>'
             $("#mytasklist").html(topUserTaskLists);
+            userTaskStyle();
 
             if (succNums == 0 && failedNums == 0) {
                 $("#user-widget-main").html("<i class='icon-info-sign icon-large red'>今天没有任务调度～</i>");
@@ -703,6 +813,7 @@ $(document).ready(function () {
                 + '        </tbody>'
                 + '    </table>'
             $("#grouptasklist").html(topGroupTaskLists);
+            groupTaskStyle();
             if (groupSuccNums != 0 || groupFailedNums != 0) {
                 var placeholder = $('#grouptasks').css({'width': '90%', 'min-height': '200px'});
                 var data = [
@@ -793,6 +904,286 @@ $(document).ready(function () {
             } else {
                 $("#group-widget-main").html("<i class='icon-info-sign icon-large red'>今天没有任务调度～</i>");
                 $("#group-widget-main").addClass("align-center");
+
+            }
+        }
+
+
+    });
+
+
+    var totalSuccNums = 0;
+    var totalFailedNums = 0;
+    var totalKillNums = 0;
+    var totalTimeoutNums = 0;
+    var totalCongestNums = 0;
+    var totalSuccTaskNums = 0;
+    var totalFailedTaskNums = 0;
+    var totalKillTaskNums = 0;
+    var totalTimeoutTaskNums = 0;
+    var totalCongestTaskNums = 0;
+    var totalSuccLists = new Array();
+
+    var totalFailedLists = new Array();
+    var totalKillLists = new Array();
+    var totalTimeoutLists = new Array();
+    var totalCongestLists = new Array();
+
+    var totalSuccBody = "";
+    var totalFailedBody = "";
+    var totalKillBody = "";
+    var totalTimeoutBody = "";
+    var totalCongestBody = "";
+
+    $.ajax({
+        data: {
+            action: "totaltask",
+            start: starttime,
+            end: endtime
+        },
+        type: "POST",
+        url: "/monitor",
+        error: function () {
+            $("#total-widget-main").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
+            $("#total-widget-main").addClass("align-center");
+        },
+        success: function (response, textStatus) {
+            var totalTaskListBody = "";
+            var jsonarray = $.parseJSON(response);
+            $.each(jsonarray, function (i, item) {
+                var usericon = "";
+                var groupicon ="";
+                var taskicon ="";
+
+                if (username == item.creator) {
+                    usericon = "&nbsp;&nbsp;<i class='icon-user green'></i>";
+                    groupicon = "&nbsp;&nbsp;<i class='icon-group green'></i>";
+                    taskicon = "<i class='icon-tasks green'></i>"
+                } else {
+                    usericon = "&nbsp;&nbsp;<i class='icon-user'></i>";
+                    groupicon = "&nbsp;&nbsp;<i class='icon-group'></i>";
+                    taskicon = "<i class='icon-tasks'></i>"
+                }
+
+                if (item.status == "success" && item.nums != 0) {
+                    totalSuccNums += item.nums;
+
+                    totalSuccLists[totalSuccTaskNums] = item.taskName;
+                    totalSuccTaskNums++;
+
+                    var group = item.group;
+
+                    if(group == null || group == ""){
+                        group = "未分组";
+                    }
+
+                    totalSuccBody += taskicon + item.taskName + ": " + item.nums + usericon + item.creator + groupicon + group +"<br>"
+                    totalTaskListBody += "<tr>" +
+                        "<td>" + group + "</td>" +
+                        "<td>" + item.taskName + "</td>" +
+                        "<td>成功</td>" +
+                        "<td>" + item.nums + "</td>" +
+                        "<td>" + item.creator + "</td>" +
+                        "</tr>";
+                } else if (item.status == "failed"){
+                    if (item.nums != 0) {
+                        totalFailedNums += item.nums;
+                        totalFailedLists[totalFailedNums] = item.taskName;
+                        totalFailedTaskNums++;
+                        var group = item.group;
+
+                        if(group == null || group == ""){
+                            group = "未分组";
+                        }
+
+                        totalFailedBody += taskicon + item.taskName + ": " + item.nums + usericon + item.creator + groupicon + group + "<br>"
+                        totalTaskListBody += "<tr>" +
+                            "<td>" + group + "</td>" +
+                            "<td>" + item.taskName + "</td>" +
+                            "<td>失败</td>" +
+                            "<td>" + item.nums + "</td>" +
+                            "<td>" + item.creator + "</td>" +
+                            "</tr>";
+                    }
+
+                }else if (item.status == "killed"){
+                    if (item.nums != 0) {
+                        totalKillNums += item.nums;
+                        totalKillLists[groupKillNums] = item.taskName;
+                        totalKillTaskNums++;
+
+                        var group = item.group;
+
+                        if(group == null || group == ""){
+                            group = "未分组";
+                        }
+
+                        totalKillBody += taskicon+ item.taskName + ": " + item.nums + usericon + item.creator + groupicon + group + "<br>"
+                        totalTaskListBody += "<tr>" +
+                            "<td>" + group + "</td>" +
+                            "<td>" + item.taskName + "</td>" +
+                            "<td>杀死</td>" +
+                            "<td>" + item.nums + "</td>" +
+                            "<td>" + item.creator + "</td>" +
+                            "</tr>";
+                    }
+
+                }else if (item.status == "timeout"){
+                    if (item.nums != 0) {
+                        totalTimeoutNums += item.nums;
+                        totalTimeoutLists[groupTimeoutNums] = item.taskName;
+                        totalTimeoutTaskNums++;
+
+                        var group = item.group;
+
+                        if(group == null || group == ""){
+                            group = "未分组";
+                        }
+
+                        totalTimeoutBody += taskicon + item.taskName + ": " + item.nums + usericon + item.creator + groupicon + group + "<br>"
+                        totalTaskListBody += "<tr>" +
+                            "<td>" + group + "</td>" +
+                            "<td>" + item.taskName + "</td>" +
+                            "<td>超时</td>" +
+                            "<td>" + item.nums + "</td>" +
+                            "<td>" + item.creator + "</td>" +
+                            "</tr>";
+                    }
+
+                }else if (item.status == "congest"){
+                    if (item.nums != 0) {
+                        totalCongestNums += item.nums;
+                        totalCongestLists[groupCongestNums] = item.taskName;
+                        totalCongestTaskNums++;
+
+                        var group = item.group;
+
+                        if(group == null || group == ""){
+                            group = "未分组";
+                        }
+
+                        totalCongestBody += taskicon + item.taskName + ": " + item.nums + usericon + item.creator + groupicon + group + "<br>"
+                        totalTaskListBody += "<tr>" +
+                            "<td>" + group + "</td>" +
+                            "<td>" + item.taskName + "</td>" +
+                            "<td>拥堵</td>" +
+                            "<td>" + item.nums + "</td>" +
+                            "<td>" + item.creator + "</td>" +
+                            "</tr>";
+                    }
+
+                }
+
+            });
+
+            if (totalSuccNums != 0 || totalFailedNums != 0 ||  totalKillNums != 0 || totalTimeoutNums != 0 || groupCongestNums != 0) {
+                $("#totalsucctask").html(totalSuccNums.toString());
+                $("#totalfailtask").html(totalFailedNums.toString());
+                $("#totalkilltask").html(totalKillNums.toString());
+                $("#totaltimouttask").html(totalTimeoutNums.toString());
+                $("#totalcongesttask").html(totalCongestTaskNums.toString());
+            } else {
+                $("#total-widget-main").html("<i class='icon-info-sign icon-large red '>今天没有任务调度～</i>");
+                $("#total-widget-main").addClass("align-center");
+            }
+            var topTotalTaskLists = ' <table  class="table table-striped table-bordered table-hover align-center" id="totalTaskTable">'
+                + '<thead><tr><th>组名</th><th>任务名</th>  <th>状态</th> <th>次数</th> <th>创建者</th> </tr> </thead>'
+                + '        <tbody>'
+                + totalTaskListBody
+                + '        </tbody>'
+                + '    </table>'
+            $("#totaltasklist").html(topTotalTaskLists);
+            totalTaskStyle();
+            if (totalSuccNums != 0 || totalFailedNums != 0) {
+                var placeholder = $('#totaltasks').css({'width': '90%', 'min-height': '200px'});
+                var data = [
+                    { label: "正常", data: totalSuccNums, color: "#68BC31"},
+                    { label: "失败", data: totalFailedNums, color: "#FF0000"},
+                    { label: "杀死", data: totalKillNums, color: "#AF4E96"},
+                    { label: "超时", data: totalTimeoutNums, color: "#FFD306"},
+                    { label: "拥堵", data: totalCongestNums, color: "#8E8E8E"}
+                ]
+                Number.prototype.toFixed = function (fractionDigits) {
+                    return  (parseInt(this * Math.pow(10, fractionDigits) + 0.5) / Math.pow(10, fractionDigits)).toString();
+                }
+
+                function drawPieChart(placeholder, data, position) {
+                    $.plot(placeholder, data, {
+                        series: {
+                            pie: {
+                                show: true,
+                                tilt: 1,
+                                highlight: {
+                                    opacity: 0.25
+                                },
+                                stroke: {
+                                    color: '#fff',
+                                    width: 2
+                                },
+                                startAngle: 2
+                            }
+                        },
+                        legend: {
+                            show: true,
+                            position: position || "ne",
+                            labelBoxBorderColor: null,
+                            margin: [-30, 15]
+                        },
+                        grid: {
+                            hoverable: true,
+                            clickable: true
+                        }
+                    })
+                }
+
+                drawPieChart(placeholder, data);
+
+                /**
+                 we saved the drawing function and the data to redraw with different position later when switching to RTL mode dynamically
+                 so that's not needed actually.
+                 */
+                placeholder.data('chart', data);
+                placeholder.data('draw', drawPieChart);
+
+
+                //pie chart tooltip example
+                var tooltip = $("<div class='tooltip top in align-left'><div class='tooltip-inner align-left'></div></div>").hide().appendTo('body');
+                var previousPoint = null;
+
+                placeholder.on('plothover', function (event, pos, item) {
+                    if (item) {
+                        if (previousPoint != item.seriesIndex) {
+                            previousPoint = item.seriesIndex;
+
+                            if (item.series['label'] == "正常") {
+                                tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%<hr>' + totalSuccBody;
+                            } else if (item.series['label'] == "失败") {
+                                tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%<hr>' + totalFailedBody;
+                            }else if (item.series['label'] == "杀死") {
+                                tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%<hr>' + totalKillBody;
+                            }else if (item.series['label'] == "超时") {
+                                tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%<hr>' + totalTimeoutBody;
+                            }else if (item.series['label'] == "拥堵") {
+                                tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%<hr>' + totalCongestBody;
+                            }
+
+                            else {
+                                tip = item.series['label'] + ':' + item.series['percent'].toFixed(2) + '%'
+
+                            }
+
+                            tooltip.show().children(0).html(tip);
+                        }
+                        tooltip.css({top: pos.pageY + 10, left: pos.pageX + 10});
+                    } else {
+                        tooltip.hide();
+                        previousPoint = null;
+                    }
+
+                });
+            } else {
+                $("#total-widget-main").html("<i class='icon-info-sign icon-large red'>今天没有任务调度～</i>");
+                $("#total-widget-main").addClass("align-center");
 
             }
         }

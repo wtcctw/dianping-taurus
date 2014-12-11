@@ -113,6 +113,7 @@ public interface TaskAttemptMapper {
     public ArrayList getFailedTaskLoadHost(@Param("start")String start,@Param("end")String end);
     public ArrayList getUserTasks(@Param("user")String user,@Param("start")String start,@Param("end")String end ,@Param("status")int[] ids);
     public ArrayList<GroupTaskExample>  getGroupTasks(@Param("user")String user,@Param("start")String start,@Param("end")String end ,@Param("status")int[] ids );
+    public ArrayList<GroupTaskExample>  getTotalTasks(@Param("start")String start,@Param("end")String end ,@Param("status")int[] ids );
     public HashMap<String, String> isExitTaskId(@Param("taskId")String taskId);
     public TaskAttempt isExitRunningTask(@Param("taskId")String taskId);
 

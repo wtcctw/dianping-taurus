@@ -259,21 +259,78 @@
 <div class="col-sm-12 padding-14">
 <section id="new">
     <div class="page-header">
-        <h1>最新功能:我要报错&&我要反馈</h1>
+        <h1>最新功能:我要报错</h1>
         <hr>
-<h2>我要报错</h2>
-        <img src="img/qq.png" style="float:left;width: 300px;height: 300px"/>
-        <img src="img/feedQQ.png" style="float:right;width: 720px;height: 300px"/>
+        <br>
+        <table class="table align-center">
+            <tr style="padding-left: 14px;padding-right: 20px">
+                <td > <img src="img/qq.png" style="width: 300px;height: 300px"/><h1>Hi，大家好，我是小Q</h1></td>
+                <td><h1>为了体验新功能，小Q恳请你在用户设置中设置你的QQ号</h1>
+                    <img src="img/setqq.png" style="width: 720px;height: 400px"/>
+                </td>
+            </tr>
 
-        <img src="img/feederror.png" style="width: 1020px;height: 250px"/>
+
+
+        </table>
+        <table class="table align-center">
+            <tr style="padding-left: 14px;">
+                <td><h1>然后你在调度历史中可以看到：</h1> <hr><img src="img/feederror.png" style="width: 1020px;height: 300px"/></td>
+
+            </tr>
+        </table>
+        <table class="table align-center">
+
+            <tr style="padding-left: 14px;padding-right: 20px">
+                <td><h1>你点击小Q我就可以看到：</h1><hr><img src="img/feedQQ.png" style="width: 720px;height: 300px"/></td>
+                <td > <img src="img/qq.png" style="width: 300px;height: 300px"/></td>
+
+            </tr>
+
+
+        </table>
+        <table class="table align-center">
+
+            <tr style="padding-left: 14px;padding-right: 20px">
+                <td > <img src="img/qq.png" style="width: 300px;height: 300px"/><br><h1>还在等什么，快去尝试一下吧~</h1></td>
+
+
+
+            </tr>
+
+
+        </table>
+
+
+
+
+        <br>
+        <h1>最新功能：我要反馈</h1>
         <hr>
-        <h2>我要反馈</h2>
-        <div>
-        <img src="img/feedback.png" style="width: 720px;height: 560px"/>
-</div>
+        <br>
+        <table class="table align-center">
+            <tr style="padding-left: 14px;">
+                <td><img src="img/qq.png" style="float:left;width: 300px;height: 300px"/></td>
+                <td> <img src="img/feedback.png" style="width: 720px;height: 560px"/></td>
+
+
+            </tr>
+        </table>
+        <br>
+        <table class="table align-center">
+
+            <tr style="padding-left: 14px;padding-right: 20px">
+                <td > <img src="img/qq.png" style="width: 300px;height: 300px"/><br><h1>还在等什么，快去尝试一下吧~</h1></td>
+
+
+
+            </tr>
+
+
+        </table>
         <hr>
 
-        <p style="font-size: 14px; color:#ff7f50;" ><h1>快来体验！！！</h1></p>
+
         <hr>
         <h1>入门导引</h1>
     </div>
