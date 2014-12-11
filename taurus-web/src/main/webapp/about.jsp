@@ -266,6 +266,8 @@
             <tr style="padding-left: 14px;padding-right: 20px">
                 <td > <img src="img/qq.png" style="width: 300px;height: 300px"/><h1>Hi，大家好，我是小Q</h1></td>
                 <td><h1>为了体验新功能，小Q恳请你在用户设置中设置你的QQ号</h1>
+                   <h2> <a href="http://shang.qq.com/v3/widget.html">点我开通QQ通讯组件</a></h2>
+                    <img src="img/ktqq.png" style="width: 720px;height: 400px"/>
                     <img src="img/setqq.png" style="width: 720px;height: 400px"/>
                 </td>
             </tr>

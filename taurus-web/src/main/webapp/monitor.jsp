@@ -660,7 +660,140 @@ if (step == null || step == "null") {
     endtime = GetDateStr(now, 1);
 }
 
+jQuery(function ($) {
 
+    jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+        "html-percent-pre": function (a) {
+            var x = String(a).replace(/<[\s\S]*?>/g, "");    //去除html标记
+            x = x.replace(/&nbsp;/ig, "");                   //去除空格
+            x = x.replace(/MB/, "");                          //去除MB
+            x = x.replace(/异常数据/, "0");                          //去除异常数据
+            return parseFloat(x);
+        },
+        "html-percent-asc": function (a, b) {                //正序排序引用方法
+            return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+        },
+        "html-percent-desc": function (a, b) {                //倒序排序引用方法
+            return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+        }
+    });
+
+    runningStyle = function () {
+        $('#running').dataTable({
+            "bAutoWidth": true,
+            "bPaginate": false,
+            "bFilter": true,
+            "bInfo": false,
+            "bLengthChange": false,
+            "aoColumns": [
+                { "sType": "html-percent", "aTargets": [1] },
+                { "sType": "html-percent", "aTargets": [2] },
+                { "sType": "html-percent", "aTargets": [3] },
+                { "sType": "html-percent", "aTargets": [4] },
+                { "sType": "html-percent", "aTargets": [5] },
+                { "sType": "html-percent", "aTargets": [6] },
+                { "sType": "html-percent", "aTargets": [7] }
+            ]
+        });
+    };
+    submitfailStyle = function () {
+        $('#submitfail').dataTable({
+            "bAutoWidth": true,
+            "bPaginate": false,
+            "bFilter": true,
+            "bInfo": false,
+            "bLengthChange": false,
+            "aoColumns": [
+                { "sType": "html-percent", "aTargets": [1] },
+                { "sType": "html-percent", "aTargets": [2] },
+                { "sType": "html-percent", "aTargets": [3] },
+                { "sType": "html-percent", "aTargets": [4] },
+                { "sType": "html-percent", "aTargets": [5] },
+                { "sType": "html-percent", "aTargets": [6] },
+                { "sType": "html-percent", "aTargets": [7] }
+            ]
+        });
+    };
+
+    dependencyStyle = function () {
+        $('#dependency').dataTable({
+            "bAutoWidth": true,
+            "bPaginate": false,
+            "bFilter": true,
+            "bInfo": false,
+            "bLengthChange": false,
+            "aoColumns": [
+                { "sType": "html-percent", "aTargets": [1] },
+                { "sType": "html-percent", "aTargets": [2] },
+                { "sType": "html-percent", "aTargets": [3] },
+                { "sType": "html-percent", "aTargets": [4] },
+                { "sType": "html-percent", "aTargets": [5] },
+                { "sType": "html-percent", "aTargets": [6] },
+                { "sType": "html-percent", "aTargets": [7] }
+            ]
+        });
+    };
+    failedStyle = function () {
+        $('#fail').dataTable({
+            "bAutoWidth": true,
+            "bPaginate": false,
+            "bFilter": true,
+            "bInfo": false,
+            "bLengthChange": false,
+            "aoColumns": [
+                { "sType": "html-percent", "aTargets": [1] },
+                { "sType": "html-percent", "aTargets": [2] },
+                { "sType": "html-percent", "aTargets": [3] },
+                { "sType": "html-percent", "aTargets": [4] },
+                { "sType": "html-percent", "aTargets": [5] },
+                { "sType": "html-percent", "aTargets": [6] },
+                { "sType": "html-percent", "aTargets": [7] },
+                { "sType": "html-percent", "aTargets": [8] }
+            ]
+        });
+    };
+
+    dependencyTimeoutStyle = function () {
+        $('#dependency-timeout').dataTable({
+            "bAutoWidth": true,
+            "bPaginate": false,
+            "bFilter": true,
+            "bInfo": false,
+            "bLengthChange": false,
+            "aoColumns": [
+                { "sType": "html-percent", "aTargets": [1] },
+                { "sType": "html-percent", "aTargets": [2] },
+                { "sType": "html-percent", "aTargets": [3] },
+                { "sType": "html-percent", "aTargets": [4] },
+                { "sType": "html-percent", "aTargets": [5] },
+                { "sType": "html-percent", "aTargets": [6] },
+                { "sType": "html-percent", "aTargets": [7] },
+                { "sType": "html-percent", "aTargets": [8] }
+            ]
+        });
+    };
+
+    timeoutStyle = function () {
+        $('#timeout').dataTable({
+            "bAutoWidth": true,
+            "bPaginate": false,
+            "bFilter": true,
+            "bInfo": false,
+            "bLengthChange": false,
+            "aoColumns": [
+                { "sType": "html-percent", "aTargets": [1] },
+                { "sType": "html-percent", "aTargets": [2] },
+                { "sType": "html-percent", "aTargets": [3] },
+                { "sType": "html-percent", "aTargets": [4] },
+                { "sType": "html-percent", "aTargets": [5] },
+                { "sType": "html-percent", "aTargets": [6] },
+                { "sType": "html-percent", "aTargets": [7] },
+                { "sType": "html-percent", "aTargets": [8] }
+            ]
+        });
+    };
+
+});
 $(document).ready(function () {
     var load_count = 5;
     $.ajax({
@@ -693,6 +826,7 @@ $(document).ready(function () {
         success: function (response, textStatus) {
             $("#running_load").html("");
             $("#running_body").html(response);
+            runningStyle();
         }
 
 
@@ -711,6 +845,7 @@ $(document).ready(function () {
         success: function (response, textStatus) {
             $("#submit_load").html("");
             $("#submit_body").html(response);
+            submitfailStyle();
 
             load_count = load_count - 1;
             if(load_count == 0){
@@ -765,7 +900,7 @@ $(document).ready(function () {
         success: function (response, textStatus) {
             $("#dependency_load").html("");
             $("#dependency_body").html(response);
-
+            dependencyStyle();
 
             load_count = load_count - 1;
             if(load_count == 0){
@@ -793,6 +928,7 @@ $(document).ready(function () {
                             });
 
 
+
                         }
 
 
@@ -818,6 +954,9 @@ $(document).ready(function () {
         success: function (response, textStatus) {
             $("#failed_load").html("");
             $("#failed_body").html(response);
+
+            failedStyle();
+
             load_count = load_count - 1;
             if(load_count == 0){
                 $(".feedBtn").on('click', function (e) {
@@ -870,6 +1009,9 @@ $(document).ready(function () {
         success: function (response, textStatus) {
             $("#dependency_timeout_load").html("");
             $("#dependency_timeout_body").html(response);
+
+            dependencyTimeoutStyle();
+
             load_count = load_count - 1;
             if(load_count == 0){
                 $(".feedBtn").on('click', function (e) {
@@ -922,6 +1064,9 @@ $(document).ready(function () {
         success: function (response, textStatus) {
             $("#timeout_load").html("");
             $("#timeout_body").html(response);
+
+            timeoutStyle();
+
             load_count = load_count - 1;
             if(load_count == 0){
                 $(".feedBtn").on('click', function (e) {
