@@ -548,7 +548,7 @@
 <a href="#" class="scrollup" style="display: inline;">
     <img src="img/betop.png" width="66" height="67">
 </a>
-<div class="feedTool">
+<div class="feedTool" style="display: none">
 
     <a target="_blank" style="color: white;" href="http://wpa.qq.com/msgrd?v=3&uin=767762405&site=qq&menu=yes"><img border="0" src="img/qq.png"  width="80" height="80" color="white" alt="点我报错" title="点我报错"/></a>
     <a target="_blank" style="float:right; padding-right:16px;color: white;" href="javascript:close_tool()"><img border="0" src="img/x_alt.png"  width="20" height="20" color="white" alt="关闭挂件" title="关闭挂件"/></a>

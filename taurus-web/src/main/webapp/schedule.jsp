@@ -474,7 +474,7 @@
                                 +"<li><a href='#confirm' onClick=\"action($(this).parents('tr').find('td')[0].textContent,3)\">执行</a></li>"
                                 + "<li><a class='detailBtn' href='task_form.jsp?task_id="
                                 + item.taskId
-                                + " target= 'blank''>详细</a></li></ul></div>"
+                                + "' >详细</a></li></ul></div>"
                         +"</td>"
                         + "<td><a id='attempts' class='btn btn-primary btn-small' href='attempt.jsp?taskID=" + item.taskId + "' target= 'blank'>运行历史</a></td></tr>"
 

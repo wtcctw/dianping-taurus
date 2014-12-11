@@ -23,7 +23,8 @@
     IUserGroupsResource groupResource = cr.wrap(IUserGroupsResource.class);
     cr.accept(MediaType.APPLICATION_XML);
     ArrayList<UserGroupDTO> groups = groupResource.retrieve();
-    cr = new ClientResource(host + "task/" + request.getParameter("task_id"));
+    String taskId = request.getParameter("task_id");
+    cr = new ClientResource(host + "task/" + taskId.trim());
     ITaskResource taskResource = cr.wrap(ITaskResource.class);
     cr.accept(MediaType.APPLICATION_XML);
     TaskDTO dto = taskResource.retrieve();
