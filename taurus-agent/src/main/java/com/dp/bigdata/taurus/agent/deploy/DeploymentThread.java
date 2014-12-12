@@ -101,7 +101,7 @@ public class DeploymentThread extends BaseEnvManager {
             try{
                 taskHelper.deployTask(ftpUrl, localPath);
                 status.setStatus(DeploymentStatus.DEPLOY_SUCCESS);
-                conf.setLocalPath(localParentPath);
+                conf.setLocalPath(localPath);
                 LOGGER.debug("Job " + name + " deploy successed");
             } catch(Exception e ){
                 LOGGER.debug("Job " + name + " deploy failed",e);
