@@ -382,6 +382,30 @@
                                     +"'>日志</a>";
                         }
                         attemptBody +="</td>"
+                        attemptBody += "<td> <a id ='feedBtn' class='feedBtn'  href='feederror.jsp?id="
+                                +item.attemptId
+                                +"&status="
+                                +state
+                                +"&taskName="
+                                +item.taskName
+                                +"&ip="
+                                +item.exeHost
+                                +"&taskId="
+                                +taskID
+                                +"&feedtype=mail"
+                                +"'><i class='icon-envelope'></i></a> |";
+                        attemptBody += "<a id ='feedQQBtn' class='feedBtn'  href='feederror.jsp?id="
+                                +item.attemptId
+                                +"&status="
+                                +state
+                                +"&taskName="
+                                +item.taskName
+                                +"&ip="
+                                +item.exeHost
+                                +"&taskId="
+                                +taskID
+                                +"&feedtype=qq"
+                                +"'><img border='0' src='img/qq.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a></td>"
                     }else{
                         attemptBody += "<td> <a target='_blank'  href='viewlog.jsp?id="
                         +item.attemptId
