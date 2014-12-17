@@ -84,7 +84,7 @@ public class MailHelper{
         String wechat_api = wechat_url+ "/api";
 
         String params = "action=push&sysName=ezc&keyword=" + user.trim()
-                + "&title=Taurus-Agent主机失联系告警服务&content= Taurus-Agent主机失联系告警服务<br>" + content.trim();
+                + "&title=Taurus-Agent主机失联系告警服务&content= Taurus-Agent主机失联系告警服务\n" + content.trim();
 
         sendPost(wechat_api, params);
 

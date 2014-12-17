@@ -295,10 +295,15 @@ public class TaurusAlert {
                 domain="taurus.dp";
                 e.printStackTrace();
             }
-
+            sbMailContent.append("※ Taurs 任务执行状态微信告警服务 ※");
+            sbMailContent.append("\n");
             sbMailContent.append("任务名:" + task.getName());
+            sbMailContent.append("\n");
             sbMailContent.append("任务状态: " + AttemptStatus.getInstanceRunState(attempt.getStatus()));
-            sbMailContent.append("日志查看:" + "http://"+domain+"/viewlog.jsp?id="+ attempt.getAttemptid() +"&status="+AttemptStatus.getInstanceRunState(attempt.getStatus()));
+            sbMailContent.append("\n");
+            sbMailContent.append("日志查看:" + "http://"+domain+"/viewlog.jsp?id="+ attempt.getAttemptid());
+            sbMailContent.append("\n");
+            sbMailContent.append("※ 点评工具组 ※");
 
             try {
                 WeChatHelper.sendWeChat( task.getCreator(),sbMailContent.toString());
