@@ -389,6 +389,7 @@
             <input type="checkbox" value="57">57
             <input type="checkbox" value="58">58
             <input type="checkbox" value="59">59
+            <input type="checkbox" value="0">00
         </div>
     </div>
 </div>

@@ -34,6 +34,7 @@
     <link rel="stylesheet" href="lib/ace/css/ace-rtl.min.css"/>
     <link rel="stylesheet" href="lib/ace/css/ace-skins.min.css"/>
     <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/loading.css">
 </head>
 <body>
 
@@ -298,7 +299,15 @@
                 <% }%>
 
                 <div id="schedule_content" class="align-center">
-                    <i class="icon-spinner icon-spin icon-large"></i>
+                    <div class="loadIcon">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                    正在加载中...
+
                 </div>
 
 

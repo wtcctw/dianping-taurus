@@ -97,7 +97,68 @@
                            value="<%=currentUser%>">
                 </fieldset>
             </form>
-            <%} else {%>
+            <%}else  if (feedType.equals("wechat")) {
+                cr = new ClientResource(host + "task/" + taskId);
+                ITaskResource taskResource = cr.wrap(ITaskResource.class);
+                cr.accept(MediaType.APPLICATION_XML);
+                TaskDTO dto = taskResource.retrieve();
+                creator = dto.getCreator();
+            %>
+            <form id="form_<%=attemptId%>" class="form-horizontal task-form">
+                <fieldset>
+
+
+                    <div class="control-group col-sm-12">
+                        <label class="label label-lg label-info arrowed-right col-sm-2" for="taskName">任务名称*</label>
+
+                        <div class="controls">
+                            <input type="text" class="input-big" id="taskName"
+                                   name="taskName" value="<%=taskName%>" readonly>
+                        </div>
+                    </div>
+                    <br>
+
+                    <div id="host" class="control-group col-sm-12">
+                        <label class="label label-lg label-info arrowed-right col-sm-2" for="host">部署的机器*</label>
+
+                        <div class="controls">
+                            <input type="text" id="hostname" name="hostname"
+                                   class="input-big field" value="<%=ip%>" disabled>
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="control-group col-sm-12">
+                        <label class="label label-lg label-info arrowed-right col-sm-2" for="state">任务状态</label>
+
+                        <div class="controls">
+                            <input type="text" class="input field " id="state"
+                                   name="state" value="<%=state%>" disabled>
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="control-group col-sm-12">
+                        <label class="label label-lg label-info arrowed-right col-sm-4"
+                               for="alertUser">选择报错接收人(逗号分隔)</label>
+
+                        <div class="controls">
+                            <input type="text" class="" id="alertUser"
+                                   name="alertUser" value="<%=creator%>"
+                                    >
+                        </div>
+                    </div>
+                    <br>
+
+                    <input type="text" class="field" style="display: none" id="creator"
+                           name="creator"
+                           value="<%=currentUser%>">
+                </fieldset>
+            </form>
+            <%}
+            else {%>
             <h3><i class="icon-info red">请把下面内容复制,然后点击【报错】按钮，在弹出的QQ对话框中粘贴报错内容</i>
             </h3>
             <hr>
@@ -193,7 +254,7 @@
 
 
     function action_feed() {
-        if (feedtype == "mail") {
+        if (feedtype == "mail" || feedtype == "wechat") {
             var mailTo = $("#alertUser").val();
 
             var feedResult = "";
@@ -207,7 +268,8 @@
                     user: user,
                     status: status,
                     ip: ip,
-                    mailTo: mailTo
+                    mailTo: mailTo,
+                    feedtype:feedtype
                 },
                 timeout: 1000,
                 type: 'POST',

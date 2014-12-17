@@ -32,6 +32,7 @@
     <link rel="stylesheet" href="lib/ace/css/ace-rtl.min.css"/>
     <link rel="stylesheet" href="lib/ace/css/ace-skins.min.css"/>
     <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/loading.css">
     <style>
 
         .time_inal {
@@ -269,7 +270,12 @@
         </thead>
         <tbody id="running_body">
         <div id="running_load">
-            <i class="icon-spinner icon-spin icon-large"></i>
+            <div class="loadIcon">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
         </div>
 
         </tbody>
@@ -400,7 +406,12 @@
         <tbody id="submit_body">
 
         <div id="submit_load">
-            <i class="icon-spinner icon-spin icon-large"></i>
+            <div class="loadIcon">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
         </div>
 
         </tbody>
@@ -429,7 +440,12 @@
         </thead>
         <tbody id="dependency_body">
         <div id="dependency_load">
-            <i class="icon-spinner icon-spin icon-large"></i>
+            <div class="loadIcon">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
         </div>
         </tbody>
     </table>
@@ -459,7 +475,12 @@
         </thead>
         <tbody id="failed_body">
         <div id="failed_load">
-            <i class="icon-spinner icon-spin icon-large"></i>
+            <div class="loadIcon">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
         </div>
         </tbody>
     </table>
@@ -488,7 +509,12 @@
         </thead>
         <tbody id="dependency_timeout_body">
         <div id="dependency_timeout_load">
-            <i class="icon-spinner icon-spin icon-large"></i>
+            <div class="loadIcon">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
         </div>
         </tbody>
     </table>
@@ -516,7 +542,12 @@
         </thead>
         <tbody id="timeout_body">
         <div id="timeout_load">
-            <i class="icon-spinner icon-spin icon-large"></i>
+            <div class="loadIcon">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
         </div>
         </tbody>
     </table>

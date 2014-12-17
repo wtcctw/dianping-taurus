@@ -1,35 +1,51 @@
 <!DOCTYPE HTML>
 <html lang="en-US">
 <head>
-    <meta charset="UTF-8"/>
-    <title>xxx</title>
+    <title>Taurus</title>
+    <%@ include file="jsp/common-nav.jsp" %>
+    <meta charset="utf-8">
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- basic styles -->
+    <script type="text/javascript" src="resource/js/lib/jquery-1.9.1.min.js"></script>
+    <link href="lib/ace/css/bootstrap.min.css" rel="stylesheet"/>
+    <script src="lib/ace/js/ace-extra.min.js"></script>
+    <link rel="stylesheet" href="lib/ace/css/font-awesome.min.css"/>
+    <script src="lib/ace/js/ace-elements.min.js"></script>
+    <script src="lib/ace/js/ace.min.js"></script>
+    <script src="lib/ace/js/bootbox.min.js"></script>
+    <script type="text/javascript" src="resource/js/lib/raphael.2.1.0.min.js"></script>
+    <script type="text/javascript" src="resource/js/lib/justgage.1.0.1.min.js"></script>
+    <script type="text/javascript" src="js/login.js"></script>
+    <script type="text/javascript" src="js/viewlog.js"></script>
+    <!-- page specific plugin styles -->
+
+    <!-- fonts -->
+    <script src="lib/ace/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="lib/ace/css/ace-fonts.css"/>
+
+    <!-- ace styles -->
+
+    <link rel="stylesheet" href="lib/ace/css/ace.min.css"/>
+    <link rel="stylesheet" href="lib/ace/css/ace-rtl.min.css"/>
+    <link rel="stylesheet" href="lib/ace/css/ace-skins.min.css"/>
+    <link rel="stylesheet" href="css/common.css">
 </head>
 <body>
-<a href="javascript:;" class="qq">发送信息给好友</a>
+<table>
+    <tr>
+
+        <td> <div class="atip" data-toggle="tooltip" data-placement="right" data-original-title="超时的任务">haha</div></td>
+      </tr>
+    <tr>  <td>hhh</td>
+    </tr>
+    </table>
 </body>
 </html>
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script>
-    function qqShare(){
-        var p = {
-            url:'http://wwww.baidu.com', /*获取URL，可加上来自分享到QQ标识，方便统计*/
-            desc:'发送信息给好友',
-            title:'发送信息给好友', /*分享标题(可选)*/
-            summary:'', /*分享摘要(可选)*/
-            pics:'', /*分享图片(可选)*/
-            flash: '', /*视频地址(可选)*/
-            site:'http://wwww.baidu.com', /*分享来源(可选) 如：QQ分享*/
-            style:'203',
-            width:16,
-            height:16
-        };
-        var s = [];
-        for(var i in p){
-            s.push(i + '=' + encodeURIComponent(p[i]||''));
-        }
-        var qhref = "http://connect.qq.com/widget/shareqq/index.html?"+s.join('&');
-        $(".qq").attr({href:qhref,target:"_blank"});
-    };
+$(".atip").tooltip();
+
 
     $(".qq").click(function(){
         qqShare();

@@ -181,6 +181,7 @@ public class TaurusAlert {
 				if (user != null) {
 					if (rule.getHasmail() && StringUtils.isNotBlank(user.getMail())) {
 						sendMail(user.getMail(), attempt);
+                        sendWeChat(user.getName(),attempt);
 					}
 
 					if (rule.getHassms() && StringUtils.isNotBlank(user.getTel())) {
@@ -279,6 +280,33 @@ public class TaurusAlert {
 				Cat.logError(e);
 			}
 		}
+
+        private void sendWeChat(String user,TaskAttempt attempt) {
+            Cat.logEvent("Alert.WeChat", user);
+            LOG.info("Send WeChat to " + user);
+            Task task = taskMapper.selectByPrimaryKey(attempt.getTaskid());
+
+            StringBuilder sbMailContent = new StringBuilder();
+
+            String domain ="";
+            try {
+                domain = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.deploy.weburl");
+            } catch (LionException e) {
+                domain="taurus.dp";
+                e.printStackTrace();
+            }
+
+            sbMailContent.append("任务名:" + task.getName());
+            sbMailContent.append("任务状态: " + AttemptStatus.getInstanceRunState(attempt.getStatus()));
+            sbMailContent.append("日志查看:" + "http://"+domain+"/viewlog.jsp?id="+ attempt.getAttemptid() +"&status="+AttemptStatus.getInstanceRunState(attempt.getStatus()));
+
+            try {
+                WeChatHelper.sendWeChat( task.getCreator(),sbMailContent.toString());
+            } catch (Exception e) {
+                LOG.error("fail to send WeChat to " + user, e);
+                Cat.logError(e);
+            }
+        }
 	}
 
 	public class MetaDataUpdatedThread implements Runnable {

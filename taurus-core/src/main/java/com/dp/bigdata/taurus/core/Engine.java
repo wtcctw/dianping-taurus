@@ -185,8 +185,11 @@ final public class Engine implements Scheduler {
                     String isAlive = get_data(url);
                     if (isAlive!= null && isAlive.equals("true")){
                        MailHelper.sendMail("kirin.li@dianping.com",context);
+                       MailHelper.sendWeChat("kirin.li",context);
+
                     }else
                     {
+                        MailHelper.sendWeChat("kirin.li",exceptContext);
                         String toMails = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.down.mail.to");
                         String [] toLists = toMails.split(",");
                         for (String to:toLists){

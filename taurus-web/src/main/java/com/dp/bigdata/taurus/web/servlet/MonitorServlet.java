@@ -714,8 +714,9 @@ public class MonitorServlet extends HttpServlet {
                                 + dto.getExecHost()
                                 +"&taskId="
                                 + dto.getTaskID()
-                                +"&feedtype=mail"
-                                +"'><i class='icon-envelope'></i></a> |"
+                                +"&feedtype=wechat"
+                                +"&from=monitor"
+                                +"'><img border='0' src='img/wechat.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a> |"
                                 +"<a id ='failedFeedQQBtn' class='feedBtn'  href='feederror.jsp?id="
                                 +dto.getAttemptID()
                                 +"&status="
@@ -823,8 +824,9 @@ public class MonitorServlet extends HttpServlet {
                                 + dto.getExecHost()
                                 +"&taskId="
                                 + dto.getTaskID()
-                                +"&feedtype=mail"
-                                +"'><i class='icon-envelope'></i></a> |"
+                                +"&feedtype=wechat"
+                                +"&from=monitor"
+                                +"'><img border='0' src='img/wechat.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a> |"
                                 +"<a id ='submitFeedQQBtn' class='feedBtn'  href='feederror.jsp?id="
                                 +dto.getAttemptID()
                                 +"&status="
@@ -934,8 +936,9 @@ public class MonitorServlet extends HttpServlet {
                                 + dto.getExecHost()
                                 +"&taskId="
                                 + dto.getTaskID()
-                                +"&feedtype=mail"
-                                +"'><i class='icon-envelope'></i></a> |"
+                                +"&feedtype=wechat"
+                                +"&from=monitor"
+                                +"'><img border='0' src='img/wechat.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a> |"
                                 +"<a id ='denpencyFeedQQBtn' class='feedBtn'  href='feederror.jsp?id="
                                 +dto.getAttemptID()
                                 +"&status="
@@ -1050,8 +1053,9 @@ public class MonitorServlet extends HttpServlet {
                                 + dto.getExecHost()
                                 +"&taskId="
                                 + dto.getTaskID()
-                                +"&feedtype=mail"
-                                +"'><i class='icon-envelope'></i></a> |"
+                                +"&feedtype=wechat"
+                                +"&from=monitor"
+                                +"'><img border='0' src='img/wechat.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a> |"
                                 +"<a id ='denpencyTimeoutFeedQQBtn' class='feedBtn'  href='feederror.jsp?id="
                                 +dto.getAttemptID()
                                 +"&status="
@@ -1166,8 +1170,9 @@ public class MonitorServlet extends HttpServlet {
                                 + dto.getExecHost()
                                 +"&taskId="
                                 + dto.getTaskID()
-                                +"&feedtype=mail"
-                                +"'><i class='icon-envelope'></i></a> |"
+                                +"&feedtype=wechat"
+                                +"&from=monitor"
+                                +"'><img border='0' src='img/wechat.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a> |"
                                 +"<a id ='timeOutFeedQQBtn' class='feedBtn'  href='feederror.jsp?id="
                                 +dto.getAttemptID()
                                 +"&status="

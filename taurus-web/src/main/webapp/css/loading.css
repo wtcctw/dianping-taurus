@@ -1,0 +1,76 @@
+@keyframes spin {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+    }
+}
+@-webkit-keyframes spin {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+    }
+}
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.loadIcon {
+    margin: 60px auto;
+    height: 120px;
+    width: 120px;
+    position: relative;
+}
+.loadIcon div {
+    position: absolute;
+}
+.loadIcon div:first-child {
+    height: 120px;
+    width: 120px;
+    border-radius: 60px;
+    border-top: solid 10px #237699;
+    animation: spin 2s infinite;
+    -webkit-animation: spin 2s infinite;
+    animation-timing-function: linear;
+    -webkit-animation-timing-function: linear;
+}
+.loadIcon div:nth-child(2) {
+    height: 90px;
+    width: 90px;
+    border-radius: 45px;
+    border-top: solid 10px #6CC5EC;
+    top: 15px;
+    left: 15px;
+    animation: spin 1.5s infinite;
+    -webkit-animation: spin 1.5s infinite;
+    animation-timing-function: linear;
+    -webkit-animation-timing-function: linear;
+}
+.loadIcon div:nth-child(3) {
+    height: 60px;
+    width: 60px;
+    border-radius: 30px;
+    border-top: solid 10px #ACDFF6;
+    top: 30px;
+    left: 30px;
+    animation: spin 1s infinite;
+    -webkit-animation: spin 1s infinite;
+    animation-timing-function: linear;
+    -webkit-animation-timing-function: linear;
+}
+.loadIcon div:nth-child(4) {
+    height: 30px;
+    width: 30px;
+    border-radius: 15px;
+    border-top: solid 10px #D1EEFB;
+    top: 45px;
+    left: 45px;
+    animation: spin 0.5s infinite;
+    -webkit-animation: spin 0.5s infinite;
+    animation-timing-function: linear;
+    -webkit-animation-timing-function: linear;
+}

@@ -31,6 +31,10 @@
     <script src="lib/ace/js/jquery.dataTables.bootstrap.js"></script>
     <script type="text/javascript" src="js/login.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
+    <script src="lib/dist/echarts.js"></script>
+    <script src="lib/dist/chart/gauge.js"></script>
+    <script src="lib/dist/theme/macarons.js"></script>
+
     <!-- page specific plugin styles -->
 
     <!-- fonts -->
@@ -45,6 +49,7 @@
 
     <link rel="stylesheet" href="resource/css/monitor-center.css">
     <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/loading.css">
     <style>
         .dayreport {
             float: left
@@ -454,7 +459,38 @@
 </div>
 <div id="total">
     <div class="col-sm-12">
-        <div class="col-sm-12">
+        <div class="col-sm-6">
+            <div class="widget-box">
+                <div class="widget-header widget-header-flat widget-header-small">
+                    <h5 class="widget-title">
+                        <i class="icon-dashboard"></i>
+                        任务仪表盘
+                    </h5>
+
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="collapse">
+                            <i class="icon-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="widget-body">
+                    <div class="widget-main" id="total-chart" style="width: 499px;height: 319px">
+                        <div class="loadIcon">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                    <!-- /.widget-main -->
+                </div>
+                <!-- /.widget-body -->
+            </div>
+            <!-- /.widget-box -->
+
+        </div>
+        <div class="col-sm-6">
             <div class="widget-box">
                 <div class="widget-header widget-header-flat widget-header-small">
                     <h5 class="widget-title">
@@ -472,7 +508,12 @@
                 <div class="widget-body">
                     <div class="widget-main" id="total-widget-main">
 
-                        <div id="totaltasks"><i class="icon-spinner icon-spin icon-large"></i></div>
+                        <div id="totaltasks"> <div class="loadIcon">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div></div>
 
                         <div class="hr hr8 hr-double"></div>
 
@@ -543,7 +584,12 @@
                 <div class="widget-body">
 
                     <div class="widget-main " id="totaltasklist">
-                        <i class="icon-spinner icon-spin icon-large"></i>
+                        <div class="loadIcon">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
                     </div>
                     <!-- /.widget-main -->
                 </div>
@@ -575,7 +621,14 @@
             <div class="widget-body">
                 <div class="widget-main" id="user-widget-main">
 
-                    <div id="mytasks"><i class="icon-spinner icon-spin icon-large"></i></div>
+                    <div id="mytasks">
+                        <div class="loadIcon">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
 
                     <div class="hr hr8 hr-double"></div>
 
@@ -647,7 +700,14 @@
             <div class="widget-body">
                 <div class="widget-main" id="group-widget-main">
 
-                    <div id="grouptasks"><i class="icon-spinner icon-spin icon-large"></i></div>
+                    <div id="grouptasks">
+                        <div class="loadIcon">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
 
                     <div class="hr hr8 hr-double"></div>
 
@@ -719,7 +779,12 @@
             <div class="widget-body">
 
                 <div class="widget-main align-center" id="mytasklist">
-                    <i class="icon-spinner icon-spin icon-large"></i>
+                    <div class="loadIcon">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
                 </div>
                 <!-- /.widget-main -->
             </div>
@@ -747,7 +812,12 @@
             <div class="widget-body">
 
                 <div class="widget-main align-center" id="grouptasklist">
-                    <i class="icon-spinner icon-spin icon-large"></i>
+                    <div class="loadIcon">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
                 </div>
                 <!-- /.widget-main -->
             </div>
@@ -777,7 +847,14 @@
 
             <div class="widget-body">
                 <div class="widget-main">
-                    <div id="piechart-placeholder"><i class="icon-spinner icon-spin icon-large"></i></div>
+                    <div id="piechart-placeholder">
+                        <div class="loadIcon">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
 
                     <div class="hr hr8 hr-double"></div>
 
@@ -826,7 +903,12 @@
 
             <div class="widget-body">
                 <div class="widget-main" id="exceptionJob" style="height: 283px">
-                    <i class="icon-spinner icon-spin icon-large"></i>
+                    <div class="loadIcon">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
                 </div>
                 <!-- /.widget-main -->
             </div>
@@ -860,7 +942,12 @@
             <div class="widget-body">
 
                 <div class="widget-main align-center" id="cpuload">
-                    <i class="icon-spinner icon-spin icon-large"></i>
+                    <div class="loadIcon">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
                 </div>
                 <!-- /.widget-main -->
             </div>
@@ -892,7 +979,12 @@
             <div class="widget-body">
 
                 <div class="widget-main align-center" id="memload">
-                    <i class="icon-spinner icon-spin icon-large"></i>
+                    <div class="loadIcon">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
                 </div>
                 <!-- /.widget-main -->
             </div>
@@ -920,7 +1012,14 @@
 
         <div class="widget-body">
             <div class="widget-main">
-                <div id="job-placeholder"><i class="icon-spinner icon-spin icon-large"></i></div>
+                <div id="job-placeholder">
+                    <div class="loadIcon">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
 
                 <div class="hr hr8 hr-double"></div>
 
@@ -952,7 +1051,12 @@
 
 
                 <div class="widget-main align-center" id="totalJob">
-                    <i class="icon-spinner icon-spin icon-large"></i>
+                    <div class="loadIcon">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
                 </div>
                 <!-- /.widget-main -->
             </div>
@@ -980,7 +1084,12 @@
 
                 <div class="widget-main align-center" id="failedJob">
 
-                        <i class="icon-spinner icon-spin icon-large"></i>
+                    <div class="loadIcon">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
                 </div>
                 <!-- /.widget-main -->
             </div>
@@ -1009,7 +1118,6 @@
 
     <p style="text-align: center; padding-right:32px;color: firebrick">点我报错</p>
 </div>
-
 <script type="text/javascript">
     $('li[id="index"]').addClass("active");
     $('#menu-toggler').on(ace.click_event, function () {
@@ -1018,6 +1126,7 @@
         return false;
     });
 
+    // 基于准备好的dom，初始化echarts图表
     $(".atip").tooltip();
     options = {
         delay: { show: 500, hide: 100 },
@@ -1035,6 +1144,8 @@
         $("html, body").scrollTop(0);
         return false;
     });
+
+
     function GetDateStr(dd, AddDayCount) {
         dd.setDate(dd.getDate() + AddDayCount);//获取AddDayCount天后的日期
         var y = dd.getFullYear();
