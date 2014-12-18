@@ -27,9 +27,10 @@ jQuery(function ($) {
         $('#cputable').dataTable({
             "bAutoWidth": true,
             "bPaginate": true,
-            "bFilter": false,
+            "bFilter": true,
             "bInfo": true,
             "bLengthChange": true,
+            "aaSorting": [[ 1, "desc" ]],
             "aoColumns": [
                 null,
                 { "sType": "html-percent", "aTargets": [2] }
@@ -41,9 +42,10 @@ jQuery(function ($) {
         $('#memtable').dataTable({
             "bAutoWidth": true,
             "bPaginate": true,
-            "bFilter": false,
+            "bFilter": true,
             "bInfo": true,
             "bLengthChange": true,
+            "aaSorting": [[ 1, "asc" ]],
             "aoColumns": [
                 null,
                 { "sType": "html-percent", "aTargets": [2] }
@@ -56,16 +58,11 @@ jQuery(function ($) {
         $('#totalTaskTable').dataTable({
             "bAutoWidth": true,
             "bPaginate": true,
-            "bFilter": false,
+            "bFilter": true,
             "bInfo": true,
             "bLengthChange": true,
-            "aoColumns": [
-                { "sType": "html-percent", "aTargets": [1] },
-                { "sType": "html-percent", "aTargets": [2] },
-                { "sType": "html-percent", "aTargets": [3] },
-                { "sType": "html-percent", "aTargets": [4] },
-                { "sType": "html-percent", "aTargets": [5] }
-            ]
+            "aaSorting": [[ 3, "desc" ]]
+
 
 
         });
@@ -74,14 +71,10 @@ jQuery(function ($) {
         $('#userTaskTable').dataTable({
             "bAutoWidth": true,
             "bPaginate": true,
-            "bFilter": false,
+            "bFilter": true,
             "bInfo": true,
             "bLengthChange": true,
-            "aoColumns": [
-                null,
-                { "sType": "html-percent", "aTargets": [1] },
-                { "sType": "html-percent", "aTargets": [2] }
-            ]
+            "aaSorting": [[ 2, "desc" ]]
 
 
         });
@@ -91,15 +84,10 @@ jQuery(function ($) {
         $('#groupTaskTable').dataTable({
             "bAutoWidth": true,
             "bPaginate": true,
-            "bFilter": false,
+            "bFilter": true,
             "bInfo": true,
             "bLengthChange": true,
-            "aoColumns": [
-                null,
-                { "sType": "html-percent", "aTargets": [1] },
-                { "sType": "html-percent", "aTargets": [2] },
-                { "sType": "html-percent", "aTargets": [3] }
-            ]
+            "aaSorting": [[ 2, "desc" ]]
 
 
         });
@@ -109,13 +97,10 @@ jQuery(function ($) {
         $('#failedJobTable').dataTable({
             "bAutoWidth": true,
             "bPaginate": true,
-            "bFilter": false,
+            "bFilter": true,
             "bInfo": true,
             "bLengthChange": true,
-            "aoColumns": [
-                null,
-                null
-            ]
+            "aaSorting": [[ 1, "desc" ]]
 
 
         });
@@ -125,14 +110,10 @@ jQuery(function ($) {
         $("#totalJobTable").dataTable({
             "bAutoWidth": true,
             "bPaginate": true,
-            "bFilter": false,
+            "bFilter": true,
             "bInfo": true,
             "bLengthChange": true,
-            "aoColumns": [
-                null,
-                null
-            ]
-
+            "aaSorting": [[ 1, "desc" ]]
 
         });
     };
@@ -141,14 +122,10 @@ jQuery(function ($) {
         $("#jobStateTable").dataTable({
             "bAutoWidth": true,
             "bPaginate": true,
-            "bFilter": false,
+            "bFilter": true,
             "bInfo": true,
             "bLengthChange": true,
-            "aoColumns": [
-                null,
-                null
-            ]
-
+            "aaSorting": [[ 1, "desc" ]]
 
         });
     };
