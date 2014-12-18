@@ -401,7 +401,7 @@
                                 +"&taskId="
                                 +taskID
                                 +"&feedtype=mail"
-                                +"'><i class='icon-envelope'></i></a> |";
+                                +"'><i class='icon-envelope'><img border='0' src='img/wechat.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></i></a> |";
                         attemptBody += "<a id ='feedQQBtn' class='feedBtn'  href='feederror.jsp?id="
                                 +item.attemptId
                                 +"&status="
@@ -432,7 +432,7 @@
                                 +"&taskId="
                                 +taskID
                                 +"&feedtype=mail"
-                                +"'><i class='icon-envelope'></i></a> |";
+                                +"'><i class='icon-envelope'><img border='0' src='img/wechat.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></i></a> |";
                         attemptBody += "<a id ='feedQQBtn' class='feedBtn'  href='feederror.jsp?id="
                                 +item.attemptId
                                 +"&status="
