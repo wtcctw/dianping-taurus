@@ -1091,7 +1091,7 @@ $(document).ready(function () {
                 function (ec) {
                     // 基于准备好的dom，初始化echarts图表
                     var myChart = ec.init(document.getElementById('total-chart'));
-                    var succ =  ((totalSuccNums * 1.0)/(1.0*(totalSuccNums+totalFailedNums+totalKillNums+totalFailedNums+totalTimeoutNums+totalCongestNums)))*100
+                    var succ =  ((totalSuccNums * 1.0)/(1.0*(totalSuccNums+totalFailedNums+totalKillNums+totalTimeoutNums+totalCongestNums)))*100
                     var option = {
                         tooltip : {
                             formatter: "{a} <br/>{b} : {c}%"
