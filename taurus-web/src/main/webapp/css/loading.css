@@ -33,8 +33,8 @@ body {
     width: 120px;
     border-radius: 60px;
     border-top: solid 10px #237699;
-    animation: spin 2s infinite;
-    -webkit-animation: spin 2s infinite;
+    animation: spin 1s infinite;
+    -webkit-animation: spin 1s infinite;
     animation-timing-function: linear;
     -webkit-animation-timing-function: linear;
 }
@@ -42,7 +42,7 @@ body {
     height: 90px;
     width: 90px;
     border-radius: 45px;
-    border-top: solid 10px #6CC5EC;
+    border-top: solid 10px #ecb345;
     top: 15px;
     left: 15px;
     animation: spin 1.5s infinite;
@@ -66,7 +66,7 @@ body {
     height: 30px;
     width: 30px;
     border-radius: 15px;
-    border-top: solid 10px #D1EEFB;
+    border-top: solid 10px #fb4a52;
     top: 45px;
     left: 45px;
     animation: spin 0.5s infinite;
