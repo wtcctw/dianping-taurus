@@ -19,6 +19,7 @@
     <script type="text/javascript" src="resource/js/lib/raphael.2.1.0.min.js"></script>
     <script type="text/javascript" src="resource/js/lib/justgage.1.0.1.min.js"></script>
     <script type="text/javascript" src="resource/js/lib/Chart.js"></script>
+
     <!-- page specific plugin styles -->
     <script src="lib/ace/js/jquery.dataTables.min.js"></script>
     <script src="lib/ace/js/jquery.dataTables.bootstrap.js"></script>
@@ -239,6 +240,9 @@
                 <a href="attempt.jsp">调度历史</a>
             </li>
         </ul>
+        <div style="float:right;padding-right: 5%">
+            <a class="btn btn-info" href='#' onClick="redo('<%=request.getParameter("taskID")%>')"><i class="icon-repeat">重跑该任务</i></a>
+        </div>
     </div>
 
     <div class="page-content">

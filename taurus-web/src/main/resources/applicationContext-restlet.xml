@@ -31,6 +31,9 @@
     <bean name="/api/runningtask/{task_id}" id="isExistRunningTask" autowire="byName"
           scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.ExistTaskRunning" />
 
+    <bean name="/api/getlaststatus/{task_id}" id="getLastStatus" autowire="byName"
+          scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.GetTaskLastStatus" />
+
     <bean name="/api/getuserid/{userName}" id="getUserId" autowire="byName"
           scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.GetUserId" />
 	<bean name="/api/manualtask/{task_id}" id="manualTaskResource"

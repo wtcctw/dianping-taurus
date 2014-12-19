@@ -5,6 +5,7 @@
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="num" jdbcType="INTEGER" property="num"/>
         <result column="creator" jdbcType="VARCHAR" property="creator"/>
+        <result column="taskID" jdbcType="VARCHAR" property="taskID"/>
     </resultMap>
     <resultMap id="TotalTaskResultMap" type="com.dp.bigdata.taurus.generated.module.TotalTaskExample">
         <result column="name" jdbcType="VARCHAR" property="name"/>
@@ -402,12 +403,12 @@
     where <![CDATA[ startTime >=#{start} and  startTime <=#{end} and status=8]]>  group by execHost order by totaltask desc
 
 </select>
-    <select id="getUserTasks" resultType="map">
-        select a.name,count(1) AS num from TaurusTask a join TaurusTaskAttempt b on a.taskID=b.taskID  where <![CDATA[ a.creator=#{user} and b.status = #{status, typeHandler=com.dp.bigdata.taurus.generated.module.InHandler}   and b.startTime >=#{start} and  startTime <= #{end}]]> group by a.name
+    <select id="getUserTasks" resultMap="GroupTaskResultMap">
+        select a.name,a.taskID,count(1) AS num ,a.creator from TaurusTask a join TaurusTaskAttempt b on a.taskID=b.taskID  where <![CDATA[ a.creator=#{user} and b.status = #{status, typeHandler=com.dp.bigdata.taurus.generated.module.InHandler}   and b.startTime >=#{start} and  startTime <= #{end}]]> group by a.name
     </select>
 
     <select id="getGroupTasks" resultMap="GroupTaskResultMap">
-        select d.name,count(1) as num,d.creator from
+        select d.name,d.taskID,count(1) as num,d.creator from
         (
         select a.*,b.groupID from
         (
@@ -424,8 +425,8 @@
         group by d.name,d.creator
     </select>
 
-    <select id="getTotalTasks" resultMap="GroupTaskResultMap">
-        select f.name,count(1) as num,f.creator from
+    <select id="getTotalTasks" resultMap="TotalTaskResultMap">
+        select f.name,f.taskID,count(1) as num,f.creator from
         (
         select a.* from
         (
@@ -449,5 +450,9 @@
 
     <select id="isExitRunningTask"  resultMap="BaseResultMap">
         select TaurusTaskAttempt.taskID from TaurusTaskAttempt where TaurusTaskAttempt.status = 6 and TaurusTaskAttempt.taskID = #{taskId} limit 1
+    </select>
+
+    <select id="getTaskLastStatus"  resultType="int">
+        select status from TaurusTaskAttempt where taskID = #{taskId} order by startTime desc limit 1
     </select>
 </mapper>

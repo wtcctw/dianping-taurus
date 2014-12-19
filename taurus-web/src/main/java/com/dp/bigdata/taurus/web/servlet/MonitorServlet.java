@@ -3,6 +3,7 @@ package com.dp.bigdata.taurus.web.servlet;
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
 import com.dianping.lion.client.LionException;
+import com.dp.bigdata.taurus.core.AttemptStatus;
 import com.dp.bigdata.taurus.generated.mapper.TaskAttemptMapper;
 import com.dp.bigdata.taurus.generated.mapper.TaskMapper;
 import com.dp.bigdata.taurus.generated.module.Task;
@@ -15,7 +16,9 @@ import com.dp.bigdata.taurus.web.utils.ReFlashHostLoadTaskTimer;
 import com.dp.bigdata.taurus.web.utils.ZabbixUtil;
 import com.dp.bigdata.taurus.zookeeper.common.infochannel.ZooKeeperCleaner;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONArray;
@@ -69,7 +72,7 @@ public class MonitorServlet extends HttpServlet {
     private static final String RESIGN = "resign";
     private static final String REFLASH_ATTEMPTS = "reflash_attempts";
 
-    private  static ArrayList<AttemptDTO> attempts;
+    private static ArrayList<AttemptDTO> attempts;
     private static boolean is_flash = false;
 
 
@@ -237,12 +240,12 @@ public class MonitorServlet extends HttpServlet {
             String jsonString = groupTasks.retrieve();
             output.write(jsonString.getBytes());
             output.close();
-        }else if (TOTAL_TASK.equals(action)) {
+        } else if (TOTAL_TASK.equals(action)) {
             OutputStream output = response.getOutputStream();
             String start = request.getParameter("start");
             String end = request.getParameter("end");
 
-            cr = new ClientResource(RESTLET_URL_BASE + "totaltasks/"   + start + "/" + end);
+            cr = new ClientResource(RESTLET_URL_BASE + "totaltasks/" + start + "/" + end);
             ITotalTask totalTasks = cr.wrap(ITotalTask.class);
             cr.accept(MediaType.APPLICATION_XML);
             String jsonString = totalTasks.retrieve();
@@ -313,26 +316,26 @@ public class MonitorServlet extends HttpServlet {
             String reusult_str = "";
 
             if (adminUser.contains(user)) {
-            String start_str = request.getParameter("start");
-            String end_str = request.getParameter("end");
+                String start_str = request.getParameter("start");
+                String end_str = request.getParameter("end");
 
-            try {
-                int start = Integer.parseInt(start_str);
-                int end = Integer.parseInt(end_str);
+                try {
+                    int start = Integer.parseInt(start_str);
+                    int end = Integer.parseInt(end_str);
 
-                ZooKeeperCleaner.clearNodes(start, end);
-                reusult_str = "清理成功！";
-            } catch (Exception e) {
-                output.write("failed".getBytes());
-                output.close();
-            }
+                    ZooKeeperCleaner.clearNodes(start, end);
+                    reusult_str = "清理成功！";
+                } catch (Exception e) {
+                    output.write("failed".getBytes());
+                    output.close();
+                }
             } else {
                 reusult_str = "无权限执行操作!";
             }
             output.write(reusult_str.getBytes());
             output.close();
 
-        }else if (UPDATE_CREATOR.equals(action)) {
+        } else if (UPDATE_CREATOR.equals(action)) {
             OutputStream output = response.getOutputStream();
             String taskName = request.getParameter("taskName");
             String creator = request.getParameter("creator");
@@ -377,7 +380,7 @@ public class MonitorServlet extends HttpServlet {
             output.close();
 
 
-        }else if (RESIGN.equals(action)) {
+        } else if (RESIGN.equals(action)) {
             OutputStream output = response.getOutputStream();
             String taskName = request.getParameter("taskName");
             String creator = request.getParameter("creator");
@@ -390,129 +393,125 @@ public class MonitorServlet extends HttpServlet {
             String reusult_str = "";
 
 
-                cr = new ClientResource(RESTLET_URL_BASE + "updatecreator/" + creator.trim() + "/" + taskName.trim() + "/resign" );
-                IClearDependencyPassTask clearTasks = cr.wrap(IClearDependencyPassTask.class);
-                cr.accept(MediaType.APPLICATION_XML);
-                int result = clearTasks.retrieve();
+            cr = new ClientResource(RESTLET_URL_BASE + "updatecreator/" + creator.trim() + "/" + taskName.trim() + "/resign");
+            IClearDependencyPassTask clearTasks = cr.wrap(IClearDependencyPassTask.class);
+            cr.accept(MediaType.APPLICATION_XML);
+            int result = clearTasks.retrieve();
 
 
-            cr = new ClientResource(RESTLET_URL_BASE + "getuserid/" + creator.trim() );
+            cr = new ClientResource(RESTLET_URL_BASE + "getuserid/" + creator.trim());
             IGetUserId getUserId = cr.wrap(IGetUserId.class);
             cr.accept(MediaType.APPLICATION_XML);
-           int creatorId =  getUserId.retrieve();
+            int creatorId = getUserId.retrieve();
 
 
-                switch (result) {
-                    case SERVICE_EXCEPTION:
-                        reusult_str = "后台服务异常!";
-                        break;
-                    case TASKID_IS_NOT_FOUND:
-                        reusult_str = "taskName 不存在!";
-                        break;
-                    case STATUS_IS_NOT_RIGHT:
-                        reusult_str = "creator 错误!";
-                        break;
-                    default:
-                        reusult_str = "执行成功~";
-                        //替换告警人
+            switch (result) {
+                case SERVICE_EXCEPTION:
+                    reusult_str = "后台服务异常!";
+                    break;
+                case TASKID_IS_NOT_FOUND:
+                    reusult_str = "taskName 不存在!";
+                    break;
+                case STATUS_IS_NOT_RIGHT:
+                    reusult_str = "creator 错误!";
+                    break;
+                default:
+                    reusult_str = "执行成功~";
+                    //替换告警人
 
-                        String [] tmpUserList = alertUser.split(","); //现有的alert user
-                        String [] tmpJobIdList = jobId.split(",");
-                        String [] oldCreatorsList = oldcreators.split(","); //之前的用户
-
-
-                        for (int i = 0; i < tmpJobIdList.length; i++){
-
-                            String tmpJobId = tmpJobIdList[i];
-                            String tmpUserId = tmpUserList[i];
-                            String older = oldCreatorsList[i];
-
-                            boolean isHaveAlert = false;
-
-                            if (tmpUserId.indexOf(creator) > -1){
-                                isHaveAlert = true;
-                            }
-
-                            String[] tmpUsers = tmpUserId.split(";");
-                            String newUserId = "";
-                            if (isHaveAlert){
-                                for (int j = 0; j < tmpUsers.length; j++){
-                                    String user = tmpUsers[j];
-                                    cr = new ClientResource(RESTLET_URL_BASE + "getuserid/" + user.trim() );
-                                    getUserId = cr.wrap(IGetUserId.class);
-                                    cr.accept(MediaType.APPLICATION_XML);
-                                    int userIdAlert =  getUserId.retrieve();
-                                    if (j == tmpUsers.length - 1){
-                                        if (!user.equals(older)){
-                                            newUserId += userIdAlert;
-                                        }
-                                    }else {
-                                        if (!user.equals(older)){
-                                            newUserId += userIdAlert + ";";
-                                        }
-                                    }
+                    String[] tmpUserList = alertUser.split(","); //现有的alert user
+                    String[] tmpJobIdList = jobId.split(",");
+                    String[] oldCreatorsList = oldcreators.split(","); //之前的用户
 
 
-                                }
-                            }else {
-                                for (int j = 0; j < tmpUsers.length; j++){
-                                    String user = tmpUsers[j];
+                    for (int i = 0; i < tmpJobIdList.length; i++) {
 
-                                    cr = new ClientResource(RESTLET_URL_BASE + "getuserid/" + user.trim() );
-                                    getUserId = cr.wrap(IGetUserId.class);
-                                    cr.accept(MediaType.APPLICATION_XML);
+                        String tmpJobId = tmpJobIdList[i];
+                        String tmpUserId = tmpUserList[i];
+                        String older = oldCreatorsList[i];
 
-                                    int userIdAlert =  getUserId.retrieve();
+                        boolean isHaveAlert = false;
 
-                                    if (j == tmpUsers.length - 1){
-                                        if (user.equals(older)){
-                                            newUserId += creatorId;
-                                        }else {
-                                            newUserId += userIdAlert;
-                                        }
-                                    }else {
-                                        if (user.equals(older)){
-                                            newUserId += creatorId + ";";
-                                        }else {
-                                            newUserId += userIdAlert + ";";
-                                        }
-                                    }
-
-
-
-
-                                }
-                            }
-
-                            cr = new ClientResource(RESTLET_URL_BASE + "updatealert/" + newUserId.trim() + "/" + tmpJobId.trim() + "" );
-                            IUpdateAlertRule updateAlertRule = cr.wrap(IUpdateAlertRule.class);
-                            cr.accept(MediaType.APPLICATION_XML);
-                            updateAlertRule.retrieve();
-
-
-
+                        if (tmpUserId.indexOf(creator) > -1) {
+                            isHaveAlert = true;
                         }
-                        String clientIp = getIpAddr(request);
-                        String logInfo = "####RESGIN OP #### IP:" + clientIp + " 用户【" + currentUser + "】把任务名为：【 " + taskName + "】的任务原对应调度人分别为【" + oldcreators + "】 都指派给了 【" + creator + "】";
-                        LOGGER.info(logInfo);
-                        System.out.println(logInfo);
-                        break;
 
-                }
+                        String[] tmpUsers = tmpUserId.split(";");
+                        String newUserId = "";
+                        if (isHaveAlert) {
+                            for (int j = 0; j < tmpUsers.length; j++) {
+                                String user = tmpUsers[j];
+                                cr = new ClientResource(RESTLET_URL_BASE + "getuserid/" + user.trim());
+                                getUserId = cr.wrap(IGetUserId.class);
+                                cr.accept(MediaType.APPLICATION_XML);
+                                int userIdAlert = getUserId.retrieve();
+                                if (j == tmpUsers.length - 1) {
+                                    if (!user.equals(older)) {
+                                        newUserId += userIdAlert;
+                                    }
+                                } else {
+                                    if (!user.equals(older)) {
+                                        newUserId += userIdAlert + ";";
+                                    }
+                                }
+
+
+                            }
+                        } else {
+                            for (int j = 0; j < tmpUsers.length; j++) {
+                                String user = tmpUsers[j];
+
+                                cr = new ClientResource(RESTLET_URL_BASE + "getuserid/" + user.trim());
+                                getUserId = cr.wrap(IGetUserId.class);
+                                cr.accept(MediaType.APPLICATION_XML);
+
+                                int userIdAlert = getUserId.retrieve();
+
+                                if (j == tmpUsers.length - 1) {
+                                    if (user.equals(older)) {
+                                        newUserId += creatorId;
+                                    } else {
+                                        newUserId += userIdAlert;
+                                    }
+                                } else {
+                                    if (user.equals(older)) {
+                                        newUserId += creatorId + ";";
+                                    } else {
+                                        newUserId += userIdAlert + ";";
+                                    }
+                                }
+
+
+                            }
+                        }
+
+                        cr = new ClientResource(RESTLET_URL_BASE + "updatealert/" + newUserId.trim() + "/" + tmpJobId.trim() + "");
+                        IUpdateAlertRule updateAlertRule = cr.wrap(IUpdateAlertRule.class);
+                        cr.accept(MediaType.APPLICATION_XML);
+                        updateAlertRule.retrieve();
+
+
+                    }
+                    String clientIp = getIpAddr(request);
+                    String logInfo = "####RESGIN OP #### IP:" + clientIp + " 用户【" + currentUser + "】把任务名为：【 " + taskName + "】的任务原对应调度人分别为【" + oldcreators + "】 都指派给了 【" + creator + "】";
+                    LOGGER.info(logInfo);
+                    System.out.println(logInfo);
+                    break;
+
+            }
 
 
             output.write(reusult_str.getBytes());
             output.close();
 
 
-        } else if(REFLASH_ATTEMPTS.equals(action)){
+        } else if (REFLASH_ATTEMPTS.equals(action)) {
             OutputStream output = response.getOutputStream();
             String start = request.getParameter("start");
             String taskTime = start;
 
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             String url = RESTLET_URL_BASE + "getattemptsbystatus/";
-
 
 
             cr = new ClientResource(url + taskTime);
@@ -522,7 +521,7 @@ public class MonitorServlet extends HttpServlet {
             output.write("success".getBytes());
             output.close();
 
-        }else if (RUNNING_TASKS.equals(action)) {
+        } else if (RUNNING_TASKS.equals(action)) {
             OutputStream output = response.getOutputStream();
             String hourTimeStr = request.getParameter("hourTime");
             long hourTime = 60 * 60 * 1000;
@@ -602,8 +601,8 @@ public class MonitorServlet extends HttpServlet {
 
                             result += "<td >"
                                     + "  <a target=\"_blank\" href=\"viewlog.jsp?id="
-                                    + dto.getAttemptID()+"&status="+dto.getStatus()
-                                    +"\">日志</a>"
+                                    + dto.getAttemptID() + "&status=" + dto.getStatus()
+                                    + "\">日志</a>"
                                     + "</td >";
 
 
@@ -631,7 +630,6 @@ public class MonitorServlet extends HttpServlet {
                 ReFlashHostLoadTask.allTasks = tasks;
                 ReFlashHostLoadTask.lastReadDataTime = new Date().getTime();
             }
-
 
 
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -700,36 +698,36 @@ public class MonitorServlet extends HttpServlet {
 
                         result += "<td >"
                                 + "  <a target=\"_blank\" href=\"viewlog.jsp?id="
-                                + dto.getAttemptID()+"&status="+dto.getStatus()
-                                +"\">日志</a>"
+                                + dto.getAttemptID() + "&status=" + dto.getStatus()
+                                + "\">日志</a>"
                                 + "</td >";
 
                         result += "<td> <a id ='failedFeedBtn' class='feedBtn'  href='feederror.jsp?id="
-                                +dto.getAttemptID()
-                                +"&status="
+                                + dto.getAttemptID()
+                                + "&status="
                                 + dto.getStatus()
-                                +"&taskName="
+                                + "&taskName="
                                 + taskName
-                                +"&ip="
+                                + "&ip="
                                 + dto.getExecHost()
-                                +"&taskId="
+                                + "&taskId="
                                 + dto.getTaskID()
-                                +"&feedtype=wechat"
-                                +"&from=monitor"
-                                +"'><img border='0' src='img/wechat.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a> |"
-                                +"<a id ='failedFeedQQBtn' class='feedBtn'  href='feederror.jsp?id="
-                                +dto.getAttemptID()
-                                +"&status="
+                                + "&feedtype=wechat"
+                                + "&from=monitor"
+                                + "'><img border='0' src='img/wechat.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a> |"
+                                + "<a id ='failedFeedQQBtn' class='feedBtn'  href='feederror.jsp?id="
+                                + dto.getAttemptID()
+                                + "&status="
                                 + dto.getStatus()
-                                +"&taskName="
+                                + "&taskName="
                                 + taskName
-                                +"&ip="
+                                + "&ip="
                                 + dto.getExecHost()
-                                +"&taskId="
+                                + "&taskId="
                                 + dto.getTaskID()
-                                +"&feedtype=qq"
-                                +"&from=monitor"
-                                +"'><img border='0' src='img/qq.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a></td>";
+                                + "&feedtype=qq"
+                                + "&from=monitor"
+                                + "'><img border='0' src='img/qq.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a></td>";
 
 
                         result += "</tr>";
@@ -815,31 +813,31 @@ public class MonitorServlet extends HttpServlet {
                                     + "</td >";
                         }
                         result += "<td> <a id ='submitFeedBtn' class='feedBtn'  href='feederror.jsp?id="
-                                +dto.getAttemptID()
-                                +"&status="
+                                + dto.getAttemptID()
+                                + "&status="
                                 + dto.getStatus()
-                                +"&taskName="
+                                + "&taskName="
                                 + taskName
-                                +"&ip="
+                                + "&ip="
                                 + dto.getExecHost()
-                                +"&taskId="
+                                + "&taskId="
                                 + dto.getTaskID()
-                                +"&feedtype=wechat"
-                                +"&from=monitor"
-                                +"'><img border='0' src='img/wechat.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a> |"
-                                +"<a id ='submitFeedQQBtn' class='feedBtn'  href='feederror.jsp?id="
-                                +dto.getAttemptID()
-                                +"&status="
+                                + "&feedtype=wechat"
+                                + "&from=monitor"
+                                + "'><img border='0' src='img/wechat.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a> |"
+                                + "<a id ='submitFeedQQBtn' class='feedBtn'  href='feederror.jsp?id="
+                                + dto.getAttemptID()
+                                + "&status="
                                 + dto.getStatus()
-                                +"&taskName="
+                                + "&taskName="
                                 + taskName
-                                +"&ip="
+                                + "&ip="
                                 + dto.getExecHost()
-                                +"&taskId="
+                                + "&taskId="
                                 + dto.getTaskID()
-                                +"&feedtype=qq"
-                                +"&from=monitor"
-                                +"'><img border='0' src='img/qq.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a></td>";
+                                + "&feedtype=qq"
+                                + "&from=monitor"
+                                + "'><img border='0' src='img/qq.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a></td>";
                         result += "</tr>";
                     }
                 }
@@ -859,7 +857,6 @@ public class MonitorServlet extends HttpServlet {
                 ReFlashHostLoadTask.allTasks = tasks;
                 ReFlashHostLoadTask.lastReadDataTime = new Date().getTime();
             }
-
 
 
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -927,31 +924,31 @@ public class MonitorServlet extends HttpServlet {
                         }
 
                         result += "<td> <a id ='denpencyFeedBtn' class='feedBtn'  href='feederror.jsp?id="
-                                +dto.getAttemptID()
-                                +"&status="
+                                + dto.getAttemptID()
+                                + "&status="
                                 + dto.getStatus()
-                                +"&taskName="
+                                + "&taskName="
                                 + taskName
-                                +"&ip="
+                                + "&ip="
                                 + dto.getExecHost()
-                                +"&taskId="
+                                + "&taskId="
                                 + dto.getTaskID()
-                                +"&feedtype=wechat"
-                                +"&from=monitor"
-                                +"'><img border='0' src='img/wechat.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a> |"
-                                +"<a id ='denpencyFeedQQBtn' class='feedBtn'  href='feederror.jsp?id="
-                                +dto.getAttemptID()
-                                +"&status="
+                                + "&feedtype=wechat"
+                                + "&from=monitor"
+                                + "'><img border='0' src='img/wechat.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a> |"
+                                + "<a id ='denpencyFeedQQBtn' class='feedBtn'  href='feederror.jsp?id="
+                                + dto.getAttemptID()
+                                + "&status="
                                 + dto.getStatus()
-                                +"&taskName="
+                                + "&taskName="
                                 + taskName
-                                +"&ip="
+                                + "&ip="
                                 + dto.getExecHost()
-                                +"&taskId="
+                                + "&taskId="
                                 + dto.getTaskID()
-                                +"&feedtype=qq"
-                                +"&from=monitor"
-                                +"'><img border='0' src='img/qq.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a></td>";
+                                + "&feedtype=qq"
+                                + "&from=monitor"
+                                + "'><img border='0' src='img/qq.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a></td>";
 
                         result += "</tr>";
                     }
@@ -971,7 +968,6 @@ public class MonitorServlet extends HttpServlet {
                 ReFlashHostLoadTask.allTasks = tasks;
                 ReFlashHostLoadTask.lastReadDataTime = new Date().getTime();
             }
-
 
 
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -1039,36 +1035,36 @@ public class MonitorServlet extends HttpServlet {
                         }
                         result += "<td >"
                                 + "  <a target=\"_blank\" href=\"viewlog.jsp?id="
-                                + dto.getAttemptID()+"&status="+dto.getStatus()
-                                +"\">日志</a>"
+                                + dto.getAttemptID() + "&status=" + dto.getStatus()
+                                + "\">日志</a>"
                                 + "</td >";
 
                         result += "<td> <a id ='denpencyTimeoutFeedBtn' class='feedBtn'  href='feederror.jsp?id="
-                                +dto.getAttemptID()
-                                +"&status="
+                                + dto.getAttemptID()
+                                + "&status="
                                 + dto.getStatus()
-                                +"&taskName="
+                                + "&taskName="
                                 + taskName
-                                +"&ip="
+                                + "&ip="
                                 + dto.getExecHost()
-                                +"&taskId="
+                                + "&taskId="
                                 + dto.getTaskID()
-                                +"&feedtype=wechat"
-                                +"&from=monitor"
-                                +"'><img border='0' src='img/wechat.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a> |"
-                                +"<a id ='denpencyTimeoutFeedQQBtn' class='feedBtn'  href='feederror.jsp?id="
-                                +dto.getAttemptID()
-                                +"&status="
+                                + "&feedtype=wechat"
+                                + "&from=monitor"
+                                + "'><img border='0' src='img/wechat.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a> |"
+                                + "<a id ='denpencyTimeoutFeedQQBtn' class='feedBtn'  href='feederror.jsp?id="
+                                + dto.getAttemptID()
+                                + "&status="
                                 + dto.getStatus()
-                                +"&taskName="
+                                + "&taskName="
                                 + taskName
-                                +"&ip="
+                                + "&ip="
                                 + dto.getExecHost()
-                                +"&taskId="
+                                + "&taskId="
                                 + dto.getTaskID()
-                                +"&feedtype=qq"
-                                +"&from=monitor"
-                                +"'><img border='0' src='img/qq.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a></td>";
+                                + "&feedtype=qq"
+                                + "&from=monitor"
+                                + "'><img border='0' src='img/qq.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a></td>";
 
                         result += "</tr>";
                     }
@@ -1086,7 +1082,6 @@ public class MonitorServlet extends HttpServlet {
                 ReFlashHostLoadTask.allTasks = tasks;
                 ReFlashHostLoadTask.lastReadDataTime = new Date().getTime();
             }
-
 
 
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -1155,37 +1150,37 @@ public class MonitorServlet extends HttpServlet {
 
                         result += "<td >"
                                 + "  <a target=\"_blank\" href=\"viewlog.jsp?id="
-                                + dto.getAttemptID()+"&status="+dto.getStatus()
-                                +"\">日志</a>"
+                                + dto.getAttemptID() + "&status=" + dto.getStatus()
+                                + "\">日志</a>"
                                 + "</td >";
 
                         result += "<td> "
-                                +"<a id ='timeOutFeedBtn' class='feedBtn'  href='feederror.jsp?id="
-                                +dto.getAttemptID()
-                                +"&status="
+                                + "<a id ='timeOutFeedBtn' class='feedBtn'  href='feederror.jsp?id="
+                                + dto.getAttemptID()
+                                + "&status="
                                 + dto.getStatus()
-                                +"&taskName="
+                                + "&taskName="
                                 + taskName
-                                +"&ip="
+                                + "&ip="
                                 + dto.getExecHost()
-                                +"&taskId="
+                                + "&taskId="
                                 + dto.getTaskID()
-                                +"&feedtype=wechat"
-                                +"&from=monitor"
-                                +"'><img border='0' src='img/wechat.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a> |"
-                                +"<a id ='timeOutFeedQQBtn' class='feedBtn'  href='feederror.jsp?id="
-                                +dto.getAttemptID()
-                                +"&status="
+                                + "&feedtype=wechat"
+                                + "&from=monitor"
+                                + "'><img border='0' src='img/wechat.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a> |"
+                                + "<a id ='timeOutFeedQQBtn' class='feedBtn'  href='feederror.jsp?id="
+                                + dto.getAttemptID()
+                                + "&status="
                                 + dto.getStatus()
-                                +"&taskName="
+                                + "&taskName="
                                 + taskName
-                                +"&ip="
+                                + "&ip="
                                 + dto.getExecHost()
-                                +"&taskId="
+                                + "&taskId="
                                 + dto.getTaskID()
-                                +"&feedtype=qq"
-                                +"&from=monitor"
-                                +"'><img border='0' src='img/qq.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a></td>";
+                                + "&feedtype=qq"
+                                + "&from=monitor"
+                                + "'><img border='0' src='img/qq.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a></td>";
 
                         result += "</tr>";
                     }
@@ -1195,6 +1190,7 @@ public class MonitorServlet extends HttpServlet {
         } else if (SCHEDULE.equals(action)) {
             OutputStream output = response.getOutputStream();
             String task_api = RESTLET_URL_BASE + "task";
+            String status_api = RESTLET_URL_BASE + "getlaststatus";
             String name = request.getParameter("name");
             String path = request.getParameter("path");
             String appname = request.getParameter("appname");
@@ -1218,21 +1214,48 @@ public class MonitorServlet extends HttpServlet {
             for (TaskDTO dto : tasks) {
                 JsonObject jsonObject = new JsonObject();
                 String state = dto.getStatus();
-                jsonObject.addProperty("state",state);
+                cr = new ClientResource(status_api + "/" + dto.getTaskid());
+                IGetTaskLastStatus statusResource = cr.wrap(IGetTaskLastStatus.class);
+                cr.accept(MediaType.APPLICATION_XML);
+                String status = statusResource.retrieve();
+                String lastTaskStatus = "";
+                int taskState = -1;
+                if (status != null) {
+                    try {
+                        JsonParser parser = new JsonParser();
+                        JsonElement statusElement = parser.parse(status);
+                        JsonObject statusObject = statusElement.getAsJsonObject();
+                        JsonElement statusValue = statusObject.get("status");
+
+                        taskState = statusValue.getAsInt();
+
+                        lastTaskStatus = AttemptStatus.getInstanceRunState(taskState);
+                    } catch (Exception e) {
+                        lastTaskStatus = "NULL";
+                    }
+
+
+                } else {
+                    lastTaskStatus = "NULL";
+                }
+
+
+                jsonObject.addProperty("state", state);
 
                 jsonObject.addProperty("taskId", dto.getTaskid());
-                jsonObject.addProperty("taskName",dto.getName());
+                jsonObject.addProperty("taskName", dto.getName());
                 jsonObject.addProperty("hostName", dto.getHostname());
-                jsonObject.addProperty("creator",dto.getCreator());
-                jsonObject.addProperty("proxyUser",dto.getProxyuser());
-                jsonObject.addProperty("addTime",formatter.format(dto.getAddtime()));
-                jsonObject.addProperty("crontab",dto.getCrontab());
+                jsonObject.addProperty("creator", dto.getCreator());
+                jsonObject.addProperty("proxyUser", dto.getProxyuser());
+                jsonObject.addProperty("addTime", formatter.format(dto.getAddtime()));
+                jsonObject.addProperty("crontab", dto.getCrontab());
+                jsonObject.addProperty("lastTaskStatus", lastTaskStatus);
                 jsonArray.add(jsonObject);
             }
 
             output.write(jsonArray.toString().getBytes());
             output.close();
-        }else if (ATTEMPT.equals(action)){
+        } else if (ATTEMPT.equals(action)) {
             OutputStream output = response.getOutputStream();
             ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
             if (tasks == null) {
@@ -1298,7 +1321,7 @@ public class MonitorServlet extends HttpServlet {
                 }
                 jsonObject.addProperty("returnValue", dto.getReturnValue());
                 boolean isViewLog = AttemptProxyServlet.isHostOverLoad(dto.getExecHost());
-                jsonObject.addProperty("isViewLog",isViewLog);
+                jsonObject.addProperty("isViewLog", isViewLog);
 
                 jsonArray.add(jsonObject);
 
@@ -1308,9 +1331,9 @@ public class MonitorServlet extends HttpServlet {
             output.close();
 
 
-
         }
     }
+
     public String getIpAddr(HttpServletRequest request) {
         String ip = request.getHeader("x-forwarded-for");
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {

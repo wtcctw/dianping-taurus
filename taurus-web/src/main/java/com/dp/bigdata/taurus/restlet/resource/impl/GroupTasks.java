@@ -43,6 +43,7 @@ public class GroupTasks extends ServerResource implements IGroupTasks {
 
                 JSONObject json = new JSONObject();
                 json.put("taskName", task.getName());
+                json.put("taskId", task.getTaskID());
                 json.put("nums", task.getNum());
                 json.put("status", "success");
                 json.put("creator", task.getCreator());
@@ -57,6 +58,7 @@ public class GroupTasks extends ServerResource implements IGroupTasks {
 
                 JSONObject json = new JSONObject();
                 json.put("taskName", task.getName());
+                json.put("taskId", task.getTaskID());
                 json.put("nums", task.getNum());
                 json.put("status", "failed");
                 json.put("creator", task.getCreator());
@@ -72,6 +74,7 @@ public class GroupTasks extends ServerResource implements IGroupTasks {
 
                 JSONObject json = new JSONObject();
                 json.put("taskName", task.getName());
+                json.put("taskId", task.getTaskID());
                 json.put("nums", task.getNum());
                 json.put("status", "killed");
                 json.put("creator", task.getCreator());
@@ -87,6 +90,7 @@ public class GroupTasks extends ServerResource implements IGroupTasks {
 
                 JSONObject json = new JSONObject();
                 json.put("taskName", task.getName());
+                json.put("taskId", task.getTaskID());
                 json.put("nums", task.getNum());
                 json.put("status", "timeout");
                 json.put("creator", task.getCreator());
@@ -102,6 +106,7 @@ public class GroupTasks extends ServerResource implements IGroupTasks {
 
                 JSONObject json = new JSONObject();
                 json.put("taskName", task.getName());
+                json.put("taskId", task.getTaskID());
                 json.put("nums", task.getNum());
                 json.put("status", "congest");
                 json.put("creator", task.getCreator());
@@ -113,7 +118,6 @@ public class GroupTasks extends ServerResource implements IGroupTasks {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        System.out.println(jsonData.toString());
         return jsonData.toString();
     }
 }

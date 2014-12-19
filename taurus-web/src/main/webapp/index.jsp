@@ -457,150 +457,7 @@
            data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>~<%=formatter.format(new Date())%>]">[+1m] </a>
     </div>
 </div>
-<div id="total">
-    <div class="col-sm-12">
-        <div class="col-sm-6">
-            <div class="widget-box">
-                <div class="widget-header widget-header-flat widget-header-small">
-                    <h5 class="widget-title">
-                        <i class="icon-dashboard"></i>
-                        任务仪表盘
-                    </h5>
 
-                    <div class="widget-toolbar">
-                        <a href="#" data-action="collapse">
-                            <i class="icon-chevron-up"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="widget-body">
-                    <div class="widget-main" id="total-chart" style="width: 499px;height: 319px">
-                        <div class="loadIcon">
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                        </div>
-                    </div>
-                    <!-- /.widget-main -->
-                </div>
-                <!-- /.widget-body -->
-            </div>
-            <!-- /.widget-box -->
-
-        </div>
-        <div class="col-sm-6">
-            <div class="widget-box">
-                <div class="widget-header widget-header-flat widget-header-small">
-                    <h5 class="widget-title">
-                        <i class="icon-dashboard"></i>
-                        所有的任务成功率
-                    </h5>
-
-                    <div class="widget-toolbar">
-                        <a href="#" data-action="collapse">
-                            <i class="icon-chevron-up"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="widget-body">
-                    <div class="widget-main" id="total-widget-main">
-
-                        <div id="totaltasks"> <div class="loadIcon">
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                        </div></div>
-
-                        <div class="hr hr8 hr-double"></div>
-
-                        <div class="clearfix">
-                            <div class="col-sm-4">
-														<span class="grey">
-															<i class="icon-lightbulb green"></i>
-															&nbsp; 成功
-														</span>
-                                <h4 class="smaller pull-right" id="totalsucctask"></h4>
-                            </div>
-
-                            <div class="col-sm-4">
-														<span class="grey">
-															<i class="icon-lightbulb red"></i>
-															&nbsp; 失败
-														</span>
-                                <h4 class="smaller pull-right " id="totalfailtask"></h4>
-                            </div>
-                            <div class="col-sm-4">
-														<span class="grey">
-															<i class="icon-lightbulb red"></i>
-															&nbsp; 杀死
-														</span>
-                                <h4 class="smaller pull-right " id="totalkilltask"></h4>
-                            </div>
-                            <div class="col-sm-4">
-														<span class="grey">
-															<i class="icon-lightbulb btn-yellow"></i>
-															&nbsp; 超时
-														</span>
-                                <h4 class="smaller pull-right " id="totaltimouttask"></h4>
-                            </div>
-                            <div class="col-sm-4">
-														<span class="grey">
-															<i class="icon-lightbulb"></i>
-															&nbsp; 拥堵
-														</span>
-                                <h4 class="smaller pull-right " id="totalcongesttask"></h4>
-                            </div>
-
-                            <!-- /section:custom/extra.grid -->
-                        </div>
-                    </div>
-                    <!-- /.widget-main -->
-                </div>
-                <!-- /.widget-body -->
-            </div>
-            <!-- /.widget-box -->
-
-        </div>
-        <div class="col-sm-12">
-            <div class="widget-box">
-                <div class="widget-header widget-header-flat widget-header-small">
-                    <h5 class="widget-title">
-                        <i class=" icon-list-alt"></i>
-                        所有任务的执行详情
-                    </h5>
-
-                    <div class="widget-toolbar">
-
-                        <a href="#" data-action="collapse">
-                            <i class="icon-chevron-up"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="widget-body">
-
-                    <div class="widget-main " id="totaltasklist">
-                        <div class="loadIcon">
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                        </div>
-                    </div>
-                    <!-- /.widget-main -->
-                </div>
-                <!-- /.widget-body -->
-            </div>
-            <!-- /.widget-box -->
-
-        </div>
-    </div>
-
-</div>
 <div id="userpanel">
 <div class="col-sm-12">
     <div class="col-sm-6">
@@ -827,6 +684,150 @@
 
     </div>
 </div>
+</div>
+<div id="total">
+    <div class="col-sm-12">
+        <div class="col-sm-6">
+            <div class="widget-box">
+                <div class="widget-header widget-header-flat widget-header-small">
+                    <h5 class="widget-title">
+                        <i class="icon-dashboard"></i>
+                        任务仪表盘
+                    </h5>
+
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="collapse">
+                            <i class="icon-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="widget-body">
+                    <div class="widget-main" id="total-chart" style="width: 499px;height: 319px">
+                        <div class="loadIcon">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                    <!-- /.widget-main -->
+                </div>
+                <!-- /.widget-body -->
+            </div>
+            <!-- /.widget-box -->
+
+        </div>
+        <div class="col-sm-6">
+            <div class="widget-box">
+                <div class="widget-header widget-header-flat widget-header-small">
+                    <h5 class="widget-title">
+                        <i class="icon-dashboard"></i>
+                        所有的任务成功率
+                    </h5>
+
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="collapse">
+                            <i class="icon-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="widget-body">
+                    <div class="widget-main" id="total-widget-main">
+
+                        <div id="totaltasks"> <div class="loadIcon">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div></div>
+
+                        <div class="hr hr8 hr-double"></div>
+
+                        <div class="clearfix">
+                            <div class="col-sm-4">
+														<span class="grey">
+															<i class="icon-lightbulb green"></i>
+															&nbsp; 成功
+														</span>
+                                <h4 class="smaller pull-right" id="totalsucctask"></h4>
+                            </div>
+
+                            <div class="col-sm-4">
+														<span class="grey">
+															<i class="icon-lightbulb red"></i>
+															&nbsp; 失败
+														</span>
+                                <h4 class="smaller pull-right " id="totalfailtask"></h4>
+                            </div>
+                            <div class="col-sm-4">
+														<span class="grey">
+															<i class="icon-lightbulb red"></i>
+															&nbsp; 杀死
+														</span>
+                                <h4 class="smaller pull-right " id="totalkilltask"></h4>
+                            </div>
+                            <div class="col-sm-4">
+														<span class="grey">
+															<i class="icon-lightbulb btn-yellow"></i>
+															&nbsp; 超时
+														</span>
+                                <h4 class="smaller pull-right " id="totaltimouttask"></h4>
+                            </div>
+                            <div class="col-sm-4">
+														<span class="grey">
+															<i class="icon-lightbulb"></i>
+															&nbsp; 拥堵
+														</span>
+                                <h4 class="smaller pull-right " id="totalcongesttask"></h4>
+                            </div>
+
+                            <!-- /section:custom/extra.grid -->
+                        </div>
+                    </div>
+                    <!-- /.widget-main -->
+                </div>
+                <!-- /.widget-body -->
+            </div>
+            <!-- /.widget-box -->
+
+        </div>
+        <div class="col-sm-12">
+            <div class="widget-box">
+                <div class="widget-header widget-header-flat widget-header-small">
+                    <h5 class="widget-title">
+                        <i class=" icon-list-alt"></i>
+                        所有任务的执行详情
+                    </h5>
+
+                    <div class="widget-toolbar">
+
+                        <a href="#" data-action="collapse">
+                            <i class="icon-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="widget-body">
+
+                    <div class="widget-main " id="totaltasklist">
+                        <div class="loadIcon">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                    <!-- /.widget-main -->
+                </div>
+                <!-- /.widget-body -->
+            </div>
+            <!-- /.widget-box -->
+
+        </div>
+    </div>
+
 </div>
 <div id="admin">
 <div class="col-sm-12">

@@ -7,6 +7,7 @@ public class GroupTaskExample {
     private String name;
     private Integer num;
     private String creator;
+    private String taskID;
 
     public String getName() {
         return name;
@@ -30,5 +31,13 @@ public class GroupTaskExample {
 
     public void setCreator(String creator) {
         this.creator = creator;
+    }
+
+    public String getTaskID() {
+        return taskID;
+    }
+
+    public void setTaskID(String taskID) {
+        this.taskID = taskID;
     }
 }

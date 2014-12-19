@@ -1,14 +1,10 @@
 package com.dp.bigdata.taurus.generated.mapper;
 
-import com.dp.bigdata.taurus.generated.module.GroupTaskExample;
-import com.dp.bigdata.taurus.generated.module.Task;
-import com.dp.bigdata.taurus.generated.module.TaskAttempt;
-import com.dp.bigdata.taurus.generated.module.TaskAttemptExample;
+import com.dp.bigdata.taurus.generated.module.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -111,11 +107,13 @@ public interface TaskAttemptMapper {
     public ArrayList  getTaskLoadHost(@Param("start")String start,@Param("end")String end);
     public ArrayList getRunningTaskLoadHost();
     public ArrayList getFailedTaskLoadHost(@Param("start")String start,@Param("end")String end);
-    public ArrayList getUserTasks(@Param("user")String user,@Param("start")String start,@Param("end")String end ,@Param("status")int[] ids);
+    public ArrayList<GroupTaskExample> getUserTasks(@Param("user")String user,@Param("start")String start,@Param("end")String end ,@Param("status")int[] ids);
+
     public ArrayList<GroupTaskExample>  getGroupTasks(@Param("user")String user,@Param("start")String start,@Param("end")String end ,@Param("status")int[] ids );
-    public ArrayList<GroupTaskExample>  getTotalTasks(@Param("start")String start,@Param("end")String end ,@Param("status")int[] ids );
+    public ArrayList<TotalTaskExample>  getTotalTasks(@Param("start")String start,@Param("end")String end ,@Param("status")int[] ids );
     public HashMap<String, String> isExitTaskId(@Param("taskId")String taskId);
     public TaskAttempt isExitRunningTask(@Param("taskId")String taskId);
 
     public int deleteDependencyPassTask(@Param("taskId")String taskId,@Param("status")int status);
+    public int getTaskLastStatus(@Param("taskId")String taskId);
 }

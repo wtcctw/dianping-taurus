@@ -64,13 +64,13 @@ public class TotalTask extends ServerResource implements ITotalTask {
             int[] timeoutStatus = {9};
             int[] congestStatus = {2};
 
-            ArrayList<GroupTaskExample> successTasks = taskAttemptMapper.getTotalTasks(start, end, successStatus);
-            ArrayList<GroupTaskExample> failedTasks = taskAttemptMapper.getTotalTasks(start, end, failedStatus);
-            ArrayList<GroupTaskExample> killTasks = taskAttemptMapper.getTotalTasks(start, end, killStatus);
-            ArrayList<GroupTaskExample> timeoutTasks = taskAttemptMapper.getTotalTasks(start, end,timeoutStatus);
-            ArrayList<GroupTaskExample> congestTasks = taskAttemptMapper.getTotalTasks(start, end, congestStatus);
+            ArrayList<TotalTaskExample> successTasks = taskAttemptMapper.getTotalTasks(start, end, successStatus);
+            ArrayList<TotalTaskExample> failedTasks = taskAttemptMapper.getTotalTasks(start, end, failedStatus);
+            ArrayList<TotalTaskExample> killTasks = taskAttemptMapper.getTotalTasks(start, end, killStatus);
+            ArrayList<TotalTaskExample> timeoutTasks = taskAttemptMapper.getTotalTasks(start, end,timeoutStatus);
+            ArrayList<TotalTaskExample> congestTasks = taskAttemptMapper.getTotalTasks(start, end, congestStatus);
 
-            for (GroupTaskExample task : successTasks) {
+            for (TotalTaskExample task : successTasks) {
 
                 JSONObject json = new JSONObject();
                 json.put("taskName", task.getName());
@@ -89,7 +89,7 @@ public class TotalTask extends ServerResource implements ITotalTask {
 
 
             }
-            for (GroupTaskExample task : failedTasks) {
+            for (TotalTaskExample task : failedTasks) {
                 if (task.getNum() == null){
                     break;
                 }
@@ -112,7 +112,7 @@ public class TotalTask extends ServerResource implements ITotalTask {
 
             }
 
-            for (GroupTaskExample task : killTasks) {
+            for (TotalTaskExample task : killTasks) {
                 if (task.getNum() == null){
                     break;
                 }
@@ -135,7 +135,7 @@ public class TotalTask extends ServerResource implements ITotalTask {
 
             }
 
-            for (GroupTaskExample task : timeoutTasks) {
+            for (TotalTaskExample task : timeoutTasks) {
                 if (task.getNum() == null){
                     break;
                 }
@@ -158,7 +158,7 @@ public class TotalTask extends ServerResource implements ITotalTask {
 
             }
 
-            for (GroupTaskExample task : congestTasks) {
+            for (TotalTaskExample task : congestTasks) {
                 if (task.getNum() == null){
                     break;
                 }

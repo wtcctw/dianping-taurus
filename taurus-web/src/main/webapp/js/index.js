@@ -475,6 +475,7 @@ $(document).ready(function () {
                         "<td>" + item.taskName + "</td>" +
                         "<td>成功</td>" +
                         "<td>" + item.nums + "</td>" +
+                        "<td><a id='attempts' class='btn btn-primary btn-small' href='attempt.jsp?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>"+
                         "</tr>";
 
                 } else if (item.status == "failed") {
@@ -487,6 +488,7 @@ $(document).ready(function () {
                             "<td>" + item.taskName + "</td>" +
                             "<td>失败</td>" +
                             "<td>" + item.nums + "</td>" +
+                            "<td><a id='attempts' class='btn btn-primary btn-small' href='attempt.jsp?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>"+
                             "</tr>";
                     }
 
@@ -500,6 +502,7 @@ $(document).ready(function () {
                             "<td>" + item.taskName + "</td>" +
                             "<td>杀死</td>" +
                             "<td>" + item.nums + "</td>" +
+                            "<td><a id='attempts' class='btn btn-primary btn-small' href='attempt.jsp?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>"+
                             "</tr>";
                     }
 
@@ -513,6 +516,7 @@ $(document).ready(function () {
                             "<td>" + item.taskName + "</td>" +
                             "<td>超时</td>" +
                             "<td>" + item.nums + "</td>" +
+                            "<td><a id='attempts' class='btn btn-primary btn-small' href='attempt.jsp?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>"+
                             "</tr>";
                     }
 
@@ -527,6 +531,7 @@ $(document).ready(function () {
                             "<td>" + item.taskName + "</td>" +
                             "<td>拥堵</td>" +
                             "<td>" + item.nums + "</td>" +
+                            "<td><a id='attempts' class='btn btn-primary btn-small' href='attempt.jsp?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>"+
                             "</tr>";
                     }
 
@@ -545,7 +550,7 @@ $(document).ready(function () {
                 $("#user-widget-main").addClass("align-center");
             }
             var topUserTaskLists = ' <table  class="table table-striped table-bordered table-hover " id="userTaskTable">'
-                + '<thead><tr><th>任务名</th>  <th>状态</th> <th>次数</th> </tr> </thead>'
+                + '<thead><tr><th>任务名</th>  <th>状态</th> <th>次数</th> <th>操作</th></tr> </thead>'
                 + '        <tbody>'
                 + userTaskListBody
                 + '        </tbody>'
@@ -712,6 +717,7 @@ $(document).ready(function () {
                         "<td>成功</td>" +
                         "<td>" + item.nums + "</td>" +
                         "<td>" + item.creator + "</td>" +
+                        "<td><a id='attempts' class='btn btn-primary btn-small' href='attempt.jsp?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>"+
                         "</tr>";
                 } else if (item.status == "failed"){
                     if (item.nums != 0) {
@@ -724,6 +730,7 @@ $(document).ready(function () {
                             "<td>失败</td>" +
                             "<td>" + item.nums + "</td>" +
                             "<td>" + item.creator + "</td>" +
+                            "<td><a id='attempts' class='btn btn-primary btn-small' href='attempt.jsp?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>"+
                             "</tr>";
                     }
 
@@ -738,6 +745,7 @@ $(document).ready(function () {
                             "<td>杀死</td>" +
                             "<td>" + item.nums + "</td>" +
                             "<td>" + item.creator + "</td>" +
+                            "<td><a id='attempts' class='btn btn-primary btn-small' href='attempt.jsp?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>"+
                             "</tr>";
                     }
 
@@ -752,6 +760,7 @@ $(document).ready(function () {
                             "<td>超时</td>" +
                             "<td>" + item.nums + "</td>" +
                             "<td>" + item.creator + "</td>" +
+                            "<td><a id='attempts' class='btn btn-primary btn-small' href='attempt.jsp?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>"+
                             "</tr>";
                     }
 
@@ -766,6 +775,7 @@ $(document).ready(function () {
                             "<td>拥堵</td>" +
                             "<td>" + item.nums + "</td>" +
                             "<td>" + item.creator + "</td>" +
+                            "<td><a id='attempts' class='btn btn-primary btn-small' href='attempt.jsp?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>"+
                             "</tr>";
                     }
 
@@ -784,7 +794,7 @@ $(document).ready(function () {
                 $("#group-widget-main").addClass("align-center");
             }
             var topGroupTaskLists = ' <table  class="table table-striped table-bordered table-hover " id="groupTaskTable">'
-                + '<thead><tr><th>任务名</th>  <th>状态</th> <th>次数</th> <th>创建者</th> </tr> </thead>'
+                + '<thead><tr><th>任务名</th>  <th>状态</th> <th>次数</th> <th>创建者</th> <th>操作</th></tr> </thead>'
                 + '        <tbody>'
                 + groupTaskListBody
                 + '        </tbody>'

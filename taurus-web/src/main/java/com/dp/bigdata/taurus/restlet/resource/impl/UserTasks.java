@@ -9,8 +9,6 @@ import org.json.JSONObject;
 import org.restlet.resource.ServerResource;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -34,71 +32,80 @@ public class UserTasks extends ServerResource implements IUserTasks {
             int[] timeoutStatus = {9};
             int[] congestStatus = {2};
 
-            List<HashMap<String, Integer>> successTasks = taskAttemptMapper.getUserTasks(user, start, end, successStatus);
-            List<HashMap<String, Integer>> failedTasks = taskAttemptMapper.getUserTasks(user,start, end,failedStatus);
-            List<HashMap<String, Integer>> killTasks = taskAttemptMapper.getUserTasks(user,start, end,killStatus);
-            List<HashMap<String, Integer>> timeoutTasks = taskAttemptMapper.getUserTasks(user,start, end,timeoutStatus);
-            List<HashMap<String, Integer>> congestTasks = taskAttemptMapper.getUserTasks(user,start, end,congestStatus);
+            List<GroupTaskExample> successTasks = taskAttemptMapper.getUserTasks(user, start, end, successStatus);
+            List<GroupTaskExample>failedTasks = taskAttemptMapper.getUserTasks(user,start, end,failedStatus);
+            List<GroupTaskExample>killTasks = taskAttemptMapper.getUserTasks(user,start, end,killStatus);
+            List<GroupTaskExample> timeoutTasks = taskAttemptMapper.getUserTasks(user,start, end,timeoutStatus);
+            List<GroupTaskExample> congestTasks = taskAttemptMapper.getUserTasks(user,start, end,congestStatus);
 
-            for (HashMap<String, Integer> task : successTasks) {
+            for (GroupTaskExample task : successTasks) {
+
+                if (task.getName() == null){
+                    break;
+                }
 
                 JSONObject json = new JSONObject();
-                json.put("taskName", task.get("name"));
-                json.put("nums", task.get("num"));
+                json.put("taskName", task.getName());
+                json.put("taskId", task.getTaskID());
+                json.put("nums", task.getNum());
                 json.put("status", "success");
                 jsonData.put(json);
 
 
             }
-            for (HashMap<String, Integer> task : failedTasks) {
-                if (task.get("name") == null){
+            for (GroupTaskExample task : failedTasks) {
+                if (task.getName() == null){
                     break;
                 }
 
                 JSONObject json = new JSONObject();
-                json.put("taskName", task.get("name"));
-                json.put("nums", task.get("num"));
+                json.put("taskName", task.getName());
+                json.put("taskId", task.getTaskID());
+                json.put("nums", task.getNum());
                 json.put("status", "failed");
                 jsonData.put(json);
 
 
             }
 
-            for (HashMap<String, Integer> task : killTasks) {
-                if (task.get("name") == null){
+            for (GroupTaskExample task : killTasks) {
+                if (task.getName() == null){
                     break;
                 }
 
                 JSONObject json = new JSONObject();
-                json.put("taskName", task.get("name"));
-                json.put("nums", task.get("num"));
+                json.put("taskName", task.getName());
+                json.put("taskId", task.getTaskID());
+                json.put("nums", task.getNum());
                 json.put("status", "killed");
                 jsonData.put(json);
 
 
             }
-            for (HashMap<String, Integer> task : timeoutTasks) {
-                if (task.get("name") == null){
+            for (GroupTaskExample task : timeoutTasks) {
+                if (task.getName() == null){
                     break;
                 }
 
                 JSONObject json = new JSONObject();
-                json.put("taskName", task.get("name"));
-                json.put("nums", task.get("num"));
+                json.put("taskName", task.getName());
+                json.put("taskId", task.getTaskID());
+                json.put("nums", task.getNum());
                 json.put("status", "timeout");
                 jsonData.put(json);
 
 
             }
 
-            for (HashMap<String, Integer> task : congestTasks) {
-                if (task.get("name") == null){
+            for (GroupTaskExample task : congestTasks) {
+                if (task.getName() == null){
                     break;
                 }
 
                 JSONObject json = new JSONObject();
-                json.put("taskName", task.get("name"));
-                json.put("nums", task.get("num"));
+                json.put("taskName", task.getName());
+                json.put("taskId", task.getTaskID());
+                json.put("nums", task.getNum());
                 json.put("status", "congest");
                 jsonData.put(json);
 
