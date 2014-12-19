@@ -136,7 +136,7 @@ $(document).ready(function () {
     var starttime;
     var endtime;
     if (id == null || id == "null") {
-        starttime = GetDateStr(now, -1);
+        starttime = GetDateStr(now, 0);
         if (op == "day") {
             endtime = GetDateStr(now, 1);
         } else {

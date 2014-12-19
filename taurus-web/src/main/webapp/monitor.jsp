@@ -634,7 +634,7 @@ var op = "<%=op_str%>";
 var starttime;
 var endtime;
 if (step == null || step == "null") {
-    starttime = GetDateStr(now, -1);
+    starttime = GetDateStr(now, 0);
     if (op == "day") {
         endtime = GetDateStr(now, 1);
     } else {
