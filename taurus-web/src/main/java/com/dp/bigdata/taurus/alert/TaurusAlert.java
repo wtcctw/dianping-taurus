@@ -180,8 +180,8 @@ public class TaurusAlert {
 
 				if (user != null) {
 					if (rule.getHasmail() && StringUtils.isNotBlank(user.getMail())) {
-						sendMail(user.getMail(), attempt);
-                        sendWeChat(user.getName(),attempt);
+						sendMail(user.getName(),user.getMail(), attempt);
+
 					}
 
 					if (rule.getHassms() && StringUtils.isNotBlank(user.getTel())) {
@@ -227,7 +227,7 @@ public class TaurusAlert {
 			MailHelper.sendMail(mail);
 		}
 
-		private void sendMail(String mailTo, TaskAttempt attempt) {
+		private void sendMail(String userName,String mailTo, TaskAttempt attempt) {
 			Cat.logEvent("Alert.Email", mailTo);
 			LOG.info("Send mail to " + mailTo);
 			Task task = taskMapper.selectByPrimaryKey(attempt.getTaskid());
@@ -255,6 +255,8 @@ public class TaurusAlert {
 
 			try {
 				sendMail(mailTo, sbMailContent.toString());
+                sendWeChat(userName,attempt);
+
 			} catch (Exception e) {
 				LOG.error("fail to send mail to " + mailTo, e);
 				Cat.logError(e);
