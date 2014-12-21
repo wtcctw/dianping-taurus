@@ -21,7 +21,9 @@ public class GetTaskLastStatus  extends ServerResource implements IGetTaskLastSt
 
         TaskAttempt taskAttempt = taskAttemptMapper.isExitRunningTask(taskId);
         if (taskAttempt == null ){
+
             int status = taskAttemptMapper.getTaskLastStatus(taskId);
+
             return "{\"status\": "+ status +"}";
         }else{
             return "{\"status\": "+ 6 +"}";

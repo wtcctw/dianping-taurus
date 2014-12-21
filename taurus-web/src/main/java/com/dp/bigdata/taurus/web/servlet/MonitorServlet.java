@@ -1213,8 +1213,9 @@ public class MonitorServlet extends HttpServlet {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             for (TaskDTO dto : tasks) {
                 JsonObject jsonObject = new JsonObject();
-                String state = dto.getStatus();
-                String status;
+               String state = dto.getStatus();
+
+               /*  String status;
                 try {
                     cr = new ClientResource(status_api + "/" + dto.getTaskid());
                     IGetTaskLastStatus statusResource = cr.wrap(IGetTaskLastStatus.class);
@@ -1223,7 +1224,7 @@ public class MonitorServlet extends HttpServlet {
                 }catch (Exception e){
                     status = null;
                 }
-                
+
                 String lastTaskStatus = "";
                 int taskState = -1;
                 if (status != null) {
@@ -1244,7 +1245,7 @@ public class MonitorServlet extends HttpServlet {
                 } else {
                     lastTaskStatus = "NULL";
                 }
-
+*/
 
                 jsonObject.addProperty("state", state);
 
@@ -1255,7 +1256,7 @@ public class MonitorServlet extends HttpServlet {
                 jsonObject.addProperty("proxyUser", dto.getProxyuser());
                 jsonObject.addProperty("addTime", formatter.format(dto.getAddtime()));
                 jsonObject.addProperty("crontab", dto.getCrontab());
-                jsonObject.addProperty("lastTaskStatus", lastTaskStatus);
+              //  jsonObject.addProperty("lastTaskStatus", lastTaskStatus);
                 jsonArray.add(jsonObject);
             }
 
