@@ -1214,10 +1214,16 @@ public class MonitorServlet extends HttpServlet {
             for (TaskDTO dto : tasks) {
                 JsonObject jsonObject = new JsonObject();
                 String state = dto.getStatus();
-                cr = new ClientResource(status_api + "/" + dto.getTaskid());
-                IGetTaskLastStatus statusResource = cr.wrap(IGetTaskLastStatus.class);
-                cr.accept(MediaType.APPLICATION_XML);
-                String status = statusResource.retrieve();
+                String status;
+                try {
+                    cr = new ClientResource(status_api + "/" + dto.getTaskid());
+                    IGetTaskLastStatus statusResource = cr.wrap(IGetTaskLastStatus.class);
+                    cr.accept(MediaType.APPLICATION_XML);
+                    status = statusResource.retrieve();
+                }catch (Exception e){
+                    status = null;
+                }
+                
                 String lastTaskStatus = "";
                 int taskState = -1;
                 if (status != null) {
