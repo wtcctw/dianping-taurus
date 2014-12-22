@@ -144,11 +144,39 @@
     <ul class="nav nav-list">
 
         <li id="index">
-            <a href="index.jsp">
+            <a href="#" class="dropdown-toggle">
                 <i class="icon-dashboard"></i>
                 <span class="menu-text" id="userrolechange">监控中心</span>
+                <b class="icon-angle-down"></b>
             </a>
+            <ul class="submenu">
+                <li  id="monitor_center">
+                    <a href="index.jsp">
+                        <i class="menu-icon icon-caret-right"></i>
+                        我的任务
+                    </a>
+
+                </li>
+
+                <li id="task_center">
+                    <a href="task_center.jsp">
+                        <i class="menu-icon icon-caret-right"></i>
+                        所有任务
+                    </a>
+
+
+                </li>
+                <li id="host_center">
+                    <a href="host_center.jsp">
+                        <i class="menu-icon icon-caret-right"></i>
+                        主机负载
+                    </a>
+
+                </li>
+            </ul>
+
         </li>
+
 
         <li id="task">
             <a href="task.jsp" target="_self">

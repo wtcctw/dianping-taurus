@@ -30,7 +30,7 @@
     <script src="lib/ace/js/jquery.dataTables.min.js"></script>
     <script src="lib/ace/js/jquery.dataTables.bootstrap.js"></script>
     <script type="text/javascript" src="js/login.js"></script>
-    <script type="text/javascript" src="js/monitor_center.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
     <script src="lib/dist/echarts.js"></script>
     <script src="lib/dist/chart/gauge.js"></script>
     <script src="lib/dist/theme/macarons.js"></script>
@@ -161,40 +161,11 @@
     <ul class="nav nav-list">
 
         <li id="index">
-            <a href="#" class="dropdown-toggle">
+            <a href="index.jsp">
                 <i class="icon-dashboard"></i>
                 <span class="menu-text" id="userrolechange">监控中心</span>
-                <b class="icon-angle-down"></b>
             </a>
-            <ul class="submenu">
-                <li  id="monitor_center">
-                    <a href="index.jsp">
-                        <i class="menu-icon icon-caret-right"></i>
-                        我的任务
-                    </a>
-
-                </li>
-
-                <li id="task_center">
-                    <a href="task_center.jsp">
-                        <i class="menu-icon icon-caret-right"></i>
-                        所有任务
-                    </a>
-
-
-                </li>
-                <li id="host_center">
-                    <a href="host_center.jsp">
-                        <i class="menu-icon icon-caret-right"></i>
-                        主机负载
-                    </a>
-
-                </li>
-            </ul>
-
         </li>
-
-
 
         <li id="task">
             <a href="task.jsp" target="_self">
@@ -329,7 +300,7 @@
                 }
                     step = -720;
                 %>
-           href="monitor_center.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+           href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime)) %>~<%=formatter.format(new Date(df.parse(now).getTime()))%>]">[-1m] </a>
         &nbsp;&nbsp; |&nbsp;&nbsp;
@@ -339,7 +310,7 @@
                 }
                     step = -168;
                 %>
-           href="monitor_center.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+           href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>
     ~<%=formatter.format(new Date(df.parse(now).getTime()))%>]">[-1w] </a>
@@ -350,7 +321,7 @@
                 }
                     step = -24;
                 %>
-           href="monitor_center.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%>"
+           href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%>"
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>
     ~<%=formatter.format(new Date(df.parse(now).getTime()))%>]">[-1d] </a>
@@ -361,9 +332,9 @@
         }
             step = 24;
             if (df.parse(now).after(time)) {%>
-           href="monitor_center.jsp?step=-24&date＝<%=df.format(time)%> "
+           href="index.jsp?step=-24&date＝<%=df.format(time)%> "
                 <% } else {%>
-           href="monitor_center.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+           href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
                 <% }
                 %>
            data-toggle="tooltip" data-placement="top"
@@ -374,9 +345,9 @@
         }
             step = 168;
             if (df.parse(now).after(time)) {%>
-           href="monitor_center.jsp?step=-24&op=day&date＝<%=df.format(time)%> "
+           href="index.jsp?step=-24&op=day&date＝<%=df.format(time)%> "
                 <% } else {%>
-           href="monitor_center.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+           href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
                 <% }
                 %>
            data-toggle="tooltip" data-placement="top"
@@ -387,9 +358,9 @@
         }
             step = 720;
             if (df.parse(now).after(time)) {%>
-           href="monitor_center.jsp?step=-24&op=day&date＝<%=df.format(time)%> "
+           href="index.jsp?step=-24&op=day&date＝<%=df.format(time)%> "
                 <% } else {%>
-           href="monitor_center.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+           href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
                 <% }
                 %>
            data-toggle="tooltip" data-placement="top"
@@ -403,7 +374,7 @@
 
 
         <a class="atip"
-           href="monitor_center.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date())%>"
+           href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date())%>"
            data-toggle="tooltip" data-placement="top"
            data-original-title=" 时间区间[<%=formatter.format(new Date(new Date().getTime() -24*hourTime))%>~<%=formatter.format(new Date())%>]">[当天] </a>
     </div>
@@ -418,7 +389,7 @@
                 }
                     step = -720;
                 %>
-           href="monitor_center.jsp?step=<%=step%>&op=history&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+           href="index.jsp?step=<%=step%>&op=history&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime)) %>~<%=formatter.format(new Date())%>]">[-1m] </a>
         &nbsp;&nbsp; |&nbsp;&nbsp;
@@ -428,7 +399,7 @@
                 }
                     step = -168;
                 %>
-           href="monitor_center.jsp?step=<%=step%>&op=history&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+           href="index.jsp?step=<%=step%>&op=history&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>
     ~<%=formatter.format(new Date())%>]">[-1w] </a>
@@ -439,7 +410,7 @@
                 }
                     step = -24;
                 %>
-           href="monitor_center.jsp?step=<%=step%>&op=history&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%>"
+           href="index.jsp?step=<%=step%>&op=history&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%>"
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>
     ~<%=formatter.format(new Date())%>]">[-1d] </a>
@@ -451,9 +422,9 @@
         }
             step = 24;
             if (df.parse(now).after(time)) {%>
-           href="monitor_center.jsp?step=-24&date＝<%=df.format(time)%> "
+           href="index.jsp?step=-24&date＝<%=df.format(time)%> "
                 <% } else {%>
-           href="monitor_center.jsp?step=<%=step%>&op=history&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+           href="index.jsp?step=<%=step%>&op=history&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
                 <% }
                 %>
            data-toggle="tooltip" data-placement="top"
@@ -464,9 +435,9 @@
         }
             step = 168;
             if (df.parse(now).after(time)) {%>
-           href="monitor_center.jsp?step=-24&op=history&date＝<%=df.format(time)%> "
+           href="index.jsp?step=-24&op=history&date＝<%=df.format(time)%> "
                 <% } else {%>
-           href="monitor_center.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+           href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
                 <% }
                 %>
            data-toggle="tooltip" data-placement="top"
@@ -477,9 +448,9 @@
         }
             step = 720;
             if (df.parse(now).after(time)) {%>
-           href="monitor_center.jsp?step=-24&op=history&date＝<%=df.format(time)%> "
+           href="index.jsp?step=-24&op=history&date＝<%=df.format(time)%> "
                 <% } else {%>
-           href="monitor_center.jsp?step=<%=step%>&op=history&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+           href="index.jsp?step=<%=step%>&op=history&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
                 <% }
                 %>
            data-toggle="tooltip" data-placement="top"
@@ -714,7 +685,425 @@
     </div>
 </div>
 </div>
+<div id="total">
+    <div class="col-sm-12">
+        <div class="col-sm-6">
+            <div class="widget-box">
+                <div class="widget-header widget-header-flat widget-header-small">
+                    <h5 class="widget-title">
+                        <i class="icon-dashboard"></i>
+                        任务仪表盘
+                    </h5>
 
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="collapse">
+                            <i class="icon-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="widget-body">
+                    <div class="widget-main" id="total-chart" style="width: 499px;height: 319px">
+                        <div class="loadIcon">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                    <!-- /.widget-main -->
+                </div>
+                <!-- /.widget-body -->
+            </div>
+            <!-- /.widget-box -->
+
+        </div>
+        <div class="col-sm-6">
+            <div class="widget-box">
+                <div class="widget-header widget-header-flat widget-header-small">
+                    <h5 class="widget-title">
+                        <i class="icon-dashboard"></i>
+                        所有的任务成功率
+                    </h5>
+
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="collapse">
+                            <i class="icon-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="widget-body">
+                    <div class="widget-main" id="total-widget-main">
+
+                        <div id="totaltasks"> <div class="loadIcon">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div></div>
+
+                        <div class="hr hr8 hr-double"></div>
+
+                        <div class="clearfix">
+                            <div class="col-sm-4">
+														<span class="grey">
+															<i class="icon-lightbulb green"></i>
+															&nbsp; 成功
+														</span>
+                                <h4 class="smaller pull-right" id="totalsucctask"></h4>
+                            </div>
+
+                            <div class="col-sm-4">
+														<span class="grey">
+															<i class="icon-lightbulb red"></i>
+															&nbsp; 失败
+														</span>
+                                <h4 class="smaller pull-right " id="totalfailtask"></h4>
+                            </div>
+                            <div class="col-sm-4">
+														<span class="grey">
+															<i class="icon-lightbulb red"></i>
+															&nbsp; 杀死
+														</span>
+                                <h4 class="smaller pull-right " id="totalkilltask"></h4>
+                            </div>
+                            <div class="col-sm-4">
+														<span class="grey">
+															<i class="icon-lightbulb btn-yellow"></i>
+															&nbsp; 超时
+														</span>
+                                <h4 class="smaller pull-right " id="totaltimouttask"></h4>
+                            </div>
+                            <div class="col-sm-4">
+														<span class="grey">
+															<i class="icon-lightbulb"></i>
+															&nbsp; 拥堵
+														</span>
+                                <h4 class="smaller pull-right " id="totalcongesttask"></h4>
+                            </div>
+
+                            <!-- /section:custom/extra.grid -->
+                        </div>
+                    </div>
+                    <!-- /.widget-main -->
+                </div>
+                <!-- /.widget-body -->
+            </div>
+            <!-- /.widget-box -->
+
+        </div>
+        <div class="col-sm-12">
+            <div class="widget-box">
+                <div class="widget-header widget-header-flat widget-header-small">
+                    <h5 class="widget-title">
+                        <i class=" icon-list-alt"></i>
+                        所有任务的执行详情
+                    </h5>
+
+                    <div class="widget-toolbar">
+
+                        <a href="#" data-action="collapse">
+                            <i class="icon-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="widget-body">
+
+                    <div class="widget-main " id="totaltasklist">
+                        <div class="loadIcon">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                    <!-- /.widget-main -->
+                </div>
+                <!-- /.widget-body -->
+            </div>
+            <!-- /.widget-box -->
+
+        </div>
+    </div>
+
+</div>
+<div id="admin">
+<div class="col-sm-12">
+    <div class="col-sm-6">
+        <div class="widget-box">
+            <div class="widget-header widget-header-flat widget-header-small">
+                <h5 class="widget-title">
+                    <i class="icon-eye-open"></i>
+                    Job机器状态
+                </h5>
+
+                <div class="widget-toolbar">
+                    <a href="#" data-action="collapse">
+                        <i class="icon-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="widget-body">
+                <div class="widget-main">
+                    <div id="piechart-placeholder">
+                        <div class="loadIcon">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+
+                    <div class="hr hr8 hr-double"></div>
+
+                    <div class="clearfix">
+                        <div class="col-sm-6">
+														<span class="grey">
+															<i class="icon-lightbulb green"></i>
+															&nbsp; 正常
+														</span>
+                            <h4 class="bigger pull-right" id="onlineNums"></h4>
+                        </div>
+
+                        <div class="col-sm-6">
+														<span class="grey">
+															<i class="icon-lightbulb red"></i>
+															&nbsp; 失联
+														</span>
+                            <h4 class="bigger pull-right " id="exceptionNums"></h4>
+                        </div>
+
+
+                        <!-- /section:custom/extra.grid -->
+                    </div>
+                </div>
+                <!-- /.widget-main -->
+            </div>
+            <!-- /.widget-body -->
+        </div>
+        <!-- /.widget-box -->
+
+    </div>
+    <div class="col-sm-6" >
+        <div class="widget-box">
+            <div class="widget-header widget-header-flat widget-header-small">
+                <h5 class="widget-title">
+                    <i class="icon-eye-close"></i>
+                    Job异常机器列表
+                </h5>
+
+                <div class="widget-toolbar">
+                    <a href="#" data-action="collapse">
+                        <i class="icon-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="widget-body">
+                <div class="widget-main" id="exceptionJob" style="height: 283px">
+                    <div class="loadIcon">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+                <!-- /.widget-main -->
+            </div>
+            <!-- /.widget-body -->
+        </div>
+        <!-- /.widget-box -->
+
+    </div>
+</div>
+<div class="col-sm-12">
+    <div class="col-sm-6" id="cpuwidget">
+        <div class="widget-box">
+            <div class="widget-header widget-header-flat widget-header-small">
+                <h5 class="widget-title">
+                    <i class=" icon-time"></i>
+                    主机CPU负载列表
+                </h5>
+
+
+                <div class="widget-toolbar">
+                    <a href="#" data-action="collapse">
+                        <i class="icon-chevron-up"></i>
+                    </a>
+                </div>
+                <div class="widget-toolbar">
+                    <a id='cpureeflash' title='更新数据,刷新时间间隔1分钟' onclick="reflash('reflash');" href="#cpuwidget"><i
+                            class="icon-refresh"></i></a>
+                </div>
+            </div>
+
+            <div class="widget-body">
+
+                <div class="widget-main align-center" id="cpuload">
+                    <div class="loadIcon">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+                <!-- /.widget-main -->
+            </div>
+            <!-- /.widget-body -->
+        </div>
+        <!-- /.widget-box -->
+
+    </div>
+    <div class="col-sm-6" id="memwidget">
+        <div class="widget-box">
+            <div class="widget-header widget-header-flat widget-header-small">
+                <h5 class="widget-title">
+                    <i class=" icon-tint"></i>
+                    主机内存使用率列表
+                </h5>
+
+
+                <div class="widget-toolbar">
+                    <a href="#" data-action="collapse">
+                        <i class="icon-chevron-up"></i>
+                    </a>
+                </div>
+                <div class="widget-toolbar">
+                    <a id='reflash' title='更新数据,刷新时间间隔1分钟' onclick="reflash('reflash');" href="#memwidget"> <i
+                            class="icon-refresh"></i></a>
+                </div>
+            </div>
+
+            <div class="widget-body">
+
+                <div class="widget-main align-center" id="memload">
+                    <div class="loadIcon">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+                <!-- /.widget-main -->
+            </div>
+            <!-- /.widget-body -->
+        </div>
+        <!-- /.widget-box -->
+
+    </div>
+</div>
+
+<div class="col-sm-12" style="display: none">
+    <div class="widget-box">
+        <div class="widget-header widget-header-flat widget-header-small">
+            <h5 class="widget-title">
+                <i class="icon-screenshot"></i>
+                Job主机任务详情
+            </h5>
+
+            <div class="widget-toolbar">
+                <a href="#" data-action="collapse">
+                    <i class="icon-chevron-up"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="widget-body">
+            <div class="widget-main">
+                <div id="job-placeholder">
+                    <div class="loadIcon">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+
+                <div class="hr hr8 hr-double"></div>
+
+            </div>
+            <!-- /.widget-main -->
+        </div>
+        <!-- /.widget-body -->
+    </div>
+    <!-- /.widget-box -->
+
+</div>
+<div class="col-sm-12">
+    <div class="col-sm-6">
+        <div class="widget-box">
+            <div class="widget-header widget-header-flat widget-header-small">
+                <h5 class="widget-title">
+                    <i class="icon-fire"></i>
+                    执行任务总数排行
+                </h5>
+
+                <div class="widget-toolbar">
+                    <a href="#" data-action="collapse">
+                        <i class="icon-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="widget-body">
+
+
+                <div class="widget-main align-center" id="totalJob">
+                    <div class="loadIcon">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+                <!-- /.widget-main -->
+            </div>
+            <!-- /.widget-body -->
+        </div>
+        <!-- /.widget-box -->
+
+    </div>
+    <div class="col-sm-6">
+        <div class="widget-box">
+            <div class="widget-header widget-header-flat widget-header-small">
+                <h5 class="widget-title">
+                    <i class=" icon-sort-by-order"></i>
+                    执行任务失败总数排行
+                </h5>
+
+                <div class="widget-toolbar">
+                    <a href="#" data-action="collapse">
+                        <i class="icon-chevron-up"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="widget-body">
+
+                <div class="widget-main align-center" id="failedJob">
+
+                    <div class="loadIcon">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+                <!-- /.widget-main -->
+            </div>
+            <!-- /.widget-body -->
+        </div>
+        <!-- /.widget-box -->
+
+    </div>
+</div>
+</div>
+
+
+</div>
 </div>
 </div>
 <a href="#" class="scrollup" style="display: inline;">
@@ -730,10 +1119,8 @@
 
     <p style="text-align: center; padding-right:32px;color: firebrick">点我报错</p>
 </div>
-</div>
 <script type="text/javascript">
-    $('li[id="index"]').addClass("active open");
-    $('li[id="monitor_center"]').addClass("active");
+    $('li[id="index"]').addClass("active");
     $('#menu-toggler').on(ace.click_event, function () {
         $('#sidebar').toggleClass('display');
         $(this).toggleClass('display');
@@ -854,6 +1241,5 @@
 
     }
 </script>
-
 </body>
 </html>
