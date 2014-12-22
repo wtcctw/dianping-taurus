@@ -1195,6 +1195,7 @@ public class MonitorServlet extends HttpServlet {
             String path = request.getParameter("path");
             String appname = request.getParameter("appname");
             String currentUser = request.getParameter("currentUser");
+            String isAdmin = request.getParameter("isAdmin");
             JsonArray jsonArray = new JsonArray();
             if (currentUser != null) {
                 task_api = task_api + "?user=" + currentUser;
@@ -1213,39 +1214,44 @@ public class MonitorServlet extends HttpServlet {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             for (TaskDTO dto : tasks) {
                 JsonObject jsonObject = new JsonObject();
-               String state = dto.getStatus();
-
-               /*  String status;
-                try {
-                    cr = new ClientResource(status_api + "/" + dto.getTaskid());
-                    IGetTaskLastStatus statusResource = cr.wrap(IGetTaskLastStatus.class);
-                    cr.accept(MediaType.APPLICATION_XML);
-                    status = statusResource.retrieve();
-                }catch (Exception e){
-                    status = null;
-                }
-
+                String state = dto.getStatus();
                 String lastTaskStatus = "";
-                int taskState = -1;
-                if (status != null) {
+
+                if (isAdmin != null && isAdmin.equals("false")&& !state.equals("SUSPEND")) {
+                    String status;
                     try {
-                        JsonParser parser = new JsonParser();
-                        JsonElement statusElement = parser.parse(status);
-                        JsonObject statusObject = statusElement.getAsJsonObject();
-                        JsonElement statusValue = statusObject.get("status");
-
-                        taskState = statusValue.getAsInt();
-
-                        lastTaskStatus = AttemptStatus.getInstanceRunState(taskState);
+                        cr = new ClientResource(status_api + "/" + dto.getTaskid());
+                        IGetTaskLastStatus statusResource = cr.wrap(IGetTaskLastStatus.class);
+                        cr.accept(MediaType.APPLICATION_XML);
+                        status = statusResource.retrieve();
                     } catch (Exception e) {
-                        lastTaskStatus = "NULL";
+                        status = null;
                     }
 
 
+                    int taskState = -1;
+                    if (status != null) {
+                        try {
+                            JsonParser parser = new JsonParser();
+                            JsonElement statusElement = parser.parse(status);
+                            JsonObject statusObject = statusElement.getAsJsonObject();
+                            JsonElement statusValue = statusObject.get("status");
+
+                            taskState = statusValue.getAsInt();
+
+                            lastTaskStatus = AttemptStatus.getInstanceRunState(taskState);
+                        } catch (Exception e) {
+                            lastTaskStatus = "NULL";
+                        }
+
+
+                    } else {
+                        lastTaskStatus = "NULL";
+                    }
                 } else {
                     lastTaskStatus = "NULL";
                 }
-*/
+
 
                 jsonObject.addProperty("state", state);
 
@@ -1256,7 +1262,7 @@ public class MonitorServlet extends HttpServlet {
                 jsonObject.addProperty("proxyUser", dto.getProxyuser());
                 jsonObject.addProperty("addTime", formatter.format(dto.getAddtime()));
                 jsonObject.addProperty("crontab", dto.getCrontab());
-              //  jsonObject.addProperty("lastTaskStatus", lastTaskStatus);
+                jsonObject.addProperty("lastTaskStatus", lastTaskStatus);
                 jsonArray.add(jsonObject);
             }
 

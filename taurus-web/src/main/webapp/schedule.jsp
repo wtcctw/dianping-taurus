@@ -360,13 +360,15 @@
         var appname ="<%=request.getParameter("appname")%>";
         var currentUser = "<%= currentUser%>";
         var scheduleBody = "";
+        var isAdmin = "<%= isAdmin%>";
         $.ajax({
             data: {
                 action: "schedule",
                 name: name,
                 path: path,
                 appname: appname,
-                currentUser: currentUser
+                currentUser: currentUser,
+                isAdmin:isAdmin
             },
             type: "POST",
             url: "/monitor",
@@ -390,7 +392,7 @@
                         + "<th>创建时间</th>"
                         + "<th>Crontab</th>"
                         + "<th>状态</th>"
-
+                        + "<th>最后执行结果</th>"
                         + "<th class='center'>-</th>"
                         + "<th class='center'>-</th>"
                         + "</tr>"
@@ -401,7 +403,16 @@
                 $.each(jsonarray, function (i, item) {
                     var state = item.state;
                     var taskState = item.lastTaskStatus;
-
+                    var taskStatsLabel ="";
+                    if(taskState == "SUCCEEDED"){
+                        taskStatsLabel = "<span class='label label-info'>"
+                                + item.lastTaskStatus
+                                + "</span>";
+                    }else{
+                        taskStatsLabel = "<span class='label label-important'>"
+                                + item.lastTaskStatus
+                                + "</span>";
+                    }
                     var isRunning = true;
                     if (state == "SUSPEND") {
                         isRunning = false;
@@ -434,7 +445,9 @@
                                 + item.state
                                 + "</span>"
                                 + "</td>"
-
+                                +"<td>"
+                                + taskStatsLabel
+                                +"</td>"
                                 + "<td>"
                                 + "<div class='btn-group'>"
                                 + "<button class='btn btn-success dropdown-toggle' data-toggle='dropdown'>"
@@ -476,7 +489,9 @@
                                 + item.state
                                 + "</span>"
                                 +"</td>"
-
+                                +"<td>"
+                                + taskStatsLabel
+                                +"</td>"
                                 +"<td>"
                                 + "<div class='btn-group'>"
                                 + "<button class='btn btn-success dropdown-toggle' data-toggle='dropdown'>"
