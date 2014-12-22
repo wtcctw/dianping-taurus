@@ -20,6 +20,8 @@
     <script type="text/javascript" src="resource/js/lib/justgage.1.0.1.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/login.js"></script>
+    <script type="text/javascript" charset="utf-8" language="javascript" src="js/jquery.dataTables.js"></script>
+    <script type="text/javascript" charset="utf-8" language="javascript" src="js/DT_bootstrap.js"></script>
     <!-- page specific plugin styles -->
 
     <!-- fonts -->
@@ -351,7 +353,7 @@
     <% } else {%>
     <div class="col-sm-9">
         <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-hover"
-               width="100%" id="example">
+               width="100%" id="regintask">
             <thead>
             <tr>
                 <th class="hide">ID</th>
@@ -431,7 +433,7 @@
         <%
             if (!userGroup.equals("admin")) { %>
         组名：<%=userGroup%> <br>
-        <table class="table table-striped table-bordered table-condensed">
+        <table class="table table-striped table-bordered table-condensed" id="reginuser">
             <tr>
                 <th align="left">成员</th>
             </tr>
@@ -466,7 +468,7 @@
                     }
                 } else {
                             %>
-            <table class="table table-striped table-bordered table-condensed">
+            <table class="table table-striped table-bordered table-condensed" id="reginuser">
                 <tr>
                     <th align="left" >成员</th>
                     <th align="left">组名</th>
@@ -545,10 +547,27 @@
     userList = userList.substr(1);
     groupList = groupList.substr(1);
 
+
+
+
 </script>
 <script src="js/jquery.validate.min.js" type="text/javascript"></script>
 <script src="js/resign.js" type="text/javascript"></script>
 <script>
+    jQuery(function ($) {
+        $('#regintask').dataTable({
+            "bAutoWidth": true,
+            "bPaginate": false,
+            "bFilter": true,
+            "bInfo": false,
+            "bLengthChange": false
+
+        });
+        $('#reginuser').dataTable({
+            "bFilter": true,
+
+        });
+    });
     var currentUser = "<%=currentUser%>"
     var userId = <%=userId%>
 </script>

@@ -641,6 +641,43 @@ public class MonitorServlet extends HttpServlet {
 
 
                     if (state.equals("FAILED")) {
+                        String status_api = RESTLET_URL_BASE + "getlaststatus";
+                        String status;
+                        try {
+                            cr = new ClientResource(status_api + "/" + dto.getTaskID());
+                            IGetTaskLastStatus statusResource = cr.wrap(IGetTaskLastStatus.class);
+                            cr.accept(MediaType.APPLICATION_XML);
+                            status = statusResource.retrieve();
+                        } catch (Exception e) {
+                            status = null;
+                        }
+
+                        String lastTaskStatus ="";
+                        int taskState = -1;
+                        if (status != null) {
+                            try {
+                                JsonParser parser = new JsonParser();
+                                JsonElement statusElement = parser.parse(status);
+                                JsonObject statusObject = statusElement.getAsJsonObject();
+                                JsonElement statusValue = statusObject.get("status");
+
+                                taskState = statusValue.getAsInt();
+
+                                lastTaskStatus = AttemptStatus.getInstanceRunState(taskState);
+                            } catch (Exception e) {
+                                lastTaskStatus = "NULL";
+                            }
+                        }
+                        if(state == "SUCCEEDED"){
+                            lastTaskStatus = "<span class='label label-info'>"
+                                    + lastTaskStatus
+                                    + "</span>";
+                        }else{
+                            lastTaskStatus = "<span class='label label-important'>"
+                                    + lastTaskStatus
+                                    + "</span>";
+                        }
+
                         String taskName = "";
                         for (Task task : tasks) {
                             if (task.getTaskid().equals(dto.getTaskID())) {
@@ -648,6 +685,7 @@ public class MonitorServlet extends HttpServlet {
                                 break;
                             }
                         }
+
                         result += " <tr id = " + dto.getAttemptID() + " >"
                                 + "<td >"
                                 + dto.getTaskID()
@@ -695,7 +733,9 @@ public class MonitorServlet extends HttpServlet {
                                     + "NULL"
                                     + "</td >";
                         }
-
+                        result += "<td >"
+                                + lastTaskStatus
+                                + "</td >";
                         result += "<td >"
                                 + "  <a target=\"_blank\" href=\"viewlog.jsp?id="
                                 + dto.getAttemptID() + "&status=" + dto.getStatus()
@@ -758,6 +798,43 @@ public class MonitorServlet extends HttpServlet {
 
 
                     if (state.equals("SUBMIT_FAIL")) {
+                        String status_api = RESTLET_URL_BASE + "getlaststatus";
+                        String status;
+                        try {
+                            cr = new ClientResource(status_api + "/" + dto.getTaskID());
+                            IGetTaskLastStatus statusResource = cr.wrap(IGetTaskLastStatus.class);
+                            cr.accept(MediaType.APPLICATION_XML);
+                            status = statusResource.retrieve();
+                        } catch (Exception e) {
+                            status = null;
+                        }
+
+                        String lastTaskStatus ="";
+                        int taskState = -1;
+                        if (status != null) {
+                            try {
+                                JsonParser parser = new JsonParser();
+                                JsonElement statusElement = parser.parse(status);
+                                JsonObject statusObject = statusElement.getAsJsonObject();
+                                JsonElement statusValue = statusObject.get("status");
+
+                                taskState = statusValue.getAsInt();
+
+                                lastTaskStatus = AttemptStatus.getInstanceRunState(taskState);
+                            } catch (Exception e) {
+                                lastTaskStatus = "NULL";
+                            }
+                        }
+                        if(state == "SUCCEEDED"){
+                            lastTaskStatus = "<span class='label label-info'>"
+                                    + lastTaskStatus
+                                    + "</span>";
+                        }else{
+                            lastTaskStatus = "<span class='label label-important'>"
+                                    + lastTaskStatus
+                                    + "</span>";
+                        }
+
                         String taskName = "";
                         for (Task task : tasks) {
                             if (task.getTaskid().equals(dto.getTaskID())) {
@@ -812,6 +889,9 @@ public class MonitorServlet extends HttpServlet {
                                     + "NULL"
                                     + "</td >";
                         }
+                        result += "<td >"
+                                + lastTaskStatus
+                                + "</td >";
                         result += "<td> <a id ='submitFeedBtn' class='feedBtn'  href='feederror.jsp?id="
                                 + dto.getAttemptID()
                                 + "&status="
@@ -1093,6 +1173,43 @@ public class MonitorServlet extends HttpServlet {
 
 
                     if (state.equals("TIMEOUT")) {
+                        String status_api = RESTLET_URL_BASE + "getlaststatus";
+                        String status;
+                        try {
+                            cr = new ClientResource(status_api + "/" + dto.getTaskID());
+                            IGetTaskLastStatus statusResource = cr.wrap(IGetTaskLastStatus.class);
+                            cr.accept(MediaType.APPLICATION_XML);
+                            status = statusResource.retrieve();
+                        } catch (Exception e) {
+                            status = null;
+                        }
+
+                        String lastTaskStatus ="";
+                        int taskState = -1;
+                        if (status != null) {
+                            try {
+                                JsonParser parser = new JsonParser();
+                                JsonElement statusElement = parser.parse(status);
+                                JsonObject statusObject = statusElement.getAsJsonObject();
+                                JsonElement statusValue = statusObject.get("status");
+
+                                taskState = statusValue.getAsInt();
+
+                                lastTaskStatus = AttemptStatus.getInstanceRunState(taskState);
+                            } catch (Exception e) {
+                                lastTaskStatus = "NULL";
+                            }
+                        }
+                        if(state == "SUCCEEDED"){
+                            lastTaskStatus = "<span class='label label-info'>"
+                                    + lastTaskStatus
+                                    + "</span>";
+                        }else{
+                            lastTaskStatus = "<span class='label label-important'>"
+                                    + lastTaskStatus
+                                    + "</span>";
+                        }
+
                         String taskName = "";
                         for (Task task : tasks) {
                             if (task.getTaskid().equals(dto.getTaskID())) {
@@ -1147,7 +1264,9 @@ public class MonitorServlet extends HttpServlet {
                                     + "NULL"
                                     + "</td >";
                         }
-
+                        result += "<td >"
+                                + lastTaskStatus
+                                + "</td >";
                         result += "<td >"
                                 + "  <a target=\"_blank\" href=\"viewlog.jsp?id="
                                 + dto.getAttemptID() + "&status=" + dto.getStatus()

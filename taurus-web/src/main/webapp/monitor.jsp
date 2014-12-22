@@ -400,6 +400,7 @@
             <th>实际结束时间</th>
             <th>预计调度时间</th>
             <th>IP</th>
+            <th>最后执行状态</th>
             <th>我要报错</th>
         </tr>
         </thead>
@@ -469,6 +470,7 @@
             <th>实际结束时间</th>
             <th>预计调度时间</th>
             <th>IP</th>
+            <th>最后执行状态</th>
             <th>查看日志</th>
             <th>我要报错</th>
         </tr>
@@ -535,6 +537,7 @@
             <th>实际结束时间</th>
             <th>预计调度时间</th>
             <th>IP</th>
+            <th>最后执行状态</th>
             <th>查看日志</th>
             <th>我要报错</th>
 
@@ -719,16 +722,8 @@ jQuery(function ($) {
             "bPaginate": false,
             "bFilter": true,
             "bInfo": false,
-            "bLengthChange": false,
-            "aoColumns": [
-                { "sType": "html-percent", "aTargets": [1] },
-                { "sType": "html-percent", "aTargets": [2] },
-                { "sType": "html-percent", "aTargets": [3] },
-                { "sType": "html-percent", "aTargets": [4] },
-                { "sType": "html-percent", "aTargets": [5] },
-                { "sType": "html-percent", "aTargets": [6] },
-                { "sType": "html-percent", "aTargets": [7] }
-            ]
+            "bLengthChange": false
+
         });
     };
     submitfailStyle = function () {
@@ -737,16 +732,8 @@ jQuery(function ($) {
             "bPaginate": false,
             "bFilter": true,
             "bInfo": false,
-            "bLengthChange": false,
-            "aoColumns": [
-                { "sType": "html-percent", "aTargets": [1] },
-                { "sType": "html-percent", "aTargets": [2] },
-                { "sType": "html-percent", "aTargets": [3] },
-                { "sType": "html-percent", "aTargets": [4] },
-                { "sType": "html-percent", "aTargets": [5] },
-                { "sType": "html-percent", "aTargets": [6] },
-                { "sType": "html-percent", "aTargets": [7] }
-            ]
+            "bLengthChange": false
+
         });
     };
 
@@ -756,16 +743,8 @@ jQuery(function ($) {
             "bPaginate": false,
             "bFilter": true,
             "bInfo": false,
-            "bLengthChange": false,
-            "aoColumns": [
-                { "sType": "html-percent", "aTargets": [1] },
-                { "sType": "html-percent", "aTargets": [2] },
-                { "sType": "html-percent", "aTargets": [3] },
-                { "sType": "html-percent", "aTargets": [4] },
-                { "sType": "html-percent", "aTargets": [5] },
-                { "sType": "html-percent", "aTargets": [6] },
-                { "sType": "html-percent", "aTargets": [7] }
-            ]
+            "bLengthChange": false
+
         });
     };
     failedStyle = function () {
@@ -774,17 +753,8 @@ jQuery(function ($) {
             "bPaginate": false,
             "bFilter": true,
             "bInfo": false,
-            "bLengthChange": false,
-            "aoColumns": [
-                { "sType": "html-percent", "aTargets": [1] },
-                { "sType": "html-percent", "aTargets": [2] },
-                { "sType": "html-percent", "aTargets": [3] },
-                { "sType": "html-percent", "aTargets": [4] },
-                { "sType": "html-percent", "aTargets": [5] },
-                { "sType": "html-percent", "aTargets": [6] },
-                { "sType": "html-percent", "aTargets": [7] },
-                { "sType": "html-percent", "aTargets": [8] }
-            ]
+            "bLengthChange": false
+
         });
     };
 
@@ -794,17 +764,8 @@ jQuery(function ($) {
             "bPaginate": false,
             "bFilter": true,
             "bInfo": false,
-            "bLengthChange": false,
-            "aoColumns": [
-                { "sType": "html-percent", "aTargets": [1] },
-                { "sType": "html-percent", "aTargets": [2] },
-                { "sType": "html-percent", "aTargets": [3] },
-                { "sType": "html-percent", "aTargets": [4] },
-                { "sType": "html-percent", "aTargets": [5] },
-                { "sType": "html-percent", "aTargets": [6] },
-                { "sType": "html-percent", "aTargets": [7] },
-                { "sType": "html-percent", "aTargets": [8] }
-            ]
+            "bLengthChange": false
+
         });
     };
 
@@ -814,17 +775,8 @@ jQuery(function ($) {
             "bPaginate": false,
             "bFilter": true,
             "bInfo": false,
-            "bLengthChange": false,
-            "aoColumns": [
-                { "sType": "html-percent", "aTargets": [1] },
-                { "sType": "html-percent", "aTargets": [2] },
-                { "sType": "html-percent", "aTargets": [3] },
-                { "sType": "html-percent", "aTargets": [4] },
-                { "sType": "html-percent", "aTargets": [5] },
-                { "sType": "html-percent", "aTargets": [6] },
-                { "sType": "html-percent", "aTargets": [7] },
-                { "sType": "html-percent", "aTargets": [8] }
-            ]
+            "bLengthChange": false
+
         });
     };
 
