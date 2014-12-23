@@ -277,38 +277,60 @@
 
 
 <div class="row">
-<ul class="run-tag col-sm-12">
-    <li><a class="atip" data-toggle="tooltip" data-placement="right" data-original-title="正在运行的任务"><span
-            class="label label-info">RUNNING</span></a></li>
-</ul>
-<ul class="breadcrumb col-sm-12 ">
-    <table cellpadding="0" cellspacing="0" border="0"
-           class="table table-striped table-format table-hover" id="running">
-        <thead>
-        <tr>
-            <th>任务ID</th>
-            <th>任务名称</th>
-            <th>实际启动时间</th>
-            <th>实际结束时间</th>
-            <th>预计调度时间</th>
-            <th>IP</th>
-            <th>查看日志</th>
+<div class="col-sm-12" >
+    <div class="widget-box">
+        <div class="widget-header header-color-blue2">
+            <h5 class="widget-title">
+                <i class="icon-spinner"></i>
+                <a class="atip" data-toggle="tooltip" data-placement="right" data-original-title="正在运行的任务"><span
+                        style="color: white">RUNNING</span></a>
+            </h5>
 
-        </tr>
-        </thead>
-        <tbody id="running_body">
-        <div id="running_load">
-            <div class="loadIcon">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
+            <div class="widget-toolbar">
+                <a href="#" data-action="collapse">
+                    <i class="icon-chevron-up"></i>
+                </a>
             </div>
         </div>
 
-        </tbody>
-    </table>
-</ul>
+        <div class="widget-body">
+            <div class="widget-main" id="runningwidget">
+                <table cellpadding="0" cellspacing="0" border="0"
+                       class="table table-striped table-format table-hover" id="running">
+                    <thead>
+                    <tr>
+                        <th>任务ID</th>
+                        <th>任务名称</th>
+                        <th>实际启动时间</th>
+                        <th>实际结束时间</th>
+                        <th>预计调度时间</th>
+                        <th>IP</th>
+                        <th>查看日志</th>
+
+                    </tr>
+                    </thead>
+                    <tbody id="running_body">
+                    <div id="running_load">
+                        <div class="loadIcon">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+
+                    </tbody>
+                </table>
+
+            </div>
+            <!-- /.widget-main -->
+        </div>
+        <!-- /.widget-body -->
+    </div>
+    <!-- /.widget-box -->
+
+</div>
+
 <div class="time_inal ">
     <%
         Date time = new Date();
@@ -411,178 +433,280 @@
 
 
 </div>
+<div class="col-sm-12" >
+    <div class="widget-box">
+        <div class="widget-header header-color-red">
+            <h5 class="widget-title">
+                <i class="icon-remove"></i>
+                <a class="atip" data-toggle="tooltip" data-placement="right" data-original-title="提交失败的任务"><span
+                        style="color: white">SUBMIT-FAILED</span></a>
+            </h5>
 
-<ul class="submit-fail-tag col-sm-12">
-    <li><a class="atip" data-toggle="tooltip" data-placement="right" data-original-title="提交失败的任务"><span
-            class="label label-important">SUBMIT_FAIL</span></a></li>
-</ul>
-
-<ul class="breadcrumb col-sm-12">
-    <table cellpadding="0" cellspacing="0" border="0"
-           class="table table-striped table-format table-hover" id="submitfail" style="width: 100%">
-        <thead>
-        <tr>
-            <th>任务ID</th>
-            <th>任务名称</th>
-            <th>实际启动时间</th>
-            <th>实际结束时间</th>
-            <th>预计调度时间</th>
-            <th>IP</th>
-            <th>最后执行状态</th>
-            <th>我要报错</th>
-        </tr>
-        </thead>
-        <tbody id="submit_body">
-
-        <div id="submit_load">
-            <div class="loadIcon">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
+            <div class="widget-toolbar">
+                <a href="#" data-action="collapse">
+                    <i class="icon-chevron-up"></i>
+                </a>
             </div>
         </div>
 
-        </tbody>
-    </table>
-</ul>
+        <div class="widget-body">
+            <div class="widget-main" id="submitwidget">
+                <table cellpadding="0" cellspacing="0" border="0"
+                       class="table table-striped table-format table-hover" id="submitfail" >
+                    <thead>
+                    <tr>
+                        <th>任务ID</th>
+                        <th>任务名称</th>
+                        <th>实际启动时间</th>
+                        <th>实际结束时间</th>
+                        <th>预计调度时间</th>
+                        <th>IP</th>
+                        <th>最后执行状态</th>
+                        <th>我要报错</th>
+                    </tr>
+                    </thead>
+                    <tbody id="submit_body">
 
-<ul class="dependency-tag col-sm-12">
-    <li><a class="atip" data-toggle="tooltip" data-placement="right" data-original-title="拥堵的任务"><span
-            class="label label-important">DEPENDENCY_PASS</span></a></li>
+                    <div id="submit_load">
+                        <div class="loadIcon">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
 
-</ul>
+                    </tbody>
+                </table>
 
-<ul class="breadcrumb col-sm-12">
-    <table cellpadding="0" cellspacing="0" border="0"
-           class="table table-striped table-format table-hover" id="dependency" style="width: 100%">
-        <thead>
-        <tr>
-            <th>任务ID</th>
-            <th>任务名称</th>
-            <th>实际启动时间</th>
-            <th>实际结束时间</th>
-            <th>预计调度时间</th>
-            <th>IP</th>
-            <th>我要报错</th>
-        </tr>
-        </thead>
-        <tbody id="dependency_body">
-        <div id="dependency_load">
-            <div class="loadIcon">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
+            </div>
+            <!-- /.widget-main -->
+        </div>
+        <!-- /.widget-body -->
+    </div>
+    <!-- /.widget-box -->
+
+</div>
+
+
+
+
+<div class="col-sm-12" >
+    <div class="widget-box">
+        <div class="widget-header header-color-red3">
+            <h5 class="widget-title">
+                <i class="icon-eye-close"></i>
+                <a class="atip" data-toggle="tooltip" data-placement="right" data-original-title="拥堵的任务"><span
+                        style="color: #ffffff">DEPENDENCY_PASS</span></a>
+            </h5>
+
+            <div class="widget-toolbar">
+                <a href="#" data-action="collapse">
+                    <i class="icon-chevron-up"></i>
+                </a>
             </div>
         </div>
-        </tbody>
-    </table>
-</ul>
 
+        <div class="widget-body">
+            <div class="widget-main" id="dependencywidget">
+                <table cellpadding="0" cellspacing="0" border="0"
+                       class="table table-striped table-format table-hover" id="dependency" style="width: 100%">
+                    <thead>
+                    <tr>
+                        <th>任务ID</th>
+                        <th>任务名称</th>
+                        <th>实际启动时间</th>
+                        <th>实际结束时间</th>
+                        <th>预计调度时间</th>
+                        <th>IP</th>
+                        <th>我要报错</th>
+                    </tr>
+                    </thead>
+                    <tbody id="dependency_body">
+                    <div id="dependency_load">
+                        <div class="loadIcon">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                    </tbody>
+                </table>
 
-<ul class="fail-tag col-sm-12">
-    <li><a class="atip" data-toggle="tooltip" data-placement="right" data-original-title="失败的任务"><span
-            class="label label-important">FAILED</span></a></li>
+            </div>
+            <!-- /.widget-main -->
+        </div>
+        <!-- /.widget-body -->
+    </div>
+    <!-- /.widget-box -->
 
-</ul>
+</div>
 
-<ul class="breadcrumb col-sm-12">
-    <table cellpadding="0" cellspacing="0" border="0"
-           class="table table-striped table-format table-hover" id="fail" style="width: 100%">
-        <thead>
-        <tr>
-            <th>任务ID</th>
-            <th>任务名称</th>
-            <th>实际启动时间</th>
-            <th>实际结束时间</th>
-            <th>预计调度时间</th>
-            <th>IP</th>
-            <th>最后执行状态</th>
-            <th>查看日志</th>
-            <th>我要报错</th>
-        </tr>
-        </thead>
-        <tbody id="failed_body">
-        <div id="failed_load">
-            <div class="loadIcon">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
+<div class="col-sm-12" >
+    <div class="widget-box">
+        <div class="widget-header header-color-red2">
+            <h5 class="widget-title">
+                <i class="icon-remove-circle"></i>
+                <a class="atip" data-toggle="tooltip" data-placement="right" data-original-title="失败的任务"><span
+                        style="color: #ffffff">FAILED</span></a>
+            </h5>
+
+            <div class="widget-toolbar">
+                <a href="#" data-action="collapse">
+                    <i class="icon-chevron-up"></i>
+                </a>
             </div>
         </div>
-        </tbody>
-    </table>
-</ul>
 
-<ul class="dependency-timeout-tag col-sm-12">
-    <li><a class="atip" data-toggle="tooltip" data-placement="right" data-original-title="依赖超时的任务"><span
-            class="label label-important">DEPENDENCY_TIMEOUT</span></a></li>
-</ul>
+        <div class="widget-body">
+            <div class="widget-main" id="failwidget">
+                <table cellpadding="0" cellspacing="0" border="0"
+                       class="table table-striped table-format table-hover" id="fail" style="width: 100%">
+                    <thead>
+                    <tr>
+                        <th>任务ID</th>
+                        <th>任务名称</th>
+                        <th>实际启动时间</th>
+                        <th>实际结束时间</th>
+                        <th>预计调度时间</th>
+                        <th>IP</th>
+                        <th>最后执行状态</th>
+                        <th>查看日志</th>
+                        <th>我要报错</th>
+                    </tr>
+                    </thead>
+                    <tbody id="failed_body">
+                    <div id="failed_load">
+                        <div class="loadIcon">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                    </tbody>
+                </table>
 
-<ul class="breadcrumb col-sm-12">
-    <table cellpadding="0" cellspacing="0" border="0"
-           class="table table-striped table-format table-hover" id="dependency-timeout" style="width: 100%">
-        <thead>
-        <tr>
-            <th>任务ID</th>
-            <th>任务名称</th>
-            <th>实际启动时间</th>
-            <th>实际结束时间</th>
-            <th>预计调度时间</th>
-            <th>IP</th>
-            <th>查看日志</th>
-            <th>我要报错</th>
+            </div>
+            <!-- /.widget-main -->
+        </div>
+        <!-- /.widget-body -->
+    </div>
+    <!-- /.widget-box -->
 
-        </tr>
-        </thead>
-        <tbody id="dependency_timeout_body">
-        <div id="dependency_timeout_load">
-            <div class="loadIcon">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
+</div>
+
+
+
+<div class="col-sm-12" >
+    <div class="widget-box">
+        <div class="widget-header header-color-orange">
+            <h5 class="widget-title">
+                <i class="icon-info-sign"></i>
+                <a class="atip" data-toggle="tooltip" data-placement="right" data-original-title="依赖超时的任务"><span
+                        style="color: #ffffff">DEPENDENCY_TIMEOUT</span></a>
+            </h5>
+
+            <div class="widget-toolbar">
+                <a href="#" data-action="collapse">
+                    <i class="icon-chevron-up"></i>
+                </a>
             </div>
         </div>
-        </tbody>
-    </table>
-</ul>
 
-<ul class="timeout-tag col-sm-12">
-    <li><a class="atip" data-toggle="tooltip" data-placement="right" data-original-title="超时的任务"><span
-            class="label label-important">TIMEOUT</span></a></li>
-</ul>
-<ul class="breadcrumb col-sm-12">
-    <table cellpadding="0" cellspacing="0" border="0"
-           class="table table-striped table-format table-hover " id="timeout" style="width: 100%">
-        <thead>
-        <tr>
-            <th>任务ID</th>
-            <th>任务名称</th>
-            <th>实际启动时间</th>
-            <th>实际结束时间</th>
-            <th>预计调度时间</th>
-            <th>IP</th>
-            <th>最后执行状态</th>
-            <th>查看日志</th>
-            <th>我要报错</th>
+        <div class="widget-body">
+            <div class="widget-main" id="dependency-timeoutwidget">
+                <table cellpadding="0" cellspacing="0" border="0"
+                       class="table table-striped table-format table-hover" id="dependency-timeout" style="width: 100%">
+                    <thead>
+                    <tr>
+                        <th>任务ID</th>
+                        <th>任务名称</th>
+                        <th>实际启动时间</th>
+                        <th>实际结束时间</th>
+                        <th>预计调度时间</th>
+                        <th>IP</th>
+                        <th>查看日志</th>
+                        <th>我要报错</th>
 
-        </tr>
-        </thead>
-        <tbody id="timeout_body">
-        <div id="timeout_load">
-            <div class="loadIcon">
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
+                    </tr>
+                    </thead>
+                    <tbody id="dependency_timeout_body">
+                    <div id="dependency_timeout_load">
+                        <div class="loadIcon">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.widget-main -->
+        </div>
+        <!-- /.widget-body -->
+    </div>
+    <!-- /.widget-box -->
+
+</div>
+
+
+<div class="col-sm-12" >
+    <div class="widget-box">
+        <div class="widget-header header-color-orange">
+            <h5 class="widget-title">
+                <i class="icon-exclamation-sign"></i>
+                <a class="atip" data-toggle="tooltip" data-placement="right" data-original-title="超时的任务"><span
+                        style="color: #ffffff">TIMEOUT</span></a>
+            </h5>
+
+            <div class="widget-toolbar">
+                <a href="#" data-action="collapse">
+                    <i class="icon-chevron-up"></i>
+                </a>
             </div>
         </div>
-        </tbody>
-    </table>
-</ul>
+
+        <div class="widget-body">
+            <div class="widget-main" id="timeoutwidget">
+                <table cellpadding="0" cellspacing="0" border="0"
+                       class="table table-striped table-format table-hover " id="timeout" style="width: 100%">
+                    <thead>
+                    <tr>
+                        <th>任务ID</th>
+                        <th>任务名称</th>
+                        <th>实际启动时间</th>
+                        <th>实际结束时间</th>
+                        <th>预计调度时间</th>
+                        <th>IP</th>
+                        <th>最后执行状态</th>
+                        <th>查看日志</th>
+                        <th>我要报错</th>
+
+                    </tr>
+                    </thead>
+                    <tbody id="timeout_body">
+                    <div id="timeout_load">
+                        <div class="loadIcon">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.widget-main -->
+        </div>
+        <!-- /.widget-body -->
+    </div>
+    <!-- /.widget-box -->
+
+</div>
+
 
 </div>
 </div>

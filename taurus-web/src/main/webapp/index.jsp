@@ -491,7 +491,7 @@
 <div class="col-sm-12">
     <div class="col-sm-6">
         <div class="widget-box">
-            <div class="widget-header widget-header-flat widget-header-small">
+            <div class="widget-header header-color-green">
                 <h5 class="widget-title">
                     <i class="icon-bell-alt"></i>
                     我的任务成功率
@@ -570,7 +570,7 @@
     </div>
     <div class="col-sm-6">
         <div class="widget-box">
-            <div class="widget-header widget-header-flat widget-header-small">
+            <div class="widget-header header-color-red">
                 <h5 class="widget-title">
                     <i class="icon-bullseye"></i>
                     我的组的任务成功率
@@ -649,7 +649,7 @@
 <div class="col-sm-12">
     <div class="col-sm-6">
         <div class="widget-box">
-            <div class="widget-header widget-header-flat widget-header-small">
+            <div class="widget-header header-color-blue2">
                 <h5 class="widget-title">
                     <i class=" icon-list-ol"></i>
                     我的任务执行详情
@@ -681,7 +681,7 @@
     </div>
     <div class="col-sm-6">
         <div class="widget-box">
-            <div class="widget-header widget-header-flat widget-header-small">
+            <div class="widget-header header-color-orange">
                 <h5 class="widget-title">
                     <i class=" icon-list-ul"></i>
                     我所在组的任务执行详情

@@ -490,7 +490,7 @@
     <div class="col-sm-12">
         <div class="col-sm-6">
             <div class="widget-box">
-                <div class="widget-header widget-header-flat widget-header-small">
+                <div class="widget-header header-color-blue3">
                     <h5 class="widget-title">
                         <i class="icon-dashboard"></i>
                         任务仪表盘
@@ -521,7 +521,7 @@
         </div>
         <div class="col-sm-6">
             <div class="widget-box">
-                <div class="widget-header widget-header-flat widget-header-small">
+                <div class="widget-header header-color-red3">
                     <h5 class="widget-title">
                         <i class="icon-dashboard"></i>
                         所有的任务成功率
@@ -598,7 +598,7 @@
         </div>
         <div class="col-sm-12">
             <div class="widget-box">
-                <div class="widget-header widget-header-flat widget-header-small">
+                <div class="widget-header header-color-green3">
                     <h5 class="widget-title">
                         <i class=" icon-list-alt"></i>
                         所有任务的执行详情
@@ -635,7 +635,7 @@
 <div class="col-sm-12">
     <div class="col-sm-6">
         <div class="widget-box">
-            <div class="widget-header widget-header-flat widget-header-small">
+            <div class="widget-header header-color-grey">
                 <h5 class="widget-title">
                     <i class="icon-fire"></i>
                     执行任务总数排行
@@ -668,7 +668,7 @@
     </div>
     <div class="col-sm-6">
         <div class="widget-box">
-            <div class="widget-header widget-header-flat widget-header-small">
+            <div class="widget-header header-color-dark">
                 <h5 class="widget-title">
                     <i class=" icon-sort-by-order"></i>
                     执行任务失败总数排行

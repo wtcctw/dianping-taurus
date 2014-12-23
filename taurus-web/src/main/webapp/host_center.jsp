@@ -324,7 +324,7 @@
 <div class="col-sm-12">
     <div class="col-sm-6">
         <div class="widget-box">
-            <div class="widget-header widget-header-flat widget-header-small">
+            <div class="widget-header header-color-green2">
                 <h5 class="widget-title">
                     <i class="icon-eye-open"></i>
                     Job机器状态
@@ -380,7 +380,7 @@
     </div>
     <div class="col-sm-6" >
         <div class="widget-box">
-            <div class="widget-header widget-header-flat widget-header-small">
+            <div class="widget-header header-color-red3">
                 <h5 class="widget-title">
                     <i class="icon-eye-close"></i>
                     Job异常机器列表
@@ -413,7 +413,7 @@
 <div class="col-sm-12">
     <div class="col-sm-6" id="cpuwidget">
         <div class="widget-box">
-            <div class="widget-header widget-header-flat widget-header-small">
+            <div class="widget-header header-color-blue3">
                 <h5 class="widget-title">
                     <i class=" icon-time"></i>
                     主机CPU负载列表
@@ -450,7 +450,7 @@
     </div>
     <div class="col-sm-6" id="memwidget">
         <div class="widget-box">
-            <div class="widget-header widget-header-flat widget-header-small">
+            <div class="widget-header header-color-pink">
                 <h5 class="widget-title">
                     <i class=" icon-tint"></i>
                     主机内存使用率列表
