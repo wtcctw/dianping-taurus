@@ -328,7 +328,7 @@
                 }
                     step = -720;
                 %>
-           href="monitor_center.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+           href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime)) %>~<%=formatter.format(new Date(df.parse(now).getTime()))%>]">[-1m] </a>
         &nbsp;&nbsp; |&nbsp;&nbsp;
@@ -338,7 +338,7 @@
                 }
                     step = -168;
                 %>
-           href="monitor_center.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+           href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>
     ~<%=formatter.format(new Date(df.parse(now).getTime()))%>]">[-1w] </a>
@@ -349,7 +349,7 @@
                 }
                     step = -24;
                 %>
-           href="monitor_center.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%>"
+           href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%>"
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>
     ~<%=formatter.format(new Date(df.parse(now).getTime()))%>]">[-1d] </a>
@@ -360,9 +360,9 @@
         }
             step = 24;
             if (df.parse(now).after(time)) {%>
-           href="monitor_center.jsp?step=-24&date＝<%=df.format(time)%> "
+           href="index.jsp?step=-24&date＝<%=df.format(time)%> "
                 <% } else {%>
-           href="monitor_center.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+           href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
                 <% }
                 %>
            data-toggle="tooltip" data-placement="top"
@@ -373,9 +373,9 @@
         }
             step = 168;
             if (df.parse(now).after(time)) {%>
-           href="monitor_center.jsp?step=-24&op=day&date＝<%=df.format(time)%> "
+           href="index.jsp?step=-24&op=day&date＝<%=df.format(time)%> "
                 <% } else {%>
-           href="monitor_center.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+           href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
                 <% }
                 %>
            data-toggle="tooltip" data-placement="top"
@@ -386,9 +386,9 @@
         }
             step = 720;
             if (df.parse(now).after(time)) {%>
-           href="monitor_center.jsp?step=-24&op=day&date＝<%=df.format(time)%> "
+           href="index.jsp?step=-24&op=day&date＝<%=df.format(time)%> "
                 <% } else {%>
-           href="monitor_center.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+           href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
                 <% }
                 %>
            data-toggle="tooltip" data-placement="top"
@@ -402,7 +402,7 @@
 
 
         <a class="atip"
-           href="monitor_center.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date())%>"
+           href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date())%>"
            data-toggle="tooltip" data-placement="top"
            data-original-title=" 时间区间[<%=formatter.format(new Date(new Date().getTime() -24*hourTime))%>~<%=formatter.format(new Date())%>]">[当天] </a>
     </div>
@@ -417,7 +417,7 @@
                 }
                     step = -720;
                 %>
-           href="monitor_center.jsp?step=<%=step%>&op=history&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+           href="index.jsp?step=<%=step%>&op=history&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime)) %>~<%=formatter.format(new Date())%>]">[-1m] </a>
         &nbsp;&nbsp; |&nbsp;&nbsp;
@@ -427,7 +427,7 @@
                 }
                     step = -168;
                 %>
-           href="monitor_center.jsp?step=<%=step%>&op=history&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+           href="index.jsp?step=<%=step%>&op=history&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>
     ~<%=formatter.format(new Date())%>]">[-1w] </a>
@@ -438,7 +438,7 @@
                 }
                     step = -24;
                 %>
-           href="monitor_center.jsp?step=<%=step%>&op=history&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%>"
+           href="index.jsp?step=<%=step%>&op=history&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%>"
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[<%=formatter.format(new Date(df.parse(now).getTime() + step*hourTime))%>
     ~<%=formatter.format(new Date())%>]">[-1d] </a>
@@ -450,9 +450,9 @@
         }
             step = 24;
             if (df.parse(now).after(time)) {%>
-           href="monitor_center.jsp?step=-24&date＝<%=df.format(time)%> "
+           href="index.jsp?step=-24&date＝<%=df.format(time)%> "
                 <% } else {%>
-           href="monitor_center.jsp?step=<%=step%>&op=history&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+           href="index.jsp?step=<%=step%>&op=history&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
                 <% }
                 %>
            data-toggle="tooltip" data-placement="top"
@@ -463,9 +463,9 @@
         }
             step = 168;
             if (df.parse(now).after(time)) {%>
-           href="monitor_center.jsp?step=-24&op=history&date＝<%=df.format(time)%> "
+           href="index.jsp?step=-24&op=history&date＝<%=df.format(time)%> "
                 <% } else {%>
-           href="monitor_center.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+           href="index.jsp?step=<%=step%>&op=day&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
                 <% }
                 %>
            data-toggle="tooltip" data-placement="top"
@@ -476,9 +476,9 @@
         }
             step = 720;
             if (df.parse(now).after(time)) {%>
-           href="monitor_center.jsp?step=-24&op=history&date＝<%=df.format(time)%> "
+           href="index.jsp?step=-24&op=history&date＝<%=df.format(time)%> "
                 <% } else {%>
-           href="monitor_center.jsp?step=<%=step%>&op=history&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
+           href="index.jsp?step=<%=step%>&op=history&date=<%=df.format(new Date(df.parse(now).getTime() + step*hourTime))%> "
                 <% }
                 %>
            data-toggle="tooltip" data-placement="top"
