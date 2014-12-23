@@ -34,8 +34,15 @@
     <link href="css/bwizard.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="css/common.css">
     <style>
-        label.error{margin-left: 10px; color: red;}
-        label.success{margin-left: 10px; color: green;}
+        label.error {
+            margin-left: 10px;
+            color: red;
+        }
+
+        label.success {
+            margin-left: 10px;
+            color: green;
+        }
 
     </style>
 </head>
@@ -114,10 +121,17 @@
             <!-- /.ace-nav -->
         </div>
         <div class="pull-right" style="margin:10px;color: white;">
-            <a target="_blank" style="margin:10px;color: white;"  href="http://shang.qq.com/wpa/qunwpa?idkey=6a730c052b1b42ce027179ba1f1568d0e5e598c456ccb6798be582b9a9c931f7"><img border="0" src="img/group.png" width="20" height="20" alt="Taurus后援团" title="Taurus后援团">点我加入Taurus后援团 155326270</a>
+            <a target="_blank" style="margin:10px;color: white;"
+               href="http://shang.qq.com/wpa/qunwpa?idkey=6a730c052b1b42ce027179ba1f1568d0e5e598c456ccb6798be582b9a9c931f7"><img
+                    border="0" src="img/group.png" width="20" height="20" alt="Taurus后援团" title="Taurus后援团">点我加入Taurus后援团
+                155326270</a>
         </div>
 
-        <div class="pull-right ng-binding" style="margin:10px;color: white;" ng-bind="monitorMessage"><i class="icon-user-md">开发者：李明  <a target="_blank" style="margin:10px;color: white;" href="http://wpa.qq.com/msgrd?v=3&uin=767762405&site=qq&menu=yes"><img border="0" src="img/qq.png"  width="20" height="20" color="white" alt="点我报错" title="点我报错"/>点我报错</a></i> <i class="icon-phone">: 13661871541</i></div>
+        <div class="pull-right ng-binding" style="margin:10px;color: white;" ng-bind="monitorMessage"><i
+                class="icon-user-md">开发者：李明 <a target="_blank" style="margin:10px;color: white;"
+                                               href="http://wpa.qq.com/msgrd?v=3&uin=767762405&site=qq&menu=yes"><img
+                border="0" src="img/qq.png" width="20" height="20" color="white" alt="点我报错" title="点我报错"/>点我报错</a></i>
+            <i class="icon-phone">: 13661871541</i></div>
 
     </div>
     <!-- /.container -->
@@ -139,7 +153,7 @@
                 <b class="icon-angle-down"></b>
             </a>
             <ul class="submenu">
-                <li  id="monitor_center">
+                <li id="monitor_center">
                     <a href="index.jsp">
                         <i class="menu-icon icon-caret-right"></i>
                         我的任务
@@ -250,7 +264,7 @@
 
 <script>
     var isAdmin = <%=isAdmin%>;
-    if(!isAdmin){
+    if (!isAdmin) {
         $("#userrolechange").html("我的任务");
     }
 
@@ -295,8 +309,8 @@
                     map.put(group, user.getName());
                 }
                 if (user.getName().equals(currentUser)) {
-                    if (user.getGroup() == null || user.getMail() == null || user.getTel() == null ||user.getQq() == null
-                            || user.getGroup().equals("") || user.getMail().equals("") || user.getTel().equals("")||user.getQq().equals("")) {
+                    if (user.getGroup() == null || user.getMail() == null || user.getTel() == null || user.getQq() == null
+                            || user.getGroup().equals("") || user.getMail().equals("") || user.getTel().equals("") || user.getQq().equals("")) {
         %>
         <div id="alertContainer" class="container col-sm-12">
             <div id="alertContainer" class="alert alert-danger">
@@ -310,67 +324,98 @@
         <div class="container" style="margin-top: 10px">
             <div class="row">
                 <div class="col-sm-5 padding-14">
-                    <form class='form-horizontal' id= 'user-form' >
+                    <form class='form-horizontal' id='user-form'>
                         <fieldset>
-                            <div style='display:none'>
-                                <input type="text" class="input-large field" id="id" name="id"
-                                       value="<%=user.getId()%>">
-                            </div>
-                            <div class="control-group">
-                                <label class="control-label" for="userName">用户名</label>
+                            <div class="widget-box">
+                                <div class="widget-header header-color-green">
+                                    <h5 class="widget-title">
+                                        <i class="icon-cogs"></i>
+                                        <span
+                                                style="color: white">设置你的个人信息</span></a>
+                                    </h5>
 
-                                <div class="controls">
-                                    <input type="text" readonly class="input-large field" id="userName" name="userName"
-                                           value="<%=currentUser%>">
+                                    <div class="widget-toolbar">
+                                        <a href="#" data-action="collapse">
+                                            <i class="icon-chevron-up"></i>
+                                        </a>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="control-group">
-                                <label class="control-label" for="groupName">组名</label>
 
-                                <div class="controls">
-                                    <input type="text" class="input-large field" id="groupName" name="groupName"
-                                           value="<%=user.getGroup()%>">
-                                </div>
-                            </div>
-                            <div class="control-group">
-                                <label class="control-label" for="email">邮件地址</label>
+                                <div class="widget-body">
+                                    <div class="widget-main " id="userwidget">
+                                        <div style="padding-left: 80px">
+                                            <div style='display:none'>
+                                                <input type="text" class="input-large field" id="id" name="id"
+                                                       value="<%=user.getId()%>">
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label" for="userName">用户名</label>
 
-                                <div class="controls">
-                                    <input type="text" class="input-large field" id="email" name="email"
-                                           value="<%=user.getMail()%>">
-                                </div>
-                            </div>
-                            <div class="control-group">
-                                <label class="control-label" for="tel">手机号码</label>
+                                                <div class="controls">
+                                                    <input type="text" readonly class="input-large field" id="userName"
+                                                           name="userName"
+                                                           value="<%=currentUser%>">
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label" for="groupName">组名</label>
 
-                                <div class="controls">
-                                    <% if (user.getTel() == null) {%>
-                                    <input type="text" class="input-large field" id="tel" name="tel" value="">
-                                    <%} else { %>
-                                    <input type="text" class="input-large field" id="tel" name="tel"
-                                           value="<%=user.getTel()%>">
-                                    <%} %>
-                                </div>
-                            </div>
-                            <div class="control-group">
-                                <label class="control-label" for="tel">QQ</label>
+                                                <div class="controls">
+                                                    <input type="text" class="input-large field" id="groupName"
+                                                           name="groupName"
+                                                           value="<%=user.getGroup()%>">
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label" for="email">邮件地址</label>
 
-                                <div class="controls">
-                                    <% if (user.getQq() == null) {%>
-                                    <input type="text" class="input-large field" id="qq" name="qq" value="">
-                                    <%} else { %>
-                                    <input type="text" class="input-large field" id="qq" name="qq"
-                                           value="<%=user.getQq()%>">
-                                    <%} %>
-                                </div>
-                            </div>
-                            <br>
+                                                <div class="controls">
+                                                    <input type="text" class="input-large field" id="email" name="email"
+                                                           value="<%=user.getMail()%>">
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label" for="tel">手机号码</label>
 
-                            <div class="control-group">
-                                <div class="controls padding-10">
-                                    <button type="submit" id="submit" class="btn btn-primary align-center">保存</button>
+                                                <div class="controls">
+                                                    <% if (user.getTel() == null) {%>
+                                                    <input type="text" class="input-large field" id="tel" name="tel"
+                                                           value="">
+                                                    <%} else { %>
+                                                    <input type="text" class="input-large field" id="tel" name="tel"
+                                                           value="<%=user.getTel()%>">
+                                                    <%} %>
+                                                </div>
+                                            </div>
+                                            <div class="control-group">
+                                                <label class="control-label" for="tel">QQ</label>
+
+                                                <div class="controls">
+                                                    <% if (user.getQq() == null) {%>
+                                                    <input type="text" class="input-large field" id="qq" name="qq"
+                                                           value="">
+                                                    <%} else { %>
+                                                    <input type="text" class="input-large field" id="qq" name="qq"
+                                                           value="<%=user.getQq()%>">
+                                                    <%} %>
+                                                </div>
+                                            </div>
+                                            <br>
+
+                                            <div class="control-group">
+                                                <div class="controls padding-10">
+                                                    <button type="submit" id="submit"
+                                                            class="btn btn-primary align-center">保存
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /.widget-main -->
                                 </div>
+                                <!-- /.widget-body -->
                             </div>
+
 
                         </fieldset>
                     </form>
@@ -380,32 +425,56 @@
                     %>
                 </div>
                 <div class="col-sm-7" style="opacity: 0.5">
+                    <div class="widget-box">
+                        <div class="widget-header header-color-red3">
+                            <h5 class="widget-title">
+                                <i class="icon-group"></i>
+                                <span
+                                        style="color: white">分组信息</span></a>
+                            </h5>
+
+                            <div class="widget-toolbar">
+                                <a href="#" data-action="collapse">
+                                    <i class="icon-chevron-up"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="widget-body">
+                            <div class="widget-main" id="groupwidget">
+                                分组情况请参考下面的列表：<br/>
+                                <ul>
+                                    <li>如果列表中没有你想要的分组，你可以填写一个组名，这个组名请尽可能地细化。</li>
+                                    <li>这个选项的重要性在于，你可以在作业的通知选项中，选择通知一个组的人。</li>
+                                    <li>并且同组的人可以操作彼此的作业。</li>
+                                </ul>
+
+                                <table class="table table-striped table-bordered table-condensed">
+                                    <tr>
+                                        <th align="left" width="15%">组名</th>
+                                        <th align="left" width="85%">成员</th>
+                                    </tr>
+                                    <%
+                                        for (String group : map.keySet()) {
+                                    %>
+                                    <tr>
+                                        <td align="left"><%=group%>
+                                        </td>
+                                        <td align="left"><%=map.get(group)%>
+                                        </td>
+                                    </tr>
+                                    <% }%>
+
+                                </table>
+
+                            </div>
+                            <!-- /.widget-main -->
+                        </div>
+                        <!-- /.widget-body -->
+                    </div>
 
 
-                    分组情况请参考下面的列表：<br/>
-                    <ul>
-                        <li>如果列表中没有你想要的分组，你可以填写一个组名，这个组名请尽可能地细化。</li>
-                        <li>这个选项的重要性在于，你可以在作业的通知选项中，选择通知一个组的人。</li>
-                        <li>并且同组的人可以操作彼此的作业。</li>
-                    </ul>
 
-                    <table class="table table-striped table-bordered table-condensed">
-                        <tr>
-                            <th align="left" width="15%">组名</th>
-                            <th align="left" width="85%">成员</th>
-                        </tr>
-                        <%
-                            for (String group : map.keySet()) {
-                        %>
-                        <tr>
-                            <td align="left"><%=group%>
-                            </td>
-                            <td align="left"><%=map.get(group)%>
-                            </td>
-                        </tr>
-                        <% }%>
-
-                    </table>
                 </div>
             </div>
         </div>
@@ -414,10 +483,14 @@
 <a href="#" class="scrollup" style="display: inline;">
     <img src="img/betop.png" width="66" height="67">
 </a>
+
 <div class="feedTool">
 
-    <a target="_blank" style="color: white;" href="http://wpa.qq.com/msgrd?v=3&uin=767762405&site=qq&menu=yes"><img border="0" src="img/qq.png"  width="80" height="80" color="white" alt="点我报错" title="点我报错"/></a>
-    <a target="_blank" style="float:right; padding-right:16px;color: white;" href="javascript:close_tool()"><img border="0" src="img/x_alt.png"  width="20" height="20" color="white" alt="关闭挂件" title="关闭挂件"/></a>
+    <a target="_blank" style="color: white;" href="http://wpa.qq.com/msgrd?v=3&uin=767762405&site=qq&menu=yes"><img
+            border="0" src="img/qq.png" width="80" height="80" color="white" alt="点我报错" title="点我报错"/></a>
+    <a target="_blank" style="float:right; padding-right:16px;color: white;" href="javascript:close_tool()"><img
+            border="0" src="img/x_alt.png" width="20" height="20" color="white" alt="关闭挂件" title="关闭挂件"/></a>
+
     <p style="text-align: center; padding-right:32px;color: firebrick">点我报错</p>
 </div>
 <script type="text/javascript">

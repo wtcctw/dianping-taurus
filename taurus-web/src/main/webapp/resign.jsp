@@ -332,120 +332,146 @@
 <div class="row">
 <div class="col-sm-12 padding-8">
 
-<%
-    if (!userGroup.equals("null")) {
-%>
-<div class=" creatorbtn col-sm-12">
-    <a class="atip tooltip-info" data-toggle="tooltip" data-placement="bottom"
-       data-original-title="你只能把自己组的任务指派给自己组的成员，如果你需要交接给别的组请联系 李明 【kirin.li@dianping.com】">[提示] </a>
-    选择你要交接的任务：
-    <button class="btn btn-info" type="button" id="creatorbtn">
-        <i class="ace-icon fa fa-check bigger-110"></i>
-        交接任务
-    </button>
-    <a class="atip tooltip-info" data-toggle="tooltip" data-placement="bottom"
-       data-original-title="此操作为危险操作，你所做的所有操作将审计下来，如果不是你的任务，你指派给了其他人，在没有项目组的人授权情况下是违规的！！！">[警告] </a>
-</div>
-<%
-    }%>
-<br/>
-
-<div class="col-sm-12">
-
-    <% String task_api = host + "task";
-        String name = request.getParameter("name");
-        String path = request.getParameter("path");
-        String appname = request.getParameter("appname");
-        if (name != null && !name.isEmpty()) {
-            task_api = task_api + "?name=" + name;
-        } else if (appname != null) {
-            task_api = task_api + "?appname=" + appname;
-        } else if (currentUser != null) {
-            task_api = task_api + "?user=" + currentUser;
-        }
-        if (path != null && !path.equals("")) {
-    %>
-    <% }
-        cr = new ClientResource(task_api);
-        ITasksResource resource = cr.wrap(ITasksResource.class);
-        cr.accept(MediaType.APPLICATION_XML);
-        ArrayList<TaskDTO> tasks = resource.retrieve();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-
-        if (tasks == null || tasks.size() == 0) {%>
-
-    <div class="align-center col-sm-7">
-        <i class='icon-info-sign icon-large red '>你没有创建任何任务～</i>
-    </div>
-
-    <% } else {%>
-    <div class="col-sm-9">
-        <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-hover"
-               width="100%" id="regintask">
-            <thead>
-            <tr>
-                <th class="hide">ID</th>
-                <th width=>名称</th>
-                <th>IP</th>
-                <th>调度人</th>
-                <th class="hide">调度身份</th>
-                <th class="hide">组</th>
-                <th class="hide">创建时间</th>
-                <th>Crontab</th>
-                <th>状态</th>
-            </tr>
-            </thead>
-            <tbody>
             <%
-                }
-                for (TaskDTO dto : tasks) {
-                    String state = dto.getStatus();
-                    boolean isRunning = true;
-                    if (state.equals("SUSPEND")) {
-                        isRunning = false;
-                    }
-                    if (isRunning) {
+                if (!userGroup.equals("null")) {
             %>
+            <div class=" creatorbtn col-sm-12">
 
-            <tr id="<%=dto.getTaskid()%>">
-                    <% } else { %>
-            <tr id="<%=dto.getTaskid()%>" class="error">
-                <%}%>
-                <td class="hide"><%=dto.getTaskid()%>
-                </td>
-                <td class="fixLength-td"><input type="checkbox" class="field taskcheckbox"
-                                                id="<%=dto.getCreator()%>" name="taskcheckbox"
-                                                value="<%=dto.getName()%>" alertUser = "<%=dto.getAlertRule().getUserid()%>" alertId="<%=dto.getAlertRule().getJobid()%>"
-                        ><%=dto.getName()%>
-                </td>
-                <td><%=dto.getHostname()%>
-                </td>
-                <td><%=dto.getCreator()%>
-                </td>
-                <td class="hide"><%=dto.getProxyuser()%>
-                </td>
-                <td class="hide">arch(mock)</td>
-                <td class="hide"><%=formatter.format(dto.getAddtime())%>
-                </td>
-                <td><%=dto.getCrontab()%>
-                </td>
-                <td><%if (isRunning) {%>
-                    <span class="label label-info"><%=state%></span>
-                    <%} else {%>
-                    <span class="label label-important"><%=state%></span>
-                    <%}%>
-                </td>
 
-            </tr>
-            <% } %>
-            </tbody>
-        </table>
-    </div>
-    <%
-                userGroup = user.getGroup();
-            }
-        }
-    %>
+            </div>
+            <%
+                }%>
+            <br/>
+
+            <div class="col-sm-12">
+
+                <% String task_api = host + "task";
+                    String name = request.getParameter("name");
+                    String path = request.getParameter("path");
+                    String appname = request.getParameter("appname");
+                    if (name != null && !name.isEmpty()) {
+                        task_api = task_api + "?name=" + name;
+                    } else if (appname != null) {
+                        task_api = task_api + "?appname=" + appname;
+                    } else if (currentUser != null) {
+                        task_api = task_api + "?user=" + currentUser;
+                    }
+                    if (path != null && !path.equals("")) {
+                %>
+                <% }
+                    cr = new ClientResource(task_api);
+                    ITasksResource resource = cr.wrap(ITasksResource.class);
+                    cr.accept(MediaType.APPLICATION_XML);
+                    ArrayList<TaskDTO> tasks = resource.retrieve();
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+                    if (tasks == null || tasks.size() == 0) {%>
+
+                <div class="align-center col-sm-7">
+                    <i class='icon-info-sign icon-large red '>你没有创建任何任务～</i>
+                </div>
+
+                <% } else {%>
+                <div class="col-sm-9 no-padding-left">
+
+                <div class="widget-box no-padding-left">
+                <div class="widget-header header-color-green">
+                    <h5 class="widget-title">
+                        <i class="icon-tasks"></i>
+                        <a class="atip tooltip-info" data-toggle="tooltip" data-placement="bottom"
+                           data-original-title="你只能把自己组的任务指派给自己组的成员，如果你需要交接给别的组请联系 李明 【kirin.li@dianping.com】">[提示] </a>
+                        选择你要交接的任务
+                    </h5>
+
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="collapse">
+                            <i class="icon-chevron-up"></i>
+                        </a>
+                    </div>
+                    <div class="widget-toolbar">
+                        <button class="btn btn-xs btn-yellow" type="button" id="creatorbtn">
+                            <i class="ace-icon fa fa-check bigger-110"></i>
+                            交接任务
+                        </button>
+                        <a class="atip tooltip-info" data-toggle="tooltip" data-placement="bottom"
+                           data-original-title="此操作为危险操作，你所做的所有操作将审计下来，如果不是你的任务，你指派给了其他人，在没有项目组的人授权情况下是违规的！！！">[警告] </a>
+                    </div>
+                </div>
+
+                <div class="widget-body">
+                    <div class="widget-main " id="taskwidget">
+                        <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered table-hover"
+                               width="100%" id="regintask">
+                            <thead>
+                            <tr>
+                                <th class="hide">ID</th>
+                                <th width=>名称</th>
+                                <th>IP</th>
+                                <th>调度人</th>
+                                <th class="hide">调度身份</th>
+                                <th class="hide">组</th>
+                                <th class="hide">创建时间</th>
+                                <th>Crontab</th>
+                                <th>状态</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <%
+                                }
+                                for (TaskDTO dto : tasks) {
+                                    String state = dto.getStatus();
+                                    boolean isRunning = true;
+                                    if (state.equals("SUSPEND")) {
+                                        isRunning = false;
+                                    }
+                                    if (isRunning) {
+                            %>
+
+                            <tr id="<%=dto.getTaskid()%>">
+                                    <% } else { %>
+                            <tr id="<%=dto.getTaskid()%>" class="error">
+                                <%}%>
+                                <td class="hide"><%=dto.getTaskid()%>
+                                </td>
+                                <td class="fixLength-td"><input type="checkbox" class="field taskcheckbox"
+                                                                id="<%=dto.getCreator()%>" name="taskcheckbox"
+                                                                value="<%=dto.getName()%>" alertUser = "<%=dto.getAlertRule().getUserid()%>" alertId="<%=dto.getAlertRule().getJobid()%>"
+                                        ><%=dto.getName()%>
+                                </td>
+                                <td><%=dto.getHostname()%>
+                                </td>
+                                <td><%=dto.getCreator()%>
+                                </td>
+                                <td class="hide"><%=dto.getProxyuser()%>
+                                </td>
+                                <td class="hide">arch(mock)</td>
+                                <td class="hide"><%=formatter.format(dto.getAddtime())%>
+                                </td>
+                                <td><%=dto.getCrontab()%>
+                                </td>
+                                <td><%if (isRunning) {%>
+                                    <span class="label label-info"><%=state%></span>
+                                    <%} else {%>
+                                    <span class="label label-important"><%=state%></span>
+                                    <%}%>
+                                </td>
+
+                            </tr>
+                            <% } %>
+                            </tbody>
+                        </table>
+                     </div>
+                </div>
+
+                </div>
+                </div>
+                <%
+                            userGroup = user.getGroup();
+                        }
+                    }
+                %>
+
+
     <div class="col-sm-3" style="opacity: 0.5">
 
         <%
@@ -456,16 +482,31 @@
         } else {
         %>
 
+        <div class="widget-box">
+            <div class="widget-header header-color-red3">
+                <h5 class="widget-title">
+                    <i class="icon-user"></i>
+                    选择你要指派的人
+                </h5>
 
-        选择你要指派的人：<br/>
-        <%
-            if (!userGroup.equals("admin")) { %>
-        组名：<%=userGroup%> <br>
-        <table class="table table-striped table-bordered table-condensed" id="reginuser">
-            <tr>
-                <th align="left">成员</th>
-            </tr>
-                <%
+                <div class="widget-toolbar">
+                    <a href="#" data-action="collapse">
+                        <i class="icon-chevron-up"></i>
+
+                    </a>
+                </div>
+            </div>
+
+            <div class="widget-body">
+                <div class="widget-main" id="userwidget">
+                    <%
+                        if (!userGroup.equals("admin")) { %>
+                    组名：<%=userGroup%> <br>
+                    <table class="table table-striped table-bordered table-hover reginuser" >
+                        <tr>
+                            <th align="left">成员</th>
+                        </tr>
+                            <%
 
 
                         for (String group : map.keySet()) {
@@ -473,69 +514,77 @@
                 %>
 
 
-                <%
+                            <%
                     String groupUsers = map.get(group);
                     String[] userList = groupUsers.split(",");
 
                     for (int i = 0; i < userList.length; i++) {
                         String creator = userList[i];
                 %>
-            <tr>
-                <td align="left">
-                    <input type="radio" value="<%=creator%>" name="creator"><%=creator%>
-                </td>
-            </tr>
-                <%
+                        <tr>
+                            <td align="left">
+                                <input type="radio" value="<%=creator%>" name="creator"><%=creator%>
+                            </td>
+                        </tr>
+                            <%
                     }
 
                 %>
 
 
-                <%
+                            <%
                         }
                     }
                 } else {
                             %>
-            <table class="table table-striped table-bordered table-condensed" id="reginuser">
-                <tr>
-                    <th align="left" >成员</th>
-                    <th align="left">组名</th>
-                </tr>
-                <%
-                    for (String group : map.keySet()) {
-                %>
+                        <table class="table table-striped table-bordered table-hover reginuser" >
+                            <tr>
+                                <th align="left" >成员</th>
+                                <th align="left">组名</th>
+                            </tr>
+                            <%
+                                for (String group : map.keySet()) {
+                            %>
 
 
-                <%
-                    String groupUsers = map.get(group);
-                    String[] userList = groupUsers.split(",");
+                            <%
+                                String groupUsers = map.get(group);
+                                String[] userList = groupUsers.split(",");
 
-                    for (int i = 0; i < userList.length; i++) {
-                        String creator = userList[i];
-                %>
-                <tr>
-                    <td align="left">
-                        <input type="radio" value="<%=creator%>" name="creator"><%=creator%>
-                    </td>
-                    <td align="left">
-                        <%=group%>
-                    </td>
-                </tr>
-                <%
-                    }
+                                for (int i = 0; i < userList.length; i++) {
+                                    String creator = userList[i];
+                            %>
+                            <tr>
+                                <td align="left">
+                                    <input type="radio" value="<%=creator%>" name="creator"><%=creator%>
+                                </td>
+                                <td align="left">
+                                    <%=group%>
+                                </td>
+                            </tr>
+                            <%
+                                }
 
-                %>
+                            %>
 
 
-                <%
-                        }
-                    }
-                %>
+                            <%
+                                    }
+                                }
+                            %>
 
-            </table>
-                <%
+                        </table>
+                            <%
                 }
             %>
+
+                </div>
+                <!-- /.widget-main -->
+            </div>
+            <!-- /.widget-body -->
+        </div>
+        <br/>
+
     </div>
 </div>
 </div>
@@ -591,8 +640,12 @@
             "bLengthChange": false
 
         });
-        $('#reginuser').dataTable({
+        $(".reginuser").dataTable({
+            "bAutoWidth": true,
+            "bPaginate": false,
             "bFilter": true,
+            "bInfo": false,
+            "bLengthChange": false
 
         });
     });
