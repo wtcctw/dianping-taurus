@@ -1,6 +1,5 @@
 <%@ page import="java.util.Date" %>
 <%@ page import="java.text.SimpleDateFormat" %>
-<%@ page import="java.sql.Time" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -504,7 +503,7 @@
                 </div>
             </div>
 
-            <div class="widget-body">
+            <div class="widget-body" style="height: 320px">
                 <div class="widget-main" id="user-widget-main">
 
                     <div id="mytasks">
@@ -662,9 +661,9 @@
                 </div>
             </div>
 
-            <div class="widget-body">
+            <div class="widget-body" style="height: 692px">
 
-                <div class="widget-main align-center" id="mytasklist">
+                <div class="widget-main align-center"  id="mytasklist">
                     <div class="loadIcon">
                         <div></div>
                         <div></div>
@@ -695,9 +694,9 @@
                 </div>
             </div>
 
-            <div class="widget-body">
+            <div class="widget-body" style="height: 692px">
 
-                <div class="widget-main align-center" id="grouptasklist">
+                <div class="widget-main align-center"  id="grouptasklist">
                     <div class="loadIcon">
                         <div></div>
                         <div></div>
@@ -782,13 +781,13 @@
     var op = "<%=op_str%>";
     var isAdmin = <%=isAdmin%>;
     var username = "<%=currentUser%>";
-    if (isAdmin && username != "kirin.li") {
-        var user = document.getElementById("userpanel");
-        user.style.display = "none";
-    } else {
+   // if (isAdmin && username != "kirin.li") {
+      //  var user = document.getElementById("userpanel");
+       // user.style.display = "none";
+   // } else {
         //var admin = document.getElementById("admin");
         //admin.style.display="none";
-    }
+    //}
 
 
     function reflash(queryType) {
