@@ -614,7 +614,7 @@
 
                 <div class="widget-body">
 
-                    <div class="widget-main " style="height: 531px" id="totaltasklist">
+                    <div class="widget-main " style="height: 550px" id="totaltasklist">
                         <div class="loadIcon">
                             <div></div>
                             <div></div>
@@ -651,7 +651,7 @@
             <div class="widget-body">
 
 
-                <div class="widget-main align-center" style="height: 531px" id="totalJob">
+                <div class="widget-main align-center" style="height: 560px" id="totalJob">
                     <div class="loadIcon">
                         <div></div>
                         <div></div>
@@ -683,7 +683,7 @@
 
             <div class="widget-body">
 
-                <div class="widget-main align-center" style="height: 531px" id="failedJob">
+                <div class="widget-main align-center" style="height: 560px" id="failedJob">
 
                     <div class="loadIcon">
                         <div></div>
