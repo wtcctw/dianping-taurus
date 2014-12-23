@@ -668,7 +668,7 @@ public class MonitorServlet extends HttpServlet {
                                 lastTaskStatus = "NULL";
                             }
                         }
-                        if(state == "SUCCEEDED"){
+                        if(lastTaskStatus.equals("SUCCEEDED") || lastTaskStatus.equals("RUNNING")){
                             lastTaskStatus = "<span class='label label-info'>"
                                     + lastTaskStatus
                                     + "</span>";
@@ -825,7 +825,7 @@ public class MonitorServlet extends HttpServlet {
                                 lastTaskStatus = "NULL";
                             }
                         }
-                        if(state == "SUCCEEDED"){
+                        if(lastTaskStatus.equals("SUCCEEDED") || lastTaskStatus.equals("RUNNING") ){
                             lastTaskStatus = "<span class='label label-info'>"
                                     + lastTaskStatus
                                     + "</span>";
@@ -1200,7 +1200,7 @@ public class MonitorServlet extends HttpServlet {
                                 lastTaskStatus = "NULL";
                             }
                         }
-                        if(state == "SUCCEEDED"){
+                        if(lastTaskStatus.equals("SUCCEEDED") || lastTaskStatus.equals("RUNNING")){
                             lastTaskStatus = "<span class='label label-info'>"
                                     + lastTaskStatus
                                     + "</span>";

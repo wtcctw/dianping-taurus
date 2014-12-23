@@ -432,7 +432,7 @@
                         var state = item.state;
                         var taskState = item.lastTaskStatus;
                         var taskStatsLabel ="";
-                        if(taskState == "SUCCEEDED"){
+                        if(taskState == "SUCCEEDED" ||taskState == "RUNNING"){
                             taskStatsLabel = "<span class='label label-info'>"
                                     + item.lastTaskStatus
                                     + "</span>";
