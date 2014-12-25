@@ -181,9 +181,15 @@ final public class Engine implements Scheduler {
                         + ip
                         +"，谢谢~";
                 try {
-                    String url = "http://"+ip+":8080/agentrest.do?action=isnew";
-                    String isAlive = get_data(url);
-                    if (isAlive!= null && isAlive.equals("true")){
+                    String agentPort = "";
+
+
+                    String url1= "http://"+ip+":8080/agentrest.do?action=isnew";
+                    String url2 = "http://"+ip+":8088/agentrest.do?action=isnew";
+                    String isAlive1 = get_data(url1);
+                    String isAlive2 = get_data(url2);
+
+                    if ((isAlive1!= null && isAlive1.equals("true"))||(isAlive2!= null && isAlive2.equals("true"))){
                        MailHelper.sendMail("kirin.li@dianping.com",context);
                        MailHelper.sendWeChat("kirin.li",context);
 

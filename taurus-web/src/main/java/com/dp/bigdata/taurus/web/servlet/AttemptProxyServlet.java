@@ -266,7 +266,7 @@ public class AttemptProxyServlet extends HttpServlet {
                     cr.accept(MediaType.APPLICATION_XML);
                     HostDTO hostDTO = hostResource.retrieve();
                     String agentPort = "";
-                    if (hostDTO.getInfo().equals("0.5.0")){
+                    if (hostDTO.getInfo().getAgentVersion().equals("0.5.0")){
                         agentPort = AGENT_PORT;
                     }else{
                         agentPort = NEW_AGENT_PORT;
@@ -328,7 +328,7 @@ public class AttemptProxyServlet extends HttpServlet {
                         cr.accept(MediaType.APPLICATION_XML);
                         HostDTO hostDTO = hostResource.retrieve();
                         String agentPort = "";
-                        if (hostDTO.getInfo().equals("0.5.0")){
+                        if (hostDTO.getInfo().getAgentVersion().equals("0.5.0")){
                             agentPort = AGENT_PORT;
                         }else{
                             agentPort = NEW_AGENT_PORT;
@@ -453,7 +453,7 @@ public class AttemptProxyServlet extends HttpServlet {
                 cr.accept(MediaType.APPLICATION_XML);
                 HostDTO hostDTO = hostResource.retrieve();
                 String agentPort = "";
-                if (hostDTO.getInfo().equals("0.5.0")){
+                if (hostDTO.getInfo().getAgentVersion().equals("0.5.0")){
                     agentPort = AGENT_PORT;
                 }else{
                     agentPort = NEW_AGENT_PORT;
@@ -495,7 +495,7 @@ public class AttemptProxyServlet extends HttpServlet {
                 cr.accept(MediaType.APPLICATION_XML);
                 HostDTO hostDTO = hostResource.retrieve();
                 String agentPort = "";
-                if (hostDTO.getInfo().equals("0.5.0")){
+                if (hostDTO.getInfo().getAgentVersion().equals("0.5.0")){
                     agentPort = AGENT_PORT;
                 }else{
                     agentPort = NEW_AGENT_PORT;
