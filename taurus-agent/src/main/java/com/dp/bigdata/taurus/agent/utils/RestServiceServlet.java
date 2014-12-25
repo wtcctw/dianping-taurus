@@ -77,7 +77,7 @@ public class RestServiceServlet extends HttpServlet {
             output.write(respStr.getBytes());
             output.close();
         } else if (action.equals(ISNEW)) {
-            String respStr = "new";
+            String respStr = "true";
             OutputStream output = response.getOutputStream();
             output.write(respStr.getBytes());
             output.close();
