@@ -20,9 +20,11 @@ import com.dianping.lion.client.ConfigCache;
 import com.dianping.lion.client.LionException;
 import com.dp.bigdata.taurus.restlet.resource.IAttemptResource;
 import com.dp.bigdata.taurus.restlet.resource.IExistTaskRunning;
+import com.dp.bigdata.taurus.restlet.resource.IHostResource;
 import com.dp.bigdata.taurus.restlet.resource.ILogResource;
 import com.dp.bigdata.taurus.restlet.resource.impl.ExistTaskRunning;
 import com.dp.bigdata.taurus.restlet.shared.AttemptDTO;
+import com.dp.bigdata.taurus.restlet.shared.HostDTO;
 import com.dp.bigdata.taurus.web.utils.ReFlashHostLoadTask;
 import com.google.gson.JsonArray;
 import org.apache.commons.io.IOUtils;
@@ -57,6 +59,7 @@ public class AttemptProxyServlet extends HttpServlet {
     public static String RESTLET_URL_BASE;
     private String ERROR_PAGE;
     private String AGENT_PORT;
+    private String NEW_AGENT_PORT;
 
 
     @Override
@@ -68,8 +71,10 @@ public class AttemptProxyServlet extends HttpServlet {
         try {
             RESTLET_URL_BASE =ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.restlet.url");// context.getInitParameter("RESTLET_SERVER");
             AGENT_PORT = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.restlet.port");//context.getInitParameter("AGENT_SERVER_PORT");
+            NEW_AGENT_PORT = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.restlet.new.port");
         } catch (LionException e) {
             RESTLET_URL_BASE = context.getInitParameter("RESTLET_SERVER");
+            NEW_AGENT_PORT = "8088";
             e.printStackTrace();
         }catch (Exception e){
             e.printStackTrace();
@@ -256,8 +261,19 @@ public class AttemptProxyServlet extends HttpServlet {
                 }else {
                     fileSizeAttribute = "agentlogs";
                     String hostName = request.getParameter("hostname");
+                    ClientResource  cr = new ClientResource(RESTLET_URL_BASE + "host/" + hostName);
+                    IHostResource hostResource = cr.wrap(IHostResource.class);
+                    cr.accept(MediaType.APPLICATION_XML);
+                    HostDTO hostDTO = hostResource.retrieve();
+                    String agentPort = "";
+                    if (hostDTO.getInfo().equals("0.5.0")){
+                        agentPort = AGENT_PORT;
+                    }else{
+                        agentPort = NEW_AGENT_PORT;
+                    }
+
                     contentLenStr = (String) request.getSession().getAttribute(fileSizeAttribute);
-                   String  logurl = "http://" + hostName + ":" + AGENT_PORT
+                   String  logurl = "http://" + hostName + ":" + agentPort
                             + "/agentrest.do?action=getlog"
                             + "&flag=NORMAL"
                             + "&query_type=" + queryType;
@@ -307,17 +323,28 @@ public class AttemptProxyServlet extends HttpServlet {
                 } else {
 
                     try {
-                            String url = "";                //请求agent restlet的URI
+                        ClientResource  cr = new ClientResource(RESTLET_URL_BASE + "host/" + hostIp);
+                        IHostResource hostResource = cr.wrap(IHostResource.class);
+                        cr.accept(MediaType.APPLICATION_XML);
+                        HostDTO hostDTO = hostResource.retrieve();
+                        String agentPort = "";
+                        if (hostDTO.getInfo().equals("0.5.0")){
+                            agentPort = AGENT_PORT;
+                        }else{
+                            agentPort = NEW_AGENT_PORT;
+                        }
+
+                        String url = "";                //请求agent restlet的URI
 
                             if (lastTimeFileSize == 0 && !tureStatus.equals("RUNNING")) {    //如果任务真实状态不是运行中的，并且 文件偏移为0 ，说明是历史任务，直接全量获取日志
-                                url = "http://" + hostIp + ":" + AGENT_PORT
+                                url = "http://" + hostIp + ":" + agentPort
                                         + "/agentrest.do?action=getlog&date="
                                         + date
                                         + "&attemptId=" + attemptID
                                         + "&flag=NORMAL"
                                         + "&query_type=" + queryType;
                             } else {                                                        //增量获取日志
-                                url = "http://" + hostIp + ":" + AGENT_PORT
+                                url = "http://" + hostIp + ":" + agentPort
                                         + "/agentrest.do?action=getlog&date="
                                         + date
                                         + "&attemptId=" + attemptID
@@ -341,7 +368,7 @@ public class AttemptProxyServlet extends HttpServlet {
                             }
 
                             String isEndUrl = "http://" + hostIp
-                                    + ":" + AGENT_PORT
+                                    + ":" + agentPort
                                     + "/agentrest.do?action=isend&attemptId="
                                     + attemptID;
                              isEnd = getAgentRestService(isEndUrl);
@@ -421,7 +448,18 @@ public class AttemptProxyServlet extends HttpServlet {
             } else {
                 //String url = "http://" + host + ":" + AGENT_PORT + "/api/isend/" + attemptID;
                 //getLogCr = new ClientResource(url);
-                String url= "http://" + host + ":" + AGENT_PORT + "/agentrest.do?action=isend&attemptId=" + attemptID;
+                ClientResource  cr = new ClientResource(RESTLET_URL_BASE + "host/" + host);
+                IHostResource hostResource = cr.wrap(IHostResource.class);
+                cr.accept(MediaType.APPLICATION_XML);
+                HostDTO hostDTO = hostResource.retrieve();
+                String agentPort = "";
+                if (hostDTO.getInfo().equals("0.5.0")){
+                    agentPort = AGENT_PORT;
+                }else{
+                    agentPort = NEW_AGENT_PORT;
+                }
+
+                String url= "http://" + host + ":" + agentPort + "/agentrest.do?action=isend&attemptId=" + attemptID;
                 respStr = getAgentRestService(url);
             }
             if (respStr .equals("null")){
@@ -452,8 +490,18 @@ public class AttemptProxyServlet extends HttpServlet {
             AttemptDTO dto = attemptLogResource.retrieve();
             String isNew;
             if (dto !=null){
+                ClientResource  cr = new ClientResource(RESTLET_URL_BASE + "host/" + dto.getExecHost());
+                IHostResource hostResource = cr.wrap(IHostResource.class);
+                cr.accept(MediaType.APPLICATION_XML);
+                HostDTO hostDTO = hostResource.retrieve();
+                String agentPort = "";
+                if (hostDTO.getInfo().equals("0.5.0")){
+                    agentPort = AGENT_PORT;
+                }else{
+                    agentPort = NEW_AGENT_PORT;
+                }
 
-                String url= "http://" + dto.getExecHost() + ":" + AGENT_PORT + "/agentrest.do?action=isnew";
+                String url= "http://" + dto.getExecHost() + ":" + agentPort + "/agentrest.do?action=isnew";
                 isNew =  getAgentRestService(url);
                 if (isNew.isEmpty()) {
                     isNew = "null";

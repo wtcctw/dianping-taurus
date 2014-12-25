@@ -118,12 +118,12 @@ public final class AgentEnvValue {
             in.close();
 
             if (result == null) {
-                return "0.1";
+                return "5.0.0";
             }
             return result;
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
-            return "0.1";
+            return "5.0.0";
         }
     }
 
