@@ -143,6 +143,12 @@ function reflash_view(){
 
 
 function reflash_data(starttime, endtime){
+    var loading = '<div class="loadIcon"><div></div><div></div><div></div><div></div> </div>';
+
+    $("#mytasklist").html(loading);
+    $("#grouptasklist").html(loading);
+    $("#mytasks").html(loading);
+    $("#grouptasks").html(loading);
 
     var succNums = 0;
     var failedNums = 0;
