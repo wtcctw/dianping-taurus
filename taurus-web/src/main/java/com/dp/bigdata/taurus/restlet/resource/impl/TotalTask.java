@@ -184,7 +184,6 @@ public class TotalTask extends ServerResource implements ITotalTask {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        System.out.println(jsonData.toString());
         return jsonData.toString();
     }
 }

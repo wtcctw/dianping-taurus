@@ -29,6 +29,7 @@
     <script src="lib/ace/js/jquery.dataTables.min.js"></script>
     <script src="lib/ace/js/jquery.dataTables.bootstrap.js"></script>
     <script type="text/javascript" src="js/login.js"></script>
+    <script src="js/jquery.datetimepicker.js"></script>
     <script type="text/javascript" src="js/monitor_center.js"></script>
     <script src="lib/dist/echarts.js"></script>
     <script src="lib/dist/chart/gauge.js"></script>
@@ -45,7 +46,7 @@
     <link rel="stylesheet" href="lib/ace/css/ace.min.css"/>
     <link rel="stylesheet" href="lib/ace/css/ace-rtl.min.css"/>
     <link rel="stylesheet" href="lib/ace/css/ace-skins.min.css"/>
-
+    <link rel="stylesheet" href="css/jquery.datetimepicker.css"/>
     <link rel="stylesheet" href="resource/css/monitor-center.css">
     <link rel="stylesheet" href="css/common.css">
     <link rel="stylesheet" href="css/loading.css">
@@ -264,16 +265,7 @@
     </ul>
     <!-- /.nav-list -->
 
-    <div class="sidebar-collapse" id="sidebar-collapse">
-        <i class="icon-double-angle-left" data-icon1="icon-double-angle-left"
-           data-icon2="icon-double-angle-right"></i>
-    </div>
-    <script type="text/javascript">
-        try {
-            ace.settings.check('sidebar', 'collapsed')
-        } catch (e) {
-        }
-    </script>
+
 
 </div>
 
@@ -301,6 +293,11 @@
             <a href="index.jsp">HOME</a>
         </li>
     </ul>
+    <div style="float:right;padding-right: 20px">
+        <label>开始：</label><input type="text" id="startTime"/>
+        <label>结束：</label><input type="text" id="endTime"/>
+        <a class="btn btn-primary btn-small" href='#' onClick="reflash_view()"><i class="icon-eye-open">查看</i></a>
+    </div>
 </div>
 <div class="page-content">
 <div class="row">
@@ -720,7 +717,7 @@
     <img src="img/betop.png" width="66" height="67">
 </a>
 
-<div class="feedTool">
+<div class="feedTool hide">
 
     <a target="_blank" style="color: white;" href="http://wpa.qq.com/msgrd?v=3&uin=767762405&site=qq&menu=yes"><img
             border="0" src="img/qq.png" width="80" height="80" color="white" alt="点我报错" title="点我报错"/></a>
@@ -788,70 +785,25 @@
         //var admin = document.getElementById("admin");
         //admin.style.display="none";
     //}
+    $('#startTime').datetimepicker({
+        formatTime:'H:i',
+        format:'Y-m-d',
+        formatDate:'Y-m-d',
+        defaultTime:'10:00',
+        timepicker:false,
+        timepickerScrollbar:false
+    });
+
+    $('#endTime').datetimepicker({
+        format:'Y-m-d',
+        formatDate:'Y-m-d',
+        defaultTime:'10:00',
+        timepicker:false,
+        timepickerScrollbar:false
+    });
 
 
-    function reflash(queryType) {
-        var cpuLoadBody = "";
-        var memLoadBody = "";
-        $("#cpuload").html(" <i class='icon-spinner icon-spin icon-large'></i>");
-        $("#cpuload").addClass("align-center");
-        $("#memload").html("<i class='icon-spinner icon-spin icon-large'></i>");
-        $("#memload").addClass("align-center");
 
-
-        $.ajax({
-            async: true,
-            data: {
-                action: "hostload",
-                queryType: queryType
-
-            },
-            type: "POST",
-            url: "/monitor",
-            error: function () {
-                $("#cpuload").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
-                $("#cpuload").addClass("align-center");
-                $("#memload").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
-                $("#memload").addClass("align-center");
-            },
-            success: function (response, textStatus) {
-                var jsonarray = $.parseJSON(response);
-                $.each(jsonarray, function (i, item) {
-                    cpuLoadBody += "<tr>" +
-                            "<td>" + item.hostName + "</td>" +
-                            "<td>" + item.cpuLoad + "</td>"
-                    "</tr>";
-
-                    memLoadBody += "<tr>" +
-                            "<td>" + item.hostName + "</td>" +
-                            "<td>" + item.memLoad + "</td>"
-                    "</tr>";
-                });
-                var topCpuLoadLists = ' <table  class="table table-striped table-bordered table-hover " id="cputable">'
-                        + '<thead><tr><th>主机名</th>  <th>CPU负载(load average)</th> </tr> </thead>'
-                        + '        <tbody>'
-                        + cpuLoadBody
-                        + '        </tbody>'
-                        + '    </table>';
-                $("#cpuload").html(topCpuLoadLists);
-                $("#cpuload").removeClass("align-center");
-
-                var topMemLoadLists = ' <table  class="table table-striped table-bordered table-hover " id="memtable">'
-                        + '<thead><tr><th>主机名</th>  <th>内存剩余(free)</th> </tr> </thead>'
-                        + '        <tbody>'
-                        + memLoadBody
-                        + '        </tbody>'
-                        + '    </table>';
-                $("#memload").html(topMemLoadLists);
-                $("#memload").removeClass("align-center");
-                cpuTableStyle();
-                memTableStyle();
-            }
-
-
-        });
-
-    }
 </script>
 
 </body>

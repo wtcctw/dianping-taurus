@@ -43,7 +43,6 @@ public class FailedTaskLoad  extends ServerResource implements IFailedTaskLoad {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        System.out.println(jsonData.toString());
         return jsonData.toString();
     }
 }

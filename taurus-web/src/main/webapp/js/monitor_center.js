@@ -118,9 +118,31 @@ $(document).ready(function () {
         endtime = GetDateStr(now, 1);
     }
 
+    reflash_data(starttime, endtime);
 
 
 
+});
+
+
+function reflash_view(){
+    var start = $("#startTime").val();
+    var end = $("#endTime").val();
+    if (start == null|| end == null || start ==""||end==""){
+        bootbox.confirm("开始或结束不能为空！", function(result) {
+
+        });
+    }else if (start >= end){
+        bootbox.confirm("结束时间应该大于开始时间！", function(result) {
+
+        });
+    }else{
+        reflash_data(start,end);
+    }
+}
+
+
+function reflash_data(starttime, endtime){
 
     var succNums = 0;
     var failedNums = 0;
@@ -610,5 +632,4 @@ $(document).ready(function () {
             $(this).prev().focus();
         });
     });
-});
-
+}

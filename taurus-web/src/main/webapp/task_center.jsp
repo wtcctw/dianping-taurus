@@ -31,6 +31,7 @@
     <script src="lib/ace/js/jquery.dataTables.bootstrap.js"></script>
     <script type="text/javascript" src="js/login.js"></script>
     <script type="text/javascript" src="js/task_center.js"></script>
+    <script src="js/jquery.datetimepicker.js"></script>
     <script src="lib/dist/echarts.js"></script>
     <script src="lib/dist/chart/gauge.js"></script>
     <script src="lib/dist/theme/macarons.js"></script>
@@ -46,6 +47,7 @@
     <link rel="stylesheet" href="lib/ace/css/ace.min.css"/>
     <link rel="stylesheet" href="lib/ace/css/ace-rtl.min.css"/>
     <link rel="stylesheet" href="lib/ace/css/ace-skins.min.css"/>
+    <link rel="stylesheet" href="css/jquery.datetimepicker.css"/>
 
     <link rel="stylesheet" href="resource/css/monitor-center.css">
     <link rel="stylesheet" href="css/common.css">
@@ -263,16 +265,6 @@
     </ul>
     <!-- /.nav-list -->
 
-    <div class="sidebar-collapse" id="sidebar-collapse">
-        <i class="icon-double-angle-left" data-icon1="icon-double-angle-left"
-           data-icon2="icon-double-angle-right"></i>
-    </div>
-    <script type="text/javascript">
-        try {
-            ace.settings.check('sidebar', 'collapsed')
-        } catch (e) {
-        }
-    </script>
 
 </div>
 
@@ -300,6 +292,11 @@
             <a href="index.jsp">HOME</a>
         </li>
     </ul>
+    <div class="hide" style="float:right;padding-right: 20px">
+        <label>开始：</label><input type="text" id="startTime"/>
+        <label>结束：</label><input type="text" id="endTime"/>
+        <a class="btn btn-primary btn-small" href='#' onClick="reflash_view()"><i class="icon-eye-open">查看</i></a>
+    </div>
 </div>
 <div class="page-content">
 <div class="row">
@@ -709,7 +706,7 @@
     <img src="img/betop.png" width="66" height="67">
 </a>
 
-<div class="feedTool">
+<div class="feedTool hide">
 
     <a target="_blank" style="color: white;" href="http://wpa.qq.com/msgrd?v=3&uin=767762405&site=qq&menu=yes"><img
             border="0" src="img/qq.png" width="80" height="80" color="white" alt="点我报错" title="点我报错"/></a>
@@ -744,6 +741,24 @@
     $('.scrollup').click(function () {
         $("html, body").scrollTop(0);
         return false;
+    });
+
+
+    $('#startTime').datetimepicker({
+        formatTime:'H:i',
+        format:'Y-m-d',
+        formatDate:'Y-m-d',
+        defaultTime:'10:00',
+        timepicker:false,
+        timepickerScrollbar:false
+    });
+
+    $('#endTime').datetimepicker({
+        format:'Y-m-d',
+        formatDate:'Y-m-d',
+        defaultTime:'10:00',
+        timepicker:false,
+        timepickerScrollbar:false
     });
 
 

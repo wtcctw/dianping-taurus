@@ -46,7 +46,6 @@ public class TotalTaskLoad extends ServerResource implements ITotalTaskLoad {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        System.out.println(jsonData.toString());
         return jsonData.toString();
     }
 }

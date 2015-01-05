@@ -143,9 +143,35 @@ $(document).ready(function () {
         endtime = GetDateStr(now, 1);
     }
 
+    reflash_data(starttime,endtime);
 
 
+});
+function reflash_view(){
+    var start = $("#startTime").val();
+    var end = $("#endTime").val();
+    if (start == null|| end == null || start ==""||end==""){
+        bootbox.confirm("开始或结束不能为空！", function(result) {
+
+        });
+    }else if (start >= end){
+        bootbox.confirm("结束时间应该大于开始时间！", function(result) {
+
+        });
+    }else{
+        reflash_data(start,end);
+    }
+}
+
+function reflash_data(starttime,endtime){
     var totalBody = "";
+    var loading = '<div class="loadIcon"><div></div><div></div><div></div><div></div> </div>';
+
+    $("#total-chart").html(loading);
+    $("#failedJob").html(loading);
+    $("#totaltasklist").html(loading);
+    $("#totalJob").html(loading);
+    $("#totaltasks").html(loading);
 
     $.ajax({
         data: {
@@ -365,7 +391,7 @@ $(document).ready(function () {
                 }else if (item.status == "congest"){
                     if (item.nums != 0) {
                         totalCongestNums += item.nums;
-                        totalCongestLists[groupCongestNums] = item.taskName;
+                        totalCongestLists[totalCongestNums] = item.taskName;
                         totalCongestTaskNums++;
 
                         var group = item.group;
@@ -487,7 +513,7 @@ $(document).ready(function () {
                 }
             );
 
-            if (totalSuccNums != 0 || totalFailedNums != 0 ||  totalKillNums != 0 || totalTimeoutNums != 0 || groupCongestNums != 0) {
+            if (totalSuccNums != 0 || totalFailedNums != 0 ||  totalKillNums != 0 || totalTimeoutNums != 0 || totalCongestNums != 0) {
                 $("#totalsucctask").html(totalSuccNums.toString());
                 $("#totalfailtask").html(totalFailedNums.toString());
                 $("#totalkilltask").html(totalKillNums.toString());
@@ -624,5 +650,4 @@ $(document).ready(function () {
             $(this).prev().focus();
         });
     });
-});
-
+}

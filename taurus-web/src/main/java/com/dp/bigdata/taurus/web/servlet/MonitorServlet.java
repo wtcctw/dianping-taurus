@@ -495,7 +495,6 @@ public class MonitorServlet extends HttpServlet {
                     String clientIp = getIpAddr(request);
                     String logInfo = "####RESGIN OP #### IP:" + clientIp + " 用户【" + currentUser + "】把任务名为：【 " + taskName + "】的任务原对应调度人分别为【" + oldcreators + "】 都指派给了 【" + creator + "】";
                     LOGGER.info(logInfo);
-                    System.out.println(logInfo);
                     break;
 
             }
@@ -668,7 +667,7 @@ public class MonitorServlet extends HttpServlet {
                                 lastTaskStatus = "NULL";
                             }
                         }
-                        if(lastTaskStatus.equals("SUCCEEDED") || lastTaskStatus.equals("RUNNING")){
+                        if(state == "SUCCEEDED"){
                             lastTaskStatus = "<span class='label label-info'>"
                                     + lastTaskStatus
                                     + "</span>";
@@ -1200,7 +1199,7 @@ public class MonitorServlet extends HttpServlet {
                                 lastTaskStatus = "NULL";
                             }
                         }
-                        if(lastTaskStatus.equals("SUCCEEDED") || lastTaskStatus.equals("RUNNING")){
+                        if(state == "SUCCEEDED"){
                             lastTaskStatus = "<span class='label label-info'>"
                                     + lastTaskStatus
                                     + "</span>";
