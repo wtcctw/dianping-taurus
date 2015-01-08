@@ -20,7 +20,7 @@ public class LDAPAuthenticationService {
 	private static Logger logger = Logger.getLogger(LDAPAuthenticationService.class);
 	private static String loginAttribute = "sAMAccountName";
 	
-	private String ldapUrl = "ldap://192.168.50.11:389/DC=dianpingoa,DC=com";
+	private String ldapUrl = "ldap://idcldap.dianpingoa.com:389/DC=dianpingoa,DC=com";
 	private String ldapFactory = "com.sun.jndi.ldap.LdapCtxFactory"; 
 
 	private Control[] connCtls = null;
