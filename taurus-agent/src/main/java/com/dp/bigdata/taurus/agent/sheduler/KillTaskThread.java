@@ -63,12 +63,17 @@ public class KillTaskThread extends BaseEnvManager {
 		Lock lock = LockHelper.getLock(jobInstanceId);
 		try {
 			lock.lock();
+
 			ScheduleConf conf = (ScheduleConf) cs.getConf(localIp, jobInstanceId);
-            System.out.println("KILL TASK THREAD| conf:"+ conf);
 
 			ScheduleStatus status = (ScheduleStatus) cs.getStatus(localIp, jobInstanceId);
-            System.out.println("KILL TASK THREAD| ip:"+ localIp + "  |status:" + status);
-			killTask(localIp, conf, status);
+
+            System.out.println("KILL TASK THREAD|jobInstanceId:"+ jobInstanceId + "| ip:"+ localIp + "  |conf:" + conf + "  |status:" + status);
+
+            if (conf!= null && status != null){
+                killTask(localIp, conf, status);
+            }
+
 
 		} catch (Exception e) {
 			LOGGER.error(e, e);
