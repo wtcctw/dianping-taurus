@@ -202,12 +202,22 @@ public void deployer(String deployId, String deployIp, String deployFile, String
 			context.setUrl(file);
 			testFileUrl(file);
 			LOG.info(String.format("Start to depoly %s to %s", file, ip));
-			dr.status = DeployStatus.DEPLOYING;
+            System.out.println(String.format("Start to depoly %s to %s", file, ip));
+            dr.status = DeployStatus.DEPLOYING;
 			path = deployer.deploy(ip, context);
 
+            String [] tmpStrArray = file.split("/");
+            String jarName = tmpStrArray[tmpStrArray.length - 1];
+            String tmpPath = "";
+            if(path.contains(jarName)){
+                tmpPath = path;
+            }else{
+                tmpPath = path + "/" + jarName;
+            }
+
             webUrl = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.deploy.weburl");
-            String taurusUrl = String.format(createUrlPattern, webUrl, name, path, ip);
-			String updateUrl = String.format(updateUrlPattern, webUrl, name, path);
+            String taurusUrl = String.format(createUrlPattern, webUrl, name, tmpPath , ip);
+			String updateUrl = String.format(updateUrlPattern, webUrl, name, tmpPath);
 			callback(dr, callback, DeployStatus.SUCCESS, taurusUrl, updateUrl);
 			LOG.debug("deploy success");
 		} catch (DeploymentException e) {
