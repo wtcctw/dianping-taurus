@@ -949,7 +949,7 @@
     </div>
     Taurus agent已经升级到0.5.0版本，这版的agent需要部署在tomcat下，所以安装前请确认job机器有tomcat。<br/>
     <hr style="padding:15px 0px">
-
+    <h4>运维操作</h4>
     如果是第一次安装，以root身份执行如下代码：
     <div class="well">
         <em>wget http://10.1.1.171/install-new-agent-war.sh; <br/>
@@ -957,8 +957,16 @@
         </em>
     </div>
     以上会初始化taurus agent的运行环境。
+    然后ssh 到10.1.1.171 上执行
+
+    <div class="well">
+        cd /data/ftpupload <br>
+        <em style="color: darkred"> python importcmdb.py 主机名</em><br>
+        其中主机名为新增的job机器主机名
+
+    </div>
     <hr style="padding:15px 0px">
-<h4>运维操作</h4>
+  <h4>以下操作已经不需要了~</h4>
     在老cmdb中首先把服务器加入服务器列表，点deploy manage 然后输入taurus-agnet按回车,如下图所示
     <br><br>
     <img src="img/cmdb1.png" style="width: 876px;height: 455px"/>
