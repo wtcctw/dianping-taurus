@@ -119,8 +119,14 @@ public class AttemptProxyServlet extends HttpServlet {
         try {
             jsonMap = new JSONObject(jsonData);
             jsonHostName = jsonMap.getString("result");
-            JSONObject itemJson = new JSONObject(jsonHostName.replace("[","").replace("]",""));
-            hostName= itemJson.getString("hostname");
+            if (jsonHostName.contains("[")&&jsonHostName.contains("]")){
+                JSONObject itemJson = new JSONObject(jsonHostName.replace("[","").replace("]",""));
+                hostName= itemJson.getString("hostname");
+            }else{
+                hostName = null;
+            }
+
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

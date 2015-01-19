@@ -4,6 +4,7 @@ import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
 import com.dianping.lion.client.LionException;
 import com.dp.bigdata.taurus.core.AttemptStatus;
+import com.dp.bigdata.taurus.core.MultiInstanceFilter;
 import com.dp.bigdata.taurus.generated.mapper.TaskAttemptMapper;
 import com.dp.bigdata.taurus.generated.mapper.TaskMapper;
 import com.dp.bigdata.taurus.generated.module.Task;
@@ -283,6 +284,7 @@ public class MonitorServlet extends HttpServlet {
                         break;
                     default:
                         reusult_str = "执行成功~";
+                        MultiInstanceFilter.jobAlert.remove(taskId.trim());
                         break;
 
                 }
