@@ -35,29 +35,40 @@ public class MultiInstanceFilter implements Filter {
 
             if (runnings != null && runnings.size() > 0) {
                 // do nothing 拥堵了~应该告警用户任务堵住了~
-                if (null == jobAlert.get(context.getTaskid())  ||  jobAlert.get(context.getTaskid()) == 0) {
+                Integer jobAlertCount = null;
+                if (jobAlert.containsKey(context.getTaskid()) ){
+                    jobAlertCount = jobAlert.get(context.getTaskid());
+                }
+
+                if (null == jobAlertCount || jobAlertCount == 0) {
                     String alertontext = "您好，你的Taurus Job【" +
                             context.getTask().getName() + "】发生拥堵，请及时关注，谢谢~";
                     try {
                         MailHelper.sendWeChat("kirin.li", alertontext);
                         MailHelper.sendWeChat(context.getCreator(), alertontext);
                         MailHelper.sendMail(context.getCreator() + "@dianping.com", alertontext);
-                        if (null == jobAlert.get(context.getTaskid())){
+                        if (null == jobAlertCount) {
                             jobAlert.put(context.getTaskid(), 0);
-                        }else {
-                            jobAlert.put(context.getTaskid(), jobAlert.get(context.getTaskid()) + 1);
+                        } else {
+                            jobAlert.put(context.getTaskid(), jobAlertCount + 1);
                         }
 
                     } catch (Exception e) {
                         Cat.logError(e);
                     }
-                }else {
+                } else {
                     jobAlert.put(context.getTaskid(), jobAlert.get(context.getTaskid()) + 1);
                 }
 
             } else {
-                if (jobAlert.get(context.getTaskid()) == null && jobAlert.get(context.getTaskid()) != 0) {
-                    if(jobAlert.get(context.getTaskid()) == 0){
+
+                Integer jobAlertCount = null;
+                if (jobAlert.containsKey(context.getTaskid()) ){
+                    jobAlertCount = jobAlert.get(context.getTaskid());
+                }
+
+                if (jobAlertCount != null && jobAlertCount != 0) {
+                    if (jobAlertCount == 0) {
                         //恢复了
                         String alertontext = "您好，你的Taurus Job【" +
                                 context.getTask().getName() + "】拥堵状况已经恢复正常~";
@@ -71,7 +82,7 @@ public class MultiInstanceFilter implements Filter {
                         }
 
                     }
-                    jobAlert.put(context.getTaskid(), jobAlert.get(context.getTaskid()) - 1);
+                    jobAlert.put(context.getTaskid(), jobAlertCount - 1);
                 }
 
                 if (ctx == null) {

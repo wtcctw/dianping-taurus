@@ -800,7 +800,7 @@
                 表达式字段:
             </td>
             <td>
-                <input type="text" name="v_min" class="col" value="*" readonly="readonly" id="min_input">
+                <input type="text" name="v_min" class="col" value="0" readonly="readonly" id="min_input">
             </td>
             <td>
                 <input type="text" name="v_hour" class="col" value="*" readonly="readonly" id="hour_input">
@@ -821,13 +821,13 @@
         <tr>
             <td>UI结果:</td>
             <td colspan="6"><input type="text" class="input" name="showvalue" style="width: 100%;" value=""
-                                   readonly="readonly" id="showvalue">
+                                   readonly="readonly" value="0 * * * ? " id="showvalue" >
             </td>
         </tr>
 
         <tr>
             <td>Cron 表达式:</td>
-            <td colspan="6"><input type="text" name="cronvalue" style="width: 100%;" value="* * * * ?" id="cronvalue">
+            <td colspan="6"><input type="text" name="cronvalue" style="width: 100%;" value="0 * * * ?" id="cronvalue">
             </td>
             <td>
                 <button class="btn btn-info" type="button" id="btnFan" onclick="btnFan()"><i
@@ -854,6 +854,9 @@
             return false;
         });
         $.parser.parse($("body"));
+        $("#min_appoint").attr("checked", "checked");
+        var item = $("input[name=v_min]");
+        item.eq(0).attr("checked", "checked");
 
         function btnFan() {
             //获取参数中表达式的值
