@@ -193,7 +193,7 @@ public void deployer(String deployId, String deployIp, String deployFile, String
     private static String splitCMD(String cmd, String job_name){
         int lastPost = job_name.lastIndexOf('-');
         String realJobName = job_name.substring(0,lastPost);
-
+        System.out.println("CMD:"+cmd+"  # jobName:"+job_name);
         String[] cmdTmpLists = cmd.split(" ");
         StringBuffer newCMD = new StringBuffer();
         for (String tmpCmd : cmdTmpLists){
@@ -215,12 +215,14 @@ public void deployer(String deployId, String deployIp, String deployFile, String
 		String path = null;
 		DeployResult dr = new DeployResult();
         boolean needReplace = true;
+        String oldCMD = "";
         Task task = null;
         try {
             task = taskMapper.getTaskByAppNameIP(name, ip);
 
             if (task != null && task.getCommand() != null){
                 needReplace = true;
+                System.out.println("=====Task CMD:"+ task.getCommand());
             }else{
                 needReplace = false;
             }
@@ -252,7 +254,9 @@ public void deployer(String deployId, String deployIp, String deployFile, String
                 tmpPath = path + "/" + jarName;
             }
             if (needReplace){
+                oldCMD = task.getCommand();
                 String realCMD = splitCMD(task.getCommand(), jarName);
+                System.out.println("Task CMD update:"+ realCMD);
                 task.setCommand(realCMD);
                 taskMapper.updateByPrimaryKey(task);
             }
@@ -263,9 +267,17 @@ public void deployer(String deployId, String deployIp, String deployFile, String
 			LOG.debug("deploy success");
 		} catch (DeploymentException e) {
 			LOG.error(String.format("Fail to depoly %s to %s", file, ip), e);
+            if (needReplace){
+                task.setCommand(oldCMD);
+                taskMapper.updateByPrimaryKey(task);
+            }
 			callback(dr, callback, e.getStatus(), null, null);
 		} catch (Exception e) {
 			callback(dr, callback, DeployStatus.FAIL, null, null);
+            if (needReplace){
+                task.setCommand(oldCMD);
+                taskMapper.updateByPrimaryKey(task);
+            }
 			LOG.error(String.format("Fail to depoly %s to %s", file, ip), e);
 		}
 	}
