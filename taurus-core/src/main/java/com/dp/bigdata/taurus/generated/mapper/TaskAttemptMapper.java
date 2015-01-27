@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
+import org.springframework.dao.DataAccessException;
 
 public interface TaskAttemptMapper {
     /**
@@ -55,7 +56,7 @@ public interface TaskAttemptMapper {
      *
      * @mbggenerated Mon Apr 28 17:39:50 HKT 2014
      */
-    List<TaskAttempt> selectByExample(TaskAttemptExample example);
+    List<TaskAttempt> selectByExample(TaskAttemptExample example) throws DataAccessException;
     
     List<TaskAttempt> selectByGroupAndStatus();
 

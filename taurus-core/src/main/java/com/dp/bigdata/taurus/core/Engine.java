@@ -15,6 +15,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
+import com.dianping.lion.client.LionException;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -37,6 +38,7 @@ import com.dp.bigdata.taurus.zookeeper.execute.helper.ExecuteStatus;
 import com.dp.bigdata.taurus.zookeeper.execute.helper.ExecutorManager;
 import com.dp.bigdata.taurus.zookeeper.heartbeat.helper.AgentHandler;
 import com.dp.bigdata.taurus.zookeeper.heartbeat.helper.AgentMonitor;
+import org.springframework.dao.DataAccessException;
 
 import javax.mail.MessagingException;
 
@@ -111,37 +113,66 @@ final public class Engine implements Scheduler {
 		Map<String, Task> tmp_registedTasks = new ConcurrentHashMap<String, Task>();
 		Map<String, String> tmp_tasksMapCache = new ConcurrentHashMap<String, String>();
 		Map<String, HashMap<String, AttemptContext>> tmp_runningAttempts = new ConcurrentHashMap<String, HashMap<String, AttemptContext>>();
+       try {
+           // load all tasks
+           TaskExample example = new TaskExample();
+           example.or().andStatusEqualTo(TaskStatus.RUNNING);
+           example.or().andStatusEqualTo(TaskStatus.SUSPEND);
+           List<Task> tasks = taskMapper.selectByExample(example);
+           for (Task task : tasks) {
+               tmp_registedTasks.put(task.getTaskid(), task);
+               tmp_tasksMapCache.put(task.getName(), task.getTaskid());
+           }
 
-		// load all tasks
-		TaskExample example = new TaskExample();
-		example.or().andStatusEqualTo(TaskStatus.RUNNING);
-		example.or().andStatusEqualTo(TaskStatus.SUSPEND);
-		List<Task> tasks = taskMapper.selectByExample(example);
-		for (Task task : tasks) {
-			tmp_registedTasks.put(task.getTaskid(), task);
-			tmp_tasksMapCache.put(task.getName(), task.getTaskid());
-		}
+           // load running attempts
+           TaskAttemptExample example1 = new TaskAttemptExample();
+           example1.or().andStatusEqualTo(AttemptStatus.RUNNING);
+           example1.or().andStatusEqualTo(AttemptStatus.TIMEOUT);
+           List<TaskAttempt> attempts = taskAttemptMapper.selectByExample(example1);
+           for (TaskAttempt attempt : attempts) {
+               Task task = tmp_registedTasks.get(attempt.getTaskid());
 
-		// load running attempts
-		TaskAttemptExample example1 = new TaskAttemptExample();
-		example1.or().andStatusEqualTo(AttemptStatus.RUNNING);
-		example1.or().andStatusEqualTo(AttemptStatus.TIMEOUT);
-		List<TaskAttempt> attempts = taskAttemptMapper.selectByExample(example1);
-		for (TaskAttempt attempt : attempts) {
-			Task task = tmp_registedTasks.get(attempt.getTaskid());
+               if (task != null) {
+                   AttemptContext context = new AttemptContext(attempt, task);
+                   HashMap<String, AttemptContext> contexts = new HashMap<String, AttemptContext>();
+                   contexts.put(context.getAttemptid(), context);
+                   tmp_runningAttempts.put(context.getTaskid(), contexts);
+               }
+           }
 
-			if (task != null) {
-				AttemptContext context = new AttemptContext(attempt, task);
-				HashMap<String, AttemptContext> contexts = new HashMap<String, AttemptContext>();
-				contexts.put(context.getAttemptid(), context);
-				tmp_runningAttempts.put(context.getTaskid(), contexts);
-			}
-		}
+           // switch
+           registedTasks = tmp_registedTasks;
+           tasksMapCache = tmp_tasksMapCache;
+           runningAttempts = tmp_runningAttempts;
+       }catch (DataAccessException e){
+           Cat.logEvent("DataAccessException",e.getMessage());
+           String dataBaseUrl = "";
+           try {
+               dataBaseUrl = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.jdbc.url");
 
-		// switch
-		registedTasks = tmp_registedTasks;
-		tasksMapCache = tmp_tasksMapCache;
-		runningAttempts = tmp_runningAttempts;
+           }catch (LionException le){
+               dataBaseUrl = "jdbc:mysql://10.1.101.216:3306/Taurus?characterEncoding=utf-8";
+           }
+
+           String exceptContext = "您好，taurus的数据库连接发生异常 请及时查看"
+                   +"数据库连接串："
+                   +dataBaseUrl;
+           try {
+               MailHelper.sendMail("kirin.li@dianping.com",exceptContext);
+               MailHelper.sendWeChat("kirin.li",exceptContext);
+               String toMails = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.down.mail.to");
+               String [] toLists = toMails.split(",");
+               for (String to:toLists){
+                   MailHelper.sendMail(to,exceptContext);
+               }
+           }catch (LionException le){
+               Cat.logEvent("LionException",le.getMessage());
+           }catch (MessagingException me){
+               Cat.logEvent("MessagingException",me.getMessage());
+           }
+
+       }
+
 	}
 
 	/**

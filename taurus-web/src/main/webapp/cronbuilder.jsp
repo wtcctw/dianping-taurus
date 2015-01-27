@@ -1,4 +1,5 @@
 <%@ page import="com.dianping.cat.Cat" %>
+<%@ page import="java.util.Calendar" %>
 <html>
 <head>
     <%@ include file="jsp/common-nav.jsp" %>
@@ -135,6 +136,10 @@
         }
     </script>
 
+    <%
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+    %>
     <ul class="nav nav-list">
 
         <li id="index">
@@ -749,16 +754,16 @@
             <input type="radio" name="year" onclick="cycle(this)">周期 从
             <span class="spinner" style="width: 88px; height: 20px;"><input
                     class="numberspinner numberspinner-f spinner-text spinner-f validatebox-text numberbox-f"
-                    style="width: 66px; height: 20px; line-height: 20px;" data-options="min:2014,max:3000"
-                    id="yearStart_0" value="2014"><input type="hidden" value="2014"><span class="spinner-arrow"
+                    style="width: 66px; height: 20px; line-height: 20px;" data-options="min:<%=year%>,max:3000"
+                    id="yearStart_0" value="<%=year%>"><input type="hidden" value="<%=year%>"><span class="spinner-arrow"
                                                                                           style="height: 20px;"><span
                     class="spinner-arrow-up" style="height: 10px;"></span><span class="spinner-arrow-down"
                                                                                 style="height: 10px;"></span></span></span>
             -
             <span class="spinner" style="width: 88px; height: 20px;"><input
                     class="numberspinner numberspinner-f spinner-text spinner-f validatebox-text numberbox-f"
-                    style="width: 66px; height: 20px; line-height: 20px;" data-options="min:2015,max:3000"
-                    id="yearEnd_0" value="2015"><input type="hidden" value="2015"><span class="spinner-arrow"
+                    style="width: 66px; height: 20px; line-height: 20px;" data-options="min:<%=year + 1%>,max:3000"
+                    id="yearEnd_0" value="<%=year + 1%>"><input type="hidden" value="<%=year + 1%>"><span class="spinner-arrow"
                                                                                         style="height: 20px;"><span
                     class="spinner-arrow-up" style="height: 10px;"></span><span class="spinner-arrow-down"
                                                                                 style="height: 10px;"></span></span></span>

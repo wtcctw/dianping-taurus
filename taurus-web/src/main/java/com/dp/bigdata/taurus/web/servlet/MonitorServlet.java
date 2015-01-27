@@ -598,6 +598,18 @@ public class MonitorServlet extends HttpServlet {
                                     + "</td >";
                         }
                         boolean isViewLog = AttemptProxyServlet.isHostOverLoad(dto.getExecHost());
+
+                        String zabbixSwitch = "";
+                        try {
+                            zabbixSwitch = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.zabbix.switch");
+                        }catch (LionException e){
+                            zabbixSwitch = "true";
+                        }
+
+                        if (zabbixSwitch.equals("false")){
+                            isViewLog = false;
+                        }
+
                         if (!isViewLog) {
 
                             result += "<td >"
@@ -1454,6 +1466,18 @@ public class MonitorServlet extends HttpServlet {
                 }
                 jsonObject.addProperty("returnValue", dto.getReturnValue());
                 boolean isViewLog = AttemptProxyServlet.isHostOverLoad(dto.getExecHost());
+
+                String zabbixSwitch = "";
+                try {
+                    zabbixSwitch = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.zabbix.switch");
+                }catch (LionException e){
+                    zabbixSwitch = "true";
+                }
+
+                if (zabbixSwitch.equals("false")){
+                    isViewLog = false;
+                }
+
                 jsonObject.addProperty("isViewLog", isViewLog);
 
                 jsonArray.add(jsonObject);
