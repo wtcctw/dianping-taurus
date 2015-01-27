@@ -19,6 +19,7 @@ import java.net.URLConnection;
 public class WeChatHelper {
 
     public static void sendWeChat(String user,String content){
+
         String wechat_url = "";
         try {
             wechat_url = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.wechat.api");

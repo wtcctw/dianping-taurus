@@ -255,6 +255,7 @@ public class TaurusAlert {
 
 			try {
 				sendMail(mailTo, sbMailContent.toString());
+                Cat.logEvent("Alert.WeChat",userName );
                 sendWeChat(userName,attempt);
 
 			} catch (Exception e) {

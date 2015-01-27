@@ -100,6 +100,8 @@ public interface TaskMapper {
     public Task getTaskByAttemptId(@Param("attemptId")String attemptId);
     public Task getTaskById(@Param("taskId")String taskId);
 
+    public Task getTaskByAppNameIP(@Param("appName")String appName,@Param("ip")String ip);
+
     public ArrayList<Task> getTasks();
     ArrayList<Host> getTasksByHost(String hostname);
     public HashMap<String, String> isExitTaskName(@Param("taskName")String taskName);

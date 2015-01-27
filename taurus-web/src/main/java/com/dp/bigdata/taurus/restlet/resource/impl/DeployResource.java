@@ -190,9 +190,46 @@ public void deployer(String deployId, String deployIp, String deployFile, String
 
 	}
 
+    private static String splitCMD(String cmd, String job_name){
+        int lastPost = job_name.lastIndexOf('-');
+        String realJobName = job_name.substring(0,lastPost);
+
+        String[] cmdTmpLists = cmd.split(" ");
+        StringBuffer newCMD = new StringBuffer();
+        for (String tmpCmd : cmdTmpLists){
+            if (tmpCmd.contains(realJobName)){
+                int first = tmpCmd.lastIndexOf('/');
+                String realPath = tmpCmd.substring(0,first+1) + job_name;
+                newCMD.append(realPath);
+                newCMD.append(" ");
+            }else {
+                newCMD.append(tmpCmd);
+                newCMD.append(" ");
+            }
+        }
+
+        return newCMD.toString().trim();
+    }
+
 	private void deployInternal(String ip, String file, String id, String callback, String name) {
 		String path = null;
 		DeployResult dr = new DeployResult();
+        boolean needReplace = true;
+        Task task = null;
+        try {
+            task = taskMapper.getTaskByAppNameIP(name, ip);
+
+            if (task != null && task.getCommand() != null){
+                needReplace = true;
+            }else{
+                needReplace = false;
+            }
+
+        }catch (Exception e){
+            needReplace = false;
+        }
+
+
 
 		try {
 			DeploymentContext context = new DeploymentContext();
@@ -214,7 +251,11 @@ public void deployer(String deployId, String deployIp, String deployFile, String
             }else{
                 tmpPath = path + "/" + jarName;
             }
-
+            if (needReplace){
+                String realCMD = splitCMD(task.getCommand(), jarName);
+                task.setCommand(realCMD);
+                taskMapper.updateByPrimaryKey(task);
+            }
             webUrl = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.deploy.weburl");
             String taurusUrl = String.format(createUrlPattern, webUrl, name, tmpPath , ip);
 			String updateUrl = String.format(updateUrlPattern, webUrl, name, tmpPath);

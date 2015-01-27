@@ -593,4 +593,8 @@
     <select id="isExitTaskName" parameterType="String" resultType="map">
         select TaurusTask.name from TaurusTask where TaurusTask.name = #{taskName} limit 1
     </select>
+
+    <select id="getTaskByAppNameIP" parameterType="String" resultMap="BaseResultMap" >
+       select TaurusTask.* from TaurusTask where TaurusTask.appName = #{appName}  and TaurusTask.hostName = #{ip} and status != 3 limit 1
+    </select>
 </mapper>
