@@ -161,12 +161,18 @@ public class JarExecutor {
 									if (zkClient.exists(SCHEDULE_DELETE_PATH + "/" + attemptID)) {
 										zkClient.delete(SCHEDULE_DELETE_PATH + "/" + attemptID);
 									}
-									status.setStatus(ScheduleStatus.DELETE_SUCCESS);
-									status.setReturnCode(1);
+                                    if(status != null){
+                                        status.setStatus(ScheduleStatus.DELETE_SUCCESS);
+                                        status.setReturnCode(1);
+                                    }
+
 									returnValue = 1;
 								} else {
-									status.setStatus(ScheduleStatus.EXECUTE_FAILED);
-									status.setReturnCode(1);
+                                    if (status != null){
+                                        status.setStatus(ScheduleStatus.EXECUTE_FAILED);
+                                        status.setReturnCode(1);
+                                    }
+
 									returnValue = 1;
 								}
 

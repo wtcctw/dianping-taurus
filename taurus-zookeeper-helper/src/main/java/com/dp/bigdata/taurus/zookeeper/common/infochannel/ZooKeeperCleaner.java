@@ -59,16 +59,18 @@ public class ZooKeeperCleaner {
                 if (readChannel.existPath(SCHEDULE_PATH + "/" + ip + "/" + dateString)){
                     attemptList = readChannel.getChildrenNodeName(SCHEDULE_PATH + "/" + ip + "/" + dateString);
                     if (attemptList != null){
+                        for(String attemptId:attemptList){
 
-                    }for(String attemptId:attemptList){
-
-                        if(!zkChannel.rmrPath("/"+ SCHEDULE_PATH + "/" + ip + "/" + attemptId)){
-                            LOGGER.error("faile to delete " + SCHEDULE_PATH + "/" + ip + "/" + attemptId);
+                            if(!zkChannel.rmrPath("/"+ SCHEDULE_PATH + "/" + ip + "/" + attemptId)){
+                                LOGGER.error("faile to delete " + SCHEDULE_PATH + "/" + ip + "/" + attemptId);
+                            }
+                            LOGGER.info("success to delete " + SCHEDULE_PATH + "/" + ip + "/" + attemptId);
                         }
-                        LOGGER.info("success to delete " + SCHEDULE_PATH + "/" + ip + "/" + attemptId);
+                        zkChannel.rmrPath("/"+ SCHEDULE_PATH + "/" + ip + "/" + dateString);
+                        LOGGER.info("success to delete " + "/"+ SCHEDULE_PATH + "/" + ip + "/" + dateString);
                     }
-                    zkChannel.rmrPath("/"+ SCHEDULE_PATH + "/" + ip + "/" + dateString);
-                    LOGGER.info("success to delete " + "/"+ SCHEDULE_PATH + "/" + ip + "/" + dateString);
+
+
                 }
 
 
@@ -103,7 +105,6 @@ public class ZooKeeperCleaner {
 		    LOGGER.error(e,e);
 		} 
 		
-		System.out.println( result.getStatus());
 	}
 	
 	public static void main(String []args) {

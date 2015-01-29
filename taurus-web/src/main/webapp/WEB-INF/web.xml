@@ -146,7 +146,43 @@
         <servlet-class>com.dp.bigdata.taurus.web.servlet.FeedBackServlet</servlet-class>
     </servlet>
 
-	<servlet-mapping>
+    <servlet>
+        <servlet-name>HostCenterServlet</servlet-name>
+        <servlet-class>com.dp.bigdata.taurus.web.servlet.HostCenterServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>MonitorCenterServlet</servlet-name>
+        <servlet-class>com.dp.bigdata.taurus.web.servlet.MonitorCenterServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>TaskCenterServlet</servlet-name>
+        <servlet-class>com.dp.bigdata.taurus.web.servlet.TaskCenterServlet</servlet-class>
+    </servlet>
+
+
+    <servlet>
+        <servlet-name>DBAdminServlet</servlet-name>
+        <servlet-class>com.dp.bigdata.taurus.web.servlet.DBAdminServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>ResignServlet</servlet-name>
+        <servlet-class>com.dp.bigdata.taurus.web.servlet.ResignServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>AttemptServlet</servlet-name>
+        <servlet-class>com.dp.bigdata.taurus.web.servlet.AttemptServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>ScheduleServlet</servlet-name>
+        <servlet-class>com.dp.bigdata.taurus.web.servlet.ScheduleServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
 		<servlet-name>BatchTaskServlet</servlet-name>
 		<url-pattern>/batch_upload.do</url-pattern>
 	</servlet-mapping>
@@ -189,6 +225,41 @@
         <servlet-name>FeedBackServlet</servlet-name>
         <url-pattern>/feedback</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>HostCenterServlet</servlet-name>
+        <url-pattern>/host_center</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>MonitorCenterServlet</servlet-name>
+        <url-pattern>/monitor_center</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>TaskCenterServlet</servlet-name>
+        <url-pattern>/task_center</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>DBAdminServlet</servlet-name>
+        <url-pattern>/db_admin</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ResignServlet</servlet-name>
+        <url-pattern>/resign</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>AttemptServlet</servlet-name>
+        <url-pattern>/attempt</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ScheduleServlet</servlet-name>
+        <url-pattern>/schedule</url-pattern>
+    </servlet-mapping>
+
     <jsp-config>
         <jsp-property-group>
             <url-pattern>*.jsp</url-pattern>

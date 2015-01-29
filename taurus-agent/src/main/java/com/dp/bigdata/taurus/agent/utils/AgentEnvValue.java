@@ -80,17 +80,18 @@ public final class AgentEnvValue {
     public static String getConfigs() {
         InputStream in = ClassLoaderUtils.getDefaultClassLoader().getResourceAsStream(CONF);
         BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-        String result = "";
+        StringBuffer result = new StringBuffer();
         try {
             String line = reader.readLine();
             while (line != null) {
-                result += line + "\n";
+                result.append(line);
+                result.append("\n");
                 line = reader.readLine();
             }
         } catch (Exception e) {
             LOG.error(e, e);
         }
-        return result;
+        return result.toString();
     }
 
     public static void setConfigs(String configs) {

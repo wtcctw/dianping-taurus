@@ -88,7 +88,7 @@ public class DefaultDeployerManager implements Deployer {
 			} finally {
 				lock.unlock();
 			}
-			if (status.getStatus() != DeploymentStatus.DEPLOY_SUCCESS) {
+			if (status != null && status.getStatus() != DeploymentStatus.DEPLOY_SUCCESS) {
 				LOGGER.error(deployId + " deploy failed");
 				throw new DeploymentException(deployId + " deploy failed").setStatus(DeployStatus.FAIL);
 			}
@@ -135,7 +135,7 @@ public class DefaultDeployerManager implements Deployer {
 			} finally {
 				lock.unlock();
 			}
-			if (status.getStatus() != DeploymentStatus.DELETE_SUCCESS) {
+			if (status != null && status.getStatus() != DeploymentStatus.DELETE_SUCCESS) {
 				LOGGER.error("Task " + deployId + "delete failed");
 				throw new DeploymentException("Task " + deployId + "delete failed");
 			}

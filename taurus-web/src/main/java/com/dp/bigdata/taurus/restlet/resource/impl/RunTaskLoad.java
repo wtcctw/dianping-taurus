@@ -1,5 +1,6 @@
 package com.dp.bigdata.taurus.restlet.resource.impl;
 
+import com.dianping.cat.Cat;
 import com.dp.bigdata.taurus.generated.mapper.TaskAttemptMapper;
 import com.dp.bigdata.taurus.restlet.resource.IRunTaskLoad;
 import org.json.JSONArray;
@@ -23,7 +24,6 @@ public class RunTaskLoad extends ServerResource implements IRunTaskLoad {
     @Override
     @Get
     public String retrieve() {
-        String hostInfo = "";
         JSONArray jsonData = new JSONArray();
         try {
             List<HashMap<String, Integer>> tasks = taskAttemptMapper.getRunningTaskLoadHost();
@@ -35,7 +35,6 @@ public class RunTaskLoad extends ServerResource implements IRunTaskLoad {
                     json.put("execHost", task.get("execHost"));
 
                     json.put("totaltask", task.get("totaltask"));
-                    hostInfo += task.get("execHost") + ":" + task.get("totaltask") + ",";
                     jsonData.put(json);
 
 
@@ -43,10 +42,7 @@ public class RunTaskLoad extends ServerResource implements IRunTaskLoad {
             }
 
         } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        if (!hostInfo.isEmpty()) {
-
+            Cat.logError("RunTaskLoad JSONException", e);
         }
 
         return jsonData.toString();

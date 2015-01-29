@@ -1,7 +1,9 @@
 package com.dp.bigdata.taurus.restlet.resource.impl;
 
+import com.dianping.cat.Cat;
 import com.dp.bigdata.taurus.generated.mapper.TaskAttemptMapper;
 import com.dp.bigdata.taurus.restlet.resource.ITotalTaskLoad;
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,7 +24,6 @@ public class TotalTaskLoad extends ServerResource implements ITotalTaskLoad {
 
     @Override
     public String retrieve() {
-        String hostInfo = "";
         JSONArray jsonData = new JSONArray();
         try {
             String start = (String) getRequestAttributes().get("starttime");
@@ -33,18 +34,14 @@ public class TotalTaskLoad extends ServerResource implements ITotalTaskLoad {
             for (HashMap<String, Integer> task : tasks) {
 
                 JSONObject json = new JSONObject();
-                json.put("execHost",task.get("execHost"));
-                json.put("totaltask",task.get("totaltask"));
-                hostInfo += task.get("execHost") + ":" + task.get("totaltask") + ",";
+                json.put("execHost", task.get("execHost"));
+                json.put("totaltask", task.get("totaltask"));
                 jsonData.put(json);
 
 
             }
-            if (!hostInfo.isEmpty()) {
-                hostInfo = hostInfo.substring(0, hostInfo.length() - 1);
-            }
         } catch (JSONException e) {
-            e.printStackTrace();
+            Cat.logError("TotalTaskLoad JSONException", e);
         }
         return jsonData.toString();
     }

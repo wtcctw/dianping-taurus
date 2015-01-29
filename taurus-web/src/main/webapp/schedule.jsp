@@ -389,7 +389,7 @@
                 isAdmin:isAdmin
             },
             type: "POST",
-            url: "/monitor",
+            url: "/schedule",
             error: function () {
                 $("#schedule_content").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
                 $("#schedule_content").addClass("align-center");

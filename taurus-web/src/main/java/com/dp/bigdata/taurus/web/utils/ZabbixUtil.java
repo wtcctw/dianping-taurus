@@ -1,9 +1,11 @@
 package com.dp.bigdata.taurus.web.utils;
 
+import com.dianping.cat.Cat;
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
 import com.dianping.lion.client.LionException;
 import com.google.gson.JsonObject;
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -88,9 +90,7 @@ public class ZabbixUtil {
         String result = execute("user.login", paramsJSON);
         try {
             @SuppressWarnings("unchecked")
-            // Map<String, Object> jsonMap = (Map<String, Object>) JSONObject.parse(result);
-                    //Map<String, Object> jsonMap = (Map<String, Object>) new ().readValue(result, Map.class);
-                    JSONObject jsonMap = new JSONObject(result);
+            JSONObject jsonMap = new JSONObject(result);
             String authID = jsonMap.getString("result");
 
 
@@ -98,7 +98,7 @@ public class ZabbixUtil {
 
             return authID;
         } catch (JSONException e) {
-            e.printStackTrace();
+            Cat.logError("ZabbixUtil user_login JSONException", e);
             return null;
         }
     }
@@ -110,6 +110,7 @@ public class ZabbixUtil {
      * @return
      */
     public static String get_data(JsonObject jsonArgument) {
+        BufferedReader reader = null;
         try {
             URL httpUrl = new URL(url);
             HttpURLConnection conn = (HttpURLConnection) httpUrl.openConnection();
@@ -122,11 +123,26 @@ public class ZabbixUtil {
             byte[] bypes = param.getBytes();
             conn.getOutputStream().write(bypes);// 输入参数
             //返回
-            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String result = reader.readLine();
-            return result.trim();
+
+            if (StringUtils.isNotBlank(result)){
+                return result.trim();
+            }else {
+                return null;
+            }
+
         } catch (Exception e) {
-            e.printStackTrace();
+            Cat.logError("ZabbixUtil get_data Exception",e);
+        }finally {
+            if (reader != null){
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    Cat.logError("ZabbixUtil get_data IOException",e);
+                }
+            }
+
         }
         return null;
     }
@@ -144,7 +160,7 @@ public class ZabbixUtil {
             JsonObject tempJson = paramJson(method, paramsJSON);
             return get_data(tempJson);
         } catch (Exception e) {
-            e.printStackTrace();
+            Cat.logError("ZabbixUtil execute Exception", e);
         }
         return null;
     }
@@ -158,12 +174,11 @@ public class ZabbixUtil {
 
             String result = execute("host.get", paramsJSON);
 
-            //Map<String, Object> jsonMap = (Map<String, Object>) new ObjectMapper().readValue(result, Map.class);
             JSONObject jsonMap = new JSONObject(result);
             String jsonData = jsonMap.getString("result").replace("=", ":");
             return jsonData;
         } catch (JSONException e) {
-            e.printStackTrace();
+            Cat.logError("ZabbixUtil getHosts JSONException", e);
             return null;
         }
 
@@ -190,7 +205,7 @@ public class ZabbixUtil {
 
             return itemId;
         } catch (JSONException e) {
-            e.printStackTrace();
+            Cat.logError("ZabbixUtil getItemId JSONException", e);
             return null;
         }
     }
@@ -209,7 +224,6 @@ public class ZabbixUtil {
 
             String result = execute("history.get", paramsJSON);
 
-          //  Map<String, Object> jsonMap = (Map<String, Object>) new ObjectMapper().readValue(result, Map.class);
             JSONObject jsonMap = new JSONObject(result);
 
             String returnValue = jsonMap.getString("result").replace("[", "").replace("]", "");
@@ -234,7 +248,7 @@ public class ZabbixUtil {
 
             return value;
         }  catch (JSONException e) {
-            e.printStackTrace();
+            Cat.logError("ZabbixUtil getItemValue JSONException", e);
             return null;
         }
     }
@@ -251,14 +265,5 @@ public class ZabbixUtil {
         return getItemValue(itemId, "0");
     }
 
-    public static void main(String[] args) {
-        String jsonData = getHosts();
-        try {
-            JSONArray hostJson = new JSONArray(jsonData);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
 }
 

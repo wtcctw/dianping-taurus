@@ -111,23 +111,13 @@ public class ZooKeeperReader {
         } catch (Exception e) {
             LOGGER.error(e,e);
         }
-        System.out.println( result.getStatus()+result.getFailureInfo()+result.getReturnCode());
     }
     
     public static void main(String []args) {
         ZooKeeperReader reader = new ZooKeeperReader();
        
-        
-//      cleaner.set();
-//      if(args.length == 1 && args[0] != null)
-//      {
-//          System.out.println(args[0]);
-//          cleaner.read(args[0]);
-//      }
-        
+
         reader.read("taurus/schedules/"+ args[0] + "/" + args[1] + "/status");
-//      cleaner.read("taurus/schedules/192.168.7.80/attempt_201209241101_0009_1439_0001/status");
-//      cleaner.read("taurus/schedules/192.168.7.80/attempt_201209241101_0009_1440_0001/status");
 
     }
     

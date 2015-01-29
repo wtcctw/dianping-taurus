@@ -11,7 +11,7 @@ import com.dp.bigdata.taurus.agent.utils.TaskHelper;
  * @author renyuan.sun
  */
 public abstract class BaseEnvManager implements Runnable {
-    public static String clearZombie = "kill -9 `ps -ef | grep taurus-agent | awk '$3 == 1 {print $2}' `";
+    public final static String clearZombie = "kill -9 `ps -ef | grep taurus-agent | awk '$3 == 1 {print $2}' `";
     public static String agentRoot = "/data/app/taurus-agent";
     public static String jobPath = "/data/app/taurus-agent/jobs";
     public static String logPath = "/data/app/taurus-agent/logs";

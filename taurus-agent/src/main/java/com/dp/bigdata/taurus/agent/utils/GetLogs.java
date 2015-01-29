@@ -20,12 +20,6 @@ public class GetLogs  implements IGetLogs {
         String logStr = "";                                  //返回的日志结果
         String logFilePath;
 
-//        String date = (String) getRequestAttributes().get("date");               //日志日期
-//        String attemptID = (String) getRequestAttributes().get("attemptId");
-//        String fileOffset = (String) getRequestAttributes().get("file_offset");  //文件偏移量
-//        String flag = (String) getRequestAttributes().get("flag");               //这个主要是标志当web刷新时，任务还在执行，但是等请求的时候，任务已经结束的时间点
-//        String queryType = (String) getRequestAttributes().get("query_type");    //区分是log，还是error log
-
         long lastTimeFileSize = Long.parseLong(fileOffset);
 
         if (queryType.equals("log")) {
@@ -42,10 +36,12 @@ public class GetLogs  implements IGetLogs {
         if (flag.equals("INC")) {
             final RandomAccessFile logFile = new RandomAccessFile(logFilePath, "rw");
             logFile.seek(lastTimeFileSize);
-
+            StringBuffer tmpLogStr = new StringBuffer();
             while ((tmp = logFile.readLine()) != null) {
-                logStr += tmp + "\n";
+                tmpLogStr.append(tmp);
+                tmpLogStr.append("\n");
             }
+            logStr = tmpLogStr.toString();
             logFile.close();
         } else {
 

@@ -2,12 +2,10 @@ package com.dp.bigdata.taurus.web.servlet;
 
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -15,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.dianping.cat.Cat;
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
 import com.dianping.lion.client.LionException;
@@ -22,12 +21,11 @@ import com.dp.bigdata.taurus.restlet.resource.IAttemptResource;
 import com.dp.bigdata.taurus.restlet.resource.IExistTaskRunning;
 import com.dp.bigdata.taurus.restlet.resource.IHostResource;
 import com.dp.bigdata.taurus.restlet.resource.ILogResource;
-import com.dp.bigdata.taurus.restlet.resource.impl.ExistTaskRunning;
 import com.dp.bigdata.taurus.restlet.shared.AttemptDTO;
 import com.dp.bigdata.taurus.restlet.shared.HostDTO;
 import com.dp.bigdata.taurus.web.utils.ReFlashHostLoadTask;
-import com.google.gson.JsonArray;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -69,16 +67,15 @@ public class AttemptProxyServlet extends HttpServlet {
 
         ERROR_PAGE = context.getInitParameter("ERROR_PAGE");
         try {
-            RESTLET_URL_BASE =ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.restlet.url");// context.getInitParameter("RESTLET_SERVER");
-            AGENT_PORT = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.restlet.port");//context.getInitParameter("AGENT_SERVER_PORT");
+            RESTLET_URL_BASE = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.restlet.url");
+            AGENT_PORT = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.restlet.port");
             NEW_AGENT_PORT = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.restlet.new.port");
         } catch (LionException e) {
             RESTLET_URL_BASE = context.getInitParameter("RESTLET_SERVER");
             NEW_AGENT_PORT = "8088";
-            e.printStackTrace();
-        }catch (Exception e){
-            e.printStackTrace();
-            System.out.println("AttemptProxyServlet EERROR++++++++:"+e.getMessage());
+            Cat.logError("AttemptProxyServlet init LionException", e);
+        } catch (Exception e) {
+            Cat.logError("AttemptProxyServlet init Exception", e);
         }
     }
 
@@ -91,38 +88,38 @@ public class AttemptProxyServlet extends HttpServlet {
         try {
             getUrl = new URL(restUrl);
 
-        HttpURLConnection connection = (HttpURLConnection) getUrl
-                .openConnection();
+            HttpURLConnection connection = (HttpURLConnection) getUrl
+                    .openConnection();
             connection.setConnectTimeout(1000);
-        connection.connect();
-        StringWriter writer = new StringWriter();
-        inputStream =  connection.getInputStream();
-        IOUtils.copy(inputStream, writer, "UTF-8");
-         msgContent = writer.toString();
+            connection.connect();
+            StringWriter writer = new StringWriter();
+            inputStream = connection.getInputStream();
+            IOUtils.copy(inputStream, writer, "UTF-8");
+            msgContent = writer.toString();
 
 
-        // 断开连接
-        connection.disconnect();
+            // 断开连接
+            connection.disconnect();
         } catch (IOException e) {
             e.printStackTrace();
         }
         return msgContent;
     }
 
-    private static String getHostName(String ip){
+    private static String getHostName(String ip) {
 
-        String  hostNameurl = "http://api.cmdb.dp/api/v0.1/ci/s?q=_type:(server;vserver),private_ip:"+ip+"&fl=hostname";
+        String hostNameurl = "http://api.cmdb.dp/api/v0.1/ci/s?q=_type:(server;vserver),private_ip:" + ip + "&fl=hostname";
         String jsonData = getAgentRestService(hostNameurl);
-        JSONObject jsonMap = null;
-        String jsonHostName = null;
-        String hostName="";
+        JSONObject jsonMap;
+        String jsonHostName;
+        String hostName = "";
         try {
             jsonMap = new JSONObject(jsonData);
             jsonHostName = jsonMap.getString("result");
-            if (jsonHostName.contains("[")&&jsonHostName.contains("]")){
-                JSONObject itemJson = new JSONObject(jsonHostName.replace("[","").replace("]",""));
-                hostName= itemJson.getString("hostname");
-            }else{
+            if (jsonHostName.contains("[") && jsonHostName.contains("]")) {
+                JSONObject itemJson = new JSONObject(jsonHostName.replace("[", "").replace("]", ""));
+                hostName = itemJson.getString("hostname");
+            } else {
                 hostName = null;
             }
 
@@ -131,75 +128,75 @@ public class AttemptProxyServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        if (hostName !=null || !hostName.isEmpty()){
+        if (StringUtils.isNotBlank(hostName)) {
             return hostName;
-        }else{
+        } else {
             return null;
         }
 
 
     }
 
-    public static boolean isHostOverLoad(String ip){
+    public static boolean isHostOverLoad(String ip) {
         String hostName = getHostName(ip);
         boolean result = true;
-        if (hostName==null || hostName.isEmpty()){
-            result =  true;
-        }else {
+        if (hostName == null || hostName.isEmpty()) {
+            result = true;
+        } else {
             String jsonString = ReFlashHostLoadTask.hostLoadJsonData;
-            if(jsonString == null || jsonString.isEmpty()){
+            if (jsonString == null || jsonString.isEmpty()) {
                 result = true;
-            }else {
+            } else {
                 try {
                     JSONArray jsonArray = new JSONArray(jsonString);
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jo = (JSONObject) jsonArray.get(i);
-                        if (jo == null){
+                        if (jo == null) {
                             result = true;
                             return result;
                         }
 
-                        String zabbixHostName ="";
+                        String zabbixHostName = "";
 
-                        if (jo.get("hostName") != null){
+                        if (jo.get("hostName") != null) {
                             zabbixHostName = jo.get("hostName").toString();
                         }
 
-                        if (zabbixHostName != null || zabbixHostName.isEmpty()){
-                            if (zabbixHostName.equals(hostName)){
+                        if (StringUtils.isNotBlank(zabbixHostName)) {
+                            if (zabbixHostName.equals(hostName)) {
                                 String cpuLoad = "";
-                                if (jo.get("cpuLoad") !=null){
-                                    cpuLoad =  jo.get("cpuLoad").toString();
+                                if (jo.get("cpuLoad") != null) {
+                                    cpuLoad = jo.get("cpuLoad").toString();
                                 }
 
-                                if (cpuLoad != null || cpuLoad.isEmpty()){
+                                if (StringUtils.isNotBlank(cpuLoad)) {
                                     Double highValue;
-                                    if (cpuLoad.trim().equals("null") ){
+                                    if (cpuLoad.trim().equals("null")) {
                                         highValue = 10.0;
-                                    }else {
+                                    } else {
                                         highValue = Double.parseDouble(cpuLoad);
                                     }
 
-                                    if (highValue <= 4.0){
+                                    if (highValue <= 4.0) {
                                         result = false;
-                                    }else {
+                                    } else {
                                         result = true;
                                     }
 
-                                }else {
+                                } else {
                                     result = true;
                                 }
 
                                 break;
                             }
 
-                        }else {
+                        } else {
                             result = true;
                         }
 
                     }
 
-                  return result;
+                    return result;
                 } catch (JSONException e) {
                     return true;
                 }
@@ -207,7 +204,6 @@ public class AttemptProxyServlet extends HttpServlet {
         }
         return result;
     }
-
 
 
     @Override
@@ -246,7 +242,7 @@ public class AttemptProxyServlet extends HttpServlet {
             String contentLenStr;                                   //从agent取来的日志长度（String的）
             String hostIp = "";                                     //agent 主机ip
             String tureStatus = "";                                 //任务的真实状态 （从参数获得的可能会过期）
-            String fileSizeAttribute = "";                          //区别是log的文件偏移属性 还是error-log的文件偏移
+            String fileSizeAttribute;                          //区别是log的文件偏移属性 还是error-log的文件偏移
 
             long lastTimeFileSize;                                  //文件偏移
 
@@ -261,25 +257,25 @@ public class AttemptProxyServlet extends HttpServlet {
                 if (queryType.equals("log")) {
                     fileSizeAttribute = "lastTimeFileSize";
                     contentLenStr = (String) request.getSession().getAttribute(fileSizeAttribute);
-                } else if(queryType.equals("errorlog")){
+                } else if (queryType.equals("errorlog")) {
                     fileSizeAttribute = "errorLastTimeFileSize";
                     contentLenStr = (String) request.getSession().getAttribute(fileSizeAttribute);
-                }else {
+                } else {
                     fileSizeAttribute = "agentlogs";
                     String hostName = request.getParameter("hostname");
-                    ClientResource  cr = new ClientResource(RESTLET_URL_BASE + "host/" + hostName);
+                    ClientResource cr = new ClientResource(RESTLET_URL_BASE + "host/" + hostName);
                     IHostResource hostResource = cr.wrap(IHostResource.class);
                     cr.accept(MediaType.APPLICATION_XML);
                     HostDTO hostDTO = hostResource.retrieve();
                     String agentPort = "";
-                    if (hostDTO.getInfo().getAgentVersion().equals("0.5.0")){
+                    if (hostDTO.getInfo().getAgentVersion().equals("0.5.0")) {
                         agentPort = AGENT_PORT;
-                    }else{
+                    } else {
                         agentPort = NEW_AGENT_PORT;
                     }
 
                     contentLenStr = (String) request.getSession().getAttribute(fileSizeAttribute);
-                   String  logurl = "http://" + hostName + ":" + agentPort
+                    String logurl = "http://" + hostName + ":" + agentPort
                             + "/agentrest.do?action=getlog"
                             + "&flag=NORMAL"
                             + "&query_type=" + queryType;
@@ -288,7 +284,7 @@ public class AttemptProxyServlet extends HttpServlet {
                     String logStr = context;
                     OutputStream output = response.getOutputStream();
 
-                    if (logStr == null) {                                     //时间间隔短，日志尚未生成可能获得null
+                    if (StringUtils.isBlank(logStr)) {                                     //时间间隔短，日志尚未生成可能获得null
                         retStr = " ";
                     } else {
                         retStr = logStr.replace("\n", "<br>");
@@ -329,81 +325,72 @@ public class AttemptProxyServlet extends HttpServlet {
                 } else {
 
                     try {
-                        ClientResource  cr = new ClientResource(RESTLET_URL_BASE + "host/" + hostIp);
+                        ClientResource cr = new ClientResource(RESTLET_URL_BASE + "host/" + hostIp);
                         IHostResource hostResource = cr.wrap(IHostResource.class);
                         cr.accept(MediaType.APPLICATION_XML);
                         HostDTO hostDTO = hostResource.retrieve();
-                        String agentPort = "";
-                        if (hostDTO.getInfo().getAgentVersion().equals("0.5.0")){
+                        String agentPort;
+                        if (hostDTO.getInfo().getAgentVersion().equals("0.5.0")) {
                             agentPort = AGENT_PORT;
-                        }else{
+                        } else {
                             agentPort = NEW_AGENT_PORT;
                         }
 
-                        String url = "";                //请求agent restlet的URI
+                        String url;                //请求agent restlet的URI
 
-                            if (lastTimeFileSize == 0 && !tureStatus.equals("RUNNING")) {    //如果任务真实状态不是运行中的，并且 文件偏移为0 ，说明是历史任务，直接全量获取日志
-                                url = "http://" + hostIp + ":" + agentPort
-                                        + "/agentrest.do?action=getlog&date="
-                                        + date
-                                        + "&attemptId=" + attemptID
-                                        + "&flag=NORMAL"
-                                        + "&query_type=" + queryType;
-                            } else {                                                        //增量获取日志
-                                url = "http://" + hostIp + ":" + agentPort
-                                        + "/agentrest.do?action=getlog&date="
-                                        + date
-                                        + "&attemptId=" + attemptID
-                                        + "&flag=INC"
-                                        + "&query_type=" + queryType;
+                        if (lastTimeFileSize == 0 && !tureStatus.equals("RUNNING")) {    //如果任务真实状态不是运行中的，并且 文件偏移为0 ，说明是历史任务，直接全量获取日志
+                            url = "http://" + hostIp + ":" + agentPort
+                                    + "/agentrest.do?action=getlog&date="
+                                    + date
+                                    + "&attemptId=" + attemptID
+                                    + "&flag=NORMAL"
+                                    + "&query_type=" + queryType;
+                        } else {                                                        //增量获取日志
+                            url = "http://" + hostIp + ":" + agentPort
+                                    + "/agentrest.do?action=getlog&date="
+                                    + date
+                                    + "&attemptId=" + attemptID
+                                    + "&flag=INC"
+                                    + "&query_type=" + queryType;
 
-                                acceptContentWay = true;
+                            acceptContentWay = true;
+                        }
+
+                        String context = getAgentRestService(url);
+
+                        if (StringUtils.isBlank(context)) {
+                            lastTimeFileSize += context.length();
+                        } else {
+                            if (!acceptContentWay) {
+                                context = "无日志数据";
                             }
+                        }
 
-                            long start = System.currentTimeMillis();
-                            String context = getAgentRestService(url);//getLogCr.get().getText();
-                            long end1 = System.currentTimeMillis();
+                        String isEndUrl = "http://" + hostIp
+                                + ":" + agentPort
+                                + "/agentrest.do?action=isend&attemptId="
+                                + attemptID;
+                        isEnd = getAgentRestService(isEndUrl);
 
-                            System.out.println("#######"+queryType+"#####TIME1:"+(end1 - start) );
-                            if (context != null) {
-                                lastTimeFileSize += context.length();
-                            } else {
-                                if (!acceptContentWay) {
-                                    context = "无日志数据";
-                                }
-                            }
+                        if (acceptContentWay && isEnd.equals("false")) {
+                            request.getSession().setAttribute(fileSizeAttribute, ((Long) lastTimeFileSize).toString());
+                        } else if (isEnd.trim().equals("true")) {
+                            request.getSession().setAttribute(fileSizeAttribute, "0");
+                        }
 
-                            String isEndUrl = "http://" + hostIp
-                                    + ":" + agentPort
-                                    + "/agentrest.do?action=isend&attemptId="
-                                    + attemptID;
-                             isEnd = getAgentRestService(isEndUrl);
-                            long end2 = System.currentTimeMillis();
-
-                            System.out.println("#######"+queryType+"#####TIME2:"+(end2 - start) );
-
-                            if (acceptContentWay && isEnd.equals("false")) {
-                                request.getSession().setAttribute(fileSizeAttribute, ((Long) lastTimeFileSize).toString());
-                            } else if (isEnd.trim().equals("true")) {
-                                request.getSession().setAttribute(fileSizeAttribute, "0");
-                            }
-
-                            String retStr;
-                                                                   //格式化日志 以便在web显示是换行的
-                            OutputStream output = response.getOutputStream();
+                        String retStr;
+                        //格式化日志 以便在web显示是换行的
+                        OutputStream output = response.getOutputStream();
 
 
-                            if (context == null) {                                     //时间间隔短，日志尚未生成可能获得null
-                                retStr = " ";
-                            } else {
-                                retStr = context.replace("\n","<br>");
-                            }
+                        if (StringUtils.isBlank(context)) {                                     //时间间隔短，日志尚未生成可能获得null
+                            retStr = " ";
+                        } else {
+                            retStr = context.replace("\n", "<br>");
+                        }
 
-                            long end = System.currentTimeMillis();
-
-                            System.out.println("#######"+queryType+"###Length: "+retStr.length()+"#####TIME:"+(end - start) );
-                            output.write(retStr.getBytes());
-                            output.close();
+                        output.write(retStr.getBytes());
+                        output.close();
                     } catch (Exception e) {
                         String exceptMessage = e.getMessage();
                         if (exceptMessage.equals("Connection Error") || exceptMessage.equals("Not Found")) {
@@ -452,28 +439,24 @@ public class AttemptProxyServlet extends HttpServlet {
                 OutputStream output = response.getOutputStream();
                 output.close();
             } else {
-                //String url = "http://" + host + ":" + AGENT_PORT + "/api/isend/" + attemptID;
-                //getLogCr = new ClientResource(url);
-                ClientResource  cr = new ClientResource(RESTLET_URL_BASE + "host/" + host);
+                ClientResource cr = new ClientResource(RESTLET_URL_BASE + "host/" + host);
                 IHostResource hostResource = cr.wrap(IHostResource.class);
                 cr.accept(MediaType.APPLICATION_XML);
                 HostDTO hostDTO = hostResource.retrieve();
                 String agentPort = "";
-                if (hostDTO.getInfo().getAgentVersion().equals("0.5.0")){
+                if (hostDTO.getInfo().getAgentVersion().equals("0.5.0")) {
                     agentPort = AGENT_PORT;
-                }else{
+                } else {
                     agentPort = NEW_AGENT_PORT;
                 }
 
-                String url= "http://" + host + ":" + agentPort + "/agentrest.do?action=isend&attemptId=" + attemptID;
+                String url = "http://" + host + ":" + agentPort + "/agentrest.do?action=isend&attemptId=" + attemptID;
                 respStr = getAgentRestService(url);
             }
-            if (respStr .equals("null")){
+            if (respStr.equals("null")) {
                 respStr = "old";
             }
-            //Representation repLog = getLogCr.get(MediaType.TEXT_HTML);
             OutputStream output = response.getOutputStream();
-            //repLog.write(output);
             output.write(respStr.getBytes());
             output.close();
         } else if (action.equals(STATUS)) {
@@ -495,44 +478,44 @@ public class AttemptProxyServlet extends HttpServlet {
             IAttemptResource attemptLogResource = attemptLogCr.wrap(IAttemptResource.class);
             AttemptDTO dto = attemptLogResource.retrieve();
             String isNew;
-            if (dto !=null){
-                ClientResource  cr = new ClientResource(RESTLET_URL_BASE + "host/" + dto.getExecHost());
+            if (dto != null) {
+                ClientResource cr = new ClientResource(RESTLET_URL_BASE + "host/" + dto.getExecHost());
                 IHostResource hostResource = cr.wrap(IHostResource.class);
                 cr.accept(MediaType.APPLICATION_XML);
                 HostDTO hostDTO = hostResource.retrieve();
                 String agentPort = "";
-                if (hostDTO.getInfo().getAgentVersion().equals("0.5.0")){
+                if (hostDTO.getInfo().getAgentVersion().equals("0.5.0")) {
                     agentPort = AGENT_PORT;
-                }else{
+                } else {
                     agentPort = NEW_AGENT_PORT;
                 }
 
-                String url= "http://" + dto.getExecHost() + ":" + agentPort + "/agentrest.do?action=isnew";
-                isNew =  getAgentRestService(url);
+                String url = "http://" + dto.getExecHost() + ":" + agentPort + "/agentrest.do?action=isnew";
+                isNew = getAgentRestService(url);
                 if (isNew.isEmpty()) {
                     isNew = "null";
                 }
-            }else {
+            } else {
                 isNew = "null";
             }
 
             output.write(isNew.getBytes());
             output.close();
-        }else if(ISVIEWLOG.equals(action)){
+        } else if (ISVIEWLOG.equals(action)) {
             OutputStream output = response.getOutputStream();
-            String isView = "";
-            String ip = (String)request.getParameter("ip");
+            String isView;
+            String ip = request.getParameter("ip");
             boolean isviewlog = isHostOverLoad(ip);
 
-            if (isviewlog){
+            if (isviewlog) {
                 isView = "false";
-            }else {
+            } else {
                 isView = "true";
             }
 
             output.write(isView.getBytes());
             output.close();
-        }else if(ISEXIST_RUNNING_TASK.equals(action)){
+        } else if (ISEXIST_RUNNING_TASK.equals(action)) {
             OutputStream output = response.getOutputStream();
 
             String taskId = request.getParameter("taskId");

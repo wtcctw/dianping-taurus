@@ -1,9 +1,5 @@
 var tip;
-var onLineBody;
-var exceptionBody;
 var body = "";
-var memTableStyle;
-var cpuTableStyle;
 
 jQuery(function ($) {
 
@@ -180,7 +176,7 @@ function reflash_data(starttime,endtime){
             end: endtime
         },
         type: "POST",
-        url: "/monitor",
+        url: "/task_center",
         error: function () {
             $("#totalJob").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
             $("#totalJob").addClass("align-center");
@@ -216,7 +212,7 @@ function reflash_data(starttime,endtime){
             end: endtime
         },
         type: "POST",
-        url: "/monitor",
+        url: "/task_center",
         error: function () {
             $("#failedJob").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
             $("#failedJob").addClass("align-center");
@@ -280,7 +276,7 @@ function reflash_data(starttime,endtime){
             end: endtime
         },
         type: "POST",
-        url: "/monitor",
+        url: "/task_center",
         error: function () {
             $("#total-widget-main").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
             $("#total-widget-main").addClass("align-center");

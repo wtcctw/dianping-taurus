@@ -48,7 +48,7 @@ $(document).ready(function () {
                             alertUser:alertUser
                         },
                         type: "POST",
-                        url: "/monitor",
+                        url: "/resign",
                         error: function () {
                             $("#adjustout").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
                             $("#adjustout").addClass("align-center");

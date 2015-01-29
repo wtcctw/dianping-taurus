@@ -1,9 +1,5 @@
 var tip;
-var onLineBody;
-var exceptionBody;
 var body = "";
-var memTableStyle;
-var cpuTableStyle;
 
 jQuery(function ($) {
 
@@ -180,7 +176,7 @@ function reflash_data(starttime, endtime){
             end: endtime
         },
         type: "POST",
-        url: "/monitor",
+        url: "/monitor_center",
         error: function () {
             $("#user-widget-main").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
             $("#user-widget-main").addClass("align-center");
@@ -415,7 +411,7 @@ function reflash_data(starttime, endtime){
             end: endtime
         },
         type: "POST",
-        url: "/monitor",
+        url: "/monitor_center",
         error: function () {
             $("#group-widget-main").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
             $("#group-widget-main").addClass("align-center");

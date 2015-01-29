@@ -331,7 +331,7 @@
                 taskID:taskID
             },
             type: "POST",
-            url: "/monitor",
+            url: "/attempt",
             error: function () {
                 $("#attempt_content").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
                 $("#attempt_content").addClass("align-center");

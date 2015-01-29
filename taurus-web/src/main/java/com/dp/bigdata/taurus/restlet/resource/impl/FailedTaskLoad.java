@@ -1,5 +1,6 @@
 package com.dp.bigdata.taurus.restlet.resource.impl;
 
+import com.dianping.cat.Cat;
 import com.dp.bigdata.taurus.generated.mapper.TaskAttemptMapper;
 import com.dp.bigdata.taurus.restlet.resource.IFailedTaskLoad;
 import org.json.JSONArray;
@@ -19,7 +20,6 @@ public class FailedTaskLoad  extends ServerResource implements IFailedTaskLoad {
     private TaskAttemptMapper taskAttemptMapper;
     @Override
     public String retrieve() {
-        String hostInfo = "";
         JSONArray jsonData = new JSONArray();
         try {
             String start = (String) getRequestAttributes().get("starttime");
@@ -32,16 +32,12 @@ public class FailedTaskLoad  extends ServerResource implements IFailedTaskLoad {
                 JSONObject json = new JSONObject();
                 json.put("execHost",task.get("execHost"));
                 json.put("totaltask",task.get("totaltask"));
-                hostInfo += task.get("execHost") + ":" + task.get("totaltask") + ",";
                 jsonData.put(json);
 
 
             }
-            if (!hostInfo.isEmpty()) {
-                hostInfo = hostInfo.substring(0, hostInfo.length() - 1);
-            }
         } catch (JSONException e) {
-            e.printStackTrace();
+            Cat.logError("FailedTaskLoad JSONException", e);
         }
         return jsonData.toString();
     }
