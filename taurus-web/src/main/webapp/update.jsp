@@ -269,6 +269,26 @@
 								<th width="10%">发布时间</th>
 							</tr>
                             <tr>
+                                <td>部署PPE环境，gitpub同步支持job上线PPE环境 环境地址<a href="http://ppe.taurus.dp/">ppe.taurus.dp/</a></td>
+                                <td>2015-01-30</td>
+                            </tr>
+                            <tr>
+                                <td>新增数据库状态监控告警，数据库连接异常，执行sql异常会及时告警到我和监控运维</td>
+                                <td>2015-01-26</td>
+                            </tr>
+                            <tr>
+                                <td>新增部署job后智能更新jar版本号</td>
+                                <td>2015-01-25</td>
+                            </tr>
+                            <tr>
+                                <td>新增任务拥堵告警</td>
+                                <td>2015-01-20</td>
+                            </tr>
+                            <tr>
+                                <td>上线job 命令行提示到文件名</td>
+                                <td>2015-01-09</td>
+                            </tr>
+                            <tr>
                                 <td>在调度历史中，新增 重跑任务 功能</td>
                                 <td>2014-12-19</td>
                             </tr>
