@@ -143,6 +143,9 @@
                     <a href="http://beta.taurus.dp/">Beta 环境</a>
                 </li>
                 <li>
+                    <a href="http://ppe.taurus.dp/">PPE 环境</a>
+                </li>
+                <li>
                     <a href="http://taurus.dp/">线上环境</a>
                 </li>
 
