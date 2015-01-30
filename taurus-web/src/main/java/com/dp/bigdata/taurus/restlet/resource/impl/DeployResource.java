@@ -152,7 +152,8 @@ public class DeployResource extends ServerResource implements IDeployResource {
 				result.put("updateurl", deployResult.updateUrl);
 			}
 		}
-		return new JsonRepresentation(result);
+        System.out.println("###############result: "+ result);
+        return new JsonRepresentation(result);
 	}
 public void deployer(String deployId, String deployIp, String deployFile, String url, String appName){
 

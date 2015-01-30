@@ -96,5 +96,6 @@ public interface HostMapper {
      */
     int updateByPrimaryKey(Host record);
    ArrayList <Host> getAllExceptionHosts();
+    ArrayList <Host> getAllOnlineHosts();
 
 }

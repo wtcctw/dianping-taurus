@@ -287,5 +287,8 @@
     <select id="getAllExceptionHosts" resultMap="BaseResultMap">
         select * from TaurusHost where isOnline = 1 and isConnected = 0
     </select>
+    <select id="getAllOnlineHosts" resultMap="BaseResultMap">
+        select * from TaurusHost where isOnline = 1 and isConnected = 1
+    </select>
 
 </mapper>

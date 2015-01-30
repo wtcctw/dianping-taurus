@@ -104,6 +104,9 @@
     <bean name="/api/offline/{hostname}" id="offlineHost" autowire="byName"
           scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.OffLineHost">
     </bean>
+    <bean name="/api/allhosts" id="allHosts" autowire="byName"
+          scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.AllHosts">
+    </bean>
     <bean name="/api/exceptionhosts" id="exceptionHosts" autowire="byName"
           scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.ExcpetionHosts">
     </bean>
