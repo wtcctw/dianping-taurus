@@ -95,5 +95,6 @@ public interface HostMapper {
      * @mbggenerated Thu May 15 16:53:11 HKT 2014
      */
     int updateByPrimaryKey(Host record);
+   ArrayList <Host> getAllExceptionHosts();
 
 }

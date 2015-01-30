@@ -17,6 +17,7 @@ public class ReFlashHostLoadTask extends TimerTask {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     public void run() {
         hostLoadJsonData = ReFlashLoad.reFlashHostLoadData();
+
     }
 
    public static String read(){

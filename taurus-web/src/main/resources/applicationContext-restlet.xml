@@ -100,6 +100,14 @@
           scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.DeployResource">
         <property name="webUrl" value="taurus.dp" />
     </bean>
+
+    <bean name="/api/offline/{hostname}" id="offlineHost" autowire="byName"
+          scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.OffLineHost">
+    </bean>
+    <bean name="/api/exceptionhosts" id="exceptionHosts" autowire="byName"
+          scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.ExcpetionHosts">
+    </bean>
+
     <bean name="/api/status" id="attemptStatusResource" autowire="byName"
           scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.AttemptStatusResource" />
 		<!-- Core Service -->

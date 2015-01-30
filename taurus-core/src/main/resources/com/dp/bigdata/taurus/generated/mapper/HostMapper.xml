@@ -284,5 +284,8 @@
     where name = #{name,jdbcType=VARCHAR}
   </update>
 
+    <select id="getAllExceptionHosts" resultMap="BaseResultMap">
+        select * from TaurusHost where isOnline = 1 and isConnected = 0
+    </select>
 
 </mapper>

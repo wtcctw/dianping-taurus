@@ -2,6 +2,7 @@ package com.dp.bigdata.taurus.restlet;
 
 import com.dp.bigdata.taurus.alert.TaurusAlert;
 import com.dp.bigdata.taurus.restlet.utils.ClearLogsTimerManager;
+import com.dp.bigdata.taurus.web.utils.MonitorAgentOffLineTaskTimer;
 import org.restlet.Component;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -30,6 +31,7 @@ public class TaurusServer {
             alert.start(-1);
             engine.start();
             ClearLogsTimerManager.getClearLogsTimerManager().start();
+            MonitorAgentOffLineTaskTimer.getMonitorAgentOffLineTimeManager().start();
         } catch (Exception e) {
             e.printStackTrace();
         }
