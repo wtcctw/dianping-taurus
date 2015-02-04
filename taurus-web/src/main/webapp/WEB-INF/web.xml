@@ -182,6 +182,11 @@
         <servlet-class>com.dp.bigdata.taurus.web.servlet.ScheduleServlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>HostHistoryServlet</servlet-name>
+        <servlet-class>com.dp.bigdata.taurus.web.servlet.HostHistoryServlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
 		<servlet-name>BatchTaskServlet</servlet-name>
 		<url-pattern>/batch_upload.do</url-pattern>
@@ -258,6 +263,10 @@
     <servlet-mapping>
         <servlet-name>ScheduleServlet</servlet-name>
         <url-pattern>/schedule</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>HostHistoryServlet</servlet-name>
+        <url-pattern>/host_history</url-pattern>
     </servlet-mapping>
 
     <jsp-config>

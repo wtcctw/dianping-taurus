@@ -322,6 +322,12 @@
                 </h5>
 
                 <div class="widget-toolbar">
+                    <a class="btn btn-xs btn-yellow" href="host_history.jsp">
+                        <i class="icon-search bigger-110"></i>
+                        查看图谱
+                    </a>
+                    <a class="atip tooltip-info" data-toggle="tooltip" data-placement="bottom"
+                       data-original-title="此按钮可以查看主机的任务执行历史"><span style="color: white">[提示]</span> </a>
                     <a href="#" data-action="collapse">
                         <i class="icon-chevron-up"></i>
                     </a>

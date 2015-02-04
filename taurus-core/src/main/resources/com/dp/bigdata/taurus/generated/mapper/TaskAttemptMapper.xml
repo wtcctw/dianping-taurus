@@ -455,4 +455,8 @@
     <select id="getTaskLastStatus"  resultType="int">
         select status from TaurusTaskAttempt where taskID = #{taskId} order by startTime desc limit 1
     </select>
+
+    <select id="getTaskAttemptsHistory"  resultMap="BaseResultMap">
+        select * from TaurusTaskAttempt where execHost = #{ip} and startTime > #{time}
+    </select>
 </mapper>

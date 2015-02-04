@@ -298,7 +298,7 @@ public class TaurusAlert {
                 domain="taurus.dp";
                 e.printStackTrace();
             }
-            sbMailContent.append("※ Taurs 任务执行状态微信告警服务 ※");
+            sbMailContent.append("※ Taurus 任务执行状态微信告警服务 ※");
             sbMailContent.append("\n");
             sbMailContent.append("任务名:" + task.getName());
             sbMailContent.append("\n");

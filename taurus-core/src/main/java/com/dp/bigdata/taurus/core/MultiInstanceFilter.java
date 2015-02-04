@@ -20,6 +20,7 @@ public class MultiInstanceFilter implements Filter {
 
     private Scheduler scheduler;
     public static HashMap<String, Integer> jobAlert = new HashMap<String, Integer>();
+    private static final int ALERT_SILENCE_MAX_COUNT = 19;
 
     @Autowired
     public MultiInstanceFilter(Scheduler scheduler) {
@@ -34,55 +35,43 @@ public class MultiInstanceFilter implements Filter {
             AttemptContext ctx = maps.get(context.getTaskid());
 
             if (runnings != null && runnings.size() > 0) {
-                // do nothing 拥堵了~应该告警用户任务堵住了~
+                // 拥堵了~应该告警用户任务堵住了~
                 Integer jobAlertCount = null;
-                if (jobAlert.containsKey(context.getTaskid()) ){
+                if (jobAlert.containsKey(context.getTaskid())) {
                     jobAlertCount = jobAlert.get(context.getTaskid());
                 }
 
-                if (null == jobAlertCount || jobAlertCount == 0) {
+                if (null == jobAlertCount) {
+                    jobAlert.put(context.getTaskid(), 0);
+                } else if (jobAlertCount == 0) {
                     String alertontext = "您好，你的Taurus Job【" +
                             context.getTask().getName() + "】发生拥堵，请及时关注，谢谢~";
                     try {
                         MailHelper.sendWeChat("kirin.li", alertontext);
                         MailHelper.sendWeChat(context.getCreator(), alertontext);
                         MailHelper.sendMail(context.getCreator() + "@dianping.com", alertontext);
-                        if (null == jobAlertCount) {
-                            jobAlert.put(context.getTaskid(), 0);
-                        } else {
-                            jobAlert.put(context.getTaskid(), jobAlertCount + 1);
-                        }
+
+                        jobAlert.put(context.getTaskid(), jobAlertCount + 1);
 
                     } catch (Exception e) {
                         Cat.logError(e);
                     }
                 } else {
-                    jobAlert.put(context.getTaskid(), jobAlert.get(context.getTaskid()) + 1);
+                    jobAlert.put(context.getTaskid(), jobAlertCount + 1);
                 }
 
             } else {
 
                 Integer jobAlertCount = null;
-                if (jobAlert.containsKey(context.getTaskid()) ){
+                if (jobAlert.containsKey(context.getTaskid())) {
                     jobAlertCount = jobAlert.get(context.getTaskid());
                 }
 
-                if (jobAlertCount != null && jobAlertCount != 0) {
-                    if (jobAlertCount == 0) {
-                        //恢复了
-                        String alertontext = "您好，你的Taurus Job【" +
-                                context.getTask().getName() + "】拥堵状况已经恢复正常~";
-                        try {
-                            MailHelper.sendWeChat("kirin.li", alertontext);
-                            MailHelper.sendWeChat(context.getCreator(), alertontext);
-                            MailHelper.sendMail(context.getCreator() + "@dianping.com", alertontext);
-                            jobAlert.remove(context.getTaskid());
-                        } catch (Exception e) {
-                            Cat.logError(e);
-                        }
-
+                if (jobAlertCount != null) {
+                    //如果超出了静默告警数，者清除MAP中得count，就会重新告警一次，默认每20个拥堵告警一次
+                    if (jobAlertCount >= ALERT_SILENCE_MAX_COUNT) {
+                        jobAlert.remove(context.getTaskid());
                     }
-                    jobAlert.put(context.getTaskid(), jobAlertCount - 1);
                 }
 
                 if (ctx == null) {

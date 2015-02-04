@@ -105,7 +105,7 @@ public interface TaskMapper {
 
     public ArrayList<Task> getTasks();
     ArrayList<Host> getTasksByHost(String hostname);
-    ArrayList<Host> getRealTasksByHost(String hostname);
+    ArrayList<Task> getRealTasksByHost(String hostname);
     public HashMap<String, String> isExitTaskName(@Param("taskName")String taskName);
     int updateCreator(@Param("creator")String creator,@Param("taskName")String taskName);
 }

@@ -3,6 +3,7 @@ package com.dp.bigdata.taurus.restlet.resource.impl;
 import com.dp.bigdata.taurus.generated.mapper.HostMapper;
 import com.dp.bigdata.taurus.generated.mapper.TaskMapper;
 import com.dp.bigdata.taurus.generated.module.Host;
+import com.dp.bigdata.taurus.generated.module.Task;
 import com.dp.bigdata.taurus.restlet.resource.IOffLineHost;
 import com.google.gson.JsonObject;
 import org.restlet.data.Status;
@@ -30,7 +31,7 @@ public class OffLineHost   extends ServerResource implements IOffLineHost {
             respJson.addProperty("message",hostname+" is not found!");
             return respJson.toString();
         }
-        ArrayList<Host> tasks = taskMapper.getRealTasksByHost(hostname);
+        ArrayList<Task> tasks = taskMapper.getRealTasksByHost(hostname);
         if(tasks == null || tasks.size() == 0){
             host.setIp(hostname);
             host.setIsonline(false);
