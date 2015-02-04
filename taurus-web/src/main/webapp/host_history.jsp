@@ -323,23 +323,19 @@
                         <div class="widget-main ">
 
 
+                            <table class="table table-bordered">
+                                <tr>
+                                    <td>一个<span style='color: gainsboro; font-size: 15px'>●</span>代表 6 分钟</td>
+                                    <td><span style='color: gainsboro; font-size: 15px'>●  </span>表示该任务未调度执行</td>
+                                    <td><span style='color: green; font-size: 15px'>●  </span>表示该任务调度执行成功</td>
+                                    <td>
+                                        <span style='color: red; font-size: 15px'>●  </span>表示该任务调度执行失败
+                                    </td>
+                                    <td><span style='color: #ffff00; font-size: 15px'>●  </span>表示该任务调度执行超时</td>
 
 
-
-                                <table class="table table-bordered">
-                                    <tr>
-                                        <td>一个<span style='color: gainsboro; font-size: 15px'>●</span>代表 6 分钟</td>
-                                        <td><span style='color: gainsboro; font-size: 15px'>●  </span>表示该任务未调度执行</td>
-                                        <td> <span style='color: green; font-size: 15px'>●  </span>表示该任务调度执行成功</td>
-                                        <td>
-                                            <span style='color: red; font-size: 15px'>●  </span>表示该任务调度执行失败
-                                        </td>
-                                        <td><span style='color: #ffff00; font-size: 15px'>●  </span>表示该任务调度执行超时</td>
-
-
-
-                                    </tr>
-                                 </table>
+                                </tr>
+                            </table>
 
                         </div>
                         <!-- /.widget-main -->
@@ -357,9 +353,10 @@
                         </h5>
 
                         <div class="widget-toolbar">
-                            <label>开始：</label><input type="text" id="startTime"/>
-                            <a class="btn btn-primary btn-small" href='#' onClick="time_reflash_view()"><i class="icon-eye-open">查看</i></a>
-                            |
+                            <label id="viewlable">截止时间：</label><input type="text" id="startTime"/>
+                            <a id="viewbtn" class="btn btn-primary btn-small" href='#' onClick="time_reflash_view()"><i
+                                    class="icon-eye-open">查看</i></a>
+                            <span id="split">|</span>
                             <a href="#" data-action="collapse">
                                 <i class="icon-chevron-up"></i>
                             </a>
@@ -373,31 +370,31 @@
                             <label class="label label-lg label-info arrowed-right "
                                    for="ip">选择查看的Job主机</label>
 
-                                <select id="ip" name="ip" class="input-big field" style="width: 300px">
-                                    <%
-                                        if (StringUtils.isBlank(ip)) {
-                                            cr = new ClientResource(host + "host");
-                                            IHostsResource hostResource = cr.wrap(IHostsResource.class);
-                                            cr.accept(MediaType.APPLICATION_XML);
-                                            ArrayList<HostDTO> hosts = hostResource.retrieve();
+                            <select id="ip" name="ip" class="input-big field" style="width: 300px">
+                                <%
+                                    if (StringUtils.isBlank(ip)) {
+                                        cr = new ClientResource(host + "host");
+                                        IHostsResource hostResource = cr.wrap(IHostsResource.class);
+                                        cr.accept(MediaType.APPLICATION_XML);
+                                        ArrayList<HostDTO> hosts = hostResource.retrieve();
 
-                                            for (HostDTO hostip : hosts) {
-                                    %>
+                                        for (HostDTO hostip : hosts) {
+                                %>
 
-                                    <option><%=hostip.getIp()%>
-                                    </option>
-                                    <% }
-                                    %>
+                                <option><%=hostip.getIp()%>
+                                </option>
+                                <% }
+                                %>
 
 
-                                    <%
+                                <%
 
-                                        }
-                                    %>
+                                    }
+                                %>
 
-                                </select>
-                                <a id="btn" class="btn btn-primary btn-minier"
-                                   href="#" onClick="reflash_view()">查看</a>
+                            </select>
+                            <a id="btn" class="btn btn-primary btn-minier"
+                               href="#" onClick="reflash_view()">查看</a>
 
 
                         </div>
@@ -440,12 +437,12 @@
 
     $(".atip").tooltip();
     $('#startTime').datetimepicker({
-        formatTime:'H:i',
-        format:'Y-m-d H:i',
-        formatDate:'Y-m-d',
-        defaultTime:'10:00',
-        timepicker:true,
-        timepickerScrollbar:true
+        formatTime: 'H:i',
+        format: 'Y-m-d H:i',
+        formatDate: 'Y-m-d',
+        defaultTime: '10:00',
+        timepicker: true,
+        timepickerScrollbar: true
     });
 
     function GetDateStr(dd, AddDayCount) {
@@ -457,26 +454,21 @@
         var mm = dd.getMinutes();
         var s = dd.getSeconds();
 
-        if( h < '10')
-        {
+        if (h < '10') {
             h = '0' + h;
         }
-        if(m < '10')
-        {
+        if (m < '10') {
             m = '0' + m;
         }
 
-        if(d < '10')
-        {
+        if (d < '10') {
             d = '0' + d;
         }
 
-        if(mm < '10')
-        {
+        if (mm < '10') {
             mm = '0' + mm;
         }
-        if(s < '10')
-        {
+        if (s < '10') {
             s = '0' + s;
         }
         return y + "-" + m + "-" + d + " " + h + ":" + mm + ":" + s;
@@ -495,11 +487,11 @@
     var run_yellow = "<span style='color: #ffff00; font-size: 12px'>●</span>";
     var ip = "<%=ip%>";
 
-    if(ip != null && ip !="null"){
+    if (ip != null && ip != "null") {
         get_history(ip, time);
     }
 
-    function get_history(ip, time){
+    function get_history(ip, time) {
         $.ajax({
             data: {
                 action: "host_history",
@@ -516,12 +508,18 @@
 
                 var jsonarray = $.parseJSON(response);
 
-                if(jsonarray.length == 0){
+                if (jsonarray.length == 0) {
                     $("#history").html("<i class='icon-info-sign icon-large red '>该Job机没有任何任务执行~</i> <a class='btn btn-primary btn-minier' href='host_history.jsp'>返回</a>");
                     $("#history").addClass("align-center");
-                }else{
-                    var show_time =  new Date(Date.parse(time.replace(/-/g, "/")));
-                    table_body += '<tr><th>任务名</th><th><span style="float:left">时间段 :</span><span class="padding-right-14" style="float:left">'+  GetDateStr(show_time, -1) + '</span><span class="padding-left-14" style="float:right">'+GetDateStr(show_time, 1)+'</span></th></tr>';
+                    $('#startTime').addClass("hide");
+                    $('#viewlable').addClass("hide");
+                    $('#viewbtn').addClass("hide");
+                    $('#split').addClass("hide");
+
+
+                } else {
+                    var show_time = new Date(Date.parse(time.replace(/-/g, "/")));
+                    table_body += '<tr><th>任务名</th><th><span style="float:left">时间段 :</span><span class="padding-right-14" style="float:left">' + GetDateStr(show_time, -1) + '</span><span class="padding-left-14" style="float:right">' + GetDateStr(show_time, 1) + '</span></th></tr>';
                     $.each(jsonarray, function (i, item) {
 
                         table_body += " <tr><td valign='left'><span style='color: darkgreen; font-size: 9px'>"
@@ -541,21 +539,47 @@
             }
         });
     }
-    function reflash_view(){
+    function reflash_view() {
+        var new_time = $('#startTime').val();
         var selected_ip = $("#ip").val();
-        get_history(selected_ip, time);
+        if(new_time == null || new_time == " "){
+
+            get_history(selected_ip, time);
+
+        }else{
+            new_time += ':00';
+            get_history(selected_ip, new_time);
+        }
+
+
     }
 
-    function time_reflash_view(){
-        if(ip != null && ip !="null"){
-           var new_time = $('#startTime').val();
-            new_time +=':00';
+    function time_reflash_view() {
+        var new_time = $('#startTime').val();
+        if (ip != null && ip != "null") {
+
+            if(new_time == null || new_time == ""){
+                bootbox.confirm("截止时间不能为空！", function(result) {
+                });
+                return;
+
+            }else{
+                new_time += ':00';
+            }
+
             get_history(ip, new_time);
-        }else{
-            new_time = $('#startTime').val();
-            new_time +=':00';
-            var selected_ip = $("#ip").val();
-            get_history(selected_ip, new_time);
+        } else {
+            if(new_time == null || new_time == ""){
+                bootbox.confirm("截止时间不能为空！", function(result) {
+                });
+                return;
+
+            }else{
+                new_time += ':00';
+                var selected_ip = $("#ip").val();
+                get_history(selected_ip, new_time);
+            }
+
         }
 
 
