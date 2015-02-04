@@ -332,7 +332,6 @@
 
         String step_str = request.getParameter("step");
         String now = request.getParameter("date");
-        System.out.println(step_str + "#" + now);
         int step = -24;
     %>
 

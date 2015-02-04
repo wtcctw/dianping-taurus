@@ -117,4 +117,7 @@ public interface TaskAttemptMapper {
 
     public int deleteDependencyPassTask(@Param("taskId")String taskId,@Param("status")int status);
     public int getTaskLastStatus(@Param("taskId")String taskId);
+
+    public ArrayList<TaskAttempt> getTaskAttemptsHistory(@Param("ip")String ip,@Param("time")String time);
+
 }

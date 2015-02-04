@@ -104,6 +104,11 @@
     <bean name="/api/offline/{hostname}" id="offlineHost" autowire="byName"
           scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.OffLineHost">
     </bean>
+
+    <bean name="/api/runningMap/{time}/{ip}" id="runningMap" autowire="byName"
+          scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.HostTaskExecTime">
+    </bean>
+
     <bean name="/api/exceptionhosts" id="exceptionHosts" autowire="byName"
           scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.ExcpetionHosts">
     </bean>

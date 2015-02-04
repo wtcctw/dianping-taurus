@@ -383,6 +383,13 @@
                    href="http://code.dianpingoa.com/arch/taurus/rollout_branches">升级</a></td>
             <%}} %>
         </tr>
+
+        <tr class="info">
+            <td>5</td>
+            <td>主机任务执行历史</td>
+            <td><a id="history" class="btn btn-primary btn-minier"
+                   href="host_history.jsp?ip=<%=hostName%>">查看</a></td>
+        </tr>
         </tbody>
     </table>
 </div>
