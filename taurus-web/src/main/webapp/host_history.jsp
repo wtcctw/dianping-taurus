@@ -484,7 +484,7 @@
 
     var now_s = "<%=formatter.format( formatter.parse(now_str))%>";
     var now = new Date(Date.parse(now_s.replace(/-/g, "/")));
-    var time = GetDateStr(now, -1);
+    var time = GetDateStr(now, 0);
     var table_body = '<a class="btn btn-primary btn-minier" style="float: right" href="host_history.jsp">返回</a><table class="table table-striped table-bordered table-condensed" >';
 
 
