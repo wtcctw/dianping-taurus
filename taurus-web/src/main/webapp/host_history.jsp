@@ -542,7 +542,7 @@
     function reflash_view() {
         var new_time = $('#startTime').val();
         var selected_ip = $("#ip").val();
-        if(new_time == null || new_time == " "){
+        if(new_time == null || new_time == ""){
 
             get_history(selected_ip, time);
 
