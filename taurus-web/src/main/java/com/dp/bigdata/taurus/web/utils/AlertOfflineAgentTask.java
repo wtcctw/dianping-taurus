@@ -38,20 +38,28 @@ public class AlertOfflineAgentTask  extends TimerTask {
         IExceptionHosts hostsResource = cr.wrap(IExceptionHosts.class);
         cr.accept(MediaType.APPLICATION_XML);
         String exceptionHosts = hostsResource.retrieve();
+        String domain ="";
+        try {
+            domain = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.deploy.weburl");
+        } catch (LionException e) {
+            domain="taurus.dp";
+            e.printStackTrace();
+        }
         if (StringUtils.isNotBlank(exceptionHosts)){
             String[] hostLists = exceptionHosts.split(",");
 
             for (String host: hostLists){
+
                 String context = "您好，taurus-agent的job主机 ["
                         + host
-                        + "] 心跳异常请在【http://taurus.dp/host_center.jsp】核实" +
-                        "监控连接如下：http://taurus.dp/hosts.jsp?hostName="
+                        + "] 心跳异常请在【http://"+domain+"/host_center.jsp】核实" +
+                        "监控连接如下：http://"+domain+"/hosts.jsp?hostName="
                         + host
                         +"，谢谢~";
                 String exceptContext = "您好，taurus-agent的job主机 ["
                         + host
-                        + "] 服务已经挂掉请在【http://taurus.dp/host_center.jsp】核实并重启该Job机器的TOMCAT" +
-                        "监控连接如下：http://taurus.dp/hosts.jsp?hostName="
+                        + "] 服务已经挂掉请在【http://"+domain+"/host_center.jsp】核实并重启该Job机器的TOMCAT" +
+                        "监控连接如下：http://"+domain+"/hosts.jsp?hostName="
                         + host
                         +"，谢谢~";
 
