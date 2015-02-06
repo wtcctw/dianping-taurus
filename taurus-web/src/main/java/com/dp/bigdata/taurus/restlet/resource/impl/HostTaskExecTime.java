@@ -122,10 +122,21 @@ public class HostTaskExecTime extends ServerResource implements IHostTaskExecTim
     }
 
     long getBufferPos(Date time, Date start) {
+        if (time == null){
+            time = new Date();
+        }
+        Long different;
         Date end = new Date(time.getTime() - 24 * 60 * 60 * 1000);
+        try {
 
-        long different = start.getTime() - end.getTime();
-        different = different / (1000 * 60);
-        return (different / 20 + 1);
+
+             different = start.getTime() - end.getTime();
+            different = different / (1000 * 60);
+            return (different / 20 + 1);
+        }catch (Exception e){
+            System.out.println("except===start"+start+"===end:"+end+e.getMessage());
+        }
+
+        return 0;
     }
 }
