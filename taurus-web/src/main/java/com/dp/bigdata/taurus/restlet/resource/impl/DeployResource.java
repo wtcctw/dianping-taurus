@@ -14,6 +14,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
@@ -216,26 +217,12 @@ public void deployer(String deployId, String deployIp, String deployFile, String
 	private void deployInternal(String ip, String file, String id, String callback, String name) {
 		String path = null;
 		DeployResult dr = new DeployResult();
-        boolean needReplace = true;
-        String oldCMD = "";
-        Task task = null;
+        boolean needReplace = false;
+
+        ArrayList<Task>  tasks = null;
+
+        ArrayList<String> oldCMDs = new ArrayList<String>();
         try {
-            task = taskMapper.getTaskByAppNameIP(name, ip);
-
-            if (task != null && StringUtil.isNotBlank(task.getCommand())){
-                needReplace = true;
-                System.out.println("=====Task CMD:"+ task.getCommand());
-            }else{
-                needReplace = false;
-            }
-
-        }catch (Exception e){
-            needReplace = false;
-        }
-
-
-
-		try {
 			DeploymentContext context = new DeploymentContext();
 			deployResults.put(id, dr);
 			context.setDepolyId(id);
@@ -255,21 +242,42 @@ public void deployer(String deployId, String deployIp, String deployFile, String
             }else{
                 tmpPath = path + "/" + jarName;
             }
-            if (needReplace){
-                oldCMD = task.getCommand();
-                String realCMD = splitCMD(task.getCommand(), jarName);
 
-                if(StringUtils.isNotBlank(realCMD)){
-                    System.out.println("Task CMD update:"+ realCMD);
-                    LOG.error("Task CMD update:"+ realCMD);
-                    task.setCommand(realCMD);
-                    taskMapper.updateByPrimaryKey(task);
-                }else {
-                    LOG.error("Update Task["+task.getName()+"] exception");
-                    System.out.println("Update Task["+task.getName()+"] exception");
+
+            try {
+                tasks  = taskMapper.getTaskByAppNameIP(name, ip);
+
+                if (tasks != null){
+                    for (Task task : tasks){
+
+                        if (task != null && StringUtil.isNotBlank(task.getCommand())){
+                            needReplace = true;
+                            oldCMDs.add(task.getCommand());
+                            String realCMD = splitCMD(task.getCommand(), jarName);
+
+                            if(StringUtils.isNotBlank(realCMD)){
+                                System.out.println("Task CMD update:"+ realCMD);
+                                LOG.error("Task CMD update:"+ realCMD);
+                                task.setCommand(realCMD);
+                                taskMapper.updateByPrimaryKey(task);
+                            }else {
+                                LOG.error("Update Task["+task.getName()+"] exception");
+                                System.out.println("Update Task["+task.getName()+"] exception");
+                            }
+                            System.out.println("=====Task CMD:"+ task.getCommand());
+                        }
+                    }
+
                 }
 
+
+            }catch (Exception e){
+                LOG.error("update Task cmd Error");
             }
+
+
+
+
 
             webUrl = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.deploy.weburl");
             String taurusUrl = String.format(createUrlPattern, webUrl, name, tmpPath , ip);
@@ -279,15 +287,39 @@ public void deployer(String deployId, String deployIp, String deployFile, String
 		} catch (DeploymentException e) {
 			LOG.error(String.format("Fail to depoly %s to %s", file, ip), e);
             if (needReplace){
-                task.setCommand(oldCMD);
-                taskMapper.updateByPrimaryKey(task);
+                if (tasks != null){
+                    int i = 0;
+                    for (Task task : tasks){
+
+                        if (task != null && StringUtil.isNotBlank(task.getCommand())){
+                            task.setCommand(oldCMDs.get(i));
+
+                            taskMapper.updateByPrimaryKey(task);
+                        }
+                        i++;
+                    }
+
+                }
+
             }
 			callback(dr, callback, e.getStatus(), null, null);
 		} catch (Exception e) {
 			callback(dr, callback, DeployStatus.FAIL, null, null);
             if (needReplace){
-                task.setCommand(oldCMD);
-                taskMapper.updateByPrimaryKey(task);
+                if (tasks != null){
+                    int i = 0;
+                    for (Task task : tasks){
+
+                        if (task != null && StringUtil.isNotBlank(task.getCommand())){
+                            task.setCommand(oldCMDs.get(i));
+
+                            taskMapper.updateByPrimaryKey(task);
+                        }
+                        i++;
+                    }
+
+                }
+
             }
 			LOG.error(String.format("Fail to depoly %s to %s", file, ip), e);
 		}

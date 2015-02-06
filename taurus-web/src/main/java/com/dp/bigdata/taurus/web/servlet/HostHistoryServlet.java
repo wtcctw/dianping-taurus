@@ -58,11 +58,16 @@ public class HostHistoryServlet extends HttpServlet {
             cr = new ClientResource(RESTLET_URL_BASE + "runningMap/" + time + "/" + ip);
             IHostTaskExecTime hostTaskExecTime = cr.wrap(IHostTaskExecTime.class);
             cr.accept(MediaType.APPLICATION_XML);
-            String jsonString = hostTaskExecTime.retrieve();
-            if (StringUtils.isBlank(jsonString)){
-                output.write("[]".getBytes());
-            }else {
-                output.write(jsonString.getBytes());
+            try {
+                String jsonString = hostTaskExecTime.retrieve();
+                if (StringUtils.isBlank(jsonString)){
+                    output.write("[]".getBytes());
+                }else {
+                    output.write(jsonString.getBytes());
+                }
+
+            }catch (Exception e){
+                LOG.error(e.getMessage());
             }
 
             output.close();

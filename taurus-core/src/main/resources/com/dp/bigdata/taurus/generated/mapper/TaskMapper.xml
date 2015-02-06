@@ -598,6 +598,6 @@
     </select>
 
     <select id="getTaskByAppNameIP" parameterType="String" resultMap="BaseResultMap" >
-       select TaurusTask.* from TaurusTask where TaurusTask.appName = #{appName}  and TaurusTask.hostName = #{ip} and status != 3 limit 1
+       select TaurusTask.* from TaurusTask where TaurusTask.appName = #{appName}  and TaurusTask.hostName = #{ip} and status != 3
     </select>
 </mapper>
