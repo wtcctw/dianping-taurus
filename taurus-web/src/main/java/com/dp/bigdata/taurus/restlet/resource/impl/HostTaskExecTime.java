@@ -51,29 +51,32 @@ public class HostTaskExecTime extends ServerResource implements IHostTaskExecTim
             HashMap<String, String> taskMap = new HashMap<String, String>();
 
             for (TaskAttempt taskAttempt : taskAttempts) {
-                String tmp = taskMap.get(taskAttempt.getTaskid());
-                long start = getBufferPos(now, taskAttempt.getStarttime());
-                Date tmpDate = taskAttempt.getStarttime();
-                if (tmpDate == null) {
-                    tmpDate = new Date();// 如果为空默认为现在，因为该任务还未执行完成
-                }
+                if(taskAttempt.getStarttime() != null){
+                    String tmp = taskMap.get(taskAttempt.getTaskid());
+                    long start = getBufferPos(now, taskAttempt.getStarttime());
+                    Date tmpDate = taskAttempt.getStarttime();
+                    if (tmpDate == null) {
+                        tmpDate = new Date();// 如果为空默认为现在，因为该任务还未执行完成
+                    }
 
-                long end = getBufferPos(now, tmpDate);
-                StringBuffer runningHistoryMap = new StringBuffer();
-                for (long i = start; i <= end; i++) {
-                    runningHistoryMap.append(i);
-                    runningHistoryMap.append("#");
-                    runningHistoryMap.append(taskAttempt.getStatus());
-                    if (i != end) {
-                        runningHistoryMap.append(",");
+                    long end = getBufferPos(now, tmpDate);
+                    StringBuffer runningHistoryMap = new StringBuffer();
+                    for (long i = start; i <= end; i++) {
+                        runningHistoryMap.append(i);
+                        runningHistoryMap.append("#");
+                        runningHistoryMap.append(taskAttempt.getStatus());
+                        if (i != end) {
+                            runningHistoryMap.append(",");
+                        }
+                    }
+                    if (StringUtils.isNotBlank(tmp)) {
+
+                        taskMap.put(taskAttempt.getTaskid(), tmp + "," + runningHistoryMap.toString());
+                    } else {
+                        taskMap.put(taskAttempt.getTaskid(), runningHistoryMap.toString());
                     }
                 }
-                if (StringUtils.isNotBlank(tmp)) {
 
-                    taskMap.put(taskAttempt.getTaskid(), tmp + "," + runningHistoryMap.toString());
-                } else {
-                    taskMap.put(taskAttempt.getTaskid(), runningHistoryMap.toString());
-                }
 
             }
 
