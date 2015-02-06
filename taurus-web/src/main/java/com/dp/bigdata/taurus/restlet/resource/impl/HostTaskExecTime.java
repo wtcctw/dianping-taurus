@@ -126,6 +126,6 @@ public class HostTaskExecTime extends ServerResource implements IHostTaskExecTim
 
         long different = start.getTime() - end.getTime();
         different = different / (1000 * 60);
-        return (different / 12 + 1);
+        return (different / 20 + 1);
     }
 }

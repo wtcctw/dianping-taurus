@@ -325,7 +325,7 @@
 
                             <table class="table table-bordered">
                                 <tr>
-                                    <td>一个<span style='color: gainsboro; font-size: 15px'>●</span>代表 12 分钟</td>
+                                    <td>一个<span style='color: gainsboro; font-size: 15px'>●</span>代表 20 分钟</td>
                                     <td><span style='color: gainsboro; font-size: 15px'>●  </span>表示该任务未调度执行</td>
                                     <td><span style='color: green; font-size: 15px'>●  </span>表示该任务调度执行成功</td>
                                     <td>
@@ -422,213 +422,215 @@
     <p style="text-align: center; padding-right:32px;color: firebrick">点我报错</p>
 </div>
 <script type="text/javascript">
-    $(window).scroll(function () {
-        if ($(this).scrollTop() > 100) {
-            $('.scrollup').fadeIn();
-        } else {
-            $('.scrollup').fadeOut();
-        }
-    });
+$(window).scroll(function () {
+    if ($(this).scrollTop() > 100) {
+        $('.scrollup').fadeIn();
+    } else {
+        $('.scrollup').fadeOut();
+    }
+});
 
-    $('.scrollup').click(function () {
-        $("html, body").scrollTop(0);
-        return false;
-    });
+$('.scrollup').click(function () {
+    $("html, body").scrollTop(0);
+    return false;
+});
 
-    $(".atip").tooltip();
-    $('#startTime').datetimepicker({
-        formatTime: 'H:i',
-        format: 'Y-m-d H:i',
-        formatDate: 'Y-m-d',
-        defaultTime: '10:00',
-        timepicker: true,
-        timepickerScrollbar: true
-    });
+$(".atip").tooltip();
+$('#startTime').datetimepicker({
+    formatTime: 'H:i',
+    format: 'Y-m-d H:i',
+    formatDate: 'Y-m-d',
+    defaultTime: '10:00',
+    timepicker: true,
+    timepickerScrollbar: true
+});
 
-    function GetDateStr(dd, AddDayCount) {
-        dd.setDate(dd.getDate() + AddDayCount);//获取AddDayCount天后的日期
-        var y = dd.getFullYear();
-        var m = dd.getMonth() + 1;//获取当前月份的日期
-        var d = dd.getDate();
-        var h = dd.getHours();
-        var mm = dd.getMinutes();
-        var s = dd.getSeconds();
+function GetDateStr(dd, AddDayCount) {
+    dd.setDate(dd.getDate() + AddDayCount);//获取AddDayCount天后的日期
+    var y = dd.getFullYear();
+    var m = dd.getMonth() + 1;//获取当前月份的日期
+    var d = dd.getDate();
+    var h = dd.getHours();
+    var mm = dd.getMinutes();
+    var s = dd.getSeconds();
 
-        if (h < '10') {
-            h = '0' + h;
-        }
-        if (m < '10') {
-            m = '0' + m;
-        }
-
-        if (d < '10') {
-            d = '0' + d;
-        }
-
-        if (mm < '10') {
-            mm = '0' + mm;
-        }
-        if (s < '10') {
-            s = '0' + s;
-        }
-        return y + "-" + m + "-" + d + " " + h + ":" + mm + ":" + s;
+    if (h < '10') {
+        h = '0' + h;
+    }
+    if (m < '10') {
+        m = '0' + m;
     }
 
-    var now_s = "<%=formatter.format( formatter.parse(now_str))%>";
-    var now = new Date(Date.parse(now_s.replace(/-/g, "/")));
-    var time = GetDateStr(now, 0);
-    var table_body = '<a class="btn btn-primary btn-minier" style="float: right" href="host_history.jsp">返回</a><table class="table table-striped table-bordered table-condensed" >';
-
-
-    var not_run = "<span style='color: gainsboro; font-size: 12px'>●</span>"
-    var run_green = "<span style='color: green; font-size: 12px'>●</span>";
-    var run_red = "<span style='color: red; font-size: 12px'>●</span>";
-    var run_bule = "<span style='color: #0000ff; font-size: 12px'>●</span>";
-    var run_yellow = "<span style='color: #ffff00; font-size: 12px'>●</span>";
-    var ip = "<%=ip%>";
-
-    if (ip != null && ip != "null") {
-        get_history(ip, time);
+    if (d < '10') {
+        d = '0' + d;
     }
 
-    function get_history(ip, time) {
-        $.ajax({
-            data: {
-                action: "host_history",
-                time: time,
-                ip: ip
-            },
-            type: "POST",
-            url: "/host_history",
-            error: function () {
-                $("#history").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
+    if (mm < '10') {
+        mm = '0' + mm;
+    }
+    if (s < '10') {
+        s = '0' + s;
+    }
+    return y + "-" + m + "-" + d + " " + h + ":" + mm + ":" + s;
+}
+
+var now_s = "<%=formatter.format( formatter.parse(now_str))%>";
+var now = new Date(Date.parse(now_s.replace(/-/g, "/")));
+var time = GetDateStr(now, 0);
+
+
+var not_run = "<span style='color: gainsboro; font-size: 12px'>●</span>"
+var run_green = "<span style='color: green; font-size: 12px'>●</span>";
+var run_red = "<span style='color: red; font-size: 12px'>●</span>";
+var run_bule = "<span style='color: #0000ff; font-size: 12px'>●</span>";
+var run_yellow = "<span style='color: #ffff00; font-size: 12px'>●</span>";
+var ip = "<%=ip%>";
+
+if (ip != null && ip != "null") {
+    get_history(ip, time);
+}
+
+function get_history(ip, time) {
+    $.ajax({
+        data: {
+            action: "host_history",
+            time: time,
+            ip: ip
+        },
+        type: "POST",
+        url: "/host_history",
+        error: function () {
+            $("#history").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
+            $("#history").addClass("align-center");
+        },
+        success: function (response, textStatus) {
+            var table_body = '<a class="btn btn-primary btn-minier" style="float: right" href="host_history.jsp">返回</a><table class="table table-striped table-bordered table-condensed" >';
+            var jsonarray = $.parseJSON(response);
+
+            if (jsonarray.length == 0) {
+                $("#history").html("<i class='icon-info-sign icon-large red '>该Job机没有任何任务执行~</i> <a class='btn btn-primary btn-minier' href='host_history.jsp'>返回</a>");
                 $("#history").addClass("align-center");
-            },
-            success: function (response, textStatus) {
-
-                var jsonarray = $.parseJSON(response);
-
-                if (jsonarray.length == 0) {
-                    $("#history").html("<i class='icon-info-sign icon-large red '>该Job机没有任何任务执行~</i> <a class='btn btn-primary btn-minier' href='host_history.jsp'>返回</a>");
-                    $("#history").addClass("align-center");
-                    $('#startTime').addClass("hide");
-                    $('#viewlable').addClass("hide");
-                    $('#viewbtn').addClass("hide");
-                    $('#split').addClass("hide");
+                $('#startTime').addClass("hide");
+                $('#viewlable').addClass("hide");
+                $('#viewbtn').addClass("hide");
+                $('#split').addClass("hide");
 
 
-                } else {
-                    var show_time = new Date(Date.parse(time.replace(/-/g, "/")));
-                    table_body += '<tr><th>任务名</th><th><span style="float:left">时间段 :</span><span class="padding-right-14" style="float:left">' + GetDateStr(show_time, -1) + '</span><span class="padding-left-14" style="float:right">' + GetDateStr(show_time, 1) + '</span></th></tr>';
-                    $.each(jsonarray, function (i, item) {
+            } else {
+                var show_time = new Date(Date.parse(time.replace(/-/g, "/")));
+                table_body += '<tr><th>任务名</th><th><span style="float:left">时间段 :</span><span class="padding-right-14" style="float:left">' + GetDateStr(show_time, -1) + '</span><span class="padding-left-14" style="float:right">' + GetDateStr(show_time, 1) + '</span></th></tr>';
+                $.each(jsonarray, function (i, item) {
 
-                        table_body += " <tr><td valign='left'><span style='color: darkgreen; font-size: 9px'>"
-                                + item.taskName
-                                + "</span></td>"
-                                + "<td valign='middle'>"
-                                + genrate_body(item.runningMap)
-                                + "</td><tr>";
-
-
-                    });
-                    table_body += "</table>"
-                    $("#history").html(table_body);
-                }
+                    table_body += " <tr><td valign='left'><span style='color: darkgreen; font-size: 9px'>"
+                            + item.taskName
+                            + "</span></td>"
+                            + "<td valign='middle'>"
+                            + genrate_body(item.runningMap, show_time)
+                            + "</td><tr>";
 
 
+                });
+                table_body += "</table>"
+                $("#history").html(table_body);
+                $(".atip").tooltip();
             }
-        });
+
+
+        }
+    });
+}
+function reflash_view() {
+    var new_time = $('#startTime').val();
+    var selected_ip = $("#ip").val();
+    if (new_time == null || new_time == "") {
+
+        get_history(selected_ip, time);
+
+    } else {
+        new_time += ':00';
+        get_history(selected_ip, new_time);
     }
-    function reflash_view() {
-        var new_time = $('#startTime').val();
-        var selected_ip = $("#ip").val();
-        if(new_time == null || new_time == ""){
 
-            get_history(selected_ip, time);
 
-        }else{
+}
+
+function time_reflash_view() {
+    var new_time = $('#startTime').val();
+    if (ip != null && ip != "null") {
+
+        if (new_time == null || new_time == "") {
+            bootbox.confirm("截止时间不能为空！", function (result) {
+            });
+            return;
+
+        } else {
             new_time += ':00';
+        }
+
+        get_history(ip, new_time);
+    } else {
+        if (new_time == null || new_time == "") {
+            bootbox.confirm("截止时间不能为空！", function (result) {
+            });
+            return;
+
+        } else {
+            new_time += ':00';
+            var selected_ip = $("#ip").val();
             get_history(selected_ip, new_time);
         }
 
-
     }
 
-    function time_reflash_view() {
-        var new_time = $('#startTime').val();
-        if (ip != null && ip != "null") {
 
-            if(new_time == null || new_time == ""){
-                bootbox.confirm("截止时间不能为空！", function(result) {
-                });
-                return;
+}
 
-            }else{
-                new_time += ':00';
-            }
+function genrate_body(runningMap, time) {
+    var runng_history = runningMap.split(",");
+    var ret_body = "";
+    var pointCount = 72;
+    var runArray = new Array(pointCount);
+    for (var i = 0; i < pointCount; i++) {
+        runArray[i] = '-1';
+    }
 
-            get_history(ip, new_time);
+    for (var len = 0; len < runng_history.length; len++) {
+        var tmp = runng_history[len].split("#");
+        var pos_s = tmp[0];
+        var pos = parseInt(pos_s);
+        var status;
+
+        if (tmp[1] != null) {
+            status = tmp[1];
         } else {
-            if(new_time == null || new_time == ""){
-                bootbox.confirm("截止时间不能为空！", function(result) {
-                });
-                return;
-
-            }else{
-                new_time += ':00';
-                var selected_ip = $("#ip").val();
-                get_history(selected_ip, new_time);
-            }
-
+            status = "7";
         }
 
-
+        var span_td;
+        if (status == "7" || status == "1" || status == "4") {
+            span_td = run_green;
+        } else if (status == "2" || status == "5" || status == "8" || status == "10" || status == "11") {
+            span_td = run_red;
+        } else if (status == "3" || status == "9") {
+            span_td = run_yellow;
+        } else {
+            span_td = run_bule;
+        }
+        runArray[pos] = span_td
     }
 
-    function genrate_body(runningMap) {
-        var runng_history = runningMap.split(",");
-        var ret_body = "";
-        var runArray = new Array(120);
-        for (var i = 0; i < 120; i++) {
-            runArray[i] = '-1';
+    for (var i = 0; i < pointCount; i++) {
+
+        if (runArray[i] != '-1') {
+            ret_body += '<a class="atip tooltip-info" data-toggle="tooltip" data-placement="bottom"  data-original-title="时间区间：' + GetDateStr(new Date(time.getTime() - ( pointCount- i) * 20 * 60 * 1000), 0) + ' ~' + GetDateStr(new Date(time.getTime() - (pointCount - i - 1) * 20 * 60 * 1000), 0) + '"> ' + runArray[i] + '</a>';
+        } else {
+            ret_body += '<a class="atip tooltip-info" data-toggle="tooltip" data-placement="bottom"  data-original-title="时间区间：' + GetDateStr(new Date(time.getTime() - (pointCount - i) * 20 * 60 * 1000), 0) + ' ~' + GetDateStr(new Date(time.getTime() - (pointCount - i - 1) * 20 * 60 * 1000), 0) + '"> ' + not_run + '</a>';
         }
 
-        for (var len = 0; len < runng_history.length; len++) {
-            var tmp = runng_history[len].split("#");
-            var pos_s = tmp[0];
-            var pos = parseInt(pos_s);
-            var status;
-
-            if (tmp[1] != null) {
-                status = tmp[1];
-            } else {
-                status = "7";
-            }
-
-            var span_td;
-            if (status == "7" || status == "1" || status == "4") {
-                span_td = run_green;
-            } else if (status == "2" || status == "5" || status == "8" || status == "10" || status == "11") {
-                span_td = run_red;
-            } else if (status == "3" || status == "9") {
-                span_td = run_yellow;
-            } else {
-                span_td = run_bule;
-            }
-            runArray[pos] = span_td
-        }
-
-        for (var i = 0; i < 120; i++) {
-
-            if (runArray[i] != '-1') {
-                ret_body += runArray[i];
-            } else {
-                ret_body += not_run;
-            }
-
-        }
-        return ret_body;
     }
+    return ret_body;
+}
+
 </script>
 <script src="js/jquery.validate.min.js" type="text/javascript"></script>
 

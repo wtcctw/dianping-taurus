@@ -194,7 +194,11 @@ public void deployer(String deployId, String deployIp, String deployFile, String
 	}
 
     private static String splitCMD(String cmd, String job_name){
-        int lastPost = job_name.lastIndexOf('-');
+        int lastPost =  job_name.lastIndexOf('-');
+        if(cmd.contains("SNAPSHOT")){
+            lastPost = job_name.substring(0,lastPost).lastIndexOf('-');
+        }
+
         String realJobName = job_name.substring(0,lastPost);
         System.out.println("CMD:"+cmd+"  # jobName:"+job_name);
         String[] cmdTmpLists = cmd.split(" ");
@@ -212,6 +216,10 @@ public void deployer(String deployId, String deployIp, String deployFile, String
         }
 
         return newCMD.toString().trim();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(splitCMD("java -jar /data/app/taurus-agent/jobs/group-recommendnote-job/group-recommendnote-job-product-2.0.0-SNAPSHOT.jar","group-recommendnote-job-product-1.0.0-SNAPSHOT.jar"));
     }
 
 	private void deployInternal(String ip, String file, String id, String callback, String name) {
