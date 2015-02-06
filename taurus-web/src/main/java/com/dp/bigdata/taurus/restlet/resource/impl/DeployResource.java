@@ -21,6 +21,7 @@ import com.dp.bigdata.taurus.restlet.resource.IDeployResource;
 import jodd.util.StringUtil;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.JSONObject;
@@ -257,10 +258,19 @@ public void deployer(String deployId, String deployIp, String deployFile, String
             if (needReplace){
                 oldCMD = task.getCommand();
                 String realCMD = splitCMD(task.getCommand(), jarName);
-                System.out.println("Task CMD update:"+ realCMD);
-                task.setCommand(realCMD);
-                taskMapper.updateByPrimaryKey(task);
+
+                if(StringUtils.isNotBlank(realCMD)){
+                    System.out.println("Task CMD update:"+ realCMD);
+                    LOG.error("Task CMD update:"+ realCMD);
+                    task.setCommand(realCMD);
+                    taskMapper.updateByPrimaryKey(task);
+                }else {
+                    LOG.error("Update Task["+task.getName()+"] exception");
+                    System.out.println("Update Task["+task.getName()+"] exception");
+                }
+
             }
+
             webUrl = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.deploy.weburl");
             String taurusUrl = String.format(createUrlPattern, webUrl, name, tmpPath , ip);
 			String updateUrl = String.format(updateUrlPattern, webUrl, name, tmpPath);
