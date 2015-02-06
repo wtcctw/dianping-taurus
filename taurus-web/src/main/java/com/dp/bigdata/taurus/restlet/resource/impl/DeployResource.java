@@ -18,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
 import com.dp.bigdata.taurus.restlet.resource.IDeployResource;
+import jodd.util.StringUtil;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.logging.Log;
@@ -220,7 +221,7 @@ public void deployer(String deployId, String deployIp, String deployFile, String
         try {
             task = taskMapper.getTaskByAppNameIP(name, ip);
 
-            if (task != null && task.getCommand() != null){
+            if (task != null && StringUtil.isNotBlank(task.getCommand())){
                 needReplace = true;
                 System.out.println("=====Task CMD:"+ task.getCommand());
             }else{
