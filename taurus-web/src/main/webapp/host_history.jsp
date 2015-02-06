@@ -325,7 +325,7 @@
 
                             <table class="table table-bordered">
                                 <tr>
-                                    <td>一个<span style='color: gainsboro; font-size: 15px'>●</span>代表 6 分钟</td>
+                                    <td>一个<span style='color: gainsboro; font-size: 15px'>●</span>代表 12 分钟</td>
                                     <td><span style='color: gainsboro; font-size: 15px'>●  </span>表示该任务未调度执行</td>
                                     <td><span style='color: green; font-size: 15px'>●  </span>表示该任务调度执行成功</td>
                                     <td>

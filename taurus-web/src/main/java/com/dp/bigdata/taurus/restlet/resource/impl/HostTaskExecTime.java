@@ -40,7 +40,7 @@ public class HostTaskExecTime extends ServerResource implements IHostTaskExecTim
             now = new Date();
         }
 
-        Date startDate = new Date(now.getTime() - 12 * 60 * 60 * 1000);
+        Date startDate = new Date(now.getTime() - 24 * 60 * 60 * 1000);
         startTime = simpleDateFormat.format(startDate);
 
         ArrayList<TaskAttempt> taskAttempts = taskAttemptMapper.getTaskAttemptsHistory(ip, startTime);
@@ -122,7 +122,7 @@ public class HostTaskExecTime extends ServerResource implements IHostTaskExecTim
     }
 
     long getBufferPos(Date time, Date start) {
-        Date end = new Date(time.getTime() - 12 * 60 * 60 * 1000);
+        Date end = new Date(time.getTime() - 24 * 60 * 60 * 1000);
 
         long different = start.getTime() - end.getTime();
         different = different / (1000 * 60);
