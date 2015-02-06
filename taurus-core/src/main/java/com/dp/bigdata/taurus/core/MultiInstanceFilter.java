@@ -7,6 +7,8 @@ import java.util.List;
 import com.dianping.cat.Cat;
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
+import com.dianping.lion.client.LionException;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -44,18 +46,41 @@ public class MultiInstanceFilter implements Filter {
                 if (null == jobAlertCount) {
                     jobAlert.put(context.getTaskid(), 0);
                 } else if (jobAlertCount == 0) {
-                    String alertontext = "您好，你的Taurus Job【" +
-                            context.getTask().getName() + "】发生拥堵，请及时关注，谢谢~";
+                    String notAlertJobs;
                     try {
-                        MailHelper.sendWeChat("kirin.li", alertontext);
-                        MailHelper.sendWeChat(context.getCreator(), alertontext);
-                        MailHelper.sendMail(context.getCreator() + "@dianping.com", alertontext);
-
-                        jobAlert.put(context.getTaskid(), jobAlertCount + 1);
-
-                    } catch (Exception e) {
-                        Cat.logError(e);
+                        notAlertJobs = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.taskblock.notalert");
+                    } catch (LionException e) {
+                        notAlertJobs = "";
                     }
+                    boolean needAlert = true;
+                    if (StringUtils.isNotBlank(notAlertJobs)) {
+
+                        String[] notAlertLists = notAlertJobs.split(",");
+
+                        for (String notalert : notAlertLists) {
+                            if (notalert.equals(context.getName())) {
+                                needAlert = false;
+                                break;
+                            }
+                        }
+                    }
+                    
+                    if (needAlert) {
+                        String alertontext = "您好，你的Taurus Job【" +
+                                context.getTask().getName() + "】发生拥堵，请及时关注，谢谢~";
+                        try {
+                            MailHelper.sendWeChat("kirin.li", alertontext);
+                            MailHelper.sendWeChat(context.getCreator(), alertontext);
+                            MailHelper.sendMail(context.getCreator() + "@dianping.com", alertontext);
+
+                        } catch (Exception e) {
+                            Cat.logError(e);
+                        }
+                    }
+
+
+                    jobAlert.put(context.getTaskid(), jobAlertCount + 1);
+
                 } else {
                     jobAlert.put(context.getTaskid(), jobAlertCount + 1);
                 }
