@@ -31,6 +31,7 @@
     <link rel="stylesheet" href="lib/ace/css/ace-rtl.min.css"/>
     <link rel="stylesheet" href="lib/ace/css/ace-skins.min.css"/>
     <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/loading.css">
 </head>
 <body>
 <div class="navbar navbar-default" id="navbar">
@@ -240,6 +241,12 @@
                     </ul>
                     <div data-spy="scroll" data-offset="0"  style="cursor: text; margin-top: 5px; background-color: #3A1042; color: #e6e6e6; font-size: 12px;  height: 650px; overflow-x: auto;"   id="errolog">
 
+                            <div class="loadIcon" id = "loading">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
 
                     </div>
                 </div>
@@ -272,7 +279,15 @@
                            data-original-title="您的任务运行在老版本的agent上，此版本不支持实时查看日志，请等待任务完成后查看日志">[注意] </a>
                     </div>
 
-                    <div data-spy="scroll" class="col-sm-12" data-offset="0" style="cursor: text; margin-top: 5px; background-color: #3A1042; color: #e6e6e6; font-size: 12px;  height: 650px; overflow-x: auto;" id="strout">
+                    <div data-spy="scroll" class="col-sm-12" data-offset="0" style="cursor: text; margin-top: 5px; background-color: #3A1042; color: #e6e6e6; font-size: 12px;  height: 650px; overflow-x: auto;" id="stdout">
+                        <div class="loadIcon" id = "loading">
+
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+
+                        </div>
 
 
                     </div>

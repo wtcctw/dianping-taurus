@@ -71,6 +71,8 @@ function fetch_errorLog() {
         clearInterval(error_log_rtn);
     }
 
+    var loading = document.getElementById("loading");
+
     $.ajax({
         url: "attempts.do",
         data: {
@@ -81,17 +83,16 @@ function fetch_errorLog() {
         timeout: timeout,
         type: 'POST',
         error: function () {
-            $logContainer.text("无数据");
+            loading.style.display = "none";
+            $logContainer.html("<i class='icon-info red'>没有找到日志数据,请到该job主机的/data/app/taurus-agent/logs/日期/"+attemptID+".err 查看");
         },
         success: function (response) {
+            loading.style.display = "none";
             result = response;//.replace(/[\n]/g, "<br>")
 
             $logContainer.append("<div>" + result + "</div>");
             $logContainer.scrollTop($logContainer.get(0).scrollHeight);
-            $(".loading").hide();
-        },
-        beforeSend: function () {//正在加载，显示“正在加载......”
-            $(".loading").show();
+
         }
 
     });
@@ -100,7 +101,8 @@ function fetch_errorLog() {
 }
 
 function fetch_Log() {
-    var $logContainer = $("#strout");
+    var $logContainer = $("#stdout");
+    var loading = document.getElementById("loading");
     if (status == "RUNNING") {
         var is_end = is_log_end();
         if (is_end == "true") {
@@ -111,7 +113,6 @@ function fetch_Log() {
     if (is_flash == false) {
         clearInterval(log_rtn);
     }
-
     $.ajax({
         url: "attempts.do",
         data: {
@@ -122,18 +123,19 @@ function fetch_Log() {
         timeout: timeout,
         type: 'POST',
         error: function () {
-            $logContainer.text("没有找到日志数据");
+            loading.style.display = "none";
+            $logContainer.html("<i class='icon-info red'>没有找到日志数据,请到该job主机的/data/app/taurus-agent/logs/日期/"+attemptID+".log 查看");
         },
         success: function (response) {
-
+            loading.style.display = "none";
             result = response;
 
             $logContainer.append("<div>" + result + "</div>");
             $logContainer.scrollTop($logContainer.get(0).scrollHeight);
-            $(".loading").hide();
+
         },
         beforeSend: function () {//正在加载，显示“正在加载......”
-            $(".loading").show();
+
         }
 
     });
