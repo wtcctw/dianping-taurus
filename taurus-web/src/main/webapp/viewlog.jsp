@@ -241,7 +241,7 @@
                     </ul>
                     <div data-spy="scroll" data-offset="0"  style="cursor: text; margin-top: 5px; background-color: #3A1042; color: #e6e6e6; font-size: 12px;  height: 650px; overflow-x: auto;"   id="errolog">
 
-                            <div class="loadIcon" id = "loading">
+                            <div class="loadIcon" id = "errloading">
                                 <div></div>
                                 <div></div>
                                 <div></div>
@@ -280,7 +280,7 @@
                     </div>
 
                     <div data-spy="scroll" class="col-sm-12" data-offset="0" style="cursor: text; margin-top: 5px; background-color: #3A1042; color: #e6e6e6; font-size: 12px;  height: 650px; overflow-x: auto;" id="stdout">
-                        <div class="loadIcon" id = "loading">
+                        <div class="loadIcon" id = "logloading">
 
                             <div></div>
                             <div></div>

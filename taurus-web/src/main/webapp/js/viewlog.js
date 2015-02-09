@@ -71,7 +71,7 @@ function fetch_errorLog() {
         clearInterval(error_log_rtn);
     }
 
-    var loading = document.getElementById("loading");
+    var loading = document.getElementById("errloading");
 
     $.ajax({
         url: "attempts.do",
@@ -102,7 +102,7 @@ function fetch_errorLog() {
 
 function fetch_Log() {
     var $logContainer = $("#stdout");
-    var loading = document.getElementById("loading");
+    var loading = document.getElementById("logloading");
     if (status == "RUNNING") {
         var is_end = is_log_end();
         if (is_end == "true") {
