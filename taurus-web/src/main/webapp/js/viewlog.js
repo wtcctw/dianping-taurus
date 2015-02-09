@@ -40,9 +40,9 @@ $(document).ready(function () {
     reflash_tip.style.display = "none";
     if (status != "RUNNING") {
         flash_btn.style.display = "none";
-        timeout = 1000;
+        timeout = 1500;
     } else {
-        timeout = 1000;
+        timeout = 1500;
     }
 
     do_relash_task();
@@ -145,8 +145,8 @@ function do_relash_task() {
     if (status == "RUNNING") {
         var is_end = is_log_end();
         if (is_end == "false") {
-            error_log_rtn = setInterval("fetch_errorLog()", 10000);
-            log_rtn = setInterval("fetch_Log()", 10000);
+            error_log_rtn = setInterval("fetch_errorLog()", 5000);
+            log_rtn = setInterval("fetch_Log()", 5000);
             setTimeout("close_reflash()", 10 * 60 * 1000)
         } else {
             fetch_errorLog();
@@ -171,7 +171,7 @@ function is_log_end() {
             id: attemptID,
             action: 'isend'
         },
-        timeout: 1000,
+        timeout: 1500,
         type: 'POST',
         async: false,
         error: function () {

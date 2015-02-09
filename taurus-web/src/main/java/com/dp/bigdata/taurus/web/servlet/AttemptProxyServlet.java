@@ -90,7 +90,7 @@ public class AttemptProxyServlet extends HttpServlet {
 
             HttpURLConnection connection = (HttpURLConnection) getUrl
                     .openConnection();
-            connection.setConnectTimeout(1000);
+            connection.setConnectTimeout(1500);
             connection.connect();
             StringWriter writer = new StringWriter();
             inputStream = connection.getInputStream();
@@ -358,7 +358,7 @@ public class AttemptProxyServlet extends HttpServlet {
 
                         String context = getAgentRestService(url);
 
-                        if (StringUtils.isBlank(context)) {
+                        if (StringUtils.isNotBlank(context)) {
                             lastTimeFileSize += context.length();
                         } else {
                             if (!acceptContentWay) {
