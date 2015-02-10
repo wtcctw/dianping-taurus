@@ -521,9 +521,13 @@ function get_history(ip, time) {
                 table_body += '<tr><th>任务名</th><th><span style="float:left">时间段 :</span><span class="padding-right-14" style="float:left">' + GetDateStr(show_time, -1) + '</span><span class="padding-left-14" style="float:right">' + GetDateStr(show_time, 1) + '</span></th></tr>';
                 $.each(jsonarray, function (i, item) {
 
-                    table_body += " <tr><td valign='left'><span style='color: darkgreen; font-size: 9px'>"
+                    table_body += " <tr><td valign='left'>"
+                            +"<a href='attempt.jsp?taskID="
+                            +item.taskId
+                            +"' >"
+                            +"<span style='color: darkgreen; font-size: 9px'>"
                             + item.taskName
-                            + "</span></td>"
+                            + "</span></a></td>"
                             + "<td valign='middle'>"
                             + genrate_body(item.runningMap, show_time)
                             + "</td><tr>";
