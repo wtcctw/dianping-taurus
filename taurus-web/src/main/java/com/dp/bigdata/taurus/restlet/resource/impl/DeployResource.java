@@ -244,6 +244,7 @@ public void deployer(String deployId, String deployIp, String deployFile, String
 
             String [] tmpStrArray = file.split("/");
             String jarName = tmpStrArray[tmpStrArray.length - 1];
+
             String tmpPath = "";
             if(path.contains(jarName)){
                 tmpPath = path;
@@ -253,6 +254,7 @@ public void deployer(String deployId, String deployIp, String deployFile, String
 
 
             try {
+                System.out.println("===getTaskByAppNameIP===");
                 tasks  = taskMapper.getTaskByAppNameIP(name, ip);
 
                 if (tasks != null){
@@ -281,6 +283,7 @@ public void deployer(String deployId, String deployIp, String deployFile, String
 
             }catch (Exception e){
                 LOG.error("update Task cmd Error");
+                System.out.println("update Task cmd Error"+e);
             }
 
 
