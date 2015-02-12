@@ -3,8 +3,10 @@ package com.dp.bigdata.taurus.agent.utils;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 
 /**
  * Created by kirinli on 14-8-19.
@@ -67,8 +69,10 @@ public class RestServiceServlet extends HttpServlet {
                 }
 
             }
-            output.write(respStr.getBytes());
-            output.close();
+            BufferedWriter osw = new BufferedWriter(new OutputStreamWriter(output, "UTF-8"));
+            osw.write(respStr.toString());
+            osw.close();
+
         } else if (action.equals(ISEND)) {
             String attemptID = (String) request.getParameter("attemptId");
             LogFileEnd logFileEnd = new LogFileEnd();

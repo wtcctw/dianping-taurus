@@ -24,7 +24,7 @@ public class DefaultDeployerManager implements Deployer {
 
 	private static final Log LOGGER = LogFactory.getLog(DefaultDeployerManager.class);
 
-	private static final int DEFAULT_TIME_OUT_IN_SECONDS = 120;
+	private static final int DEFAULT_TIME_OUT_IN_SECONDS = 90;
 
 	private static Map<String, Lock> taskIDToLockMap = new HashMap<String, Lock>();
 
