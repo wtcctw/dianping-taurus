@@ -2,6 +2,7 @@ package com.dp.bigdata.taurus.web.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import javax.servlet.ServletConfig;
@@ -21,6 +22,7 @@ import com.dp.bigdata.taurus.generated.module.User;
 import com.dp.bigdata.taurus.restlet.resource.IUserResource;
 import com.dp.bigdata.taurus.restlet.resource.IUsersResource;
 import com.dp.bigdata.taurus.restlet.shared.UserDTO;
+import org.springframework.web.util.CookieGenerator;
 
 /**
  * LoginServlet
@@ -111,6 +113,11 @@ public class LoginServlet extends HttpServlet {
 			if (hasRegister) {
 				HttpSession session = request.getSession();
 				session.setAttribute(USER_NAME, userName);
+                CookieGenerator cookie = new CookieGenerator();
+                cookie.setCookieDomain(".taurus.dp");//这个也要设置才能实现上面的两个网站共用
+                cookie.setCookieMaxAge(1 * 24 * 60 * 60);
+                cookie.setCookieName("cookie_user_jsessionid");
+                cookie.addCookie(response, URLEncoder.encode(userName, "UTF-8"));
 				if(isInfoCompleted(userName)){
 					response.setStatus(200);
 				} else{
@@ -122,11 +129,11 @@ public class LoginServlet extends HttpServlet {
 		} else {
 			HttpSession session = request.getSession();
 			session.setAttribute(USER_NAME, userName);
-            Cookie cookie = new Cookie("nickname", userName);
-            cookie.setPath("/");//这个要设置
-            cookie.setDomain(".taurus.dp");//这个也要设置才能实现上面的两个网站共用
-            cookie.setMaxAge(24*60*60);
-
+            CookieGenerator cookie = new CookieGenerator();
+            cookie.setCookieDomain(".taurus.dp");//这个也要设置才能实现上面的两个网站共用
+            cookie.setCookieMaxAge(1 * 24 * 60 * 60);
+            cookie.setCookieName("cookie_user_jsessionid");
+            cookie.addCookie(response, URLEncoder.encode(userName, "UTF-8"));
             System.out.println("login success!");
 
 			ClientResource cr = new ClientResource(USER_API);
