@@ -136,9 +136,16 @@
         </div>
         <div class="pull-right" style="margin:10px;color: white;">
             <a target="_blank" style="margin:10px;color: white;"
-               href="http://shang.qq.com/wpa/qunwpa?idkey=6a730c052b1b42ce027179ba1f1568d0e5e598c456ccb6798be582b9a9c931f7"><img
-                    border="0" src="img/group.png" width="20" height="20" alt="Taurus后援团" title="Taurus后援团">点我加入Taurus后援团
-                155326270</a>
+               href="http://alpha.taurus.dp/"><i class="icon-bolt">切换alpha</i></a>
+            <a target="_blank" style="margin:10px;color: white;"
+               href="http://beta.taurus.dp/"><i class="icon-bolt">切换beta</i></a>
+            <a target="_blank" style="margin:10px;color: white;"
+               href="http://ppe.taurus.dp/"><i class="icon-bolt">切换ppe</i></a>
+            <a target="_blank" style="margin:10px;color: white;"
+               href="http://taurus.dp/"><i class="icon-bolt">切换线上</i></a>
+        </div>
+        <div class="pull-right" style="margin:10px;color: white;">
+            <i class="icon-group">155326270</i>
         </div>
 
         <div class="pull-right ng-binding" style="margin:10px;color: white;" ng-bind="monitorMessage"><i

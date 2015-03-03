@@ -9,11 +9,13 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.dp.bigdata.taurus.web.servlet.LoginServlet;
+import org.apache.commons.lang.StringUtils;
 
 /**
  * AuthenticationFilter
@@ -56,7 +58,21 @@ public class AuthenticationFilter implements Filter {
 		HttpSession session = req.getSession(true);
 
 		Object currentUser = session.getAttribute(LoginServlet.USER_NAME);
-		if (currentUser == null) {
+        String nickName = "";
+        Cookie cookies[] = req.getCookies();
+        if (cookies != null)
+        {
+            for (int i = 0; i < cookies.length; i++)
+            {
+                if (cookies[i].getName().equals("nick"))
+                {
+                    nickName = cookies[i].getValue();
+                    System.out.println(cookies[i].getValue());
+                }
+            }
+        }
+       // if (currentUser == null) {
+        if (StringUtils.isNotBlank(nickName)){
 			String loginUrl = loginPage + "?redirect-url="+URLEncoder.encode(requestURL, "UTF-8");
 //			req.getRequestDispatcher(loginUrl).forward(request, response);
 			res.sendRedirect(loginUrl);

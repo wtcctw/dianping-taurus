@@ -7,10 +7,7 @@ import java.util.ArrayList;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
@@ -68,7 +65,20 @@ public class LoginServlet extends HttpServlet {
         
         response.setContentType("text/html;charset=GBK");
         PrintWriter out = response.getWriter();
-       
+        Cookie cookies[] = request.getCookies();
+        if (cookies != null)
+        {
+            for (int i = 0; i < cookies.length; i++)
+            {
+                if (cookies[i].getName().equals("nickname"))
+                {
+                    Cookie cookie = new Cookie("nickname","");//这边得用"",不能用null
+                    cookie.setPath("/");//设置成跟写入cookies一样的
+                    cookie.setDomain(".taurus.dp");//设置成跟写入cookies一样的
+                    response.addCookie(cookie);
+                }
+            }
+        }
         out.print("登出成功");
         out.flush();
         out.close();
@@ -112,7 +122,12 @@ public class LoginServlet extends HttpServlet {
 		} else {
 			HttpSession session = request.getSession();
 			session.setAttribute(USER_NAME, userName);
-			System.out.println("login success!");
+            Cookie cookie = new Cookie("nickname", userName);
+            cookie.setPath("/");//这个要设置
+            cookie.setDomain(".taurus.dp");//这个也要设置才能实现上面的两个网站共用
+            cookie.setMaxAge(24*60*60);
+
+            System.out.println("login success!");
 
 			ClientResource cr = new ClientResource(USER_API);
 			IUsersResource resource = cr.wrap(IUsersResource.class);
