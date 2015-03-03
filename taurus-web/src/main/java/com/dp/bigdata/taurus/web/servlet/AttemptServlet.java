@@ -4,6 +4,7 @@ import com.dianping.cat.Cat;
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
 import com.dianping.lion.client.LionException;
+import com.dp.bigdata.taurus.core.Scheduler;
 import com.dp.bigdata.taurus.generated.module.Task;
 import com.dp.bigdata.taurus.restlet.resource.IAttemptsResource;
 import com.dp.bigdata.taurus.restlet.resource.IGetTasks;
@@ -14,6 +15,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.restlet.data.MediaType;
 import org.restlet.resource.ClientResource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import javax.servlet.ServletConfig;
@@ -27,6 +29,7 @@ import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * Created by kirinli on 15/1/28.
@@ -34,6 +37,9 @@ import java.util.Date;
 public class AttemptServlet extends HttpServlet {
     private String RESTLET_URL_BASE;
     private static final String ATTEMPT = "attempt";
+
+    @Autowired
+    private Scheduler scheduler;
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -62,15 +68,10 @@ public class AttemptServlet extends HttpServlet {
         ClientResource cr;
 
         if (ATTEMPT.equals(action)) {
+            Map<String ,Task> map = scheduler.getAllRegistedTask();
+
             OutputStream output = response.getOutputStream();
-            ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
-            if (tasks == null) {
-                ClientResource crTask = new ClientResource(RESTLET_URL_BASE + "gettasks");
-                IGetTasks taskResource = crTask.wrap(IGetTasks.class);
-                tasks = taskResource.retrieve();
-                ReFlashHostLoadTask.allTasks = tasks;
-                ReFlashHostLoadTask.lastReadDataTime = new Date().getTime();
-            }
+
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             JsonArray jsonArray = new JsonArray();
             String taskID = request.getParameter("taskID");
@@ -80,6 +81,18 @@ public class AttemptServlet extends HttpServlet {
             IAttemptsResource resource = cr.wrap(IAttemptsResource.class);
             cr.accept(MediaType.APPLICATION_XML);
             ArrayList<AttemptDTO> attempts = resource.retrieve();
+            Task task = map.get(taskID);
+            String taskName = task.getName();
+            String zabbixSwitch;
+            try {
+                zabbixSwitch = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.zabbix.switch");
+            }catch (LionException e){
+                zabbixSwitch = "true";
+            }
+            boolean isViewLog = AttemptProxyServlet.isHostOverLoad(task.getHostname());
+            if (zabbixSwitch.equals("false")){
+                isViewLog = false;
+            }
 
             for (AttemptDTO dto : attempts) {
                 JsonObject jsonObject = new JsonObject();
@@ -87,13 +100,6 @@ public class AttemptServlet extends HttpServlet {
                 String state = dto.getStatus();
                 jsonObject.addProperty("state", state);
 
-                String taskName = "";
-                for (Task task : tasks) {
-                    if (task.getTaskid().equals(dto.getTaskID())) {
-                        taskName = task.getName();
-                        break;
-                    }
-                }
 
                 jsonObject.addProperty("attemptId", dto.getAttemptID());
                 jsonObject.addProperty("id", dto.getId());
@@ -126,18 +132,6 @@ public class AttemptServlet extends HttpServlet {
                     jsonObject.addProperty("exeHost", "NULL");
                 }
                 jsonObject.addProperty("returnValue", dto.getReturnValue());
-                boolean isViewLog = AttemptProxyServlet.isHostOverLoad(dto.getExecHost());
-
-                String zabbixSwitch;
-                try {
-                    zabbixSwitch = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.zabbix.switch");
-                }catch (LionException e){
-                    zabbixSwitch = "true";
-                }
-
-                if (zabbixSwitch.equals("false")){
-                    isViewLog = false;
-                }
 
                 jsonObject.addProperty("isViewLog", isViewLog);
 

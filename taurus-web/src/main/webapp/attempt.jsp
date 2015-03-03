@@ -330,6 +330,7 @@
                 action: "attempt",
                 taskID:taskID
             },
+            timeout: 1500,
             type: "POST",
             url: "/attempt",
             error: function () {
