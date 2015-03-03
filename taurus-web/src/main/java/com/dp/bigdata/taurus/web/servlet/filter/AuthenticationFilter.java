@@ -71,6 +71,10 @@ public class AuthenticationFilter implements Filter {
                 chain.doFilter(request, response);
             }
 
+        }else {
+            String loginUrl = loginPage + "?redirect-url="+URLEncoder.encode(requestURL, "UTF-8");
+//			req.getRequestDispatcher(loginUrl).forward(request, response);
+            res.sendRedirect(loginUrl);
         }
 
 	}

@@ -12,7 +12,11 @@
 <%@ page import="org.springframework.web.util.WebUtils" %>
 <%
     Cookie cookie = WebUtils.getCookie(request, "cookie_user_jsessionid");
-    String currentUser = cookie.getValue();//(String) session.getAttribute(com.dp.bigdata.taurus.web.servlet.LoginServlet.USER_NAME);
+    String currentUser = null;
+    if (cookie != null){
+        currentUser =  cookie.getValue();
+    }
+   //(String) session.getAttribute(com.dp.bigdata.taurus.web.servlet.LoginServlet.USER_NAME);
     if (currentUser != null) {
 %>
 <%} else {%>
