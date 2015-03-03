@@ -8,8 +8,11 @@
 <%@ page import="com.dianping.lion.client.LionException" %>
 <%@ page import="java.util.HashMap" %>
 <%@ page import="com.dp.bigdata.taurus.web.servlet.LoginServlet" %>
+<%@ page import="static com.dp.bigdata.taurus.web.servlet.LoginServlet.*" %>
+<%@ page import="org.springframework.web.util.WebUtils" %>
 <%
-    String currentUser = LoginServlet.COOKIE_USER;//(String) session.getAttribute(com.dp.bigdata.taurus.web.servlet.LoginServlet.USER_NAME);
+    Cookie cookie = WebUtils.getCookie(request, "cookie_user_jsessionid");
+    String currentUser = cookie.getValue();//(String) session.getAttribute(com.dp.bigdata.taurus.web.servlet.LoginServlet.USER_NAME);
     if (currentUser != null) {
 %>
 <%} else {%>
