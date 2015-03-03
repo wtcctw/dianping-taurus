@@ -23,6 +23,8 @@ import com.dp.bigdata.taurus.restlet.resource.IUserResource;
 import com.dp.bigdata.taurus.restlet.resource.IUsersResource;
 import com.dp.bigdata.taurus.restlet.shared.UserDTO;
 import org.springframework.web.util.CookieGenerator;
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
 
 /**
  * LoginServlet
@@ -118,8 +120,12 @@ public class LoginServlet extends HttpServlet {
                 CookieGenerator cookie = new CookieGenerator();
                 cookie.setCookieDomain(".taurus.dp");//这个也要设置才能实现上面的两个网站共用
                 cookie.setCookieMaxAge(1 * 24 * 60 * 60);
-                cookie.setCookieName("cookie_user_jsessionid");
-                cookie.addCookie(response, URLEncoder.encode(userName, "UTF-8"));
+                BASE64Encoder base64Encoder = new BASE64Encoder();
+
+                String cookieInfo = base64Encoder.encode(userName.getBytes());
+                String cookieName ="cookie_user_jsessionid";
+                cookie.setCookieName(cookieName);
+                cookie.addCookie(response, cookieInfo);
                 COOKIE_USER = userName;
 				if(isInfoCompleted(userName)){
 					response.setStatus(200);
@@ -135,9 +141,12 @@ public class LoginServlet extends HttpServlet {
             CookieGenerator cookie = new CookieGenerator();
             cookie.setCookieDomain(".taurus.dp");//这个也要设置才能实现上面的两个网站共用
             cookie.setCookieMaxAge(1 * 24 * 60 * 60);
-            cookie.setCookieName("cookie_user_jsessionid");
+            BASE64Encoder base64Encoder = new BASE64Encoder();
+            String cookieInfo = base64Encoder.encode(userName.getBytes());
+            String cookieName ="cookie_user_jsessionid";
+            cookie.setCookieName(cookieName);
             COOKIE_USER = userName;
-            cookie.addCookie(response, URLEncoder.encode(userName, "UTF-8"));
+            cookie.addCookie(response, cookieInfo);
             System.out.println("login success!");
 
 			ClientResource cr = new ClientResource(USER_API);

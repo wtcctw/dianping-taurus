@@ -17,6 +17,7 @@ import javax.servlet.http.HttpSession;
 import com.dp.bigdata.taurus.web.servlet.LoginServlet;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.util.WebUtils;
+import sun.misc.BASE64Encoder;
 
 /**
  * AuthenticationFilter
@@ -59,7 +60,8 @@ public class AuthenticationFilter implements Filter {
 		HttpSession session = req.getSession(true);
 
 		Object currentUser = session.getAttribute(LoginServlet.USER_NAME);
-        Cookie cookie = WebUtils.getCookie(req, "cookie_user_jsessionid");
+        String cookieName ="cookie_user_jsessionid";
+        Cookie cookie = WebUtils.getCookie(req, cookieName);
 
         if (null != cookie) {
             String cookieValue = cookie.getValue();
@@ -83,4 +85,11 @@ public class AuthenticationFilter implements Filter {
 	public void destroy() {
 	}
 
+    public static void main(String[] args) {
+        String s = "cookie_user_jsessionid";
+        BASE64Encoder base64Encoder = new BASE64Encoder();
+        String e = base64Encoder.encode(s.getBytes());
+        System.out.println(e);
+
+    }
 }

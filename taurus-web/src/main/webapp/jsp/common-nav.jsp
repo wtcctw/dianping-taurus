@@ -10,11 +10,17 @@
 <%@ page import="com.dp.bigdata.taurus.web.servlet.LoginServlet" %>
 <%@ page import="static com.dp.bigdata.taurus.web.servlet.LoginServlet.*" %>
 <%@ page import="org.springframework.web.util.WebUtils" %>
+<%@ page import="sun.misc.BASE64Decoder" %>
+<%@ page import="sun.misc.BASE64Encoder" %>
 <%
-    Cookie cookie = WebUtils.getCookie(request, "cookie_user_jsessionid");
+    BASE64Encoder base64Encoder = new BASE64Encoder();
+    String cookieName = "cookie_user_jsessionid";
+    Cookie cookie = WebUtils.getCookie(request, cookieName);
     String currentUser = null;
+    BASE64Decoder base64Decoder = new BASE64Decoder();
     if (cookie != null){
-        currentUser =  cookie.getValue();
+        byte[] userNameByte = base64Decoder.decodeBuffer(cookie.getValue());
+        currentUser = new String(userNameByte);
     }
    //(String) session.getAttribute(com.dp.bigdata.taurus.web.servlet.LoginServlet.USER_NAME);
     if (currentUser != null) {
