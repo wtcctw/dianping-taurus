@@ -7,8 +7,9 @@
 <%@ page import="com.dianping.lion.EnvZooKeeperConfig" %>
 <%@ page import="com.dianping.lion.client.LionException" %>
 <%@ page import="java.util.HashMap" %>
+<%@ page import="com.dp.bigdata.taurus.web.servlet.LoginServlet" %>
 <%
-    String currentUser = (String) session.getAttribute(com.dp.bigdata.taurus.web.servlet.LoginServlet.USER_NAME);
+    String currentUser = LoginServlet.COOKIE_USER;//(String) session.getAttribute(com.dp.bigdata.taurus.web.servlet.LoginServlet.USER_NAME);
     if (currentUser != null) {
 %>
 <%} else {%>

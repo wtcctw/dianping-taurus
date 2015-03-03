@@ -42,6 +42,7 @@ public class LoginServlet extends HttpServlet {
 	public static final String USER_GROUP = "taurus-group";
 
 	public static final String USER_POWER = "taurus-user-power";
+    public static  String COOKIE_USER = "";
 
 	private String RESTLET_URL_BASE;
 
@@ -72,15 +73,16 @@ public class LoginServlet extends HttpServlet {
         {
             for (int i = 0; i < cookies.length; i++)
             {
-                if (cookies[i].getName().equals("nickname"))
+                if (cookies[i].getName().equals("cookie_user_jsessionid"))
                 {
-                    Cookie cookie = new Cookie("nickname","");//这边得用"",不能用null
+                    Cookie cookie = new Cookie("cookie_user_jsessionid","");//这边得用"",不能用null
                     cookie.setPath("/");//设置成跟写入cookies一样的
                     cookie.setDomain(".taurus.dp");//设置成跟写入cookies一样的
                     response.addCookie(cookie);
                 }
             }
         }
+        COOKIE_USER = "";
         out.print("登出成功");
         out.flush();
         out.close();
@@ -118,6 +120,7 @@ public class LoginServlet extends HttpServlet {
                 cookie.setCookieMaxAge(1 * 24 * 60 * 60);
                 cookie.setCookieName("cookie_user_jsessionid");
                 cookie.addCookie(response, URLEncoder.encode(userName, "UTF-8"));
+                COOKIE_USER = userName;
 				if(isInfoCompleted(userName)){
 					response.setStatus(200);
 				} else{
@@ -133,6 +136,7 @@ public class LoginServlet extends HttpServlet {
             cookie.setCookieDomain(".taurus.dp");//这个也要设置才能实现上面的两个网站共用
             cookie.setCookieMaxAge(1 * 24 * 60 * 60);
             cookie.setCookieName("cookie_user_jsessionid");
+            COOKIE_USER = userName;
             cookie.addCookie(response, URLEncoder.encode(userName, "UTF-8"));
             System.out.println("login success!");
 
