@@ -24,6 +24,8 @@ import com.dp.bigdata.taurus.restlet.resource.ILogResource;
 import com.dp.bigdata.taurus.restlet.shared.AttemptDTO;
 import com.dp.bigdata.taurus.restlet.shared.HostDTO;
 import com.dp.bigdata.taurus.web.utils.ReFlashHostLoadTask;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.WebResource;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
@@ -79,7 +81,7 @@ public class AttemptProxyServlet extends HttpServlet {
         }
     }
 
-    public static String getAgentRestService(String restUrl) {
+   /* public static String getAgentRestService(String restUrl) {
 
         InputStream inputStream = null;
         String msgContent = "";
@@ -104,8 +106,14 @@ public class AttemptProxyServlet extends HttpServlet {
             e.printStackTrace();
         }
         return msgContent;
-    }
-
+    }*/
+public static String getAgentRestService(String restUrl){
+    Client client = Client.create();
+    client.setConnectTimeout(1500);
+    client.setReadTimeout(1000);
+    WebResource webResource = client.resource(restUrl);
+    return webResource.get(String.class);
+}
     private static String getHostName(String ip) {
 
         String hostNameurl = "http://api.cmdb.dp/api/v0.1/ci/s?q=_type:(server;vserver),private_ip:" + ip + "&fl=hostname";
@@ -281,13 +289,12 @@ public class AttemptProxyServlet extends HttpServlet {
                             + "&query_type=" + queryType;
                     String context = getAgentRestService(logurl);
                     String retStr;                                              //格式化日志 以便在web显示是换行的
-                    String logStr = context;
                     OutputStream output = response.getOutputStream();
 
-                    if (StringUtils.isBlank(logStr)) {                                     //时间间隔短，日志尚未生成可能获得null
+                    if (StringUtils.isBlank(context)) {                                     //时间间隔短，日志尚未生成可能获得null
                         retStr = " ";
                     } else {
-                        retStr = logStr.replace("\n", "<br>");
+                        retStr = context.replace("\n", "<br>");
                     }
                     output.write(retStr.getBytes());
                     output.close();
@@ -378,18 +385,17 @@ public class AttemptProxyServlet extends HttpServlet {
                             request.getSession().setAttribute(fileSizeAttribute, "0");
                         }
 
-                        String retStr;
                         //格式化日志 以便在web显示是换行的
                         OutputStream output = response.getOutputStream();
 
 
                         if (StringUtils.isBlank(context)) {                                     //时间间隔短，日志尚未生成可能获得null
-                            retStr = " ";
+                            context = " ";
                         } else {
-                            retStr = context.replace("\n", "<br>");
+                            context = context.replace("\n", "<br>");
                         }
 
-                        output.write(retStr.getBytes());
+                        output.write(context.getBytes());
                         output.close();
                     } catch (Exception e) {
                         String exceptMessage = e.getMessage();
