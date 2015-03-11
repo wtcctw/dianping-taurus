@@ -246,47 +246,45 @@ public void deployer(String deployId, String deployIp, String deployFile, String
             String jarName = tmpStrArray[tmpStrArray.length - 1];
 
             String tmpPath = "";
-            if(path.contains(jarName)){
-                tmpPath = path;
-            }else{
-                tmpPath = path + "/" + jarName;
-            }
+            if (StringUtils.isNotBlank(jarName)&& StringUtils.isNotBlank(path)){
+                if(path.contains(jarName)){
+                    tmpPath = path;
+                }else{
+                    tmpPath = path + "/" + jarName;
+                }
+                try {
+                    System.out.println("===getTaskByAppNameIP===");
+                    tasks  = taskMapper.getTaskByAppNameIP(name, ip);
 
+                    if (tasks != null){
+                        for (Task task : tasks){
 
-            try {
-                System.out.println("===getTaskByAppNameIP===");
-                tasks  = taskMapper.getTaskByAppNameIP(name, ip);
+                            if (task != null && StringUtil.isNotBlank(task.getCommand())){
+                                needReplace = true;
+                                oldCMDs.add(task.getCommand());
+                                String realCMD = splitCMD(task.getCommand(), jarName);
 
-                if (tasks != null){
-                    for (Task task : tasks){
-
-                        if (task != null && StringUtil.isNotBlank(task.getCommand())){
-                            needReplace = true;
-                            oldCMDs.add(task.getCommand());
-                            String realCMD = splitCMD(task.getCommand(), jarName);
-
-                            if(StringUtils.isNotBlank(realCMD)){
-                                System.out.println("Task CMD update:"+ realCMD);
-                                LOG.error("Task CMD update:"+ realCMD);
-                                task.setCommand(realCMD);
-                                taskMapper.updateByPrimaryKey(task);
-                            }else {
-                                LOG.error("Update Task["+task.getName()+"] exception");
-                                System.out.println("Update Task["+task.getName()+"] exception");
+                                if(StringUtils.isNotBlank(realCMD)){
+                                    System.out.println("Task CMD update:"+ realCMD);
+                                    LOG.error("Task CMD update:"+ realCMD);
+                                    task.setCommand(realCMD);
+                                    taskMapper.updateByPrimaryKey(task);
+                                }else {
+                                    LOG.error("Update Task["+task.getName()+"] exception");
+                                    System.out.println("Update Task["+task.getName()+"] exception");
+                                }
+                                System.out.println("=====Task CMD:"+ task.getCommand());
                             }
-                            System.out.println("=====Task CMD:"+ task.getCommand());
                         }
+
                     }
 
+
+                }catch (Exception e){
+                    LOG.error("update Task cmd Error");
+                    System.out.println("update Task cmd Error"+e);
                 }
-
-
-            }catch (Exception e){
-                LOG.error("update Task cmd Error");
-                System.out.println("update Task cmd Error"+e);
             }
-
-
 
 
 
