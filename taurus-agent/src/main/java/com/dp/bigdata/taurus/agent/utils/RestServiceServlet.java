@@ -70,7 +70,7 @@ public class RestServiceServlet extends HttpServlet {
 
             }
             BufferedWriter osw = new BufferedWriter(new OutputStreamWriter(output, "UTF-8"));
-            osw.write(respStr.toString());
+            osw.write(respStr);
             osw.close();
 
         } else if (action.equals(ISEND)) {

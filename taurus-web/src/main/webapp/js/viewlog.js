@@ -147,8 +147,8 @@ function do_relash_task() {
     if (status == "RUNNING") {
         var is_end = is_log_end();
         if (is_end == "false") {
-            error_log_rtn = setInterval("fetch_errorLog()", 5000);
-            log_rtn = setInterval("fetch_Log()", 5000);
+            error_log_rtn = setInterval("fetch_errorLog()", 15000);
+            log_rtn = setInterval("fetch_Log()", 15000);
             setTimeout("close_reflash()", 10 * 60 * 1000)
         } else {
             fetch_errorLog();

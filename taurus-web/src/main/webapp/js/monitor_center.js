@@ -433,26 +433,32 @@ function reflash_data(starttime, endtime){
                     groupSuccTaskNums++;
 
                     groupSuccBody += "<i class='icon-tasks'></i>" + item.taskName + ": " + item.nums + usericon + item.creator + "<br>"
-                    groupTaskListBody += "<tr>" +
-                        "<td>" + item.taskName + "</td>" +
-                        "<td>成功</td>" +
-                        "<td>" + item.nums + "</td>" +
-                        "<td>" + item.creator + "</td>" +
-                        "<td><a id='attempts' class='btn btn-primary btn-small' href='attempt.jsp?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>"+
-                        "</tr>";
+                    if(item.creator != username){
+                        groupTaskListBody += "<tr>" +
+                            "<td>" + item.taskName + "</td>" +
+                            "<td>成功</td>" +
+                            "<td>" + item.nums + "</td>" +
+                            "<td>" + item.creator + "</td>" +
+                            "<td><a id='attempts' class='btn btn-primary btn-small' href='attempt.jsp?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>"+
+                            "</tr>";
+                    }
+
+
                 } else if (item.status == "failed"){
                     if (item.nums != 0) {
                         groupFailedNums += item.nums;
                         groupFailedLists[groupFailedNums] = item.taskName;
                         groupFailedTaskNums++;
                         groupFailedBody += "<i class='icon-tasks'></i>" + item.taskName + ": " + item.nums + usericon + item.creator + "<br>"
-                        groupTaskListBody += "<tr>" +
-                            "<td>" + item.taskName + "</td>" +
-                            "<td>失败</td>" +
-                            "<td>" + item.nums + "</td>" +
-                            "<td>" + item.creator + "</td>" +
-                            "<td><a id='attempts' class='btn btn-primary btn-small' href='attempt.jsp?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>"+
-                            "</tr>";
+                        if(item.creator != username) {
+                            groupTaskListBody += "<tr>" +
+                                "<td>" + item.taskName + "</td>" +
+                                "<td>失败</td>" +
+                                "<td>" + item.nums + "</td>" +
+                                "<td>" + item.creator + "</td>" +
+                                "<td><a id='attempts' class='btn btn-primary btn-small' href='attempt.jsp?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>" +
+                                "</tr>";
+                        }
                     }
 
                 }else if (item.status == "killed"){
@@ -461,13 +467,15 @@ function reflash_data(starttime, endtime){
                         groupKillLists[groupKillNums] = item.taskName;
                         groupKillTaskNums++;
                         groupKillBody += "<i class='icon-tasks'></i>" + item.taskName + ": " + item.nums + usericon + item.creator + "<br>"
-                        groupTaskListBody += "<tr>" +
-                            "<td>" + item.taskName + "</td>" +
-                            "<td>杀死</td>" +
-                            "<td>" + item.nums + "</td>" +
-                            "<td>" + item.creator + "</td>" +
-                            "<td><a id='attempts' class='btn btn-primary btn-small' href='attempt.jsp?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>"+
-                            "</tr>";
+                        if(item.creator != username) {
+                            groupTaskListBody += "<tr>" +
+                                "<td>" + item.taskName + "</td>" +
+                                "<td>杀死</td>" +
+                                "<td>" + item.nums + "</td>" +
+                                "<td>" + item.creator + "</td>" +
+                                "<td><a id='attempts' class='btn btn-primary btn-small' href='attempt.jsp?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>" +
+                                "</tr>";
+                        }
                     }
 
                 }else if (item.status == "timeout"){
