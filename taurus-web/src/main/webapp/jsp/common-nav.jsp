@@ -13,7 +13,7 @@
 <%@ page import="sun.misc.BASE64Decoder" %>
 <%@ page import="sun.misc.BASE64Encoder" %>
 <%
-    BASE64Encoder base64Encoder = new BASE64Encoder();
+    /*BASE64Encoder base64Encoder = new BASE64Encoder();
     String cookieName = "cookie_user_jsessionid";
     Cookie cookie = WebUtils.getCookie(request, cookieName);
     String currentUser = null;
@@ -21,8 +21,8 @@
     if (cookie != null){
         byte[] userNameByte = base64Decoder.decodeBuffer(cookie.getValue());
         currentUser = new String(userNameByte);
-    }
-   //(String) session.getAttribute(com.dp.bigdata.taurus.web.servlet.LoginServlet.USER_NAME);
+    }*/
+    String currentUser =  (String) session.getAttribute(com.dp.bigdata.taurus.web.servlet.LoginServlet.USER_NAME);
     if (currentUser != null) {
 %>
 <%} else {%>
