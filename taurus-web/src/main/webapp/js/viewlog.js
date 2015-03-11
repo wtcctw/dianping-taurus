@@ -4,6 +4,7 @@ var error_log_rtn;
 var log_rtn;
 var result;
 var is_flash;
+var is_force;
 var old_status;
 var timeout;
 $(document).ready(function () {
@@ -31,10 +32,20 @@ $(document).ready(function () {
 
 
     });
+    $('#force-button-borders').attr('checked', 'checked').on('click', function () {
+        $('#default-buttons .btn').toggleClass('no-border');
+        is_force = $('#force-button-borders')[0].checked;
+        if(is_force){
+            timeout = 5000;
+            do_relash_task();
+        }
+
+    });
     attemptID = GetQueryString("id"); //通过表达式获得传递参数
     old_status = GetQueryString("status");
     status = get_task_status();
     is_flash = $('#id-button-borders')[0].checked;
+
     var flash_btn = document.getElementById("flash_btn");
     var reflash_tip = document.getElementById("reflashtip");
     reflash_tip.style.display = "none";
@@ -44,7 +55,7 @@ $(document).ready(function () {
     } else {
         timeout = 1500;
     }
-
+    setTimeout("window.close()",10*60000);
     do_relash_task();
 });
 
@@ -72,7 +83,6 @@ function fetch_errorLog() {
     }
 
     var loading = document.getElementById("errloading");
-
     $.ajax({
         url: "attempts.do",
         data: {
@@ -110,6 +120,7 @@ function fetch_Log() {
         }
     }
     is_flash = $('#id-button-borders')[0].checked;
+
     if (is_flash == false) {
         clearInterval(log_rtn);
     }
@@ -224,3 +235,4 @@ var unloadPageTip = function () {
 };
 
 window.onbeforeunload = unloadPageTip;
+

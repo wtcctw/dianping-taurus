@@ -262,7 +262,19 @@
                         </li>
                     </ul>
                     </div>
+                    <div class="flash_btn col-sm-6" id="force_btn">
+                        <div class="col-sm-8">
+                            <label class="label ">强制查看</label>
+                            <input id="force-button-borders" checked="checked" type="checkbox" class="ace ace-switch ace-switch-5">
+                            <span class="lbl middle"></span>
+                        </div>
+                        <div class="col-sm-4">
+                            <a class="atip tooltip-info" data-toggle="tooltip" data-placement="left"
+                               data-original-title="你的日志显示异常，是由于job主机负载过高导致，如果强制显示日志，可能对该主机的job造成影响">[提示] </a>
+                        </div>
+                    </div>
                     <div class="flash_btn col-sm-6" id="flash_btn">
+
                        <div class="col-sm-8">
                         <label class="label " >实时刷新:</label>
                             <input id="id-button-borders" checked="checked" type="checkbox" class="ace ace-switch ace-switch-5">
@@ -273,6 +285,7 @@
                            data-original-title="当你开启实时刷新后页面会自动刷新，不需要自己动手刷新页面喽～">[提示] </a>
                         </div>
                      </div>
+
                     <div class="reflashtip col-sm-2" id="reflashtip">
 
                         <a class="atip tooltip-info" data-toggle="tooltip" data-placement="left"
