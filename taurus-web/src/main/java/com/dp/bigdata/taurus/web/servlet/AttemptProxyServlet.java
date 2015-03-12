@@ -109,7 +109,7 @@ public class AttemptProxyServlet extends HttpServlet {
     }*/
 public static String getAgentRestService(String restUrl){
     Client client = Client.create();
-    client.setConnectTimeout(1500);
+    client.setConnectTimeout(1000);
     client.setReadTimeout(1000);
     WebResource webResource = client.resource(restUrl);
     return webResource.get(String.class);
@@ -229,7 +229,7 @@ public static String getAgentRestService(String restUrl){
         ILogResource attemptResource = attemptCr.wrap(ILogResource.class);
 
         if (action.equals(KILL)) {
-            attemptResource.kill();
+                attemptResource.kill();
             response.setStatus(attemptCr.getStatus().getCode());
         } else if (action.equals(LOG)) {
             response.setContentType("text/html;charset=utf-8");
@@ -392,7 +392,7 @@ public static String getAgentRestService(String restUrl){
                         if (StringUtils.isBlank(context)) {                                     //时间间隔短，日志尚未生成可能获得null
                             context = " ";
                         } else {
-                            context = context.replace("\n", "<br>");
+                           // context = context.replace("\n", "<br>");
                         }
 
                         output.write(context.getBytes());

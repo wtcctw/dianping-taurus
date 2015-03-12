@@ -265,8 +265,8 @@
                     <div class="flash_btn col-sm-6" id="force_btn">
                         <div class="col-sm-8">
                             <label class="label ">强制查看</label>
-                            <input id="force-button-borders" checked="checked" type="checkbox" class="ace ace-switch ace-switch-5">
-                            <span class="lbl middle"></span>
+                            <input id="force-button-borders" type="checkbox" class="ace ace-switch ace-switch-5">
+                            <span class="lbl"></span>
                         </div>
                         <div class="col-sm-4">
                             <a class="atip tooltip-info" data-toggle="tooltip" data-placement="left"

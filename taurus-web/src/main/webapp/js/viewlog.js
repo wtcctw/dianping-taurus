@@ -32,11 +32,13 @@ $(document).ready(function () {
 
 
     });
-    $('#force-button-borders').attr('checked', 'checked').on('click', function () {
+    $('#force-button-borders').attr('unchecked', 'checked').on('click', function () {
+
         $('#default-buttons .btn').toggleClass('no-border');
         is_force = $('#force-button-borders')[0].checked;
         if(is_force){
-            timeout = 5000;
+            timeout = 6000;
+
             do_relash_task();
         }
 
@@ -46,14 +48,17 @@ $(document).ready(function () {
     status = get_task_status();
     is_flash = $('#id-button-borders')[0].checked;
 
+    var force_btn = document.getElementById("force_btn");
     var flash_btn = document.getElementById("flash_btn");
     var reflash_tip = document.getElementById("reflashtip");
     reflash_tip.style.display = "none";
     if (status != "RUNNING") {
+
         flash_btn.style.display = "none";
-        timeout = 1500;
+        timeout = 2500;
     } else {
-        timeout = 1500;
+        force_btn.style.display = "none";
+        timeout = 4000;
     }
     setTimeout("window.close()",10*60000);
     do_relash_task();
@@ -98,7 +103,11 @@ function fetch_errorLog() {
         },
         success: function (response) {
             loading.style.display = "none";
-            result = response;//.replace(/[\n]/g, "<br>")
+            if(response.indexOf("你要的东西不在这或者目前不存在，到别处看看风景吧") >=0){
+                result = response;
+            }else{
+                result = response.replace(/[\n]/g, "<br>");
+            }
 
             $logContainer.append("<div>" + result + "</div>");
             $logContainer.scrollTop($logContainer.get(0).scrollHeight);
@@ -139,7 +148,12 @@ function fetch_Log() {
         },
         success: function (response) {
             loading.style.display = "none";
-            result = response;
+
+            if(response.indexOf("你要的东西不在这或者目前不存在，到别处看看风景吧") >=0){
+                result = response;
+            }else{
+                result = response.replace(/[\n]/g, "<br>");
+            }
 
             $logContainer.append("<div>" + result + "</div>");
             $logContainer.scrollTop($logContainer.get(0).scrollHeight);
