@@ -17,7 +17,7 @@
 
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
+    </listener>ApiAction
 	<context-param>
 		<param-name>RESTLET_SERVER</param-name>
 		<param-value>http://localhost:8192/api/</param-value>

@@ -7,11 +7,8 @@
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
 
 	<!-- Datasource -->
-	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
-		<property name="driverClass" value="com.mysql.jdbc.Driver" />
-		<property name="jdbcUrl" value="${taurus.jdbc.url}" />
-		<property name="user" value="${taurus.jdbc.username}" />
-		<property name="password" value="${taurus.jdbc.password}" />
+	<bean id="dataSource" class="com.dianping.zebra.group.jdbc.GroupDataSource" init-method="init">
+        <property name="jdbcRef" value="taurus" /> <!-- 唯一确定数据库的key -->
 		<property name="minPoolSize" value="5" />
 		<property name="maxPoolSize" value="10" />
 		<property name="initialPoolSize" value="5" />

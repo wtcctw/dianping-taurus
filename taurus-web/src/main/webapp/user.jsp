@@ -427,7 +427,7 @@
                             <div class="widget-toolbar">
                                 <a href="#" data-action="collapse">
                                     <i class="icon-chevron-up"></i>
-                                </a>d
+                                </a>
                             </div>
                         </div>
 
