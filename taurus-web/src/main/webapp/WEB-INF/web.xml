@@ -79,6 +79,21 @@
 		<session-timeout>720</session-timeout>
 	</session-config>
 
+	<!-- spirng mvc 配置 -->
+	<servlet>
+		<servlet-name>springmvc-servlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:spring-mvc.xml</param-value>
+		</init-param>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>springmvc-servlet</servlet-name>
+		<url-pattern>/mvc/*</url-pattern>
+	</servlet-mapping>
+
 	<servlet>
 		<servlet-name>TaskProxyServlet</servlet-name>
 		<servlet-class>com.dp.bigdata.taurus.web.servlet.TaskProxyServlet</servlet-class>
