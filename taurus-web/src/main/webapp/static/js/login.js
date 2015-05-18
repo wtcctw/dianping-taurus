@@ -23,14 +23,14 @@ function login(url){
 			},
 			200 : function(){
 				if(url=='')
-					window.location="../index.jsp";
+					window.location="index";
 				else{
 					window.location=url;
 				}
 			},
 			201 : function(){
 				if(url=='')
-					window.location="../index.jsp";
+					window.location="index";
 				else{
 					window.location=url;
 				}
@@ -46,7 +46,7 @@ function logout(){
 		type:"get",
 		statusCode:{
 			200 : function(){
-				window.location="../signin.jsp";
+				window.location="signin";
 			}
 			
 		}

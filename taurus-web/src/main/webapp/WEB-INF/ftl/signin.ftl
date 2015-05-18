@@ -49,7 +49,7 @@
 														<span class="block input-icon input-icon-right">
 															<input type="password" id="password" class="form-control required"
                                                                    placeholder="Password"
-                                                                   onKeyPress="EnterTo('${url}')"/>
+                                                                   onKeyPress="EnterTo('${url!}')"/>
 															<i class="ace-icon icon-lock"></i>
 														</span>
                                             </label>
@@ -58,7 +58,7 @@
 
                                             <div class="clearfix">
                                                 <button type="button" class="width-35 pull-right btn btn-sm btn-primary"
-                                                        onClick="login('${url}')">
+                                                        onClick="login('${url!}')">
                                                     <i class="ace-icon icon-key"></i>
                                                     <span class="bigger-110">Sign in</span>
                                                 </button>
