@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.mortbay.log.Log;
+
 import com.dp.bigdata.taurus.web.servlet.LoginServlet;
 
 /**
@@ -23,6 +25,8 @@ import com.dp.bigdata.taurus.web.servlet.LoginServlet;
 public class AuthenticationFilter implements Filter {
 
 	private String loginPage;
+	
+	private String mvcLoginPage;
 
 	private String[] excludePages;
 
@@ -30,6 +34,7 @@ public class AuthenticationFilter implements Filter {
 	public void init(FilterConfig filterConfig) throws ServletException {
 		if (filterConfig != null) {
 			loginPage = filterConfig.getInitParameter("loginPage");
+			mvcLoginPage = filterConfig.getInitParameter("mvcLoginPage");
 			String excludePage = filterConfig.getInitParameter("excludePage");
 			excludePages = excludePage.split(",");
 		}
@@ -58,7 +63,11 @@ public class AuthenticationFilter implements Filter {
 		Object currentUser = session.getAttribute(LoginServlet.USER_NAME);
 		if (currentUser == null) {
 			String loginUrl = loginPage + "?redirect-url="+URLEncoder.encode(requestURL, "UTF-8");
-//			req.getRequestDispatcher(loginUrl).forward(request, response);
+			//新增过滤spring mvc页面,mvc链接临时解决方案
+			if(requestURL.toLowerCase().contains("mvc")){
+				loginUrl = req.getContextPath()+mvcLoginPage+
+						"?redirect-url="+URLEncoder.encode(requestURL, "UTF-8");
+			}
 			res.sendRedirect(loginUrl);
 		
 		} else {

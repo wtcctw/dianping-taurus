@@ -94,7 +94,6 @@ public class HomeController implements ServletContextAware{
             now = df.format(time);
         }
         
-        //目前没看出day和history参数的区别
         long nowLtime = df.parse(now).getTime();
         long dHour = 24*hourTime;
         long wHour = 7*dHour;
@@ -149,7 +148,6 @@ public class HomeController implements ServletContextAware{
         modelMap.addAttribute("af1mD", af1mD);
         modelMap.addAttribute("af1mDtip", af1mDtip);
         
-        
         String now_s = formatter.format( df.parse(now));
         modelMap.addAttribute("now_s", now_s);
         modelMap.addAttribute("step", step_str);
@@ -158,6 +156,93 @@ public class HomeController implements ServletContextAware{
 		return "/index.ftl";
 	}
 	
+	@RequestMapping(value = "/task_center", method = RequestMethod.GET)
+	public String task_center(ModelMap modelMap, HttpServletRequest request,
+			HttpServletResponse response) throws ParseException {
+		log.info("--------------init the task_center------------");
+		
+		commonnav(modelMap,request);
+		
+		Date time = new Date();
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHH");
+        long hourTime = 60 * 60 * 1000;
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+        String step_str = request.getParameter("step");
+        String now = request.getParameter("date");
+        String op_str = request.getParameter("op");
+        if(op_str==null || op_str.isEmpty()){
+        	op_str="day";
+        }
+        System.out.println(step_str + "#" + now);
+        int step = -24;
+        
+        if (now == null || now.isEmpty()) {
+            now = df.format(time);
+        }
+        
+        long nowLtime = df.parse(now).getTime();
+        long dHour = 24*hourTime;
+        long wHour = 7*dHour;
+        long mHour = 30*dHour;
+        String nowFormat = formatter.format(new Date(nowLtime));
+        
+        String bf1mD = df.format(new Date(nowLtime -mHour));
+        String bf1mDtip = formatter.format(new Date(nowLtime -mHour))+"~"+nowFormat;
+        String bf1wD = df.format(new Date(nowLtime -wHour));
+        String bf1wDtip = formatter.format(new Date(nowLtime -wHour))+"~"+nowFormat;
+        String bf1dD = df.format(new Date(nowLtime -dHour));
+        String bf1dDtip = formatter.format(new Date(nowLtime -dHour))+"~"+nowFormat;
+        //当天
+        String todayD = df.format(time);
+        String todayDtip = formatter.format(new Date(time.getTime() -dHour))+
+        		"~"+formatter.format(time);
+        //未来1天，1周，1月
+        //+1d，+1w，+1m的jsp脚本判断bug修复，现有时间粒度上加1小时进行判断,即futureNow
+        //实际上变量名now和time交换一下逻辑上比较清晰,另外，request.getParameter("step")似乎没什么用。
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(df.parse(now));
+        cal.add(Calendar.HOUR, 1);
+        String futureNow = df.format(cal.getTime());
+        String af1dD = "";
+        String af1wD = "";
+        String af1mD = "";
+        if(df.parse(futureNow).after(time)){
+        	af1dD=af1wD=af1mD=todayD;
+        }else{
+        	af1dD = df.format(new Date(nowLtime + dHour));
+        	af1wD = df.format(new Date(nowLtime + wHour));
+        	af1mD = df.format(new Date(nowLtime + mHour));
+        }
+        String af1dDtip = nowFormat+"~"+formatter.format(new Date(nowLtime + dHour));
+        String af1wDtip = nowFormat+"~"+formatter.format(new Date(nowLtime + wHour));
+        String af1mDtip = nowFormat+"~"+formatter.format(new Date(nowLtime + mHour));
+        
+        modelMap.addAttribute("bf1mD", bf1mD);
+        modelMap.addAttribute("bf1mDtip", bf1mDtip);
+        modelMap.addAttribute("bf1wD", bf1wD);
+        modelMap.addAttribute("bf1wDtip", bf1wDtip);
+        modelMap.addAttribute("bf1dD", bf1dD);
+        modelMap.addAttribute("bf1dDtip", bf1dDtip);
+        
+        modelMap.addAttribute("todayD", todayD);
+        modelMap.addAttribute("todayDtip", todayDtip);
+        
+        modelMap.addAttribute("af1dD", af1dD);
+        modelMap.addAttribute("af1dDtip", af1dDtip);
+        modelMap.addAttribute("af1wD", af1wD);
+        modelMap.addAttribute("af1wDtip", af1wDtip);
+        modelMap.addAttribute("af1mD", af1mD);
+        modelMap.addAttribute("af1mDtip", af1mDtip);
+        
+        String now_s = formatter.format( df.parse(now));
+        modelMap.addAttribute("now_s", now_s);
+        modelMap.addAttribute("step", step_str);
+        modelMap.addAttribute("op_str", op_str);
+        
+		return "/task_center.ftl";
+	}
 	/**
 	 * 重构jsp/common-nav.jsp
 	 * @param modelMap
@@ -203,9 +288,9 @@ public class HomeController implements ServletContextAware{
 	    modelMap.addAttribute("currentUser", currentUser);
 	    modelMap.addAttribute("isAdmin",isAdmin);
 	}
+	
+	
 
-	
-	
 	//lion test
 //	@RequestMapping(value = "/liontest/{user}", method = RequestMethod.GET)
 //	@ResponseBody

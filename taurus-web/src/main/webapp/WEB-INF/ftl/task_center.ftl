@@ -1,12 +1,12 @@
 <!DOCTYPE html >
 <html >
 <head>
-	<meta name="description" content="overview &amp; stats"/>
+
 	<title>Taurus</title>
 
 	<#include "segment/html_header.ftl">
     <script type="text/javascript" src="${rc.contextPath}/static/js/login.js"></script>
-    <script type="text/javascript" src="${rc.contextPath}/static/js/monitor_center.js"></script>
+    <script type="text/javascript" src="${rc.contextPath}/static/js/task_center.js"></script>
     <link rel="stylesheet" href="${rc.contextPath}/resource/css/monitor-center.css">
     <style>
         .dayreport {
@@ -23,7 +23,7 @@
 </head>
 
 <body>
-<#include "segment/index_header.ftl">
+<#include "segment/header.ftl">
 <#include "segment/left.ftl">
 
 <div class="main-content  " style="opacity: 1;">
@@ -40,7 +40,7 @@
             <a href="${rc.contextPath}/mvc/index">HOME</a>
         </li>
     </ul>
-    <div style="float:right;padding-right: 20px">
+    <div class="hide" style="float:right;padding-right: 20px">
         <label>开始：</label><input type="text" id="startTime"/>
         <label>结束：</label><input type="text" id="endTime"/>
         <a class="btn btn-primary btn-small" href='#' onClick="reflash_view()"><i class="icon-eye-open">查看</i></a>
@@ -49,39 +49,39 @@
 <div class="page-content">
 <div class="row">
 <div class="time_inal ">
-    
+
     <div class="col-sm-5">
         <a class="atip" data-toggle="tooltip" data-placement="top"
            data-original-title="查看一天内的数据">[天] </a>
         &nbsp;&nbsp;|&nbsp;&nbsp;
         <a class="atip"
-           href="${rc.contextPath}/mvc/index?step=-720&op=day&date=${bf1mD!}"
+           href="${rc.contextPath}/mvc/task_center?step=-720&op=day&date=${bf1mD!}"
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[${bf1mDtip!}]">[-1m] </a>
         &nbsp;&nbsp; |&nbsp;&nbsp;
         <a class="atip"
-           href="${rc.contextPath}/mvc/index?step=-168&op=day&date=${bf1wD!}"
+           href="${rc.contextPath}/mvc/task_center?step=-168&op=day&date=${bf1wD!}"
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[${bf1wDtip!}]">[-1w] </a>
         &nbsp;&nbsp; |&nbsp;&nbsp;
         <a class="atip"
-           href="${rc.contextPath}/mvc/index?step=-24&op=day&date=${bf1dD!}"
+           href="${rc.contextPath}/mvc/task_center?step=-24&op=day&date=${bf1dD!}"
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[${bf1dDtip!}]">[-1d] </a>
 
         &nbsp;&nbsp; |&nbsp;&nbsp;
         <a class="atip"  
-           href="${rc.contextPath}/mvc/index?step=24&op=day&date=${af1dD!}"
+           href="${rc.contextPath}/mvc/task_center?24&op=day&date=${af1dD!}"
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[${af1dDtip!}]">[+1d] </a>
         &nbsp;&nbsp; |&nbsp;&nbsp;
-        <a class="atip"  
-           href="${rc.contextPath}/mvc/index?step=168&op=day&date=${af1wD!}"
+        <a class="atip" 
+           href="${rc.contextPath}/mvc/task_center?step=168&op=day&date=${af1wD!}"
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[${af1wDtip!}]">[+1w] </a>
         &nbsp;&nbsp; |&nbsp;&nbsp;
-        <a class="atip"  
-           href="${rc.contextPath}/mvc/index?step=720&op=day&date=${af1mD!}"
+        <a class="atip" 
+           href="${rc.contextPath}/mvc/task_center?step=720&op=day&date=${af1mD!}"
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[${af1mDtip!}]">[+1m] </a>
     </div>
@@ -93,7 +93,7 @@
 
 
         <a class="atip"
-           href="${rc.contextPath}/mvc/index?step=720&op=day&date=${todayD!}"
+           href="${rc.contextPath}/mvc/task_center?step=720&op=day&date=${todayD!}"
            data-toggle="tooltip" data-placement="top"
            data-original-title=" 时间区间[${todayDtip!}]">[当天] </a>
     </div>
@@ -103,60 +103,59 @@
            data-original-title="查看到今天所有的数据">[历史数据] </a>
         &nbsp;&nbsp;|&nbsp;&nbsp;
         <a class="atip"
-           href="${rc.contextPath}/mvc/index?step=-720&op=history&date=${bf1mD!}"
+           href="${rc.contextPath}/mvc/task_center?step=-720&op=history&date=${bf1mD!}"
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[${bf1mDtip!}]">[-1m] </a>
         &nbsp;&nbsp; |&nbsp;&nbsp;
         <a class="atip"
-           href="${rc.contextPath}/mvc/index?step=-168&op=history&date=${bf1wD!}"
+           href="${rc.contextPath}/mvc/task_center?step=-168&op=history&date=${bf1wD!}"
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[${bf1wDtip!}]">[-1w] </a>
         &nbsp;&nbsp; |&nbsp;&nbsp;
         <a class="atip"
-           href="${rc.contextPath}/mvc/index?step=-24&op=history&date=${bf1dD!}"
+           href="${rc.contextPath}/mvc/task_center?step=-24&op=history&date=${bf1dD!}"
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[${bf1dDtip!}]">[-1d] </a>
         &nbsp;&nbsp; |&nbsp;&nbsp;
 
 
-        <a class="atip"  
-           href="${rc.contextPath}/mvc/index?step=24&op=history&date=${af1dD!}"
+        <a class="atip" 
+           href="${rc.contextPath}/mvc/task_center?step=24&op=history&date=${af1dD!}"
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[${af1dDtip!}]">[+1d] </a>
         &nbsp;&nbsp; |&nbsp;&nbsp;
         <a class="atip" 
-           href="${rc.contextPath}/mvc/index?step=168&op=history&date=${af1wD!}"
+           href="${rc.contextPath}/mvc/task_center?step=168&op=history&date=${af1wD!}"
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[${af1wDtip!}]">[+1w] </a>
         &nbsp;&nbsp; |&nbsp;&nbsp;
-        <a class="atip"  
-           href="${rc.contextPath}/mvc/index?step=720&op=history&date=${af1mD!}"
+        <a class="atip" 
+           href="${rc.contextPath}/mvc/task_center?step=720&op=history&date=${af1mD!}"
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[${af1mDtip!}]">[+1m] </a>
     </div>
 </div>
 
-<div id="userpanel">
-<div class="col-sm-12">
-    <div class="col-sm-6">
-        <div class="widget-box">
-            <div class="widget-header header-color-green">
-                <h5 class="widget-title">
-                    <i class="icon-bell-alt"></i>
-                    我的任务成功率
-                </h5>
 
-                <div class="widget-toolbar">
-                    <a href="#" data-action="collapse">
-                        <i class="icon-chevron-up"></i>
-                    </a>
+<div id="total">
+    <div class="col-sm-12">
+        <div class="col-sm-6">
+            <div class="widget-box">
+                <div class="widget-header header-color-blue3">
+                    <h5 class="widget-title">
+                        <i class="icon-dashboard"></i>
+                        任务仪表盘
+                    </h5>
+
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="collapse">
+                            <i class="icon-chevron-up"></i>
+                        </a>
+                    </div>
                 </div>
-            </div>
 
-            <div class="widget-body" style="height: 320px">
-                <div class="widget-main" id="user-widget-main">
-
-                    <div id="mytasks">
+                <div class="widget-body">
+                    <div class="widget-main" id="total-chart" style="width: 499px;height: 319px">
                         <div class="loadIcon">
                             <div></div>
                             <div></div>
@@ -164,65 +163,133 @@
                             <div></div>
                         </div>
                     </div>
+                    <!-- /.widget-main -->
+                </div>
+                <!-- /.widget-body -->
+            </div>
+            <!-- /.widget-box -->
 
-                    <div class="hr hr8 hr-double"></div>
+        </div>
+        <div class="col-sm-6">
+            <div class="widget-box">
+                <div class="widget-header header-color-red3">
+                    <h5 class="widget-title">
+                        <i class="icon-dashboard"></i>
+                        所有的任务成功率
+                    </h5>
 
-                    <div class="clearfix">
-                        <div class="col-sm-4">
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="collapse">
+                            <i class="icon-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="widget-body">
+                    <div class="widget-main" id="total-widget-main">
+
+                        <div id="totaltasks">
+                            <div class="loadIcon">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                            </div>
+                        </div>
+
+                        <div class="hr hr8 hr-double"></div>
+
+                        <div class="clearfix">
+                            <div class="col-sm-4">
 														<span class="grey">
 															<i class="icon-lightbulb green"></i>
 															&nbsp; 成功
 														</span>
-                            <h4 class="smaller pull-right" id="succtask"></h4>
-                        </div>
+                                <h4 class="smaller pull-right" id="totalsucctask"></h4>
+                            </div>
 
-                        <div class="col-sm-4">
+                            <div class="col-sm-4">
 														<span class="grey">
 															<i class="icon-lightbulb red"></i>
 															&nbsp; 失败
 														</span>
-                            <h4 class="smaller pull-right " id="failtask"></h4>
-                        </div>
-                        <div class="col-sm-4">
+                                <h4 class="smaller pull-right " id="totalfailtask"></h4>
+                            </div>
+                            <div class="col-sm-4">
 														<span class="grey">
 															<i class="icon-lightbulb red"></i>
 															&nbsp; 杀死
 														</span>
-                            <h4 class="smaller pull-right " id="killtask"></h4>
-                        </div>
-                        <div class="col-sm-4">
+                                <h4 class="smaller pull-right " id="totalkilltask"></h4>
+                            </div>
+                            <div class="col-sm-4">
 														<span class="grey">
 															<i class="icon-lightbulb btn-yellow"></i>
 															&nbsp; 超时
 														</span>
-                            <h4 class="smaller pull-right " id="timeouttask"></h4>
-                        </div>
-                        <div class="col-sm-4">
+                                <h4 class="smaller pull-right " id="totaltimouttask"></h4>
+                            </div>
+                            <div class="col-sm-4">
 														<span class="grey">
-															<i class="icon-lightbulb "></i>
+															<i class="icon-lightbulb"></i>
 															&nbsp; 拥堵
-                                                            <h4 class="smaller pull-right " id="congesttask"></h4>
 														</span>
+                                <h4 class="smaller pull-right " id="totalcongesttask"></h4>
+                            </div>
 
+                            <!-- /section:custom/extra.grid -->
                         </div>
+                    </div>
+                    <!-- /.widget-main -->
+                </div>
+                <!-- /.widget-body -->
+            </div>
+            <!-- /.widget-box -->
 
+        </div>
+        <div class="col-sm-12">
+            <div class="widget-box">
+                <div class="widget-header header-color-green3">
+                    <h5 class="widget-title">
+                        <i class=" icon-list-alt"></i>
+                        所有任务的执行详情
+                    </h5>
 
-                        <!-- /section:custom/extra.grid -->
+                    <div class="widget-toolbar">
+
+                        <a href="#" data-action="collapse">
+                            <i class="icon-chevron-up"></i>
+                        </a>
                     </div>
                 </div>
-                <!-- /.widget-main -->
-            </div>
-            <!-- /.widget-body -->
-        </div>
-        <!-- /.widget-box -->
 
+                <div class="widget-body">
+
+                    <div class="widget-main " style="height: 550px" id="totaltasklist">
+                        <div class="loadIcon">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                    <!-- /.widget-main -->
+                </div>
+                <!-- /.widget-body -->
+            </div>
+            <!-- /.widget-box -->
+
+        </div>
     </div>
+
+</div>
+<div class="col-sm-12">
     <div class="col-sm-6">
         <div class="widget-box">
-            <div class="widget-header header-color-red">
+            <div class="widget-header header-color-grey">
                 <h5 class="widget-title">
-                    <i class="icon-bullseye"></i>
-                    我的组的任务成功率
+                    <i class="icon-fire"></i>
+                    执行任务总数排行
                 </h5>
 
                 <div class="widget-toolbar">
@@ -233,87 +300,9 @@
             </div>
 
             <div class="widget-body">
-                <div class="widget-main" id="group-widget-main">
 
-                    <div id="grouptasks">
-                        <div class="loadIcon">
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                        </div>
-                    </div>
 
-                    <div class="hr hr8 hr-double"></div>
-
-                    <div class="clearfix">
-                        <div class="col-sm-4">
-														<span class="grey">
-															<i class="icon-lightbulb green"></i>
-															&nbsp; 成功
-														</span>
-                            <h4 class="smaller pull-right" id="groupsucctask"></h4>
-                        </div>
-
-                        <div class="col-sm-4">
-														<span class="grey">
-															<i class="icon-lightbulb red"></i>
-															&nbsp; 失败
-														</span>
-                            <h4 class="smaller pull-right " id="groupfailtask"></h4>
-                        </div>
-                        <div class="col-sm-4">
-														<span class="grey">
-															<i class="icon-lightbulb red"></i>
-															&nbsp; 杀死
-														</span>
-                            <h4 class="smaller pull-right " id="groupkilltask"></h4>
-                        </div>
-                        <div class="col-sm-4">
-														<span class="grey">
-															<i class="icon-lightbulb btn-yellow"></i>
-															&nbsp; 超时
-														</span>
-                            <h4 class="smaller pull-right " id="grouptimouttask"></h4>
-                        </div>
-                        <div class="col-sm-4">
-														<span class="grey">
-															<i class="icon-lightbulb"></i>
-															&nbsp; 拥堵
-														</span>
-                            <h4 class="smaller pull-right " id="groupcongesttask"></h4>
-                        </div>
-
-                        <!-- /section:custom/extra.grid -->
-                    </div>
-                </div>
-                <!-- /.widget-main -->
-            </div>
-            <!-- /.widget-body -->
-        </div>
-        <!-- /.widget-box -->
-
-    </div>
-</div>
-<div class="col-sm-12">
-    <div class="col-sm-6">
-        <div class="widget-box">
-            <div class="widget-header header-color-blue2">
-                <h5 class="widget-title">
-                    <i class=" icon-list-ol"></i>
-                    我的任务执行详情
-                </h5>
-
-                <div class="widget-toolbar">
-                    <a href="#" data-action="collapse">
-                        <i class="icon-chevron-up"></i>
-                    </a>
-                </div>
-            </div>
-
-            <div class="widget-body" style="height: 692px">
-
-                <div class="widget-main align-center"  id="mytasklist">
+                <div class="widget-main align-center" style="height: 560px" id="totalJob">
                     <div class="loadIcon">
                         <div></div>
                         <div></div>
@@ -330,23 +319,23 @@
     </div>
     <div class="col-sm-6">
         <div class="widget-box">
-            <div class="widget-header header-color-orange">
+            <div class="widget-header header-color-dark">
                 <h5 class="widget-title">
-                    <i class=" icon-list-ul"></i>
-                    我所在组的任务执行详情
+                    <i class=" icon-sort-by-order"></i>
+                    执行任务失败总数排行
                 </h5>
 
                 <div class="widget-toolbar">
-
                     <a href="#" data-action="collapse">
                         <i class="icon-chevron-up"></i>
                     </a>
                 </div>
             </div>
 
-            <div class="widget-body" style="height: 692px">
+            <div class="widget-body">
 
-                <div class="widget-main align-center"  id="grouptasklist">
+                <div class="widget-main align-center" style="height: 560px" id="failedJob">
+
                     <div class="loadIcon">
                         <div></div>
                         <div></div>
@@ -362,8 +351,9 @@
 
     </div>
 </div>
-</div>
 
+
+</div>
 </div>
 </div>
 <a href="#" class="scrollup" style="display: inline;">
@@ -379,10 +369,9 @@
 
     <p style="text-align: center; padding-right:32px;color: firebrick">点我报错</p>
 </div>
-</div>
 <script type="text/javascript">
     $('li[id="index"]').addClass("active open");
-    $('li[id="monitor_center"]').addClass("active");
+    $('li[id="task_center"]').addClass("active");
     $('#menu-toggler').on(ace.click_event, function () {
         $('#sidebar').toggleClass('display');
         $(this).toggleClass('display');
@@ -408,27 +397,7 @@
         return false;
     });
 
-    function GetDateStr(dd, AddDayCount) {
-        dd.setDate(dd.getDate() + AddDayCount);//获取AddDayCount天后的日期
-        var y = dd.getFullYear();
-        var m = dd.getMonth() + 1;//获取当前月份的日期
-        var d = dd.getDate();
-        return y + "-" + m + "-" + d;
-    }
-    var now_s = "${now_s!}";
-    var now = new Date(Date.parse(now_s.replace(/-/g, "/")));
-    var id = "${step!}";
-    var op = "${op_str!}";
-    var isAdmin = ${isAdmin?c};
-    //console.log(isAdmin);
-    var username = "${currentUser!}";
-   // if (isAdmin && username != "kirin.li") {
-      //  var user = document.getElementById("userpanel");
-       // user.style.display = "none";
-   // } else {
-        //var admin = document.getElementById("admin");
-        //admin.style.display="none";
-    //}
+
     $('#startTime').datetimepicker({
         formatTime:'H:i',
         format:'Y-m-d',
@@ -445,6 +414,21 @@
         timepicker:false,
         timepickerScrollbar:false
     });
+
+
+    function GetDateStr(dd, AddDayCount) {
+        dd.setDate(dd.getDate() + AddDayCount);//获取AddDayCount天后的日期
+        var y = dd.getFullYear();
+        var m = dd.getMonth() + 1;//获取当前月份的日期
+        var d = dd.getDate();
+        return y + "-" + m + "-" + d;
+    }
+    var now_s = "${now_s!}";
+    var now = new Date(Date.parse(now_s.replace(/-/g, "/")));
+    var id = "${step!}";
+    var op = "${op_str!}";
+
+
 
 </script>
 </body>

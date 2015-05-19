@@ -48,8 +48,12 @@
 			<param-value>signin.jsp</param-value>
 		</init-param>
 		<init-param>
+			<param-name>mvcLoginPage</param-name>
+			<param-value>/mvc/signin</param-value>
+		</init-param>
+		<init-param>
 			<param-name>excludePage</param-name>
-			<param-value>/signin.jsp,/login.do,/common-header.jsp</param-value>
+			<param-value>/signin.jsp,/login.do,/common-header.jsp,/mvc/signin</param-value>
 		</init-param>
 	</filter>
 
@@ -71,6 +75,13 @@
 	<filter-mapping>
 		<filter-name>AuthenticationFilter</filter-name>
 		<url-pattern>*.jsp</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+	</filter-mapping>
+	
+	<!-- 新增过滤spring mvc页面 -->
+	<filter-mapping>
+		<filter-name>AuthenticationFilter</filter-name>
+		<url-pattern>/mvc/*</url-pattern>
 		<dispatcher>REQUEST</dispatcher>
 	</filter-mapping> 
 
