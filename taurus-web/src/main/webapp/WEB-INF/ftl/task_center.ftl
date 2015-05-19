@@ -3,9 +3,9 @@
 <head>
 
 	<title>Taurus</title>
-
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
 	<#include "segment/html_header.ftl">
-
+    <#include "segment/monitor-center_header.ftl">
     <script type="text/javascript" src="${rc.contextPath}/static/js/task_center.js"></script>
     <script src="${rc.contextPath}/js/jquery.datetimepicker.js"></script>
     <link rel="stylesheet" href="${rc.contextPath}/css/jquery.datetimepicker.css"/>

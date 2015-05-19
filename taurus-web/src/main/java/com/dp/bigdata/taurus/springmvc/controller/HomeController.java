@@ -250,6 +250,14 @@ public class HomeController implements ServletContextAware{
         
 		return "/task_center.ftl";
 	}
+	/**
+	 * 重构host_center.jsp
+	 * @param modelMap
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws ParseException
+	 */
 	@RequestMapping(value = "/host_center", method = RequestMethod.GET)
 	public String host_center(ModelMap modelMap, HttpServletRequest request,
 			HttpServletResponse response) throws ParseException {
@@ -282,6 +290,22 @@ public class HomeController implements ServletContextAware{
 		
 		return "/host_center.ftl";
 	}
+	/**
+	 * 重构task.jsp
+	 * @param modelMap
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/task", method = RequestMethod.GET)
+	public String task(ModelMap modelMap, HttpServletRequest request,
+			HttpServletResponse response) {
+		log.info("--------------init the task------------");
+		commonnav(modelMap,request);
+		
+		return "/task.ftl";
+	}
+	
 	/**
 	 * 重构jsp/common-nav.jsp
 	 * @param modelMap
