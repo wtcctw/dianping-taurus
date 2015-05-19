@@ -20,7 +20,7 @@
     <script type="text/javascript" src="${rc.contextPath}/lib/ace/js/daterangepicker.min.js"></script>
     <script src="${rc.contextPath}/lib/ace/js/jquery.dataTables.min.js"></script>
     <script src="${rc.contextPath}/lib/ace/js/jquery.dataTables.bootstrap.js"></script>
-    <script src="${rc.contextPath}/js/jquery.datetimepicker.js"></script>
+    
     <script src="${rc.contextPath}/lib/dist/echarts.js"></script>
     <script src="${rc.contextPath}/lib/dist/chart/gauge.js"></script>
     <script src="${rc.contextPath}/lib/dist/theme/macarons.js"></script>
@@ -36,7 +36,24 @@
     <link rel="stylesheet" href="${rc.contextPath}/lib/ace/css/ace.min.css"/>
     <link rel="stylesheet" href="${rc.contextPath}/lib/ace/css/ace-rtl.min.css"/>
     <link rel="stylesheet" href="${rc.contextPath}/lib/ace/css/ace-skins.min.css"/>
-    <link rel="stylesheet" href="${rc.contextPath}/css/jquery.datetimepicker.css"/>
+    
     
     <link rel="stylesheet" href="${rc.contextPath}/css/common.css">
     <link rel="stylesheet" href="${rc.contextPath}/css/loading.css">
+
+
+    <script type="text/javascript" src="${rc.contextPath}/static/js/login.js"></script>
+    <link rel="stylesheet" href="${rc.contextPath}/resource/css/monitor-center.css">
+
+    <style>
+        .dayreport {
+            float: left
+        }
+        .tip {
+            text-align: center;
+            margin: 0 auto;
+        }
+        .historyreport {
+            float: right
+        }
+    </style>

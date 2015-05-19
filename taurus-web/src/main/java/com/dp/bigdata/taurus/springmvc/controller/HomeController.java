@@ -41,7 +41,7 @@ public class HomeController implements ServletContextAware{
     }
     
 	/**
-	 * signin.jsp
+	 * 重构signin.jsp
 	 * @param modelMap
 	 * @param request
 	 * @param response
@@ -61,7 +61,7 @@ public class HomeController implements ServletContextAware{
 	}
 	
 	/**
-	 * index.jsp
+	 * 重构index.jsp
 	 * @param modelMap
 	 * @param request
 	 * @param response
@@ -155,7 +155,14 @@ public class HomeController implements ServletContextAware{
         
 		return "/index.ftl";
 	}
-	
+	/**
+	 * 重构task_center.jsp
+	 * @param modelMap
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws ParseException
+	 */
 	@RequestMapping(value = "/task_center", method = RequestMethod.GET)
 	public String task_center(ModelMap modelMap, HttpServletRequest request,
 			HttpServletResponse response) throws ParseException {
@@ -242,6 +249,38 @@ public class HomeController implements ServletContextAware{
         modelMap.addAttribute("op_str", op_str);
         
 		return "/task_center.ftl";
+	}
+	@RequestMapping(value = "/host_center", method = RequestMethod.GET)
+	public String host_center(ModelMap modelMap, HttpServletRequest request,
+			HttpServletResponse response) throws ParseException {
+		log.info("--------------init the host_center------------");
+		commonnav(modelMap,request);
+		
+		Date time = new Date();
+        SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHH");
+        long hourTime = 60 * 60 * 1000;
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+        String step_str = request.getParameter("step");
+        String now = request.getParameter("date");
+        String op_str = request.getParameter("op");
+        if(op_str==null || op_str.isEmpty()){
+        	op_str="day";
+        }
+        System.out.println(step_str + "#" + now);
+        int step = -24;
+        
+        if (now == null || now.isEmpty()) {
+            now = df.format(time);
+        }
+        
+        String now_s = formatter.format( df.parse(now));
+        modelMap.addAttribute("now_s", now_s);
+        modelMap.addAttribute("step", step_str);
+        modelMap.addAttribute("op_str", op_str);
+		
+		return "/host_center.ftl";
 	}
 	/**
 	 * 重构jsp/common-nav.jsp

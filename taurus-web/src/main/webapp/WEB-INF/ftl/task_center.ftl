@@ -5,21 +5,10 @@
 	<title>Taurus</title>
 
 	<#include "segment/html_header.ftl">
-    <script type="text/javascript" src="${rc.contextPath}/static/js/login.js"></script>
+
     <script type="text/javascript" src="${rc.contextPath}/static/js/task_center.js"></script>
-    <link rel="stylesheet" href="${rc.contextPath}/resource/css/monitor-center.css">
-    <style>
-        .dayreport {
-            float: left
-        }
-        .tip {
-            text-align: center;
-            margin: 0 auto;
-        }
-        .historyreport {
-            float: right
-        }
-    </style>
+    <script src="${rc.contextPath}/js/jquery.datetimepicker.js"></script>
+    <link rel="stylesheet" href="${rc.contextPath}/css/jquery.datetimepicker.css"/>
 </head>
 
 <body>
@@ -46,6 +35,7 @@
         <a class="btn btn-primary btn-small" href='#' onClick="reflash_view()"><i class="icon-eye-open">查看</i></a>
     </div>
 </div>
+
 <div class="page-content">
 <div class="row">
 <div class="time_inal ">
