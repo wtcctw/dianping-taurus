@@ -10,7 +10,7 @@
 <script src="${rc.contextPath}/lib/dist/chart/gauge.js"></script>
 <script src="${rc.contextPath}/lib/dist/theme/macarons.js"></script>
 
-<link rel="stylesheet" href="${rc.contextPath}/css/common.css">
+
 <link rel="stylesheet" href="${rc.contextPath}/css/loading.css">
 <link rel="stylesheet" href="${rc.contextPath}/resource/css/monitor-center.css">
 <style>

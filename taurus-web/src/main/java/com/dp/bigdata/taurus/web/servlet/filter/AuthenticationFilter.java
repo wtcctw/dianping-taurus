@@ -64,7 +64,7 @@ public class AuthenticationFilter implements Filter {
 		if (currentUser == null) {
 			String loginUrl = loginPage + "?redirect-url="+URLEncoder.encode(requestURL, "UTF-8");
 			//新增过滤spring mvc页面,mvc链接临时解决方案
-			if(requestURL.toLowerCase().contains("mvc")){
+			if(requestURL.toLowerCase().contains("/mvc/")){
 				loginUrl = req.getContextPath()+mvcLoginPage+
 						"?redirect-url="+URLEncoder.encode(requestURL, "UTF-8");
 			}

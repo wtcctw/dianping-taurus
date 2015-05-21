@@ -27,8 +27,16 @@ import com.dianping.cat.Cat;
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
 import com.dianping.lion.client.LionException;
+import com.dp.bigdata.taurus.restlet.resource.IAttemptStatusResource;
+import com.dp.bigdata.taurus.restlet.resource.IHostsResource;
+import com.dp.bigdata.taurus.restlet.resource.IPoolsResource;
+import com.dp.bigdata.taurus.restlet.resource.IUserGroupsResource;
 import com.dp.bigdata.taurus.restlet.resource.IUsersResource;
+import com.dp.bigdata.taurus.restlet.shared.HostDTO;
+import com.dp.bigdata.taurus.restlet.shared.PoolDTO;
+import com.dp.bigdata.taurus.restlet.shared.StatusDTO;
 import com.dp.bigdata.taurus.restlet.shared.UserDTO;
+import com.dp.bigdata.taurus.restlet.shared.UserGroupDTO;
 import com.dp.bigdata.taurus.springmvc.bean.WebResult;
 
 @Controller
@@ -73,7 +81,10 @@ public class HomeController implements ServletContextAware{
 			HttpServletResponse response) throws ParseException {
 		log.info("--------------init the index------------");
 		
-		commonnav(modelMap,request);
+		GlobalViewVariable gvv = new GlobalViewVariable();
+		commonnav(modelMap,request,gvv);
+		modelMap.addAttribute("currentUser", gvv.currentUser);
+	    modelMap.addAttribute("isAdmin",gvv.isAdmin);
 		
 		Date time = new Date();
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHH");
@@ -168,7 +179,10 @@ public class HomeController implements ServletContextAware{
 			HttpServletResponse response) throws ParseException {
 		log.info("--------------init the task_center------------");
 		
-		commonnav(modelMap,request);
+		GlobalViewVariable gvv = new GlobalViewVariable();
+		commonnav(modelMap,request,gvv);
+		modelMap.addAttribute("currentUser", gvv.currentUser);
+	    modelMap.addAttribute("isAdmin",gvv.isAdmin);
 		
 		Date time = new Date();
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHH");
@@ -262,8 +276,11 @@ public class HomeController implements ServletContextAware{
 	public String host_center(ModelMap modelMap, HttpServletRequest request,
 			HttpServletResponse response) throws ParseException {
 		log.info("--------------init the host_center------------");
-		commonnav(modelMap,request);
-		
+		GlobalViewVariable gvv = new GlobalViewVariable();
+		commonnav(modelMap,request,gvv);
+		modelMap.addAttribute("currentUser", gvv.currentUser);
+	    modelMap.addAttribute("isAdmin",gvv.isAdmin);
+	    
 		Date time = new Date();
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHH");
         long hourTime = 60 * 60 * 1000;
@@ -301,8 +318,47 @@ public class HomeController implements ServletContextAware{
 	public String task(ModelMap modelMap, HttpServletRequest request,
 			HttpServletResponse response) {
 		log.info("--------------init the task------------");
-		commonnav(modelMap,request);
+		GlobalViewVariable gvv = new GlobalViewVariable();
+		commonnav(modelMap,request,gvv);
+		modelMap.addAttribute("currentUser", gvv.currentUser);
+	    modelMap.addAttribute("isAdmin",gvv.isAdmin);
 		
+		gvv.cr = new ClientResource(gvv.host + "pool");
+	    IPoolsResource poolResource = gvv.cr.wrap(IPoolsResource.class);
+	    gvv.cr.accept(MediaType.APPLICATION_XML);
+	    ArrayList<PoolDTO> pools = poolResource.retrieve();
+	    int UNALLOCATED = 1;
+
+	    gvv.cr = new ClientResource(gvv.host + "host");
+	    IHostsResource hostResource = gvv.cr.wrap(IHostsResource.class);
+	    gvv.cr.accept(MediaType.APPLICATION_XML);
+	    ArrayList<HostDTO> hosts = hostResource.retrieve();
+
+	    gvv.cr = new ClientResource(gvv.host + "status");
+	    IAttemptStatusResource attemptResource = gvv.cr.wrap(IAttemptStatusResource.class);
+	    gvv.cr.accept(MediaType.APPLICATION_XML);
+	    ArrayList<StatusDTO> statuses = attemptResource.retrieve();
+
+	    gvv.cr = new ClientResource(gvv.host + "group");
+	    IUserGroupsResource groupResource = gvv.cr.wrap(IUserGroupsResource.class);
+	    gvv.cr.accept(MediaType.APPLICATION_XML);
+	    ArrayList<UserGroupDTO> groups = groupResource.retrieve();
+	    String name = request.getParameter("appname");
+	    String path = request.getParameter("path");
+	    String ip = request.getParameter("ip");
+	    if (name == null) {
+	        name = "";
+	    }
+	    if (ip == null) {
+	        ip = "";
+	    }
+		modelMap.addAttribute("ip", ip);
+	    modelMap.addAttribute("hosts", hosts);
+	    modelMap.addAttribute("name", name);
+	    modelMap.addAttribute("path", path);
+	    modelMap.addAttribute("statuses",statuses);
+	    modelMap.addAttribute("users", gvv.users);
+	    modelMap.addAttribute("groups",groups);
 		return "/task.ftl";
 	}
 	
@@ -311,48 +367,63 @@ public class HomeController implements ServletContextAware{
 	 * @param modelMap
 	 * @param request
 	 */
-	private void commonnav(ModelMap modelMap, HttpServletRequest request){
-		String currentUser =  (String) request.getSession().
+	private void commonnav(ModelMap modelMap, HttpServletRequest request,GlobalViewVariable gvv){
+		gvv.currentUser =  (String) request.getSession().
 				getAttribute(com.dp.bigdata.taurus.web.servlet.LoginServlet.USER_NAME);
-	    if (currentUser != null) {
+	    if (gvv.currentUser != null) {
 	    	
 		} else {
 			
 		}
 	    //Global variable
-	    String host;
-	    int userId = -1;
+	    //String host;
+	    gvv.userId = -1;
 	    try {
-	        host = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.restlet.url");
+	        gvv.host = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.restlet.url");
 	    } catch (LionException e) {
-	        host = servletContext.getInitParameter("RESTLET_SERVER");
+	        gvv.host = servletContext.getInitParameter("RESTLET_SERVER");
 	        e.printStackTrace();
 	    }
 
-	    boolean isAdmin = false;
-	    ClientResource cr = new ClientResource(host + "user");
-	    IUsersResource userResource = cr.wrap(IUsersResource.class);
-	    cr.accept(MediaType.APPLICATION_XML);
-	    ArrayList<UserDTO> users = userResource.retrieve();
-	    HashMap<String, UserDTO>  userMap = new HashMap<String, UserDTO>();
-	    for (UserDTO user : users) {
-	        userMap.put(user.getName(),user);
-	        if (user.getName().equals(currentUser)) {
+	    gvv.isAdmin = false;
+	    gvv.cr = new ClientResource(gvv.host + "user");
+	    gvv.userResource = gvv.cr.wrap(IUsersResource.class);
+	    gvv.cr.accept(MediaType.APPLICATION_XML);
+	    gvv.users = gvv.userResource.retrieve();
+	    gvv.userMap = new HashMap<String, UserDTO>();
+	    for (UserDTO user : gvv.users) {
+	        gvv.userMap.put(user.getName(),user);
+	        if (user.getName().equals(gvv.currentUser)) {
 
-	            userId = user.getId();
+	            gvv.userId = user.getId();
 	            if ("admin".equals(user.getGroup()) || "monitor".equals(user.getGroup()) || "OP".equals(user.getGroup())) {
-	                isAdmin = true;
+	                gvv.isAdmin = true;
 	            } else {
-	                isAdmin = false;
+	                gvv.isAdmin = false;
 	            }
 
 	        }
 	    }
-	    modelMap.addAttribute("currentUser", currentUser);
-	    modelMap.addAttribute("isAdmin",isAdmin);
+	    
 	}
-	
-	
+	/**
+	 * jsp/common-nav.jsp所需公共变量
+	 * @author chenchongze
+	 *
+	 */
+	public class GlobalViewVariable{
+		
+		private String currentUser=null;
+		private String host=null;
+	    private int userId = -1;
+	    private boolean isAdmin = false;
+	    private ClientResource cr=null;
+	    private IUsersResource userResource=null;
+	    private ArrayList<UserDTO> users=null;
+	    private HashMap<String, UserDTO>  userMap =null;
+	    
+	    public GlobalViewVariable(){};
+	}
 
 	//lion test
 //	@RequestMapping(value = "/liontest/{user}", method = RequestMethod.GET)

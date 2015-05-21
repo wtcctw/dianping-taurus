@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="${rc.contextPath}/lib/ace/css/ace.min.css"/>
     <link rel="stylesheet" href="${rc.contextPath}/lib/ace/css/ace-rtl.min.css"/>
     <link rel="stylesheet" href="${rc.contextPath}/lib/ace/css/ace-skins.min.css"/>
+    
+    <link rel="stylesheet" href="${rc.contextPath}/css/common.css">
 
     <script type="text/javascript" src="${rc.contextPath}/static/js/login.js"></script>
 
