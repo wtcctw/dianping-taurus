@@ -5,9 +5,12 @@
 	<title>Taurus</title>
 
 	<#include "segment/html_header.ftl">
+	<!-- jquery-ui.js必须放在bootstrap.js前面，否则atip tooltip失效 -->
     <script type="text/javascript" src="${rc.contextPath}/js/jquery-ui.min.js"></script>
+    <#include "segment/html_header2.ftl">
     <link rel="stylesheet" href="${rc.contextPath}/css/jquery-ui.min.css"/>
     <link href="${rc.contextPath}/css/bwizard.min.css" rel="stylesheet"/>
+
     <style>
         label.error{margin-left: 10px; color: red;}
         label.success{margin-left: 10px; color: green;}

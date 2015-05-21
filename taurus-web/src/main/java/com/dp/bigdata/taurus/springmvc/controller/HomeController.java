@@ -361,7 +361,24 @@ public class HomeController implements ServletContextAware{
 	    modelMap.addAttribute("groups",groups);
 		return "/task.ftl";
 	}
-	
+	/**
+	 * 重构schedule.jsp
+	 * @param modelMap
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/schedule", method = RequestMethod.GET)
+	public String schedule(ModelMap modelMap, HttpServletRequest request,
+			HttpServletResponse response) {
+		log.info("--------------init the schedule------------");
+		GlobalViewVariable gvv = new GlobalViewVariable();
+		commonnav(modelMap,request,gvv);
+		modelMap.addAttribute("currentUser", gvv.currentUser);
+	    modelMap.addAttribute("isAdmin",gvv.isAdmin);
+	    
+		return "/schedule.ftl";
+	}
 	/**
 	 * 重构jsp/common-nav.jsp
 	 * @param modelMap
