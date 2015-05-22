@@ -204,8 +204,7 @@
 
     <div class="controls">
         <input type="text" class="input-large field" id="alertUser"
-               name="alertUser" <%if(dto.getAlertRule().getUserid() != null){%>
-               value="<%=dto.getAlertRule().getUserid()%>" <%}%> disabled>
+               name="alertUser" value="${dto.getAlertRule().getUserid()!}" disabled>
     </div>
 </div>
 <br>
@@ -214,37 +213,41 @@
 
     <div class="controls">
         <input type="text" class="input-large field" id="alertGroup"
-               name="alertGroup"
-            <%if(dto.getAlertRule().getGroupid() != null){%>
-               value="<%=dto.getAlertRule().getGroupid()%>" <%}%> disabled>
+               name="alertGroup" value="${dto.getAlertRule().getGroupid()!}" disabled>
     </div>
 </div>
 <input type="text" class="field" style="display: none" id="creator"
        name="creator"
-       value="<%=currentUser%>">
+       value="${currentUser!}">
 </fieldset>
 </form>
 </div>
 <div class="modal-footer">
     <button id="updateBtn" class="btn btn-primary"
-            onClick="action_update('<%=dto.getTaskid()%>')"
+            onClick="action_update('${dto.getTaskid()!}')"
             data-loading-text='正在保存..'>修改
     </button>
     <button class="btn" data-dismiss="modal">关闭</button>
 </div>
 
-
-
 </div>
 </div>
 <script type="text/javascript">
     var userList = "", groupList = "";
-    <%for(UserDTO user:users) {%>
-    userList = userList + ",<%=user.getName()%>";
-    <%}%>
-    <%for(UserGroupDTO group:groups) {%>
-    groupList = groupList + ",<%=group.getName()%>";
-    <%}%>
+    userList = userList
+    <#if users??>
+    <#list users as user>
+        +",${user.name!}"
+    </#list>
+    </#if>
+        ;
+    groupList = groupList
+    <#if groups??>
+    <#list groups as group>
+        +",${group.name!}"
+    </#list>
+    </#if>
+        ;
     userList = userList.substr(1);
     groupList = groupList.substr(1);
 </script>
