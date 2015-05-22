@@ -30,11 +30,13 @@ import com.dianping.lion.client.LionException;
 import com.dp.bigdata.taurus.restlet.resource.IAttemptStatusResource;
 import com.dp.bigdata.taurus.restlet.resource.IHostsResource;
 import com.dp.bigdata.taurus.restlet.resource.IPoolsResource;
+import com.dp.bigdata.taurus.restlet.resource.ITaskResource;
 import com.dp.bigdata.taurus.restlet.resource.IUserGroupsResource;
 import com.dp.bigdata.taurus.restlet.resource.IUsersResource;
 import com.dp.bigdata.taurus.restlet.shared.HostDTO;
 import com.dp.bigdata.taurus.restlet.shared.PoolDTO;
 import com.dp.bigdata.taurus.restlet.shared.StatusDTO;
+import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
 import com.dp.bigdata.taurus.restlet.shared.UserDTO;
 import com.dp.bigdata.taurus.restlet.shared.UserGroupDTO;
 import com.dp.bigdata.taurus.springmvc.bean.WebResult;
@@ -378,6 +380,43 @@ public class HomeController implements ServletContextAware{
 	    modelMap.addAttribute("isAdmin",gvv.isAdmin);
 	    
 		return "/schedule.ftl";
+	}
+	/**
+	 * 重构task_form.jsp
+	 * @param modelMap
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/task_form", method = RequestMethod.GET)
+	public String task_form(ModelMap modelMap, HttpServletRequest request,
+			HttpServletResponse response) {
+		log.info("--------------init the task_form------------");
+		GlobalViewVariable gvv = new GlobalViewVariable();
+		commonnav(modelMap,request,gvv);
+	    
+		String[] types = {"hadoop", "spring", "other"};
+
+	    gvv.cr = new ClientResource(gvv.host + "status");
+	    IAttemptStatusResource attemptResource = gvv.cr.wrap(IAttemptStatusResource.class);
+	    gvv.cr.accept(MediaType.APPLICATION_XML);
+	    ArrayList<StatusDTO> statuses = attemptResource.retrieve();
+
+	    gvv.cr = new ClientResource(gvv.host + "group");
+	    IUserGroupsResource groupResource = gvv.cr.wrap(IUserGroupsResource.class);
+	    gvv.cr.accept(MediaType.APPLICATION_XML);
+	    ArrayList<UserGroupDTO> groups = groupResource.retrieve();
+	    String taskId = request.getParameter("task_id");
+	    gvv.cr = new ClientResource(gvv.host + "task/" + taskId.trim());
+	    ITaskResource taskResource = gvv.cr.wrap(ITaskResource.class);
+	    gvv.cr.accept(MediaType.APPLICATION_XML);
+	    TaskDTO dto = taskResource.retrieve();
+	    String conditionStr = dto.getAlertRule().getConditions();
+	    modelMap.addAttribute("conditionStr", conditionStr);
+	    modelMap.addAttribute("dto", dto);
+	    modelMap.addAttribute("statuses", statuses);
+	    
+		return "/task_form.ftl";
 	}
 	/**
 	 * 重构jsp/common-nav.jsp

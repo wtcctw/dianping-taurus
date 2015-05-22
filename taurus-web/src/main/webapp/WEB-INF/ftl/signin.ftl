@@ -1,5 +1,41 @@
-<#import "/segment/layoutblank.ftl" as layout/>
-<@layout.page title="Sign in · Taurus" bodystyle = "login-layout light-login">
+<!DOCTYPE html >
+<html >
+<head>
+    <#-- scrpit & style -->
+    <!-- basic styles -->
+    <script type="text/javascript" src="${rc.contextPath}/resource/js/lib/jquery-1.9.1.min.js"></script>
+    <link href="${rc.contextPath}/lib/ace/css/bootstrap.min.css" rel="stylesheet"/>
+    <script src="${rc.contextPath}/lib/ace/js/ace-extra.min.js"></script>
+    <link rel="stylesheet" href="${rc.contextPath}/lib/ace/css/font-awesome.min.css"/>
+    <script src="${rc.contextPath}/lib/ace/js/ace-elements.min.js"></script>
+    <script src="${rc.contextPath}/lib/ace/js/ace.min.js"></script>
+    <script src="${rc.contextPath}/lib/ace/js/bootbox.min.js"></script>
+    <script type="text/javascript" src="${rc.contextPath}/resource/js/lib/raphael.2.1.0.min.js"></script>
+    <script type="text/javascript" src="${rc.contextPath}/resource/js/lib/justgage.1.0.1.min.js"></script>
+    <script type="text/javascript" src="${rc.contextPath}/resource/js/lib/Chart.js"></script>
+    <!-- page specific plugin scripts -->
+    <script src="${rc.contextPath}/lib/ace/js/jquery.dataTables.min.js"></script>
+    <script src="${rc.contextPath}/lib/ace/js/jquery.dataTables.bootstrap.js"></script>
+    <script src="${rc.contextPath}/lib/ace/js/jquery.validate.min.js"></script>
+    <!-- page specific plugin styles -->
+
+    <!-- fonts -->
+    <script src="${rc.contextPath}/lib/ace/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="${rc.contextPath}/lib/ace/css/ace-fonts.css"/>
+
+    <!-- ace styles -->
+
+    <link rel="stylesheet" href="${rc.contextPath}/lib/ace/css/ace.min.css"/>
+    <link rel="stylesheet" href="${rc.contextPath}/lib/ace/css/ace-rtl.min.css"/>
+    <link rel="stylesheet" href="${rc.contextPath}/lib/ace/css/ace-skins.min.css"/>
+    <script src="${rc.contextPath}/static/js/login.js"></script>
+    <style>
+        .light-login{background:#dfe0e2 url('${rc.contextPath}/img/taurus.jpg') no-repeat}
+    </style>
+
+</head>
+<body class="login-layout light-login">
+
 <div class="main-container">
     <div class="main-content">
         <div class="row">
@@ -114,40 +150,13 @@
 
 <!-- /container -->
 
-	<#-- scrpit & style -->
-	<!-- basic styles -->
-    <script type="text/javascript" src="${rc.contextPath}/resource/js/lib/jquery-1.9.1.min.js"></script>
-    <link href="${rc.contextPath}/lib/ace/css/bootstrap.min.css" rel="stylesheet"/>
-    <script src="${rc.contextPath}/lib/ace/js/ace-extra.min.js"></script>
-    <link rel="stylesheet" href="${rc.contextPath}/lib/ace/css/font-awesome.min.css"/>
-    <script src="${rc.contextPath}/lib/ace/js/ace-elements.min.js"></script>
-    <script src="${rc.contextPath}/lib/ace/js/ace.min.js"></script>
-    <script src="${rc.contextPath}/lib/ace/js/bootbox.min.js"></script>
-    <script type="text/javascript" src="${rc.contextPath}/resource/js/lib/raphael.2.1.0.min.js"></script>
-    <script type="text/javascript" src="${rc.contextPath}/resource/js/lib/justgage.1.0.1.min.js"></script>
-    <script type="text/javascript" src="${rc.contextPath}/resource/js/lib/Chart.js"></script>
-    <!-- page specific plugin scripts -->
-    <script src="${rc.contextPath}/lib/ace/js/jquery.dataTables.min.js"></script>
-    <script src="${rc.contextPath}/lib/ace/js/jquery.dataTables.bootstrap.js"></script>
-    <script src="${rc.contextPath}/lib/ace/js/jquery.validate.min.js"></script>
-    <!-- page specific plugin styles -->
-
-    <!-- fonts -->
-    <script src="${rc.contextPath}/lib/ace/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="${rc.contextPath}/lib/ace/css/ace-fonts.css"/>
-
-    <!-- ace styles -->
-
-    <link rel="stylesheet" href="${rc.contextPath}/lib/ace/css/ace.min.css"/>
-    <link rel="stylesheet" href="${rc.contextPath}/lib/ace/css/ace-rtl.min.css"/>
-    <link rel="stylesheet" href="${rc.contextPath}/lib/ace/css/ace-skins.min.css"/>
-    <script src="${rc.contextPath}/static/js/login.js"></script>
-	<style>
-	    .light-login{background:#dfe0e2 url('${rc.contextPath}/img/taurus.jpg') no-repeat}
-	</style>
+	
 	<script>
 	    $().ready(function() {
 	        $("#signupForm").validate();
 	    });
 	</script>
-</@layout.page>
+
+</body>
+
+</html>

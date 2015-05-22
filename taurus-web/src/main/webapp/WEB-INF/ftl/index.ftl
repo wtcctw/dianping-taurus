@@ -7,6 +7,7 @@
 	<#include "segment/html_header.ftl">
     <#include "segment/html_header2.ftl">
     <#include "segment/monitor-center_header.ftl">
+    <link rel="stylesheet" href="${rc.contextPath}/css/loading.css">
     <script type="text/javascript" src="${rc.contextPath}/static/js/monitor_center.js"></script>
     <script src="${rc.contextPath}/js/jquery.datetimepicker.js"></script>
     <link rel="stylesheet" href="${rc.contextPath}/css/jquery.datetimepicker.css"/>
