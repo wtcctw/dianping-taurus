@@ -154,7 +154,6 @@ public class MonitorController implements ServletContextAware {
         ArrayList<Task> tasks = taskResource.retrieve();
 
         
-        
         modelMap.addAttribute("attempts", attempts);
         modelMap.addAttribute("tasks", tasks);
         modelMap.addAttribute("mHelper", new MonitorHelper());
@@ -164,7 +163,7 @@ public class MonitorController implements ServletContextAware {
     
     @RequestMapping(value = "/submitfail", method = RequestMethod.POST)
 	public String submitfail(ModelMap modelMap, HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
+			HttpServletResponse response) {
 		log.info("--------------init the submitfail------------");
     	
     	ClientResource cr = new ClientResource(RESTLET_URL_BASE + "host");
@@ -172,8 +171,6 @@ public class MonitorController implements ServletContextAware {
         cr.accept(MediaType.APPLICATION_XML);
         ArrayList<HostDTO> hosts = hostsResource.retrieve();
         
-        OutputStream output = response.getOutputStream();
-
         ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
         if (tasks == null) {
             ClientResource crTask = new ClientResource(RESTLET_URL_BASE + "gettasks");
@@ -183,142 +180,6 @@ public class MonitorController implements ServletContextAware {
             ReFlashHostLoadTask.lastReadDataTime = new Date().getTime();
         }
 
-
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-
-        String result = "";
-        if (attempts != null)
-            for (AttemptDTO dto : attempts) {
-                String state = dto.getStatus();
-
-
-                if (state.equals("SUBMIT_FAIL")) {
-                    String status_api = RESTLET_URL_BASE + "getlaststatus";
-                    String status;
-                    try {
-                        cr = new ClientResource(status_api + "/" + dto.getTaskID());
-                        IGetTaskLastStatus statusResource = cr.wrap(IGetTaskLastStatus.class);
-                        cr.accept(MediaType.APPLICATION_XML);
-                        status = statusResource.retrieve();
-                    } catch (Exception e) {
-                        status = null;
-                    }
-
-                    String lastTaskStatus ="";
-                    int taskState = -1;
-                    if (status != null) {
-                        try {
-                            JsonParser parser = new JsonParser();
-                            JsonElement statusElement = parser.parse(status);
-                            JsonObject statusObject = statusElement.getAsJsonObject();
-                            JsonElement statusValue = statusObject.get("status");
-
-                            taskState = statusValue.getAsInt();
-
-                            lastTaskStatus = AttemptStatus.getInstanceRunState(taskState);
-                        } catch (Exception e) {
-                            lastTaskStatus = "NULL";
-                        }
-                    }
-                    if(lastTaskStatus.equals("SUCCEEDED") || lastTaskStatus.equals("RUNNING") ){
-                        lastTaskStatus = "<span class='label label-info'>"
-                                + lastTaskStatus
-                                + "</span>";
-                    }else{
-                        lastTaskStatus = "<span class='label label-important'>"
-                                + lastTaskStatus
-                                + "</span>";
-                    }
-
-                    String taskName = "";
-                    for (Task task : tasks) {
-                        if (task.getTaskid().equals(dto.getTaskID())) {
-                            taskName = task.getName();
-                            break;
-                        }
-                    }
-                    result += " <tr id = " + dto.getAttemptID() + " >"
-                            + "<td >"
-                            + dto.getTaskID()
-                            + "</td >"
-                            + "<td >"
-                            + taskName
-                            + "</td >";
-
-
-                    if (dto.getStartTime() != null) {
-                        result += "<td >"
-                                + formatter.format(dto.getStartTime())
-                                + "</td >";
-
-                    } else {
-                        result += "<td >"
-                                + "NULL"
-                                + "</td >";
-                    }
-
-                    if (dto.getEndTime() != null) {
-                        result += "<td >"
-                                + formatter.format(dto.getEndTime())
-                                + "</td >";
-                    } else {
-                        result += "<td >"
-                                + "NULL"
-                                + "</td >";
-                    }
-                    if (dto.getScheduleTime() != null) {
-                        result += "<td >"
-                                + formatter.format(dto.getScheduleTime())
-                                + "</td >";
-                    } else {
-                        result += "<td >"
-                                + "NULL"
-                                + "</td >";
-                    }
-                    if (dto.getExecHost() != null) {
-                        result += "<td >"
-                                + dto.getExecHost()
-                                + "</td >";
-                    } else {
-                        result += "<td >"
-                                + "NULL"
-                                + "</td >";
-                    }
-                    result += "<td >"
-                            + lastTaskStatus
-                            + "</td >";
-                    result += "<td> <a id ='submitFeedBtn' class='feedBtn'  href='feederror.jsp?id="
-                            + dto.getAttemptID()
-                            + "&status="
-                            + dto.getStatus()
-                            + "&taskName="
-                            + taskName
-                            + "&ip="
-                            + dto.getExecHost()
-                            + "&taskId="
-                            + dto.getTaskID()
-                            + "&feedtype=wechat"
-                            + "&from=monitor"
-                            + "'><img border='0' src='img/wechat.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a> |"
-                            + "<a id ='submitFeedQQBtn' class='feedBtn'  href='feederror.jsp?id="
-                            + dto.getAttemptID()
-                            + "&status="
-                            + dto.getStatus()
-                            + "&taskName="
-                            + taskName
-                            + "&ip="
-                            + dto.getExecHost()
-                            + "&taskId="
-                            + dto.getTaskID()
-                            + "&feedtype=qq"
-                            + "&from=monitor"
-                            + "'><img border='0' src='img/qq.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a></td>";
-                    result += "</tr>";
-                }
-            }
-        output.write(result.getBytes());
-        output.close();
-        
         
         modelMap.addAttribute("attempts", attempts);
         modelMap.addAttribute("tasks", tasks);
@@ -328,7 +189,7 @@ public class MonitorController implements ServletContextAware {
     
     @RequestMapping(value = "/dependencypass", method = RequestMethod.POST)
 	public String dependencypass(ModelMap modelMap, HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
+			HttpServletResponse response) {
 		log.info("--------------init the dependencypass------------");
     	
     	ClientResource cr = new ClientResource(RESTLET_URL_BASE + "host");
@@ -336,8 +197,6 @@ public class MonitorController implements ServletContextAware {
         cr.accept(MediaType.APPLICATION_XML);
         ArrayList<HostDTO> hosts = hostsResource.retrieve();
         
-        OutputStream output = response.getOutputStream();
-
         ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
         if (tasks == null) {
             ClientResource crTask = new ClientResource(RESTLET_URL_BASE + "gettasks");
@@ -347,119 +206,22 @@ public class MonitorController implements ServletContextAware {
             ReFlashHostLoadTask.lastReadDataTime = new Date().getTime();
         }
 
-
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-
-        String result = "";
-        if (attempts != null)
-            for (AttemptDTO dto : attempts) {
-                String state = dto.getStatus();
-
-
-                if (state.equals("DEPENDENCY_PASS")) {
-                    String taskName = "";
-                    for (Task task : tasks) {
-                        if (task.getTaskid().equals(dto.getTaskID())) {
-                            taskName = task.getName();
-                            break;
-                        }
-                    }
-                    result += " <tr id = " + dto.getAttemptID() + " >"
-                            + "<td >"
-                            + dto.getTaskID()
-                            + "</td >"
-                            + "<td >"
-                            + taskName
-                            + "</td >";
-
-
-                    if (dto.getStartTime() != null) {
-                        result += "<td >"
-                                + formatter.format(dto.getStartTime())
-                                + "</td >";
-
-                    } else {
-                        result += "<td >"
-                                + "NULL"
-                                + "</td >";
-                    }
-
-                    if (dto.getEndTime() != null) {
-                        result += "<td >"
-                                + formatter.format(dto.getEndTime())
-                                + "</td >";
-                    } else {
-                        result += "<td >"
-                                + "NULL"
-                                + "</td >";
-                    }
-                    if (dto.getScheduleTime() != null) {
-                        result += "<td >"
-                                + formatter.format(dto.getScheduleTime())
-                                + "</td >";
-                    } else {
-                        result += "<td >"
-                                + "NULL"
-                                + "</td >";
-                    }
-                    if (dto.getExecHost() != null) {
-                        result += "<td >"
-                                + dto.getExecHost()
-                                + "</td >";
-                    } else {
-                        result += "<td >"
-                                + "NULL"
-                                + "</td >";
-                    }
-
-                    result += "<td> <a id ='denpencyFeedBtn' class='feedBtn'  href='feederror.jsp?id="
-                            + dto.getAttemptID()
-                            + "&status="
-                            + dto.getStatus()
-                            + "&taskName="
-                            + taskName
-                            + "&ip="
-                            + dto.getExecHost()
-                            + "&taskId="
-                            + dto.getTaskID()
-                            + "&feedtype=wechat"
-                            + "&from=monitor"
-                            + "'><img border='0' src='img/wechat.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a> |"
-                            + "<a id ='denpencyFeedQQBtn' class='feedBtn'  href='feederror.jsp?id="
-                            + dto.getAttemptID()
-                            + "&status="
-                            + dto.getStatus()
-                            + "&taskName="
-                            + taskName
-                            + "&ip="
-                            + dto.getExecHost()
-                            + "&taskId="
-                            + dto.getTaskID()
-                            + "&feedtype=qq"
-                            + "&from=monitor"
-                            + "'><img border='0' src='img/qq.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a></td>";
-
-                    result += "</tr>";
-                }
-            }
-        output.write(result.getBytes());
-        output.close();
         
-        
+        modelMap.addAttribute("attempts", attempts);
+        modelMap.addAttribute("tasks", tasks);
+        modelMap.addAttribute("mHelper", new MonitorHelper());
         return "/monitor/dependencypass.ftl";
 	}
     
     @RequestMapping(value = "/failedtasks", method = RequestMethod.POST)
 	public String failedtasks(ModelMap modelMap, HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
+			HttpServletResponse response) {
 		log.info("--------------init the failedtasks------------");
     	
     	ClientResource cr = new ClientResource(RESTLET_URL_BASE + "host");
         IHostsResource hostsResource = cr.wrap(IHostsResource.class);
         cr.accept(MediaType.APPLICATION_XML);
         ArrayList<HostDTO> hosts = hostsResource.retrieve();
-        
-        OutputStream output = response.getOutputStream();
 
         ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
         if (tasks == null) {
@@ -471,157 +233,15 @@ public class MonitorController implements ServletContextAware {
         }
 
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-
-        String result = "";
-        if (attempts != null)
-            for (AttemptDTO dto : attempts) {
-                String state = dto.getStatus();
-
-
-                if (state.equals("FAILED")) {
-                    String status_api = RESTLET_URL_BASE + "getlaststatus";
-                    String status;
-                    try {
-                        cr = new ClientResource(status_api + "/" + dto.getTaskID());
-                        IGetTaskLastStatus statusResource = cr.wrap(IGetTaskLastStatus.class);
-                        cr.accept(MediaType.APPLICATION_XML);
-                        status = statusResource.retrieve();
-                    } catch (Exception e) {
-                        status = null;
-                    }
-
-                    String lastTaskStatus ="";
-                    int taskState = -1;
-                    if (status != null) {
-                        try {
-                            JsonParser parser = new JsonParser();
-                            JsonElement statusElement = parser.parse(status);
-                            JsonObject statusObject = statusElement.getAsJsonObject();
-                            JsonElement statusValue = statusObject.get("status");
-
-                            taskState = statusValue.getAsInt();
-
-                            lastTaskStatus = AttemptStatus.getInstanceRunState(taskState);
-                        } catch (Exception e) {
-                            lastTaskStatus = "NULL";
-                        }
-                    }
-                    if(state == "SUCCEEDED"){
-                        lastTaskStatus = "<span class='label label-info'>"
-                                + lastTaskStatus
-                                + "</span>";
-                    }else{
-                        lastTaskStatus = "<span class='label label-important'>"
-                                + lastTaskStatus
-                                + "</span>";
-                    }
-
-                    String taskName = "";
-                    for (Task task : tasks) {
-                        if (task.getTaskid().equals(dto.getTaskID())) {
-                            taskName = task.getName();
-                            break;
-                        }
-                    }
-
-                    result += " <tr id = " + dto.getAttemptID() + " >"
-                            + "<td >"
-                            + dto.getTaskID()
-                            + "</td >"
-                            + "<td >"
-                            + taskName
-                            + "</td >";
-
-
-                    if (dto.getStartTime() != null) {
-                        result += "<td >"
-                                + formatter.format(dto.getStartTime())
-                                + "</td >";
-
-                    } else {
-                        result += "<td >"
-                                + "NULL"
-                                + "</td >";
-                    }
-
-                    if (dto.getEndTime() != null) {
-                        result += "<td >"
-                                + formatter.format(dto.getEndTime())
-                                + "</td >";
-                    } else {
-                        result += "<td >"
-                                + "NULL"
-                                + "</td >";
-                    }
-                    if (dto.getScheduleTime() != null) {
-                        result += "<td >"
-                                + formatter.format(dto.getScheduleTime())
-                                + "</td >";
-                    } else {
-                        result += "<td >"
-                                + "NULL"
-                                + "</td >";
-                    }
-                    if (dto.getExecHost() != null) {
-                        result += "<td >"
-                                + dto.getExecHost()
-                                + "</td >";
-                    } else {
-                        result += "<td >"
-                                + "NULL"
-                                + "</td >";
-                    }
-                    result += "<td >"
-                            + lastTaskStatus
-                            + "</td >";
-                    result += "<td >"
-                            + "  <a target=\"_blank\" href=\"viewlog.jsp?id="
-                            + dto.getAttemptID() + "&status=" + dto.getStatus()
-                            + "\">日志</a>"
-                            + "</td >";
-
-                    result += "<td> <a id ='failedFeedBtn' class='feedBtn'  href='feederror.jsp?id="
-                            + dto.getAttemptID()
-                            + "&status="
-                            + dto.getStatus()
-                            + "&taskName="
-                            + taskName
-                            + "&ip="
-                            + dto.getExecHost()
-                            + "&taskId="
-                            + dto.getTaskID()
-                            + "&feedtype=wechat"
-                            + "&from=monitor"
-                            + "'><img border='0' src='img/wechat.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a> |"
-                            + "<a id ='failedFeedQQBtn' class='feedBtn'  href='feederror.jsp?id="
-                            + dto.getAttemptID()
-                            + "&status="
-                            + dto.getStatus()
-                            + "&taskName="
-                            + taskName
-                            + "&ip="
-                            + dto.getExecHost()
-                            + "&taskId="
-                            + dto.getTaskID()
-                            + "&feedtype=qq"
-                            + "&from=monitor"
-                            + "'><img border='0' src='img/qq.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a></td>";
-
-
-                    result += "</tr>";
-                }
-            }
-        output.write(result.getBytes());
-        output.close();
-        
-        
+        modelMap.addAttribute("attempts", attempts);
+        modelMap.addAttribute("tasks", tasks);
+        modelMap.addAttribute("mHelper", new MonitorHelper());
         return "/monitor/failedtasks.ftl";
 	}
     
     @RequestMapping(value = "/dependencytimeout", method = RequestMethod.POST)
 	public String dependencytimeout(ModelMap modelMap, HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
+			HttpServletResponse response) {
 		log.info("--------------init the dependencytimeout------------");
     	
     	ClientResource cr = new ClientResource(RESTLET_URL_BASE + "host");
@@ -629,8 +249,6 @@ public class MonitorController implements ServletContextAware {
         cr.accept(MediaType.APPLICATION_XML);
         ArrayList<HostDTO> hosts = hostsResource.retrieve();
         
-        OutputStream output = response.getOutputStream();
-
         ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
         if (tasks == null) {
             ClientResource crTask = new ClientResource(RESTLET_URL_BASE + "gettasks");
@@ -640,114 +258,16 @@ public class MonitorController implements ServletContextAware {
             ReFlashHostLoadTask.lastReadDataTime = new Date().getTime();
         }
 
-
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-
-        String result = "";
-        if (attempts != null)
-            for (AttemptDTO dto : attempts) {
-                String state = dto.getStatus();
-
-
-                if (state.equals("DEPENDENCY_TIMEOUT")) {
-                    String taskName = "";
-                    for (Task task : tasks) {
-                        if (task.getTaskid().equals(dto.getTaskID())) {
-                            taskName = task.getName();
-                            break;
-                        }
-                    }
-                    result += " <tr id = " + dto.getAttemptID() + " >"
-                            + "<td >"
-                            + dto.getTaskID()
-                            + "</td >"
-                            + "<td >"
-                            + taskName
-                            + "</td >";
-
-
-                    if (dto.getStartTime() != null) {
-                        result += "<td >"
-                                + formatter.format(dto.getStartTime())
-                                + "</td >";
-
-                    } else {
-                        result += "<td >"
-                                + "NULL"
-                                + "</td >";
-                    }
-
-                    if (dto.getEndTime() != null) {
-                        result += "<td >"
-                                + formatter.format(dto.getEndTime())
-                                + "</td >";
-                    } else {
-                        result += "<td >"
-                                + "NULL"
-                                + "</td >";
-                    }
-                    if (dto.getScheduleTime() != null) {
-                        result += "<td >"
-                                + formatter.format(dto.getScheduleTime())
-                                + "</td >";
-                    } else {
-                        result += "<td >"
-                                + "NULL"
-                                + "</td >";
-                    }
-                    if (dto.getExecHost() != null) {
-                        result += "<td >"
-                                + dto.getExecHost()
-                                + "</td >";
-                    } else {
-                        result += "<td >"
-                                + "NULL"
-                                + "</td >";
-                    }
-                    result += "<td >"
-                            + "  <a target=\"_blank\" href=\"viewlog.jsp?id="
-                            + dto.getAttemptID() + "&status=" + dto.getStatus()
-                            + "\">日志</a>"
-                            + "</td >";
-
-                    result += "<td> <a id ='denpencyTimeoutFeedBtn' class='feedBtn'  href='feederror.jsp?id="
-                            + dto.getAttemptID()
-                            + "&status="
-                            + dto.getStatus()
-                            + "&taskName="
-                            + taskName
-                            + "&ip="
-                            + dto.getExecHost()
-                            + "&taskId="
-                            + dto.getTaskID()
-                            + "&feedtype=wechat"
-                            + "&from=monitor"
-                            + "'><img border='0' src='img/wechat.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a> |"
-                            + "<a id ='denpencyTimeoutFeedQQBtn' class='feedBtn'  href='feederror.jsp?id="
-                            + dto.getAttemptID()
-                            + "&status="
-                            + dto.getStatus()
-                            + "&taskName="
-                            + taskName
-                            + "&ip="
-                            + dto.getExecHost()
-                            + "&taskId="
-                            + dto.getTaskID()
-                            + "&feedtype=qq"
-                            + "&from=monitor"
-                            + "'><img border='0' src='img/qq.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a></td>";
-
-                    result += "</tr>";
-                }
-            }
-        output.write(result.getBytes());
-        output.close();
+        
+        modelMap.addAttribute("attempts", attempts);
+        modelMap.addAttribute("tasks", tasks);
+        modelMap.addAttribute("mHelper", new MonitorHelper());
         return "/monitor/dependencytimeout.ftl";
 	}
     
     @RequestMapping(value = "/timeout", method = RequestMethod.POST)
 	public String timeout(ModelMap modelMap, HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
+			HttpServletResponse response) {
 		log.info("--------------init the timeout------------");
     	
     	ClientResource cr = new ClientResource(RESTLET_URL_BASE + "host");
@@ -755,7 +275,6 @@ public class MonitorController implements ServletContextAware {
         cr.accept(MediaType.APPLICATION_XML);
         ArrayList<HostDTO> hosts = hostsResource.retrieve();
         
-        OutputStream output = response.getOutputStream();
         ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
         if (tasks == null) {
             ClientResource crTask = new ClientResource(RESTLET_URL_BASE + "gettasks");
@@ -766,150 +285,9 @@ public class MonitorController implements ServletContextAware {
         }
 
 
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-
-        String result = "";
-        if (attempts != null)
-            for (AttemptDTO dto : attempts) {
-                String state = dto.getStatus();
-
-
-                if (state.equals("TIMEOUT")) {
-                    String status_api = RESTLET_URL_BASE + "getlaststatus";
-                    String status;
-                    try {
-                        cr = new ClientResource(status_api + "/" + dto.getTaskID());
-                        IGetTaskLastStatus statusResource = cr.wrap(IGetTaskLastStatus.class);
-                        cr.accept(MediaType.APPLICATION_XML);
-                        status = statusResource.retrieve();
-                    } catch (Exception e) {
-                        status = null;
-                    }
-
-                    String lastTaskStatus ="";
-                    int taskState = -1;
-                    if (status != null) {
-                        try {
-                            JsonParser parser = new JsonParser();
-                            JsonElement statusElement = parser.parse(status);
-                            JsonObject statusObject = statusElement.getAsJsonObject();
-                            JsonElement statusValue = statusObject.get("status");
-
-                            taskState = statusValue.getAsInt();
-
-                            lastTaskStatus = AttemptStatus.getInstanceRunState(taskState);
-                        } catch (Exception e) {
-                            lastTaskStatus = "NULL";
-                        }
-                    }
-                    if(state == "SUCCEEDED"){
-                        lastTaskStatus = "<span class='label label-info'>"
-                                + lastTaskStatus
-                                + "</span>";
-                    }else{
-                        lastTaskStatus = "<span class='label label-important'>"
-                                + lastTaskStatus
-                                + "</span>";
-                    }
-
-                    String taskName = "";
-                    for (Task task : tasks) {
-                        if (task.getTaskid().equals(dto.getTaskID())) {
-                            taskName = task.getName();
-                            break;
-                        }
-                    }
-                    result += " <tr id = " + dto.getAttemptID() + " >"
-                            + "<td >"
-                            + dto.getTaskID()
-                            + "</td >"
-                            + "<td >"
-                            + taskName
-                            + "</td >";
-
-
-                    if (dto.getStartTime() != null) {
-                        result += "<td >"
-                                + formatter.format(dto.getStartTime())
-                                + "</td >";
-
-                    } else {
-                        result += "<td >"
-                                + "NULL"
-                                + "</td >";
-                    }
-
-                    if (dto.getEndTime() != null) {
-                        result += "<td >"
-                                + formatter.format(dto.getEndTime())
-                                + "</td >";
-                    } else {
-                        result += "<td >"
-                                + "NULL"
-                                + "</td >";
-                    }
-                    if (dto.getScheduleTime() != null) {
-                        result += "<td >"
-                                + formatter.format(dto.getScheduleTime())
-                                + "</td >";
-                    } else {
-                        result += "<td >"
-                                + "NULL"
-                                + "</td >";
-                    }
-                    if (dto.getExecHost() != null) {
-                        result += "<td >"
-                                + dto.getExecHost()
-                                + "</td >";
-                    } else {
-                        result += "<td >"
-                                + "NULL"
-                                + "</td >";
-                    }
-                    result += "<td >"
-                            + lastTaskStatus
-                            + "</td >";
-                    result += "<td >"
-                            + "  <a target=\"_blank\" href=\"viewlog.jsp?id="
-                            + dto.getAttemptID() + "&status=" + dto.getStatus()
-                            + "\">日志</a>"
-                            + "</td >";
-
-                    result += "<td> "
-                            + "<a id ='timeOutFeedBtn' class='feedBtn'  href='feederror.jsp?id="
-                            + dto.getAttemptID()
-                            + "&status="
-                            + dto.getStatus()
-                            + "&taskName="
-                            + taskName
-                            + "&ip="
-                            + dto.getExecHost()
-                            + "&taskId="
-                            + dto.getTaskID()
-                            + "&feedtype=wechat"
-                            + "&from=monitor"
-                            + "'><img border='0' src='img/wechat.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a> |"
-                            + "<a id ='timeOutFeedQQBtn' class='feedBtn'  href='feederror.jsp?id="
-                            + dto.getAttemptID()
-                            + "&status="
-                            + dto.getStatus()
-                            + "&taskName="
-                            + taskName
-                            + "&ip="
-                            + dto.getExecHost()
-                            + "&taskId="
-                            + dto.getTaskID()
-                            + "&feedtype=qq"
-                            + "&from=monitor"
-                            + "'><img border='0' src='img/qq.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a></td>";
-
-                    result += "</tr>";
-                }
-            }
-        output.write(result.getBytes());
-        output.close();
-		
-        
+        modelMap.addAttribute("attempts", attempts);
+        modelMap.addAttribute("tasks", tasks);
+        modelMap.addAttribute("mHelper", new MonitorHelper());
         return "/monitor/timeout.ftl";
 	}
     
@@ -965,15 +343,6 @@ public class MonitorController implements ServletContextAware {
                 } catch (Exception e) {
                     lastTaskStatus = "NULL";
                 }
-            }
-            if(lastTaskStatus.equals("SUCCEEDED") || lastTaskStatus.equals("RUNNING") ){
-                lastTaskStatus = "<span class='label label-info'>"
-                        + lastTaskStatus
-                        + "</span>";
-            }else{
-                lastTaskStatus = "<span class='label label-important'>"
-                        + lastTaskStatus
-                        + "</span>";
             }
             return lastTaskStatus;
     	}
