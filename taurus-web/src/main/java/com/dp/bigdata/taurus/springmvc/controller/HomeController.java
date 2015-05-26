@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +29,7 @@ import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
 import com.dianping.lion.client.LionException;
 import com.dp.bigdata.taurus.restlet.resource.IAttemptStatusResource;
+import com.dp.bigdata.taurus.restlet.resource.IHostResource;
 import com.dp.bigdata.taurus.restlet.resource.IHostsResource;
 import com.dp.bigdata.taurus.restlet.resource.IPoolsResource;
 import com.dp.bigdata.taurus.restlet.resource.ITaskResource;
@@ -628,6 +630,47 @@ public class HomeController implements ServletContextAware{
         modelMap.addAttribute("op_str", opStr);
         
 		return "/monitor.ftl";
+	}
+	/**
+	 * 重构hosts.jsp
+	 * @param modelMap
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/hosts", method = RequestMethod.GET)
+	public String hosts(ModelMap modelMap, HttpServletRequest request,
+			HttpServletResponse response) {
+		log.info("--------------init the hosts------------");
+		GlobalViewVariable gvv = new GlobalViewVariable();
+		commonnav(request,gvv);
+		modelMap.addAttribute("currentUser", gvv.currentUser);
+	    modelMap.addAttribute("isAdmin",gvv.isAdmin);
+
+	    gvv.cr = new ClientResource(gvv.host + "host");
+	    IHostsResource hostsResource = gvv.cr.wrap(IHostsResource.class);
+	    gvv.cr.accept(MediaType.APPLICATION_XML);
+	    ArrayList<HostDTO> hosts = hostsResource.retrieve();
+
+	    String statusCode = (String) (request.getAttribute("statusCode"));
+	    String hostName = request.getParameter("hostName");
+	    String op = request.getParameter("op");
+	    gvv.cr = new ClientResource(gvv.host + "host/" + hostName);
+	    IHostResource hostResource = gvv.cr.wrap(IHostResource.class);
+	    gvv.cr.accept(MediaType.APPLICATION_XML);
+	    HostDTO dto = hostResource.retrieve();
+	    Map<String, String> maps = new HashMap<String, String>();
+	    maps.put("up", "上线");
+	    maps.put("dowan", "下线");
+	    maps.put("restart", "重启");
+	    maps.put("update", "升级");
+	    String opChs = maps.get(op);
+	    if (opChs == null) {
+	        opChs = "操作";
+	    }
+	    
+	    modelMap.addAttribute("statusCode", statusCode);
+		return "/task.ftl";
 	}
 	/**
 	 * 重构jsp/common-nav.jsp
