@@ -19,7 +19,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.ServletContextAware;
 
 import com.dianping.cat.Cat;
@@ -35,7 +34,6 @@ import com.dp.bigdata.taurus.restlet.resource.IHostsResource;
 import com.dp.bigdata.taurus.restlet.resource.IUserTasks;
 import com.dp.bigdata.taurus.restlet.shared.AttemptDTO;
 import com.dp.bigdata.taurus.restlet.shared.HostDTO;
-import com.dp.bigdata.taurus.springmvc.bean.WebResult;
 import com.dp.bigdata.taurus.web.servlet.AttemptProxyServlet;
 import com.dp.bigdata.taurus.web.utils.ReFlashHostLoadTask;
 import com.dp.bigdata.taurus.web.utils.ReFlashHostLoadTaskTimer;
