@@ -29,18 +29,23 @@ import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
 import com.dianping.lion.client.LionException;
 import com.dp.bigdata.taurus.restlet.resource.IAttemptStatusResource;
+import com.dp.bigdata.taurus.restlet.resource.IGetAttemptsByStatus;
+import com.dp.bigdata.taurus.restlet.resource.IGetTasks;
 import com.dp.bigdata.taurus.restlet.resource.IHostResource;
 import com.dp.bigdata.taurus.restlet.resource.IHostsResource;
 import com.dp.bigdata.taurus.restlet.resource.IPoolsResource;
 import com.dp.bigdata.taurus.restlet.resource.ITaskResource;
 import com.dp.bigdata.taurus.restlet.resource.IUserGroupsResource;
 import com.dp.bigdata.taurus.restlet.resource.IUsersResource;
+import com.dp.bigdata.taurus.restlet.shared.AttemptDTO;
 import com.dp.bigdata.taurus.restlet.shared.HostDTO;
 import com.dp.bigdata.taurus.restlet.shared.PoolDTO;
 import com.dp.bigdata.taurus.restlet.shared.StatusDTO;
 import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
 import com.dp.bigdata.taurus.restlet.shared.UserDTO;
 import com.dp.bigdata.taurus.restlet.shared.UserGroupDTO;
+
+import com.dp.bigdata.taurus.generated.module.Task;
 
 @Controller
 public class HomeController implements ServletContextAware{
@@ -651,7 +656,12 @@ public class HomeController implements ServletContextAware{
 	    IHostsResource hostsResource = gvv.cr.wrap(IHostsResource.class);
 	    gvv.cr.accept(MediaType.APPLICATION_XML);
 	    ArrayList<HostDTO> hosts = hostsResource.retrieve();
-
+	    
+	    //hostList.jsp todo
+	    modelMap.addAttribute("host", gvv.host);
+	    modelMap.addAttribute("hosts", hosts);
+	    modelMap.addAttribute("hHelper", new HomeHelper());
+	    
 	    String statusCode = (String) (request.getAttribute("statusCode"));
 	    String hostName = request.getParameter("hostName");
 	    String op = request.getParameter("op");
@@ -661,7 +671,8 @@ public class HomeController implements ServletContextAware{
 	    HostDTO dto = hostResource.retrieve();
 	    Map<String, String> maps = new HashMap<String, String>();
 	    maps.put("up", "上线");
-	    maps.put("dowan", "下线");
+	    //我把dowan改成down了
+	    maps.put("down", "下线");
 	    maps.put("restart", "重启");
 	    maps.put("update", "升级");
 	    String opChs = maps.get(op);
@@ -670,7 +681,60 @@ public class HomeController implements ServletContextAware{
 	    }
 	    
 	    modelMap.addAttribute("statusCode", statusCode);
-		return "/task.ftl";
+	    modelMap.addAttribute("hostName", hostName);
+	    modelMap.addAttribute("dto", dto);
+	    
+	    // 任务监控标签 start
+	    // 正在运行的任务RUNNING
+	    ClientResource crTask = new ClientResource(gvv.host + "gettasks");
+        com.dp.bigdata.taurus.restlet.resource.IGetTasks taskResource = crTask.wrap(IGetTasks.class);
+        ArrayList<Task> tasks = taskResource.retrieve();
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        String url = gvv.host + "getattemptsbystatus/";
+
+        Date nowTime  = new Date();
+        String now = formatter.format(nowTime);
+        long hourTime = 60 * 60 * 1000;
+        Date taskDateTime = new Date(new Date().getTime() - 24 * hourTime);
+        String taskTime = formatter.format(taskDateTime);
+        
+        gvv.cr = new ClientResource(url + 6);//正在运行？
+        IGetAttemptsByStatus resource = gvv.cr.wrap(IGetAttemptsByStatus.class);
+        ArrayList<AttemptDTO> attempts = resource.retrieve();
+	    modelMap.addAttribute("attempts", attempts);
+	    modelMap.addAttribute("tasks", tasks);
+	    modelMap.addAttribute("nowTime", nowTime);
+	    
+	    
+	    // 提交失败的任务 SUBMIT_FAIL
+	    ClientResource submitFailCr = new ClientResource(url + 5);//提交失败？
+        IGetAttemptsByStatus submitFailResource = submitFailCr.wrap(IGetAttemptsByStatus.class);
+        ArrayList<AttemptDTO> submitFailAttempts = submitFailResource.retrieve();
+        modelMap.addAttribute("submitFailAttempts", submitFailAttempts);
+        modelMap.addAttribute("taskDateTime", taskDateTime);
+        
+        
+        //失败的任务 FAILED
+        ClientResource failCr = new ClientResource(url + 8);//失败？
+        IGetAttemptsByStatus failResource = failCr.wrap(IGetAttemptsByStatus.class);
+        ArrayList<AttemptDTO> failAttempts = failResource.retrieve();
+        modelMap.addAttribute("failAttempts", failAttempts);
+        
+        //依赖超时的任务 DEPENDENCY_TIMEOUT
+        ClientResource dependencyTimeOutCr = new ClientResource(url + 3);
+        IGetAttemptsByStatus dependencyTimeOutResource = dependencyTimeOutCr.wrap(IGetAttemptsByStatus.class);
+        ArrayList<AttemptDTO> dependencyTimeOutAttempts = dependencyTimeOutResource.retrieve();
+        modelMap.addAttribute("dependencyTimeOutAttempts", dependencyTimeOutAttempts);
+        
+        //超时的任务 TIMEOUT
+        ClientResource timeOutCr = new ClientResource(url + 9);
+        IGetAttemptsByStatus timeOutResource = timeOutCr.wrap(IGetAttemptsByStatus.class);
+        ArrayList<AttemptDTO> timeOutAttempts = timeOutResource.retrieve();
+        modelMap.addAttribute("timeOutAttempts", timeOutAttempts);
+	    // 任务监控标签 end
+	    
+		return "/hosts.ftl";
 	}
 	/**
 	 * 重构jsp/common-nav.jsp
@@ -735,4 +799,13 @@ public class HomeController implements ServletContextAware{
 	    public GlobalViewVariable(){};
 	}
 
+	public class HomeHelper{
+		public HostDTO getDtos(String host, String dtoName){
+			ClientResource cr = new ClientResource(host + "host/" + dtoName);
+	        IHostResource hostResource = cr.wrap(IHostResource.class);
+	        cr.accept(MediaType.APPLICATION_XML);
+	        HostDTO dtos = hostResource.retrieve();
+	        return dtos;
+		}
+	}
 }

@@ -26,14 +26,14 @@
 
 <div class="main-content">
 <div class="page-content col-sm-12">
-<#if statusCode == "200">
+<#if statusCode! == "200">
 <div id="alertContainer" class="container">
     <div id="alertContainerSuccess" class="alert alert-success">
         <button type="button" class="close" data-dismiss="alert">×</button>
         ${opChs!}成功
     </div>
 </div>
-<#elseif statusCode == "500">
+<#elseif statusCode! == "500">
 <div id="alertContainer" class="container">
     <div id="alertContainerError" class="alert alert-danger">
         <button type="button" class="close" data-dismiss="alert">×</button>
@@ -41,9 +41,7 @@
     </div>
 </div>
 </#if>
-<%
-    if (dto != null) {
-%>
+<#if dto?exists>
 
 <ul class="nav nav-tabs">
     <li class="active"><a href="#state" data-toggle="tab">运行状态</a></li>
@@ -63,79 +61,71 @@
             <th>#</th>
             <th>属性</th>
             <th>值</th>
-            <% if (isAdmin){%>
-            <th>操作</th>
-            <%}%>
+            <#if isAdmin><th>操作</th></#if>
         </tr>
         </thead>
         <tbody>
         <tr class="success">
             <td>1</td>
             <td>机器IP</td>
-            <td><%=hostName%>
-            </td>
-            <% if (isAdmin){%>
-            <td></td>
-            <%}%>
+            <td>${hostName!}</td>
+            <#if isAdmin><td></td></#if>
         </tr>
         <tr class="error">
             <td>2</td>
             <td>机器状态</td>
-            <%if (dto.isOnline()) {%>
+        <#if dto.isOnline()>
             <td>在线</td>
-            <% if (isAdmin){%>
-
+            <#if isAdmin>
             <td><a id="down" title="这台agent将不在监控范围内，agent进程是否被kill并不能确定。" class="btn  btn-primary btn-minier"
-                   href="updateHost?hostName=<%=hostName%>&op=down">下线</a></td>
-            <%}%>
-            <%} else {%>
+                   href="updateHost?hostName=${hostName!}&op=down">下线</a></td>
+            </#if>
+        <#else>
             <td>下线</td>
-            <% if (isAdmin){%>
+            <#if isAdmin>
             <td><a id="up" title="这台agent将被纳入监控范围内，agent需要手动启动。" class="btn btn-primary btn-minier"
-                   href="updateHost?hostName=<%=hostName%>&op=up">上线</a></td>
-            <%}%>
-            <%} %>
+                   href="updateHost?hostName=${hostName!}&op=up">上线</a></td>
+            </#if>
+        </#if>
         </tr>
         <tr class="warning">
             <td>3</td>
             <td>心跳状态</td>
-            <%if (dto.isConnected()) {%>
+        <#if dto.isConnected()>
             <td>正常</td>
-            <% if (isAdmin){%>
+            <#if isAdmin>
             <td><a id="restart" class="btn  btn-primary btn-minier"
-                   href="updateHost?hostName=<%=hostName%>&op=restart">重启</a></td>
-            <%}%>
-            <%} else {%>
+                   href="updateHost?hostName=${hostName!}&op=restart">重启</a></td>
+            </#if>
+        <#else>
             <td>异常</td>
-            <% if (isAdmin){%>
+            <#if isAdmin>
             <td>无法重启</td>
-
-            <%} }%>
+            </#if>
+        </#if>
         </tr>
         <tr class="info">
             <td>4</td>
             <td>版本</td>
-            <td><% if (dto.getInfo() == null) {%>
-                异常，无法获得版本号 <%
-                } else {
-                %><%=dto.getInfo().getAgentVersion() %><%}%></td>
-            <%if (dto.isConnected()) {%>
-            <% if (isAdmin){%>
+            <td><#if dto.info?exists>${dto.info.agentVersion!}<#else>异常，无法获得版本号</#if></td>
+        <#if dto.isConnected()>
+            <#if isAdmin>
             <td><a id="update" class="btn btn-primary btn-minier"
                    href="http://code.dianpingoa.com/arch/taurus/rollout_branches">升级</a></td>
-            <%} %>
-            <%} else {%>
-            <% if (isAdmin){%>
+            </#if>
+        <#else>
+            <#if isAdmin>
             <td><a id="update" class="btn btn-primary btn-minier"
                    href="http://code.dianpingoa.com/arch/taurus/rollout_branches">升级</a></td>
-            <%}} %>
+            </#if>
+        </#if>
         </tr>
 
         <tr class="info">
             <td>5</td>
             <td>主机任务执行历史</td>
             <td><a id="history" class="btn btn-primary btn-minier"
-                   href="host_history.jsp?ip=<%=hostName%>">查看</a></td>
+                   href="${rc.contextPath}/mvc/host_history?ip=${hostName!}">查看</a></td>
         </tr>
         </tbody>
     </table>
@@ -161,91 +151,37 @@
             <th>预计调度时间</th>
             <!-- <th>IP</th> -->
             <th>查看日志</th>
-
         </tr>
         </thead>
         <tbody>
-        <%
+<#if attempts?exists>
+<#list attempts as hostDto>
 
-            ClientResource crTask = new ClientResource(host + "gettasks");
-            com.dp.bigdata.taurus.restlet.resource.IGetTasks taskResource = crTask.wrap(IGetTasks.class);
-            ArrayList<Task> tasks = taskResource.retrieve();
-
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            String url = host + "getattemptsbystatus/";
-
-            String now = formatter.format(new Date());
-            long hourTime = 60 * 60 * 1000;
-            String taskTime = formatter.format(new Date(new Date().getTime() - 24 * hourTime));
-            cr = new ClientResource(url + 6);
-            IGetAttemptsByStatus resource = cr.wrap(IGetAttemptsByStatus.class);
-            ArrayList<AttemptDTO> attempts = resource.retrieve();
-
-            if (attempts != null)
-                for (AttemptDTO hostDto : attempts) {
-                    Date startDate = hostDto.getStartTime();
-                    String startTime;
-                    if (startDate == null) {
-                        startTime = null;
-                    } else {
-                        startTime = formatter.format(startDate);
-                    }
-
-                    Date endDate = hostDto.getEndTime();
-                    String endTime;
-                    if (endDate == null) {
-                        endTime = null;
-                    } else {
-                        endTime = formatter.format(endDate);
-                    }
-
-
-                    String state = hostDto.getStatus();
-                    String exeHost = hostDto.getExecHost();
-                    if (hostName != null && hostName.equals(exeHost)) {
-                        if (tasks != null && startTime != null && state.equals("RUNNING") && (startTime.compareTo(now) <= 0 && (endTime == null || endTime.compareTo(now) >= 0))) {
-                            String taskName = "";
-
-                            for (Task task : tasks) {
-                                if (task.getTaskid().equals(hostDto.getTaskID())) {
-                                    taskName = task.getName();
-                                    break;
-                                }
-                            }
-        %>
-        <tr id="<%=hostDto.getAttemptID()%>">
-            <td><%=hostDto.getTaskID()%>
-            </td>
-            <td><%=taskName%>
-            </td>
-            <%if (hostDto.getStartTime() != null) {%>
-            <td><%=formatter.format(hostDto.getStartTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (hostDto.getEndTime() != null) {%>
-            <td><%=formatter.format(hostDto.getEndTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (hostDto.getScheduleTime() != null) {%>
-            <td><%=formatter.format(hostDto.getScheduleTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
+<#if hostName?? && hostName == hostDto.execHost>
+    <#if tasks?exists && hostDto.startTime?exists && hostDto.status == "RUNNING" &&
+     (hostDto.startTime?string("yyyy-MM-dd HH:mm")?date("yyyy-MM-dd HH:mm") lte nowTime?string("yyyy-MM-dd HH:mm")?date("yyyy-MM-dd HH:mm") && (hostDto.endTime?? == false || hostDto.endTime?string("yyyy-MM-dd HH:mm")?date("yyyy-MM-dd HH:mm") gte nowTime?string("yyyy-MM-dd HH:mm")?date("yyyy-MM-dd HH:mm") )) >
+        <#list tasks as task>
+		<#if task.taskid == hostDto.taskID>
+        <tr id="${hostDto.attemptID!}">
+            <td>${hostDto.taskID!}</td>
+            <td>${task.name!}</td>
+            <td>${(hostDto.startTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>
+            <td>${(hostDto.endTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>
+            <td>${(hostDto.scheduleTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>
             <td>
-
                 <a target="_blank"
-                   href="viewlog.jsp?id=<%=hostDto.getAttemptID()%>&status=<%=hostDto.getStatus()%>">日志</a>
+                   href="${rc.contextPath}/mvc/viewlog?id=${hostDto.attemptID!}&status=${hostDto.status!}">日志</a>
             </td>
 
         </tr>
-        <% }
-        }
-        }%>
+    	<#break>
+		</#if>
+		</#list>
+	</#if>
+</#if>
+
+</#list>
+</#if>
         </tbody>
     </table>
 </ul>
@@ -270,120 +206,54 @@
         </tr>
         </thead>
         <tbody>
-        <%
-            ClientResource submitFailCr = new ClientResource(url + 5);
-            IGetAttemptsByStatus submitFailResource = submitFailCr.wrap(IGetAttemptsByStatus.class);
-            ArrayList<AttemptDTO> submitFailAttempts = submitFailResource.retrieve();
 
-            if (submitFailAttempts != null)
-                for (AttemptDTO hostDto : submitFailAttempts) {
-                    String exeHost = hostDto.getExecHost();
-                    if (hostName != null && hostName.equals(exeHost)) {
-                        String state = hostDto.getStatus();
+<#if submitFailAttempts?exists>
+<#list submitFailAttempts as hostDto>
+	<#list tasks as task>
+	<#if task.taskid == hostDto.taskID>
 
-                        if (taskTime != null) {
-                            Date startDate = hostDto.getStartTime();
-                            String startTime;
-                            if (startDate == null) {
-                                startTime = null;
-                            } else {
-                                startTime = formatter.format(startDate);
-                            }
+    <#if hostName?exists && hostName == hostDto.execHost>
+        <#if taskTime?exists>
+            <#if hostDto.startTime?exists && hostDto.status == "SUBMIT_FAIL" && (hostDto.startTime.compareTo(taskDateTime)>=0 || hostDto.endTime.compareTo(taskDateTime) >= 0 )> 
 
-                            Date endDate = hostDto.getEndTime();
-                            String endTime;
-                            if (endDate == null) {
-                                endTime = null;
-                            } else {
-                                endTime = formatter.format(endDate);
-                            }
+	        <tr id="${hostDto.attemptID!}">
+	        	<td>${hostDto.taskID!}</td>
+	            <td>${task.name!}</td>
+	            <td>${(hostDto.startTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>
+	            <td>${(hostDto.endTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>
+	            <td>${(hostDto.scheduleTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>
 
-                            if (startTime != null && state.equals("SUBMIT_FAIL") && (startTime.compareTo(taskTime) >= 0 || endTime.compareTo(taskTime) >= 0)) {
-                                String taskName = "";
-                                for (Task task : tasks) {
-                                    if (task.getTaskid().equals(hostDto.getTaskID())) {
-                                        taskName = task.getName();
-                                        break;
-                                    }
-                                }
+	            <td>
+	                <a target="_blank"
+	                   href="${rc.contextPath}/mvc/viewlog?id=${hostDto.attemptID!}&status=${hostDto.status!}">日志</a>
+	            </td>
 
-        %>
-        <tr id="<%=hostDto.getAttemptID()%>">
-            <td><%=hostDto.getTaskID()%>
-            </td>
-            <td><%=taskName%>
-            </td>
-            <%if (hostDto.getStartTime() != null) {%>
-            <td><%=formatter.format(hostDto.getStartTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (hostDto.getEndTime() != null) {%>
-            <td><%=formatter.format(hostDto.getEndTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (hostDto.getScheduleTime() != null) {%>
-            <td><%=formatter.format(hostDto.getScheduleTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
+	        </tr>
+        	</#if>
+        <#else>
+        	<#if hostDto.status == "SUBMIT_FAIL">
 
-            <td>
-                <a target="_blank"
-                   href="viewlog.jsp?id=<%=hostDto.getAttemptID()%>&status=<%=hostDto.getStatus()%>">日志</a>
-            </td>
+	        <tr id="${hostDto.attemptID!}">
+	        	<td>${hostDto.taskID!}</td>
+	            <td>${task.name!}</td>
+	            <td>${(hostDto.startTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>
+	            <td>${(hostDto.endTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>
+	            <td>${(hostDto.scheduleTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>
+	            <td>
+	                <a target="_blank"
+	                   href="${rc.contextPath}/mvc/viewlog?id=${hostDto.attemptID!}&status=${hostDto.status!}">日志</a>
+	            </td>
 
-        </tr>
-        <% }
-        } else {
-            if (state.equals("SUBMIT_FAIL")) {
-                String taskName = "";
-                for (Task task : tasks) {
-                    if (task.getTaskid().equals(hostDto.getTaskID())) {
-                        taskName = task.getName();
-                        break;
-                    }
-                }
+	        </tr>
+    		</#if>
+        </#if>
+    </#if>
 
-        %>
-        <tr id="<%=hostDto.getAttemptID()%>">
-            <td><%=hostDto.getTaskID()%>
-            </td>
-            <td><%=taskName%>
-            </td>
-            <%if (hostDto.getStartTime() != null) {%>
-            <td><%=formatter.format(hostDto.getStartTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (hostDto.getEndTime() != null) {%>
-            <td><%=formatter.format(hostDto.getEndTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (hostDto.getScheduleTime() != null) {%>
-            <td><%=formatter.format(hostDto.getScheduleTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <td>
-                <a target="_blank"
-                   href="viewlog.jsp?id=<%=hostDto.getAttemptID()%>&status=<%=hostDto.getStatus()%>">日志</a>
-            </td>
-
-        </tr>
-        <% }
-        }
-
-        }
-        }%>
+    <#break>
+	</#if>
+	</#list>
+</#list>
+</#if>
         </tbody>
     </table>
 </ul>
@@ -408,121 +278,53 @@
         </tr>
         </thead>
         <tbody>
-        <%
-            ClientResource failCr = new ClientResource(url + 8);
-            IGetAttemptsByStatus failResource = failCr.wrap(IGetAttemptsByStatus.class);
-            ArrayList<AttemptDTO> failAttempts = failResource.retrieve();
 
-            if (failAttempts != null)
-                for (AttemptDTO hostDto : failAttempts) {
-                    String exeHost = hostDto.getExecHost();
-                    if (hostName != null && hostName.equals(exeHost)) {
-                        String state = hostDto.getStatus();
+<#if failAttempts?exists>
+<#list failAttempts as hostDto>
+	<#list tasks as task>
+	<#if task.taskid == hostDto.taskID>
 
+	<#if hostName?exists && hostName == hostDto.execHost>
+		<#if taskTime?exists>
+			<#if hostDto.startTime?exists && hostDto.status == "FAILED" && (hostDto.startTime.compareTo(taskDateTime)>=0 || hostDto.endTime.compareTo(taskDateTime) >= 0 )> 
+        	<tr id="${hostDto.attemptID!}">
+	        	<td>${hostDto.taskID!}</td>
+	            <td>${task.name!}</td>
+	            <td>${(hostDto.startTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>
+	            <td>${(hostDto.endTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>
+	            <td>${(hostDto.scheduleTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>
+	            <td>
+	                <a target="_blank"
+	                   href="${rc.contextPath}/mvc/viewlog?id=${hostDto.attemptID!}&status=${hostDto.status!}">日志</a>
+	            </td>
 
-                        if (taskTime != null) {
-                            Date startDate = hostDto.getStartTime();
-                            String startTime;
-                            if (startDate == null) {
-                                startTime = null;
-                            } else {
-                                startTime = formatter.format(startDate);
-                            }
+	        </tr>
+    		</#if>
+    	<#else>
+    		<#if hostDto.status == "FAILED">
+        	<tr id="${hostDto.attemptID!}">
+	        	<td>${hostDto.taskID!}</td>
+	            <td>${task.name!}</td>
+	            <td>${(hostDto.startTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>
+	            <td>${(hostDto.endTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>
+	            <td>${(hostDto.scheduleTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>
+	            <td>
+	                <a target="_blank"
+	                   href="${rc.contextPath}/mvc/viewlog?id=${hostDto.attemptID!}&status=${hostDto.status!}">日志</a>
+	            </td>
 
-                            Date endDate = hostDto.getEndTime();
-                            String endTime;
-                            if (endDate == null) {
-                                endTime = null;
-                            } else {
-                                endTime = formatter.format(endDate);
-                            }
+	        </tr>
+    		</#if>
+    	</#if>
 
-                            if (startTime != null && state.equals("FAILED") && (startTime.compareTo(taskTime) >= 0 || endTime.compareTo(taskTime) >= 0)) {
-                                String taskName = "";
-                                for (Task task : tasks) {
-                                    if (task.getTaskid().equals(hostDto.getTaskID())) {
-                                        taskName = task.getName();
-                                        break;
-                                    }
-                                }
+	</#if>
 
-        %>
-        <tr id="<%=hostDto.getAttemptID()%>">
-            <td><%=hostDto.getTaskID()%>
-            </td>
-            <td><%=taskName%>
-            </td>
-            <%if (hostDto.getStartTime() != null) {%>
-            <td><%=formatter.format(hostDto.getStartTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (hostDto.getEndTime() != null) {%>
-            <td><%=formatter.format(hostDto.getEndTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (hostDto.getScheduleTime() != null) {%>
-            <td><%=formatter.format(hostDto.getScheduleTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
+	<#break>
+	</#if>
+	</#list>
+</#list>
+</#if>
 
-            <td>
-                <a target="_blank"
-                   href="viewlog.jsp?id=<%=hostDto.getAttemptID()%>&status=<%=hostDto.getStatus()%>">日志</a>
-            </td>
-
-        </tr>
-        <% }
-        } else {
-            if (state.equals("FAILED")) {
-                String taskName = "";
-                for (Task task : tasks) {
-                    if (task.getTaskid().equals(hostDto.getTaskID())) {
-                        taskName = task.getName();
-                        break;
-                    }
-                }
-
-        %>
-        <tr id="<%=hostDto.getAttemptID()%>">
-            <td><%=hostDto.getTaskID()%>
-            </td>
-            <td><%=taskName%>
-            </td>
-            <%if (hostDto.getStartTime() != null) {%>
-            <td><%=formatter.format(hostDto.getStartTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (hostDto.getEndTime() != null) {%>
-            <td><%=formatter.format(hostDto.getEndTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (hostDto.getScheduleTime() != null) {%>
-            <td><%=formatter.format(hostDto.getScheduleTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <td>
-                <a target="_blank"
-                   href="viewlog.jsp?id=<%=hostDto.getAttemptID()%>&status=<%=hostDto.getStatus()%>">日志</a>
-            </td>
-
-        </tr>
-        <% }
-        }
-
-        }
-        }%>
         </tbody>
     </table>
 </ul>
@@ -548,120 +350,51 @@
         </tr>
         </thead>
         <tbody>
-        <%
-            ClientResource dependencyTimeOutCr = new ClientResource(url + 3);
-            IGetAttemptsByStatus dependencyTimeOutResource = dependencyTimeOutCr.wrap(IGetAttemptsByStatus.class);
-            ArrayList<AttemptDTO> dependencyTimeOutAttempts = dependencyTimeOutResource.retrieve();
+            
+<#if dependencyTimeOutAttempts?exists>
+<#list dependencyTimeOutAttempts as hostDto>
+	<#list tasks as task>
+	<#if task.taskid == hostDto.taskID>
 
-            if (dependencyTimeOutAttempts != null)
-                for (AttemptDTO hostDto : dependencyTimeOutAttempts) {
-                    String exeHost = hostDto.getExecHost();
-                    if (hostName != null && hostName.equals(exeHost)) {
-                        String state = hostDto.getStatus();
+	<#if hostName?exists && hostName == hostDto.execHost>
+		<#if taskTime?exists>
+			<#if hostDto.startTime?exists && hostDto.status == "DEPENDENCY_TIMEOUT" && (hostDto.startTime.compareTo(taskDateTime)>=0 || hostDto.endTime.compareTo(taskDateTime) >= 0 )> 
+			<tr id="${hostDto.attemptID!}">
+	        	<td>${hostDto.taskID!}</td>
+	            <td>${task.name!}</td>
+	            <td>${(hostDto.startTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>
+	            <td>${(hostDto.endTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>
+	            <td>${(hostDto.scheduleTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>
+	            <td>
+	                <a target="_blank"
+	                   href="${rc.contextPath}/mvc/viewlog?id=${hostDto.attemptID!}&status=${hostDto.status!}">日志</a>
+	            </td>
 
+	        </tr>
+    		</#if>
+    	<#else>
+    		<#if hostDto.status == "DEPENDENCY_TIMEOUT"> 
+			<tr id="${hostDto.attemptID!}">
+	        	<td>${hostDto.taskID!}</td>
+	            <td>${task.name!}</td>
+	            <td>${(hostDto.startTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>
+	            <td>${(hostDto.endTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>
+	            <td>${(hostDto.scheduleTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>
+	            <td>
+	                <a target="_blank"
+	                   href="${rc.contextPath}/mvc/viewlog?id=${hostDto.attemptID!}&status=${hostDto.status!}">日志</a>
+	            </td>
 
-                        if (taskTime != null) {
-                            Date startDate = hostDto.getStartTime();
-                            String startTime;
-                            if (startDate == null) {
-                                startTime = null;
-                            } else {
-                                startTime = formatter.format(startDate);
-                            }
+	        </tr>
+    		</#if>
+        </#if>
+	</#if>
 
-                            Date endDate = hostDto.getEndTime();
-                            String endTime;
-                            if (endDate == null) {
-                                endTime = null;
-                            } else {
-                                endTime = formatter.format(endDate);
-                            }
-                            if (startTime != null && state.equals("DEPENDENCY_TIMEOUT") && (startTime.compareTo(taskTime) >= 0 || endTime.compareTo(taskTime) >= 0)) {
-                                String taskName = "";
-                                for (Task task : tasks) {
-                                    if (task.getTaskid().equals(hostDto.getTaskID())) {
-                                        taskName = task.getName();
-                                        break;
-                                    }
-                                }
-        %>
-        <tr id="<%=hostDto.getAttemptID()%>">
-            <td><%=hostDto.getTaskID()%>
-            </td>
-            <td><%=taskName%>
-            </td>
-            <%if (hostDto.getStartTime() != null) {%>
-            <td><%=formatter.format(hostDto.getStartTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (hostDto.getEndTime() != null) {%>
-            <td><%=formatter.format(hostDto.getEndTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (hostDto.getScheduleTime() != null) {%>
-            <td><%=formatter.format(hostDto.getScheduleTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <td>
-                <a target="_blank"
-                   href="viewlog.jsp?id=<%=hostDto.getAttemptID()%>&status=<%=hostDto.getStatus()%>">日志</a>
-            </td>
-
-        </tr>
-        <% }
-        } else {
-            if (state.equals("DEPENDENCY_TIMEOUT")) {
-                String taskName = "";
-                for (Task task : tasks) {
-                    if (task.getTaskid().equals(hostDto.getTaskID())) {
-                        taskName = task.getName();
-                        break;
-                    }
-                }
-
-        %>
-        <tr id="<%=hostDto.getAttemptID()%>">
-            <td><%=hostDto.getTaskID()%>
-            </td>
-            <td><%=taskName%>
-            </td>
-            <%if (hostDto.getStartTime() != null) {%>
-            <td><%=formatter.format(hostDto.getStartTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (hostDto.getEndTime() != null) {%>
-            <td><%=formatter.format(hostDto.getEndTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (hostDto.getScheduleTime() != null) {%>
-            <td><%=formatter.format(hostDto.getScheduleTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <!-- <td><%=hostDto.getExecHost()%></td> -->
-
-            <td>
-                <a target="_blank"
-                   href="viewlog.jsp?id=<%=hostDto.getAttemptID()%>&status=<%=hostDto.getStatus()%>">日志</a>
-            </td>
-
-        </tr>
-        <% }
-        }
-
-        }
-        }%>
+	<#break>
+	</#if>
+	</#list>
+</#list>
+</#if>
         </tbody>
     </table>
 </ul>
@@ -687,118 +420,51 @@
         </tr>
         </thead>
         <tbody>
-        <%
-            ClientResource timeOutCr = new ClientResource(url + 9);
-            IGetAttemptsByStatus timeOutResource = timeOutCr.wrap(IGetAttemptsByStatus.class);
-            ArrayList<AttemptDTO> timeOutAttempts = timeOutResource.retrieve();
+            
+<#if timeOutAttempts?exists>
+<#list timeOutAttempts as hostDto>
+	<#list tasks as task>
+	<#if task.taskid == hostDto.taskID>
 
-            if (timeOutAttempts != null)
-                for (AttemptDTO hostDto : timeOutAttempts) {
-                    String exeHost = hostDto.getExecHost();
-                    if (hostName != null && hostName.equals(exeHost)) {
-                        String state = hostDto.getStatus();
+	<#if hostName?exists && hostName == hostDto.execHost>
+		<#if taskTime?exists>
+			<#if hostDto.startTime?exists && hostDto.status == "TIMEOUT" && (hostDto.startTime.compareTo(taskDateTime)>=0 || hostDto.endTime.compareTo(taskDateTime) >= 0 )> 
+			<tr id="${hostDto.attemptID!}">
+	        	<td>${hostDto.taskID!}</td>
+	            <td>${task.name!}</td>
+	            <td>${(hostDto.startTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>
+	            <td>${(hostDto.endTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>
+	            <td>${(hostDto.scheduleTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>
+	            <td>
+	                <a target="_blank"
+	                   href="${rc.contextPath}/mvc/viewlog?id=${hostDto.attemptID!}&status=${hostDto.status!}">日志</a>
+	            </td>
 
-                        if (taskTime != null) {
-                            Date startDate = hostDto.getStartTime();
-                            String startTime;
-                            if (startDate == null) {
-                                startTime = null;
-                            } else {
-                                startTime = formatter.format(startDate);
-                            }
+	        </tr>
+    		</#if>
+    	<#else>
+    		<#if hostDto.status == "TIMEOUT"> 
+			<tr id="${hostDto.attemptID!}">
+	        	<td>${hostDto.taskID!}</td>
+	            <td>${task.name!}</td>
+	            <td>${(hostDto.startTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>
+	            <td>${(hostDto.endTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>
+	            <td>${(hostDto.scheduleTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>
+	            <td>
+	                <a target="_blank"
+	                   href="${rc.contextPath}/mvc/viewlog?id=${hostDto.attemptID!}&status=${hostDto.status!}">日志</a>
+	            </td>
 
-                            Date endDate = hostDto.getEndTime();
-                            String endTime;
-                            if (endDate == null) {
-                                endTime = null;
-                            } else {
-                                endTime = formatter.format(endDate);
-                            }
-                            if (startTime != null && state.equals("TIMEOUT") && (startTime.compareTo(taskTime) >= 0 || endTime.compareTo(taskTime) >= 0)) {
-                                String taskName = "";
-                                for (Task task : tasks) {
-                                    if (task.getTaskid().equals(hostDto.getTaskID())) {
-                                        taskName = task.getName();
-                                        break;
-                                    }
-                                }
-        %>
-        <tr id="<%=hostDto.getAttemptID()%>">
-            <td><%=hostDto.getTaskID()%>
-            </td>
-            <td><%=taskName%>
-            </td>
-            <%if (hostDto.getStartTime() != null) {%>
-            <td><%=formatter.format(hostDto.getStartTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (hostDto.getEndTime() != null) {%>
-            <td><%=formatter.format(hostDto.getEndTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (hostDto.getScheduleTime() != null) {%>
-            <td><%=formatter.format(hostDto.getScheduleTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <td>
-                <a target="_blank"
-                   href="viewlog.jsp?id=<%=hostDto.getAttemptID()%>&status=<%=hostDto.getStatus()%>">日志</a>
-            </td>
+	        </tr>
+    		</#if>
+		</#if>
+	</#if>
 
-        </tr>
-        <% }
-        } else {
-            if (state.equals("TIMEOUT")) {
-                String taskName = "";
-                for (Task task : tasks) {
-                    if (task.getTaskid().equals(hostDto.getTaskID())) {
-                        taskName = task.getName();
-                        break;
-                    }
-                }
-
-        %>
-        <tr id="<%=hostDto.getAttemptID()%>">
-            <td><%=hostDto.getTaskID()%>
-            </td>
-            <td><%=taskName%>
-            </td>
-            <%if (hostDto.getStartTime() != null) {%>
-            <td><%=formatter.format(hostDto.getStartTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (hostDto.getEndTime() != null) {%>
-            <td><%=formatter.format(hostDto.getEndTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <%if (hostDto.getScheduleTime() != null) {%>
-            <td><%=formatter.format(hostDto.getScheduleTime())%>
-            </td>
-            <%} else {%>
-            <td>NULL</td>
-            <%}%>
-            <!-- <td><%=hostDto.getExecHost()%></td> -->
-
-            <td>
-                <a target="_blank"
-                   href="viewlog.jsp?id=<%=hostDto.getAttemptID()%>&status=<%=hostDto.getStatus()%>">日志</a>
-            </td>
-
-        </tr>
-        <% }
-        }
-        }
-        }%>
+	<#break>
+	</#if>
+	</#list>
+</#list>
+</#if>
         </tbody>
     </table>
 </ul>
@@ -829,10 +495,11 @@
 
 </div>
 <#-- agent机器详情 end -->
-<% }%>
+
+</#if><#-- dto判空结束 -->
+
+
 </div>
-
-
 </div>
 </div>
 </div>
