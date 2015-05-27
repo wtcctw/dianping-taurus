@@ -214,7 +214,8 @@
 
     <#if hostName?exists && hostName == hostDto.execHost>
         <#if taskTime?exists>
-            <#if hostDto.startTime?exists && hostDto.status == "SUBMIT_FAIL" && (hostDto.startTime.compareTo(taskDateTime)>=0 || hostDto.endTime.compareTo(taskDateTime) >= 0 )> 
+            <#if hostDto.startTime?exists && hostDto.status == "SUBMIT_FAIL" && 
+            (hostDto.startTime?string("yyyy-MM-dd HH:mm")?date("yyyy-MM-dd HH:mm") gte taskDateTime?string("yyyy-MM-dd HH:mm")?date("yyyy-MM-dd HH:mm") || hostDto.endTime?string("yyyy-MM-dd HH:mm")?date("yyyy-MM-dd HH:mm") gte taskDateTime?string("yyyy-MM-dd HH:mm")?date("yyyy-MM-dd HH:mm") )> 
 
 	        <tr id="${hostDto.attemptID!}">
 	        	<td>${hostDto.taskID!}</td>
@@ -286,7 +287,7 @@
 
 	<#if hostName?exists && hostName == hostDto.execHost>
 		<#if taskTime?exists>
-			<#if hostDto.startTime?exists && hostDto.status == "FAILED" && (hostDto.startTime.compareTo(taskDateTime)>=0 || hostDto.endTime.compareTo(taskDateTime) >= 0 )> 
+			<#if hostDto.startTime?exists && hostDto.status == "FAILED" && (hostDto.startTime?string("yyyy-MM-dd HH:mm")?date("yyyy-MM-dd HH:mm") gte taskDateTime?string("yyyy-MM-dd HH:mm")?date("yyyy-MM-dd HH:mm") || hostDto.endTime?string("yyyy-MM-dd HH:mm")?date("yyyy-MM-dd HH:mm") gte taskDateTime?string("yyyy-MM-dd HH:mm")?date("yyyy-MM-dd HH:mm") )> 
         	<tr id="${hostDto.attemptID!}">
 	        	<td>${hostDto.taskID!}</td>
 	            <td>${task.name!}</td>
@@ -358,7 +359,7 @@
 
 	<#if hostName?exists && hostName == hostDto.execHost>
 		<#if taskTime?exists>
-			<#if hostDto.startTime?exists && hostDto.status == "DEPENDENCY_TIMEOUT" && (hostDto.startTime.compareTo(taskDateTime)>=0 || hostDto.endTime.compareTo(taskDateTime) >= 0 )> 
+			<#if hostDto.startTime?exists && hostDto.status == "DEPENDENCY_TIMEOUT" && (hostDto.startTime?string("yyyy-MM-dd HH:mm")?date("yyyy-MM-dd HH:mm") gte taskDateTime?string("yyyy-MM-dd HH:mm")?date("yyyy-MM-dd HH:mm") || hostDto.endTime?string("yyyy-MM-dd HH:mm")?date("yyyy-MM-dd HH:mm") gte taskDateTime?string("yyyy-MM-dd HH:mm")?date("yyyy-MM-dd HH:mm") )> 
 			<tr id="${hostDto.attemptID!}">
 	        	<td>${hostDto.taskID!}</td>
 	            <td>${task.name!}</td>
@@ -428,7 +429,7 @@
 
 	<#if hostName?exists && hostName == hostDto.execHost>
 		<#if taskTime?exists>
-			<#if hostDto.startTime?exists && hostDto.status == "TIMEOUT" && (hostDto.startTime.compareTo(taskDateTime)>=0 || hostDto.endTime.compareTo(taskDateTime) >= 0 )> 
+			<#if hostDto.startTime?exists && hostDto.status == "TIMEOUT" && (hostDto.startTime?string("yyyy-MM-dd HH:mm")?date("yyyy-MM-dd HH:mm") gte taskDateTime?string("yyyy-MM-dd HH:mm")?date("yyyy-MM-dd HH:mm") || hostDto.endTime?string("yyyy-MM-dd HH:mm")?date("yyyy-MM-dd HH:mm") gte taskDateTime?string("yyyy-MM-dd HH:mm")?date("yyyy-MM-dd HH:mm") )> 
 			<tr id="${hostDto.attemptID!}">
 	        	<td>${hostDto.taskID!}</td>
 	            <td>${task.name!}</td>
