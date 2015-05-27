@@ -736,6 +736,38 @@ public class HomeController implements ServletContextAware{
 	    
 		return "/hosts.ftl";
 	}
+	@RequestMapping(value = "/host_history", method = RequestMethod.GET)
+	public String host_history(ModelMap modelMap, HttpServletRequest request,
+			HttpServletResponse response) throws ParseException {
+		log.info("--------------init the host_history------------");
+		GlobalViewVariable gvv = new GlobalViewVariable();
+		commonnav(request,gvv);
+		modelMap.addAttribute("currentUser", gvv.currentUser);
+	    modelMap.addAttribute("isAdmin",gvv.isAdmin);
+	    
+	    String ip = request.getParameter("ip");
+        java.util.Date time = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String now_str = request.getParameter("date");
+        if (now_str == null || now_str.isEmpty()) {
+            now_str = formatter.format(time);
+        }
+
+        Date startDate = new Date(time.getTime() - 12 * 60 * 60 * 1000);
+        String startTime = formatter.format(startDate);
+
+        String endTime = formatter.format(formatter.parse(now_str));
+        modelMap.addAttribute("ip", ip);
+        
+        gvv.cr = new ClientResource(gvv.host + "host");
+        IHostsResource hostResource = gvv.cr.wrap(IHostsResource.class);
+        gvv.cr.accept(MediaType.APPLICATION_XML);
+        ArrayList<HostDTO> hosts = hostResource.retrieve();
+        modelMap.addAttribute("hosts", hosts);
+        
+        modelMap.addAttribute("now_s", endTime);
+		return "/host_history.ftl";
+	}
 	/**
 	 * 重构jsp/common-nav.jsp
 	 * @param modelMap
