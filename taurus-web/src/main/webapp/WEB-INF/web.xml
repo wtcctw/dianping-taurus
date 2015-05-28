@@ -33,7 +33,8 @@
 	</context-param>
 	<context-param>
 		<param-name>ERROR_PAGE</param-name>
-		<param-value>/error.jsp</param-value>
+		<param-value>/mvc/error</param-value>
+		<!-- <param-value>/error.jsp</param-value> -->
 	</context-param>
     <filter>
         <filter-name>cat-filter</filter-name>

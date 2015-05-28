@@ -993,6 +993,26 @@ public class HomeController implements ServletContextAware{
 	    return "/about.ftl";
 	}
 	/**
+	 * 重构error.jsp
+	 * @param modelMap
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/error", method = {RequestMethod.GET,RequestMethod.POST})
+	public String error(ModelMap modelMap, HttpServletRequest request,
+			HttpServletResponse response) {
+		log.info("--------------init the error------------");
+		GlobalViewVariable gvv = new GlobalViewVariable();
+		commonnav(request,gvv);
+		modelMap.addAttribute("currentUser", gvv.currentUser);
+	    modelMap.addAttribute("isAdmin",gvv.isAdmin);
+	    
+	    
+	    
+	    return "/error.ftl";
+	}
+	/**
 	 * 重构jsp/common-nav.jsp
 	 * @param modelMap
 	 * @param request
