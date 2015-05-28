@@ -891,6 +891,108 @@ public class HomeController implements ServletContextAware{
 	    return "/resign.ftl";
 	}
 	/**
+	 * 重构dbadmin.jsp
+	 * @param modelMap
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/dbadmin", method = RequestMethod.GET)
+	public String dbadmin(ModelMap modelMap, HttpServletRequest request,
+			HttpServletResponse response) {
+		log.info("--------------init the dbadmin------------");
+		GlobalViewVariable gvv = new GlobalViewVariable();
+		commonnav(request,gvv);
+		modelMap.addAttribute("currentUser", gvv.currentUser);
+	    modelMap.addAttribute("isAdmin",gvv.isAdmin);
+	    
+	    
+	    
+	    return "/dbadmin.ftl";
+	}
+	/**
+	 * 重构cronbuilder.jsp cron生成器
+	 * @param modelMap
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/cronbuilder", method = RequestMethod.GET)
+	public String cronbuilder(ModelMap modelMap, HttpServletRequest request,
+			HttpServletResponse response) {
+		log.info("--------------init the cronbuilder------------");
+		GlobalViewVariable gvv = new GlobalViewVariable();
+		commonnav(request,gvv);
+		modelMap.addAttribute("currentUser", gvv.currentUser);
+	    modelMap.addAttribute("isAdmin",gvv.isAdmin);
+	    
+	    Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        modelMap.addAttribute("year", year);
+	    
+	    return "/cronbuilder.ftl";
+	}
+	/**
+	 * 重构feedback.jsp 我要反馈
+	 * @param modelMap
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/feedback", method = RequestMethod.GET)
+	public String feedback(ModelMap modelMap, HttpServletRequest request,
+			HttpServletResponse response) {
+		log.info("--------------init the feedback------------");
+		GlobalViewVariable gvv = new GlobalViewVariable();
+		commonnav(request,gvv);
+		modelMap.addAttribute("currentUser", gvv.currentUser);
+	    modelMap.addAttribute("isAdmin",gvv.isAdmin);
+	    
+	    
+	    
+	    return "/feedback.ftl";
+	}
+	/**
+	 * 重构update.jsp 更新日志
+	 * @param modelMap
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/update", method = RequestMethod.GET)
+	public String update(ModelMap modelMap, HttpServletRequest request,
+			HttpServletResponse response) {
+		log.info("--------------init the update------------");
+		GlobalViewVariable gvv = new GlobalViewVariable();
+		commonnav(request,gvv);
+		modelMap.addAttribute("currentUser", gvv.currentUser);
+	    modelMap.addAttribute("isAdmin",gvv.isAdmin);
+	    
+	    
+	    
+	    return "/update.ftl";
+	}
+	/**
+	 * 重构about.jsp 使用帮助
+	 * @param modelMap
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/about", method = RequestMethod.GET)
+	public String about(ModelMap modelMap, HttpServletRequest request,
+			HttpServletResponse response) {
+		log.info("--------------init the about------------");
+		GlobalViewVariable gvv = new GlobalViewVariable();
+		commonnav(request,gvv);
+		modelMap.addAttribute("currentUser", gvv.currentUser);
+	    modelMap.addAttribute("isAdmin",gvv.isAdmin);
+	    
+	    
+	    
+	    return "/about.ftl";
+	}
+	/**
 	 * 重构jsp/common-nav.jsp
 	 * @param modelMap
 	 * @param request
