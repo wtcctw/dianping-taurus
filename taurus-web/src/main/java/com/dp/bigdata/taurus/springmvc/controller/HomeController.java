@@ -736,6 +736,14 @@ public class HomeController implements ServletContextAware{
 	    
 		return "/hosts.ftl";
 	}
+	/**
+	 * 重构host_history.jsp
+	 * @param modelMap
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws ParseException
+	 */
 	@RequestMapping(value = "/host_history", method = RequestMethod.GET)
 	public String host_history(ModelMap modelMap, HttpServletRequest request,
 			HttpServletResponse response) throws ParseException {
@@ -767,6 +775,72 @@ public class HomeController implements ServletContextAware{
         
         modelMap.addAttribute("now_s", endTime);
 		return "/host_history.ftl";
+	}
+	/**
+	 * 重构user.jsp
+	 * @param modelMap
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/user", method = RequestMethod.GET)
+	public String user(ModelMap modelMap, HttpServletRequest request,
+			HttpServletResponse response) {
+		log.info("--------------init the user------------");
+		GlobalViewVariable gvv = new GlobalViewVariable();
+		commonnav(request,gvv);
+		modelMap.addAttribute("currentUser", gvv.currentUser);
+	    modelMap.addAttribute("isAdmin",gvv.isAdmin);
+	    
+	    gvv.cr = new ClientResource(gvv.host + "group");
+        IUserGroupsResource groupResource = gvv.cr.wrap(IUserGroupsResource.class);
+        gvv.cr.accept(MediaType.APPLICATION_XML);
+        ArrayList<UserGroupDTO> groups = groupResource.retrieve();
+        modelMap.addAttribute("groups", groups);
+
+        //用户分组列表显示，所以分组信息只存在与用户表，并没有分组表？
+        Map<String, String> map = new HashMap<String, String>();
+        for (UserDTO user : gvv.users) {
+            String group = user.getGroup();
+            if (group == null || group.equals("")) {
+                group = "未分组";
+            }
+            if (map.containsKey(group)) {
+            	//已有分组成员，加入分组列表，用逗号加空格分隔
+                map.put(group, map.get(group) + ", " + user.getName());
+            } else {
+            	//创建新分组
+                map.put(group, user.getName());
+            }
+    		//找到当前用户
+            if (user.getName().equals(gvv.currentUser)) {
+            	modelMap.addAttribute("user", user);
+            }
+        }
+        modelMap.addAttribute("map", map);
+        
+        
+        
+	    modelMap.addAttribute("users", gvv.users);
+	    return "/user.ftl";
+	}
+	/**
+	 * 重构resign.jsp
+	 * @param modelMap
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/resign", method = RequestMethod.GET)
+	public String resign(ModelMap modelMap, HttpServletRequest request,
+			HttpServletResponse response) {
+		log.info("--------------init the resign------------");
+		GlobalViewVariable gvv = new GlobalViewVariable();
+		commonnav(request,gvv);
+		modelMap.addAttribute("currentUser", gvv.currentUser);
+	    modelMap.addAttribute("isAdmin",gvv.isAdmin);
+	    
+	    return "/resign.ftl";
 	}
 	/**
 	 * 重构jsp/common-nav.jsp
