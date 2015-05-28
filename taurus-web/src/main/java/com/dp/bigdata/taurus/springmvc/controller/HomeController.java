@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -35,6 +36,7 @@ import com.dp.bigdata.taurus.restlet.resource.IHostResource;
 import com.dp.bigdata.taurus.restlet.resource.IHostsResource;
 import com.dp.bigdata.taurus.restlet.resource.IPoolsResource;
 import com.dp.bigdata.taurus.restlet.resource.ITaskResource;
+import com.dp.bigdata.taurus.restlet.resource.ITasksResource;
 import com.dp.bigdata.taurus.restlet.resource.IUserGroupsResource;
 import com.dp.bigdata.taurus.restlet.resource.IUsersResource;
 import com.dp.bigdata.taurus.restlet.shared.AttemptDTO;
@@ -44,7 +46,6 @@ import com.dp.bigdata.taurus.restlet.shared.StatusDTO;
 import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
 import com.dp.bigdata.taurus.restlet.shared.UserDTO;
 import com.dp.bigdata.taurus.restlet.shared.UserGroupDTO;
-
 import com.dp.bigdata.taurus.generated.module.Task;
 
 @Controller
@@ -840,6 +841,53 @@ public class HomeController implements ServletContextAware{
 		modelMap.addAttribute("currentUser", gvv.currentUser);
 	    modelMap.addAttribute("isAdmin",gvv.isAdmin);
 	    
+	    
+	    gvv.cr = new ClientResource(gvv.host + "group");
+	    IUserGroupsResource groupResource = gvv.cr.wrap(IUserGroupsResource.class);
+	    gvv.cr.accept(MediaType.APPLICATION_XML);
+	    ArrayList<UserGroupDTO> groups = groupResource.retrieve();
+
+	    Map<String, String> map = new HashMap<String, String>();
+	    for (UserDTO user : gvv.users) {
+	        String group = user.getGroup();
+	        if (group == null || group.equals("")) {
+	            group = "未分组";
+	        }
+	        if (map.containsKey(group)) {
+	            map.put(group, map.get(group) + ", " + user.getName());
+	        } else {
+	            map.put(group, user.getName());
+	        }
+	        if (user.getName().equals(gvv.currentUser)) {
+	        	modelMap.addAttribute("user", user);
+	        }  
+	    } 
+	    modelMap.addAttribute("map", map);
+	    
+	    
+	    String task_api = gvv.host + "task";
+        String name = request.getParameter("name");
+        String path = request.getParameter("path");
+        String appname = request.getParameter("appname");
+        if (name != null && !name.isEmpty()) {
+            task_api = task_api + "?name=" + name;
+        } else if (appname != null) {
+            task_api = task_api + "?appname=" + appname;
+        } else if (gvv.currentUser != null) {
+            task_api = task_api + "?user=" + gvv.currentUser;
+        }
+        if (path != null && !path.equals("")) {
+    	
+    	}
+        gvv.cr = new ClientResource(task_api);
+        ITasksResource resource = gvv.cr.wrap(ITasksResource.class);
+        gvv.cr.accept(MediaType.APPLICATION_XML);
+        ArrayList<TaskDTO> tasks = resource.retrieve();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        modelMap.addAttribute("tasks", tasks);
+        modelMap.addAttribute("hHelper", new HomeHelper());
+	    
+	    modelMap.addAttribute("userId", gvv.userId);
 	    return "/resign.ftl";
 	}
 	/**
@@ -912,6 +960,10 @@ public class HomeController implements ServletContextAware{
 	        cr.accept(MediaType.APPLICATION_XML);
 	        HostDTO dtos = hostResource.retrieve();
 	        return dtos;
+		}
+		//resign任务交接页面取一个分组的用户数组
+		public String[] getGroupUserList(String groupUsers){
+			return groupUsers.split(",");
 		}
 	}
 }
