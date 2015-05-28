@@ -60,7 +60,8 @@
         </div>
 <#else>
         <div id="alertContainer" class="container col-sm-12"></div>
-<#if>
+</#if>
+</#if>
 <#-- 提示完善用户信息 end -->
 
 
@@ -155,7 +156,7 @@
                         </fieldset>
                     </form>
                 </div>
-                <#if>
+                </#if>
                 <#-- 设置你的个人信息 end -->
 
 
@@ -193,8 +194,8 @@
                                 <#if map?exists>
 					                <#list map?keys as group> 
 				                    <tr>
-				                        <td align="left">${group}</td>
-				                        <td align="left">${map.get(group)}</td>
+				                        <td align="left">${group!}</td>
+				                        <td align="left">${map[group]!}</td>
 					                </tr>
 					                </#list>
 					            </#if>
