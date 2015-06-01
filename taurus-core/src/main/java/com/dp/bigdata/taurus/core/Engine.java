@@ -17,6 +17,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
 import com.dianping.lion.client.LionException;
+import com.dianping.ops.http.HttpPoster;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
@@ -160,7 +161,7 @@ final public class Engine implements Scheduler {
            }catch (LionException le){
                dataBaseUrl = "jdbc:mysql://10.1.101.216:3306/Taurus?characterEncoding=utf-8";
            }
-
+           
            String exceptContext = "您好，taurus的数据库连接发生异常 请及时查看"
                    +"数据库连接串："
                    +dataBaseUrl;
@@ -173,26 +174,26 @@ final public class Engine implements Scheduler {
                    MailHelper.sendMail(to,exceptContext);
                }
                
-               HttpClient httpclient = new HttpClient();
-               PostMethod postMethod = new PostMethod("http://pulse.dp/report/alarm/post");
-               NameValuePair[] data = {new NameValuePair("typeObject", "Taurus"),
-            		   new NameValuePair("typeItem","Service"),new NameValuePair("typeAttribute","Status"),
-            		   new NameValuePair("source","taurus"),new NameValuePair("domain","IP addr"),
-            		   new NameValuePair("title","Taurus-Agent主机失联系告警服务"),
-            		   new NameValuePair("content",exceptContext)};
-               postMethod.setRequestBody(data);
-               try {
-				int statusCode = httpclient.executeMethod(postMethod);
-				System.out.println(statusCode);
-				} catch (HttpException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}finally{
-				   postMethod.releaseConnection();
-				}
+               // 给运维报警
+               String reportToOps = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).
+            		   getProperty("taurus.agent.down.ops.report.alarm.post");
+               
+               Map<String, String> header = new HashMap<String, String>();
+               Map<String, String> body = new HashMap<String, String>();
+               
+               body.put("typeObject", "Taurus");
+               body.put("typeItem", "Service");
+               body.put("typeAttribute", "Status");
+               body.put("source", "taurus");
+               // 摘出数据库ip给运维报警
+               body.put("domain", dataBaseUrl.split(":")[2].split("/")[2]);
+               body.put("title", "Taurus数据库连接异常");
+               body.put("content",exceptContext);
+               //此处动态修改
+               body.put("url", dataBaseUrl);
+               body.put("receiver", "dpop@dianping.com");
+				
+               HttpPoster.postWithoutException(reportToOps, header, body);
                
            }catch (LionException le){
                Cat.logEvent("LionException",le.getMessage());
@@ -229,18 +230,22 @@ final public class Engine implements Scheduler {
 			@Override
 			public void disConnected(String ip) {
 				Cat.logEvent("DisConnected", ip);
+				try {
+					
+				String webDomain = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).
+               		   getProperty("taurus.web.serverName");
                 String exceptContext = "您好，taurus-agent的job主机 ["
                         + ip
-                        + "] 服务已经挂掉请重启，监控连接如下：http://taurus.dp/hosts.jsp?hostName="
+                        + "] 服务已经挂掉请重启，监控连接如下：" + webDomain + "/mvc/hosts?hostName="
                         + ip
                         +"，谢谢~";
 
                 String context = "您好，taurus-agent的job主机 ["
                         + ip
-                        + "] 心跳异常，监控连接如下：http://taurus.dp/hosts.jsp?hostName="
+                        + "] 心跳异常，监控连接如下：" + webDomain + "/mvc/hosts?hostName="
                         + ip
                         +"，谢谢~";
-                try {
+                
                     String agentPort = "";
 
 
@@ -263,26 +268,27 @@ final public class Engine implements Scheduler {
                         }
 
                         
-                        HttpClient httpclient = new HttpClient();
-                        PostMethod postMethod = new PostMethod("http://pulse.dp/report/alarm/post");
-                        NameValuePair[] data = {new NameValuePair("typeObject", "Taurus"),
-                     		   new NameValuePair("typeItem","Service"),new NameValuePair("typeAttribute","Status"),
-                     		   new NameValuePair("source","taurus"),new NameValuePair("domain","IP addr"),
-                     		   new NameValuePair("title","Taurus-Agent主机失联系告警服务"),
-                     		   new NameValuePair("content",exceptContext)};
-                        postMethod.setRequestBody(data);
-                        try {
-         				int statusCode = httpclient.executeMethod(postMethod);
-         				System.out.println(statusCode);
-         				} catch (HttpException e1) {
-         					// TODO Auto-generated catch block
-         					e1.printStackTrace();
-         				} catch (IOException e1) {
-         					// TODO Auto-generated catch block
-         					e1.printStackTrace();
-         				}finally{
-         				   postMethod.releaseConnection();
-         				}
+                        // 给运维报警
+                        
+                        String reportToOps = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).
+                     		   getProperty("taurus.agent.down.ops.report.alarm.post");
+                        
+                        Map<String, String> header = new HashMap<String, String>();
+                        Map<String, String> body = new HashMap<String, String>();
+                        
+                        body.put("typeObject", "Taurus");
+                        body.put("typeItem", "Service");
+                        body.put("typeAttribute", "Status");
+                        body.put("source", "taurus");
+                        //此处动态修改
+                        body.put("domain", ip);
+                        body.put("title", "Taurus-Agent主机失联系告警服务");
+                        body.put("content",exceptContext);
+                        //此处动态修改
+                        body.put("url", webDomain + "/mvc/hosts?hostName=" + ip);
+                        body.put("receiver", "dpop@dianping.com");
+         				
+                        HttpPoster.postWithoutException(reportToOps, header, body);
                         
                         
                     }
