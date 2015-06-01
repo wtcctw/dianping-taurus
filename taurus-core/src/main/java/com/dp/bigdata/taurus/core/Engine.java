@@ -1,6 +1,7 @@
 package com.dp.bigdata.taurus.core;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -16,6 +17,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
 import com.dianping.lion.client.LionException;
+
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.NameValuePair;
+import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -38,6 +44,7 @@ import com.dp.bigdata.taurus.zookeeper.execute.helper.ExecuteStatus;
 import com.dp.bigdata.taurus.zookeeper.execute.helper.ExecutorManager;
 import com.dp.bigdata.taurus.zookeeper.heartbeat.helper.AgentHandler;
 import com.dp.bigdata.taurus.zookeeper.heartbeat.helper.AgentMonitor;
+
 import org.springframework.dao.DataAccessException;
 
 import javax.mail.MessagingException;
@@ -165,6 +172,28 @@ final public class Engine implements Scheduler {
                for (String to:toLists){
                    MailHelper.sendMail(to,exceptContext);
                }
+               
+               HttpClient httpclient = new HttpClient();
+               PostMethod postMethod = new PostMethod("http://pulse.dp/report/alarm/post");
+               NameValuePair[] data = {new NameValuePair("typeObject", "Taurus"),
+            		   new NameValuePair("typeItem","Service"),new NameValuePair("typeAttribute","Status"),
+            		   new NameValuePair("source","taurus"),new NameValuePair("domain","IP addr"),
+            		   new NameValuePair("title","Taurus-Agent主机失联系告警服务"),
+            		   new NameValuePair("content",exceptContext)};
+               postMethod.setRequestBody(data);
+               try {
+				int statusCode = httpclient.executeMethod(postMethod);
+				System.out.println(statusCode);
+				} catch (HttpException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}finally{
+				   postMethod.releaseConnection();
+				}
+               
            }catch (LionException le){
                Cat.logEvent("LionException",le.getMessage());
            }catch (MessagingException me){
@@ -233,6 +262,29 @@ final public class Engine implements Scheduler {
                             MailHelper.sendMail(to,exceptContext);
                         }
 
+                        
+                        HttpClient httpclient = new HttpClient();
+                        PostMethod postMethod = new PostMethod("http://pulse.dp/report/alarm/post");
+                        NameValuePair[] data = {new NameValuePair("typeObject", "Taurus"),
+                     		   new NameValuePair("typeItem","Service"),new NameValuePair("typeAttribute","Status"),
+                     		   new NameValuePair("source","taurus"),new NameValuePair("domain","IP addr"),
+                     		   new NameValuePair("title","Taurus-Agent主机失联系告警服务"),
+                     		   new NameValuePair("content",exceptContext)};
+                        postMethod.setRequestBody(data);
+                        try {
+         				int statusCode = httpclient.executeMethod(postMethod);
+         				System.out.println(statusCode);
+         				} catch (HttpException e1) {
+         					// TODO Auto-generated catch block
+         					e1.printStackTrace();
+         				} catch (IOException e1) {
+         					// TODO Auto-generated catch block
+         					e1.printStackTrace();
+         				}finally{
+         				   postMethod.releaseConnection();
+         				}
+                        
+                        
                     }
 
                 } catch (Exception e) {
