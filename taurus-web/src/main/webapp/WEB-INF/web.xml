@@ -91,10 +91,10 @@
 	        <param-value>false</param-value>
 	    </init-param> -->
 	    <!-- 免登录url，支持通配符*，多个用,分隔 -->
-	    <init-param>
+	    <!-- <init-param>
 	        <param-name>excludeURLs</param-name>
 	        <param-value>/signin.jsp,/login.do,/common-header.jsp,/mvc/signin</param-value>
-	    </init-param>
+	    </init-param> -->
 	    
 	</filter>
 	
