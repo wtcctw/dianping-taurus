@@ -51,7 +51,7 @@
 		</init-param>
 		<init-param>
 			<param-name>mvcLoginPage</param-name>
-			<param-value>/mvc/signin</param-value>
+			<param-value>mvc/signin</param-value>
 		</init-param>
 		<init-param>
 			<param-name>excludePage</param-name>
@@ -84,8 +84,9 @@
 	<filter-mapping>
 		<filter-name>AuthenticationFilter</filter-name>
 		<url-pattern>/mvc/*</url-pattern>
+		<url-pattern>/</url-pattern>
 		<dispatcher>REQUEST</dispatcher>
-	</filter-mapping> 
+	</filter-mapping>
 
 	<session-config>
 		<!-- 12 hours -->

@@ -46,7 +46,15 @@ public class AuthenticationFilter implements Filter {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
 		String requestURL = req.getRequestURI();
-
+		
+		//解决首页显示URL层级不同JS上层目录不同的问题
+		String conTextPath = req.getContextPath();
+		String reqURInoConTextPath = requestURL.substring(conTextPath.length());
+		// root级webapp结果为""，带项目目录webapp结果为"/"
+		if(reqURInoConTextPath.equals("/") || reqURInoConTextPath.equals("")){
+			requestURL = requestURL + "mvc/index";
+		}
+		
 		if (req.getQueryString() != null) {
 			requestURL = requestURL + "?" + req.getQueryString();
 		}
@@ -59,17 +67,21 @@ public class AuthenticationFilter implements Filter {
 		}
 
 		HttpSession session = req.getSession(true);
-
 		Object currentUser = session.getAttribute(LoginServlet.USER_NAME);
 		if (currentUser == null) {
-			String loginUrl = loginPage + "?redirect-url="+URLEncoder.encode(requestURL, "UTF-8");
-			//新增过滤spring mvc页面,mvc链接临时解决方案
-			if(requestURL.toLowerCase().contains("/mvc/")){
-				loginUrl = req.getContextPath()+mvcLoginPage+
-						"?redirect-url="+URLEncoder.encode(requestURL, "UTF-8");
-			}
+			String loginUrl = conTextPath + (conTextPath.equals("/")?"":"/") + mvcLoginPage +
+					"?redirect-url=" + URLEncoder.encode(requestURL, "UTF-8");
+			//System.out.println(loginUrl);
+//			String loginUrl = loginPage + "?redirect-url="+URLEncoder.encode(requestURL, "UTF-8");
+//			//新增过滤spring mvc页面,mvc链接临时解决方案
+//			if(requestURL.toLowerCase().contains("/mvc/")){
+//				loginUrl = req.getContextPath()+mvcLoginPage+
+//						"?redirect-url="+URLEncoder.encode(requestURL, "UTF-8");
+//			}
 			res.sendRedirect(loginUrl);
 		
+		} else if(reqURInoConTextPath.equals("/") || reqURInoConTextPath.equals("")){
+			res.sendRedirect(requestURL);
 		} else {
 			chain.doFilter(request, response);
 		}
