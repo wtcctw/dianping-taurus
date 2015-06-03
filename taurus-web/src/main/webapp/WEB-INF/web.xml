@@ -13,16 +13,13 @@
     <!--</listener>-->
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath*:applicationContext*.xml</param-value>
+        <param-value>
+        	classpath*:applicationContext*.xml
+        	classpath*:config/spring/common/appcontext-*.xml
+			classpath*:config/spring/local/appcontext-*.xml
+		</param-value>
     </context-param>
 
-	<context-param>
-	<param-name>contextConfigLocation</param-name>
-	<param-value>
-		classpath*:config/spring/common/appcontext-*.xml
-		classpath*:config/spring/local/appcontext-*.xml
-	</param-value>
-	</context-param>
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
@@ -62,16 +59,7 @@
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
 	
-	<!-- sso测试集成 -->
-	<filter>
-	   <filter-name>CAS Single Sign Out Filter</filter-name>
-	   <filter-class>org.jasig.cas.client.session.SingleSignOutFilter</filter-class>
-	   <init-param>
-	       <param-name>artifactParameterName</param-name>
-	       <param-value>SAMLart</param-value>
-	   </init-param>
-	</filter>
-	
+	<!-- sso文档给的顺序不对，必须按下面这个顺序严格排放 -->
 	<filter>
 	    <filter-name>CAS Authentication Filter</filter-name>
 	    <filter-class>org.jasig.cas.client.authentication.Saml11AuthenticationFilter</filter-class>
@@ -91,11 +79,10 @@
 	        <param-value>false</param-value>
 	    </init-param> -->
 	    <!-- 免登录url，支持通配符*，多个用,分隔 -->
-	    <!-- <init-param>
+	    <init-param>
 	        <param-name>excludeURLs</param-name>
-	        <param-value>/signin.jsp,/login.do,/common-header.jsp,/mvc/signin</param-value>
-	    </init-param> -->
-	    
+	        <param-value>mvc/rest/ssologin</param-value>
+	    </init-param>
 	</filter>
 	
 	<filter>
@@ -131,6 +118,15 @@
 	  <filter-class>org.jasig.cas.client.util.HttpServletRequestWrapperFilter</filter-class>
 	</filter>
 	
+	<filter>
+	   <filter-name>CAS Single Sign Out Filter</filter-name>
+	   <filter-class>org.jasig.cas.client.session.SingleSignOutFilter</filter-class>
+	   <init-param>
+	       <param-name>artifactParameterName</param-name>
+	       <param-value>SAMLart</param-value>
+	   </init-param>
+	</filter>
+	
 	<!-- 不要修改 filter-mapping的顺序 -->
 	<filter-mapping>
 	  <filter-name>CAS Single Sign Out Filter</filter-name>
@@ -163,7 +159,7 @@
 		</init-param>
 		<init-param>
 			<param-name>excludePage</param-name>
-			<param-value>/signin.jsp,/login.do,/common-header.jsp,/mvc/signin</param-value>
+			<param-value>/signin.jsp,/login.do,/common-header.jsp,/mvc/signin,/mvc/rest/ssologin</param-value>
 		</init-param>
 	</filter>
 
@@ -193,8 +189,6 @@
 	</session-config>
 
 
-
-
 	<!-- spirng mvc 配置 -->
 	<servlet>
 		<servlet-name>springmvc-servlet</servlet-name>
@@ -210,6 +204,7 @@
 		<url-pattern>/mvc/*</url-pattern>
 	</servlet-mapping>
 
+	<!-- 传统servlet配置 -->
 	<servlet>
 		<servlet-name>TaskProxyServlet</servlet-name>
 		<servlet-class>com.dp.bigdata.taurus.web.servlet.TaskProxyServlet</servlet-class>

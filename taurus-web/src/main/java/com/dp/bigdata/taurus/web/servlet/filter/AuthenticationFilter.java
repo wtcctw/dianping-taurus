@@ -45,32 +45,42 @@ public class AuthenticationFilter implements Filter {
 	      ServletException {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
-		String requestURL = req.getRequestURI();
+		String requestURI = req.getRequestURI();
 		
+		if(requestURI.contains("/mvc/rest/ssologin")){
+			chain.doFilter(request, response);
+			return;
+		}
+		
+		//完整url请求地址,不包含QueryString
+		//String requestURL = req.getRequestURL().toString();
+		//System.out.println("url:"+requestURL+req.getRemoteUser());
 		//解决首页显示URL层级不同JS上层目录不同的问题
 		String conTextPath = req.getContextPath();
-		String reqURInoConTextPath = requestURL.substring(conTextPath.length());
+		String reqURInoConTextPath = requestURI.substring(conTextPath.length());
 		// root级webapp结果为""，带项目目录webapp结果为"/"
 		if(reqURInoConTextPath.equals("/") || reqURInoConTextPath.equals("")){
-			requestURL = requestURL + "mvc/index";
+			requestURI = requestURI + "mvc/index";
+			//requestURL = requestURL + "mvc/index";
 		}
 		
 		if (req.getQueryString() != null) {
-			requestURL = requestURL + "?" + req.getQueryString();
+			requestURI = requestURI + "?" + req.getQueryString();
+			//requestURL = requestURL + "?" + req.getQueryString();
 		}
-		for (String uri : excludePages) {
-			if (uri.equalsIgnoreCase(req.getRequestURI().substring(req.getContextPath().length()))) {
-				System.out.println("excludePage : " + uri);
-				chain.doFilter(request, response);
-				return;
-			}
-		}
-
+//		for (String uri : excludePages) {
+//			if (uri.equalsIgnoreCase(req.getRequestURI().substring(req.getContextPath().length()))) {
+//				System.out.println("excludePage : " + uri);
+//				chain.doFilter(request, response);
+//				return;
+//			}
+//		}
+		
 		HttpSession session = req.getSession(true);
 		Object currentUser = session.getAttribute(LoginServlet.USER_NAME);
 		if (currentUser == null) {
-			String loginUrl = conTextPath + (conTextPath.equals("/")?"":"/") + mvcLoginPage +
-					"?redirect-url=" + URLEncoder.encode(requestURL, "UTF-8");
+//			String loginUrl = conTextPath + (conTextPath.equals("/")?"":"/") + mvcLoginPage +
+//					"?redirect-url=" + URLEncoder.encode(requestURL, "UTF-8");
 			//System.out.println(loginUrl);
 //			String loginUrl = loginPage + "?redirect-url="+URLEncoder.encode(requestURL, "UTF-8");
 //			//新增过滤spring mvc页面,mvc链接临时解决方案
@@ -78,10 +88,16 @@ public class AuthenticationFilter implements Filter {
 //				loginUrl = req.getContextPath()+mvcLoginPage+
 //						"?redirect-url="+URLEncoder.encode(requestURL, "UTF-8");
 //			}
-			res.sendRedirect(loginUrl);
+			
+			String loginUrl =  (conTextPath.equals("/")?"":"/") +
+					"mvc/rest/ssologin?redirect-url=" + URLEncoder.encode(requestURI, "UTF-8");
+//			String loginUrl =  (conTextPath.equals("/")?"":"/") +
+//					"ssologin.do?redirect-url=" + URLEncoder.encode(requestURI, "UTF-8");
+			//res.sendRedirect(loginUrl);
+			req.getRequestDispatcher(loginUrl).forward(req, res);
 		
 		} else if(reqURInoConTextPath.equals("/") || reqURInoConTextPath.equals("")){
-			res.sendRedirect(requestURL);
+			res.sendRedirect(requestURI);
 		} else {
 			chain.doFilter(request, response);
 		}

@@ -50,6 +50,7 @@ public class UsersResource extends ServerResource implements IUsersResource {
             if(userGroups.size() == 0){
             	userDto.setGroup("");
             } else {
+            	//得到第一个分组的ID，用户多分组接入的基础，用for循环取分组逗号分隔
             	int groupId = userGroups.get(0).getGroupid();
             	UserGroup group = userGroupMapper.selectByPrimaryKey(groupId);
                 userDto.setGroup(group.getGroupname());
@@ -64,6 +65,7 @@ public class UsersResource extends ServerResource implements IUsersResource {
 		UserExample example = new UserExample();
 		example.or().andNameEqualTo(user.getName());
 		List<User> userDtos = userMapper.selectByExample(example);
+		//找不到用户，新建用户（第一次使用taurus的用户）
 		if(userDtos == null || userDtos.size() == 0){
 			User usr = new User();
 			usr.setName(user.getName());

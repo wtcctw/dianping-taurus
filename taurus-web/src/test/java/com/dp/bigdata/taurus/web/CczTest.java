@@ -6,11 +6,8 @@ public class CczTest {
 
 	@Test
 	public void test1(){
-		String conTextPath =  "/";
-		String requestURL = "/";
-		String result = requestURL.substring(conTextPath.length());
+		String[] ss = "chongze.chen|-83494|0019381|陈充泽".split("\\|");
 		
-		System.out.println(result);
-		System.out.println(result.equals(""));
+		System.out.println(ss[0]);
 	}
 }
