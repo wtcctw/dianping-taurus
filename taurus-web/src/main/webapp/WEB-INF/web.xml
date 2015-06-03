@@ -42,10 +42,10 @@
 		<!-- <param-value>/error.jsp</param-value> -->
 	</context-param>
 	<!-- sso登出url -->
-	<context-param>
+	<!-- <context-param>
 		<param-name>CAS_LOGOUT_LIONKEY</param-name>
 		<param-value>cas-server-webapp.logoutUrl</param-value>
-	</context-param>
+	</context-param> -->
 	
 	<!-- cat集成 -->
     <filter>

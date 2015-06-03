@@ -3,6 +3,7 @@ package com.dp.bigdata.taurus.springmvc.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import javax.annotation.PostConstruct;
@@ -218,8 +219,26 @@ public class LoginController implements ServletContextAware {
         out.flush();
         out.close();
         
+        String ssoLogoutUrl = "";
+        String taurusUrl = "";
+        try {
+        	ssoLogoutUrl = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress())
+        			.getProperty("cas-server-webapp.logoutUrl");
+        	taurusUrl = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress())
+        			.getProperty("taurus.web.serverName");
+        } catch (LionException e) {
+            e.printStackTrace();
+            ssoLogoutUrl = "https://sso.51ping.com/logout";
+            taurusUrl = "http://beta.taurus.dp";
+        }
+        response.sendRedirect(ssoLogoutUrl + "?service=" + URLEncoder.encode(taurusUrl, "UTF-8"));
 	}
 	
+	/**
+	 * 检查用户信息是否完整
+	 * @param userName
+	 * @return
+	 */
 	private boolean isInfoCompleted(String userName){
 		ClientResource cr = new ClientResource(RESTLET_URL_BASE + "user");
   	    IUsersResource userResource = cr.wrap(IUsersResource.class);
@@ -238,6 +257,11 @@ public class LoginController implements ServletContextAware {
   	    return false;
 	}
 	
+	/**
+	 * 设置User点评通行证用户名和邮箱
+	 * @param userName
+	 * @return
+	 */
 	private User setUserInfo(String userName){
 		User user = new User();
 		user.setName(userName);

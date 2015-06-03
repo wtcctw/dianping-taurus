@@ -41,17 +41,18 @@ function login(url){
 }
 
 function logout(){
-	$.ajax({
-		url: '../login.do',
-		type:"get",
-		statusCode:{
-			200 : function(){
-				window.location="signin";
-			}
+	window.location = "rest/ssologout";
+	// $.ajax({
+	// 	url: '../login.do',
+	// 	type:"get",
+	// 	statusCode:{
+	// 		200 : function(){
+	// 			window.location="signin";
+	// 		}
 			
-		}
-	});
-	return false;
+	// 	}
+	// });
+	// return false;
 }
 
 function EnterTo(url){
