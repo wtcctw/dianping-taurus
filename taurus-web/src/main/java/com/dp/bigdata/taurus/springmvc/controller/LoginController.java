@@ -199,7 +199,7 @@ public class LoginController implements ServletContextAware {
         request.getSession().invalidate(); 
         
         response.setContentType("text/html;charset=GBK");
-        PrintWriter out = response.getWriter();
+//        PrintWriter out = response.getWriter();
         Cookie cookies[] = request.getCookies();
         if (cookies != null)
         {
@@ -214,10 +214,11 @@ public class LoginController implements ServletContextAware {
                 }
             }
         }
-        COOKIE_USER = "";
-        out.print("登出成功");
-        out.flush();
-        out.close();
+//        COOKIE_USER = "";
+//        out.print("登出成功");
+//        out.flush();
+//        out.close();
+        System.out.println("logout success!");
         
         String ssoLogoutUrl = "";
         String taurusUrl = "";
@@ -229,7 +230,7 @@ public class LoginController implements ServletContextAware {
         } catch (LionException e) {
             e.printStackTrace();
             ssoLogoutUrl = "https://sso.51ping.com/logout";
-            taurusUrl = "http://beta.taurus.dp";
+            taurusUrl = "http://alpha.taurus.dp:8080";
         }
         response.sendRedirect(ssoLogoutUrl + "?service=" + URLEncoder.encode(taurusUrl, "UTF-8"));
 	}

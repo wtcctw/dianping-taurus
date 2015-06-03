@@ -81,7 +81,7 @@
 	    <!-- 免登录url，支持通配符*，多个用,分隔 -->
 	    <init-param>
 	        <param-name>excludeURLs</param-name>
-	        <param-value>mvc/rest/ssologin</param-value>
+	        <param-value>/mvc/rest/ssologin,/mvc/rest/ssologout</param-value>
 	    </init-param>
 	</filter>
 	
@@ -159,7 +159,7 @@
 		</init-param>
 		<init-param>
 			<param-name>excludePage</param-name>
-			<param-value>/signin.jsp,/login.do,/common-header.jsp,/mvc/signin,/mvc/rest/ssologin</param-value>
+			<param-value>/signin.jsp,/login.do,/common-header.jsp,/mvc/signin,/mvc/rest/ssologin,/mvc/rest/ssologout</param-value>
 		</init-param>
 	</filter>
 
