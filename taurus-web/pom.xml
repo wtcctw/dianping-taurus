@@ -248,15 +248,31 @@
         <dependency>
             <groupId>com.dianping</groupId>
             <artifactId>avatar-cache</artifactId>
-            <version>2.6.7</version>
+            <version>2.6.6</version>
         </dependency>
 		
 		<!-- sso接入 -->
 		<dependency>
 		  <groupId>org.jasig.cas.client</groupId>
 		  <artifactId>cas-client-core-product</artifactId>
-		  <version>3.2.1-memcached.STABLE.7</version>
+		  <version>3.2.1-memcached.STABLE.6</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>dpsf-net</artifactId>
+                    <groupId>com.dianping.dpsf</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>lion-client</artifactId>
+                    <groupId>com.dianping.lion</groupId>
+                </exclusion>
+
+            </exclusions>
 		</dependency>
+        <dependency>
+            <artifactId>dpsf-net</artifactId>
+            <groupId>com.dianping.dpsf</groupId>
+            <version>2.4.6</version>
+        </dependency>
 		<dependency>
 		  <groupId>commons-codec</groupId>
 		  <artifactId>commons-codec</artifactId>
