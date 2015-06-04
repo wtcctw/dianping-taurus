@@ -7,13 +7,11 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-//import org.springframework.context.MessageSource;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 public class WebResult {
-//	public static final String MESSAGE_BEAN_REF = "messageSource";
 	private Boolean hasError = false;
 	private String errorMsg = "";
 	private String message = "";
@@ -21,7 +19,6 @@ public class WebResult {
 	private Date requestTime = new Date();
 	private Map<String, Object> result = new HashMap<String, Object>();
 	private Locale locale = Locale.getDefault();
-	//private MessageSource messageSource = null;
 
 	public WebResult() {
 
@@ -35,13 +32,6 @@ public class WebResult {
 		if (null == context) {
 			context = RequestContextUtils.getWebApplicationContext(request);
 		}
-//		if (null != context) {
-//			Object _messageSource = context.getBean(MESSAGE_BEAN_REF);
-//			if (null != _messageSource
-//					&& _messageSource instanceof MessageSource) {
-//				messageSource = (MessageSource)_messageSource; 
-//			}
-//		}
 	}
 
 	public Boolean getHasError() {
@@ -57,24 +47,8 @@ public class WebResult {
 	}
 
 	public void setErrorMsg(String errorMsg) {
-//		if (null == this.messageSource) {
-//			setPlanErrorMsg(errorMsg);
-//		} else {
-//			String bundledMessage = messageSource.getMessage(errorMsg, null,
-//					locale);
-//			if (null != bundledMessage) {
-//				this.errorMsg = bundledMessage;
-//			} else {
-//				this.errorMsg = errorMsg;
-//			}
-//		}
 		this.errorMsg = errorMsg;
 	}
-
-//	public void setPlanErrorMsg(String msg) {
-//		this.errorMsg = msg;
-//	}
-
 
 	public Integer getStatus() {
 		return status;
@@ -115,14 +89,6 @@ public class WebResult {
 	public void setLocale(Locale locale) {
 		this.locale = locale;
 	}
-
-//	public MessageSource getMessageSource() {
-//		return messageSource;
-//	}
-//
-//	public void setMessageSource(MessageSource messageSource) {
-//		this.messageSource = messageSource;
-//	}
 
 	public void addAttr(String key, Object value) {
 		this.result.put(key, value);

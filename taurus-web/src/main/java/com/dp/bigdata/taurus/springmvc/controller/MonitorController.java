@@ -50,8 +50,7 @@ public class MonitorController implements ServletContextAware {
 	private String RESTLET_URL_BASE;
 
     private static ArrayList<AttemptDTO> attempts;
-    private static boolean is_flash = false;
-	
+    
     private ServletContext servletContext;
     
     @Override
@@ -76,8 +75,10 @@ public class MonitorController implements ServletContextAware {
 	}
 
     @RequestMapping(value = "/jobdetail", method = RequestMethod.POST)
-	public void jobdetail(ModelMap modelMap, HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
+	public void jobdetail(ModelMap modelMap, 
+							HttpServletRequest request,
+							HttpServletResponse response) throws IOException 
+    {
 		log.info("--------------init the jobdetail------------");
     	
     	ClientResource cr = new ClientResource(RESTLET_URL_BASE + "host");
@@ -93,6 +94,7 @@ public class MonitorController implements ServletContextAware {
         IUserTasks userTasks = cr.wrap(IUserTasks.class);
         cr.accept(MediaType.APPLICATION_XML);
         String jsonString = userTasks.retrieve();
+        
         output.write(jsonString.getBytes());
         output.close();
 	}
@@ -105,8 +107,10 @@ public class MonitorController implements ServletContextAware {
      * @throws IOException
      */
     @RequestMapping(value = "/reflash_attempts", method = RequestMethod.POST)
-	public void monitor(ModelMap modelMap, HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
+	public void monitor(ModelMap modelMap, 
+						HttpServletRequest request,
+						HttpServletResponse response) throws IOException 
+    {
 		log.info("--------------init the reflash_attempts------------");
     	
     	ClientResource cr = new ClientResource(RESTLET_URL_BASE + "host");
@@ -121,7 +125,6 @@ public class MonitorController implements ServletContextAware {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String url = RESTLET_URL_BASE + "getattemptsbystatus/";
 
-
         cr = new ClientResource(url + taskTime);
         IGetAttemptsByStatus resource = cr.wrap(IGetAttemptsByStatus.class);
         attempts = resource.retrieve();
@@ -131,8 +134,10 @@ public class MonitorController implements ServletContextAware {
 	}
 	
     @RequestMapping(value = "/runningtasks", method = RequestMethod.GET)
-	public String runningtasks(ModelMap modelMap, HttpServletRequest request,
-			HttpServletResponse response) {
+	public String runningtasks(ModelMap modelMap, 
+								HttpServletRequest request,
+								HttpServletResponse response) 
+    {
 		log.info("--------------init the runningtasks------------");
     	
     	ClientResource cr = new ClientResource(RESTLET_URL_BASE + "host");
@@ -141,35 +146,37 @@ public class MonitorController implements ServletContextAware {
         ArrayList<HostDTO> hosts = hostsResource.retrieve();
         
         String hourTimeStr = request.getParameter("hourTime");
-        long hourTime = 60 * 60 * 1000;
+        Long hourTime = 60 * 60 * 1000L;
+        
         if (hourTimeStr != null && hourTimeStr.isEmpty()) {
             hourTime = Long.parseLong(hourTimeStr);
-
         }
 
         ClientResource crTask = new ClientResource(RESTLET_URL_BASE + "gettasks");
         IGetTasks taskResource = crTask.wrap(IGetTasks.class);
         ArrayList<Task> tasks = taskResource.retrieve();
-
         
         modelMap.addAttribute("attempts", attempts);
         modelMap.addAttribute("tasks", tasks);
         modelMap.addAttribute("mHelper", new MonitorHelper());
+        
         return "/monitor/runningtasks.ftl";
 	}
     
     
     @RequestMapping(value = "/submitfail", method = RequestMethod.POST)
-	public String submitfail(ModelMap modelMap, HttpServletRequest request,
-			HttpServletResponse response) {
+	public String submitfail(ModelMap modelMap, 
+								HttpServletRequest request,
+								HttpServletResponse response) 
+    {
 		log.info("--------------init the submitfail------------");
     	
     	ClientResource cr = new ClientResource(RESTLET_URL_BASE + "host");
         IHostsResource hostsResource = cr.wrap(IHostsResource.class);
         cr.accept(MediaType.APPLICATION_XML);
         ArrayList<HostDTO> hosts = hostsResource.retrieve();
-        
         ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
+        
         if (tasks == null) {
             ClientResource crTask = new ClientResource(RESTLET_URL_BASE + "gettasks");
             IGetTasks taskResource = crTask.wrap(IGetTasks.class);
@@ -178,24 +185,26 @@ public class MonitorController implements ServletContextAware {
             ReFlashHostLoadTask.lastReadDataTime = new Date().getTime();
         }
 
-        
         modelMap.addAttribute("attempts", attempts);
         modelMap.addAttribute("tasks", tasks);
         modelMap.addAttribute("mHelper", new MonitorHelper());
+        
         return "/monitor/submitfail.ftl";
 	}
     
     @RequestMapping(value = "/dependencypass", method = RequestMethod.POST)
-	public String dependencypass(ModelMap modelMap, HttpServletRequest request,
-			HttpServletResponse response) {
+	public String dependencypass(ModelMap modelMap, 
+									HttpServletRequest request,
+									HttpServletResponse response) 
+    {
 		log.info("--------------init the dependencypass------------");
     	
     	ClientResource cr = new ClientResource(RESTLET_URL_BASE + "host");
         IHostsResource hostsResource = cr.wrap(IHostsResource.class);
         cr.accept(MediaType.APPLICATION_XML);
         ArrayList<HostDTO> hosts = hostsResource.retrieve();
-        
         ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
+        
         if (tasks == null) {
             ClientResource crTask = new ClientResource(RESTLET_URL_BASE + "gettasks");
             IGetTasks taskResource = crTask.wrap(IGetTasks.class);
@@ -204,24 +213,26 @@ public class MonitorController implements ServletContextAware {
             ReFlashHostLoadTask.lastReadDataTime = new Date().getTime();
         }
 
-        
         modelMap.addAttribute("attempts", attempts);
         modelMap.addAttribute("tasks", tasks);
         modelMap.addAttribute("mHelper", new MonitorHelper());
+        
         return "/monitor/dependencypass.ftl";
 	}
     
     @RequestMapping(value = "/failedtasks", method = RequestMethod.POST)
-	public String failedtasks(ModelMap modelMap, HttpServletRequest request,
-			HttpServletResponse response) {
+	public String failedtasks(ModelMap modelMap, 
+								HttpServletRequest request,
+								HttpServletResponse response) 
+    {
 		log.info("--------------init the failedtasks------------");
     	
     	ClientResource cr = new ClientResource(RESTLET_URL_BASE + "host");
         IHostsResource hostsResource = cr.wrap(IHostsResource.class);
         cr.accept(MediaType.APPLICATION_XML);
         ArrayList<HostDTO> hosts = hostsResource.retrieve();
-
         ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
+        
         if (tasks == null) {
             ClientResource crTask = new ClientResource(RESTLET_URL_BASE + "gettasks");
             IGetTasks taskResource = crTask.wrap(IGetTasks.class);
@@ -230,24 +241,26 @@ public class MonitorController implements ServletContextAware {
             ReFlashHostLoadTask.lastReadDataTime = new Date().getTime();
         }
 
-
         modelMap.addAttribute("attempts", attempts);
         modelMap.addAttribute("tasks", tasks);
         modelMap.addAttribute("mHelper", new MonitorHelper());
+        
         return "/monitor/failedtasks.ftl";
 	}
     
     @RequestMapping(value = "/dependencytimeout", method = RequestMethod.POST)
-	public String dependencytimeout(ModelMap modelMap, HttpServletRequest request,
-			HttpServletResponse response) {
+	public String dependencytimeout(ModelMap modelMap, 
+									HttpServletRequest request,
+									HttpServletResponse response) 
+    {
 		log.info("--------------init the dependencytimeout------------");
     	
     	ClientResource cr = new ClientResource(RESTLET_URL_BASE + "host");
         IHostsResource hostsResource = cr.wrap(IHostsResource.class);
         cr.accept(MediaType.APPLICATION_XML);
         ArrayList<HostDTO> hosts = hostsResource.retrieve();
-        
         ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
+        
         if (tasks == null) {
             ClientResource crTask = new ClientResource(RESTLET_URL_BASE + "gettasks");
             IGetTasks taskResource = crTask.wrap(IGetTasks.class);
@@ -256,24 +269,26 @@ public class MonitorController implements ServletContextAware {
             ReFlashHostLoadTask.lastReadDataTime = new Date().getTime();
         }
 
-        
         modelMap.addAttribute("attempts", attempts);
         modelMap.addAttribute("tasks", tasks);
         modelMap.addAttribute("mHelper", new MonitorHelper());
+        
         return "/monitor/dependencytimeout.ftl";
 	}
     
     @RequestMapping(value = "/timeout", method = RequestMethod.POST)
-	public String timeout(ModelMap modelMap, HttpServletRequest request,
-			HttpServletResponse response) {
+	public String timeout(ModelMap modelMap, 
+							HttpServletRequest request,
+							HttpServletResponse response) 
+    {
 		log.info("--------------init the timeout------------");
     	
     	ClientResource cr = new ClientResource(RESTLET_URL_BASE + "host");
         IHostsResource hostsResource = cr.wrap(IHostsResource.class);
         cr.accept(MediaType.APPLICATION_XML);
         ArrayList<HostDTO> hosts = hostsResource.retrieve();
-        
         ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
+        
         if (tasks == null) {
             ClientResource crTask = new ClientResource(RESTLET_URL_BASE + "gettasks");
             IGetTasks taskResource = crTask.wrap(IGetTasks.class);
@@ -282,14 +297,15 @@ public class MonitorController implements ServletContextAware {
             ReFlashHostLoadTask.lastReadDataTime = new Date().getTime();
         }
 
-
         modelMap.addAttribute("attempts", attempts);
         modelMap.addAttribute("tasks", tasks);
         modelMap.addAttribute("mHelper", new MonitorHelper());
+        
         return "/monitor/timeout.ftl";
 	}
     
     public class MonitorHelper{
+    	
     	/**
     	 * runningtasks.ftl辅助方法
     	 * @param ip
@@ -297,7 +313,8 @@ public class MonitorController implements ServletContextAware {
     	 */
     	public boolean isViewLog(String ip){
     		boolean result = AttemptProxyServlet.isHostOverLoad(ip);
-    		String zabbixSwitch = "";
+    		String zabbixSwitch = null;
+    		
             try {
                 zabbixSwitch = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.zabbix.switch");
             }catch (LionException e){
@@ -307,8 +324,10 @@ public class MonitorController implements ServletContextAware {
             if (zabbixSwitch.equals("false")){
             	result = false;
             }
+            
             return result;
     	}
+    	
     	/**
     	 * submitfail.ftl辅助方法
     	 * @param taskID
@@ -316,7 +335,8 @@ public class MonitorController implements ServletContextAware {
     	 */
     	public String getLastTaskStatus(String taskID){
     		String status_api = RESTLET_URL_BASE + "getlaststatus";
-            String status;
+            String status = null;
+            
             try {
             	ClientResource cr = new ClientResource(status_api + "/" + taskID);
                 IGetTaskLastStatus statusResource = cr.wrap(IGetTaskLastStatus.class);
@@ -326,8 +346,9 @@ public class MonitorController implements ServletContextAware {
                 status = null;
             }
 
-            String lastTaskStatus ="";
+            String lastTaskStatus = null;
             int taskState = -1;
+            
             if (status != null) {
                 try {
                     JsonParser parser = new JsonParser();
@@ -342,6 +363,7 @@ public class MonitorController implements ServletContextAware {
                     lastTaskStatus = "NULL";
                 }
             }
+            
             return lastTaskStatus;
     	}
     }

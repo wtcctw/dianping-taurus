@@ -41,11 +41,6 @@
 		<param-value>/mvc/error</param-value>
 		<!-- <param-value>/error.jsp</param-value> -->
 	</context-param>
-	<!-- sso登出url -->
-	<!-- <context-param>
-		<param-name>CAS_LOGOUT_LIONKEY</param-name>
-		<param-value>cas-server-webapp.logoutUrl</param-value>
-	</context-param> -->
 	
 	<!-- cat集成 -->
     <filter>
@@ -81,7 +76,7 @@
 	    <!-- 免登录url，支持通配符*，多个用,分隔 -->
 	    <init-param>
 	        <param-name>excludeURLs</param-name>
-	        <param-value>/mvc/rest/ssologin,/mvc/rest/ssologout</param-value>
+	        <param-value>/mvc/rest/ssologout</param-value>
 	    </init-param>
 	</filter>
 	

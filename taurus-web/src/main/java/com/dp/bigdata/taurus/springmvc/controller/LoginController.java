@@ -1,7 +1,6 @@
 package com.dp.bigdata.taurus.springmvc.controller;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -20,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.ServletContextAware;
@@ -35,7 +33,6 @@ import com.dp.bigdata.taurus.generated.module.User;
 import com.dp.bigdata.taurus.restlet.resource.IUserResource;
 import com.dp.bigdata.taurus.restlet.resource.IUsersResource;
 import com.dp.bigdata.taurus.restlet.shared.UserDTO;
-import com.dp.bigdata.taurus.web.servlet.LDAPAuthenticationService;
 
 @Controller
 @RequestMapping("/rest")
@@ -48,6 +45,7 @@ public class LoginController implements ServletContextAware {
 	public static final String USER_GROUP = "taurus-group";
 
 	public static final String USER_POWER = "taurus-user-power";
+	
     public static  String COOKIE_USER = "";
 
 	private String RESTLET_URL_BASE;
@@ -71,6 +69,7 @@ public class LoginController implements ServletContextAware {
             RESTLET_URL_BASE = servletContext.getInitParameter("RESTLET_SERVER");
             e.printStackTrace();
         }
+		
 		USER_API = RESTLET_URL_BASE + "user";
 	}
 	
@@ -83,44 +82,31 @@ public class LoginController implements ServletContextAware {
 	 * @throws IOException 
 	 */
 	@RequestMapping(value = "/ssologin", method = RequestMethod.GET)
-	public void ssologin(ModelMap modelMap, HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
+	public void ssologin(ModelMap modelMap, 
+							HttpServletRequest request,
+							HttpServletResponse response) throws IOException 
+	{
 		log.info("--------------init the ssologin------------");
     	
-//		String userName = request.getParameter("username");
-//		String password = request.getParameter("password");
-//
-//		if (StringUtils.isBlank(password)) {
-//			response.setStatus(401);
-//			return;
-//		}
-
-//		LDAPAuthenticationService authService = new LDAPAuthenticationService();
-//		User user = null;
-
-//		try {
-//			user = authService.authenticate(userName, password);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
 		String encodedUrl = (String) request.getParameter("redirect-url");
+		
 	    if (StringUtils.isBlank(encodedUrl)) {
 	    	encodedUrl = "";
 	    }
-	    System.out.println("encodedUrl: "+encodedUrl);
-		//有没有可能绕过sso，直接访问这个链接，伪造各种用户信息？
-		String userInfoStr = request.getRemoteUser();
-		System.out.println("ssoUserInfo: " + userInfoStr);
+	    
+	    log.info("encodedUrl: "+encodedUrl);
+		String userInfoStr = request.getRemoteUser();//有没有可能绕过sso，直接访问这个链接，伪造各种用户信息？
+		log.info("ssoUserInfo: " + userInfoStr);
+		
 		if(userInfoStr == null){
 			String conTextPath = request.getContextPath();
 			response.sendRedirect(conTextPath + (conTextPath.equals("/")?"":"/") + "/mvc/error");
 			return ;
 		}
+		
 		String userName = userInfoStr.split("\\|")[0];
-		System.out.println("userName: "+userName);
-		//这个User是taurus数据库的user表，不是点评通行证的数据库
-		User user = setUserInfo(userName);
-		System.out.println("user: "+user.getName()+" "+user.getMail());
+		User user = setUserInfo(userName);//这个User是taurus数据库的user表，不是点评通行证的数据库
+		log.info("user: "+user.getName()+" "+user.getMail());
 		
 		//理论上这个if条件在sso登录条件下执行不了了，请教一下原先是在什么场景下会执行？
 		if (user == null) {
@@ -169,6 +155,7 @@ public class LoginController implements ServletContextAware {
 			dto.setName(userName);
 			dto.setMail(user.getMail());
 			resource.createIfNotExist(dto);
+			
 			if(isInfoCompleted(userName)){
 				//用户信息完整
 				response.setStatus(200);
@@ -178,7 +165,7 @@ public class LoginController implements ServletContextAware {
 			}
 		}
 		
-		System.out.println("decode:"+URLDecoder.decode(encodedUrl, "UTF-8"));
+		log.info("decode:"+URLDecoder.decode(encodedUrl, "UTF-8"));
 		response.sendRedirect(URLDecoder.decode(encodedUrl, "UTF-8"));
 		
 	}
@@ -191,15 +178,15 @@ public class LoginController implements ServletContextAware {
 	 * @throws IOException
 	 */
 	@RequestMapping(value = "/ssologout", method = RequestMethod.GET)
-	public void ssologout(ModelMap modelMap, HttpServletRequest request,
-			HttpServletResponse response) throws IOException {
+	public void ssologout(ModelMap modelMap, 
+							HttpServletRequest request,
+							HttpServletResponse response) throws IOException 
+	{
 		log.info("--------------init the ssologout------------");
     	
 		// 只销毁了session。在线用户库里的注销工作在session的SessionDestroyedListener里完成
         request.getSession().invalidate(); 
         
-        response.setContentType("text/html;charset=GBK");
-//        PrintWriter out = response.getWriter();
         Cookie cookies[] = request.getCookies();
         if (cookies != null)
         {
@@ -214,24 +201,22 @@ public class LoginController implements ServletContextAware {
                 }
             }
         }
-//        COOKIE_USER = "";
-//        out.print("登出成功");
-//        out.flush();
-//        out.close();
+        
+        COOKIE_USER = "";
         System.out.println("logout success!");
         
-        String ssoLogoutUrl = "";
-        String taurusUrl = "";
+        String ssoLogoutUrl = null;
+        String taurusUrl = null;
+        
         try {
-        	ssoLogoutUrl = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress())
-        			.getProperty("cas-server-webapp.logoutUrl");
-        	taurusUrl = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress())
-        			.getProperty("taurus.web.serverName");
+        	ssoLogoutUrl = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("cas-server-webapp.logoutUrl");
+        	taurusUrl = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.serverName");
         } catch (LionException e) {
             e.printStackTrace();
             ssoLogoutUrl = "https://sso.51ping.com/logout";
             taurusUrl = "http://alpha.taurus.dp:8080";
         }
+        
         response.sendRedirect(ssoLogoutUrl + "?service=" + URLEncoder.encode(taurusUrl, "UTF-8"));
 	}
 	
@@ -245,6 +230,7 @@ public class LoginController implements ServletContextAware {
   	    IUsersResource userResource = cr.wrap(IUsersResource.class);
   	    cr.accept(MediaType.APPLICATION_XML);
   	    ArrayList<UserDTO> users = userResource.retrieve();
+  	    
   	    for(UserDTO user:users){
   	    	if(userName.equals(user.getName())){
   	    		if(user.getGroup() == null || user.getMail() == null || user.getTel() == null 
@@ -255,6 +241,7 @@ public class LoginController implements ServletContextAware {
   	    		}
   	    	}
   	    }
+  	    
   	    return false;
 	}
 	
