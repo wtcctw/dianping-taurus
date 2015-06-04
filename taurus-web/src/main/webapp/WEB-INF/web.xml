@@ -5,6 +5,7 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 	<display-name>Taurus Web</display-name>
 	<welcome-file-list>
+		<welcome-file>mvc/index</welcome-file>
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
     <!--<listener>-->
@@ -12,12 +13,16 @@
     <!--</listener>-->
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath*:applicationContext*.xml</param-value>
+        <param-value>
+        	classpath*:applicationContext*.xml
+        	classpath*:config/spring/common/appcontext-*.xml
+			classpath*:config/spring/local/appcontext-*.xml
+		</param-value>
     </context-param>
 
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>ApiAction
+    </listener>
 	<context-param>
 		<param-name>RESTLET_SERVER</param-name>
 		<param-value>http://localhost:8192/api/</param-value>
@@ -33,13 +38,109 @@
 	</context-param>
 	<context-param>
 		<param-name>ERROR_PAGE</param-name>
-		<param-value>/error.jsp</param-value>
+		<param-value>/mvc/error</param-value>
+		<!-- <param-value>/error.jsp</param-value> -->
 	</context-param>
+	
+	<!-- cat集成 -->
     <filter>
         <filter-name>cat-filter</filter-name>
         <filter-class>com.dianping.cat.servlet.CatFilter</filter-class>
     </filter>
-
+	<filter-mapping>
+        <filter-name>cat-filter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
+	
+	<!-- sso文档给的顺序不对，必须按下面这个顺序严格排放 -->
+	<filter>
+	    <filter-name>CAS Authentication Filter</filter-name>
+	    <filter-class>org.jasig.cas.client.authentication.Saml11AuthenticationFilter</filter-class>
+	    <!-- SSO 登录页面的lion key，不用改写 -->
+	    <init-param>
+	        <param-name>casServerLoginUrlLionKey</param-name>
+	        <param-value>cas-server-webapp.loginUrl</param-value>
+	    </init-param>
+	    <!-- 此处需要改写param-value，改成接入站点uri的lion key，lion的value必须是应用的完整地址且不带子路径，例如：http://my.dper.com -->
+	    <init-param>
+	        <param-name>serverNameLionKey</param-name>
+	        <param-value>taurus.web.serverName</param-value>
+	    </init-param>
+	    <!-- 实施安全策略，提升外网访问时的安全级别，没有外网访问的站点不建议打开 -->
+	    <!-- <init-param>
+	        <param-name>safe</param-name>
+	        <param-value>false</param-value>
+	    </init-param> -->
+	    <!-- 免登录url，支持通配符*，多个用,分隔 -->
+	    <init-param>
+	        <param-name>excludeURLs</param-name>
+	        <param-value>/mvc/rest/ssologout</param-value>
+	    </init-param>
+	</filter>
+	
+	<filter>
+	    <filter-name>CAS Validation Filter</filter-name>
+	    <filter-class>org.jasig.cas.client.validation.Saml11TicketValidationFilter</filter-class>
+	    <init-param>
+	        <param-name>casServerUrlPrefixLionKey</param-name>
+	        <param-value>cas-server-webapp.serverName</param-value>
+	    </init-param>
+	    <!-- 此处需要改写param-value，改成接入站点uri的lion key，lion的value必须是应用的完整地址且不带子路径，例如：http://my.dper.com -->
+	    <init-param>
+	        <param-name>serverNameLionKey</param-name>
+	        <param-value>taurus.web.serverName</param-value>
+	    </init-param>
+	    <init-param>
+	        <param-name>redirectAfterValidation</param-name>
+	        <param-value>true</param-value>
+	    </init-param>
+	    <!-- 是否开启票据时间差验证，默认开启 -->
+	    <init-param>
+	        <param-name>validate</param-name>
+	        <param-value>true</param-value>
+	    </init-param>
+	    <!-- 最大容忍的时间差（毫秒） -->
+	    <init-param>
+	        <param-name>tolerance</param-name>
+	        <param-value>5000</param-value>
+	    </init-param>
+	</filter>
+	
+	<filter>
+	  <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+	  <filter-class>org.jasig.cas.client.util.HttpServletRequestWrapperFilter</filter-class>
+	</filter>
+	
+	<filter>
+	   <filter-name>CAS Single Sign Out Filter</filter-name>
+	   <filter-class>org.jasig.cas.client.session.SingleSignOutFilter</filter-class>
+	   <init-param>
+	       <param-name>artifactParameterName</param-name>
+	       <param-value>SAMLart</param-value>
+	   </init-param>
+	</filter>
+	
+	<!-- 不要修改 filter-mapping的顺序 -->
+	<filter-mapping>
+	  <filter-name>CAS Single Sign Out Filter</filter-name>
+	  <url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+	  <filter-name>CAS Authentication Filter</filter-name>
+	  <url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+	  <filter-name>CAS Validation Filter</filter-name>
+	  <url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+	  <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+	  <url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	<!-- 本机身份验证 -->
 	<filter>
 		<filter-name>AuthenticationFilter</filter-name>
 		<filter-class>com.dp.bigdata.taurus.web.servlet.filter.AuthenticationFilter</filter-class>
@@ -48,19 +149,14 @@
 			<param-value>signin.jsp</param-value>
 		</init-param>
 		<init-param>
+			<param-name>mvcLoginPage</param-name>
+			<param-value>mvc/signin</param-value>
+		</init-param>
+		<init-param>
 			<param-name>excludePage</param-name>
-			<param-value>/signin.jsp,/login.do,/common-header.jsp</param-value>
+			<param-value>/signin.jsp,/login.do,/common-header.jsp,/mvc/signin,/mvc/rest/ssologin,/mvc/rest/ssologout</param-value>
 		</init-param>
 	</filter>
-
-
-    <filter-mapping>
-        <filter-name>cat-filter</filter-name>
-        <url-pattern>/*</url-pattern>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>FORWARD</dispatcher>
-    </filter-mapping>
-
 
 	<filter-mapping>
 		<filter-name>AuthenticationFilter</filter-name>
@@ -72,13 +168,38 @@
 		<filter-name>AuthenticationFilter</filter-name>
 		<url-pattern>*.jsp</url-pattern>
 		<dispatcher>REQUEST</dispatcher>
-	</filter-mapping> 
+	</filter-mapping>
+	
+	<!-- 新增过滤spring mvc页面 -->
+	<filter-mapping>
+		<filter-name>AuthenticationFilter</filter-name>
+		<url-pattern>/mvc/*</url-pattern>
+		<url-pattern>/</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+	</filter-mapping>
 
 	<session-config>
 		<!-- 12 hours -->
 		<session-timeout>720</session-timeout>
 	</session-config>
 
+
+	<!-- spirng mvc 配置 -->
+	<servlet>
+		<servlet-name>springmvc-servlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:spring-mvc.xml</param-value>
+		</init-param>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>springmvc-servlet</servlet-name>
+		<url-pattern>/mvc/*</url-pattern>
+	</servlet-mapping>
+
+	<!-- 传统servlet配置 -->
 	<servlet>
 		<servlet-name>TaskProxyServlet</servlet-name>
 		<servlet-class>com.dp.bigdata.taurus.web.servlet.TaskProxyServlet</servlet-class>

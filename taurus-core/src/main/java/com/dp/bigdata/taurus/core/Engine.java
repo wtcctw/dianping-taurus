@@ -1,6 +1,7 @@
 package com.dp.bigdata.taurus.core;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -16,6 +17,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
 import com.dianping.lion.client.LionException;
+import com.dianping.ops.http.HttpPoster;
+
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.HttpException;
+import org.apache.commons.httpclient.NameValuePair;
+import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -38,6 +45,7 @@ import com.dp.bigdata.taurus.zookeeper.execute.helper.ExecuteStatus;
 import com.dp.bigdata.taurus.zookeeper.execute.helper.ExecutorManager;
 import com.dp.bigdata.taurus.zookeeper.heartbeat.helper.AgentHandler;
 import com.dp.bigdata.taurus.zookeeper.heartbeat.helper.AgentMonitor;
+
 import org.springframework.dao.DataAccessException;
 
 import javax.mail.MessagingException;
@@ -153,7 +161,7 @@ final public class Engine implements Scheduler {
            }catch (LionException le){
                dataBaseUrl = "jdbc:mysql://10.1.101.216:3306/Taurus?characterEncoding=utf-8";
            }
-
+           
            String exceptContext = "您好，taurus的数据库连接发生异常 请及时查看"
                    +"数据库连接串："
                    +dataBaseUrl;
@@ -165,6 +173,28 @@ final public class Engine implements Scheduler {
                for (String to:toLists){
                    MailHelper.sendMail(to,exceptContext);
                }
+               
+               // 给运维报警
+               String reportToOps = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).
+            		   getProperty("taurus.agent.down.ops.report.alarm.post");
+               
+               Map<String, String> header = new HashMap<String, String>();
+               Map<String, String> body = new HashMap<String, String>();
+               
+               body.put("typeObject", "Taurus");
+               body.put("typeItem", "Service");
+               body.put("typeAttribute", "Status");
+               body.put("source", "taurus");
+               // 摘出数据库ip给运维报警
+               body.put("domain", dataBaseUrl.split(":")[2].split("/")[2]);
+               body.put("title", "Taurus数据库连接异常");
+               body.put("content",exceptContext);
+               //此处动态修改
+               body.put("url", dataBaseUrl);
+               body.put("receiver", "dpop@dianping.com");
+				
+               HttpPoster.postWithoutException(reportToOps, header, body);
+               
            }catch (LionException le){
                Cat.logEvent("LionException",le.getMessage());
            }catch (MessagingException me){
@@ -200,18 +230,22 @@ final public class Engine implements Scheduler {
 			@Override
 			public void disConnected(String ip) {
 				Cat.logEvent("DisConnected", ip);
+				try {
+					
+				String webDomain = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).
+               		   getProperty("taurus.web.serverName");
                 String exceptContext = "您好，taurus-agent的job主机 ["
                         + ip
-                        + "] 服务已经挂掉请重启，监控连接如下：http://taurus.dp/hosts.jsp?hostName="
+                        + "] 服务已经挂掉请重启，监控连接如下：" + webDomain + "/mvc/hosts?hostName="
                         + ip
                         +"，谢谢~";
 
                 String context = "您好，taurus-agent的job主机 ["
                         + ip
-                        + "] 心跳异常，监控连接如下：http://taurus.dp/hosts.jsp?hostName="
+                        + "] 心跳异常，监控连接如下：" + webDomain + "/mvc/hosts?hostName="
                         + ip
                         +"，谢谢~";
-                try {
+                
                     String agentPort = "";
 
 
@@ -233,6 +267,30 @@ final public class Engine implements Scheduler {
                             MailHelper.sendMail(to,exceptContext);
                         }
 
+                        
+                        // 给运维报警
+                        
+                        String reportToOps = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).
+                     		   getProperty("taurus.agent.down.ops.report.alarm.post");
+                        
+                        Map<String, String> header = new HashMap<String, String>();
+                        Map<String, String> body = new HashMap<String, String>();
+                        
+                        body.put("typeObject", "Taurus");
+                        body.put("typeItem", "Service");
+                        body.put("typeAttribute", "Status");
+                        body.put("source", "taurus");
+                        //此处动态修改
+                        body.put("domain", ip);
+                        body.put("title", "Taurus-Agent主机失联系告警服务");
+                        body.put("content",exceptContext);
+                        //此处动态修改
+                        body.put("url", webDomain + "/mvc/hosts?hostName=" + ip);
+                        body.put("receiver", "dpop@dianping.com");
+         				
+                        HttpPoster.postWithoutException(reportToOps, header, body);
+                        
+                        
                     }
 
                 } catch (Exception e) {

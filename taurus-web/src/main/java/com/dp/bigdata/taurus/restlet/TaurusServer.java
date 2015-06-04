@@ -27,6 +27,7 @@ public class TaurusServer {
         System.setProperty("org.restlet.engine.loggerFacadeClass", "org.restlet.ext.slf4j.Slf4jLoggerFacade");
 
         try {
+        	System.out.println("start restlet....");
             restlet.start();
             alert.start(-1);
             engine.start();
