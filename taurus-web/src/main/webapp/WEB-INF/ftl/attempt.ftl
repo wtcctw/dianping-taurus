@@ -106,7 +106,7 @@
                 action: "attempt",
                 taskID:taskID
             },
-            timeout: 1500,
+            timeout: 2000,
             type: "POST",
             url: "../attempt",
             error: function () {
