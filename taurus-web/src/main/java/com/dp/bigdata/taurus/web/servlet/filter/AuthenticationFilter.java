@@ -2,6 +2,7 @@ package com.dp.bigdata.taurus.web.servlet.filter;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.Date;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -37,12 +38,14 @@ public class AuthenticationFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
 	      ServletException {
+		System.out.println(new Date() + " [" + this.getClass().getName() + "] --------------init the doFilter------------");
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
 		String requestURI = req.getRequestURI();
 		
 		// Filter出口1. 登录/mvc/ssologin 本机放行，cas不能放行，否则可以伪造cas认证信息；登出/mvc/ssologout 本机和cas都放行
 		for (String uri : excludePages) {
+			//System.out.println(new Date() + " [" + this.getClass().getName() + "] " + uri);
 			if (requestURI.toLowerCase().contains(uri)){
 				System.out.println("excludePage : " + uri);
 				chain.doFilter(request, response);
@@ -59,7 +62,7 @@ public class AuthenticationFilter implements Filter {
 			requestURI = requestURI + "mvc/index";
 		}
 		
-		if (StringUtil.isBlank(req.getQueryString())) {
+		if (StringUtil.isBlank(req.getQueryString()) == false) {
 			requestURI = requestURI + "?" + req.getQueryString();
 		}
 		

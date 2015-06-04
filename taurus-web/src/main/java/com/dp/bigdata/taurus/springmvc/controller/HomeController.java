@@ -77,6 +77,16 @@ public class HomeController implements ServletContextAware{
 		
 		modelMap.addAttribute("url", url);
 		
+		String[] switchUrls = null;
+		try {
+			String keys = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.deploy.weburl");
+			switchUrls = keys.split(",");
+		} catch (LionException e) {
+			e.printStackTrace();
+			switchUrls = "http://alpha.taurus.dp:8080,http://beta.taurus.dp,http://ppe.taurus.dp,http://taurus.dp".split(",");
+		}
+		modelMap.addAttribute("switchUrls", switchUrls);
+		
 		return "/signin.ftl";
 	}
 	
@@ -179,6 +189,16 @@ public class HomeController implements ServletContextAware{
 		modelMap.addAttribute("now_s", baseDateTip);
 		modelMap.addAttribute("step", stepStr);
 		modelMap.addAttribute("op_str", opStr);
+		
+		String[] switchUrls = null;
+		try {
+			String keys = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.url.switch");
+			switchUrls = keys.split(",");
+		} catch (LionException e) {
+			e.printStackTrace();
+			switchUrls = "http://alpha.taurus.dp:8080,http://beta.taurus.dp,http://ppe.taurus.dp,http://taurus.dp".split(",");
+		}
+		modelMap.addAttribute("switchUrls", switchUrls);
 		
 		return "/index.ftl";
 	}

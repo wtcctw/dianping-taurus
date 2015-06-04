@@ -126,18 +126,23 @@
                 </div>
             </div>
             <ul>
+            <#if switchUrls?exists>
+            <#list switchUrls as switchUrl>
                 <li>
-                    <a href="http://alpha.taurus.dp/">Alpha 环境</a>
+                    <a href="${switchUrl!}">
+                    <#if switchUrl?contains("alpha")>
+                    Alpha 环境
+                    <#elseif switchUrl?contains("beta")>
+                    Beta 环境
+                    <#elseif switchUrl?contains("ppe")>
+                    PPE 环境
+                    <#else>
+                    线上环境
+                    </#if>
+                    </a>
                 </li>
-                <li>
-                    <a href="http://beta.taurus.dp/">Beta 环境</a>
-                </li>
-                <li>
-                    <a href="http://ppe.taurus.dp/">PPE 环境</a>
-                </li>
-                <li>
-                    <a href="http://taurus.dp/">线上环境</a>
-                </li>
+            </#list>
+            </#if>
 
             </ul>
             <!-- /.col -->

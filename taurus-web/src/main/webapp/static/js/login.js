@@ -42,17 +42,6 @@ function login(url){
 
 function logout(){
 	window.location = "rest/ssologout";
-	// $.ajax({
-	// 	url: '../login.do',
-	// 	type:"get",
-	// 	statusCode:{
-	// 		200 : function(){
-	// 			window.location="signin";
-	// 		}
-			
-	// 	}
-	// });
-	// return false;
 }
 
 function EnterTo(url){

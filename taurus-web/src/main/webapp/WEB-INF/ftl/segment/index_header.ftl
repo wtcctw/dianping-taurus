@@ -54,14 +54,22 @@
             <!-- /.ace-nav -->
         </div>
         <div class="pull-right" style="margin:10px;color: white;">
+        <#if switchUrls?exists>
+        <#list switchUrls as switchUrl>
             <a target="_blank" style="margin:10px;color: white;"
-               href="http://alpha.taurus.dp/"><i class="icon-bolt">切换alpha</i></a>
-            <a target="_blank" style="margin:10px;color: white;"
-               href="http://beta.taurus.dp/"><i class="icon-bolt">切换beta</i></a>
-            <a target="_blank" style="margin:10px;color: white;"
-               href="http://ppe.taurus.dp/"><i class="icon-bolt">切换ppe</i></a>
-            <a target="_blank" style="margin:10px;color: white;"
-               href="http://taurus.dp/"><i class="icon-bolt">切换线上</i></a>
+               href="${switchUrl!}"><i class="icon-bolt">
+                <#if switchUrl?contains("alpha")>
+                切换alpha
+                <#elseif switchUrl?contains("beta")>
+                切换beta
+                <#elseif switchUrl?contains("ppe")>
+                切换ppe
+                <#else>
+                切换线上
+                </#if>
+               </i></a>
+        </#list>
+        </#if>
         </div>
         <div class="pull-right" style="margin:10px;color: white;">
             <i class="icon-group">155326270</i>

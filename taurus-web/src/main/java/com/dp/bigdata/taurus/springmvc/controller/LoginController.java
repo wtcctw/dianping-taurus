@@ -91,7 +91,7 @@ public class LoginController implements ServletContextAware {
 		String encodedUrl = (String) request.getParameter("redirect-url");
 		
 	    if (StringUtils.isBlank(encodedUrl)) {
-	    	encodedUrl = "";
+	    	encodedUrl = "/";
 	    }
 	    
 	    log.info("encodedUrl: "+encodedUrl);
