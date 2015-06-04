@@ -372,7 +372,7 @@
                                     + item.taskId
                                     + "' >详细</a></li></ul></div>"
                                     +"</td>"
-                                    + "<td><a id='attempts' class='btn btn-primary btn-small' href='attempt.jsp?taskID=" + item.taskId + "' target= 'blank'>运行历史</a></td></tr>";
+                                    + "<td><a id='attempts' class='btn btn-primary btn-small' href='${rc.contextPath}/mvc/attempt?taskID=" + item.taskId + "' target= 'blank'>运行历史</a></td></tr>";
                         } else {
                             scheduleBody += "<tr id='" + item.taskId + "' class='error'>"
                                     +"<td class='hide'>" + item.taskId + "</td>"

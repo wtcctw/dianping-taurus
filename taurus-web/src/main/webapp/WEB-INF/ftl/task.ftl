@@ -59,7 +59,7 @@
                         <option>default</option>
                         <option>hadoop</option>
                     </select>
-                    <a href="about.jsp#config" class="atip" data-toggle="tooltip" data-placement="top"
+                    <a href="${rc.contextPath}/mvc/about#config" class="atip" data-toggle="tooltip" data-placement="top"
                        data-original-title="hadoop: 需要访问hadoop的作业。这种类型的作业，taurus会管理作业的hadoop ticket的申请和销毁。
                             default: 上述两种类型以外所有类型。">帮助</a>
                 </div>
