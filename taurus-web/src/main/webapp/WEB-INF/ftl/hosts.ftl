@@ -78,13 +78,13 @@
             <td>在线</td>
             <#if isAdmin>
             <td><a id="down" title="这台agent将不在监控范围内，agent进程是否被kill并不能确定。" class="btn  btn-primary btn-minier"
-                   href="updateHost?hostName=${hostName!}&op=down">下线</a></td>
+                   href="${rc.contextPath}/updateHost?hostName=${hostName!}&op=down">下线</a></td>
             </#if>
         <#else>
             <td>下线</td>
             <#if isAdmin>
             <td><a id="up" title="这台agent将被纳入监控范围内，agent需要手动启动。" class="btn btn-primary btn-minier"
-                   href="updateHost?hostName=${hostName!}&op=up">上线</a></td>
+                   href="${rc.contextPath}/updateHost?hostName=${hostName!}&op=up">上线</a></td>
             </#if>
         </#if>
         </tr>
@@ -95,7 +95,7 @@
             <td>正常</td>
             <#if isAdmin>
             <td><a id="restart" class="btn  btn-primary btn-minier"
-                   href="updateHost?hostName=${hostName!}&op=restart">重启</a></td>
+                   href="${rc.contextPath}/updateHost?hostName=${hostName!}&op=restart">重启</a></td>
             </#if>
         <#else>
             <td>异常</td>
