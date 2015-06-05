@@ -6,7 +6,7 @@
 	<display-name>Taurus Web</display-name>
 	<welcome-file-list>
 		<welcome-file>mvc/index</welcome-file>
-		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>mvc/error</welcome-file>
 	</welcome-file-list>
     <!--<listener>-->
         <!--<listener-class>com.dp.bigdata.taurus.restlet.utils.StartServlet</listener-class>-->

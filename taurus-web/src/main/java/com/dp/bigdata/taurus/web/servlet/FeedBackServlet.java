@@ -99,7 +99,7 @@ public class FeedBackServlet  extends HttpServlet {
             }
 String logUrl =  "http://"
         + domain
-        + "/viewlog.jsp?id="
+        + "/mvc/viewlog?id="
         + attemptId;
 
             if(feedType.equals("mail")){

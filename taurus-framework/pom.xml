@@ -8,6 +8,7 @@
 	</parent>
 	<artifactId>taurus-framework</artifactId>
 	<version>0.1</version>
+	<name>taurus-framework</name>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework</groupId>
