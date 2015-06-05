@@ -190,15 +190,14 @@ public class HomeController implements ServletContextAware{
 		modelMap.addAttribute("step", stepStr);
 		modelMap.addAttribute("op_str", opStr);
 		
-		String[] switchUrls = null;
+		String switchUrlAll = null;
 		try {
-			String keys = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.url.switch");
-			switchUrls = keys.split(",");
+			switchUrlAll = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.url.switch");
 		} catch (LionException e) {
 			e.printStackTrace();
-			switchUrls = "http://alpha.taurus.dp:8080,http://beta.taurus.dp,http://ppe.taurus.dp,http://taurus.dp".split(",");
+			switchUrlAll = "http://alpha.taurus.dp:8080,http://beta.taurus.dp,http://ppe.taurus.dp,http://taurus.dp";
 		}
-		modelMap.addAttribute("switchUrls", switchUrls);
+		modelMap.addAttribute("switchUrls", switchUrlAll.split(","));
 		
 		return "/index.ftl";
 	}
