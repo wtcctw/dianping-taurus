@@ -64,7 +64,7 @@ public class HostServlet extends HttpServlet {
 			req.setAttribute("statusCode", "500");
 		}
 		RequestDispatcher requestDispatcher = req
-				.getRequestDispatcher("/hosts.jsp");
+				.getRequestDispatcher((req.getContextPath().equals("/")?"":"/") + "mvc/hosts");
 		requestDispatcher.forward(req, resp);
 
 	}

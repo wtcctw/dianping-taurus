@@ -249,7 +249,7 @@ public class TaurusAlert {
 			sbMailContent.append("<td>任务状态</td><td> " + AttemptStatus.getInstanceRunState(attempt.getStatus()) + "</td>");
 			sbMailContent.append("</tr>");
 			sbMailContent.append("<tr>");//
-			sbMailContent.append("<td>日志查看</td><td>" + "http://"+domain+"/viewlog.jsp?id="+ attempt.getAttemptid() +"&status="+AttemptStatus.getInstanceRunState(attempt.getStatus())+"</td>");
+			sbMailContent.append("<td>日志查看</td><td>" + "http://"+domain+"/mvc/viewlog?id="+ attempt.getAttemptid() +"&status="+AttemptStatus.getInstanceRunState(attempt.getStatus())+"</td>");
 			sbMailContent.append("</tr>");
 			sbMailContent.append("</table>");
 
@@ -304,7 +304,7 @@ public class TaurusAlert {
             sbMailContent.append("\n");
             sbMailContent.append("任务状态: " + AttemptStatus.getInstanceRunState(attempt.getStatus()));
             sbMailContent.append("\n");
-            sbMailContent.append("日志查看:" + "http://"+domain+"/viewlog.jsp?id="+ attempt.getAttemptid());
+            sbMailContent.append("日志查看:" + "http://"+domain+"/mvc/viewlog?id="+ attempt.getAttemptid());
             sbMailContent.append("\n");
             sbMailContent.append("※ 点评工具组 ※");
 

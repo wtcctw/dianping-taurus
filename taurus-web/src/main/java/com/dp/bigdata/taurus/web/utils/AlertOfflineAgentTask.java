@@ -52,14 +52,14 @@ public class AlertOfflineAgentTask  extends TimerTask {
 
                 String context = "您好，taurus-agent的job主机 ["
                         + host
-                        + "] 心跳异常请在【http://"+domain+"/host_center.jsp】核实" +
-                        "监控连接如下：http://"+domain+"/hosts.jsp?hostName="
+                        + "] 心跳异常请在【http://"+domain+"/mvc/host_center】核实" +
+                        "监控连接如下：http://"+domain+"/mvc/hosts?hostName="
                         + host
                         +"，谢谢~";
                 String exceptContext = "您好，taurus-agent的job主机 ["
                         + host
-                        + "] 服务已经挂掉请在【http://"+domain+"/host_center.jsp】核实并重启该Job机器的TOMCAT" +
-                        "监控连接如下：http://"+domain+"/hosts.jsp?hostName="
+                        + "] 服务已经挂掉请在【http://"+domain+"/mvc/host_center】核实并重启该Job机器的TOMCAT" +
+                        "监控连接如下：http://"+domain+"/mvc/hosts?hostName="
                         + host
                         +"，谢谢~";
 
