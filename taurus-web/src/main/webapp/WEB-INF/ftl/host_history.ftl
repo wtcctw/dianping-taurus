@@ -234,11 +234,11 @@ function get_history(ip, time) {
             $("#history").addClass("align-center");
         },
         success: function (response, textStatus) {
-            var table_body = '<a class="btn btn-primary btn-minier" style="float: right" href="host_history.jsp">返回</a><table class="table table-striped table-bordered table-condensed" >';
+            var table_body = '<a class="btn btn-primary btn-minier" style="float: right" href="${rc.contextPath}/mvc/host_history">返回</a><table class="table table-striped table-bordered table-condensed" >';
             var jsonarray = $.parseJSON(response);
 
             if (jsonarray.length == 0) {
-                $("#history").html("<i class='icon-info-sign icon-large red '>该Job机没有任何任务执行~</i> <a class='btn btn-primary btn-minier' href='host_history.jsp'>返回</a>");
+                $("#history").html("<i class='icon-info-sign icon-large red '>该Job机没有任何任务执行~</i> <a class='btn btn-primary btn-minier' href='${rc.contextPath}/mvc/host_history'>返回</a>");
                 $("#history").addClass("align-center");
                 $('#startTime').addClass("hide");
                 $('#viewlable').addClass("hide");
@@ -252,7 +252,7 @@ function get_history(ip, time) {
                 $.each(jsonarray, function (i, item) {
 
                     table_body += " <tr><td valign='left'>"
-                            +"<a href='attempt.jsp?taskID="
+                            +"<a href='${rc.contextPath}/mvc/attempt?taskID="
                             +item.taskId
                             +"' >"
                             +"<span style='color: darkgreen; font-size: 9px'>"
