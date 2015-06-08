@@ -244,7 +244,13 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
+        
+		<dependency>
+			<groupId>com.dianping</groupId>
+			<artifactId>ops-http-client</artifactId>
+			<version>1.0.16</version>
+		</dependency>
+		
         <dependency>
             <groupId>com.dianping</groupId>
             <artifactId>avatar-cache</artifactId>

@@ -117,7 +117,7 @@
                                    for="ip">选择查看的Job主机</label>
 
                             <select id="ip" name="ip" class="input-big field" style="width: 300px">
-                                <#if ip?exists>
+                                <#if ip?exists == false>
                                 <#list hosts as hostip>
                                 	<option>${hostip.ip!}</option>
                                 </#list>
