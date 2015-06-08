@@ -46,6 +46,8 @@ public class UserServlet extends HttpServlet {
 			throws ServletException, IOException {
 		ClientResource cr = new ClientResource(RESTLET_URL_BASE + "user/" + request.getParameter("userName"));
 
+		//TODO 服务端验证恶意分组或其他信息
+		
 		Form form = new Form();
 		for (UserProperty p : UserProperty.values()) {
 			form.add(p.getName(), request.getParameter(p.getName()));
