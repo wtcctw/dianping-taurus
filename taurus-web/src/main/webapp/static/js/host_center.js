@@ -119,7 +119,7 @@ $(document).ready(function () {
                 for (var i = 0; i < exceptionNums; i++) {
                     body += "<tr>" +
                         "<td>" + exceptionLists[i] + "</td>" +
-                        "<td><a id='down' title='查看job机详情' class='btn  btn-primary btn-minier' href='mvc/hosts?hostName=" + exceptionLists[i] + "'>详情</a></td>"
+                        "<td><a id='down' title='查看job机详情' class='btn  btn-primary btn-minier' href='hosts?hostName=" + exceptionLists[i] + "'>详情</a></td>"
                     "</tr>"
                 }
                 htmlContent = ' <table  class="table table-striped " id = "jobStateTable">'
