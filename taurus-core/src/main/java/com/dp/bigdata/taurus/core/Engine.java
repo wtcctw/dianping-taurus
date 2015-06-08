@@ -174,9 +174,14 @@ final public class Engine implements Scheduler {
                    MailHelper.sendMail(to,exceptContext);
                }
                
+               String reportToOps = null;
+               try {
+                   reportToOps = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.down.ops.report.alarm.post");
+               } catch (LionException le) {
+                   reportToOps = "http://pulse.dp/report/alarm/post";
+                   le.printStackTrace();
+               }
                // 给运维报警
-               String reportToOps = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).
-            		   getProperty("taurus.agent.down.ops.report.alarm.post");
                
                Map<String, String> header = new HashMap<String, String>();
                Map<String, String> body = new HashMap<String, String>();
@@ -254,8 +259,13 @@ final public class Engine implements Scheduler {
                     String isAlive1 = get_data(url1);
                     String isAlive2 = get_data(url2);
 
-                    String reportToOps = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).
-                 		   getProperty("taurus.agent.down.ops.report.alarm.post");
+                    String reportToOps = null;
+                    try {
+                        reportToOps = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.down.ops.report.alarm.post");
+                    } catch (LionException e) {
+                        reportToOps = "http://pulse.dp/report/alarm/post";
+                        e.printStackTrace();
+                    }
                     
                     if ((isAlive1!= null && isAlive1.equals("true"))||(isAlive2!= null && isAlive2.equals("true"))){
                        MailHelper.sendMail("kirin.li@dianping.com",context);
