@@ -66,6 +66,14 @@ public class MultiInstanceFilter implements Filter {
                     }
 
                     if (needAlert) {
+                    	// 告警加入domain
+                    	String domain = null;
+                    	try {
+                    		domain = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.deploy.weburl");
+                        } catch (LionException e) {
+                        	domain = "taurus.dp";
+                        	e.printStackTrace();
+                        }
                         String alertontext = "您好，你的Taurus Job【" +
                                 context.getTask().getName() + "】发生拥堵，请及时关注，谢谢~";
                         try {
