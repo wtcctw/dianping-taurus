@@ -929,11 +929,11 @@ public class HomeController implements ServletContextAware{
 		String path = request.getParameter("path");
 		String appname = request.getParameter("appname");
 		
-		if (StringUtil.isBlank(name) == false) {
+		if (StringUtil.isNotBlank(name)) {
 		    task_api = task_api + "?name=" + name;
-		} else if (StringUtil.isBlank(appname) == false) {
+		} else if (StringUtil.isNotBlank(appname)) {
 		    task_api = task_api + "?appname=" + appname;
-		} else if (StringUtil.isBlank(globalViewVariable.currentUser) == false) {
+		} else if (StringUtil.isNotBlank(globalViewVariable.currentUser)) {
 		    task_api = task_api + "?user=" + globalViewVariable.currentUser;
 		}
 		
