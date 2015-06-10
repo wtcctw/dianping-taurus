@@ -124,6 +124,7 @@ public class HomeController implements ServletContextAware{
 		
 		Date baseDate = urlDateFormat.parse(baseDateStr);
 		String baseDateTip = tipDateFormat.format(baseDate);
+		String nowDateTip = tipDateFormat.format(nowDate);
         
 		Long dateHour = baseDate.getTime();
 		Long hourTime = 60 * 60 * 1000L;
@@ -133,15 +134,18 @@ public class HomeController implements ServletContextAware{
 		
 		String OneMonthEarlierTime = urlDateFormat.format(new Date(dateHour - monthHour));
 		String OneMonthEarlierTip = tipDateFormat.format(new Date(dateHour - monthHour)) + "~" + baseDateTip;
+		String OneMonthEarlierHistoryTip = tipDateFormat.format(new Date(dateHour - monthHour)) + "~" + nowDateTip;
 		
 		String OneWeekEarlierTime = urlDateFormat.format(new Date(dateHour - weekHour));
 		String OneWeekEarlierTip = tipDateFormat.format(new Date(dateHour - weekHour)) + "~" + baseDateTip;
+		String OneWeekEarlierHistoryTip = tipDateFormat.format(new Date(dateHour - weekHour)) + "~" + nowDateTip;
 		
 		String OneDayEarlierTime = urlDateFormat.format(new Date(dateHour - dayHour));
 		String OneDayEarlierTip = tipDateFormat.format(new Date(dateHour - dayHour)) + "~" + baseDateTip;
+		String OneDayEarlierHistoryTip = tipDateFormat.format(new Date(dateHour - dayHour)) + "~" + nowDateTip;
 		
 		String todayTime = urlDateFormat.format(nowDate);
-		String todayTip = tipDateFormat.format(new Date(nowDate.getTime() -dayHour)) + "~" + tipDateFormat.format(nowDate);
+		String todayTip = tipDateFormat.format(new Date(nowDate.getTime() -dayHour)) + "~" + nowDateTip;
 		
 		/**
 		 * 未来1天，1周，1月
@@ -169,6 +173,12 @@ public class HomeController implements ServletContextAware{
 		String OneWeekLaterTip = baseDateTip + "~" + tipDateFormat.format(new Date(dateHour + weekHour));
 		String OneMonthLaterTip = baseDateTip + "~" + tipDateFormat.format(new Date(dateHour + monthHour));
 		
+		String OneDayLaterHistoryTip = tipDateFormat.format(new Date(dateHour + dayHour)) + "~" + nowDateTip;
+		String OneWeekLaterHistoryTip = tipDateFormat.format(new Date(dateHour + weekHour)) + "~" + nowDateTip;
+		String OneMonthLaterHistoryTip = tipDateFormat.format(new Date(dateHour + monthHour)) + "~" + nowDateTip;
+		
+		
+		// op = day
 		modelMap.addAttribute("bf1mD", OneMonthEarlierTime);
 		modelMap.addAttribute("bf1mDtip", OneMonthEarlierTip);
 		modelMap.addAttribute("bf1wD", OneWeekEarlierTime);
@@ -185,6 +195,14 @@ public class HomeController implements ServletContextAware{
 		modelMap.addAttribute("af1wDtip", OneWeekLaterTip);
 		modelMap.addAttribute("af1mD", OneMonthLaterTime);
 		modelMap.addAttribute("af1mDtip", OneMonthLaterTip);
+		
+		// op = history
+		modelMap.addAttribute("bf1mHtip", OneMonthEarlierHistoryTip);
+		modelMap.addAttribute("bf1wHtip", OneWeekEarlierHistoryTip);
+		modelMap.addAttribute("bf1dHtip", OneDayEarlierHistoryTip);
+		modelMap.addAttribute("af1dHtip", OneDayLaterHistoryTip);
+		modelMap.addAttribute("af1wHtip", OneWeekLaterHistoryTip);
+		modelMap.addAttribute("af1mHtip", OneMonthLaterHistoryTip);
 		
 		modelMap.addAttribute("now_s", baseDateTip);
 		modelMap.addAttribute("step", stepStr);
@@ -236,6 +254,7 @@ public class HomeController implements ServletContextAware{
 		
 		Date baseDate = urlDateFormat.parse(baseDateStr);
 		String baseDateTip = tipDateFormat.format(baseDate);
+		String nowDateTip = tipDateFormat.format(nowDate);
         
 		Long dateHour = baseDate.getTime();
 		Long hourTime = 60 * 60 * 1000L;
@@ -245,15 +264,18 @@ public class HomeController implements ServletContextAware{
 		
 		String OneMonthEarlierTime = urlDateFormat.format(new Date(dateHour - monthHour));
 		String OneMonthEarlierTip = tipDateFormat.format(new Date(dateHour - monthHour)) + "~" + baseDateTip;
+		String OneMonthEarlierHistoryTip = tipDateFormat.format(new Date(dateHour - monthHour)) + "~" + nowDateTip;
 		
 		String OneWeekEarlierTime = urlDateFormat.format(new Date(dateHour - weekHour));
 		String OneWeekEarlierTip = tipDateFormat.format(new Date(dateHour - weekHour)) + "~" + baseDateTip;
+		String OneWeekEarlierHistoryTip = tipDateFormat.format(new Date(dateHour - weekHour)) + "~" + nowDateTip;
 		
 		String OneDayEarlierTime = urlDateFormat.format(new Date(dateHour - dayHour));
 		String OneDayEarlierTip = tipDateFormat.format(new Date(dateHour - dayHour)) + "~" + baseDateTip;
+		String OneDayEarlierHistoryTip = tipDateFormat.format(new Date(dateHour - dayHour)) + "~" + nowDateTip;
 		
 		String todayTime = urlDateFormat.format(nowDate);
-		String todayTip = tipDateFormat.format(new Date(nowDate.getTime() -dayHour)) + "~" + tipDateFormat.format(nowDate);
+		String todayTip = tipDateFormat.format(new Date(nowDate.getTime() -dayHour)) + "~" + nowDateTip;
 		
 		/**
 		 * 未来1天，1周，1月
@@ -281,6 +303,12 @@ public class HomeController implements ServletContextAware{
 		String OneWeekLaterTip = baseDateTip + "~" + tipDateFormat.format(new Date(dateHour + weekHour));
 		String OneMonthLaterTip = baseDateTip + "~" + tipDateFormat.format(new Date(dateHour + monthHour));
 		
+		String OneDayLaterHistoryTip = tipDateFormat.format(new Date(dateHour + dayHour)) + "~" + nowDateTip;
+		String OneWeekLaterHistoryTip = tipDateFormat.format(new Date(dateHour + weekHour)) + "~" + nowDateTip;
+		String OneMonthLaterHistoryTip = tipDateFormat.format(new Date(dateHour + monthHour)) + "~" + nowDateTip;
+		
+		
+		// op = day
 		modelMap.addAttribute("bf1mD", OneMonthEarlierTime);
 		modelMap.addAttribute("bf1mDtip", OneMonthEarlierTip);
 		modelMap.addAttribute("bf1wD", OneWeekEarlierTime);
@@ -297,6 +325,14 @@ public class HomeController implements ServletContextAware{
 		modelMap.addAttribute("af1wDtip", OneWeekLaterTip);
 		modelMap.addAttribute("af1mD", OneMonthLaterTime);
 		modelMap.addAttribute("af1mDtip", OneMonthLaterTip);
+		
+		// op = history
+		modelMap.addAttribute("bf1mHtip", OneMonthEarlierHistoryTip);
+		modelMap.addAttribute("bf1wHtip", OneWeekEarlierHistoryTip);
+		modelMap.addAttribute("bf1dHtip", OneDayEarlierHistoryTip);
+		modelMap.addAttribute("af1dHtip", OneDayLaterHistoryTip);
+		modelMap.addAttribute("af1wHtip", OneWeekLaterHistoryTip);
+		modelMap.addAttribute("af1mHtip", OneMonthLaterHistoryTip);
 		
 		modelMap.addAttribute("now_s", baseDateTip);
 		modelMap.addAttribute("step", stepStr);
@@ -552,7 +588,7 @@ public class HomeController implements ServletContextAware{
 		TaskDTO dto = taskResource.retrieve();
 		creator = dto.getCreator();
 		
-		if (StringUtil.isBlank(from) == false && from.equals("monitor")) {
+		if (StringUtil.isNotBlank(from) && from.equals("monitor")) {
 			UserDTO userDTO = globalViewVariable.userMap.get(creator);
 			
 			if (userDTO != null) {

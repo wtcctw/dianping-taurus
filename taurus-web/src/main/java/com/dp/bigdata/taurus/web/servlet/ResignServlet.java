@@ -98,8 +98,8 @@ public class ResignServlet extends HttpServlet {
                     break;
                 default:
                     reusult_str = "执行成功~";
+                    
                     //替换告警人
-
                     String[] tmpUserList = alertUser.split(","); //现有的alert user
                     String[] tmpJobIdList = jobId.split(",");
                     String[] oldCreatorsList = oldcreators.split(","); //之前的用户
@@ -113,6 +113,7 @@ public class ResignServlet extends HttpServlet {
 
                         boolean isHaveAlert = false;
 
+                        //告警人列表中包含作业原creator
                         if (tmpUserId.indexOf(creator) > -1) {
                             isHaveAlert = true;
                         }
@@ -126,6 +127,8 @@ public class ResignServlet extends HttpServlet {
                                 getUserId = cr.wrap(IGetUserId.class);
                                 cr.accept(MediaType.APPLICATION_XML);
                                 int userIdAlert = getUserId.retrieve();
+                                
+                                //告警人列表不包含作业原creator
                                 if (j == tmpUsers.length - 1) {
                                     if (!user.equals(older)) {
                                         newUserId += userIdAlert;
@@ -138,7 +141,7 @@ public class ResignServlet extends HttpServlet {
 
 
                             }
-                        } else {
+                        } else { // isHaveAlert == false , 告警人列表加上作业原creator
                             for (int j = 0; j < tmpUsers.length; j++) {
                                 String user = tmpUsers[j];
 

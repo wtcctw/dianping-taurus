@@ -34,7 +34,7 @@
     <div style="float:right;padding-right: 20px">
         <label>开始：</label><input type="text" id="startTime"/>
         <label>结束：</label><input type="text" id="endTime"/>
-        <a class="btn btn-primary btn-small" href='#' onClick="reflash_view()"><i class="icon-eye-open">查看</i></a>
+        <a class="btn btn-primary btn-small" href='javascript:void(0)' onClick="reflash_view()"><i class="icon-eye-open">查看</i></a>
     </div>
 </div>
 <div class="page-content">
@@ -96,34 +96,34 @@
         <a class="atip"
            href="${rc.contextPath}/mvc/index?step=-720&op=history&date=${bf1mD!}"
            data-toggle="tooltip" data-placement="top"
-           data-original-title="时间区间[${bf1mDtip!}]">[-1m] </a>
+           data-original-title="时间区间[${bf1mHtip!}]">[-1m] </a>
         &nbsp;&nbsp; |&nbsp;&nbsp;
         <a class="atip"
            href="${rc.contextPath}/mvc/index?step=-168&op=history&date=${bf1wD!}"
            data-toggle="tooltip" data-placement="top"
-           data-original-title="时间区间[${bf1wDtip!}]">[-1w] </a>
+           data-original-title="时间区间[${bf1wHtip!}]">[-1w] </a>
         &nbsp;&nbsp; |&nbsp;&nbsp;
         <a class="atip"
            href="${rc.contextPath}/mvc/index?step=-24&op=history&date=${bf1dD!}"
            data-toggle="tooltip" data-placement="top"
-           data-original-title="时间区间[${bf1dDtip!}]">[-1d] </a>
+           data-original-title="时间区间[${bf1dHtip!}]">[-1d] </a>
         &nbsp;&nbsp; |&nbsp;&nbsp;
 
 
         <a class="atip"  
            href="${rc.contextPath}/mvc/index?step=24&op=history&date=${af1dD!}"
            data-toggle="tooltip" data-placement="top"
-           data-original-title="时间区间[${af1dDtip!}]">[+1d] </a>
+           data-original-title="时间区间[${af1dHtip!}]">[+1d] </a>
         &nbsp;&nbsp; |&nbsp;&nbsp;
         <a class="atip" 
            href="${rc.contextPath}/mvc/index?step=168&op=history&date=${af1wD!}"
            data-toggle="tooltip" data-placement="top"
-           data-original-title="时间区间[${af1wDtip!}]">[+1w] </a>
+           data-original-title="时间区间[${af1wHtip!}]">[+1w] </a>
         &nbsp;&nbsp; |&nbsp;&nbsp;
         <a class="atip"  
            href="${rc.contextPath}/mvc/index?step=720&op=history&date=${af1mD!}"
            data-toggle="tooltip" data-placement="top"
-           data-original-title="时间区间[${af1mDtip!}]">[+1m] </a>
+           data-original-title="时间区间[${af1mHtip!}]">[+1m] </a>
     </div>
 </div>
 

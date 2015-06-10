@@ -214,7 +214,7 @@
 
             <div class="widget-body">
                 <div class="widget-main" id="userwidget">
-			<#if userGroup != "admin">
+			<#if userGroup != "admin"> <#-- TODO 普通成员能加入最多3个分组，查看交接的组和成员 -->
                     组名：${userGroup!} 
                     <br>
                     <table class="table table-striped table-bordered table-hover reginuser" >
@@ -235,7 +235,7 @@
                     		</#if>
                             </#list>
 			            </#if>
-            <#else>
+            <#else> <#-- 管理员可以交接任务给所有的分组和成员 -->
                         <table class="table table-striped table-bordered table-hover reginuser" >
                             <tr>
                                 <th align="left" >成员</th>
