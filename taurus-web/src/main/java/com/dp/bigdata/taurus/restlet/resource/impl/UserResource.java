@@ -109,7 +109,7 @@ public class UserResource extends ServerResource implements IUserResource {
             }
 
 		}
-		// TODO 用户多分组保存用户表，分组表，用户分组映射表
+		// TODO 用户多分组保存用户表，分组表，用户分组映射表 PS:貌似已经弃用了，查不到用到UserResource的地方
 		
 		userMapper.updateByPrimaryKey(user.getUser());
 		if(groupName !=null && !"".equals(groupName)){

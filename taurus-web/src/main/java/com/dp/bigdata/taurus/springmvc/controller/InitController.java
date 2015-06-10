@@ -1,17 +1,48 @@
 package com.dp.bigdata.taurus.springmvc.controller;
 
-//import javax.annotation.PostConstruct;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-//import org.springframework.stereotype.Controller;
-//
-//@Controller
-public class InitController {
+import javax.annotation.PostConstruct;
+import javax.servlet.ServletContext;
 
-//	private Logger log = LoggerFactory.getLogger(this.getClass());
-//	@PostConstruct
-//	public void init() throws Exception{
-//		log.info("----------- into spring mvc init ------------");
-//		
-//	}
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.context.ServletContextAware;
+
+import com.dianping.cat.Cat;
+import com.dianping.lion.EnvZooKeeperConfig;
+import com.dianping.lion.client.ConfigCache;
+import com.dianping.lion.client.LionException;
+import com.dp.bigdata.taurus.web.utils.ReFlashHostLoadTaskTimer;
+
+@Controller
+public class InitController implements ServletContextAware {
+
+	private Logger log = LoggerFactory.getLogger(this.getClass());
+	
+	private ServletContext servletContext;
+    
+	public static String RESTLET_URL_BASE = null;
+	
+    @Override
+	public void setServletContext(ServletContext sc) {
+		this.servletContext=sc;  
+	}
+	
+	
+	@PostConstruct
+	public void init() {
+		log.info("----------- into spring mvc init ------------");
+		
+		ReFlashHostLoadTaskTimer.getReFlashHostLoadManager().start();
+		
+		try {
+            RESTLET_URL_BASE = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.restlet.url");
+        } catch (LionException e) {
+            RESTLET_URL_BASE = servletContext.getInitParameter("RESTLET_SERVER");
+            Cat.logError("LionException",e);
+        } catch (Exception e) {
+            Cat.logError("LionException", e);
+        }
+	}
+	
 }

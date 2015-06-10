@@ -51,9 +51,14 @@ public class UsersResource extends ServerResource implements IUsersResource {
             	userDto.setGroup("");
             } else {
             	//TODO 得到第一个分组的ID，用户多分组接入的基础，用for循环取分组逗号分隔
-            	int groupId = userGroups.get(0).getGroupid();
-            	UserGroup group = userGroupMapper.selectByPrimaryKey(groupId);
-                userDto.setGroup(group.getGroupname());
+            	StringBuffer userGroupNames = new StringBuffer();
+            	for(UserGroupMapping userGroup : userGroups){
+            		int groupId = userGroup.getGroupid();
+            		UserGroup group = userGroupMapper.selectByPrimaryKey(groupId);
+            		userGroupNames.append(group.getGroupname() + ",");
+            	}
+            	userGroupNames.deleteCharAt(userGroupNames.length()-1);
+            	userDto.setGroup(userGroupNames.toString());
             }
         }
         

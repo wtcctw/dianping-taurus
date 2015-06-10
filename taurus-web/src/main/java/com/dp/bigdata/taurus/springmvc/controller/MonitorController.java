@@ -43,36 +43,12 @@ import com.google.gson.JsonParser;
 
 @Controller
 @RequestMapping("/monitor")
-public class MonitorController implements ServletContextAware {
+public class MonitorController {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 	
-	private String RESTLET_URL_BASE;
-
     private static ArrayList<AttemptDTO> attempts;
     
-    private ServletContext servletContext;
-    
-    @Override
-	public void setServletContext(ServletContext sc) {
-		this.servletContext=sc;  
-	}
-    
-    @PostConstruct
-	public void init() throws Exception{
-		log.info("----------- into MonitorController init ------------");
-		
-		ReFlashHostLoadTaskTimer.getReFlashHostLoadManager().start();
-		
-		try {
-            RESTLET_URL_BASE = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.restlet.url");
-        } catch (LionException e) {
-            RESTLET_URL_BASE = servletContext.getInitParameter("RESTLET_SERVER");
-            Cat.logError("LionException",e);
-        } catch (Exception e) {
-            Cat.logError("LionException", e);
-        }
-	}
 
     @RequestMapping(value = "/jobdetail", method = RequestMethod.POST)
 	public void jobdetail(ModelMap modelMap, 
@@ -81,7 +57,7 @@ public class MonitorController implements ServletContextAware {
     {
 		log.info("--------------init the jobdetail------------");
     	
-    	ClientResource cr = new ClientResource(RESTLET_URL_BASE + "host");
+    	ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "host");
         IHostsResource hostsResource = cr.wrap(IHostsResource.class);
         cr.accept(MediaType.APPLICATION_XML);
         ArrayList<HostDTO> hosts = hostsResource.retrieve();
@@ -90,7 +66,7 @@ public class MonitorController implements ServletContextAware {
         String start = request.getParameter("start");
         String end = request.getParameter("end");
 
-        cr = new ClientResource(RESTLET_URL_BASE + "jobdetail/" + "/" + start + "/" + end);
+        cr = new ClientResource(InitController.RESTLET_URL_BASE + "jobdetail/" + "/" + start + "/" + end);
         IUserTasks userTasks = cr.wrap(IUserTasks.class);
         cr.accept(MediaType.APPLICATION_XML);
         String jsonString = userTasks.retrieve();
@@ -113,7 +89,7 @@ public class MonitorController implements ServletContextAware {
     {
 		log.info("--------------init the reflash_attempts------------");
     	
-    	ClientResource cr = new ClientResource(RESTLET_URL_BASE + "host");
+    	ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "host");
         IHostsResource hostsResource = cr.wrap(IHostsResource.class);
         cr.accept(MediaType.APPLICATION_XML);
         ArrayList<HostDTO> hosts = hostsResource.retrieve();
@@ -123,7 +99,7 @@ public class MonitorController implements ServletContextAware {
         String taskTime = start;
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        String url = RESTLET_URL_BASE + "getattemptsbystatus/";
+        String url = InitController.RESTLET_URL_BASE + "getattemptsbystatus/";
 
         cr = new ClientResource(url + taskTime);
         IGetAttemptsByStatus resource = cr.wrap(IGetAttemptsByStatus.class);
@@ -140,7 +116,7 @@ public class MonitorController implements ServletContextAware {
     {
 		log.info("--------------init the runningtasks------------");
     	
-    	ClientResource cr = new ClientResource(RESTLET_URL_BASE + "host");
+    	ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "host");
         IHostsResource hostsResource = cr.wrap(IHostsResource.class);
         cr.accept(MediaType.APPLICATION_XML);
         ArrayList<HostDTO> hosts = hostsResource.retrieve();
@@ -152,7 +128,7 @@ public class MonitorController implements ServletContextAware {
             hourTime = Long.parseLong(hourTimeStr);
         }
 
-        ClientResource crTask = new ClientResource(RESTLET_URL_BASE + "gettasks");
+        ClientResource crTask = new ClientResource(InitController.RESTLET_URL_BASE + "gettasks");
         IGetTasks taskResource = crTask.wrap(IGetTasks.class);
         ArrayList<Task> tasks = taskResource.retrieve();
         
@@ -171,14 +147,14 @@ public class MonitorController implements ServletContextAware {
     {
 		log.info("--------------init the submitfail------------");
     	
-    	ClientResource cr = new ClientResource(RESTLET_URL_BASE + "host");
+    	ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "host");
         IHostsResource hostsResource = cr.wrap(IHostsResource.class);
         cr.accept(MediaType.APPLICATION_XML);
         ArrayList<HostDTO> hosts = hostsResource.retrieve();
         ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
         
         if (tasks == null) {
-            ClientResource crTask = new ClientResource(RESTLET_URL_BASE + "gettasks");
+            ClientResource crTask = new ClientResource(InitController.RESTLET_URL_BASE + "gettasks");
             IGetTasks taskResource = crTask.wrap(IGetTasks.class);
             tasks = taskResource.retrieve();
             ReFlashHostLoadTask.allTasks = tasks;
@@ -199,14 +175,14 @@ public class MonitorController implements ServletContextAware {
     {
 		log.info("--------------init the dependencypass------------");
     	
-    	ClientResource cr = new ClientResource(RESTLET_URL_BASE + "host");
+    	ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "host");
         IHostsResource hostsResource = cr.wrap(IHostsResource.class);
         cr.accept(MediaType.APPLICATION_XML);
         ArrayList<HostDTO> hosts = hostsResource.retrieve();
         ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
         
         if (tasks == null) {
-            ClientResource crTask = new ClientResource(RESTLET_URL_BASE + "gettasks");
+            ClientResource crTask = new ClientResource(InitController.RESTLET_URL_BASE + "gettasks");
             IGetTasks taskResource = crTask.wrap(IGetTasks.class);
             tasks = taskResource.retrieve();
             ReFlashHostLoadTask.allTasks = tasks;
@@ -227,14 +203,14 @@ public class MonitorController implements ServletContextAware {
     {
 		log.info("--------------init the failedtasks------------");
     	
-    	ClientResource cr = new ClientResource(RESTLET_URL_BASE + "host");
+    	ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "host");
         IHostsResource hostsResource = cr.wrap(IHostsResource.class);
         cr.accept(MediaType.APPLICATION_XML);
         ArrayList<HostDTO> hosts = hostsResource.retrieve();
         ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
         
         if (tasks == null) {
-            ClientResource crTask = new ClientResource(RESTLET_URL_BASE + "gettasks");
+            ClientResource crTask = new ClientResource(InitController.RESTLET_URL_BASE + "gettasks");
             IGetTasks taskResource = crTask.wrap(IGetTasks.class);
             tasks = taskResource.retrieve();
             ReFlashHostLoadTask.allTasks = tasks;
@@ -255,14 +231,14 @@ public class MonitorController implements ServletContextAware {
     {
 		log.info("--------------init the dependencytimeout------------");
     	
-    	ClientResource cr = new ClientResource(RESTLET_URL_BASE + "host");
+    	ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "host");
         IHostsResource hostsResource = cr.wrap(IHostsResource.class);
         cr.accept(MediaType.APPLICATION_XML);
         ArrayList<HostDTO> hosts = hostsResource.retrieve();
         ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
         
         if (tasks == null) {
-            ClientResource crTask = new ClientResource(RESTLET_URL_BASE + "gettasks");
+            ClientResource crTask = new ClientResource(InitController.RESTLET_URL_BASE + "gettasks");
             IGetTasks taskResource = crTask.wrap(IGetTasks.class);
             tasks = taskResource.retrieve();
             ReFlashHostLoadTask.allTasks = tasks;
@@ -283,14 +259,14 @@ public class MonitorController implements ServletContextAware {
     {
 		log.info("--------------init the timeout------------");
     	
-    	ClientResource cr = new ClientResource(RESTLET_URL_BASE + "host");
+    	ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "host");
         IHostsResource hostsResource = cr.wrap(IHostsResource.class);
         cr.accept(MediaType.APPLICATION_XML);
         ArrayList<HostDTO> hosts = hostsResource.retrieve();
         ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
         
         if (tasks == null) {
-            ClientResource crTask = new ClientResource(RESTLET_URL_BASE + "gettasks");
+            ClientResource crTask = new ClientResource(InitController.RESTLET_URL_BASE + "gettasks");
             IGetTasks taskResource = crTask.wrap(IGetTasks.class);
             tasks = taskResource.retrieve();
             ReFlashHostLoadTask.allTasks = tasks;
@@ -334,7 +310,7 @@ public class MonitorController implements ServletContextAware {
     	 * @return
     	 */
     	public String getLastTaskStatus(String taskID){
-    		String status_api = RESTLET_URL_BASE + "getlaststatus";
+    		String status_api = InitController.RESTLET_URL_BASE + "getlaststatus";
             String status = null;
             
             try {
