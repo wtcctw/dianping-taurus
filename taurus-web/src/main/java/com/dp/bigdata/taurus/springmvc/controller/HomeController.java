@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.context.ServletContextAware;
 
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
@@ -46,16 +44,11 @@ import com.dp.bigdata.taurus.restlet.shared.StatusDTO;
 import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
 import com.dp.bigdata.taurus.restlet.shared.UserDTO;
 import com.dp.bigdata.taurus.restlet.shared.UserGroupDTO;
-import com.dp.bigdata.taurus.web.servlet.LoginServlet;
 
 @Controller
-public class HomeController implements ServletContextAware{
+public class HomeController {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass());
-	
-	private ServletContext servletContext;
-	
-	public void setServletContext(ServletContext sc) { this.servletContext=sc; }
     
 	/**
 	 * 重构signin.jsp
@@ -1127,15 +1120,10 @@ public class HomeController implements ServletContextAware{
 	 */
 	private void commonnav(HttpServletRequest request,GlobalViewVariable globalViewVariable){
 		
-		globalViewVariable.currentUser = (String) request.getSession().getAttribute(LoginServlet.USER_NAME);
+		globalViewVariable.currentUser = (String) request.getSession().getAttribute(InitController.USER_NAME);
 		globalViewVariable.userId = -1;
 		
-		try {
-			globalViewVariable.host = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.restlet.url");
-		} catch (LionException e) {
-			globalViewVariable.host = servletContext.getInitParameter("RESTLET_SERVER");
-		    e.printStackTrace();
-		}
+		globalViewVariable.host = InitController.RESTLET_URL_BASE;
 		
 		globalViewVariable.isAdmin = false;
 		globalViewVariable.cr = new ClientResource(globalViewVariable.host + "user");

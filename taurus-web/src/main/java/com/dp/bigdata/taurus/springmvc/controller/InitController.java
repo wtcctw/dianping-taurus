@@ -23,6 +23,14 @@ public class InitController implements ServletContextAware {
     
 	public static String RESTLET_URL_BASE = null;
 	
+	public static String USER_API = null;
+	
+	public static final String USER_NAME = "taurus-user";
+
+	public static final String USER_GROUP = "taurus-group";
+
+	public static final String USER_POWER = "taurus-user-power";
+	
     @Override
 	public void setServletContext(ServletContext sc) {
 		this.servletContext=sc;  
@@ -39,10 +47,12 @@ public class InitController implements ServletContextAware {
             RESTLET_URL_BASE = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.restlet.url");
         } catch (LionException e) {
             RESTLET_URL_BASE = servletContext.getInitParameter("RESTLET_SERVER");
-            Cat.logError("LionException",e);
+            Cat.logError("LionException", e);
         } catch (Exception e) {
             Cat.logError("LionException", e);
         }
+		
+		USER_API = RESTLET_URL_BASE + "user";
 	}
 	
 }

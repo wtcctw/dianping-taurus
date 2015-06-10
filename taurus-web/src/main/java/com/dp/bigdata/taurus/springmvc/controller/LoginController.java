@@ -36,7 +36,7 @@ import com.dp.bigdata.taurus.restlet.shared.UserDTO;
 
 @Controller
 @RequestMapping("/rest")
-public class LoginController implements ServletContextAware {
+public class LoginController {
 	
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 	
@@ -46,32 +46,9 @@ public class LoginController implements ServletContextAware {
 
 	public static final String USER_POWER = "taurus-user-power";
 	
-    public static  String COOKIE_USER = "";
+    public static String COOKIE_USER = "";
 
-	private String RESTLET_URL_BASE;
-
-	private String USER_API;
-
-	private ServletContext servletContext;
     
-    @Override
-	public void setServletContext(ServletContext sc) {
-		this.servletContext=sc;  
-	}
-    
-	@PostConstruct
-	public void init() throws Exception{
-		log.info("----------- into LoginController init ------------");
-		
-		try {
-            RESTLET_URL_BASE = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.restlet.url");
-        } catch (LionException e) {
-            RESTLET_URL_BASE = servletContext.getInitParameter("RESTLET_SERVER");
-            e.printStackTrace();
-        }
-		
-		USER_API = RESTLET_URL_BASE + "user";
-	}
 	
 	/**
 	 * 登陆sso
@@ -110,7 +87,7 @@ public class LoginController implements ServletContextAware {
 		
 		//理论上这个if条件在sso登录条件下执行不了了，请教一下原先是在什么场景下会执行？
 		if (user == null) {
-			ClientResource cr = new ClientResource(String.format("%s/%s", USER_API, userName));
+			ClientResource cr = new ClientResource(String.format("%s/%s", InitController.USER_API, userName));
 			IUserResource resource = cr.wrap(IUserResource.class);
 			boolean hasRegister = resource.hasRegister();
 			if (hasRegister) {
@@ -149,7 +126,7 @@ public class LoginController implements ServletContextAware {
             cookie.addCookie(response, cookieInfo);
             System.out.println("login success!");
 
-			ClientResource cr = new ClientResource(USER_API);
+			ClientResource cr = new ClientResource(InitController.USER_API);
 			IUsersResource resource = cr.wrap(IUsersResource.class);
 			UserDTO dto = new UserDTO();
 			dto.setName(userName);
@@ -226,7 +203,7 @@ public class LoginController implements ServletContextAware {
 	 * @return
 	 */
 	private boolean isInfoCompleted(String userName){
-		ClientResource cr = new ClientResource(RESTLET_URL_BASE + "user");
+		ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "user");
   	    IUsersResource userResource = cr.wrap(IUsersResource.class);
   	    cr.accept(MediaType.APPLICATION_XML);
   	    ArrayList<UserDTO> users = userResource.retrieve();

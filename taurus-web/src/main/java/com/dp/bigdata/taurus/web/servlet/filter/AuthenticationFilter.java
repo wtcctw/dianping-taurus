@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
 
 import jodd.util.StringUtil;
 
-import com.dp.bigdata.taurus.web.servlet.LoginServlet;
+import com.dp.bigdata.taurus.springmvc.controller.InitController;
 
 /**
  * AuthenticationFilter
@@ -67,7 +67,7 @@ public class AuthenticationFilter implements Filter {
 		}
 		
 		HttpSession session = req.getSession(true);
-		Object currentUser = session.getAttribute(LoginServlet.USER_NAME);
+		Object currentUser = session.getAttribute(InitController.USER_NAME);
 		
 		//未登录
 		if (currentUser == null) {
