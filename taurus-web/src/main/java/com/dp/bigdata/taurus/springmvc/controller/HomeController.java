@@ -885,22 +885,26 @@ public class HomeController {
 		Map<String, String> map = new HashMap<String, String>();
 		
 		for (UserDTO user : globalViewVariable.users) {
-		    String group = user.getGroup();
-		    
-		    if (StringUtil.isBlank(group)) { group = "未分组"; }
-		    
-		    if (map.containsKey(group)) {
-		    	//已有分组成员，加入分组列表，用逗号加空格分隔
-		        map.put(group, map.get(group) + ", " + user.getName());
-		    } else {
-		    	//创建新分组
-		        map.put(group, user.getName());
-		    }
-		    
 			//找到当前用户
 		    if (user.getName().equals(globalViewVariable.currentUser)) {
 		    	modelMap.addAttribute("user", user);
 		    }
+		    
+		    //TODO 多分组重新改写(完成)
+		    String groupNamesWithComma = user.getGroup();
+		    if (StringUtil.isBlank(groupNamesWithComma)) { groupNamesWithComma = "未分组"; }
+		    
+		    String[] groupNames = groupNamesWithComma.split(",");
+		    for(String groupName : groupNames){
+		    	if (map.containsKey(groupName)) {
+			    	//已有分组成员，加入分组列表，用逗号加空格分隔
+			        map.put(groupName, map.get(groupName) + ", " + user.getName());
+			    } else {
+			    	//创建新分组
+			        map.put(groupName, user.getName());
+			    }
+		    }
+		    
 		}
 		
 		modelMap.addAttribute("map", map);

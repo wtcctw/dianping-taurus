@@ -5,8 +5,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import jodd.util.StringUtil;
+
 import com.dp.bigdata.taurus.restlet.resource.IUserResource;
 import com.dp.bigdata.taurus.restlet.shared.UserDTO;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.restlet.data.Form;
@@ -109,12 +112,15 @@ public class UserResource extends ServerResource implements IUserResource {
             }
 
 		}
-		// TODO 用户多分组保存用户表，分组表，用户分组映射表
 		
 		userMapper.updateByPrimaryKey(user.getUser());
-		if(groupName !=null && !"".equals(groupName)){
-			int groupID = addGroup(groupName);
-			addUserGroupMapping(groupID,user.getId());
+		if(StringUtil.isNotBlank(groupName)){
+			// TODO 用户多分组保存用户表，分组表，用户分组映射表(完成)
+			String[] userGroups = groupName.split(",");
+			for(String userGroup : userGroups){
+				int groupID = addGroup(userGroup);
+				addUserGroupMapping(groupID,user.getId());
+			}
 		}
 	}
 	
