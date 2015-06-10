@@ -5,8 +5,6 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
-import javax.annotation.PostConstruct;
-import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,7 +19,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.util.CookieGenerator;
 
 import sun.misc.BASE64Encoder;
@@ -40,16 +37,8 @@ public class LoginController {
 	
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 	
-	public static final String USER_NAME = "taurus-user";
-
-	public static final String USER_GROUP = "taurus-group";
-
-	public static final String USER_POWER = "taurus-user-power";
-	
     public static String COOKIE_USER = "";
 
-    
-	
 	/**
 	 * 登陆sso
 	 * @param modelMap
@@ -92,7 +81,7 @@ public class LoginController {
 			boolean hasRegister = resource.hasRegister();
 			if (hasRegister) {
 				HttpSession session = request.getSession();
-				session.setAttribute(USER_NAME, userName);
+				session.setAttribute(InitController.USER_NAME, userName);
                 CookieGenerator cookie = new CookieGenerator();
                 cookie.setCookieDomain(".taurus.dp");//这个也要设置才能实现上面的两个网站共用
                 cookie.setCookieMaxAge(1 * 24 * 60 * 60);
@@ -114,7 +103,7 @@ public class LoginController {
 		//sso登录成功之后
 		} else {
 			HttpSession session = request.getSession();
-			session.setAttribute(USER_NAME, userName);
+			session.setAttribute(InitController.USER_NAME, userName);
             CookieGenerator cookie = new CookieGenerator();
             cookie.setCookieDomain(".taurus.dp");//这个也要设置才能实现上面的两个网站共用
             cookie.setCookieMaxAge(1 * 24 * 60 * 60);
