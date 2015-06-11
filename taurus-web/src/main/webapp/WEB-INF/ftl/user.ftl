@@ -104,12 +104,13 @@
                                                 </div>
                                             </div>
                                             <div class="control-group">
-                                                <label class="control-label" for="groupName">组名</label>
+                                                <label class="control-label" for="groupName">组名(逗号分隔)</label>
 
                                                 <div class="controls">
                                                     <input type="text" class="input-large field" id="groupName"
                                                            name="groupName"
-                                                           value="${user.group!}">
+                                                           value="${user.group!}"
+                                                           placeholder="Max 3 and split with ,">
                                                 </div>
                                             </div>
                                             <div class="control-group">

@@ -1126,7 +1126,7 @@ public class HomeController {
 	 * @param modelMap
 	 * @param request
 	 */
-	private void commonnav(HttpServletRequest request,GlobalViewVariable globalViewVariable){
+	public void commonnav(HttpServletRequest request,GlobalViewVariable globalViewVariable){
 		
 		globalViewVariable.currentUser = (String) request.getSession().getAttribute(InitController.USER_NAME);
 		globalViewVariable.userId = -1;
