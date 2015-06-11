@@ -5,18 +5,18 @@ import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 import org.restlet.resource.Put;
 
-import com.dp.bigdata.taurus.restlet.shared.UserDTO;
+import com.dp.bigdata.taurus.restlet.shared.UserGroupDTO;
 
 public interface IUserGroupResource {
 
 	@Post
-	public boolean create(UserDTO userDTO);  
+	public boolean create(UserGroupDTO userGroupDTO);  
 	
 	@Get
-	public UserDTO read(int id);
+	public UserGroupDTO read(int id);
 
 	@Put
-	public boolean update(UserDTO userDTO);
+	public boolean update(UserGroupDTO userGroupDTO);
 	
 	@Delete
 	public boolean deleteById();
