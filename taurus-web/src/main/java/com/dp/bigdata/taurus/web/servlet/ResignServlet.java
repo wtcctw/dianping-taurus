@@ -7,7 +7,9 @@ import com.dianping.lion.client.LionException;
 import com.dp.bigdata.taurus.restlet.resource.IClearDependencyPassTask;
 import com.dp.bigdata.taurus.restlet.resource.IGetUserId;
 import com.dp.bigdata.taurus.restlet.resource.IUpdateAlertRule;
+import com.dp.bigdata.taurus.restlet.resource.IUpdateCreator;
 import com.dp.bigdata.taurus.web.utils.ReFlashHostLoadTaskTimer;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.restlet.data.MediaType;
@@ -20,6 +22,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -33,7 +36,7 @@ public class ResignServlet extends HttpServlet {
 
     private static final int SERVICE_EXCEPTION = -1;
     private static final int TASKID_IS_NOT_FOUND = -2;
-    private static final int STATUS_IS_NOT_RIGHT = -3;
+    private static final int CREATOR_IS_NOT_RIGHT = -3;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -75,9 +78,12 @@ public class ResignServlet extends HttpServlet {
 
 
             cr = new ClientResource(RESTLET_URL_BASE + "updatecreator/" + creator.trim() + "/" + taskName.trim() + "/resign");
-            IClearDependencyPassTask clearTasks = cr.wrap(IClearDependencyPassTask.class);
+            IUpdateCreator updateCreator = cr.wrap(IUpdateCreator.class);
             cr.accept(MediaType.APPLICATION_XML);
-            int result = clearTasks.retrieve();
+            int result = updateCreator.retrieve();
+            /*IClearDependencyPassTask clearTasks = cr.wrap(IClearDependencyPassTask.class);
+            cr.accept(MediaType.APPLICATION_XML);
+            int result = clearTasks.retrieve();*/
 
 
             cr = new ClientResource(RESTLET_URL_BASE + "getuserid/" + creator.trim());
@@ -93,7 +99,7 @@ public class ResignServlet extends HttpServlet {
                 case TASKID_IS_NOT_FOUND:
                     reusult_str = "taskName 不存在!";
                     break;
-                case STATUS_IS_NOT_RIGHT:
+                case CREATOR_IS_NOT_RIGHT:
                     reusult_str = "creator 错误!";
                     break;
                 default:

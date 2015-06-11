@@ -50,8 +50,8 @@ public class UsersResource extends ServerResource implements IUsersResource {
             if(userGroups.size() == 0){
             	userDto.setGroup("");
             } else {
-            	//TODO 得到第一个分组的ID，用户多分组接入的基础，用for循环取分组逗号分隔（完成）
-            	StringBuffer userGroupNames = new StringBuffer();
+            	//TODO 用户多分组接入的基础，用for循环取分组逗号分隔（完成）
+            	StringBuilder userGroupNames = new StringBuilder();
             	for(UserGroupMapping userGroup : userGroups){
             		int groupId = userGroup.getGroupid();
             		UserGroup group = userGroupMapper.selectByPrimaryKey(groupId);

@@ -935,25 +935,29 @@ public class HomeController {
 		globalViewVariable.cr = new ClientResource(globalViewVariable.host + "group");
 		IUserGroupsResource groupResource = globalViewVariable.cr.wrap(IUserGroupsResource.class);
 		globalViewVariable.cr.accept(MediaType.APPLICATION_XML);
-		ArrayList<UserGroupDTO> groups = groupResource.retrieve();
 		
 		Map<String, String> map = new HashMap<String, String>();
 		
 		for (UserDTO user : globalViewVariable.users) {
-			
-			String group = user.getGroup();
-			
-			if (StringUtil.isBlank(group)) { group = "未分组"; }
-			
-			if (map.containsKey(group)) {
-			    map.put(group, map.get(group) + ", " + user.getName());
-			} else {
-			    map.put(group, user.getName());
-			}
-			
-			if (user.getName().equals(globalViewVariable.currentUser)) {
-				modelMap.addAttribute("user", user);
-			}
+			//找到当前用户
+		    if (user.getName().equals(globalViewVariable.currentUser)) {
+		    	modelMap.addAttribute("user", user);
+		    }
+		    
+		    //TODO 多分组重新改写(完成)
+		    String groupNamesWithComma = user.getGroup();
+		    if (StringUtil.isBlank(groupNamesWithComma)) { groupNamesWithComma = "未分组"; }
+		    
+		    String[] groupNames = groupNamesWithComma.split(",");
+		    for(String groupName : groupNames){
+		    	if (map.containsKey(groupName)) {
+			    	//已有分组成员，加入分组列表，用逗号加空格分隔
+			        map.put(groupName, map.get(groupName) + ", " + user.getName());
+			    } else {
+			    	//创建新分组
+			        map.put(groupName, user.getName());
+			    }
+		    }
 		} 
 		modelMap.addAttribute("map", map);
 		
@@ -1141,12 +1145,17 @@ public class HomeController {
 			if (user.getName().equals(globalViewVariable.currentUser)) {
 				
 				globalViewVariable.userId = user.getId();
-				
-				if ("admin".equals(user.getGroup()) || "monitor".equals(user.getGroup()) || "OP".equals(user.getGroup())) {
-					globalViewVariable.isAdmin = true;
-				} else {
-					globalViewVariable.isAdmin = false;
+				//TODO support multi group(完成)
+				String[] userGroups = user.getGroup().split(",");
+				for(String userGroup : userGroups){
+					if ("admin".equals(user.getGroup())) {
+						globalViewVariable.isAdmin = true;
+						break;
+					} else {
+						globalViewVariable.isAdmin = false;
+					}
 				}
+				
 
 			}
 		}

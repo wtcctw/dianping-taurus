@@ -214,42 +214,42 @@
 
             <div class="widget-body">
                 <div class="widget-main" id="userwidget">
-			<#if userGroup != "admin"> <#-- TODO 普通成员能加入最多3个分组，查看交接的组和成员 -->
-                    组名：${userGroup!} 
-                    <br>
+			<#if userGroup?contains("alpha") == false> <#-- TODO 普通组成员能加入最多3个分组，查看交接的组和成员(完成) -->
                     <table class="table table-striped table-bordered table-hover reginuser" >
                         <tr>
                             <th align="left">成员</th>
+                            <th align="left">组名</th>
                         </tr>
 						<#if map?exists>
 			                <#list map?keys as group>
-			                <#if group == userGroup>
+			                <#if userGroup?contains(group)><#-- TODO 改为userGroup包含group的子串(完成) -->
                                 <#list hHelper.getGroupUserList(map[group]) as creator>
 			                        <tr>
 			                            <td align="left">
 			                                <input type="radio" value="${creator!}" name="creator">${creator!}
 			                            </td>
+                                        <td align="left">${group!}</td>
 			                        </tr>
                     			</#list>
                     			<#break>
                     		</#if>
                             </#list>
 			            </#if>
-            <#else> <#-- 管理员可以交接任务给所有的分组和成员 -->
+            <#else> <#-- admin组可以交接任务给所有的分组和成员 -->
                         <table class="table table-striped table-bordered table-hover reginuser" >
                             <tr>
-                                <th align="left" >成员</th>
+                                <th align="left">成员</th>
                                 <th align="left">组名</th>
                             </tr>
 						<#if map?exists>
 			                <#list map?keys as group>
                                 <#list hHelper.getGroupUserList(map[group]) as creator>
-			                            <tr>
-			                                <td align="left">
-			                                    <input type="radio" value="${creator!}" name="creator">${creator!}
-			                                </td>
-			                                <td align="left">${group!}</td>
-			                            </tr>
+		                            <tr>
+		                                <td align="left">
+		                                    <input type="radio" value="${creator!}" name="creator">${creator!}
+		                                </td>
+		                                <td align="left">${group!}</td>
+		                            </tr>
                                 </#list>
                             </#list>
 			            </#if>

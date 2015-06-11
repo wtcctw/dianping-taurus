@@ -1,11 +1,14 @@
 package com.dp.bigdata.taurus.restlet.resource.impl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.dp.bigdata.taurus.restlet.resource.ITasksResource;
 import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
 import com.dp.bigdata.taurus.restlet.utils.*;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -136,10 +139,10 @@ public class TasksResource extends ServerResource implements ITasksResource {
 		} else if (StringUtils.isNotBlank(appName)) {
 			taskExample.createCriteria().andAppnameEqualTo(appName).andStatusEqualTo(TaskStatus.RUNNING);
 			taskExample.or().andAppnameEqualTo(appName).andStatusEqualTo(TaskStatus.SUSPEND);
-		} else if (!isAdmin && StringUtils.isNotBlank(creatorName)) {
+		} else if (!isAdmin && StringUtils.isNotBlank(creatorName)) {//普通分组的查找所在多个分组[去重后同组人]的task
 			taskExample.or().andCreatorIn(sameGroupUsers).andStatusEqualTo(TaskStatus.RUNNING);
 			taskExample.or().andCreatorIn(sameGroupUsers).andStatusEqualTo(TaskStatus.SUSPEND);
-		} else {
+		} else {// admin 分组的查找所有的task
 			taskExample.or().andStatusEqualTo(TaskStatus.RUNNING);
 			taskExample.or().andStatusEqualTo(TaskStatus.SUSPEND);
 		}
@@ -167,6 +170,7 @@ public class TasksResource extends ServerResource implements ITasksResource {
 						UserExample userExample = new UserExample();
 						userExample.or().andIdEqualTo(Integer.parseInt(user));
 						List<User> userList = userMapper.selectByExample(userExample);
+						//检查每一个报警用户还存在
 						if (userList != null && userList.size() == 1) {
 							userName.append(userList.get(0).getName());
 						}
@@ -185,6 +189,7 @@ public class TasksResource extends ServerResource implements ITasksResource {
 						UserGroupExample groupExample = new UserGroupExample();
 						groupExample.or().andIdEqualTo(Integer.parseInt(group));
 						List<UserGroup> userGroups = userGroupMapper.selectByExample(groupExample);
+						//检查每一个报警分组还存在
 						if (userGroups != null && userGroups.size() == 1) {
 							groupName.append(userGroups.get(0).getGroupname());
 						}
@@ -200,21 +205,29 @@ public class TasksResource extends ServerResource implements ITasksResource {
 		return (ArrayList<TaskDTO>) result;
 	}
 
+	//TODO 找多个分组的同组用户并且打算利用HashSet去重(完成)
 	private List<String> getSameGroupUsers(int userID, String userName) {
 		List<String> userNames = new ArrayList<String>();
 		userNames.add(userName);
 		UserGroupMappingExample example = new UserGroupMappingExample();
 		example.or().andUseridEqualTo(userID);
 		List<UserGroupMapping> queryMappings = userGroupMappingMapper.selectByExample(example);
+		
 		if (queryMappings.size() > 0) {
-			int groupID = queryMappings.get(0).getGroupid();
-			example = new UserGroupMappingExample();
-			example.or().andGroupidEqualTo(groupID);
-			queryMappings = userGroupMappingMapper.selectByExample(example);
+			Set<Integer> userIDSet = new HashSet<Integer>();
 			List<Integer> userIDs = new ArrayList<Integer>();
-			for (UserGroupMapping mapping : queryMappings) {
-				userIDs.add(mapping.getUserid());
+			for (UserGroupMapping queryMapping : queryMappings){
+				int groupID = queryMapping.getGroupid();
+				example = new UserGroupMappingExample();
+				example.or().andGroupidEqualTo(groupID);
+				List<UserGroupMapping> ugMappings = userGroupMappingMapper.selectByExample(example);
+				for (UserGroupMapping mapping : ugMappings) {
+					if(userIDSet.add(mapping.getUserid())){
+						userIDs.add(mapping.getUserid());
+					}
+				}
 			}
+			
 			UserExample userExample = new UserExample();
 			userExample.or().andIdIn(userIDs);
 			List<User> users = userMapper.selectByExample(userExample);
