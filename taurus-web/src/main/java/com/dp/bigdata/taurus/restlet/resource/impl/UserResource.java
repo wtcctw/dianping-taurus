@@ -1,5 +1,7 @@
 package com.dp.bigdata.taurus.restlet.resource.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +56,8 @@ public class UserResource extends ServerResource implements IUserResource {
 	private static final String GROUP="groupName";
 	private static final String NAME="userName";
     private static final String QQ="qq";
+    
+    private int MAX_USERGROUP_NUM = 3;
 	
 	@Get
 	@Override
@@ -117,13 +121,59 @@ public class UserResource extends ServerResource implements IUserResource {
 		if(StringUtil.isNotBlank(groupName)){
 			// TODO 用户多分组保存用户表，分组表，用户分组映射表(完成)
 			String[] userGroups = groupName.split(",");
+			List<Integer> groupIDs = new ArrayList<Integer>();
 			for(String userGroup : userGroups){
 				int groupID = addGroup(userGroup);
-				addUserGroupMapping(groupID,user.getId());
+				groupIDs.add(groupID);
+				//addUserGroupMapping(groupID,user.getId());
 			}
+			updateMultiUserGroupMapping(groupIDs, user.getId());
 		}
 	}
+	//更新维护用户分组映射表（至多3个）
+	private synchronized void updateMultiUserGroupMapping(List<Integer> groupIDs, int userID) {
+		UserGroupMappingExample example = new UserGroupMappingExample();
+		example.or().andUseridEqualTo(userID);
+		List<UserGroupMapping> mappings = mappingMapper.selectByExample(example);
+		int mappingSize = mappings.size();
+		int groupIdSize = groupIDs.size();
+		if(mappingSize <= MAX_USERGROUP_NUM && groupIdSize <= MAX_USERGROUP_NUM){
+			if (mappingSize <= groupIdSize) {//数据库旧记录少于新记录
+				int i = 0;
+				for( ; i < mappingSize; ++i){//更新旧记录
+					UserGroupMapping userGroup = new UserGroupMapping();
+					userGroup.setId(mappings.get(i).getId());
+					userGroup.setGroupid(groupIDs.get(i));
+					userGroup.setUserid(userID);
+					mappingMapper.updateByPrimaryKey(userGroup);
+				}
+				for( ; i < groupIdSize; ++i){//插入新记录
+					UserGroupMapping userGroup = new UserGroupMapping();
+					userGroup.setGroupid(groupIDs.get(i));
+					userGroup.setUserid(userID);
+					mappingMapper.insert(userGroup);
+				}
+			} else {//数据库旧记录多于新记录
+				int i = 0;
+				for( ; i < groupIdSize; ++i){//更新旧记录
+					UserGroupMapping userGroup = new UserGroupMapping();
+					userGroup.setId(mappings.get(i).getId());
+					userGroup.setGroupid(groupIDs.get(i));
+					userGroup.setUserid(userID);
+					mappingMapper.updateByPrimaryKey(userGroup);
+				}
+				for( ; i < mappingSize; ++i){//删除多余记录
+					mappingMapper.deleteByPrimaryKey(mappings.get(i).getId());
+				}
+			}
+			
+		} else {
+			throw new RuntimeException("Found user " + userID + " belongs to more than " + MAX_USERGROUP_NUM + " groups");
+		} 
+	}
 	
+	// 原先只允许一个分组时用的方法
+	@Deprecated
 	private synchronized void addUserGroupMapping(int groupID, int userID) {
 		UserGroupMappingExample example = new UserGroupMappingExample();
 		example.or().andUseridEqualTo(userID);

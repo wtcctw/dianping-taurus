@@ -1,5 +1,7 @@
 package com.dp.bigdata.taurus.springmvc.controller;
 
+import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -40,9 +42,8 @@ public class UserController {
 			String formFieldName = p.getName();
 			String formFieldValue = request.getParameter(p.getName());
 			
-			if(formFieldName.equals(UserProperty.GROUPNAME)){
+			if(formFieldName.equals(UserProperty.GROUPNAME.getName())){
 				String[] userGroups = formFieldValue.split(",");
-				
 				if (userGroups.length > MAX_USERGROUP_NUM) {
 					Status status = Status.CLIENT_ERROR_BAD_REQUEST;
 					response.setStatus(status.getCode());

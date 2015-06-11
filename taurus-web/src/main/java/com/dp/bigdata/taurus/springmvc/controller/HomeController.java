@@ -1148,7 +1148,7 @@ public class HomeController {
 				//TODO support multi group(完成)
 				String[] userGroups = user.getGroup().split(",");
 				for(String userGroup : userGroups){
-					if ("admin".equals(user.getGroup())) {
+					if ("admin".equals(userGroup)) {
 						globalViewVariable.isAdmin = true;
 						break;
 					} else {

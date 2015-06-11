@@ -214,7 +214,7 @@
 
             <div class="widget-body">
                 <div class="widget-main" id="userwidget">
-			<#if userGroup?contains("alpha") == false> <#-- TODO 普通组成员能加入最多3个分组，查看交接的组和成员(完成) -->
+			<#if userGroup?contains("admin") == false> <#-- TODO 普通组成员能加入最多3个分组，查看交接的组和成员(完成) -->
                     <table class="table table-striped table-bordered table-hover reginuser" >
                         <tr>
                             <th align="left">成员</th>
@@ -231,7 +231,6 @@
                                         <td align="left">${group!}</td>
 			                        </tr>
                     			</#list>
-                    			<#break>
                     		</#if>
                             </#list>
 			            </#if>
