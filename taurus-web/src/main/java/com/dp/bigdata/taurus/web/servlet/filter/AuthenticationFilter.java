@@ -45,7 +45,6 @@ public class AuthenticationFilter implements Filter {
 		
 		// Filter出口1. 登录/mvc/ssologin 本机放行，cas不能放行，否则可以伪造cas认证信息；登出/mvc/ssologout 本机和cas都放行
 		for (String uri : excludePages) {
-			//System.out.println(new Date() + " [" + this.getClass().getName() + "] " + uri);
 			if (requestURI.toLowerCase().contains(uri)){
 				System.out.println("excludePage : " + uri);
 				chain.doFilter(request, response);
@@ -53,12 +52,11 @@ public class AuthenticationFilter implements Filter {
 			}
 		}
 		
-		//解决首页显示URL层级不同JS上层目录不同的问题
+		// 解决首页显示URL层级不同JS上层目录不同的问题
 		String conTextPath = req.getContextPath();
 		String reqURInoConTextPath = requestURI.substring(conTextPath.length());
-		
-		// root级webapp结果为""，带项目目录webapp结果为"/"
-		if(reqURInoConTextPath.equals("/") || reqURInoConTextPath.equals("")){
+		// 访问根目录
+		if(reqURInoConTextPath.equals("/")){
 			requestURI = requestURI + "mvc/index";
 		}
 		
@@ -71,12 +69,12 @@ public class AuthenticationFilter implements Filter {
 		
 		//未登录
 		if (currentUser == null) {
-			String loginUrl =  (conTextPath.equals("/")?"":"/") 
+			String loginUrl =  conTextPath 
 								+ "mvc/rest/ssologin?redirect-url=" 
 								+ URLEncoder.encode(requestURI, "UTF-8");
 			req.getRequestDispatcher(loginUrl).forward(req, res);
 		//根目录首页跳转再过滤
-		} else if(reqURInoConTextPath.equals("/") || reqURInoConTextPath.equals("")){
+		} else if(reqURInoConTextPath.equals("/")){
 			res.sendRedirect(requestURI);
 		// Filter出口2.
 		} else {

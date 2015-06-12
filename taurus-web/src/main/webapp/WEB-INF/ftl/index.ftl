@@ -11,6 +11,8 @@
     <script type="text/javascript" src="${rc.contextPath}/static/js/monitor_center.js"></script>
     <script src="${rc.contextPath}/js/jquery.datetimepicker.js"></script>
     <link rel="stylesheet" href="${rc.contextPath}/css/jquery.datetimepicker.css"/>
+    
+    <script type="text/javascript" src="${rc.contextPath}/mvc/test/common.js"></script>
 </head>
 
 <body>
