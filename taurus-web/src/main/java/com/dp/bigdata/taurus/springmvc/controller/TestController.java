@@ -84,6 +84,19 @@ public class TestController {
 		return result;
 	}
 
+	@RequestMapping(value = "/showUsers", method = RequestMethod.GET)
+	@ResponseBody
+	public WebResult showUsers(HttpServletRequest request, HttpServletResponse response) {
+		log.info("--------------init the showUsers------------");
+		
+		WebResult result = new WebResult(request);
+		GlobalViewVariable globalViewVariable = new GlobalViewVariable();
+		commonnav(request,globalViewVariable);
+		result.addAttr("users", globalViewVariable.users);
+		
+		return result;
+	}
+	
 	@RequestMapping(value = "/showGroups", method = RequestMethod.GET)
 	@ResponseBody
 	public WebResult showGroups(HttpServletRequest request, HttpServletResponse response) {

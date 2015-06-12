@@ -198,6 +198,7 @@
 		<servlet-name>springmvc-servlet</servlet-name>
 		<url-pattern>/mvc/*</url-pattern>
 	</servlet-mapping>
+	
 
 	<!-- 传统servlet配置 -->
 	<servlet>
