@@ -198,6 +198,10 @@
 		<servlet-name>springmvc-servlet</servlet-name>
 		<url-pattern>/mvc/*</url-pattern>
 	</servlet-mapping>
+	<context-param>
+		<param-name>SPRINGMVC_SERVLET_URL_PATTERN</param-name>
+		<param-value>/mvc/*</param-value>
+	</context-param>
 	
 
 	<!-- 传统servlet配置 -->

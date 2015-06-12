@@ -23,6 +23,8 @@ public class InitController implements ServletContextAware {
 	
 	private ServletContext servletContext;
 	
+	public static String SPRINGMVC_SERVLET_URL_PATTERN;
+	
 	public static String SPRINGMVC_SERVLET_ROOTPATH;
     
 	public static String RESTLET_URL_BASE = null;
@@ -44,9 +46,8 @@ public class InitController implements ServletContextAware {
 	@PostConstruct
 	public void init() {
 		log.info("----------- into spring mvc init ------------");
-		Collection<String> mappings = servletContext.getServletRegistration("springmvc-servlet").getMappings();
-		String spring_servlet_url_pattern = (String) mappings.toArray()[0];
-    	SPRINGMVC_SERVLET_ROOTPATH = spring_servlet_url_pattern.substring(0, spring_servlet_url_pattern.length()-2);
+		SPRINGMVC_SERVLET_URL_PATTERN = servletContext.getInitParameter("SPRINGMVC_SERVLET_URL_PATTERN");
+    	SPRINGMVC_SERVLET_ROOTPATH = SPRINGMVC_SERVLET_URL_PATTERN.substring(0, SPRINGMVC_SERVLET_URL_PATTERN.length()-2);
     	log.info(SPRINGMVC_SERVLET_ROOTPATH);
     	
 		ReFlashHostLoadTaskTimer.getReFlashHostLoadManager().start();
