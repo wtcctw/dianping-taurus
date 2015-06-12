@@ -57,7 +57,7 @@ public class AuthenticationFilter implements Filter {
 		String reqURInoConTextPath = requestURI.substring(conTextPath.length());
 		// 访问根目录
 		if(reqURInoConTextPath.equals("/")){
-			requestURI = requestURI + "mvc/index";
+			requestURI = InitController.SPRINGMVC_SERVLET_ROOTPATH + "/index";
 		}
 		
 		if (StringUtil.isBlank(req.getQueryString()) == false) {
@@ -70,7 +70,8 @@ public class AuthenticationFilter implements Filter {
 		//未登录
 		if (currentUser == null) {
 			String loginUrl =  conTextPath 
-								+ "mvc/rest/ssologin?redirect-url=" 
+								+ InitController.SPRINGMVC_SERVLET_ROOTPATH
+								+ "/rest/ssologin?redirect-url=" 
 								+ URLEncoder.encode(requestURI, "UTF-8");
 			req.getRequestDispatcher(loginUrl).forward(req, res);
 		//根目录首页跳转再过滤

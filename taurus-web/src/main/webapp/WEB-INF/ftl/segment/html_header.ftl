@@ -16,4 +16,5 @@
     <script type="text/javascript" src="${rc.contextPath}/resource/js/lib/raphael.2.1.0.min.js"></script>
     <script type="text/javascript" src="${rc.contextPath}/resource/js/lib/justgage.1.0.1.min.js"></script>
     
-    <script type="text/javascript" src="${rc.contextPath}/static/js/login.js"></script>
+    <script type="text/javascript" src="${rc.contextPath}${mvc!""}/js/login.js"></script>
+    <#-- <script type="text/javascript" src="${rc.contextPath}/static/js/login.js"></script> -->

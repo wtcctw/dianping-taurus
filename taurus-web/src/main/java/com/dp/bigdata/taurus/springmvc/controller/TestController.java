@@ -134,25 +134,6 @@ public class TestController {
 		return result;
 	}
 	
-	/**
-	 * 试试生成JS文件
-	 * @param modelMap
-	 * @param request
-	 * @param response
-	 * @return
-	 */
-	@RequestMapping(value = "/common.js", method = RequestMethod.GET)
-	public String commonjs(ModelMap modelMap, 
-							HttpServletRequest request,
-							HttpServletResponse response) 
-	{
-		log.info("--------------init the commonjs------------");
-		
-		modelMap.addAttribute("contextPath", request.getContextPath());
-		
-		return "/js/common.ftl";
-	}
-	
 	private enum UserProperty {
 		ID("id"), USERNAME("userName"), GROUPNAME("groupName"), EMAIL("email"), TEL(
 				"tel"),QQ("qq");

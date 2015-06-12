@@ -8,11 +8,11 @@
     <#include "segment/html_header2.ftl">
     <#include "segment/monitor-center_header.ftl">
     <link rel="stylesheet" href="${rc.contextPath}/css/loading.css">
-    <script type="text/javascript" src="${rc.contextPath}/static/js/monitor_center.js"></script>
+    <script type="text/javascript" src="${rc.contextPath}${mvc!""}/js/monitor_center.js"></script>
+    <#-- <script type="text/javascript" src="${rc.contextPath}/static/js/monitor_center.js"></script> -->
     <script src="${rc.contextPath}/js/jquery.datetimepicker.js"></script>
     <link rel="stylesheet" href="${rc.contextPath}/css/jquery.datetimepicker.css"/>
     
-    <script type="text/javascript" src="${rc.contextPath}/mvc/test/common.js"></script>
 </head>
 
 <body>
@@ -30,7 +30,7 @@
     <ul class="breadcrumb">
         <li class="active">
             <i class="icon-home home-icon"></i>
-            <a href="${rc.contextPath}/mvc/index">HOME</a>
+            <a href="${rc.contextPath}${mvc!""}/index">HOME</a>
         </li>
     </ul>
     <div style="float:right;padding-right: 20px">
@@ -48,33 +48,33 @@
            data-original-title="查看一天内的数据">[天] </a>
         &nbsp;&nbsp;|&nbsp;&nbsp;
         <a class="atip"
-           href="${rc.contextPath}/mvc/index?step=-720&op=day&date=${bf1mD!}"
+           href="${rc.contextPath}${mvc!""}/index?step=-720&op=day&date=${bf1mD!}"
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[${bf1mDtip!}]">[-1m] </a>
         &nbsp;&nbsp; |&nbsp;&nbsp;
         <a class="atip"
-           href="${rc.contextPath}/mvc/index?step=-168&op=day&date=${bf1wD!}"
+           href="${rc.contextPath}${mvc!""}/index?step=-168&op=day&date=${bf1wD!}"
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[${bf1wDtip!}]">[-1w] </a>
         &nbsp;&nbsp; |&nbsp;&nbsp;
         <a class="atip"
-           href="${rc.contextPath}/mvc/index?step=-24&op=day&date=${bf1dD!}"
+           href="${rc.contextPath}${mvc!""}/index?step=-24&op=day&date=${bf1dD!}"
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[${bf1dDtip!}]">[-1d] </a>
 
         &nbsp;&nbsp; |&nbsp;&nbsp;
         <a class="atip"  
-           href="${rc.contextPath}/mvc/index?step=24&op=day&date=${af1dD!}"
+           href="${rc.contextPath}${mvc!""}/index?step=24&op=day&date=${af1dD!}"
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[${af1dDtip!}]">[+1d] </a>
         &nbsp;&nbsp; |&nbsp;&nbsp;
         <a class="atip"  
-           href="${rc.contextPath}/mvc/index?step=168&op=day&date=${af1wD!}"
+           href="${rc.contextPath}${mvc!""}/index?step=168&op=day&date=${af1wD!}"
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[${af1wDtip!}]">[+1w] </a>
         &nbsp;&nbsp; |&nbsp;&nbsp;
         <a class="atip"  
-           href="${rc.contextPath}/mvc/index?step=720&op=day&date=${af1mD!}"
+           href="${rc.contextPath}${mvc!""}/index?step=720&op=day&date=${af1mD!}"
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[${af1mDtip!}]">[+1m] </a>
     </div>
@@ -86,7 +86,7 @@
 
 
         <a class="atip"
-           href="${rc.contextPath}/mvc/index?step=720&op=day&date=${todayD!}"
+           href="${rc.contextPath}${mvc!""}/index?step=720&op=day&date=${todayD!}"
            data-toggle="tooltip" data-placement="top"
            data-original-title=" 时间区间[${todayDtip!}]">[当天] </a>
     </div>
@@ -96,34 +96,34 @@
            data-original-title="查看到今天所有的数据">[历史数据] </a>
         &nbsp;&nbsp;|&nbsp;&nbsp;
         <a class="atip"
-           href="${rc.contextPath}/mvc/index?step=-720&op=history&date=${bf1mD!}"
+           href="${rc.contextPath}${mvc!""}/index?step=-720&op=history&date=${bf1mD!}"
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[${bf1mHtip!}]">[-1m] </a>
         &nbsp;&nbsp; |&nbsp;&nbsp;
         <a class="atip"
-           href="${rc.contextPath}/mvc/index?step=-168&op=history&date=${bf1wD!}"
+           href="${rc.contextPath}${mvc!""}/index?step=-168&op=history&date=${bf1wD!}"
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[${bf1wHtip!}]">[-1w] </a>
         &nbsp;&nbsp; |&nbsp;&nbsp;
         <a class="atip"
-           href="${rc.contextPath}/mvc/index?step=-24&op=history&date=${bf1dD!}"
+           href="${rc.contextPath}${mvc!""}/index?step=-24&op=history&date=${bf1dD!}"
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[${bf1dHtip!}]">[-1d] </a>
         &nbsp;&nbsp; |&nbsp;&nbsp;
 
 
         <a class="atip"  
-           href="${rc.contextPath}/mvc/index?step=24&op=history&date=${af1dD!}"
+           href="${rc.contextPath}${mvc!""}/index?step=24&op=history&date=${af1dD!}"
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[${af1dHtip!}]">[+1d] </a>
         &nbsp;&nbsp; |&nbsp;&nbsp;
         <a class="atip" 
-           href="${rc.contextPath}/mvc/index?step=168&op=history&date=${af1wD!}"
+           href="${rc.contextPath}${mvc!""}/index?step=168&op=history&date=${af1wD!}"
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[${af1wHtip!}]">[+1w] </a>
         &nbsp;&nbsp; |&nbsp;&nbsp;
         <a class="atip"  
-           href="${rc.contextPath}/mvc/index?step=720&op=history&date=${af1mD!}"
+           href="${rc.contextPath}${mvc!""}/index?step=720&op=history&date=${af1mD!}"
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[${af1mHtip!}]">[+1m] </a>
     </div>
