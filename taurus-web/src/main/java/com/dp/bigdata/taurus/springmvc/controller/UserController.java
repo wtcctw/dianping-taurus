@@ -50,7 +50,7 @@ public class UserController {
 					return;
 				} else {
 					for(String userGroup : userGroups){
-						if(userGroup.equalsIgnoreCase("admin") || userGroup.equals("未分组")){
+						if(userGroup.equalsIgnoreCase("admin")){
 							Status status = Status.CLIENT_ERROR_BAD_REQUEST;
 							response.setStatus(status.getCode());
 							return;

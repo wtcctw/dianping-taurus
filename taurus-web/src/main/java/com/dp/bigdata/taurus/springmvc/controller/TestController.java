@@ -62,11 +62,10 @@ public class TestController {
 					return result;
 				} else {
 					for(String userGroup : userGroups){
-						//可添加admin，仅验证未分组
-						if(userGroup.equals("未分组")){
-							Status status = Status.CLIENT_ERROR_BAD_REQUEST;
-							result.setStatus(status.getCode());
-							return result;
+						// admin组不能再加别的组
+						if(userGroup.equals("admin")){
+							formFieldValue = userGroup;
+							break;
 						}
 					}
 				}
