@@ -44,7 +44,7 @@ public class InitController implements ServletContextAware {
 	@PostConstruct
 	public void init() {
 		log.info("----------- into spring mvc init ------------");
-		Collection<String> mappings = servletContext.getServletRegistration("x3d-servlet").getMappings();
+		Collection<String> mappings = servletContext.getServletRegistration("springmvc-servlet").getMappings();
 		String spring_servlet_url_pattern = (String) mappings.toArray()[0];
     	SPRINGMVC_SERVLET_ROOTPATH = spring_servlet_url_pattern.substring(0, spring_servlet_url_pattern.length()-2);
     	log.info(SPRINGMVC_SERVLET_ROOTPATH);
