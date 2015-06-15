@@ -312,7 +312,7 @@ final public class Engine implements Scheduler {
                         body.put("content",exceptContext);
                         //此处动态修改
                         body.put("url", webDomain + "/mvc/hosts?hostName=" + ip);
-                        body.put("receiver", "dpop@dianping.com");
+                        body.put("receiver", "monitor@dianping.com");
          				
                         HttpPoster.postWithoutException(reportToOps, header, body);
                         
