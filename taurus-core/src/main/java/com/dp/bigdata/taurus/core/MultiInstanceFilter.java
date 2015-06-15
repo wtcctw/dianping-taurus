@@ -69,7 +69,7 @@ public class MultiInstanceFilter implements Filter {
                     	// 告警加入domain
                     	String domain = null;
                     	try {
-                    		domain = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.deploy.weburl");
+                    		domain = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.serverName");
                         } catch (LionException e) {
                         	domain = "taurus.dp";
                         	e.printStackTrace();
@@ -77,9 +77,9 @@ public class MultiInstanceFilter implements Filter {
                         String alertontext = "您好，你的Taurus Job【" 
                         					+ context.getTask().getName() 
                         					+ "】发生拥堵，请及时关注，谢谢~"
-                        					+ "作业调度历史：http://" 
+                        					+ "作业调度历史：" 
                         					+ domain 
-                        					+ "/mvc/attempt?taskID=" 
+                        					+ "/attempt?taskID=" 
                         					+ context.getTaskid();
                         try {
                             MailHelper.sendWeChat("kirin.li", alertontext);

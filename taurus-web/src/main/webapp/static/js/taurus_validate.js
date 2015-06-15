@@ -42,7 +42,7 @@ $.validator.addMethod("validName",function(value,element,params){
 	var result = false;
 
 	$.ajax({
-	    url: '../create_task?name='+$("#taskName").val(),  //server script to process data
+	    url: '/create_task?name='+$("#taskName").val(),  //server script to process data
 	    type: 'get',
 	    //Ajax events
 	    success:function(data){

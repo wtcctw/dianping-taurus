@@ -4,10 +4,6 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 	<display-name>Taurus Web</display-name>
-	<welcome-file-list>
-		<welcome-file>mvc/index</welcome-file>
-		<welcome-file>mvc/error</welcome-file>
-	</welcome-file-list>
     <!--<listener>-->
         <!--<listener-class>com.dp.bigdata.taurus.restlet.utils.StartServlet</listener-class>-->
     <!--</listener>-->
@@ -38,7 +34,7 @@
 	</context-param>
 	<context-param>
 		<param-name>ERROR_PAGE</param-name>
-		<param-value>/mvc/error</param-value>
+		<param-value>/error</param-value>
 		<!-- <param-value>/error.jsp</param-value> -->
 	</context-param>
 	
@@ -76,7 +72,7 @@
 	    <!-- 免登录url，支持通配符*，多个用,分隔 -->
 	    <init-param>
 	        <param-name>excludeURLs</param-name>
-	        <param-value>/mvc/rest/ssologout</param-value>
+	        <param-value>/rest/ssologout</param-value>
 	    </init-param>
 	</filter>
 	
@@ -150,11 +146,11 @@
 		</init-param>
 		<init-param>
 			<param-name>mvcLoginPage</param-name>
-			<param-value>mvc/signin</param-value>
+			<param-value>signin</param-value>
 		</init-param>
 		<init-param>
 			<param-name>excludePage</param-name>
-			<param-value>/signin.jsp,/login.do,/common-header.jsp,/mvc/signin,/mvc/rest/ssologin,/mvc/rest/ssologout</param-value>
+			<param-value>/signin.jsp,/login.do,/common-header.jsp,/signin,/rest/ssologin,/rest/ssologout</param-value>
 		</init-param>
 	</filter>
 
@@ -173,7 +169,7 @@
 	<!-- 新增过滤spring mvc页面 -->
 	<filter-mapping>
 		<filter-name>AuthenticationFilter</filter-name>
-		<url-pattern>/mvc/*</url-pattern>
+		<url-pattern>/*</url-pattern>
 		<url-pattern>/</url-pattern>
 		<dispatcher>REQUEST</dispatcher>
 	</filter-mapping>
@@ -196,11 +192,11 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>springmvc-servlet</servlet-name>
-		<url-pattern>/mvc/*</url-pattern>
+		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
 	<context-param>
 		<param-name>SPRINGMVC_SERVLET_URL_PATTERN</param-name>
-		<param-value>/mvc/*</param-value>
+		<param-value>/*</param-value>
 	</context-param>
 	
 
@@ -221,7 +217,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>TestServlet</servlet-name>
-		<url-pattern>/test</url-pattern>
+		<url-pattern>/test.do</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -338,7 +334,7 @@
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>UserServlet</servlet-name>
-		<url-pattern>/saveUser</url-pattern>
+		<url-pattern>/saveUser.do</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>HostServlet</servlet-name>
@@ -350,49 +346,49 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>MonitorServlet</servlet-name>
-        <url-pattern>/monitor</url-pattern>
+        <url-pattern>/monitor.do</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>FeedBackServlet</servlet-name>
-        <url-pattern>/feedback</url-pattern>
+        <url-pattern>/feedback.do</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>HostCenterServlet</servlet-name>
-        <url-pattern>/host_center</url-pattern>
+        <url-pattern>/host_center.do</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>MonitorCenterServlet</servlet-name>
-        <url-pattern>/monitor_center</url-pattern>
+        <url-pattern>/monitor_center.do</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>TaskCenterServlet</servlet-name>
-        <url-pattern>/task_center</url-pattern>
+        <url-pattern>/task_center.do</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>DBAdminServlet</servlet-name>
-        <url-pattern>/db_admin</url-pattern>
+        <url-pattern>/db_admin.do</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>ResignServlet</servlet-name>
-        <url-pattern>/resign</url-pattern>
+        <url-pattern>/resign.do</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>AttemptServlet</servlet-name>
-        <url-pattern>/attempt</url-pattern>
+        <url-pattern>/attempt.do</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
         <servlet-name>ScheduleServlet</servlet-name>
-        <url-pattern>/schedule</url-pattern>
+        <url-pattern>/schedule.do</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>HostHistoryServlet</servlet-name>
-        <url-pattern>/host_history</url-pattern>
+        <url-pattern>/host_history.do</url-pattern>
     </servlet-mapping>
 
     <jsp-config>

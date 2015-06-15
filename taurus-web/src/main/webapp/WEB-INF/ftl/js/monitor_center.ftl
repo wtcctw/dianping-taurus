@@ -176,7 +176,7 @@ function reflash_data(starttime, endtime){
             end: endtime
         },
         type: "POST",
-        url: "${rc.contextPath}/monitor_center",
+        url: "${rc.contextPath}/monitor_center.do",
         error: function () {
             $("#user-widget-main").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
             $("#user-widget-main").addClass("align-center");
@@ -196,7 +196,7 @@ function reflash_data(starttime, endtime){
                         "<td>" + item.taskName + "</td>" +
                         "<td>成功</td>" +
                         "<td>" + item.nums + "</td>" +
-                        "<td><a id='attempts' class='btn btn-primary btn-small' href='${rc.contextPath}${mvc!""}/attempt?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>"+
+                        "<td><a id='attempts' class='btn btn-primary btn-small' href='${rc.contextPath}/attempt?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>"+
                         "</tr>";
 
                 } else if (item.status == "failed") {
@@ -209,7 +209,7 @@ function reflash_data(starttime, endtime){
                             "<td>" + item.taskName + "</td>" +
                             "<td>失败</td>" +
                             "<td>" + item.nums + "</td>" +
-                            "<td><a id='attempts' class='btn btn-primary btn-small' href='${rc.contextPath}${mvc!""}/attempt?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>"+
+                            "<td><a id='attempts' class='btn btn-primary btn-small' href='${rc.contextPath}/attempt?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>"+
                             "</tr>";
                     }
 
@@ -223,7 +223,7 @@ function reflash_data(starttime, endtime){
                             "<td>" + item.taskName + "</td>" +
                             "<td>杀死</td>" +
                             "<td>" + item.nums + "</td>" +
-                            "<td><a id='attempts' class='btn btn-primary btn-small' href='${rc.contextPath}${mvc!""}/attempt?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>"+
+                            "<td><a id='attempts' class='btn btn-primary btn-small' href='${rc.contextPath}/attempt?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>"+
                             "</tr>";
                     }
 
@@ -237,7 +237,7 @@ function reflash_data(starttime, endtime){
                             "<td>" + item.taskName + "</td>" +
                             "<td>超时</td>" +
                             "<td>" + item.nums + "</td>" +
-                            "<td><a id='attempts' class='btn btn-primary btn-small' href='${rc.contextPath}${mvc!""}/attempt?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>"+
+                            "<td><a id='attempts' class='btn btn-primary btn-small' href='${rc.contextPath}/attempt?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>"+
                             "</tr>";
                     }
 
@@ -252,7 +252,7 @@ function reflash_data(starttime, endtime){
                             "<td>" + item.taskName + "</td>" +
                             "<td>拥堵</td>" +
                             "<td>" + item.nums + "</td>" +
-                            "<td><a id='attempts' class='btn btn-primary btn-small' href='${rc.contextPath}${mvc!""}/attempt?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>"+
+                            "<td><a id='attempts' class='btn btn-primary btn-small' href='${rc.contextPath}/attempt?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>"+
                             "</tr>";
                     }
 
@@ -411,7 +411,7 @@ function reflash_data(starttime, endtime){
             end: endtime
         },
         type: "POST",
-        url: "${rc.contextPath}/monitor_center",
+        url: "${rc.contextPath}/monitor_center.do",
         error: function () {
             $("#group-widget-main").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
             $("#group-widget-main").addClass("align-center");
@@ -439,7 +439,7 @@ function reflash_data(starttime, endtime){
                             "<td>成功</td>" +
                             "<td>" + item.nums + "</td>" +
                             "<td>" + item.creator + "</td>" +
-                            "<td><a id='attempts' class='btn btn-primary btn-small' href='${rc.contextPath}${mvc!""}/attempt?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>"+
+                            "<td><a id='attempts' class='btn btn-primary btn-small' href='${rc.contextPath}/attempt?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>"+
                             "</tr>";
                     }
 
@@ -456,7 +456,7 @@ function reflash_data(starttime, endtime){
                                 "<td>失败</td>" +
                                 "<td>" + item.nums + "</td>" +
                                 "<td>" + item.creator + "</td>" +
-                                "<td><a id='attempts' class='btn btn-primary btn-small' href='${rc.contextPath}${mvc!""}/attempt?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>" +
+                                "<td><a id='attempts' class='btn btn-primary btn-small' href='${rc.contextPath}/attempt?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>" +
                                 "</tr>";
                         }
                     }
@@ -473,7 +473,7 @@ function reflash_data(starttime, endtime){
                                 "<td>杀死</td>" +
                                 "<td>" + item.nums + "</td>" +
                                 "<td>" + item.creator + "</td>" +
-                                "<td><a id='attempts' class='btn btn-primary btn-small' href='${rc.contextPath}${mvc!""}/attempt?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>" +
+                                "<td><a id='attempts' class='btn btn-primary btn-small' href='${rc.contextPath}/attempt?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>" +
                                 "</tr>";
                         }
                     }
@@ -489,7 +489,7 @@ function reflash_data(starttime, endtime){
                             "<td>超时</td>" +
                             "<td>" + item.nums + "</td>" +
                             "<td>" + item.creator + "</td>" +
-                            "<td><a id='attempts' class='btn btn-primary btn-small' href='${rc.contextPath}${mvc!""}/attempt?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>"+
+                            "<td><a id='attempts' class='btn btn-primary btn-small' href='${rc.contextPath}/attempt?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>"+
                             "</tr>";
                     }
 
@@ -504,7 +504,7 @@ function reflash_data(starttime, endtime){
                             "<td>拥堵</td>" +
                             "<td>" + item.nums + "</td>" +
                             "<td>" + item.creator + "</td>" +
-                            "<td><a id='attempts' class='btn btn-primary btn-small' href='${rc.contextPath}${mvc!""}/attempt?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>"+
+                            "<td><a id='attempts' class='btn btn-primary btn-small' href='${rc.contextPath}/attempt?taskID=" + item.taskId + "' target= 'blank'>查看详情</a></td>"+
                             "</tr>";
                     }
 

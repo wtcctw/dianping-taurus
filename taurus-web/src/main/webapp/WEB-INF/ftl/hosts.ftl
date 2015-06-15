@@ -125,7 +125,7 @@
             <td>5</td>
             <td>主机任务执行历史</td>
             <td><a id="history" class="btn btn-primary btn-minier"
-                   href="${rc.contextPath}/mvc/host_history?ip=${hostName!}">查看</a></td>
+                   href="${rc.contextPath}/host_history?ip=${hostName!}">查看</a></td>
         </tr>
         </tbody>
     </table>
@@ -170,7 +170,7 @@
             <td>${(hostDto.scheduleTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>
             <td>
                 <a target="_blank"
-                   href="${rc.contextPath}/mvc/viewlog?id=${hostDto.attemptID!}&status=${hostDto.status!}">日志</a>
+                   href="${rc.contextPath}/viewlog?id=${hostDto.attemptID!}&status=${hostDto.status!}">日志</a>
             </td>
 
         </tr>
@@ -226,7 +226,7 @@
 
 	            <td>
 	                <a target="_blank"
-	                   href="${rc.contextPath}/mvc/viewlog?id=${hostDto.attemptID!}&status=${hostDto.status!}">日志</a>
+	                   href="${rc.contextPath}/viewlog?id=${hostDto.attemptID!}&status=${hostDto.status!}">日志</a>
 	            </td>
 
 	        </tr>
@@ -242,7 +242,7 @@
 	            <td>${(hostDto.scheduleTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>
 	            <td>
 	                <a target="_blank"
-	                   href="${rc.contextPath}/mvc/viewlog?id=${hostDto.attemptID!}&status=${hostDto.status!}">日志</a>
+	                   href="${rc.contextPath}/viewlog?id=${hostDto.attemptID!}&status=${hostDto.status!}">日志</a>
 	            </td>
 
 	        </tr>
@@ -296,7 +296,7 @@
 	            <td>${(hostDto.scheduleTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>
 	            <td>
 	                <a target="_blank"
-	                   href="${rc.contextPath}/mvc/viewlog?id=${hostDto.attemptID!}&status=${hostDto.status!}">日志</a>
+	                   href="${rc.contextPath}/viewlog?id=${hostDto.attemptID!}&status=${hostDto.status!}">日志</a>
 	            </td>
 
 	        </tr>
@@ -311,7 +311,7 @@
 	            <td>${(hostDto.scheduleTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>
 	            <td>
 	                <a target="_blank"
-	                   href="${rc.contextPath}/mvc/viewlog?id=${hostDto.attemptID!}&status=${hostDto.status!}">日志</a>
+	                   href="${rc.contextPath}/viewlog?id=${hostDto.attemptID!}&status=${hostDto.status!}">日志</a>
 	            </td>
 
 	        </tr>
@@ -368,7 +368,7 @@
 	            <td>${(hostDto.scheduleTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>
 	            <td>
 	                <a target="_blank"
-	                   href="${rc.contextPath}/mvc/viewlog?id=${hostDto.attemptID!}&status=${hostDto.status!}">日志</a>
+	                   href="${rc.contextPath}/viewlog?id=${hostDto.attemptID!}&status=${hostDto.status!}">日志</a>
 	            </td>
 
 	        </tr>
@@ -383,7 +383,7 @@
 	            <td>${(hostDto.scheduleTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>
 	            <td>
 	                <a target="_blank"
-	                   href="${rc.contextPath}/mvc/viewlog?id=${hostDto.attemptID!}&status=${hostDto.status!}">日志</a>
+	                   href="${rc.contextPath}/viewlog?id=${hostDto.attemptID!}&status=${hostDto.status!}">日志</a>
 	            </td>
 
 	        </tr>
@@ -438,7 +438,7 @@
 	            <td>${(hostDto.scheduleTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>
 	            <td>
 	                <a target="_blank"
-	                   href="${rc.contextPath}/mvc/viewlog?id=${hostDto.attemptID!}&status=${hostDto.status!}">日志</a>
+	                   href="${rc.contextPath}/viewlog?id=${hostDto.attemptID!}&status=${hostDto.status!}">日志</a>
 	            </td>
 
 	        </tr>
@@ -453,7 +453,7 @@
 	            <td>${(hostDto.scheduleTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>
 	            <td>
 	                <a target="_blank"
-	                   href="${rc.contextPath}/mvc/viewlog?id=${hostDto.attemptID!}&status=${hostDto.status!}">日志</a>
+	                   href="${rc.contextPath}/viewlog?id=${hostDto.attemptID!}&status=${hostDto.status!}">日志</a>
 	            </td>
 
 	        </tr>

@@ -33,10 +33,10 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home home-icon"></i>
-            <a href="${rc.contextPath}/mvc/index">HOME</a>
+            <a href="${rc.contextPath}/index">HOME</a>
         </li>
         <li class="active">
-            <a href="${rc.contextPath}/mvc/task">新建任务</a>
+            <a href="${rc.contextPath}/task">新建任务</a>
         </li>
     </ul>
 </div>
@@ -59,7 +59,7 @@
                         <option>default</option>
                         <option>hadoop</option>
                     </select>
-                    <a href="${rc.contextPath}/mvc/about#config" class="atip" data-toggle="tooltip" data-placement="top"
+                    <a href="${rc.contextPath}/about#config" class="atip" data-toggle="tooltip" data-placement="top"
                        data-original-title="hadoop: 需要访问hadoop的作业。这种类型的作业，taurus会管理作业的hadoop ticket的申请和销毁。
                             default: 上述两种类型以外所有类型。">帮助</a>
                 </div>
@@ -85,7 +85,7 @@
                     <div class="controls col-sm-9">
                         <input type="text" class="input-large field" id="hadoopName" name="hadoopName"
                                placeholder="kerberos principle (wwwcron)">
-                        <a href="${rc.contextPath}/mvc/about#config" class="atip" data-toggle="tooltip" data-placement="top"
+                        <a href="${rc.contextPath}/about#config" class="atip" data-toggle="tooltip" data-placement="top"
                            data-original-title=" hadoop类型的作业，需要提供一个用于访问hadoop的principle name。
                                 为此，taurus需要读取这个principle的keytab文件，一般情况下这个keytab已经放到相应的目录。
                                 如果你不确定这一点，请联系我们。">帮助</a>
@@ -156,7 +156,7 @@
 
                 <div class="controls col-sm-9">
                     <input type="text" class="input-xxlarge field" id="crontab" name="crontab" value="0 0 * * ?">
-                    <a href="${rc.contextPath}/mvc/about#crontab">帮助</a>
+                    <a href="${rc.contextPath}/about#crontab">帮助</a>
                 </div>
                 <br>
                 <br>
@@ -230,7 +230,7 @@
                 <div class="controls">
                     <input type="number" class="input-small field" id="maxExecutionTime" name="maxExecutionTime"
                            style="text-align:right" value=60>
-                    <a href="${rc.contextPath}/mvc/about#config">帮助</a>
+                    <a href="${rc.contextPath}/about#config">帮助</a>
                 </div>
             </div>
             <div class="control-group">
@@ -239,7 +239,7 @@
                 <div class="controls">
                     <input type="text" class="input-large field" id="dependency" name="dependency"
                            placeholder="dependency expression" value="">
-                    <a href="${rc.contextPath}/mvc/about#config">帮助</a>
+                    <a href="${rc.contextPath}/about#config">帮助</a>
                 </div>
             </div>
             <div class="control-group">
@@ -248,7 +248,7 @@
                 <div class="controls">
                     <input type="number" class="input-small field" id="maxWaitTime" name="maxWaitTime"
                            style="text-align:right" value=60>
-                    <a href="${rc.contextPath}/mvc/about#config">帮助</a>
+                    <a href="${rc.contextPath}/about#config">帮助</a>
                 </div>
             </div>
 
@@ -258,7 +258,7 @@
                 <div class="controls">
                     <input type="number" class="input-small field" id="retryTimes" name="retryTimes"
                            style="text-align:right" value=0>
-                    <a href="${rc.contextPath}/mvc/about#config">帮助</a>
+                    <a href="${rc.contextPath}/about#config">帮助</a>
                 </div>
             </div>
             <div class="control-group">
@@ -268,13 +268,13 @@
                 <div class="controls field" id="isAutoKill">
                     <input type="radio" value="1" name="isAutoKill" checked> 是
                     <input type="radio" value="0" name="isAutoKill"> 否
-                    <span class="label">不要轻易修改，除非你确定其含义：<a href="${rc.contextPath}/mvc/about#config">帮助</a></span>
+                    <span class="label">不要轻易修改，除非你确定其含义：<a href="${rc.contextPath}/about#config">帮助</a></span>
                 </div>
             </div>
             <br/>
             <br/>
 
-            <p><span class="label">注意：使用以下配置项，你需要在用户<a href="${rc.contextPath}/mvc/user">用户设置</a>填写您的联系方式</span></p>
+            <p><span class="label">注意：使用以下配置项，你需要在用户<a href="${rc.contextPath}/user">用户设置</a>填写您的联系方式</span></p>
 
             <div class="control-group">
                 <label class="label label-lg label-info arrowed-right col-sm-2">选择何时收到报警</label>

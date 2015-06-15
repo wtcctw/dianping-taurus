@@ -241,13 +241,13 @@ final public class Engine implements Scheduler {
                		   getProperty("taurus.web.serverName");
                 String exceptContext = "您好，taurus-agent的job主机 ["
                         + ip
-                        + "] 服务已经挂掉请重启，监控连接如下：" + webDomain + "/mvc/hosts?hostName="
+                        + "] 服务已经挂掉请重启，监控连接如下：" + webDomain + "/hosts?hostName="
                         + ip
                         +"，谢谢~";
 
                 String context = "您好，taurus-agent的job主机 ["
                         + ip
-                        + "] 心跳异常，监控连接如下：" + webDomain + "/mvc/hosts?hostName="
+                        + "] 心跳异常，监控连接如下：" + webDomain + "/hosts?hostName="
                         + ip
                         +"，谢谢~";
                 
@@ -284,7 +284,7 @@ final public class Engine implements Scheduler {
                        body.put("title", "Taurus-Agent主机心跳异常告警服务");
                        body.put("content",context);
                        //此处动态修改
-                       body.put("url", webDomain + "/mvc/hosts?hostName=" + ip);
+                       body.put("url", webDomain + "/hosts?hostName=" + ip);
                        body.put("receiver", "dpop@dianping.com");
         				
                        HttpPoster.postWithoutException(reportToOps, header, body);
@@ -311,7 +311,7 @@ final public class Engine implements Scheduler {
                         body.put("title", "Taurus-Agent主机失联系告警服务");
                         body.put("content",exceptContext);
                         //此处动态修改
-                        body.put("url", webDomain + "/mvc/hosts?hostName=" + ip);
+                        body.put("url", webDomain + "/hosts?hostName=" + ip);
                         body.put("receiver", "monitor@dianping.com");
          				
                         HttpPoster.postWithoutException(reportToOps, header, body);

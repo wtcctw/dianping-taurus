@@ -5,7 +5,7 @@
 
     <div class="navbar-container" id="navbar-container" style="height: 30px">
         <div class="navbar-header pull-left">
-            <a href="${rc.contextPath}/mvc/index" class="navbar-brand">
+            <a href="${rc.contextPath}/index" class="navbar-brand">
                 <i class="icon-tasks"></i>
                 Taurus
             </a>
@@ -37,7 +37,7 @@
                     </a>
                     <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
                         <li>
-                            <a href="${rc.contextPath}/mvc/user">
+                            <a href="${rc.contextPath}/user">
                                 <i class="icon-cogs"></i>
                                 设置
                             </a>

@@ -26,7 +26,7 @@ function fetch_Log() {
 
 
     $.ajax({
-        url: "../attempts.do",
+        url: "/attempts.do",
         data: {
             action: 'runlog',
             hostname:hostName,

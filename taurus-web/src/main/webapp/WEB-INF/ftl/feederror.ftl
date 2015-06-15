@@ -202,7 +202,7 @@
 
             var feedResult = "";
             $.ajax({
-                url: "../feedback",
+                url: "${rc.contextPath}/feedback.do",
                 data: {
                     action: "feederror",
                     taskId: taskId,

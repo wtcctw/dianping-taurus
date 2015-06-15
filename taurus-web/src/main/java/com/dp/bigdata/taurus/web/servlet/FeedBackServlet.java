@@ -92,15 +92,14 @@ public class FeedBackServlet  extends HttpServlet {
 
             String domain ="";
             try {
-                domain = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.deploy.weburl");
+                domain = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.serverName");
             } catch (LionException e) {
-                domain="taurus.dp";
+                domain="http://taurus.dp";
                 e.printStackTrace();
             }
-String logUrl =  "http://"
-        + domain
-        + "/mvc/viewlog?id="
-        + attemptId;
+            String logUrl = domain
+					        + "/viewlog?id="
+					        + attemptId;
 
             if(feedType.equals("mail")){
                 String content = "<h4><p>Hi,"

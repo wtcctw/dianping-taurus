@@ -32,10 +32,10 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home home-icon"></i>
-            <a href="${rc.contextPath}/mvc/index">HOME</a>
+            <a href="${rc.contextPath}/index">HOME</a>
         </li>
         <li class="active">
-            <a href="${rc.contextPath}/mvc/monitor">任务监控</a>
+            <a href="${rc.contextPath}/monitor">任务监控</a>
         </li>
     </ul>
 </div>
@@ -107,40 +107,40 @@
            data-original-title="当你点击了[-1h]|[-1d]|[-1w]|[-1m]后，在想切换到当前页面时，请点击[当天]，刷新页面无效噢～">[注意] </a>
         &nbsp;&nbsp;|&nbsp;&nbsp;
         <a class="atip"
-           href="${rc.contextPath}/mvc/monitor?step=-24&op=day&date=${todayD!}"
+           href="${rc.contextPath}/monitor?step=-24&op=day&date=${todayD!}"
            data-toggle="tooltip" data-placement="top"
            data-original-title=" 时间区间[${todayDtip!}]">[当天] </a>
         <a class="atip" data-toggle="tooltip" data-placement="top"
            data-original-title="查看历史数据">[历史模式] </a>
         &nbsp;&nbsp;|&nbsp;&nbsp;
         <a class="atip"
-           href="${rc.contextPath}/mvc/monitor?step=-720&op=day&date=${bf1mD!}"
+           href="${rc.contextPath}/monitor?step=-720&op=day&date=${bf1mD!}"
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[${bf1mDtip!}]">[-1m] </a>
         &nbsp;&nbsp; |&nbsp;&nbsp;
         <a class="atip"
-           href="${rc.contextPath}/mvc/monitor?step=-168&op=day&date=${bf1wD!}"
+           href="${rc.contextPath}/monitor?step=-168&op=day&date=${bf1wD!}"
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[${bf1wDtip!}]">[-1w] </a>
         &nbsp;&nbsp; |&nbsp;&nbsp;
         <a class="atip"
-           href="${rc.contextPath}/mvc/monitor?step=-24&op=day&date=${bf1dD!}"
+           href="${rc.contextPath}/monitor?step=-24&op=day&date=${bf1dD!}"
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[${bf1dDtip!}]">[-1d] </a>
 
         &nbsp;&nbsp; |&nbsp;&nbsp;
         <a class="atip"
-           href="${rc.contextPath}/mvc/monitor?step=24&op=day&date=${af1dD!}"
+           href="${rc.contextPath}/monitor?step=24&op=day&date=${af1dD!}"
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[${af1dDtip!}]">[+1d] </a>
         &nbsp;&nbsp; |&nbsp;&nbsp;
         <a class="atip" 
-           href="${rc.contextPath}/mvc/monitor?step=168&op=day&date=${af1wD!}"
+           href="${rc.contextPath}/monitor?step=168&op=day&date=${af1wD!}"
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[${af1wDtip!}]">[+1w] </a>
         &nbsp;&nbsp; |&nbsp;&nbsp;
         <a class="atip" 
-           href="${rc.contextPath}/mvc/monitor?step=720&op=day&date=${af1mD!}"
+           href="${rc.contextPath}/monitor?step=720&op=day&date=${af1mD!}"
            data-toggle="tooltip" data-placement="top"
            data-original-title="时间区间[${af1mDtip!}]">[+1m] </a>
     </div>
@@ -657,7 +657,7 @@ $(document).ready(function () {
             start: starttime
         },
         type: "POST",
-        url: "monitor/reflash_attempts",
+        url: "${rc.contextPath}/monitor/reflash_attempts",
         error: function () {
         },
         success: function (response, textStatus) {
@@ -669,7 +669,7 @@ $(document).ready(function () {
 
     $.ajax({
         type: "GET",
-        url: "monitor/runningtasks",
+        url: "${rc.contextPath}/monitor/runningtasks",
         error: function () {
             $("#running_body").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
             $("#running_body").addClass("align-center");
@@ -687,7 +687,7 @@ $(document).ready(function () {
             id: id
         },
         type: "POST",
-        url: "monitor/submitfail",
+        url: "${rc.contextPath}/monitor/submitfail",
         error: function () {
             $("#submit_body").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
             $("#submit_body").addClass("align-center");
@@ -709,7 +709,6 @@ $(document).ready(function () {
                     }
                     $.ajax({
                         type: "get",
-                        //这里的href在MonitorServlet里面的feederror.jsp(已重构为feederror.ftl，点我报错)
                         url: anchor.href,
                         error: function () {
                             $("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>报错失败</strong></div>');
@@ -742,7 +741,7 @@ $(document).ready(function () {
             id: id
         },
         type: "POST",
-        url: "monitor/dependencypass",
+        url: "${rc.contextPath}/monitor/dependencypass",
         error: function () {
             $("#dependency_body").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
             $("#dependency_body").addClass("align-center");
@@ -795,7 +794,7 @@ $(document).ready(function () {
             id: id
         },
         type: "POST",
-        url: "monitor/failedtasks",
+        url: "${rc.contextPath}/monitor/failedtasks",
         error: function () {
             $("#failed_body").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
             $("#failed_body").addClass("align-center");
@@ -850,7 +849,7 @@ $(document).ready(function () {
             id: id
         },
         type: "POST",
-        url: "monitor/dependencytimeout",
+        url: "${rc.contextPath}/monitor/dependencytimeout",
         error: function () {
             $("#dependency_timeout_body").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
             $("#dependency_timeout_body").addClass("align-center");
@@ -905,7 +904,7 @@ $(document).ready(function () {
             id: id
         },
         type: "POST",
-        url: "monitor/timeout",
+        url: "${rc.contextPath}/monitor/timeout",
         error: function () {
             $("#timeout_body").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
             $("#timeout_body").addClass("align-center");

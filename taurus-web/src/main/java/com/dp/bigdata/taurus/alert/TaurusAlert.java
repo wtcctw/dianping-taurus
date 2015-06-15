@@ -235,9 +235,9 @@ public class TaurusAlert {
 
             String domain ="";
             try {
-                domain = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.deploy.weburl");
+                domain = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.serverName");
             } catch (LionException e) {
-                domain="taurus.dp";
+                domain="http://taurus.dp";
                 e.printStackTrace();
             }
 
@@ -249,7 +249,7 @@ public class TaurusAlert {
 			sbMailContent.append("<td>任务状态</td><td> " + AttemptStatus.getInstanceRunState(attempt.getStatus()) + "</td>");
 			sbMailContent.append("</tr>");
 			sbMailContent.append("<tr>");//
-			sbMailContent.append("<td>日志查看</td><td>" + "http://"+domain+"/mvc/viewlog?id="+ attempt.getAttemptid() +"&status="+AttemptStatus.getInstanceRunState(attempt.getStatus())+"</td>");
+			sbMailContent.append("<td>日志查看</td><td>" +domain+"/viewlog?id="+ attempt.getAttemptid() +"&status="+AttemptStatus.getInstanceRunState(attempt.getStatus())+"</td>");
 			sbMailContent.append("</tr>");
 			sbMailContent.append("</table>");
 
@@ -293,9 +293,9 @@ public class TaurusAlert {
 
             String domain ="";
             try {
-                domain = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.deploy.weburl");
+                domain = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.serverName");
             } catch (LionException e) {
-                domain="taurus.dp";
+                domain="http://taurus.dp";
                 e.printStackTrace();
             }
             sbMailContent.append("※ Taurus 任务执行状态微信告警服务 ※");
@@ -304,7 +304,7 @@ public class TaurusAlert {
             sbMailContent.append("\n");
             sbMailContent.append("任务状态: " + AttemptStatus.getInstanceRunState(attempt.getStatus()));
             sbMailContent.append("\n");
-            sbMailContent.append("日志查看:" + "http://"+domain+"/mvc/viewlog?id="+ attempt.getAttemptid());
+            sbMailContent.append("日志查看:" +domain+"/viewlog?id="+ attempt.getAttemptid());
             sbMailContent.append("\n");
             sbMailContent.append("※ 点评工具组 ※");
 

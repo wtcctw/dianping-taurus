@@ -15,7 +15,7 @@ var taskId = $("#sqlinput").val();
                          status:status
                      },
                      type: "POST",
-                     url: "../db_admin",
+                     url: "/db_admin.do",
                      error: function () {
                          $("#sqloutput").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
                          $("#sqloutput").addClass("align-center");
@@ -52,7 +52,7 @@ var taskId = $("#sqlinput").val();
                             end:end
                         },
                         type: "POST",
-                        url: "../db_admin",
+                        url: "/db_admin.do",
                         error: function () {
                             $("#clearoutput").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
                             $("#clearoutput").addClass("align-center");
@@ -90,7 +90,7 @@ var taskId = $("#sqlinput").val();
                             creator:creator
                         },
                         type: "POST",
-                        url: "../db_admin",
+                        url: "/db_admin.do",
                         error: function () {
                             $("#adjustout").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
                             $("#adjustout").addClass("align-center");

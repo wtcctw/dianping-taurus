@@ -58,8 +58,7 @@ public class LoginController {
 		log.info("ssoUserInfo: " + userInfoStr);
 		
 		if(userInfoStr == null){
-			String conTextPath = request.getContextPath();
-			response.sendRedirect(conTextPath + (conTextPath.equals("/")?"":"/") + "/mvc/error");
+			response.sendRedirect(request.getContextPath() + "/error");
 			return ;
 		}
 		

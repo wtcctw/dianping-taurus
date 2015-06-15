@@ -10,7 +10,7 @@ function login(url){
         return;
     }
 	$.ajax({
-		url: '../login.do',
+		url: '/login.do',
 		data: {
 			username : $('#username').val(),
 			password:  $('#password').val()
@@ -23,14 +23,14 @@ function login(url){
 			},
 			200 : function(){
 				if(url=='')
-					window.location="index";
+					window.location="/index";
 				else{
 					window.location=url;
 				}
 			},
 			201 : function(){
 				if(url=='')
-					window.location="index";
+					window.location="/index";
 				else{
 					window.location=url;
 				}
@@ -41,7 +41,7 @@ function login(url){
 }
 
 function logout(){
-	window.location = "rest/ssologout";
+	window.location = "/rest/ssologout";
 }
 
 function EnterTo(url){

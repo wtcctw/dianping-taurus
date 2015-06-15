@@ -34,7 +34,7 @@
         <ul class="breadcrumb">
             <li class="active">
                 <i class="icon-home home-icon"></i>
-                <a href="${rc.contextPath}${mvc!""}/index">HOME</a>
+                <a href="${rc.contextPath}/index">HOME</a>
             </li>
         </ul>
     </div>

@@ -22,10 +22,10 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home home-icon"></i>
-                <a href="${rc.contextPath}/mvc/index">HOME</a>
+                <a href="${rc.contextPath}/index">HOME</a>
             </li>
             <li class="active">
-                <a href="${rc.contextPath}/mvc/update">更新日志</a>
+                <a href="${rc.contextPath}/update">更新日志</a>
             </li>
         </ul>
     </div>
@@ -89,7 +89,7 @@
                                 <td>2014-12-10</td>
                             </tr>
                             <tr>
-                                <td>新增 <a href="${rc.contextPath}/mvc/feedback">我要反馈</a> 功能 </td>
+                                <td>新增 <a href="${rc.contextPath}/feedback">我要反馈</a> 功能 </td>
                                 <td>2014-12-9</td>
                             </tr>
                             <tr>
@@ -101,7 +101,7 @@
                                 <td>2014-12-1</td>
                             </tr>
                             <tr>
-                                <td>新增 <a href="${rc.contextPath}/mvc/resign"> 任务交接 </a>功能</td>
+                                <td>新增 <a href="${rc.contextPath}/resign"> 任务交接 </a>功能</td>
                                 <td>2014-11-21</td>
                             </tr>
                             <tr>
@@ -117,7 +117,7 @@
                                 <td>2014-11-05</td>
                             </tr>
                             <tr>
-                                <td>新增 <a href="${rc.contextPath}/mvc/cronbuilder">cron 生成器</a></td>
+                                <td>新增 <a href="${rc.contextPath}/cronbuilder">cron 生成器</a></td>
                                 <td>2014-10-28</td>
                             </tr>
                             <tr>
@@ -133,7 +133,7 @@
                                 <td>2014-10-09</td>
                             </tr>
                             <tr>
-                                <td>job host监控细化，<a href="${rc.contextPath}/mvc/hosts">主机监控</a></td>
+                                <td>job host监控细化，<a href="${rc.contextPath}/hosts">主机监控</a></td>
                                 <td>2014-09-05</td>
                             </tr>
                             <tr>
@@ -145,15 +145,15 @@
                                 <td>2014-08-05</td>
                             </tr>
                             <tr>
-                                <td>新增任务监控<a href="${rc.contextPath}/mvc/monitor">任务监控</a>页面</td>
+                                <td>新增任务监控<a href="${rc.contextPath}/monitor">任务监控</a>页面</td>
                                 <td>2014-08-03</td>
                             </tr>
 							<tr>
-								<td>重新组织了<a href="${rc.contextPath}/mvc/about">帮助</a>页面</td>
+								<td>重新组织了<a href="${rc.contextPath}/about">帮助</a>页面</td>
 								<td>2013-09-27</td>
 							</tr>
 							<tr>
-								<td>增加了<a href="${rc.contextPath}/mvc/user">用户设置</a>页面</td>
+								<td>增加了<a href="${rc.contextPath}/user">用户设置</a>页面</td>
 								<td>2013-09-27</td>
 							</tr>
 							<tr>
@@ -165,7 +165,7 @@
 								<td>2013-09-27</td>
 							</tr>
 							<tr>
-								<td>支持自动杀死Timeout作业。具体细节请看<a href="${rc.contextPath}/mvc/about#config">帮助</a></td>
+								<td>支持自动杀死Timeout作业。具体细节请看<a href="${rc.contextPath}/about#config">帮助</a></td>
 								<td>2013-08-20</td>
 							</tr>
 							<tr>

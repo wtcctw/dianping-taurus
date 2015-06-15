@@ -37,10 +37,10 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home home-icon"></i>
-                <a href="${rc.contextPath}/mvc/index">HOME</a>
+                <a href="${rc.contextPath}/index">HOME</a>
             </li>
             <li class="active">
-                <a href="${rc.contextPath}/mvc/user">用户设置</a>
+                <a href="${rc.contextPath}/user">用户设置</a>
             </li>
         </ul>
     </div>

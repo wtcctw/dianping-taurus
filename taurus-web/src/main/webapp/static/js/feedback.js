@@ -24,7 +24,7 @@ function submitFeedBack() {
 
         $.ajax({
             type: 'POST',
-            url: "../feedback",
+            url: "/feedback.do",
             data: {
                 user: user,
                 action: "feedback",

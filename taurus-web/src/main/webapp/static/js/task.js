@@ -88,7 +88,7 @@ $(document).ready(function() {
 		var jForm = jQuery(form);
 		//submit
 		$.ajax({
-	        url: '../create_task',  //server script to process data
+	        url: '/create_task.do',  //server script to process data
 	        type: 'POST',
 	        //Ajax events
 	        success:function(data){
@@ -122,7 +122,7 @@ $(document).ready(function() {
 		}
 		//submit
 		$.ajax({
-	        url: '../create_task',  //server script to process data
+	        url: '/create_task.do',  //server script to process data
 	        type: 'POST',
 	        xhr: function() {  // custom xhr
 	            myXhr = $.ajaxSettings.xhr();

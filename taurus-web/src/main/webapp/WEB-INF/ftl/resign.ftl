@@ -43,10 +43,10 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home home-icon"></i>
-            <a href="${rc.contextPath}/mvc/index">HOME</a>
+            <a href="${rc.contextPath}/index">HOME</a>
         </li>
         <li class="active">
-            <a href="${rc.contextPath}/mvc/resign">离职交接</a>
+            <a href="${rc.contextPath}/resign">离职交接</a>
         </li>
     </ul>
 </div>
@@ -64,7 +64,7 @@
 				<div id="alertContainer" class="container col-sm-12">
 				    <div id="alertContainer" class="alert alert-danger">
 				        <button type="button" class="close" data-dismiss="alert">×</button>
-				        你未设分组，不能交接任务，请到<a href="${rc.contextPath}/mvc/user">用户设置</a>中设置自己的分组~
+				        你未设分组，不能交接任务，请到<a href="${rc.contextPath}/user">用户设置</a>中设置自己的分组~
 				    </div>
 				</div>
 		<#else>

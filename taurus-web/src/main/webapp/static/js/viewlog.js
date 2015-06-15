@@ -89,7 +89,7 @@ function fetch_errorLog() {
 
     var loading = document.getElementById("errloading");
     $.ajax({
-        url: "../attempts.do",
+        url: "/attempts.do",
         data: {
             id: attemptID,
             action: 'runlog',
@@ -134,7 +134,7 @@ function fetch_Log() {
         clearInterval(log_rtn);
     }
     $.ajax({
-        url: "../attempts.do",
+        url: "/attempts.do",
         data: {
             id: attemptID,
             action: 'runlog',
@@ -193,7 +193,7 @@ function close_reflash() {
 function is_log_end() {
     var ret = "";
     $.ajax({
-        url: "../attempts.do",
+        url: "/attempts.do",
         data: {
             id: attemptID,
             action: 'isend'
@@ -216,7 +216,7 @@ function is_log_end() {
 function get_task_status() {
     var ret = "";
     $.ajax({
-        url: "../attempts.do",
+        url: "/attempts.do",
         data: {
             id: attemptID,
             action: 'status'

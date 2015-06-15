@@ -86,7 +86,7 @@ $(document).ready(function () {
             gettype: "all"
         },
         type: "POST",
-        url: "../host_center",
+        url: "/host_center.do",
         error: function () {
 
         },
@@ -235,7 +235,7 @@ $(document).ready(function () {
 
             },
             type: "POST",
-            url: "../host_center",
+            url: "/host_center.do",
             error: function () {
                 $("#cpuload").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
                 $("#cpuload").addClass("align-center");

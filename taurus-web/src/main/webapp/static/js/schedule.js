@@ -130,7 +130,7 @@ function action_update(id) {
 			newForm.setAttribute("enctype","application/x-www-form-urlencoded");
 			$.ajax({
 				type: "POST",
-	            url: '../create_task?update='+id, 
+	            url: '/create_task?update='+id, 
 	            data: $(newForm).serialize(), // serializes the form's elements.
 	            enctype: 'application/x-www-form-urlencoded',
 	            error: function(data)
@@ -162,7 +162,7 @@ function action_update(id) {
 			newForm.appendChild(file);
 			$.ajax({
 				type: "POST",
-	           	url: '../create_task?update='+id, 
+	           	url: '/create_task?update='+id, 
 	           	data: new FormData(newForm),
 	           	enctype: 'multipart/form-data',
 	           	xhr: function() {  // custom xhr
@@ -205,7 +205,7 @@ function action_ok() {
     if(action_chinese == '执行') {
         var isExistRunningTask =""
         $.ajax({
-            url: "../attempts.do",
+            url: "/attempts.do",
             data: {
                 action: "runningtask",
                 taskId: taskID
@@ -241,7 +241,7 @@ function action_ok() {
 
 function do_action(){
     $.ajax({
-        url : "../tasks.do",
+        url : "/tasks.do",
         data : {
             action : toAction(action_chinese),
             id : taskID

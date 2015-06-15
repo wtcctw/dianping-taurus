@@ -176,7 +176,7 @@ function reflash_data(starttime, endtime){
             end: endtime
         },
         type: "POST",
-        url: "../monitor_center",
+        url: "/monitor_center.do",
         error: function () {
             $("#user-widget-main").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
             $("#user-widget-main").addClass("align-center");
@@ -411,7 +411,7 @@ function reflash_data(starttime, endtime){
             end: endtime
         },
         type: "POST",
-        url: "../monitor_center",
+        url: "/monitor_center.do",
         error: function () {
             $("#group-widget-main").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
             $("#group-widget-main").addClass("align-center");

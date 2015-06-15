@@ -92,7 +92,7 @@
                             返回
                         </a>
 
-                        <a href="${rc.contextPath}/mvc/index" class="btn btn-primary">
+                        <a href="${rc.contextPath}/index" class="btn btn-primary">
                             <i class="ace-icon fa fa-tachometer"></i>
                             首页
                         </a>

@@ -25,13 +25,13 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home home-icon"></i>
-                <a href="${rc.contextPath}/mvc/index">HOME</a>
+                <a href="${rc.contextPath}/index">HOME</a>
             </li>
             <li>
-                <a href="${rc.contextPath}/mvc/schedule">调度中心</a>
+                <a href="${rc.contextPath}/schedule">调度中心</a>
             </li>
             <li class="active">
-                <a href="${rc.contextPath}/mvc/attempt">调度历史</a>
+                <a href="${rc.contextPath}/attempt">调度历史</a>
             </li>
         </ul>
         <div style="float:right;padding-right: 5%">
@@ -108,7 +108,7 @@
             },
             timeout: 2000,
             type: "POST",
-            url: "../attempt",
+            url: "${rc.contextPath}/attempt.do",
             error: function () {
                 $("#attempt_content").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
                 $("#attempt_content").addClass("align-center");
@@ -182,14 +182,14 @@
                     if(state == "RUNNING"||state == "TIMEOUT"){
                         attemptBody += "<td><a href='#confirm' onClick=\"action($(this).parents('tr').attr('id'))\">Kill</a>";
                         if(item.isViewLog){
-                            attemptBody += " <a target='_blank'  href='${rc.contextPath}/mvc/viewlog?id="
+                            attemptBody += " <a target='_blank'  href='${rc.contextPath}/viewlog?id="
                                     +item.attemptId
                                     +"&status="
                                     +state
                                     +"'>日志</a>";
                         }
                         attemptBody +="</td>"
-                        attemptBody += "<td> <a id ='feedBtn' class='feedBtn'  href='${rc.contextPath}/mvc/feederror?id="
+                        attemptBody += "<td> <a id ='feedBtn' class='feedBtn'  href='${rc.contextPath}/feederror?id="
                                 +item.attemptId
                                 +"&status="
                                 +state
@@ -201,7 +201,7 @@
                                 +taskID
                                 +"&feedtype=mail"
                                 +"'><i class='icon-envelope'><img border='0' src='${rc.contextPath}/img/wechat.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></i></a> |";
-                        attemptBody += "<a id ='feedQQBtn' class='feedBtn'  href='${rc.contextPath}/mvc/feederror?id="
+                        attemptBody += "<a id ='feedQQBtn' class='feedBtn'  href='${rc.contextPath}/feederror?id="
                                 +item.attemptId
                                 +"&status="
                                 +state
@@ -214,13 +214,13 @@
                                 +"&feedtype=qq"
                                 +"'><img border='0' src='${rc.contextPath}/img/qq.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></a></td>"
                     }else{
-                        attemptBody += "<td> <a target='_blank'  href='${rc.contextPath}/mvc/viewlog?id="
+                        attemptBody += "<td> <a target='_blank'  href='${rc.contextPath}/viewlog?id="
                         +item.attemptId
                         +"&status="
                         +state
                         +"'>日志</a></td>";
 
-                        attemptBody += "<td> <a id ='feedBtn' class='feedBtn'  href='${rc.contextPath}/mvc/feederror?id="
+                        attemptBody += "<td> <a id ='feedBtn' class='feedBtn'  href='${rc.contextPath}/feederror?id="
                                 +item.attemptId
                                 +"&status="
                                 +state
@@ -232,7 +232,7 @@
                                 +taskID
                                 +"&feedtype=mail"
                                 +"'><i class='icon-envelope'><img border='0' src='${rc.contextPath}/img/wechat.png'  width='20' height='20' color='blue' alt='点我报错' title='点我报错'/></i></a> |";
-                        attemptBody += "<a id ='feedQQBtn' class='feedBtn'  href='${rc.contextPath}/mvc/feederror?id="
+                        attemptBody += "<a id ='feedQQBtn' class='feedBtn'  href='${rc.contextPath}/feederror?id="
                                 +item.attemptId
                                 +"&status="
                                 +state

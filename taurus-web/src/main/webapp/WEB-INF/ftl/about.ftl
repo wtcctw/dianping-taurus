@@ -22,10 +22,10 @@
     <ul class="breadcrumb">
         <li>
             <i class="icon-home home-icon"></i>
-            <a href="${rc.contextPath}/mvc/index">HOME</a>
+            <a href="${rc.contextPath}/index">HOME</a>
         </li>
         <li class="active">
-            <a href="${rc.contextPath}/mvc/about">使用帮助</a>
+            <a href="${rc.contextPath}/about">使用帮助</a>
         </li>
     </ul>
 </div>
@@ -66,7 +66,7 @@
         <h4>Taurus 各环境入口</h4>
         <ul>
             <li>
-                <a href="http://alpha.taurus.dp/">Alpha 环境:alpha.taurus.dp/</a>
+                <a href="http://alpha.taurus.dp:8080/">Alpha 环境:alpha.taurus.dp/</a>
             </li>
             <li>
                 <a href="http://beta.taurus.dp/">Beta 环境:beta.taurus.dp/</a>

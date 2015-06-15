@@ -53,10 +53,10 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home home-icon"></i>
-                <a href="${rc.contextPath}/mvc/index">HOME</a>
+                <a href="${rc.contextPath}/index">HOME</a>
             </li>
             <li class="active">
-                <a href="${rc.contextPath}/mvc/feedback">我要反馈</a>
+                <a href="${rc.contextPath}/feedback">我要反馈</a>
             </li>
         </ul>
     </div>

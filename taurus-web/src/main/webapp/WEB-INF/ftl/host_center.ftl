@@ -27,7 +27,7 @@
     <ul class="breadcrumb">
         <li class="active">
             <i class="icon-home home-icon"></i>
-            <a href="${rc.contextPath}/mvc/index">HOME</a>
+            <a href="${rc.contextPath}/index">HOME</a>
         </li>
     </ul>
 </div>
@@ -48,7 +48,7 @@
                 </h5>
 
                 <div class="widget-toolbar">
-                    <a class="btn btn-xs btn-yellow" href="${rc.contextPath}/mvc/host_history">
+                    <a class="btn btn-xs btn-yellow" href="${rc.contextPath}/host_history">
                         <i class="icon-search bigger-110"></i>
                         查看图谱
                     </a>
@@ -289,7 +289,7 @@
 
             },
             type: "POST",
-            url: "../host_center",
+            url: "${rc.contextPath}/host_center.do",
             error: function () {
                 $("#cpuload").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
                 $("#cpuload").addClass("align-center");

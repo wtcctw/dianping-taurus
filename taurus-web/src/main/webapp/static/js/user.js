@@ -18,7 +18,7 @@ $(document).ready(function() {
 			return false;
 		}
 		$.ajax({
-			url: 'rest/saveUser',
+			url: '/rest/saveUser',
 	        type: 'POST',
 			error: function(){
 				$("#alertContainer").html('<div id="alertContainer" class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button> <strong>保存失败</strong></div>');

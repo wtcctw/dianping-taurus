@@ -23,14 +23,14 @@ function login(url){
 			},
 			200 : function(){
 				if(url=='')
-					window.location="${rc.contextPath}${mvc!""}/index";
+					window.location="${rc.contextPath}/index";
 				else{
 					window.location=url;
 				}
 			},
 			201 : function(){
 				if(url=='')
-					window.location="${rc.contextPath}${mvc!""}/index";
+					window.location="${rc.contextPath}/index";
 				else{
 					window.location=url;
 				}
@@ -41,7 +41,7 @@ function login(url){
 }
 
 function logout(){
-	window.location = "${rc.contextPath}${mvc!""}/rest/ssologout";
+	window.location = "${rc.contextPath}/rest/ssologout";
 }
 
 function EnterTo(url){

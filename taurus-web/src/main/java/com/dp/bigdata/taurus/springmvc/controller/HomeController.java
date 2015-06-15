@@ -1,5 +1,6 @@
 package com.dp.bigdata.taurus.springmvc.controller;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -81,6 +83,16 @@ public class HomeController {
 		modelMap.addAttribute("switchUrls", switchUrls);
 		
 		return "/signin.ftl";
+	}
+	
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public void rootUrl(ModelMap modelMap, 
+						HttpServletRequest request,
+						HttpServletResponse response) throws ServletException, IOException 
+	{
+		log.info("--------------init the rootUrl------------");
+		
+		request.getRequestDispatcher(request.getContextPath() + "/index").forward(request, response);
 	}
 	
 	/**
@@ -593,16 +605,15 @@ public class HomeController {
 		
 		String domain = null;
 		try {
-		    domain = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.deploy.weburl");
+		    domain = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.serverName");
 		} catch (LionException e) {
 		
 		    e.printStackTrace();
-		    domain = "taurus.dp";
+		    domain = "http://taurus.dp";
 		}
 		
-		logUrl = "http://"
-		        + domain
-		        + "/mvc/viewlog?id="
+		logUrl = domain
+		        + "/viewlog?id="
 		        + attemptId
 		        + "&status="
 		        + state;

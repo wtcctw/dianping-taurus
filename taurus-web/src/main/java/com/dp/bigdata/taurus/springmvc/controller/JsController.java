@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-@RequestMapping("/js")
+@RequestMapping("/dynamic/js")
 public class JsController {
 
 	@RequestMapping(value = "/login.js", method = RequestMethod.GET)

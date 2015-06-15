@@ -53,10 +53,10 @@ public class AlertOfflineAgentTask  extends TimerTask {
         String domain = null;
         String reportToOps = null;
         try {
-            domain = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.deploy.weburl");
+            domain = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.serverName");
             reportToOps = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.down.ops.report.alarm.post");
         } catch (LionException e) {
-            domain="taurus.dp";
+            domain="http://taurus.dp";
             reportToOps = "http://pulse.dp/report/alarm/post";
             e.printStackTrace();
         }
@@ -70,14 +70,14 @@ public class AlertOfflineAgentTask  extends TimerTask {
 
                 String context = "您好，taurus-agent的job主机 ["
                         + host
-                        + "] 心跳异常请在【http://"+domain+"/mvc/host_center】核实" +
-                        "监控连接如下：http://"+domain+"/mvc/hosts?hostName="
+                        + "] 心跳异常请在【"+domain+"/host_center】核实" +
+                        "监控连接如下："+domain+"/hosts?hostName="
                         + host
                         +"，谢谢~";
                 String exceptContext = "您好，taurus-agent的job主机 ["
                         + host
-                        + "] 服务已经挂掉请在【http://"+domain+"/mvc/host_center】核实并重启该Job机器的TOMCAT" +
-                        "监控连接如下：http://"+domain+"/mvc/hosts?hostName="
+                        + "] 服务已经挂掉请在【"+domain+"/host_center】核实并重启该Job机器的TOMCAT" +
+                        "监控连接如下："+domain+"/hosts?hostName="
                         + host
                         +"，谢谢~";
 
@@ -97,7 +97,8 @@ public class AlertOfflineAgentTask  extends TimerTask {
                         reportAlarmToOps(host, 
                     					"Taurus-Agent主机心跳异常告警服务", 
                     					context, 
-                    					domain + "/mvc/hosts?hostName=" + host, 
+                    					domain + "/hosts?hostName=" + host, 
+                    					"dpop@dianping.com",
                     					reportToOps);
                     }else
                     {
@@ -111,7 +112,8 @@ public class AlertOfflineAgentTask  extends TimerTask {
                         reportAlarmToOps(host, 
             					"Taurus-Agent主机失联系告警服务", 
             					exceptContext, 
-            					domain + "/mvc/hosts?hostName=" + host, 
+            					domain + "/hosts?hostName=" + host, 
+            					"monitor@dianping.com",
             					reportToOps);
                     }
 
@@ -129,8 +131,8 @@ public class AlertOfflineAgentTask  extends TimerTask {
 
                 String exceptContext = "您好，taurus-agent的job主机 ["
                         + host
-                        + "] 服务已经挂掉请在【http://"+domain+"/mvc/host_center】核实并重启该Job机器的TOMCAT" +
-                        "监控连接如下：http://"+domain+"/mvc/hosts?hostName="
+                        + "] 服务已经挂掉请在【"+domain+"/host_center】核实并重启该Job机器的TOMCAT" +
+                        "监控连接如下："+domain+"/hosts?hostName="
                         + host
                         +"，谢谢~";
 
@@ -155,7 +157,8 @@ public class AlertOfflineAgentTask  extends TimerTask {
                         reportAlarmToOps(host, 
             					"Taurus-Agent主机失联系告警服务", 
             					exceptContext, 
-            					domain + "/mvc/hosts?hostName=" + host, 
+            					domain + "/hosts?hostName=" + host, 
+            					"monitor@dianping.com",
             					reportToOps);
                     }
 
@@ -175,7 +178,7 @@ public class AlertOfflineAgentTask  extends TimerTask {
      * @param url
      * @param reportUrl 运维告警的post接口
      */
-    public void reportAlarmToOps(String domain, String title, String content, String url, String reportUrl) {
+    public void reportAlarmToOps(String domain, String title, String content, String url, String receiver, String reportUrl) {
     	
     	// 给运维报警
         Map<String, String> header = new HashMap<String, String>();

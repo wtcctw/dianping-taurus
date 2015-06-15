@@ -26,10 +26,10 @@
         <ul class="breadcrumb">
             <li>
                 <i class="icon-home home-icon"></i>
-                <a href="${rc.contextPath}/mvc/index">HOME</a>
+                <a href="${rc.contextPath}/index">HOME</a>
             </li>
             <li class="active">
-                <a href="${rc.contextPath}/mvc/schedule">调度中心</a>
+                <a href="${rc.contextPath}/schedule">调度中心</a>
             </li>
         </ul>
     </div>
@@ -161,7 +161,7 @@
                 isAdmin:isAdmin
             },
             type: "POST",
-            url: "../schedule",
+            url: "${rc.contextPath}/schedule.do",
             error: function () {
                 $("#schedule_content").html("<i class='icon-info-sign icon-large red '>后台服务器打了个盹～</i>");
                 $("#schedule_content").addClass("align-center");
@@ -247,11 +247,11 @@
                                     + "<li><a href='#confirm' onClick=\"action($(this).parents('tr').find('td')[0].textContent,1)\">删除</a></li>"
                                     + "<li><a href='#confirm' onClick=\"action($(this).parents('tr').find('td')[0].textContent,2)\">暂停</a></li>"
                                     + "<li><a href='#confirm' onClick=\"action($(this).parents('tr').find('td')[0].textContent,3)\">执行</a></li>"
-                                    + "<li><a class='detailBtn' href='${rc.contextPath}/mvc/task_form?task_id="
+                                    + "<li><a class='detailBtn' href='${rc.contextPath}/task_form?task_id="
                                     + item.taskId
                                     + "' >详细</a></li></ul></div>"
                                     +"</td>"
-                                    + "<td><a id='attempts' class='btn btn-primary btn-small' href='${rc.contextPath}/mvc/attempt?taskID=" + item.taskId + "' target= 'blank'>运行历史</a></td></tr>";
+                                    + "<td><a id='attempts' class='btn btn-primary btn-small' href='${rc.contextPath}/attempt?taskID=" + item.taskId + "' target= 'blank'>运行历史</a></td></tr>";
                         } else {
                             scheduleBody += "<tr id='" + item.taskId + "' class='error'>"
                                     +"<td class='hide'>" + item.taskId + "</td>"
@@ -291,11 +291,11 @@
                                     + "<li><a href='#confirm' onClick=\"action($(this).parents('tr').find('td')[0].textContent,1)\">删除</a></li>"
                                     +"<li><a href='#confirm' onClick=\"action($(this).parents('tr').find('td')[0].textContent,2)\">恢复</a></li>"
                                     +"<li><a href='#confirm' onClick=\"action($(this).parents('tr').find('td')[0].textContent,3)\">执行</a></li>"
-                                    + "<li><a class='detailBtn' href='${rc.contextPath}/mvc/task_form?task_id="
+                                    + "<li><a class='detailBtn' href='${rc.contextPath}/task_form?task_id="
                                     + item.taskId
                                     + "' >详细</a></li></ul></div>"
                                     +"</td>"
-                                    + "<td><a id='attempts' class='btn btn-primary btn-small' href='${rc.contextPath}/mvc/attempt?taskID=" + item.taskId + "' target= 'blank'>运行历史</a></td></tr>"
+                                    + "<td><a id='attempts' class='btn btn-primary btn-small' href='${rc.contextPath}/attempt?taskID=" + item.taskId + "' target= 'blank'>运行历史</a></td></tr>"
 
                         }
 
@@ -368,11 +368,11 @@
                                     + "<li><a href='#confirm' onClick=\"action($(this).parents('tr').find('td')[0].textContent,1)\">删除</a></li>"
                                     + "<li><a href='#confirm' onClick=\"action($(this).parents('tr').find('td')[0].textContent,2)\">暂停</a></li>"
                                     + "<li><a href='#confirm' onClick=\"action($(this).parents('tr').find('td')[0].textContent,3)\">执行</a></li>"
-                                    + "<li><a class='detailBtn' href='${rc.contextPath}/mvc/task_form?task_id="
+                                    + "<li><a class='detailBtn' href='${rc.contextPath}/task_form?task_id="
                                     + item.taskId
                                     + "' >详细</a></li></ul></div>"
                                     +"</td>"
-                                    + "<td><a id='attempts' class='btn btn-primary btn-small' href='${rc.contextPath}/mvc/attempt?taskID=" + item.taskId + "' target= 'blank'>运行历史</a></td></tr>";
+                                    + "<td><a id='attempts' class='btn btn-primary btn-small' href='${rc.contextPath}/attempt?taskID=" + item.taskId + "' target= 'blank'>运行历史</a></td></tr>";
                         } else {
                             scheduleBody += "<tr id='" + item.taskId + "' class='error'>"
                                     +"<td class='hide'>" + item.taskId + "</td>"
@@ -409,11 +409,11 @@
                                     + "<li><a href='#confirm' onClick=\"action($(this).parents('tr').find('td')[0].textContent,1)\">删除</a></li>"
                                     +"<li><a href='#confirm' onClick=\"action($(this).parents('tr').find('td')[0].textContent,2)\">恢复</a></li>"
                                     +"<li><a href='#confirm' onClick=\"action($(this).parents('tr').find('td')[0].textContent,3)\">执行</a></li>"
-                                    + "<li><a class='detailBtn' href='${rc.contextPath}/mvc/task_form?task_id="
+                                    + "<li><a class='detailBtn' href='${rc.contextPath}/task_form?task_id="
                                     + item.taskId
                                     + "' >详细</a></li></ul></div>"
                                     +"</td>"
-                                    + "<td><a id='attempts' class='btn btn-primary btn-small' href='${rc.contextPath}/mvc/attempt?taskID=" + item.taskId + "' target= 'blank'>运行历史</a></td></tr>"
+                                    + "<td><a id='attempts' class='btn btn-primary btn-small' href='${rc.contextPath}/attempt?taskID=" + item.taskId + "' target= 'blank'>运行历史</a></td></tr>"
 
                         }
 

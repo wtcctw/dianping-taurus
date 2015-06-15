@@ -43,7 +43,7 @@ public class AuthenticationFilter implements Filter {
 		HttpServletResponse res = (HttpServletResponse) response;
 		String requestURI = req.getRequestURI();
 		
-		// Filter出口1. 登录/mvc/ssologin 本机放行，cas不能放行，否则可以伪造cas认证信息；登出/mvc/ssologout 本机和cas都放行
+		// Filter出口1. 登录/ssologin 本机放行，cas不能放行，否则可以伪造cas认证信息；登出/ssologout 本机和cas都放行
 		for (String uri : excludePages) {
 			if (requestURI.toLowerCase().contains(uri)){
 				System.out.println("excludePage : " + uri);
@@ -52,15 +52,7 @@ public class AuthenticationFilter implements Filter {
 			}
 		}
 		
-		// 解决首页显示URL层级不同JS上层目录不同的问题
-		String conTextPath = req.getContextPath();
-		String reqURInoConTextPath = requestURI.substring(conTextPath.length());
-		// 访问根目录
-		if(reqURInoConTextPath.equals("/")){
-			requestURI = InitController.SPRINGMVC_SERVLET_ROOTPATH + "/index";
-		}
-		
-		if (StringUtil.isBlank(req.getQueryString()) == false) {
+		if (StringUtil.isNotBlank(req.getQueryString())) {
 			requestURI = requestURI + "?" + req.getQueryString();
 		}
 		
@@ -69,16 +61,11 @@ public class AuthenticationFilter implements Filter {
 		
 		//未登录
 		if (currentUser == null) {
-			String loginUrl =  conTextPath 
-								+ InitController.SPRINGMVC_SERVLET_ROOTPATH
+			String loginUrl =  req.getContextPath() 
 								+ "/rest/ssologin?redirect-url=" 
 								+ URLEncoder.encode(requestURI, "UTF-8");
 			req.getRequestDispatcher(loginUrl).forward(req, res);
-		//根目录首页跳转再过滤
-		} else if(reqURInoConTextPath.equals("/")){
-			res.sendRedirect(requestURI);
-		// Filter出口2.
-		} else {
+		} else {// Filter出口2.
 			chain.doFilter(request, response);
 		}
 	}

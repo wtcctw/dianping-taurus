@@ -23,7 +23,7 @@ function action(id) {
 
 function redo_ok() {
     $.ajax({
-        url : "../tasks.do",
+        url : "/tasks.do",
         data : {
             action : "execute",
             id : taskId
@@ -44,7 +44,7 @@ function redo_ok() {
 
 function action_ok() {
 	$.ajax({
-		url : "../attempts.do",
+		url : "/attempts.do",
 		data : {
 			id : attemptID,
 			action : 'kill'

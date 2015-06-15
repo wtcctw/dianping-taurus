@@ -61,9 +61,9 @@ public class DeployResource extends ServerResource implements IDeployResource {
 
 	private static final Log LOG = LogFactory.getLog(DeployResource.class);
 
-	private static final String createUrlPattern = "http://%s/mvc/task?appname=%s&path=%s&ip=%s";
+	private static final String createUrlPattern = "http://%s/task?appname=%s&path=%s&ip=%s";
 
-	private static final String updateUrlPattern = "http://%s/mvc/schedule?appname=%s&path=%s";
+	private static final String updateUrlPattern = "http://%s/schedule?appname=%s&path=%s";
 
 	private static Map<String, DeployResult> deployResults = new LinkedHashMap<String, DeployResult>(1000, 0.75f, true) {
 		private static final long serialVersionUID = 1L;
