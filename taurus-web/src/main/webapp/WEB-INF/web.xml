@@ -315,7 +315,7 @@
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>CreateTaskServlet</servlet-name>
-		<url-pattern>/create_task</url-pattern>
+		<url-pattern>/create_task.do</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>UserServlet</servlet-name>
