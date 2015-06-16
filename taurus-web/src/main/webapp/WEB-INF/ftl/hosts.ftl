@@ -481,7 +481,7 @@
             <ul class="run-tag">
                 <li><a>日志信息<span class="label label-info">STDOUT</span></a></li>
             </ul>
-            <div data-spy="scroll" data-offset="0" style="height: 510px; line-height: 20px; overflow: auto;"
+            <div data-offset="0" style="height: 510px; line-height: 20px; overflow: auto;"
                  class="terminal terminal-like col-sm-12" id="strout">
             </div>
         </div>
