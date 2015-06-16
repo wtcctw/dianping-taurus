@@ -42,6 +42,7 @@ public class AuthenticationFilter implements Filter {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
 		String requestURI = req.getRequestURI();
+		System.out.println(new Date() + " [" + this.getClass().getName() + "] RequestURI: " + requestURI);
 		
 		// Filter出口1. 登录/ssologin 本机放行，cas不能放行，否则可以伪造cas认证信息；登出/ssologout 本机和cas都放行
 		for (String uri : excludePages) {

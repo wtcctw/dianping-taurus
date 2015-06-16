@@ -85,7 +85,7 @@ public class HomeController {
 		return "/signin.ftl";
 	}
 	
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/", method = RequestMethod.GET)
 	public void rootUrl(ModelMap modelMap, 
 						HttpServletRequest request,
 						HttpServletResponse response) throws ServletException, IOException 
@@ -93,7 +93,7 @@ public class HomeController {
 		log.info("--------------init the rootUrl------------");
 		
 		request.getRequestDispatcher(request.getContextPath() + "/index").forward(request, response);
-	}
+	}*/
 	
 	/**
 	 * 重构index.jsp,主体代码task_center,monitor可以复用
@@ -103,7 +103,7 @@ public class HomeController {
 	 * @return
 	 * @throws ParseException
 	 */
-	@RequestMapping(value = "/index", method = RequestMethod.GET)
+	@RequestMapping(value = {"/","/index"}, method = RequestMethod.GET)
 	public String index(ModelMap modelMap, 
 						HttpServletRequest request,
 						HttpServletResponse response) throws ParseException 
