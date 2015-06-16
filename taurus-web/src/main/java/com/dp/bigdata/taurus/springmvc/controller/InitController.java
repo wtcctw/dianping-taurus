@@ -37,6 +37,10 @@ public class InitController implements ServletContextAware {
 
 	public static final String USER_POWER = "taurus-user-power";
 	
+	public static String targetUri = "task";
+	
+	public static String nameUri = "name?task_name=";
+	
     @Override
 	public void setServletContext(ServletContext sc) {
 		this.servletContext=sc;  
@@ -61,6 +65,8 @@ public class InitController implements ServletContextAware {
         }
 		
 		USER_API = RESTLET_URL_BASE + "user";
+		targetUri = RESTLET_URL_BASE + targetUri;
+        nameUri =  RESTLET_URL_BASE + nameUri;
 	}
 	
 }
