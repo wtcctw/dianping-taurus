@@ -14,7 +14,7 @@
     <link rel="stylesheet" type="text/css" href="${rc.contextPath}/css/DT_bootstrap.css">
     <link href="${rc.contextPath}/css/viewlog.css" rel="stylesheet" type="text/css">
 </head>
-<body data-spy="scroll">
+<body>
 <#include "segment/header.ftl">
 <#include "segment/left.ftl">
 
