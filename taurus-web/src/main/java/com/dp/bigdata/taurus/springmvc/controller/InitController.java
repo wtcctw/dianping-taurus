@@ -1,7 +1,5 @@
 package com.dp.bigdata.taurus.springmvc.controller;
 
-import java.util.Collection;
-
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletContext;
 
