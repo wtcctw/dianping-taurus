@@ -20,24 +20,22 @@ public class InitController implements ServletContextAware {
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 	
 	private ServletContext servletContext;
-	
-	public static String SPRINGMVC_SERVLET_URL_PATTERN;
-	
-	public static String SPRINGMVC_SERVLET_ROOTPATH;
-    
+
 	public static String RESTLET_URL_BASE = null;
 	
-	public static String USER_API = null;
+	public static String ERROR_PAGE = null;
+	
+	public static String AGENT_PORT = null;
+	
+    public static String NEW_AGENT_PORT = null;
+    
+    public static String XSL_UPLOAD_TMP_DIR = null;
 	
 	public static final String USER_NAME = "taurus-user";
 
 	public static final String USER_GROUP = "taurus-group";
 
 	public static final String USER_POWER = "taurus-user-power";
-	
-	public static String targetUri = "task";
-	
-	public static String nameUri = "name?task_name=";
 	
     @Override
 	public void setServletContext(ServletContext sc) {
@@ -48,23 +46,24 @@ public class InitController implements ServletContextAware {
 	@PostConstruct
 	public void init() {
 		log.info("----------- into spring mvc init ------------");
-		SPRINGMVC_SERVLET_URL_PATTERN = servletContext.getInitParameter("SPRINGMVC_SERVLET_URL_PATTERN");
-    	SPRINGMVC_SERVLET_ROOTPATH = SPRINGMVC_SERVLET_URL_PATTERN.substring(0, SPRINGMVC_SERVLET_URL_PATTERN.length()-2);
-    	
+		
 		ReFlashHostLoadTaskTimer.getReFlashHostLoadManager().start();
 		
 		try {
             RESTLET_URL_BASE = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.restlet.url");
+            AGENT_PORT = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.restlet.port");
+            NEW_AGENT_PORT = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.restlet.new.port");
         } catch (LionException e) {
             RESTLET_URL_BASE = servletContext.getInitParameter("RESTLET_SERVER");
+            AGENT_PORT = "8080";
+            NEW_AGENT_PORT = "8088";
             Cat.logError("LionException", e);
         } catch (Exception e) {
             Cat.logError("LionException", e);
         }
 		
-		USER_API = RESTLET_URL_BASE + "user";
-		targetUri = RESTLET_URL_BASE + targetUri;
-        nameUri =  RESTLET_URL_BASE + nameUri;
+        ERROR_PAGE = servletContext.getInitParameter("ERROR_PAGE");
+        XSL_UPLOAD_TMP_DIR = servletContext.getInitParameter("XSL_UPLOAD_TMP_DIR");
 	}
 	
 }

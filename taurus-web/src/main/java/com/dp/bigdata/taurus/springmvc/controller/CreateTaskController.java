@@ -35,18 +35,18 @@ public class CreateTaskController {
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 	
 	@RequestMapping(value = "/create_task", method = RequestMethod.POST)
-	public void create_task_post(HttpServletRequest req, HttpServletResponse resp) 
+	public void createTaskPost(HttpServletRequest req, HttpServletResponse resp) 
 												throws IOException, ServletException 
 	{
-		log.info("--------------init the create_task_post------------");
+		log.info("--------------init the createTaskPost------------");
 		HttpClient httpclient = new DefaultHttpClient();
         // Determine final URL
         StringBuffer uri = new StringBuffer();
         
         if(req.getParameter("update") != null){
-            uri.append(InitController.targetUri).append("/").append(req.getParameter("update"));
+            uri.append(InitController.RESTLET_URL_BASE + "task").append("/").append(req.getParameter("update"));
         } else {
-            uri.append(InitController.targetUri);
+            uri.append(InitController.RESTLET_URL_BASE + "task");
         }
         log.info("Access URI : " + uri.toString());
         // Get HTTP method
@@ -140,14 +140,14 @@ public class CreateTaskController {
 	}
 	
 	@RequestMapping(value = "/create_task", method = RequestMethod.GET)
-	public void create_task_get(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+	public void createTaskGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		
-		log.info("--------------init the create_task_get------------");
+		log.info("--------------init the createTaskGet------------");
 		
 		StringBuffer uri = new StringBuffer();
         
 		if (req.getParameter("name") != null){
-            uri.append(InitController.nameUri).append(req.getParameter("name"));
+            uri.append(InitController.RESTLET_URL_BASE + "name?task_name=").append(req.getParameter("name"));
             log.info("Access URI : " + uri.toString());
             ClientResource cr = new ClientResource(uri.toString());
             INameResource nameResource = cr.wrap(INameResource.class);

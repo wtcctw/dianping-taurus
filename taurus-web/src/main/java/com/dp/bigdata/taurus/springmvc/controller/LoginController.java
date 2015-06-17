@@ -71,7 +71,7 @@ public class LoginController {
 		session.setAttribute(InitController.USER_NAME, userName);
         System.out.println("login success!");
 
-		ClientResource cr = new ClientResource(InitController.USER_API);
+		ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "user");
 		IUsersResource resource = cr.wrap(IUsersResource.class);
 		UserDTO dto = new UserDTO();
 		dto.setName(userName);
