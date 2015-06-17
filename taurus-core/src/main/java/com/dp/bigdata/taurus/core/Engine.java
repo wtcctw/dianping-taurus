@@ -1,7 +1,6 @@
 package com.dp.bigdata.taurus.core;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -14,24 +13,22 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import com.dianping.lion.EnvZooKeeperConfig;
-import com.dianping.lion.client.ConfigCache;
-import com.dianping.lion.client.LionException;
-import com.dianping.ops.http.HttpPoster;
+import javax.mail.MessagingException;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.NameValuePair;
-import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataAccessException;
 
 import com.dianping.cat.Cat;
 import com.dianping.cat.message.Message;
 import com.dianping.cat.message.Transaction;
+import com.dianping.lion.EnvZooKeeperConfig;
+import com.dianping.lion.client.ConfigCache;
+import com.dianping.lion.client.LionException;
+import com.dianping.ops.http.HttpPoster;
 import com.dp.bigdata.taurus.generated.mapper.HostMapper;
 import com.dp.bigdata.taurus.generated.mapper.TaskAttemptMapper;
 import com.dp.bigdata.taurus.generated.mapper.TaskMapper;
@@ -45,10 +42,6 @@ import com.dp.bigdata.taurus.zookeeper.execute.helper.ExecuteStatus;
 import com.dp.bigdata.taurus.zookeeper.execute.helper.ExecutorManager;
 import com.dp.bigdata.taurus.zookeeper.heartbeat.helper.AgentHandler;
 import com.dp.bigdata.taurus.zookeeper.heartbeat.helper.AgentMonitor;
-
-import org.springframework.dao.DataAccessException;
-
-import javax.mail.MessagingException;
 
 /**
  * Engine is the default implementation of the <code>Scheduler</code>.

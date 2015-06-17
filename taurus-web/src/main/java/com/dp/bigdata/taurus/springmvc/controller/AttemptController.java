@@ -60,9 +60,11 @@ public class AttemptController {
             Task task = map.get(taskID);
             String taskName = task.getName();
             String zabbixSwitch = InitController.ZABBIX_SWITCH;
-            boolean isViewLog = AttemptProxyController.isHostOverLoad(task.getHostname());
+            boolean isViewLog = false;
             if (zabbixSwitch.equals("false")){
                 isViewLog = false;
+            }else{
+            	isViewLog = AttemptProxyController.isHostOverLoad(task.getHostname());
             }
 
             for (AttemptDTO dto : attempts) {
