@@ -186,7 +186,7 @@
 	
 
 	<!-- 传统servlet配置 -->
-	<servlet>
+	<!-- <servlet>
 		<servlet-name>TaskProxyServlet</servlet-name>
 		<servlet-class>com.dp.bigdata.taurus.web.servlet.TaskProxyServlet</servlet-class>
 	</servlet>
@@ -313,17 +313,14 @@
 		<servlet-name>LoginServlet</servlet-name>
 		<url-pattern>/login.do</url-pattern>
 	</servlet-mapping>
-	<!-- 弃用，启用CreateTaskController -->
 	<servlet-mapping>
 		<servlet-name>CreateTaskServlet</servlet-name>
 		<url-pattern>/create_task.do</url-pattern>
 	</servlet-mapping>
-	<!-- 弃用，启用UserController -->
 	<servlet-mapping>
 		<servlet-name>UserServlet</servlet-name>
 		<url-pattern>/saveUser.do</url-pattern>
 	</servlet-mapping>
-	<!-- 弃用，启用HostController -->
 	<servlet-mapping>
 		<servlet-name>HostServlet</servlet-name>
 		<url-pattern>/updateHost.do</url-pattern>
@@ -332,7 +329,6 @@
         <servlet-name>DeployServlet</servlet-name>
         <url-pattern>/deploy.do</url-pattern>
     </servlet-mapping>
-    <!-- 弃用，启用MonitorController -->
     <servlet-mapping>
         <servlet-name>MonitorServlet</servlet-name>
         <url-pattern>/monitor.do</url-pattern>
@@ -378,7 +374,7 @@
     <servlet-mapping>
         <servlet-name>HostHistoryServlet</servlet-name>
         <url-pattern>/host_history.do</url-pattern>
-    </servlet-mapping>
+    </servlet-mapping> -->
 
     <!-- <jsp-config>
         <jsp-property-group>
