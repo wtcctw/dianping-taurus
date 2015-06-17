@@ -6,8 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import javax.annotation.PostConstruct;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,12 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.context.ServletContextAware;
 
-import com.dianping.cat.Cat;
-import com.dianping.lion.EnvZooKeeperConfig;
-import com.dianping.lion.client.ConfigCache;
-import com.dianping.lion.client.LionException;
 import com.dp.bigdata.taurus.core.AttemptStatus;
 import com.dp.bigdata.taurus.generated.module.Task;
 import com.dp.bigdata.taurus.restlet.resource.IGetAttemptsByStatus;
@@ -36,7 +29,6 @@ import com.dp.bigdata.taurus.restlet.shared.AttemptDTO;
 import com.dp.bigdata.taurus.restlet.shared.HostDTO;
 import com.dp.bigdata.taurus.web.servlet.AttemptProxyServlet;
 import com.dp.bigdata.taurus.web.utils.ReFlashHostLoadTask;
-import com.dp.bigdata.taurus.web.utils.ReFlashHostLoadTaskTimer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -289,13 +281,7 @@ public class MonitorController {
     	 */
     	public boolean isViewLog(String ip){
     		boolean result = AttemptProxyServlet.isHostOverLoad(ip);
-    		String zabbixSwitch = null;
-    		
-            try {
-                zabbixSwitch = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.zabbix.switch");
-            }catch (LionException e){
-                zabbixSwitch = "true";
-            }
+    		String zabbixSwitch = InitController.ZABBIX_SWITCH;
 
             if (zabbixSwitch.equals("false")){
             	result = false;

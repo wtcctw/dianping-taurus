@@ -14,9 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.dianping.lion.EnvZooKeeperConfig;
-import com.dianping.lion.client.ConfigCache;
-import com.dianping.lion.client.LionException;
 import com.dp.bigdata.taurus.alert.MailHelper;
 import com.dp.bigdata.taurus.alert.WeChatHelper;
 
@@ -50,13 +47,7 @@ public class FeedBackController {
                     + feedback
                     + "反馈信息我们已经收到，我们会及时处理，谢谢你的支持！"
                     + " ❃ 点评工具组 ❃";
-            String to="";
-            try {
-                to = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.feedback.mail.to");
-            } catch (LionException e) {
-                e.printStackTrace();
-                to = "kirin.li@dianping.com";
-            }
+            String to= InitController.MAIL_TO;
             to += ","+ user +"@dianping.com";
 
             try {
@@ -82,13 +73,7 @@ public class FeedBackController {
             String mailTo = request.getParameter("mailTo");
             String feedType = request.getParameter("feedtype");
 
-            String domain ="";
-            try {
-                domain = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.serverName");
-            } catch (LionException e) {
-                domain="http://taurus.dp";
-                e.printStackTrace();
-            }
+            String domain = InitController.DOMAIN;
             String logUrl = domain
 					        + "/viewlog?id="
 					        + attemptId;

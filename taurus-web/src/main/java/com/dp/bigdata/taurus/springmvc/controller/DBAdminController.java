@@ -15,9 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.dianping.lion.EnvZooKeeperConfig;
-import com.dianping.lion.client.ConfigCache;
-import com.dianping.lion.client.LionException;
 import com.dp.bigdata.taurus.core.MultiInstanceFilter;
 import com.dp.bigdata.taurus.restlet.resource.IClearDependencyPassTask;
 import com.dp.bigdata.taurus.zookeeper.common.infochannel.ZooKeeperCleaner;
@@ -43,12 +40,7 @@ public class DBAdminController {
         ClientResource cr;
         if (SQL_QUERY.equals(action)) {
             String user = (String) request.getSession().getAttribute("taurus-user");
-            String adminUser;
-            try {
-                adminUser = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.dbadmin.user");
-            } catch (LionException e) {
-                adminUser = "kirin.li";
-            }
+            String adminUser = InitController.ADMIN_USER;
             OutputStream output = response.getOutputStream();
             String reusult_str = "";
 
@@ -87,12 +79,7 @@ public class DBAdminController {
         }else if (CLEAR_ZOOKEEPER_NODES.equals(action)) {
             OutputStream output = response.getOutputStream();
             String user = (String) request.getSession().getAttribute("taurus-user");
-            String adminUser;
-            try {
-                adminUser = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.dbadmin.user");
-            } catch (LionException e) {
-                adminUser = "kirin.li";
-            }
+            String adminUser = InitController.ADMIN_USER;
             String reusult_str = "";
 
             if (adminUser.contains(user)) {
@@ -121,12 +108,7 @@ public class DBAdminController {
             String creator = request.getParameter("creator");
 
             String user = (String) request.getSession().getAttribute("taurus-user");
-            String adminUser;
-            try {
-                adminUser = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.dbadmin.user");
-            } catch (LionException e) {
-                adminUser = "kirin.li";
-            }
+            String adminUser = InitController.ADMIN_USER;
             String reusult_str = "";
 
             if (adminUser.contains(user)) {

@@ -19,9 +19,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.dianping.lion.EnvZooKeeperConfig;
-import com.dianping.lion.client.ConfigCache;
-import com.dianping.lion.client.LionException;
 import com.dp.bigdata.taurus.generated.module.User;
 import com.dp.bigdata.taurus.restlet.resource.IUsersResource;
 import com.dp.bigdata.taurus.restlet.shared.UserDTO;
@@ -110,17 +107,8 @@ public class LoginController {
         
         System.out.println("logout success!");
         
-        String ssoLogoutUrl = null;
-        String taurusUrl = null;
-        
-        try {
-        	ssoLogoutUrl = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("cas-server-webapp.logoutUrl");
-        	taurusUrl = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.serverName");
-        } catch (LionException e) {
-            e.printStackTrace();
-            ssoLogoutUrl = "https://sso.51ping.com/logout";
-            taurusUrl = "http://alpha.taurus.dp:8080";
-        }
+        String ssoLogoutUrl = InitController.SSO_LOGOUT_URL;
+        String taurusUrl = InitController.DOMAIN;
         
         response.sendRedirect(ssoLogoutUrl + "?service=" + URLEncoder.encode(taurusUrl, "UTF-8"));
 	}

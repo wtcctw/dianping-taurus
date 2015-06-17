@@ -1,6 +1,5 @@
 package com.dp.bigdata.taurus.springmvc.controller;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -9,7 +8,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -25,9 +23,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.dianping.lion.EnvZooKeeperConfig;
-import com.dianping.lion.client.ConfigCache;
-import com.dianping.lion.client.LionException;
 import com.dp.bigdata.taurus.generated.module.Task;
 import com.dp.bigdata.taurus.restlet.resource.IAttemptStatusResource;
 import com.dp.bigdata.taurus.restlet.resource.IGetAttemptsByStatus;
@@ -72,28 +67,11 @@ public class HomeController {
 		
 		modelMap.addAttribute("url", url);
 		
-		String[] switchUrls = null;
-		try {
-			String keys = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.deploy.weburl");
-			switchUrls = keys.split(",");
-		} catch (LionException e) {
-			e.printStackTrace();
-			switchUrls = "http://alpha.taurus.dp:8080,http://beta.taurus.dp,http://ppe.taurus.dp,http://taurus.dp".split(",");
-		}
-		modelMap.addAttribute("switchUrls", switchUrls);
+		String switchUrlAll = InitController.SWITCH_URL_ALL;
+		modelMap.addAttribute("switchUrls", switchUrlAll.split(","));
 		
 		return "/signin.ftl";
 	}
-	
-	/*@RequestMapping(value = "/", method = RequestMethod.GET)
-	public void rootUrl(ModelMap modelMap, 
-						HttpServletRequest request,
-						HttpServletResponse response) throws ServletException, IOException 
-	{
-		log.info("--------------init the rootUrl------------");
-		
-		request.getRequestDispatcher(request.getContextPath() + "/index").forward(request, response);
-	}*/
 	
 	/**
 	 * 重构index.jsp,主体代码task_center,monitor可以复用
@@ -213,13 +191,7 @@ public class HomeController {
 		modelMap.addAttribute("step", stepStr);
 		modelMap.addAttribute("op_str", opStr);
 		
-		String switchUrlAll = null;
-		try {
-			switchUrlAll = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.url.switch");
-		} catch (LionException e) {
-			e.printStackTrace();
-			switchUrlAll = "http://alpha.taurus.dp:8080,http://beta.taurus.dp,http://ppe.taurus.dp,http://taurus.dp";
-		}
+		String switchUrlAll = InitController.SWITCH_URL_ALL;
 		modelMap.addAttribute("switchUrls", switchUrlAll.split(","));
 		
 		return "/index.ftl";
@@ -603,14 +575,7 @@ public class HomeController {
 			}
 		}
 		
-		String domain = null;
-		try {
-		    domain = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.serverName");
-		} catch (LionException e) {
-		
-		    e.printStackTrace();
-		    domain = "http://taurus.dp";
-		}
+		String domain = InitController.DOMAIN;
 		
 		logUrl = domain
 		        + "/viewlog?id="

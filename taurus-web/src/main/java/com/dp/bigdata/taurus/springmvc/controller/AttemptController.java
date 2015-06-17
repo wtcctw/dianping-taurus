@@ -19,9 +19,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.dianping.lion.EnvZooKeeperConfig;
-import com.dianping.lion.client.ConfigCache;
-import com.dianping.lion.client.LionException;
 import com.dp.bigdata.taurus.core.Scheduler;
 import com.dp.bigdata.taurus.generated.module.Task;
 import com.dp.bigdata.taurus.restlet.resource.IAttemptsResource;
@@ -62,12 +59,7 @@ public class AttemptController {
             ArrayList<AttemptDTO> attempts = resource.retrieve();
             Task task = map.get(taskID);
             String taskName = task.getName();
-            String zabbixSwitch;
-            try {
-                zabbixSwitch = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.zabbix.switch");
-            }catch (LionException e){
-                zabbixSwitch = "true";
-            }
+            String zabbixSwitch = InitController.ZABBIX_SWITCH;
             boolean isViewLog = AttemptProxyController.isHostOverLoad(task.getHostname());
             if (zabbixSwitch.equals("false")){
                 isViewLog = false;
