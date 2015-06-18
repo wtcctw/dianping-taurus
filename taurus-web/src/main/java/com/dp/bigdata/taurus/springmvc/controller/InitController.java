@@ -59,8 +59,6 @@ public class InitController implements ServletContextAware {
 	public void init() {
 		log.info("----------- into spring mvc init ------------");
 		
-		ReFlashHostLoadTaskTimer.getReFlashHostLoadManager().start();
-		
 		try {
 			RESTLET_URL_BASE = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.restlet.url");
 			AGENT_PORT = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.restlet.port");
@@ -88,6 +86,8 @@ public class InitController implements ServletContextAware {
 		
 		ERROR_PAGE = servletContext.getInitParameter("ERROR_PAGE");
 		XSL_UPLOAD_TMP_DIR = servletContext.getInitParameter("XSL_UPLOAD_TMP_DIR");
+		
+		ReFlashHostLoadTaskTimer.getReFlashHostLoadManager().start();
 	}
 	
 }
