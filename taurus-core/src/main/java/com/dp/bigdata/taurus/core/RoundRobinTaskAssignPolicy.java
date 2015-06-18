@@ -1,5 +1,6 @@
 package com.dp.bigdata.taurus.core;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,6 +32,7 @@ public class RoundRobinTaskAssignPolicy implements TaskAssignPolicy {
                                                    // index>
 
     public void init() {
+    	System.out.println(new Date() + " [" + this.getClass().getName() + "] init roundrobin....");
         poolNameToHosts = new HashMap<Integer, List<Host>>();
         poolCounter = new HashMap<Integer, Integer>();
         PoolExample example = new PoolExample();

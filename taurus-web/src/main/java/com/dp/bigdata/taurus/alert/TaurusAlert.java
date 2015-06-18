@@ -15,6 +15,7 @@ import javax.mail.MessagingException;
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
 import com.dianping.lion.client.LionException;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -72,6 +73,7 @@ public class TaurusAlert {
 	private Map<Integer, User> userMap;
 
 	public void load() {
+		System.out.println(new Date() + " [" + this.getClass().getName() + "] load alert....");
 		Map<String, AlertRule> ruleMap = new ConcurrentHashMap<String, AlertRule>();
 		List<AlertRule> commonRules = new ArrayList<AlertRule>();
 		Map<Integer, User> userMap = new ConcurrentHashMap<Integer, User>();

@@ -62,6 +62,9 @@
 				<prop key="defaultEncoding">UTF-8</prop>
 				<prop key="number_format">#</prop>
 				<prop key="date_format">yyyy-MM-dd HH:mm:ss</prop>
+				<prop key="template_exception_handler">
+		            com.dp.bigdata.taurus.springmvc.utils.FreemarkerExceptionHandler
+		        </prop>
 			</props>
 		</property>
 

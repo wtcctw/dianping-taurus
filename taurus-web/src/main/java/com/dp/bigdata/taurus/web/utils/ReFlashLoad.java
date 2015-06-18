@@ -2,9 +2,10 @@ package com.dp.bigdata.taurus.web.utils;
 
 import com.dp.bigdata.taurus.generated.module.Task;
 import com.dp.bigdata.taurus.restlet.resource.IGetTasks;
-import com.dp.bigdata.taurus.web.servlet.AttemptProxyServlet;
+import com.dp.bigdata.taurus.springmvc.controller.InitController;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 public class ReFlashLoad {
 
     public static ArrayList<Task> getTasks(){
-        ClientResource crTask = new ClientResource(AttemptProxyServlet.RESTLET_URL_BASE + "gettasks");
+        ClientResource crTask = new ClientResource(InitController.RESTLET_URL_BASE + "gettasks");
         IGetTasks taskResource = crTask.wrap(IGetTasks.class);
         ArrayList<Task> tasks = taskResource.retrieve();
         return  tasks;

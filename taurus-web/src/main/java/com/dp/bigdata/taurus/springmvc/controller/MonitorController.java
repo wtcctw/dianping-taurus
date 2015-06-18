@@ -27,7 +27,6 @@ import com.dp.bigdata.taurus.restlet.resource.IHostsResource;
 import com.dp.bigdata.taurus.restlet.resource.IUserTasks;
 import com.dp.bigdata.taurus.restlet.shared.AttemptDTO;
 import com.dp.bigdata.taurus.restlet.shared.HostDTO;
-import com.dp.bigdata.taurus.web.servlet.AttemptProxyServlet;
 import com.dp.bigdata.taurus.web.utils.ReFlashHostLoadTask;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -280,7 +279,7 @@ public class MonitorController {
     	 * @return
     	 */
     	public boolean isViewLog(String ip){
-    		boolean result = AttemptProxyServlet.isHostOverLoad(ip);
+    		boolean result = AttemptProxyController.isHostOverLoad(ip);
     		String zabbixSwitch = InitController.ZABBIX_SWITCH;
 
             if (zabbixSwitch.equals("false")){

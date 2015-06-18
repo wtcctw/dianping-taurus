@@ -1,8 +1,11 @@
 package com.dp.bigdata.taurus.restlet;
 
+import java.util.Date;
+
 import com.dp.bigdata.taurus.alert.TaurusAlert;
 import com.dp.bigdata.taurus.restlet.utils.ClearLogsTimerManager;
 import com.dp.bigdata.taurus.web.utils.MonitorAgentOffLineTaskTimer;
+
 import org.restlet.Component;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -27,7 +30,7 @@ public class TaurusServer {
         System.setProperty("org.restlet.engine.loggerFacadeClass", "org.restlet.ext.slf4j.Slf4jLoggerFacade");
 
         try {
-        	System.out.println("start restlet....");
+        	System.out.println(new Date() + " [" + this.getClass().getName() + "] start restlet....");
             restlet.start();
             alert.start(-1);
             engine.start();

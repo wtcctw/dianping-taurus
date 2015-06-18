@@ -26,7 +26,6 @@ import com.dp.bigdata.taurus.restlet.resource.IUsersResource;
 import com.dp.bigdata.taurus.restlet.shared.UserDTO;
 import com.dp.bigdata.taurus.restlet.shared.UserGroupDTO;
 import com.dp.bigdata.taurus.springmvc.bean.WebResult;
-import com.dp.bigdata.taurus.springmvc.controller.HomeController.GlobalViewVariable;
 import com.dp.bigdata.taurus.springmvc.service.ITestService;
 
 
@@ -40,6 +39,17 @@ public class TestController {
 	
 	private int MAX_USERGROUP_NUM = 3;
 
+	
+	@RequestMapping(value = "/index", method = RequestMethod.GET)
+	public String signin(ModelMap modelMap, 
+						HttpServletRequest request,
+						HttpServletResponse response) 
+	{
+		log.info("--------------init the test/index------------");
+		
+		return "/test/index.ftl";
+	}
+	
 	@RequestMapping(value = "/saveUser", method = RequestMethod.POST)
 	@ResponseBody
 	public WebResult saveUser(HttpServletRequest request,HttpServletResponse response) {
