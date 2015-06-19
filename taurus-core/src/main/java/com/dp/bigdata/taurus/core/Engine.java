@@ -207,7 +207,8 @@ final public class Engine implements Scheduler {
 	 * start the engine;
 	 */
 	public void start() {
-		if (progressMonitor != null) {
+		if (progressMonitor != null) {// spring注入了AttemptStatusMonitor
+			//System.out.println("progressMonitor is: " + progressMonitor.toString());
 			Thread monitorThread = new Thread(progressMonitor);
 			monitorThread.setName("Thread-" + AttemptStatusMonitor.class.getName());
 			monitorThread.setDaemon(true);
@@ -244,7 +245,7 @@ final public class Engine implements Scheduler {
                         + ip
                         +"，谢谢~";
                 
-                    String agentPort = "";
+                    //String agentPort = "";
 
 
                     String url1= "http://"+ip+":8080/agentrest.do?action=isnew";

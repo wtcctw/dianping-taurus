@@ -31,7 +31,7 @@ public class MaximumConcurrentTaskFilter implements Filter {
         try {
             maxJobNums  =  ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.engine.maxtasknum");
         } catch (LionException e) {
-            maxJobNums = "100";
+            maxJobNums = "1000";
         }
         int max = Integer.parseInt(maxJobNums) - scheduler.getAllRunningAttempt().size();
 

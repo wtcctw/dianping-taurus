@@ -17,9 +17,9 @@ import com.dp.bigdata.taurus.web.utils.ReFlashHostLoadTaskTimer;
 @Controller
 public class InitController implements ServletContextAware {
 
-	private Logger log = LoggerFactory.getLogger(this.getClass());
+	private static Logger log = LoggerFactory.getLogger(InitController.class);
 	
-	private ServletContext servletContext;
+	private static ServletContext servletContext;
 
 	public static String RESTLET_URL_BASE = null;
 	
@@ -59,6 +59,16 @@ public class InitController implements ServletContextAware {
 	public void init() {
 		log.info("----------- into spring mvc init ------------");
 		
+		dynamicLoad();
+		
+		ERROR_PAGE = servletContext.getInitParameter("ERROR_PAGE");
+		XSL_UPLOAD_TMP_DIR = servletContext.getInitParameter("XSL_UPLOAD_TMP_DIR");
+		
+		ReFlashHostLoadTaskTimer.getReFlashHostLoadManager().start();
+	}
+	
+	public static void dynamicLoad(){
+		log.info("----------- into dynamicLoad ------------");
 		try {
 			RESTLET_URL_BASE = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.restlet.url");
 			AGENT_PORT = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.restlet.port");
@@ -76,18 +86,12 @@ public class InitController implements ServletContextAware {
 			SWITCH_URL_ALL = "http://alpha.taurus.dp:8080,http://beta.taurus.dp,http://ppe.taurus.dp,http://taurus.dp";
 			DOMAIN = "http://taurus.dp";
 			ZABBIX_SWITCH = "true";
-			ADMIN_USER = "kirin.li";
+			ADMIN_USER = "kirin.li,ling.su,chongze.chen";
 			MAIL_TO = "kirin.li@dianping.com";
 			SSO_LOGOUT_URL = "https://sso.dper.com/logout";
 			Cat.logError("LionException", e);
 		} catch (Exception e) {
 			Cat.logError("LionException", e);
 		}
-		
-		ERROR_PAGE = servletContext.getInitParameter("ERROR_PAGE");
-		XSL_UPLOAD_TMP_DIR = servletContext.getInitParameter("XSL_UPLOAD_TMP_DIR");
-		
-		ReFlashHostLoadTaskTimer.getReFlashHostLoadManager().start();
 	}
-	
 }

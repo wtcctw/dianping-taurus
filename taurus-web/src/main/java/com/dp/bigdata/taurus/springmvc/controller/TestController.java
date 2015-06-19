@@ -41,13 +41,33 @@ public class TestController {
 
 	
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
-	public String signin(ModelMap modelMap, 
+	public String index(ModelMap modelMap, 
 						HttpServletRequest request,
 						HttpServletResponse response) 
 	{
 		log.info("--------------init the test/index------------");
 		
 		return "/test/index.ftl";
+	}
+	
+	@RequestMapping(value = "/updateLionConfig", method = RequestMethod.POST)
+	@ResponseBody
+	public WebResult signin(HttpServletRequest request, HttpServletResponse response) {
+		log.info("--------------init the test/updateLionConfig------------");
+		WebResult result = new WebResult(request);
+		
+		String user = (String) request.getSession().getAttribute("taurus-user");
+		String adminUser = InitController.ADMIN_USER;
+		
+		if (adminUser.contains(user)) {
+			log.info("Start reload lion config parameters...");
+			InitController.dynamicLoad();
+			result.setMessage("Update lion config successfully!");
+		} else {
+			result.setMessage("No authority!");
+		}
+		
+		return result;
 	}
 	
 	@RequestMapping(value = "/saveUser", method = RequestMethod.POST)
