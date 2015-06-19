@@ -19,7 +19,7 @@ public class InitController implements ServletContextAware {
 
 	private static Logger log = LoggerFactory.getLogger(InitController.class);
 	
-	private static ServletContext servletContext;
+	public static ServletContext servletContext;
 
 	public static String RESTLET_URL_BASE = null;
 	

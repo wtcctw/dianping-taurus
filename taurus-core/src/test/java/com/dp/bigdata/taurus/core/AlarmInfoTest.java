@@ -11,16 +11,31 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.junit.Test;
 
 import com.dianping.ops.http.HttpPoster;
+import com.dianping.ops.http.HttpResult;
 
 public class AlarmInfoTest {
 
 	@Test
 	public void test3(){
 		String dataBaseUrl = "jdbc:mysql://10.1.101.216:3306/Taurus?characterEncoding=utf-8";
-		String[] s1 = dataBaseUrl.split(":");
-		String[] s2 = s1[2].split("/");
-		System.out.println(dataBaseUrl.split(":")[2].split("/")[2]);
-		
+		Map<String, String> header = new HashMap<String, String>();
+        Map<String, String> body = new HashMap<String, String>();
+        
+        body.put("typeObject", "Taurus");
+        body.put("typeItem", "Service");
+        body.put("typeAttribute", "Status");
+        body.put("source", "taurus");
+        // 摘出数据库ip给运维报警
+        body.put("domain", dataBaseUrl.split(":")[2].split("/")[2]);
+        body.put("title", "Taurus数据库连接异常");
+        body.put("content","测试线上");
+        //此处动态修改
+        body.put("url", dataBaseUrl);
+        body.put("receiver", "dpop@dianping.com");
+			
+        HttpResult result = HttpPoster.postWithoutException("http://pulse.dp/report/alarm/post", header, body);
+        System.out.println(result.isSuccess);
+        System.out.println("test");
 	}
 	
 }
