@@ -247,18 +247,18 @@ $(function() {
         }
     });
 
-    var mouthList = $(".mouthList").children();
-    $("#mouth_appoint").click(function(){
+    var monthList = $(".monthList").children();
+    $("#month_appoint").click(function(){
         if(this.checked){
-            mouthList.eq(0).change();
+            monthList.eq(0).change();
         }
     });
 
-    mouthList.change(function() {
-        var mouth_appoint = $("#mouth_appoint").prop("checked");
-        if (mouth_appoint) {
+    monthList.change(function() {
+        var month_appoint = $("#month_appoint").prop("checked");
+        if (month_appoint) {
             var vals = [];
-            mouthList.each(function() {
+            monthList.each(function() {
                 if (this.checked) {
                     vals.push(this.value);
                 }
@@ -269,7 +269,7 @@ $(function() {
             }else if(vals.length == 12){
                 val = "*";
             }
-            var item = $("input[name=v_mouth]");
+            var item = $("input[name=v_month]");
             item.val(val);
             item.change();
             btnShow();

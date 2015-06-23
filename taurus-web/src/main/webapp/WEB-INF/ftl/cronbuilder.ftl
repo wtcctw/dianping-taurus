@@ -626,9 +626,9 @@
             return false;
         });
         $.parser.parse($("body"));
-        $("#min_appoint").attr("checked", "checked");
+        $("#min_appoint").prop("checked", "checked");
         var item = $("input[name=v_min]");
-        item.eq(0).attr("checked", "checked");
+        item.eq(0).prop("checked", "checked");
 
         function btnFan() {
             //获取参数中表达式的值
@@ -642,8 +642,10 @@
                 $("input[name=v_month]").val(regs[3]);
                 $("input[name=v_week]").val(regs[4]);
 
-                initObj(regs[0], "min");
-                initObj(regs[1], "hour");
+                //initObj(regs[0], "min");
+                //initObj(regs[1], "hour");
+                initMin(regs[0]);
+                initHour(regs[1]);
                 initDay(regs[2]);
                 initMonth(regs[3]);
                 initWeek(regs[4]);
@@ -660,23 +662,87 @@
             var ary = null;
             var objRadio = $("input[name='" + strid + "'");
             if (strVal == "*") {
-                objRadio.eq(0).attr("checked", "checked");
+                objRadio.eq(0).prop("checked", "checked");
             } else if (strVal.split('-').length > 1) {
                 ary = strVal.split('-');
-                objRadio.eq(1).attr("checked", "checked");
+                objRadio.eq(1).prop("checked", "checked");
                 $("#" + strid + "Start_0").numberspinner('setValue', ary[0]);
                 $("#" + strid + "End_0").numberspinner('setValue', ary[1]);
             } else if (strVal.split('/').length > 1) {
                 ary = strVal.split('/');
-                objRadio.eq(2).attr("checked", "checked");
+                objRadio.eq(2).prop("checked", "checked");
                 $("#" + strid + "Start_1").numberspinner('setValue', ary[0]);
                 $("#" + strid + "End_1").numberspinner('setValue', ary[1]);
             } else {
-                objRadio.eq(3).attr("checked", "checked");
+                objRadio.eq(3).prop("checked", "checked");
                 if (strVal != "?") {
                     ary = strVal.split(",");
+                    $tmpList = $("." + strid + "List input");
+                    for(var j = 0;j< $tmpList.length; ++j){
+                        $tmpList.eq(j).prop("checked", false);
+                    }
                     for (var i = 0; i < ary.length; i++) {
-                        $("." + strid + "List input[value='" + ary[i] + "']").attr("checked", "checked");
+                        $("." + strid + "List input[value='" + ary[i] + "']").prop("checked", true);
+                    }
+                }
+            }
+        }
+
+        function initMin(strVal) {
+            var ary = null;
+            var objRadio = $("input[name='min'");
+            if (strVal == "*") {
+                objRadio.eq(0).prop("checked", "checked");
+            } else if (strVal.split('-').length > 1) {
+                ary = strVal.split('-');
+                objRadio.eq(1).prop("checked", "checked");
+                $("#minStart_0").numberspinner('setValue', ary[0]);
+                $("#minEnd_0").numberspinner('setValue', ary[1]);
+            } else if (strVal.split('/').length > 1) {
+                ary = strVal.split('/');
+                objRadio.eq(2).prop("checked", "checked");
+                $("#minStart_1").numberspinner('setValue', ary[0]);
+                $("#minEnd_1").numberspinner('setValue', ary[1]);
+            } else {
+                objRadio.eq(3).prop("checked", "checked");
+                if (strVal != "?") {
+                    ary = strVal.split(",");
+                    $tmpList = $(".minList input");
+                    for(var j = 0;j< $tmpList.length; ++j){
+                        $tmpList.eq(j).prop("checked", false);
+                    }
+                    for (var i = 0; i < ary.length; i++) {
+                        $(".minList input[value='" + ary[i] + "']").prop("checked", true);
+                    }
+                }
+            }
+        }
+
+        function initHour(strVal) {
+            var ary = null;
+            var objRadio = $("input[name='hour'");
+            if (strVal == "*") {
+                objRadio.eq(0).prop("checked", "checked");
+            } else if (strVal.split('-').length > 1) {
+                ary = strVal.split('-');
+                objRadio.eq(1).prop("checked", "checked");
+                $("#hourStart_0").numberspinner('setValue', ary[0]);
+                $("#hourEnd_0").numberspinner('setValue', ary[1]);
+            } else if (strVal.split('/').length > 1) {
+                ary = strVal.split('/');
+                objRadio.eq(2).prop("checked", "checked");
+                $("#hourStart_1").numberspinner('setValue', ary[0]);
+                $("#hourEnd_1").numberspinner('setValue', ary[1]);
+            } else {
+                objRadio.eq(3).prop("checked", "checked");
+                if (strVal != "?") {
+                    ary = strVal.split(",");
+                    $tmpList = $(".hourList input");
+                    for(var j = 0;j< $tmpList.length; ++j){
+                        $tmpList.eq(j).prop("checked", false);
+                    }
+                    for (var i = 0; i < ary.length; i++) {
+                        $(".hourList input[value='" + ary[i] + "']").prop("checked", true);
                     }
                 }
             }
@@ -686,30 +752,33 @@
             var ary = null;
             var objRadio = $("input[name='day']");
             if (strVal == "*") {
-                objRadio.eq(0).attr("checked", "checked");
+                objRadio.eq(0).prop("checked", "checked");
             } else if (strVal == "?") {
-                objRadio.eq(1).attr("checked", "checked");
+                objRadio.eq(1).prop("checked", "checked");
             } else if (strVal.split('-').length > 1) {
                 ary = strVal.split('-');
-                objRadio.eq(2).attr("checked", "checked");
+                objRadio.eq(2).prop("checked", "checked");
                 $("#dayStart_0").numberspinner('setValue', ary[0]);
                 $("#dayEnd_0").numberspinner('setValue', ary[1]);
             } else if (strVal.split('/').length > 1) {
                 ary = strVal.split('/');
-                objRadio.eq(3).attr("checked", "checked");
+                objRadio.eq(3).prop("checked", "checked");
                 $("#dayStart_1").numberspinner('setValue', ary[0]);
                 $("#dayEnd_1").numberspinner('setValue', ary[1]);
             } else if (strVal.split('W').length > 1) {
                 ary = strVal.split('W');
-                objRadio.eq(4).attr("checked", "checked");
+                objRadio.eq(4).prop("checked", "checked");
                 $("#dayStart_2").numberspinner('setValue', ary[0]);
             } else if (strVal == "L") {
-                objRadio.eq(5).attr("checked", "checked");
+                objRadio.eq(5).prop("checked", "checked");
             } else {
-                objRadio.eq(6).attr("checked", "checked");
+                objRadio.eq(6).prop("checked", "checked");
                 ary = strVal.split(",");
+                $(".dayList input").each(function() {
+                    this.checked=false;
+                });
                 for (var i = 0; i < ary.length; i++) {
-                    $(".dayList input[value='" + ary[i] + "']").attr("checked", "checked");
+                    $(".dayList input[value='" + ary[i] + "']").prop("checked", "checked");
                 }
             }
         }
@@ -718,26 +787,29 @@
             var ary = null;
             var objRadio = $("input[name='month']");
             if (strVal == "*") {
-                objRadio.eq(0).attr("checked", "checked");
+                objRadio.eq(0).prop("checked", "checked");
             } else if (strVal == "?") {
-                objRadio.eq(1).attr("checked", "checked");
+                objRadio.eq(1).prop("checked", "checked");
             } else if (strVal.split('-').length > 1) {
                 ary = strVal.split('-');
-                objRadio.eq(2).attr("checked", "checked");
+                objRadio.eq(2).prop("checked", "checked");
                 $("#monthStart_0").numberspinner('setValue', ary[0]);
                 $("#monthEnd_0").numberspinner('setValue', ary[1]);
             } else if (strVal.split('/').length > 1) {
                 ary = strVal.split('/');
-                objRadio.eq(3).attr("checked", "checked");
+                objRadio.eq(3).prop("checked", "checked");
                 $("#monthStart_1").numberspinner('setValue', ary[0]);
                 $("#monthEnd_1").numberspinner('setValue', ary[1]);
 
             } else {
-                objRadio.eq(4).attr("checked", "checked");
+                objRadio.eq(4).prop("checked", "checked");
 
                 ary = strVal.split(",");
+                $(".monthList input").each(function() {
+                    this.checked=false;
+                });
                 for (var i = 0; i < ary.length; i++) {
-                    $(".monthList input[value='" + ary[i] + "']").attr("checked", "checked");
+                    $(".monthList input[value='" + ary[i] + "']").prop("checked", "checked");
                 }
             }
         }
@@ -746,28 +818,31 @@
             var ary = null;
             var objRadio = $("input[name='week']");
             if (strVal == "*") {
-                objRadio.eq(0).attr("checked", "checked");
+                objRadio.eq(0).prop("checked", "checked");
             } else if (strVal == "?") {
-                objRadio.eq(1).attr("checked", "checked");
+                objRadio.eq(1).prop("checked", "checked");
             } else if (strVal.split('/').length > 1) {
                 ary = strVal.split('/');
-                objRadio.eq(2).attr("checked", "checked");
+                objRadio.eq(2).prop("checked", "checked");
                 $("#weekStart_0").numberspinner('setValue', ary[0]);
                 $("#weekEnd_0").numberspinner('setValue', ary[1]);
             } else if (strVal.split('-').length > 1) {
                 ary = strVal.split('-');
-                objRadio.eq(3).attr("checked", "checked");
+                objRadio.eq(3).prop("checked", "checked");
                 $("#weekStart_1").numberspinner('setValue', ary[0]);
                 $("#weekEnd_1").numberspinner('setValue', ary[1]);
             } else if (strVal.split('L').length > 1) {
                 ary = strVal.split('L');
-                objRadio.eq(4).attr("checked", "checked");
+                objRadio.eq(4).prop("checked", "checked");
                 $("#weekStart_2").numberspinner('setValue', ary[0]);
             } else {
-                objRadio.eq(5).attr("checked", "checked");
+                objRadio.eq(5).prop("checked", "checked");
                 ary = strVal.split(",");
+                $(".weekList input").each(function() {
+                    this.checked=false;
+                });
                 for (var i = 0; i < ary.length; i++) {
-                    $(".weekList input[value='" + ary[i] + "']").attr("checked", "checked");
+                    $(".weekList input[value='" + ary[i] + "']").prop("checked", "checked");
                 }
             }
         }
@@ -776,10 +851,10 @@
             var ary = null;
             var objRadio = $("input[name='year']");
             if (strVal == "*") {
-                objRadio.eq(1).attr("checked", "checked");
+                objRadio.eq(1).prop("checked", "checked");
             } else if (strVal.split('-').length > 1) {
                 ary = strVal.split('-');
-                objRadio.eq(2).attr("checked", "checked");
+                objRadio.eq(2).prop("checked", "checked");
                 $("#yearStart_0").numberspinner('setValue', ary[0]);
                 $("#yearEnd_0").numberspinner('setValue', ary[1]);
             }

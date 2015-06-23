@@ -27,8 +27,8 @@ public class AlarmInfoTest {
         body.put("source", "taurus");
         // 摘出数据库ip给运维报警
         body.put("domain", dataBaseUrl.split(":")[2].split("/")[2]);
-        body.put("title", "Taurus数据库连接异常");
-        body.put("content","测试线上");
+        body.put("title", "本地单元测试线上接口");
+        body.put("content","本地单元测试线上接口");
         //此处动态修改
         body.put("url", dataBaseUrl);
         body.put("receiver", "dpop@dianping.com");
