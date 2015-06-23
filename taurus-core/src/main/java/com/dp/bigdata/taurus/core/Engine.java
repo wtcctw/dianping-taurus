@@ -159,12 +159,12 @@ final public class Engine implements Scheduler {
                    +"数据库连接串："
                    +dataBaseUrl;
            try {
-               MailHelper.sendMail("kirin.li@dianping.com",exceptContext);
-               MailHelper.sendWeChat("kirin.li",exceptContext);
+               MailHelper.sendMail("kirin.li@dianping.com", exceptContext, "Taurus数据库连接异常告警服务");
+               MailHelper.sendWeChat("kirin.li",exceptContext, "Taurus数据库连接异常告警服务");
                String toMails = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.down.mail.to");
                String [] toLists = toMails.split(",");
                for (String to:toLists){
-                   MailHelper.sendMail(to,exceptContext);
+                   MailHelper.sendMail(to, exceptContext, "Taurus数据库连接异常告警服务");
                }
                
                String reportToOps = null;
@@ -262,8 +262,8 @@ final public class Engine implements Scheduler {
                     }
                     
                     if ((isAlive1!= null && isAlive1.equals("true"))||(isAlive2!= null && isAlive2.equals("true"))){
-                       MailHelper.sendMail("kirin.li@dianping.com",context);
-                       MailHelper.sendWeChat("kirin.li",context);
+                       MailHelper.sendMail("kirin.li@dianping.com", context, "Taurus-Agent主机心跳异常告警服务");
+                       MailHelper.sendWeChat("kirin.li",context, "Taurus-Agent主机心跳异常告警服务");
 
                        // 给运维报警
                        Map<String, String> header = new HashMap<String, String>();
@@ -284,11 +284,11 @@ final public class Engine implements Scheduler {
                        HttpPoster.postWithoutException(reportToOps, header, body);
                        
                     } else {
-                        MailHelper.sendWeChat("kirin.li",exceptContext);
+                        MailHelper.sendWeChat("kirin.li",exceptContext, "Taurus-Agent主机失联系告警服务");
                         String toMails = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.down.mail.to");
                         String [] toLists = toMails.split(",");
                         for (String to:toLists){
-                            MailHelper.sendMail(to,exceptContext);
+                            MailHelper.sendMail(to, exceptContext, "Taurus-Agent主机失联系告警服务");
                         }
 
                         

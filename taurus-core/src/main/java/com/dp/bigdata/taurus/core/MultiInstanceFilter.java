@@ -82,10 +82,10 @@ public class MultiInstanceFilter implements Filter {
                         					+ "/attempt?taskID=" 
                         					+ context.getTaskid();
                         try {
-                            MailHelper.sendWeChat("kirin.li", alertontext);
-                            MailHelper.sendWeChat("chongze.chen", alertontext);
-                            MailHelper.sendWeChat(context.getCreator(), alertontext);
-                            MailHelper.sendMail(context.getCreator() + "@dianping.com", alertontext);
+                            MailHelper.sendWeChat("kirin.li", alertontext, "Taurus-Job拥塞告警服务");
+                            MailHelper.sendWeChat("chongze.chen", alertontext, "Taurus-Job拥塞告警服务");
+                            MailHelper.sendWeChat(context.getCreator(), alertontext, "Taurus-Job拥塞告警服务");
+                            MailHelper.sendMail(context.getCreator() + "@dianping.com", alertontext, "Taurus-Job拥塞告警服务");
 
                         } catch (Exception e) {
                             Cat.logError(e);

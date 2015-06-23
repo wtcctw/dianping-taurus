@@ -91,8 +91,8 @@ public class AlertOfflineAgentTask  extends TimerTask {
                     String isAlive2 = get_data(url2);
 
                     if ((isAlive1!= null && isAlive1.equals("true"))||(isAlive2!= null && isAlive2.equals("true"))){
-                        MailHelper.sendMail("kirin.li@dianping.com", context);
-                        MailHelper.sendWeChat("kirin.li",context);
+                        MailHelper.sendMail("kirin.li@dianping.com", context, "Taurus-Agent主机心跳异常告警服务");
+                        MailHelper.sendWeChat("kirin.li",context, "Taurus-Agent主机心跳异常告警服务");
                         
                         reportAlarmToOps(host, 
                     					"Taurus-Agent主机心跳异常告警服务", 
@@ -102,11 +102,11 @@ public class AlertOfflineAgentTask  extends TimerTask {
                     					reportToOps);
                     }else
                     {
-                        MailHelper.sendWeChat("kirin.li",exceptContext);
+                        MailHelper.sendWeChat("kirin.li",exceptContext, "Taurus-Agent主机失联系告警服务");
                         String toMails = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.down.mail.to");
                         String [] toLists = toMails.split(",");
                         for (String to:toLists){
-                            MailHelper.sendMail(to,exceptContext);
+                            MailHelper.sendMail(to, exceptContext, "Taurus-Agent主机失联系告警服务");
                         }
 
                         reportAlarmToOps(host, 
@@ -146,11 +146,11 @@ public class AlertOfflineAgentTask  extends TimerTask {
                     String isAlive2 = get_data(url2);
 
                     if(isAlive1 == null || isAlive2 == null) {//agent服务器无响应
-                        MailHelper.sendWeChat("kirin.li",exceptContext);
+                        MailHelper.sendWeChat("kirin.li",exceptContext, "Taurus-Agent主机失联系告警服务");
                         String toMails = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.down.mail.to");
                         String [] toLists = toMails.split(",");
                         for (String to:toLists){
-                            MailHelper.sendMail(to,exceptContext);
+                            MailHelper.sendMail(to, exceptContext, "Taurus-Agent主机失联系告警服务");
                         }
                         
                         reportAlarmToOps(host, 

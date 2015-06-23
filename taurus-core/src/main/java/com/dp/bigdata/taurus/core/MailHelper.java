@@ -64,15 +64,15 @@ public class MailHelper{
 		transport.sendMessage(message,message.getAllRecipients());
 		transport.close();
 	}
-    public static void sendMail(String to, String content) throws MessagingException {
+    public static void sendMail(String to, String content, String subject) throws MessagingException {
         MailInfo mail = new MailInfo();
         mail.setTo(to);
         mail.setContent(content);
         mail.setFormat("text/html");
-        mail.setSubject("Taurus-Agent主机失联系告警服务");
+        mail.setSubject(subject);
         MailHelper.sendMail(mail);
     }
-    public static void sendWeChat(String user,String content){
+    public static void sendWeChat(String user,String content, String title){
         String wechat_url = "";
         try {
             wechat_url = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.wechat.api");
@@ -84,7 +84,7 @@ public class MailHelper{
         String wechat_api = wechat_url+ "/api";
 
         String params = "action=push&sysName=ezc&keyword=" + user.trim()
-                + "&title=Taurus-Agent主机失联系告警服务&content=" + content.trim();
+                + "&title=" + title.trim() + "&content=" + content.trim();
 
         sendPost(wechat_api, params);
 
