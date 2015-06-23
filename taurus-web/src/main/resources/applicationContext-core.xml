@@ -9,6 +9,7 @@
 	<!-- Datasource -->
 	<bean id="dataSource" class="com.dianping.zebra.group.jdbc.GroupDataSource" init-method="init">
         <property name="jdbcRef" value="taurus" /> <!-- 唯一确定数据库的key -->
+        <property name="routerType" value="fail-over" /><!-- 只走写库 -->
 		<property name="minPoolSize" value="5" />
 		<property name="maxPoolSize" value="10" />
 		<property name="initialPoolSize" value="5" />
