@@ -42,44 +42,45 @@ public class AttemptStatusMonitor implements Runnable {
 					LOG.info("Current status for attempt " + attempt.getAttemptid() + " : " + status);
 
 					switch (status) {
-					case AttemptStatus.SUCCEEDED:
-						attempt.getAttempt().setReturnvalue(sstatus.getReturnCode());
-						scheduler.attemptSucceed(attempt.getAttemptid());
-						break;
-					case AttemptStatus.FAILED:
-						attempt.getAttempt().setReturnvalue(sstatus.getReturnCode());
-						scheduler.attemptFailed(attempt.getAttemptid());
-						break;
-					case AttemptStatus.RUNNING: {
-						if (attempt.getStatus() != AttemptStatus.TIMEOUT) {
-							int timeout = attempt.getExecutiontimeout();
-							Date start = attempt.getStarttime();
-							long now = System.currentTimeMillis();
-							if (now > start.getTime() + timeout * 1000 * 60) {
-								LOG.info("attempt " + attempt.getAttemptid() + " executing timeout ");
-								scheduler.attemptExpired(attempt.getAttemptid());
-							}
-						} else {
-							try {
-								if (attempt.getIsautokill()) {
-									String taskID = attempt.getTaskid();
-									String previousAttemptID = attempt.getAttemptid();
-									TaskAttempt newFiredAttempt = scheduler.getRecentFiredAttemptByTaskID(taskID);
-
-									if (newFiredAttempt != null
-									      && !newFiredAttempt.getAttemptid().equalsIgnoreCase(previousAttemptID)) {
-										scheduler.killAttempt(previousAttemptID);
-									}
+						case AttemptStatus.SUCCEEDED:
+							attempt.getAttempt().setReturnvalue(sstatus.getReturnCode());
+							scheduler.attemptSucceed(attempt.getAttemptid());
+							break;
+						case AttemptStatus.FAILED:
+							attempt.getAttempt().setReturnvalue(sstatus.getReturnCode());
+							scheduler.attemptFailed(attempt.getAttemptid());
+							break;
+						case AttemptStatus.RUNNING:
+							if (attempt.getStatus() != AttemptStatus.TIMEOUT) {
+								int timeout = attempt.getExecutiontimeout();
+								Date start = attempt.getStarttime();
+								long now = System.currentTimeMillis();
+								if (now > start.getTime() + timeout * 1000 * 60) {
+									LOG.info("attempt " + attempt.getAttemptid() + " executing timeout ");
+									scheduler.attemptExpired(attempt.getAttemptid());
 								}
-							} catch (ScheduleException e) {
-								Cat.logError(e);
+							} else {
+								try {
+									if (attempt.getIsautokill()) {
+										String taskID = attempt.getTaskid();
+										String previousAttemptID = attempt.getAttemptid();
+										TaskAttempt newFiredAttempt = scheduler.getRecentFiredAttemptByTaskID(taskID);
+	
+										if (newFiredAttempt != null
+										      && !newFiredAttempt.getAttemptid().equalsIgnoreCase(previousAttemptID)) {
+											scheduler.killAttempt(previousAttemptID);
+										}
+									}
+								} catch (ScheduleException e) {
+									Cat.logError(e);
+								}
 							}
-						}
-						break;
-					}
-					case AttemptStatus.UNKNOWN: {
-						scheduler.attemptUnKnown(attempt.getAttemptid());
-					}
+							break;
+						case AttemptStatus.UNKNOWN:
+							scheduler.attemptUnKnown(attempt.getAttemptid());
+							break;
+						default:
+							break;
 					}
 				}
 				Thread.sleep(Engine.SCHDUELE_INTERVAL);
