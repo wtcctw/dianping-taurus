@@ -175,8 +175,6 @@
                             </tr>
         </#list>
 
-
-
                             </tbody>
                         </table>
                      </div>
@@ -214,47 +212,47 @@
 
             <div class="widget-body">
                 <div class="widget-main" id="userwidget">
-			<#if userGroup?contains("admin") == false> <#-- TODO 普通组成员能加入最多3个分组，查看交接的组和成员(完成) -->
                     <table class="table table-striped table-bordered table-hover reginuser" >
-                        <tr>
-                            <th align="left">成员</th>
-                            <th align="left">组名</th>
-                        </tr>
-						<#if map?exists>
-			                <#list map?keys as group>
-			                <#if userGroup?contains(group)><#-- TODO 改为userGroup包含group的子串(完成) -->
-                                <#list hHelper.getGroupUserList(map[group]) as creator>
-			                        <tr>
-			                            <td align="left">
-			                                <input type="radio" value="${creator!}" name="creator">${creator!}
-			                            </td>
-                                        <td align="left">${group!}</td>
-			                        </tr>
-                    			</#list>
-                    		</#if>
-                            </#list>
-			            </#if>
-            <#else> <#-- admin组可以交接任务给所有的分组和成员 -->
-                        <table class="table table-striped table-bordered table-hover reginuser" >
+                        <thead>
                             <tr>
                                 <th align="left">成员</th>
                                 <th align="left">组名</th>
                             </tr>
-						<#if map?exists>
-			                <#list map?keys as group>
-                                <#list hHelper.getGroupUserList(map[group]) as creator>
-		                            <tr>
-		                                <td align="left">
-		                                    <input type="radio" value="${creator!}" name="creator">${creator!}
-		                                </td>
-		                                <td align="left">${group!}</td>
-		                            </tr>
-                                </#list>
-                            </#list>
-			            </#if>
-
+                        </thead>
+			<#if userGroup?contains("admin") == false> <#-- 普通组成员能加入最多3个分组，查看交接的组和成员 -->
+                        <tbody>
+					<#if map?exists>
+	                <#list map?keys as group>
+		                <#if userGroup?contains(group)><#-- TODO 改为userGroup包含group的子串(完成) -->
+                        <#list hHelper.getGroupUserList(map[group]) as creator>
+	                        <tr>
+	                            <td align="left">
+	                                <input type="radio" value="${creator!}" name="creator">${creator!}
+	                            </td>
+                                <td align="left">${group!}</td>
+	                        </tr>
+            			</#list>
+                		</#if>
+                    </#list>
+		            </#if>
+                        </tbody>
+            <#else> <#-- admin组可以交接任务给所有的分组和成员 -->
+                        <tbody>
+					<#if map?exists>
+	                <#list map?keys as group>
+                        <#list hHelper.getGroupUserList(map[group]) as creator>
+                            <tr>
+                                <td align="left">
+                                    <input type="radio" value="${creator!}" name="creator">${creator!}
+                                </td>
+                                <td align="left">${group!}</td>
+                            </tr>
+                        </#list>
+                    </#list>
+		            </#if>
+                        </tbody>
             </#if>
-                        </table>
+                    </table>
 
                 </div>
                 <!-- /.widget-main -->
