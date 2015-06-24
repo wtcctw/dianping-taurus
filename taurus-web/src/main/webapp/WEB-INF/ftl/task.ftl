@@ -156,7 +156,7 @@
 
                 <div class="controls col-sm-9">
                     <input type="text" class="input-xxlarge field" id="crontab" name="crontab" value="0 0 * * ?">
-                    <a href="${rc.contextPath}/about#crontab">帮助</a>
+                    <a href="${rc.contextPath}/about#crontab" target="view_window">帮助</a>
                 </div>
                 <br>
                 <br>
@@ -230,7 +230,7 @@
                 <div class="controls">
                     <input type="number" class="input-small field" id="maxExecutionTime" name="maxExecutionTime"
                            style="text-align:right" value=60>
-                    <a href="${rc.contextPath}/about#config">帮助</a>
+                    <a href="${rc.contextPath}/about#config" target="view_window">帮助</a>
                 </div>
             </div>
             <div class="control-group">
@@ -239,7 +239,7 @@
                 <div class="controls">
                     <input type="text" class="input-large field" id="dependency" name="dependency"
                            placeholder="dependency expression" value="">
-                    <a href="${rc.contextPath}/about#config">帮助</a>
+                    <a href="${rc.contextPath}/about#config" target="view_window">帮助</a>
                 </div>
             </div>
             <div class="control-group">
@@ -248,7 +248,7 @@
                 <div class="controls">
                     <input type="number" class="input-small field" id="maxWaitTime" name="maxWaitTime"
                            style="text-align:right" value=60>
-                    <a href="${rc.contextPath}/about#config">帮助</a>
+                    <a href="${rc.contextPath}/about#config" target="view_window">帮助</a>
                 </div>
             </div>
 
@@ -258,7 +258,7 @@
                 <div class="controls">
                     <input type="number" class="input-small field" id="retryTimes" name="retryTimes"
                            style="text-align:right" value=0>
-                    <a href="${rc.contextPath}/about#config">帮助</a>
+                    <a href="${rc.contextPath}/about#config" target="view_window">帮助</a>
                 </div>
             </div>
             <div class="control-group">
@@ -268,7 +268,7 @@
                 <div class="controls field" id="isAutoKill">
                     <input type="radio" value="1" name="isAutoKill" checked> 是
                     <input type="radio" value="0" name="isAutoKill"> 否
-                    <span class="label">不要轻易修改，除非你确定其含义：<a href="${rc.contextPath}/about#config">帮助</a></span>
+                    <span class="label">不要轻易修改，除非你确定其含义：<a href="${rc.contextPath}/about#config" target="view_window">帮助</a></span>
                 </div>
             </div>
             <br/>
