@@ -38,13 +38,13 @@ public class AlertOfflineAgentTask  extends TimerTask {
     }
 
     public void run() {
-        //监测异常的Agent 告警
+        // 监测异常的Agent 告警
         ClientResource cr = new ClientResource(restlet_url_base + "exceptionhosts");
         IExceptionHosts hostsResource = cr.wrap(IExceptionHosts.class);
         cr.accept(MediaType.APPLICATION_XML);
         String exceptionHosts = hostsResource.retrieve();
         
-        // 检测所有Agent 发现异常 告警
+        // 检测正常Agent 发现异常 告警
         cr = new ClientResource(restlet_url_base + "allhosts");
         IAllHosts allOnlineHostsResource = cr.wrap(IAllHosts.class);
         cr.accept(MediaType.APPLICATION_XML);
