@@ -118,7 +118,7 @@ public class LoginController {
 	}
 	
 	/**
-	 * sso太慢，调试不方便，留个后门,使用的时候去掉sso的filter，并且保证数据库中有用户信息
+	 * sso太慢，调试不方便，留个后门,使用的时候运行(mvn jetty:run -P dev)，并且保证数据库中有用户信息
 	 * @param modelMap
 	 * @param request
 	 * @param response
