@@ -303,7 +303,6 @@
                 <version>2.1-alpha-1</version>
                 <configuration>
                     <warName>${artifactId}-${env}-${version}</warName>
-                    <webXml>${webXmlPath}/web.xml</webXml>
                 </configuration>
             </plugin>
             <plugin>
