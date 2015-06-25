@@ -50,7 +50,7 @@
 		<filter-class>com.dp.bigdata.taurus.web.servlet.filter.AuthenticationFilter</filter-class>
 		<init-param>
 			<param-name>excludePage</param-name>
-			<param-value>/login.do,/signin,/rest/ssologin,/rest/ssologout,/static/,/js/,/css/,/files/,/img/,/lib/,/resource/</param-value>
+			<param-value>/login.do,/signin,/rest/ssologin,/rest/ssologout,/error,/static/,/js/,/css/,/files/,/img/,/lib/,/resource/</param-value>
 		</init-param>
 	</filter>
 	<filter-mapping>
