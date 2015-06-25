@@ -118,7 +118,7 @@ public class LoginController {
 	}
 	
 	/**
-	 * sso太慢，调试不方便，留个后门,使用的时候设置sso的excludeURLs为/*，然后用signin页面登录即可
+	 * sso太慢，调试不方便，留个后门,使用的时候去掉sso的filter，并且保证数据库中有用户信息
 	 * @param modelMap
 	 * @param request
 	 * @param response

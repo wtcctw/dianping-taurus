@@ -19,6 +19,7 @@
 		<argLine>-Dfile.encoding=UTF-8</argLine>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<springFramework.version>4.0.5.RELEASE</springFramework.version>
+		<webXmlPath>src/main/webapp/WEB-INF</webXmlPath>
     </properties>
 	<repositories>
 		<repository>
@@ -302,8 +303,10 @@
                 <version>2.1-alpha-1</version>
                 <configuration>
                     <warName>${artifactId}-${env}-${version}</warName>
+                    <webXml>${webXmlPath}</webXml>
                 </configuration>
-            </plugin><plugin>
+            </plugin>
+            <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-eclipse-plugin</artifactId>
 				<configuration>
@@ -335,4 +338,15 @@
 			</plugin>
         </plugins>
 	</build>
+	
+	<!-- 启动指定profile如dev使用maven命令加 -P dev -->
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<properties>
+            	<webXmlPath>src/main/resources/custom/webXml</webXmlPath>
+        	</properties>
+		</profile>
+		
+	</profiles>
 </project>

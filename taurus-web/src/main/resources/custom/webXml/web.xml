@@ -47,25 +47,25 @@
     </filter-mapping>
 	
 	<!-- sso文档给的顺序不对，必须按下面这个顺序严格排放 -->
-	<filter>
+	<!-- <filter>
 	    <filter-name>CAS Authentication Filter</filter-name>
 	    <filter-class>org.jasig.cas.client.authentication.Saml11AuthenticationFilter</filter-class>
-	    <!-- SSO 登录页面的lion key，不用改写 -->
+	    SSO 登录页面的lion key，不用改写
 	    <init-param>
 	        <param-name>casServerLoginUrlLionKey</param-name>
 	        <param-value>cas-server-webapp.loginUrl</param-value>
 	    </init-param>
-	    <!-- 此处需要改写param-value，改成接入站点uri的lion key，lion的value必须是应用的完整地址且不带子路径，例如：http://my.dper.com -->
+	    此处需要改写param-value，改成接入站点uri的lion key，lion的value必须是应用的完整地址且不带子路径，例如：http://my.dper.com
 	    <init-param>
 	        <param-name>serverNameLionKey</param-name>
 	        <param-value>taurus.web.serverName</param-value>
 	    </init-param>
-	    <!-- 实施安全策略，提升外网访问时的安全级别，没有外网访问的站点不建议打开 -->
-	    <!-- <init-param>
+	    实施安全策略，提升外网访问时的安全级别，没有外网访问的站点不建议打开
+	    <init-param>
 	        <param-name>safe</param-name>
 	        <param-value>false</param-value>
-	    </init-param> -->
-	    <!-- 免登录url，支持通配符*，多个用,分隔 -->
+	    </init-param>
+	    免登录url，支持通配符*，多个用,分隔
 	    <init-param>
 	        <param-name>excludeURLs</param-name>
 	        <param-value>/rest/ssologout</param-value>
@@ -79,7 +79,7 @@
 	        <param-name>casServerUrlPrefixLionKey</param-name>
 	        <param-value>cas-server-webapp.serverName</param-value>
 	    </init-param>
-	    <!-- 此处需要改写param-value，改成接入站点uri的lion key，lion的value必须是应用的完整地址且不带子路径，例如：http://my.dper.com -->
+	    此处需要改写param-value，改成接入站点uri的lion key，lion的value必须是应用的完整地址且不带子路径，例如：http://my.dper.com
 	    <init-param>
 	        <param-name>serverNameLionKey</param-name>
 	        <param-value>taurus.web.serverName</param-value>
@@ -88,12 +88,12 @@
 	        <param-name>redirectAfterValidation</param-name>
 	        <param-value>true</param-value>
 	    </init-param>
-	    <!-- 是否开启票据时间差验证，默认开启 -->
+	    是否开启票据时间差验证，默认开启
 	    <init-param>
 	        <param-name>validate</param-name>
 	        <param-value>true</param-value>
 	    </init-param>
-	    <!-- 最大容忍的时间差（毫秒） -->
+	    最大容忍的时间差（毫秒）
 	    <init-param>
 	        <param-name>tolerance</param-name>
 	        <param-value>5000</param-value>
@@ -114,7 +114,7 @@
 	   </init-param>
 	</filter>
 	
-	<!-- 不要修改 filter-mapping的顺序 -->
+	不要修改 filter-mapping的顺序
 	<filter-mapping>
 	  <filter-name>CAS Single Sign Out Filter</filter-name>
 	  <url-pattern>/*</url-pattern>
@@ -130,7 +130,7 @@
 	<filter-mapping>
 	  <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
 	  <url-pattern>/*</url-pattern>
-	</filter-mapping>
+	</filter-mapping> -->
 	
 	<!-- 本机身份验证 -->
 	<filter>
