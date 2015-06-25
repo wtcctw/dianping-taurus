@@ -45,7 +45,7 @@ public class AlertOfflineAgentTask  extends TimerTask {
         String exceptionHosts = hostsResource.retrieve();
         
         // 检测所有Agent 发现异常 告警
-        cr = new ClientResource(restlet_url_base + "allHosts");
+        cr = new ClientResource(restlet_url_base + "allhosts");
         IAllHosts allOnlineHostsResource = cr.wrap(IAllHosts.class);
         cr.accept(MediaType.APPLICATION_XML);
         String onlineHosts = allOnlineHostsResource.retrieve();
