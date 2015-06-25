@@ -46,7 +46,7 @@ public class AuthenticationFilter implements Filter {
 		
 		// Filter出口1. 登录/ssologin 本机放行，cas不能放行，否则可以伪造cas认证信息；登出/ssologout 本机和cas都放行
 		for (String uri : excludePages) {
-			if (requestURI.toLowerCase().contains(uri)){
+			if (requestURI.toLowerCase().startsWith(uri)){
 				System.out.println("excludePage : " + uri);
 				chain.doFilter(request, response);
 				return;

@@ -333,7 +333,8 @@
 				<artifactId>maven-jetty-plugin</artifactId>
 				<version>6.1.10</version>
 				<configuration>
-                    <contextPath>/</contextPath>                     
+                    <contextPath>/</contextPath>
+                    <webXml>${webXmlPath}/web.xml</webXml>
                 </configuration>
 			</plugin>
         </plugins>
