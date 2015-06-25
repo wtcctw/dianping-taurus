@@ -22,7 +22,7 @@ public class MultiInstanceFilter implements Filter {
 
     private Scheduler scheduler;
     public static HashMap<String, Integer> jobAlert = new HashMap<String, Integer>();
-    private static final int ALERT_SILENCE_MAX_COUNT = 22;
+    private static final int ALERT_SILENCE_MAX_COUNT = 30;
 
     @Autowired
     public MultiInstanceFilter(Scheduler scheduler) {
@@ -83,7 +83,7 @@ public class MultiInstanceFilter implements Filter {
                         					+ context.getTaskid();
                         try {
                             MailHelper.sendWeChat("kirin.li", alertontext, "Taurus-Job拥塞告警服务");
-                            MailHelper.sendWeChat("chongze.chen", alertontext, "Taurus-Job拥塞告警服务");
+                            //MailHelper.sendWeChat("chongze.chen", alertontext, "Taurus-Job拥塞告警服务");
                             MailHelper.sendWeChat(context.getCreator(), alertontext, "Taurus-Job拥塞告警服务");
                             MailHelper.sendMail(context.getCreator() + "@dianping.com", alertontext, "Taurus-Job拥塞告警服务");
 

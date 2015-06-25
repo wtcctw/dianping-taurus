@@ -9,6 +9,9 @@ import com.dp.bigdata.taurus.core.MailHelper;
 import com.dp.bigdata.taurus.restlet.resource.IAllHosts;
 import com.dp.bigdata.taurus.restlet.resource.IExceptionHosts;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 import org.apache.commons.lang.StringUtils;
 import org.restlet.data.MediaType;
 import org.restlet.resource.ClientResource;
@@ -20,6 +23,8 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TimerTask;
+
+import jodd.util.StringUtil;
 
 /**
  * Created by kirinli on 15/1/30.
@@ -48,7 +53,7 @@ public class AlertOfflineAgentTask  extends TimerTask {
         cr = new ClientResource(restlet_url_base + "allhosts");
         IAllHosts allOnlineHostsResource = cr.wrap(IAllHosts.class);
         cr.accept(MediaType.APPLICATION_XML);
-        String onlineHosts = allOnlineHostsResource.retrieve();
+        String onlineHostsJsonStr = allOnlineHostsResource.retrieve();
         
         String domain = null;
         String reportToOps = null;
@@ -124,11 +129,15 @@ public class AlertOfflineAgentTask  extends TimerTask {
         }
         
         // 检测其他agent:isOnline = 1 and isConnected = 1
-        if (StringUtils.isNotBlank(onlineHosts)){
-            String[] hostLists = onlineHosts.split(",");
-
-            for (String host: hostLists){
-
+        JSONObject jsonObj = JSONObject.fromObject(onlineHostsJsonStr);
+        Object obj = jsonObj.get("hosts");
+        
+        if(StringUtil.isNotBlank(obj.toString())){
+        	JSONArray jsonArr = jsonObj.getJSONArray("hosts");
+			Object[] hostListsObj = jsonArr.toArray();
+			
+            for (Object hostObj: hostListsObj){
+            	String host = hostObj.toString();
                 String exceptContext = "您好，taurus-agent的job主机 ["
                         + host
                         + "] 服务已经挂掉请在【"+domain+"/host_center】核实并重启该Job机器的TOMCAT" +
@@ -136,9 +145,7 @@ public class AlertOfflineAgentTask  extends TimerTask {
                         + host
                         +"，谢谢~";
 
-
                 try {
-
 
                     String url1= "http://"+host+":8080/agentrest.do?action=isnew";
                     String url2 = "http://"+host+":8088/agentrest.do?action=isnew";

@@ -7,6 +7,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.dp.bigdata.taurus.restlet.resource.IAllHosts;
 import com.dp.bigdata.taurus.restlet.resource.IUserGroupsResource;
 import com.dp.bigdata.taurus.restlet.resource.IUsersResource;
 import com.dp.bigdata.taurus.restlet.shared.UserDTO;
@@ -161,6 +165,35 @@ public class TestController {
 		
 		int affectedRowNum = testService.deleteById(Integer.parseInt(id));
 		result.addAttr("affectedRowNum", affectedRowNum);
+		return result;
+	}
+	
+	@RequestMapping(value = "/testget", method = RequestMethod.GET)
+	@ResponseBody
+	public WebResult testget(HttpServletRequest request, 
+									HttpServletResponse response) 
+	{
+		log.info("--------------init the testget------------");
+		
+		WebResult result = new WebResult(request);
+
+		// 检测正常Agent 发现异常 告警
+		ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "allhosts");
+        IAllHosts allOnlineHostsResource = cr.wrap(IAllHosts.class);
+        cr.accept(MediaType.APPLICATION_XML);
+        String onlineHosts = allOnlineHostsResource.retrieve();
+        
+        
+        JSONObject jsonObj = JSONObject.fromObject(onlineHosts);
+		
+		JSONArray jsonArr = jsonObj.getJSONArray("hosts");
+		
+		Object[] hostLists = jsonArr.toArray();
+		
+		for(int i=0;i<hostLists.length;++i){
+			result.addAttr("host"+i, hostLists[i].toString());
+		}
+        
 		return result;
 	}
 	
