@@ -18,15 +18,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.util.CookieGenerator;
 
 import com.dp.bigdata.taurus.generated.module.User;
 import com.dp.bigdata.taurus.restlet.resource.IUserResource;
 import com.dp.bigdata.taurus.restlet.resource.IUsersResource;
 import com.dp.bigdata.taurus.restlet.shared.UserDTO;
-
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
 @Controller
 public class LoginController {
