@@ -145,7 +145,7 @@ public class AlertOfflineAgentTask  extends TimerTask {
                     String isAlive1 = get_data(url1);
                     String isAlive2 = get_data(url2);
 
-                    if(isAlive1 == null || isAlive2 == null) {//agent服务器无响应
+                    if(isAlive1 == null && isAlive2 == null) {//agent服务器无响应
                         MailHelper.sendWeChat("kirin.li",exceptContext, "Taurus-Agent主机失联系告警服务");
                         String toMails = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.down.mail.to");
                         String [] toLists = toMails.split(",");
