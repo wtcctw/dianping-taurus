@@ -110,16 +110,6 @@
 			<version>1.7.7</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpmime</artifactId>
-			<version>4.2.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpcore</artifactId>
-			<version>4.2.2</version>
-		</dependency>
-		<dependency>
 			<groupId>org.restlet.jse</groupId>
 			<artifactId>org.restlet.ext.fileupload</artifactId>
 			<version>${restletVersion}</version>
@@ -129,6 +119,11 @@
 			<artifactId>ops-http-client</artifactId>
 			<version>1.0.16</version>
 		</dependency>
+		<!-- <dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpmime</artifactId>
+			<version>4.2.1</version>
+		</dependency> -->
 		<dependency>
 			<groupId>com.dp.bigdata</groupId>
 			<artifactId>taurus-core</artifactId>
@@ -266,7 +261,10 @@
                     <artifactId>lion-client</artifactId>
                     <groupId>com.dianping.lion</groupId>
                 </exclusion>
-
+                <exclusion>
+                	<artifactId>httpcore</artifactId>
+                	<groupId>org.apache.httpcomponents</groupId>
+                </exclusion>
             </exclusions>
 		</dependency>
         <dependency>
