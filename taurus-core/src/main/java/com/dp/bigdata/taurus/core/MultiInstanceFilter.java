@@ -37,6 +37,15 @@ public class MultiInstanceFilter implements Filter {
             AttemptContext ctx = maps.get(context.getTaskid());
 
             if (runnings != null && runnings.size() > 0) {
+            	//TODO 根据用户设置，决定是否设置拥塞的任务调度的新调度为过期状态，不执行（待测试）
+            	if(context.getTask().getIskillcongexp()){
+            		try {
+						scheduler.ExpireCongestionAttempt(context.getAttemptid());
+					} catch (ScheduleException e) {
+						Cat.logError(e);
+					}
+            		continue;
+            	}
                 // 拥堵了~应该告警用户任务堵住了~
                 Integer jobAlertCount = null;
                 if (jobAlert.containsKey(context.getTaskid())) {

@@ -223,7 +223,7 @@
     <form id="extended-form" class="form-horizontal">
         <fieldset>
             <legend>可选设置</legend>
-            <div class="control-group">
+            <div class="control-group col-sm-12 no-padding-left">
                 <label class="label label-lg label-info arrowed-right col-sm-2"
                        for="maxExecutionTime">最长执行时间（分钟）*</label>
 
@@ -233,7 +233,7 @@
                     <a href="${rc.contextPath}/about#config" target="view_window">帮助</a>
                 </div>
             </div>
-            <div class="control-group">
+            <div class="control-group col-sm-12 no-padding-left">
                 <label class="label label-lg label-info arrowed-right col-sm-2" for="dependency">依赖</label>
 
                 <div class="controls">
@@ -242,7 +242,7 @@
                     <a href="${rc.contextPath}/about#config" target="view_window">帮助</a>
                 </div>
             </div>
-            <div class="control-group">
+            <div class="control-group col-sm-12 no-padding-left">
                 <label class="label label-lg label-info arrowed-right col-sm-2" for="maxWaitTime">最长等待时间（分钟）*</label>
 
                 <div class="controls">
@@ -252,7 +252,7 @@
                 </div>
             </div>
 
-            <div class="control-group">
+            <div class="control-group col-sm-12 no-padding-left">
                 <label class="label label-lg label-info arrowed-right col-sm-2" for="retryTimes">重试次数*</label>
 
                 <div class="controls">
@@ -261,7 +261,7 @@
                     <a href="${rc.contextPath}/about#config" target="view_window">帮助</a>
                 </div>
             </div>
-            <div class="control-group">
+            <div class="control-group col-sm-12 no-padding-left">
                 <label class="label label-lg label-info arrowed-right col-sm-2" for="multiInstance">自动kill
                     timeout实例*</label>
 
@@ -271,12 +271,20 @@
                     <span class="label">不要轻易修改，除非你确定其含义：<a href="${rc.contextPath}/about#config" target="view_window">帮助</a></span>
                 </div>
             </div>
-            <br/>
-            <br/>
+            <div class="control-group col-sm-12 no-padding-left">
+                <label class="label label-lg label-info arrowed-right col-sm-2" for="multiInstance">放弃拥塞后续实例*</label>
 
-            <p><span class="label">注意：使用以下配置项，你需要在用户<a href="${rc.contextPath}/user">用户设置</a>填写您的联系方式</span></p>
+                <div class="controls field" id="iskillcongexp">
+                    <input type="radio" value="1" name="iskillcongexp"> 是
+                    <input type="radio" value="0" name="iskillcongexp" checked> 否
+                    <span class="label">不要轻易修改，除非你确定其含义：<a href="${rc.contextPath}/about#config" target="view_window">帮助</a></span>
+                </div>
+            </div>
+            
 
-            <div class="control-group">
+            <p><span class="label" style="margin-top:20px">注意：使用以下配置项，你需要在用户<a href="${rc.contextPath}/user">用户设置</a>填写您的联系方式</span></p>
+
+            <div class="control-group col-sm-12 no-padding-left">
                 <label class="label label-lg label-info arrowed-right col-sm-2">选择何时收到报警</label>
 
                 <div class="controls">
@@ -303,7 +311,7 @@
                 </div>
             </div>
 
-            <div class="control-group">
+            <div class="control-group col-sm-12 no-padding-left">
                 <label class="label label-lg label-info arrowed-right col-sm-2">选择报警接收人(分号分隔)</label>
 
                 <div class="controls">
@@ -312,7 +320,7 @@
                 </div>
             </div>
 
-            <div class="control-group">
+            <div class="control-group col-sm-12 no-padding-left">
                 <label class="label label-lg label-info arrowed-right col-sm-2">选择报警接收组(分号分隔)</label>
 
                 <div class="controls">

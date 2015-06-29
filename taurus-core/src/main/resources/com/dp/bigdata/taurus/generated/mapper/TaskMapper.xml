@@ -30,6 +30,7 @@
     <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="hadoopName" jdbcType="VARCHAR" property="hadoopname" />
     <result column="appName" jdbcType="VARCHAR" property="appname" />
+    <result column="isKillCongExp" jdbcType="BIT" property="iskillcongexp" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
@@ -107,7 +108,7 @@
     -->
     taskID, name, creator, dependencyExpr, addTime, lastScheduleTime, updateTime, crontab, 
     status, isAutoKill, proxyUser, waitTimeout, executionTimeout, isAutoRetry, retryTimes, 
-    command, hostName, poolID, type, fileName, description, hadoopName, appName
+    command, hostName, poolID, type, fileName, description, hadoopName, appName,isKillCongExp
   </sql>
   <select id="selectByExample" parameterType="com.dp.bigdata.taurus.generated.module.TaskExample" resultMap="BaseResultMap">
     <!--
@@ -172,7 +173,7 @@
       executionTimeout, isAutoRetry, retryTimes, 
       command, hostName, poolID, 
       type, fileName, description, 
-      hadoopName, appName)
+      hadoopName, appName, isKillCongExp)
     values (#{taskid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{dependencyexpr,jdbcType=VARCHAR}, #{addtime,jdbcType=TIMESTAMP}, #{lastscheduletime,jdbcType=TIMESTAMP}, 
       #{updatetime,jdbcType=TIMESTAMP}, #{crontab,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
@@ -180,7 +181,7 @@
       #{executiontimeout,jdbcType=INTEGER}, #{isautoretry,jdbcType=BIT}, #{retrytimes,jdbcType=INTEGER}, 
       #{command,jdbcType=VARCHAR}, #{hostname,jdbcType=VARCHAR}, #{poolid,jdbcType=INTEGER}, 
       #{type,jdbcType=VARCHAR}, #{filename,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
-      #{hadoopname,jdbcType=VARCHAR}, #{appname,jdbcType=VARCHAR})
+      #{hadoopname,jdbcType=VARCHAR}, #{appname,jdbcType=VARCHAR}, #{iskillcongexp,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.dp.bigdata.taurus.generated.module.Task">
     <!--
@@ -259,6 +260,9 @@
       <if test="appname != null">
         appName,
       </if>
+      <if test="iskillcongexp != null">
+        isKillCongExp,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="taskid != null">
@@ -329,6 +333,9 @@
       </if>
       <if test="appname != null">
         #{appname,jdbcType=VARCHAR},
+      </if>
+      <if test="iskillcongexp != null">
+        #{iskillcongexp,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -420,6 +427,9 @@
       <if test="record.appname != null">
         appName = #{record.appname,jdbcType=VARCHAR},
       </if>
+      <if test="record.iskillcongexp != null">
+        isKillCongExp = #{record.iskillcongexp,jdbcType=BIT},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -454,7 +464,8 @@
       fileName = #{record.filename,jdbcType=VARCHAR},
       description = #{record.description,jdbcType=VARCHAR},
       hadoopName = #{record.hadoopname,jdbcType=VARCHAR},
-      appName = #{record.appname,jdbcType=VARCHAR}
+      appName = #{record.appname,jdbcType=VARCHAR},
+      isKillCongExp = #{record.iskillcongexp,jdbcType=BIT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -533,6 +544,9 @@
       <if test="appname != null">
         appName = #{appname,jdbcType=VARCHAR},
       </if>
+      <if test="iskillcongexp != null">
+        isKillCongExp = #{iskillcongexp,jdbcType=BIT},
+      </if>
     </set>
     where taskID = #{taskid,jdbcType=VARCHAR}
   </update>
@@ -564,7 +578,8 @@
       fileName = #{filename,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},
       hadoopName = #{hadoopname,jdbcType=VARCHAR},
-      appName = #{appname,jdbcType=VARCHAR}
+      appName = #{appname,jdbcType=VARCHAR},
+      isKillCongExp = #{iskillcongexp,jdbcType=BIT}
     where taskID = #{taskid,jdbcType=VARCHAR}
   </update>
 

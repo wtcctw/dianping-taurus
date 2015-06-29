@@ -75,6 +75,8 @@ public class TaskDTO implements Serializable {
 	private String taskUrl;
 
 	private String hadoopName;
+	
+	private Boolean iskillcongexp;
 
 	public Date getAddtime() {
 		return addtime;
@@ -212,6 +214,7 @@ public class TaskDTO implements Serializable {
 		task.setWaittimeout(waittimeout);
 		task.setHadoopname(hadoopName);
 		task.setAppname(appName);
+		task.setIskillcongexp(iskillcongexp);
 		return task;
 	}
 
@@ -379,7 +382,15 @@ public class TaskDTO implements Serializable {
 	   this.appName = appName;
    }
 
-    @Override
+    public Boolean getIskillcongexp() {
+		return iskillcongexp;
+	}
+
+	public void setIskillcongexp(Boolean iskillcongexp) {
+		this.iskillcongexp = iskillcongexp;
+	}
+
+	@Override
     public String toString() {
         return "TaskDTO{" +
                 "taskid='" + taskid + '\'' +
@@ -413,6 +424,7 @@ public class TaskDTO implements Serializable {
                 ", mainClass='" + mainClass + '\'' +
                 ", taskUrl='" + taskUrl + '\'' +
                 ", hadoopName='" + hadoopName + '\'' +
+                ", iskillcongexp=" + iskillcongexp +
                 '}';
     }
 

@@ -55,6 +55,7 @@ public class TaskConverter {
         dto.setDescription(task.getDescription());
         dto.setHadoopName(task.getHadoopname());
         dto.setAppName(task.getAppname());
+        dto.setIskillcongexp(task.getIskillcongexp());
         return dto;
     }
 }

@@ -806,6 +806,24 @@ final public class Engine implements Scheduler {
 		}
 	}
 
+	@Override
+	public void ExpireCongestionAttempt(String attemptID) throws ScheduleException {
+		// TODO Auto-generated method stub（待测试）
+		HashMap<String, AttemptContext> contexts = runningAttempts.get(AttemptID.getTaskID(attemptID));
+		AttemptContext context = contexts.get(attemptID);
+		if (context == null) {
+			throw new ScheduleException("Unable find attemptID : " + attemptID);
+		}
+
+		context.getAttempt().setStatus(AttemptStatus.EXPIRED);
+		context.getAttempt().setEndtime(new Date());
+		//context.getAttempt().setReturnvalue(-1);
+		taskAttemptMapper.updateByPrimaryKeySelective(context.getAttempt());
+		unregistAttemptContext(context);
+
+		Cat.logEvent("Congestion-Expire-Attempt", context.getName(), Message.SUCCESS, context.getAttemptid());
+	}
+	
     public static String get_data(String url) {
         try {
             URL httpUrl = new URL(url);
@@ -823,4 +841,5 @@ final public class Engine implements Scheduler {
             return null;
         }
     }
+
 }

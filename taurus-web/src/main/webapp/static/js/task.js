@@ -208,6 +208,9 @@ $(document).ready(function() {
 				var checked = $('input[type=radio]:checked','#isAutoKill').val();
 				
 				params[element.id] = checked;
+			} else if(element.id == "iskillcongexp") {
+				var checked = $('input[type=radio]:checked','#iskillcongexp').val();
+				params[element.id] = checked;
 			}else {
 				params[element.id] = element.value;
 			}

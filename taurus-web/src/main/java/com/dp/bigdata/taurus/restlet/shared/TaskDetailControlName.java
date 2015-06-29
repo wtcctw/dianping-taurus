@@ -33,7 +33,8 @@ public enum TaskDetailControlName {
     TASKURL("taskUrl"),
     MAINCLASS("mainClass"),
     HADOOPNAME("hadoopName"),
-    APPNAME("appName");
+    APPNAME("appName"),
+    ISKILLCONGEXP("iskillcongexp");
     
     private String name;
     

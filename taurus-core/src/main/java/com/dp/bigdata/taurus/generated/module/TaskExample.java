@@ -1704,6 +1704,66 @@ public class TaskExample {
             addCriterion("appName not between", value1, value2, "appname");
             return (Criteria) this;
         }
+
+        public Criteria andIskillcongexpIsNull() {
+            addCriterion("isKillCongExp is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIskillcongexpIsNotNull() {
+            addCriterion("isKillCongExp is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIskillcongexpEqualTo(Boolean value) {
+            addCriterion("isKillCongExp =", value, "iskillcongexp");
+            return (Criteria) this;
+        }
+
+        public Criteria andIskillcongexpNotEqualTo(Boolean value) {
+            addCriterion("isKillCongExp <>", value, "iskillcongexp");
+            return (Criteria) this;
+        }
+
+        public Criteria andIskillcongexpGreaterThan(Boolean value) {
+            addCriterion("isKillCongExp >", value, "iskillcongexp");
+            return (Criteria) this;
+        }
+
+        public Criteria andIskillcongexpGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("isKillCongExp >=", value, "iskillcongexp");
+            return (Criteria) this;
+        }
+
+        public Criteria andIskillcongexpLessThan(Boolean value) {
+            addCriterion("isKillCongExp <", value, "iskillcongexp");
+            return (Criteria) this;
+        }
+
+        public Criteria andIskillcongexpLessThanOrEqualTo(Boolean value) {
+            addCriterion("isKillCongExp <=", value, "iskillcongexp");
+            return (Criteria) this;
+        }
+
+        public Criteria andIskillcongexpIn(List<Boolean> values) {
+            addCriterion("isKillCongExp in", values, "iskillcongexp");
+            return (Criteria) this;
+        }
+
+        public Criteria andIskillcongexpNotIn(List<Boolean> values) {
+            addCriterion("isKillCongExp not in", values, "iskillcongexp");
+            return (Criteria) this;
+        }
+
+        public Criteria andIskillcongexpBetween(Boolean value1, Boolean value2) {
+            addCriterion("isKillCongExp between", value1, value2, "iskillcongexp");
+            return (Criteria) this;
+        }
+
+        public Criteria andIskillcongexpNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("isKillCongExp not between", value1, value2, "iskillcongexp");
+            return (Criteria) this;
+        }
     }
 
     /**

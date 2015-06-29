@@ -231,6 +231,12 @@ public class TaskRequestExtractor implements RequestExtrator<TaskDTO> {
 				task.setMainClass(value);
 			} else if (key.equals(TaskDetailControlName.TASKURL.getName())) {
 				task.setTaskUrl(value);
+			} else if (key.equals(TaskDetailControlName.ISKILLCONGEXP.getName())) {
+				if (value.equals("1")) {
+					task.setIskillcongexp(true);
+				} else {
+					task.setIskillcongexp(false);
+				}
 			}
 		}
 		validate(task, isUpdateAction);
