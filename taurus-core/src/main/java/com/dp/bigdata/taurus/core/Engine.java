@@ -809,19 +809,17 @@ final public class Engine implements Scheduler {
 	@Override
 	public void ExpireCongestionAttempt(String attemptID) throws ScheduleException {
 		// TODO Auto-generated method stub（待测试）
-		HashMap<String, AttemptContext> contexts = runningAttempts.get(AttemptID.getTaskID(attemptID));
-		AttemptContext context = contexts.get(attemptID);
-		if (context == null) {
-			throw new ScheduleException("Unable find attemptID : " + attemptID);
-		}
+		TaskAttemptExample example = new TaskAttemptExample();
+        example.or().andAttemptidEqualTo(attemptID);
+        List<TaskAttempt> attempts = taskAttemptMapper.selectByExample(example);
+        
+        TaskAttempt attempt = attempts.get(0);
 
-		context.getAttempt().setStatus(AttemptStatus.EXPIRED);
-		context.getAttempt().setEndtime(new Date());
-		//context.getAttempt().setReturnvalue(-1);
-		taskAttemptMapper.updateByPrimaryKeySelective(context.getAttempt());
-		unregistAttemptContext(context);
+        attempt.setStatus(AttemptStatus.EXPIRED);
+        attempt.setEndtime(new Date());
+		taskAttemptMapper.updateByPrimaryKeySelective(attempt);
 
-		Cat.logEvent("Congestion-Expire-Attempt", context.getName(), Message.SUCCESS, context.getAttemptid());
+		Cat.logEvent("Congestion-Expire-Attempt", attempt.getTaskid(), Message.SUCCESS, attempt.getAttemptid());
 	}
 	
     public static String get_data(String url) {
