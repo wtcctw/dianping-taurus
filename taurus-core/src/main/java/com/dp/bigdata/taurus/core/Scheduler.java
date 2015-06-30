@@ -160,6 +160,6 @@ public interface Scheduler {
 	  * 设置拥塞的后续预期调度为过期状态，注意和运行超时TIMEOUT状态区分
 	  * @param attemptID
 	  */
-	 public void ExpireCongestionAttempt(String attemptID) throws ScheduleException;
+	 public void ExpireCongestionAttempt(String attemptID);
 
 }

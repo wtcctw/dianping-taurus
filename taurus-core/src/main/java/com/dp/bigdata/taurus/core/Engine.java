@@ -807,7 +807,7 @@ final public class Engine implements Scheduler {
 	}
 
 	@Override
-	public void ExpireCongestionAttempt(String attemptID) throws ScheduleException {
+	public void ExpireCongestionAttempt(String attemptID) {
 		// TODO Auto-generated method stub（待测试）
 		TaskAttemptExample example = new TaskAttemptExample();
         example.or().andAttemptidEqualTo(attemptID);
