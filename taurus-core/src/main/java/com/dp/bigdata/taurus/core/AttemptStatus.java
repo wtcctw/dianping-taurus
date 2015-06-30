@@ -39,7 +39,7 @@ public class AttemptStatus {
      * @return human-readable state of the job
      */
     public static String getInstanceRunState(int state) {
-        if (state < 1 || state >= runStates.length) {
+        if (state < 1 || state > runStates.length) {
             return "UNKNOWN";
         }
         return runStates[state - 1];
