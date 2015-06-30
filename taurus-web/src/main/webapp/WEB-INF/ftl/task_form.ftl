@@ -157,6 +157,20 @@
 </div>
 <br>
 <div class="control-group col-sm-12">
+    <label class="label label-lg label-info arrowed-right col-sm-4">放弃拥塞后续实例*</label>
+
+    <div class="controls field" id="iskillcongexp">
+    <#if dto.iskillcongexp >
+        <input type="radio" value="1" name="iskillcongexp" checked>是
+        <input type="radio" value="0" name="iskillcongexp">否
+    <#else>
+        <input type="radio" value="1" name="iskillcongexp">是
+        <input type="radio" value="0" name="iskillcongexp" checked>否
+    </#if>
+    </div>
+</div>
+<br>
+<div class="control-group col-sm-12">
     <label class="label label-lg label-info arrowed-right col-sm-3">选择何时收到报警</label>
 
     <div class="controls">
