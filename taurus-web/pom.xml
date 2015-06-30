@@ -19,7 +19,7 @@
 		<argLine>-Dfile.encoding=UTF-8</argLine>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<springFramework.version>4.0.5.RELEASE</springFramework.version>
-		<webXmlPath>src/main/webapp/WEB-INF</webXmlPath>
+		<webXmlPath>src/main/webapp/WEB-INF/web.xml</webXmlPath>
     </properties>
 	<repositories>
 		<repository>
@@ -325,7 +325,7 @@
 				<version>6.1.10</version>
 				<configuration>
                     <contextPath>/</contextPath>
-                    <webXml>${webXmlPath}/web.xml</webXml>
+                    <webXml>${webXmlPath}</webXml>
                 </configuration>
 			</plugin>
         </plugins>
@@ -336,7 +336,7 @@
 		<profile>
 			<id>dev</id>
 			<properties>
-            	<webXmlPath>src/main/resources/custom/webXml</webXmlPath>
+            	<webXmlPath>src/main/webapp/WEB-INF/web-dev.xml</webXmlPath>
         	</properties>
 		</profile>
 		
