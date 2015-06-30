@@ -65,6 +65,8 @@ public class InitController implements ServletContextAware {
 		XSL_UPLOAD_TMP_DIR = servletContext.getInitParameter("XSL_UPLOAD_TMP_DIR");
 		
 		ReFlashHostLoadTaskTimer.getReFlashHostLoadManager().start();
+		
+		log.info("----------- 中文测试 ------------");
 	}
 	
 	public static void dynamicLoad(){
