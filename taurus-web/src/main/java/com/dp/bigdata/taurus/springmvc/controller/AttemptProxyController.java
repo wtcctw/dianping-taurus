@@ -56,7 +56,7 @@ public class AttemptProxyController {
         ILogResource attemptResource = attemptCr.wrap(ILogResource.class);
 
         if (action.equals(KILL)) {
-                attemptResource.kill();
+            attemptResource.kill();
             response.setStatus(attemptCr.getStatus().getCode());
         } else if (action.equals(LOG)) {
             response.setContentType("text/html;charset=utf-8");

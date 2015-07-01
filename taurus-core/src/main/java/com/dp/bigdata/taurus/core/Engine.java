@@ -590,7 +590,29 @@ final public class Engine implements Scheduler {
 			LOG.error("Fail to kill attemptID :  " + attemptID + " on host : " + context.getExechost());
 		}
 
-		context.getAttempt().setStatus(AttemptStatus.KILLED);
+		context.getAttempt().setStatus(AttemptStatus.AUTO_KILLED);
+		context.getAttempt().setEndtime(new Date());
+		context.getAttempt().setReturnvalue(-1);
+		taskAttemptMapper.updateByPrimaryKeySelective(context.getAttempt());
+		unregistAttemptContext(context);
+
+		Cat.logEvent("Kill-Attempt", context.getName(), Message.SUCCESS, context.getAttemptid());
+	}
+	
+	@Override
+	public synchronized void killAttemptManual(String attemptID) throws ScheduleException {
+		HashMap<String, AttemptContext> contexts = runningAttempts.get(AttemptID.getTaskID(attemptID));
+		AttemptContext context = contexts.get(attemptID);
+		if (context == null) {
+			throw new ScheduleException("Unable find attemptID : " + attemptID);
+		}
+		try {
+			zookeeper.kill(context.getContext());
+		} catch (Exception ee) {
+			LOG.error("Fail to kill attemptID :  " + attemptID + " on host : " + context.getExechost());
+		}
+
+		context.getAttempt().setStatus(AttemptStatus.MAN_KILLED);
 		context.getAttempt().setEndtime(new Date());
 		context.getAttempt().setReturnvalue(-1);
 		taskAttemptMapper.updateByPrimaryKeySelective(context.getAttempt());

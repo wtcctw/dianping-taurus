@@ -7,6 +7,7 @@
 	<!-- page specific plugin scripts -->
     <script src="${rc.contextPath}/lib/ace/js/jquery.dataTables.min.js"></script>
     <script src="${rc.contextPath}/lib/ace/js/jquery.dataTables.bootstrap.js"></script>
+    <script type="text/javascript" src="${rc.contextPath}/static/js/jquery.autocomplete.js"></script>
 	<#include "segment/html_header2.ftl">
 	<link rel="stylesheet" href="${rc.contextPath}/css/loading.css">
 </head>

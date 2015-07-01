@@ -45,7 +45,8 @@ public class LogResource extends ServerResource implements ILogResource {
         }
 
         try {
-            scheduler.killAttempt(attemptID);
+        	//手动杀死
+            scheduler.killAttemptManual(attemptID);
         } catch (ScheduleException se) {
             LOG.error(se.getMessage(), se);
             setStatus(Status.SERVER_ERROR_INTERNAL);

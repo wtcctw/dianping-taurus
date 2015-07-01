@@ -25,7 +25,7 @@ public class CczTest {
 	
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 
-	@Test
+	//@Test
 	public void testRestlet(){
 		
 		String url = "http://localhost:8192/api/gettasks";

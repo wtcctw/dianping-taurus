@@ -70,11 +70,18 @@ public interface Scheduler {
 
 	/**
 	 * Notify the scheduler to kill a attempt.
-	 * 
-	 * @param job
+	 * 自动杀死一个指定调度
+	 * @param attemptID
 	 * @throws ScheduleException
 	 */
 	public void killAttempt(String attemptID) throws ScheduleException;
+	
+	/**
+	 * 手动杀死一个指定调度
+	 * @param attemptID
+	 * @throws ScheduleException
+	 */
+	public void killAttemptManual(String attemptID) throws ScheduleException;
 	
 	/**
 	 * Notify the scheduler that a attempt has been finished.
