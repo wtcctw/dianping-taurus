@@ -12,7 +12,6 @@ import com.dianping.cat.Cat;
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
 import com.dianping.lion.client.LionException;
-import com.dp.bigdata.taurus.web.utils.ReFlashHostLoadTaskTimer;
 
 @Controller
 public class InitController implements ServletContextAware {

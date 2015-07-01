@@ -27,7 +27,7 @@ import com.dp.bigdata.taurus.restlet.resource.IHostsResource;
 import com.dp.bigdata.taurus.restlet.resource.IUserTasks;
 import com.dp.bigdata.taurus.restlet.shared.AttemptDTO;
 import com.dp.bigdata.taurus.restlet.shared.HostDTO;
-import com.dp.bigdata.taurus.web.utils.ReFlashHostLoadTask;
+import com.dp.bigdata.taurus.restlet.utils.ReFlashHostLoadTask;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;

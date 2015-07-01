@@ -28,7 +28,7 @@ import com.dp.bigdata.taurus.restlet.resource.IHostResource;
 import com.dp.bigdata.taurus.restlet.resource.ILogResource;
 import com.dp.bigdata.taurus.restlet.shared.AttemptDTO;
 import com.dp.bigdata.taurus.restlet.shared.HostDTO;
-import com.dp.bigdata.taurus.web.utils.ReFlashHostLoadTask;
+import com.dp.bigdata.taurus.restlet.utils.ReFlashHostLoadTask;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
 

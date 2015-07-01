@@ -1,4 +1,4 @@
-package com.dp.bigdata.taurus.web.utils;
+package com.dp.bigdata.taurus.restlet.utils;
 
 import com.dp.bigdata.taurus.generated.module.Task;
 

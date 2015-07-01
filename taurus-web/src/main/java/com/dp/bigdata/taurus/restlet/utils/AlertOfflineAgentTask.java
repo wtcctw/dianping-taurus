@@ -1,4 +1,4 @@
-package com.dp.bigdata.taurus.web.utils;
+package com.dp.bigdata.taurus.restlet.utils;
 
 import com.dianping.cat.Cat;
 import com.dianping.lion.EnvZooKeeperConfig;

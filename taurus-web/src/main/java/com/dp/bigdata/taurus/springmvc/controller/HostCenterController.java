@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.dp.bigdata.taurus.restlet.resource.IHostsResource;
 import com.dp.bigdata.taurus.restlet.shared.HostDTO;
-import com.dp.bigdata.taurus.web.utils.ReFlashHostLoadTask;
+import com.dp.bigdata.taurus.restlet.utils.ReFlashHostLoadTask;
 
 @Controller
 public class HostCenterController {
