@@ -5,6 +5,7 @@ import java.util.Date;
 import com.dp.bigdata.taurus.alert.TaurusAlert;
 import com.dp.bigdata.taurus.restlet.utils.ClearLogsTimerManager;
 import com.dp.bigdata.taurus.web.utils.MonitorAgentOffLineTaskTimer;
+import com.dp.bigdata.taurus.web.utils.ReFlashHostLoadTaskTimer;
 
 import org.restlet.Component;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ public class TaurusServer {
             engine.start();
             ClearLogsTimerManager.getClearLogsTimerManager().start();
             MonitorAgentOffLineTaskTimer.getMonitorAgentOffLineTimeManager().start();
+            ReFlashHostLoadTaskTimer.getReFlashHostLoadManager().start();
         } catch (Exception e) {
             e.printStackTrace();
         }

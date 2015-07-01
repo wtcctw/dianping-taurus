@@ -1,8 +1,9 @@
 package com.dp.bigdata.taurus.web.utils;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Timer;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by kirinli on 14-10-11.
@@ -10,6 +11,7 @@ import java.util.Timer;
 public class ReFlashHostLoadTaskTimer {
 
     private volatile static ReFlashHostLoadTaskTimer loadTimerManager;
+    private Logger log = LoggerFactory.getLogger(this.getClass());
     private ReFlashHostLoadTaskTimer (){}
     //时间间隔
 
@@ -26,7 +28,7 @@ public class ReFlashHostLoadTaskTimer {
     }
     public  void start() {
 
-
+    	log.info("start ReFlashHostLoadTaskTimer");
         ReFlashHostLoadTask task = new ReFlashHostLoadTask();
         //安排指定的任务在指定的时间开始进行重复的固定延迟执行。
 

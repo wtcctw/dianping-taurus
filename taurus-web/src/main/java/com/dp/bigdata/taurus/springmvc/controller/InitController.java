@@ -64,8 +64,6 @@ public class InitController implements ServletContextAware {
 		ERROR_PAGE = servletContext.getInitParameter("ERROR_PAGE");
 		XSL_UPLOAD_TMP_DIR = servletContext.getInitParameter("XSL_UPLOAD_TMP_DIR");
 		
-		ReFlashHostLoadTaskTimer.getReFlashHostLoadManager().start();
-		
 		log.info("----------- 中文测试 ------------");
 	}
 	
