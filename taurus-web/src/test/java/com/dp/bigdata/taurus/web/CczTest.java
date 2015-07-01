@@ -15,7 +15,6 @@ import org.restlet.ext.json.JsonRepresentation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.integration.http.converter.SerializingHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
