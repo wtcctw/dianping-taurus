@@ -109,12 +109,12 @@
 	    <!-- 是否开启票据时间差验证，默认开启 -->
 	    <init-param>
 	        <param-name>validate</param-name>
-	        <param-value>true</param-value>
+	        <param-value>false</param-value>
 	    </init-param>
 	    <!-- 最大容忍的时间差（毫秒） -->
 	    <init-param>
 	        <param-name>tolerance</param-name>
-	        <param-value>5000</param-value>
+	        <param-value>60000</param-value>
 	    </init-param>
 	</filter>
 	
