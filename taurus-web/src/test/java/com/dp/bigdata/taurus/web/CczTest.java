@@ -12,10 +12,45 @@ import net.sf.json.JSONObject;
 import org.json.JSONException;
 import org.junit.Test;
 import org.restlet.ext.json.JsonRepresentation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.ByteArrayHttpMessageConverter;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.integration.http.converter.SerializingHttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
+
+import com.dp.bigdata.taurus.generated.module.Task;
 
 public class CczTest {
+	
+	private Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Test
+	public void testRestlet(){
+		
+		String url = "http://localhost:8192/api/gettasks";
+		
+        RestTemplate restTemplate = new RestTemplate();
+        List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
+        SerializingHttpMessageConverter myHttpMessageConverter = new SerializingHttpMessageConverter();
+//        List<MediaType> supportedMediaTypes = new ArrayList<MediaType>();
+//        supportedMediaTypes.add(new MediaType("application", "x-java-serialized-object"));
+//        myHttpMessageConverter.setSupportedMediaTypes(supportedMediaTypes);
+        messageConverters.add(myHttpMessageConverter);
+        restTemplate.setMessageConverters(messageConverters);
+        
+        //ResponseEntity<ArrayList> responseEntity = restTemplate.getForEntity(url, ArrayList.class);
+        ArrayList<Task> results = restTemplate.getForObject(url, ArrayList.class);
+        
+        for(Task result: results){
+        	log.info("test: "+result.getName());
+        }
+        
+	}
+	
+	
+	//@Test
 	public void test1(){
 		String jsonStr = "{\"hosts\":[\"192.168.215.117\",\"192.168.222.191\",\"192.168.222.71\"]}";
 		
@@ -33,7 +68,6 @@ public class CczTest {
 			org.json.JSONObject resJson =  rsp.getJsonObject();
 			jsonOne = resJson.toString();
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
