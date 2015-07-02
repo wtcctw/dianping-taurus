@@ -17,11 +17,13 @@ public class ExecuteStatus {
     public static final int SUCCEEDED = 7;
     public static final int FAILED = 8;
     public static final int TIMEOUT = 9;
-    public static final int KILLED = 10;
+    public static final int AUTO_KILLED = 10;
     public static final int UNKNOWN = 11;
+    public static final int EXPIRED = 12;
+    public static final int MAN_KILLED = 13;
 
     private static final String[] runStates = { "INITIALIZED", "DEPENDENCY_PASS", "DEPENDENCY_TIMEOUT", "SUBMIT_SUCCESS",
-            "SUBMIT_FAIL", "RUNNING", "SUCCEEDED", "FAILED", "TIMEOUT", "KILLED", "UNKNOWN" };
+            "SUBMIT_FAIL", "RUNNING", "SUCCEEDED", "FAILED", "TIMEOUT", "KILLED", "UNKNOWN" , "EXPIRED", "MAN_KILLED" };
 
     private int status;
     private int returnCode;
@@ -41,7 +43,7 @@ public class ExecuteStatus {
      * @return human-readable state of the job
      */
     public static String getInstanceRunState(int state) {
-        if (state < 1 || state >= runStates.length) {
+        if (state < 1 || state > runStates.length) {
             return "UNKNOWN";
         }
         return runStates[state - 1];

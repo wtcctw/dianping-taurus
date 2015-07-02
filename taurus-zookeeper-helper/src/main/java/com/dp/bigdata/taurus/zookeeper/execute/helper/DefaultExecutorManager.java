@@ -172,7 +172,7 @@ public class DefaultExecutorManager implements ExecutorManager{
         } else if(statusCode == ScheduleStatus.EXECUTE_SUCCESS) {
             result = new ExecuteStatus(ExecuteStatus.SUCCEEDED);
         } else if(statusCode == ScheduleStatus.DELETE_SUCCESS) {
-            result = new ExecuteStatus(ExecuteStatus.KILLED);
+            result = new ExecuteStatus(ExecuteStatus.AUTO_KILLED);
         } else if(statusCode == ScheduleStatus.UNKNOWN) {
             result = new ExecuteStatus(ExecuteStatus.UNKNOWN);
         } else {
