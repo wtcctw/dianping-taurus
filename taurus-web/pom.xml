@@ -262,7 +262,7 @@
 		<dependency>
 		  <groupId>org.jasig.cas.client</groupId>
 		  <artifactId>cas-client-core-product</artifactId>
-		  <version>3.2.1-memcached.STABLE.6</version>
+		  <version>3.2.1-memcached.STABLE.8</version>
             <exclusions>
                 <exclusion>
                     <artifactId>dpsf-net</artifactId>
