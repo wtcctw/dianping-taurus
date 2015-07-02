@@ -88,6 +88,10 @@
 	        <param-name>excludeURLs</param-name>
 	        <param-value>/rest/ssologout,/error</param-value>
 	    </init-param>
+	    <init-param>
+            <param-name>formal</param-name>
+            <param-value>true</param-value>
+        </init-param>
 	</filter>
 	
 	<filter>
