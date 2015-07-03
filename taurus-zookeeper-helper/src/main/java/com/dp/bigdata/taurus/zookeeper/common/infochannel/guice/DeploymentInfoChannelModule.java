@@ -6,7 +6,8 @@ import com.dp.bigdata.taurus.zookeeper.common.infochannel.TaurusZKDeploymentInfo
 import com.dp.bigdata.taurus.zookeeper.common.infochannel.interfaces.DeploymentInfoChannel;
 import com.google.inject.AbstractModule;
 
-public class                        DeploymentInfoChannelModule extends AbstractModule{
+public class DeploymentInfoChannelModule extends AbstractModule {
+	
 	@Override
 	protected void configure() {
 		bind(DeploymentInfoChannel.class).to(TaurusZKDeploymentInfoChannel.class);
@@ -14,12 +15,10 @@ public class                        DeploymentInfoChannelModule extends Abstract
 		configureOthers();
 	}
 	
-	protected void configureOthers(){
-		
-	}
 	protected void bindZooKeeper() {
 		bind(ZkClient.class).toProvider(ZooKeeperProvider.class);
 	}
 	
+	protected void configureOthers() {}
 	
 }
