@@ -20,6 +20,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<springFramework.version>4.0.5.RELEASE</springFramework.version>
 		<webXmlPath>src/main/webapp/WEB-INF/web.xml</webXmlPath>
+		<webXmlPathDev>src/main/webapp/WEB-INF/web-dev.xml</webXmlPathDev>
     </properties>
 	<repositories>
 		<repository>
