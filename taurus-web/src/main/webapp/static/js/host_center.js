@@ -64,7 +64,7 @@ jQuery(function ($) {
             "bFilter": true,
             "bInfo": true,
             "bLengthChange": true,
-            "aaSorting": [[ 1, "desc" ]],
+            "aaSorting": [[ 0, "desc" ]],
             "aoColumns": [
                 null,
                 { "sType": "html-percent", "aTargets": [2] }
