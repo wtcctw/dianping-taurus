@@ -1,14 +1,23 @@
 package com.dp.bigdata.taurus.agent;
 
+import com.dp.bigdata.taurus.agent.common.TaskType;
 import com.dp.bigdata.taurus.agent.utils.ClearLogsTimerManager;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+
+import org.junit.Test;
 import org.restlet.Component;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 public class AgentTest {
 
+	@Test
+	public void test1(){
+		System.out.println(TaskType.SPRING.name());
+		System.out.println(TaskType.getString(TaskType.SPRING));
+	}
+	
     public static void main(String[] args) {
         Injector injector = Guice.createInjector(new AgentServerModule());
         AgentServer as = injector.getInstance(AgentServer.class);
