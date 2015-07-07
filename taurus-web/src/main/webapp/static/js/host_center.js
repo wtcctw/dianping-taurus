@@ -4,6 +4,7 @@ var exceptionBody;
 var body = "";
 var memTableStyle;
 var cpuTableStyle;
+var jobStateStyle;
 
 jQuery(function ($) {
 
@@ -63,7 +64,11 @@ jQuery(function ($) {
             "bFilter": true,
             "bInfo": true,
             "bLengthChange": true,
-            "aaSorting": [[ 1, "desc" ]]
+            "aaSorting": [[ 1, "desc" ]],
+            "aoColumns": [
+                null,
+                { "sType": "html-percent", "aTargets": [2] }
+            ]
 
         });
     };
