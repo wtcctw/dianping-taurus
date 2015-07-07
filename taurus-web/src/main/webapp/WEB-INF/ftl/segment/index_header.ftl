@@ -72,15 +72,14 @@
         </#if>
         </div>
         <div class="pull-right" style="margin:10px;color: white;">
-            <a rel="popoverpic" target="_blank" style="margin:10px;color: white;"
-               href="http://shang.qq.com/wpa/qunwpa?idkey=6a730c052b1b42ce027179ba1f1568d0e5e598c456ccb6798be582b9a9c931f7" style="color:white;"><i class="icon-group">加入后援团: 155326270</i></a>
+            <a rel="popoverpic" style="color:white;"><i class="icon-group">加入后援团: 155326270</i></a>
         </div>
 <script>
     $(function(){
         $("a[rel=popoverpic]").popover({
             trigger:'manual',
             placement : 'bottom', //placement of the popover. also can use top, bottom, left or right
-            title : '<div style="text-align:center; color:gray; font-size:20px;">Taurus后援团:155326270</div>', //this is the top title bar of the popover. add some basic css
+            //title : '<div style="text-align:center; color:gray; font-size:20px;">Taurus后援团:155326270</div>', //this is the top title bar of the popover. add some basic css
             html: 'true', //needed to show html of course
             content : '<div id="popOverBox"><img src="${rc.contextPath}/static/img/taurus.png" width="246px" height="246px" alt="暂无" /></div>', //this is the content of the html box. add the image here or anything you want really.
             animation: false

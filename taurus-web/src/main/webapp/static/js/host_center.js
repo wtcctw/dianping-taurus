@@ -128,7 +128,7 @@ $(document).ready(function () {
                     "</tr>"
                 }
                 htmlContent = ' <table  class="table table-striped " id = "jobStateTable">'
-                    +'<thead><td>IP</td><td>操作</td></thead>'
+                    +'<thead><th>IP</th><th>操作</th></thead>'
                     + '        <tbody>'
                     + body
                     + '        </tbody>'
