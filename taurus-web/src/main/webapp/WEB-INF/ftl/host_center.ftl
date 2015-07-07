@@ -117,7 +117,7 @@
             </div>
 
             <div class="widget-body">
-                <div class="widget-main" id="exceptionJob" style="height: 283px">
+                <div class="widget-main" id="exceptionJob" >
                     <div class="loadIcon">
                         <div></div>
                         <div></div>
@@ -156,7 +156,7 @@
 
             <div class="widget-body">
 
-                <div class="widget-main align-center" style="height: 560px" id="cpuload">
+                <div class="widget-main align-center" id="cpuload">
                     <div class="loadIcon">
                         <div></div>
                         <div></div>
@@ -193,7 +193,7 @@
 
             <div class="widget-body">
 
-                <div class="widget-main align-center"  style="height: 560px" id="memload">
+                <div class="widget-main align-center" id="memload">
                     <div class="loadIcon">
                         <div></div>
                         <div></div>
