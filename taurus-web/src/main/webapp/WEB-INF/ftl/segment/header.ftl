@@ -54,12 +54,36 @@
             <!-- /.ace-nav -->
         </div>
         <div class="pull-right" style="margin:10px;color: white;">
-            <a target="_blank" style="margin:10px;color: white;"
+            <a rel="popoverpic" target="_blank" style="margin:10px;color: white;"
                href="http://shang.qq.com/wpa/qunwpa?idkey=6a730c052b1b42ce027179ba1f1568d0e5e598c456ccb6798be582b9a9c931f7"><img
                     border="0" src="${rc.contextPath}/img/group.png" width="20" height="20" alt="Taurus后援团" title="Taurus后援团">点我加入Taurus后援团
                 155326270</a>
         </div>
-
+<script>
+    $(function(){
+        $("a[rel=popoverpic]").popover({
+            trigger:'manual',
+            placement : 'bottom', //placement of the popover. also can use top, bottom, left or right
+            title : '<div style="text-align:center; color:gray; font-size:20px;">Taurus后援团:155326270</div>', //this is the top title bar of the popover. add some basic css
+            html: 'true', //needed to show html of course
+            content : '<div id="popOverBox"><img src="${rc.contextPath}/static/img/taurus.png" width="246px" height="246px" alt="暂无" /></div>', //this is the content of the html box. add the image here or anything you want really.
+            animation: false
+        }).on("mouseenter", function () {
+                    var _this = this;
+                    $(this).popover("show");
+                    $(this).siblings(".popover").on("mouseleave", function () {
+                        $(_this).popover('hide');
+                    });
+                }).on("mouseleave", function () {
+                    var _this = this;
+                    setTimeout(function () {
+                        if (!$(".popover:hover").length) {
+                            $(_this).popover("hide")
+                        }
+                    }, 100);
+                });
+    });
+</script>
         <div class="pull-right ng-binding" style="margin:10px;color: white;" ng-bind="monitorMessage"><i
                 class="icon-user-md">开发者：李明 <a target="_blank" style="margin:10px;color: white;"
                                                href="http://wpa.qq.com/msgrd?v=3&uin=767762405&site=qq&menu=yes"><img
