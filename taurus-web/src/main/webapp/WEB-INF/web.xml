@@ -112,9 +112,9 @@
 	    </init-param>
 	    <!-- 是否开启票据时间差验证，默认开启 -->
 	    <init-param>
-	        <param-name>validate</param-name>
-	        <param-value>false</param-value>
-	    </init-param>
+            <param-name>validateLionKey</param-name>
+            <param-value>cas-server-webapp.ticket.validate</param-value>
+        </init-param>
 	    <!-- 最大容忍的时间差（毫秒） -->
 	    <init-param>
 	        <param-name>tolerance</param-name>
