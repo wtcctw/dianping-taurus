@@ -38,16 +38,16 @@ public class AuthenticationFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
 	      ServletException {
-		System.out.println(new Date() + " [" + this.getClass().getName() + "] --------------init the doFilter------------");
+		//System.out.println(new Date() + " [" + this.getClass().getName() + "] --------------init the doFilter------------");
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
 		String requestURI = req.getRequestURI();
-		System.out.println(new Date() + " [" + this.getClass().getName() + "] RequestURI: " + requestURI);
+		//System.out.println(new Date() + " [" + this.getClass().getName() + "] RequestURI: " + requestURI);
 		
 		// Filter出口1. 登录/ssologin 本机放行，cas不能放行，否则可以伪造cas认证信息；登出/ssologout 本机和cas都放行
 		for (String uri : excludePages) {
 			if (requestURI.toLowerCase().startsWith(uri)){
-				System.out.println("excludePage : " + uri);
+				//System.out.println("excludePage : " + uri);
 				chain.doFilter(request, response);
 				return;
 			}
