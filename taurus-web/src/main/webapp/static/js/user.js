@@ -32,8 +32,14 @@ $(document).ready(function() {
 		});
 		return false;
 	});
-	$('#groupName').autocomplete({
-       source: groupList.split(',')
+	// $('#groupName').autocomplete({
+	// 	source: groupList.split(',')
+	// });
+	$('#groupName',$('#user-form')).autocomplete({
+        width: 210,
+        delimiter: /(,|;)\s*/,
+        zIndex: 9999,
+        lookup: groupList.split(',')
     });
 	
 	  $('#user-form').validate({

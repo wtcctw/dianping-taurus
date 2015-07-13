@@ -6,6 +6,7 @@
 	<#include "segment/html_header.ftl">
 	<link rel="stylesheet" href="${rc.contextPath}/css/jquery-ui.min.css"/>
 	<script type="text/javascript" src="${rc.contextPath}/js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="${rc.contextPath}/static/js/jquery.autocomplete.js"></script>
 	<#include "segment/html_header2.ftl">
 	<link href="${rc.contextPath}/css/bwizard.min.css" rel="stylesheet"/>
 	<style>
@@ -18,7 +19,12 @@
             margin-left: 10px;
             color: green;
         }
-
+        .autocomplete-suggestions { border: 1px solid #FFF; background: #FFF; overflow: auto; }
+        .autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
+        .autocomplete-selected { background: rgba(113,182,243,0.75); }
+        .autocomplete-suggestions strong { font-weight: normal; color: #DCA43B; }
+        .autocomplete-group { padding: 2px 5px; }
+        .autocomplete-group strong { display: block; border-bottom: 1px solid #111; }
     </style>
 </head>
 <body>
