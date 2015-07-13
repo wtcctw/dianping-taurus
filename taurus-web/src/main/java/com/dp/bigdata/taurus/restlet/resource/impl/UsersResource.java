@@ -68,7 +68,7 @@ public class UsersResource extends ServerResource implements IUsersResource {
     }
 
 	@Override
-   public void createIfNotExist(UserDTO user) {
+	public void createIfNotExist(UserDTO user) {
 		UserExample example = new UserExample();
 		example.or().andNameEqualTo(user.getName());
 		List<User> userDtos = userMapper.selectByExample(example);
@@ -80,6 +80,6 @@ public class UsersResource extends ServerResource implements IUsersResource {
 			
 			userMapper.insertSelective(usr);
 		}
-   }
+	}
 
 }
