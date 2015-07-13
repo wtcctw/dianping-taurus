@@ -11,7 +11,7 @@
 	<#include "segment/html_header2.ftl">
 	<link rel="stylesheet" href="${rc.contextPath}/css/loading.css">
     <style>
-        .autocomplete-suggestions { border: 1px solid #FFF; background: #FFF; overflow: auto; }
+        .autocomplete-suggestions { border: 1px solid #DDD; background: #FFF; overflow: auto; }
         .autocomplete-suggestion { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
         .autocomplete-selected { background: rgba(113,182,243,0.75); }
         .autocomplete-suggestions strong { font-weight: normal; color: #DCA43B; }
