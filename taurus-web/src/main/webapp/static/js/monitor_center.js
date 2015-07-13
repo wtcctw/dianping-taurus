@@ -52,7 +52,7 @@ $(document).ready(function () {
 
     var starttime;
     var endtime;
-    if (id == null || id == "null") {
+    if (id == null || id == "") {
         starttime = GetDateStr(now, 0);
         if (op == "day") {
             endtime = GetDateStr(now, 1);

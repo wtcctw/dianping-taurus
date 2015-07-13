@@ -503,7 +503,7 @@ var op = "${op_str!}";
 
 var starttime;
 var endtime;
-if (step == null || step == "null") {
+if (step == null || step == "") {
     starttime = GetDateStr(now, 0);
     if (op == "day") {
         endtime = GetDateStr(now, 1);
