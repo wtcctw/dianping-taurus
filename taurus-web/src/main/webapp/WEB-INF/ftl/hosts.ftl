@@ -43,11 +43,12 @@
 </#if>
 <#if dto?exists>
 
-<ul class="nav nav-tabs">
+<ul class="nav nav-tabs" role="tablist" id="maintab">
     <li class="active"><a href="#state" data-toggle="tab">运行状态</a></li>
     <li class=""><a href="#taskmonitor" data-toggle="tab">任务监控</a></li>
     <li class=""><a href="#log" data-toggle="tab">日志</a></li>
     <li class=""><a href="#statistics" data-toggle="tab">统计</a></li>
+    <li class=""><a href="#terminal" data-toggle="tab" onclick="showTab(this)">终端</a></li>
 </ul>
 
 <#-- agent机器详情 start -->
@@ -494,6 +495,12 @@
 </div>
 <#-- 统计标签 end -->
 
+<#-- web终端 start -->
+<div class="tab-pane" id="terminal">
+    
+</div>
+<#-- web终端 end -->
+
 </div>
 <#-- agent机器详情 end -->
 
@@ -513,6 +520,17 @@
 
 <script type="text/javascript">
     $(".atip").tooltip();
+
+    //首次启动webterm
+    var isTermInit = false;
+    function showTab(obj){
+        $(obj).tab('show');
+        if(isTermInit == false){
+            isTermInit = true;
+            $('#terminal').append('<iframe src="//${hostName!}:5998" name="webshell" id="webshell" class="col-sm-12" frameborder="1" style="height:500px"></iframe>').trigger('create');
+        }
+        //$('#webshell').focus();
+    }
 </script>
 <script src="${rc.contextPath}/static/js/hosts.js" type="text/javascript"></script>
 
