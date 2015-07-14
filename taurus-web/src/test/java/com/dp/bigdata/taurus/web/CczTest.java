@@ -20,15 +20,16 @@ import org.springframework.integration.http.converter.SerializingHttpMessageConv
 import org.springframework.web.client.RestTemplate;
 
 import com.dp.bigdata.taurus.generated.module.Task;
+import com.dp.bigdata.taurus.restlet.shared.HostDTO;
 
 public class CczTest {
 	
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 
-	//@Test
+	@Test
 	public void testRestlet(){
 		
-		String url = "http://localhost:8192/api/gettasks";
+		String url = "http://beta.taurus.dp:8192/api/host";
 		
         RestTemplate restTemplate = new RestTemplate();
         List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
@@ -40,10 +41,10 @@ public class CczTest {
         restTemplate.setMessageConverters(messageConverters);
         
         //ResponseEntity<ArrayList> responseEntity = restTemplate.getForEntity(url, ArrayList.class);
-        ArrayList<Task> results = restTemplate.getForObject(url, ArrayList.class);
+        ArrayList<HostDTO> hosts = restTemplate.getForObject(url, ArrayList.class);
         
-        for(Task result: results){
-        	log.info("test: "+result.getName());
+        for(HostDTO host: hosts){
+        	System.out.println(host.getIp());
         }
         
 	}
