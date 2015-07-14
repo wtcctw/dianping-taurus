@@ -23,6 +23,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.dianping.lion.EnvZooKeeperConfig;
+import com.dianping.lion.client.ConfigCache;
 import com.dp.bigdata.taurus.generated.module.Task;
 import com.dp.bigdata.taurus.restlet.resource.IAttemptStatusResource;
 import com.dp.bigdata.taurus.restlet.resource.IGetAttemptsByStatus;
@@ -745,6 +747,13 @@ public class HomeController {
 	    modelMap.addAttribute("hostName", hostName);
 	    modelMap.addAttribute("dto", dto);
 	    
+		//终端开关控制
+		boolean isWebtermEnabled = false;
+		if(StringUtil.isNotBlank(hostName)){
+			isWebtermEnabled = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getBooleanProperty("taurus.webterm.enabled");
+		}
+		modelMap.addAttribute("isWebtermEnabled", isWebtermEnabled);
+		
 	    // 任务监控标签 start
 	    
 	    // 正在运行的任务RUNNING

@@ -523,11 +523,17 @@
 
     //首次启动webterm
     var isTermInit = false;
+    var isWebtermEnabled = ${isWebtermEnabled?c!false};
     function showTab(obj){
         $(obj).tab('show');
         if(isTermInit == false){
             isTermInit = true;
-            $('#terminal').append('<iframe src="//${hostName!}:5998" name="webshell" id="webshell" class="col-sm-12" frameborder="1" style="height:500px"></iframe>').trigger('create');
+            if(isWebtermEnabled ==true){
+                $('#terminal').append('<iframe src="//${hostName!}:5998" name="webshell" id="webshell" class="col-sm-12" frameborder="1" style="height:500px"></iframe>').trigger('create');
+            }else{
+                $('#terminal').append('<span style="color:blue;">当前主机暂未开通web终端查看，如有疑问请到Taurus后援团反馈。</span>').trigger('create');
+            }
+            
         }
         //$('#webshell').focus();
     }
