@@ -155,14 +155,26 @@ $(document).ready(function() {
 	}
 	
 
-    $('#hostname').autocomplete({
-        source: ipList.split(',')
+    // $('#hostname').autocomplete({
+    //     source: ipList.split(',')
+    // });
+    // $('#alertUser').autocomplete({
+    //     source: userList.split(',')
+    // });
+    // $('#alertGroup').autocomplete({
+    //     source: groupList.split(',')
+    // });
+    $('#alertUser',$('#extended-form')).autocomplete({
+        width: 210,
+        delimiter: /(;)\s*/,
+        zIndex: 9999,
+        lookup: userList.split(',')
     });
-    $('#alertUser').autocomplete({
-        source: userList.split(',')
-    });
-    $('#alertGroup').autocomplete({
-        source: groupList.split(',')
+    $('#alertGroup',$('#extended-form')).autocomplete({
+        width: 210,
+        delimiter: /(;)\s*/,
+        zIndex: 9999,
+        lookup: groupList.split(',')
     });
 
 	$("#submitButton").click(function(e) {

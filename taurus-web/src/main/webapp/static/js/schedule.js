@@ -65,12 +65,12 @@ function action_update(id) {
 		$('.field',form).removeAttr("disabled", "disabled");
 		$('#alertUser',form).autocomplete({
 	        width: 210,
-	        delimiter: /(,|;)\s*/,
+	        delimiter: /(;)\s*/,
 	        zIndex: 9999,
 	        lookup: userList.split(',')});
 		$('#alertGroup',form).autocomplete({
 	        width: 210,
-	        delimiter: /(,|;)\s*/,
+	        delimiter: /(;)\s*/,
 	        zIndex: 9999,
 	        lookup: groupList.split(',')});
 	} else {

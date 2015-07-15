@@ -37,7 +37,7 @@ $(document).ready(function() {
 	// });
 	$('#groupName',$('#user-form')).autocomplete({
         width: 210,
-        delimiter: /(,|;)\s*/,
+        delimiter: /(,)\s*/,
         zIndex: 9999,
         lookup: groupList.split(',')
     });
