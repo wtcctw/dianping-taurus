@@ -1,4 +1,6 @@
 
+<div class="sidebar col-sm-2 no-padding-left">
+
 <div class="well sidebar-nav"  >
     <ul class="nav nav-list">
         <li class='nav-header'>  <h5>当前机器:</h5></li>
@@ -19,5 +21,7 @@
 	</li>
 </#list>
 </ul>
+
+</div>
 
 </div>

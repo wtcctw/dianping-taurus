@@ -18,13 +18,40 @@
 <#include "segment/header.ftl">
 <#include "segment/left.ftl">
 
-<div class="mid-div col-sm-12">
-<div class="page-content col-sm-12">
-<div class="sidebar col-sm-2 no-padding-left">
-<#include "hostList.ftl">
-</div>
+<#-- include "hostList.ftl" -->
+
 
 <div class="main-content">
+
+    <div class="breadcrumbs" id="breadcrumbs">
+
+        <script type="text/javascript">
+            try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+        </script>
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home home-icon"></i>
+                <a href="${rc.contextPath}/index">HOME</a>
+            </li>
+            <li class="active">
+                <a href="${rc.contextPath}/hosts">主机监控</a>
+            </li>
+        </ul>
+
+        <div style="float:right;padding-right: 20px" >
+            <label class="label label-lg label-info arrowed-right " for="ipList">选择Job主机</label>
+            <select id="ipList" name="ipList" class="input-big field" style="width: 150px">
+                <option></option>
+            <#if hosts??>
+            <#list hosts as dto>
+                <option <#if dto.name == hostName!>selected</#if> >${dto.name!}</option>
+            </#list>
+            </#if>
+            </select>
+        </div>
+
+    </div>
+
 <div class="page-content col-sm-12">
 <#if statusCode! == "200">
 <div id="alertContainer" class="container">
@@ -46,9 +73,9 @@
 <ul class="nav nav-tabs" role="tablist" id="maintab">
     <li class="active"><a href="#state" data-toggle="tab">运行状态</a></li>
     <li class=""><a href="#taskmonitor" data-toggle="tab">任务监控</a></li>
-    <li class=""><a href="#log" data-toggle="tab">日志</a></li>
+    <li class=""><a href="#log" data-toggle="tab" onclick="showLogTab(this)">日志</a></li>
     <li class=""><a href="#statistics" data-toggle="tab">统计</a></li>
-    <li class=""><a href="#terminal" data-toggle="tab" onclick="showTab(this)">终端</a></li>
+    <li class=""><a href="#terminal" data-toggle="tab" onclick="showTermTab(this)">终端</a></li>
 </ul>
 
 <#-- agent机器详情 start -->
@@ -509,8 +536,6 @@
 
 </div>
 </div>
-</div>
-</div>
 
 <div class="feedTool">
     <a target="_blank" style="color: white;" href="http://wpa.qq.com/msgrd?v=3&uin=767762405&site=qq&menu=yes"><img border="0" src="${rc.contextPath}/img/qq.png"  width="80" height="80" color="white" alt="点我报错" title="点我报错"/></a>
@@ -521,10 +546,51 @@
 <script type="text/javascript">
     $(".atip").tooltip();
 
+    //首次启动日志查看
+    var isLogInit = false;
+    function showLogTab(obj){
+        $(obj).tab('show');
+        if(isLogInit == false){
+            isLogInit = true;
+            fetch_Log();
+        }
+    }
+    function fetch_Log() {
+        var $logContainer = $("#strout")
+
+
+        $.ajax({
+            url: "/attempts.do",
+            data: {
+                action: 'runlog',
+                hostname:'${hostName!}',
+                querytype:'agentlogs',
+                status:status
+            },
+            timeout: 10000,
+            type: 'POST',
+            error: function () {
+                $logContainer.text("没有找到日志数据");
+            },
+            success: function (response) {
+
+                result = response.replace("\n","<br>");
+
+                $logContainer.append("<div class=\"terminal-like\">"+response+"</div>");
+                $logContainer.scrollTop($logContainer.get(0).scrollHeight);
+                $(".loading").hide();
+            },
+            beforeSend:function(){//正在加载，显示“正在加载......”
+                $(".loading").show();
+            }
+
+        });
+
+    }
     //首次启动webterm
     var isTermInit = false;
     var isWebtermEnabled = ${isWebtermEnabled?c!false};
-    function showTab(obj){
+    function showTermTab(obj){
         $(obj).tab('show');
         if(isTermInit == false){
             isTermInit = true;

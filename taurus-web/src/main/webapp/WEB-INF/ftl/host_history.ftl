@@ -216,7 +216,7 @@ var run_bule = "<span style='color: #0000ff; font-size: 12px'>●</span>";
 var run_yellow = "<span style='color: #ffff00; font-size: 12px'>●</span>";
 var ip = "${ip!}";
 
-if (ip != null && ip != "null") {
+if (ip != null && ip != "") {
     get_history(ip, time);
 }
 

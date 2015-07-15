@@ -1,3 +1,7 @@
+body {
+	background: #fff;
+}
+
 .scrollup {
     opacity: 0.3;
     position: fixed;
