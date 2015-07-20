@@ -3,10 +3,6 @@ package com.dp.bigdata.taurus.core;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.NameValuePair;
-import org.apache.commons.httpclient.methods.PostMethod;
 import org.junit.Test;
 
 import com.dianping.ops.http.HttpPoster;
