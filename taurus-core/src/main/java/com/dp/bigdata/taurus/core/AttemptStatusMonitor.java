@@ -39,7 +39,7 @@ public class AttemptStatusMonitor implements Runnable {
 				for (AttemptContext attempt : runningAttempts) {
 					AttemptStatus sstatus = scheduler.getAttemptStatus(attempt.getAttemptid());
 					int status = sstatus.getStatus();
-					LOG.info("Current status for attempt " + attempt.getAttemptid() + " : " + status);
+					//LOG.info("Current status for attempt " + attempt.getAttemptid() + " : " + status);
 
 					switch (status) {
 						case AttemptStatus.SUCCEEDED:
