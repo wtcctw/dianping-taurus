@@ -27,8 +27,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.dp.bigdata.taurus.restlet.resource.INameResource;
-
 @Controller
 public class CreateTaskController {
 
@@ -150,9 +148,9 @@ public class CreateTaskController {
             uri.append(InitController.RESTLET_URL_BASE + "name?task_name=").append(req.getParameter("name"));
             log.info("Access URI : " + uri.toString());
             ClientResource cr = new ClientResource(uri.toString());
-            INameResource nameResource = cr.wrap(INameResource.class);
+            boolean hasName = cr.get(boolean.class);
             resp.setContentType("text/html");
-            if(nameResource.hasName()) {
+            if(hasName) {
                 resp.getWriter().write("1");
             } else {
                 resp.getWriter().write("0");

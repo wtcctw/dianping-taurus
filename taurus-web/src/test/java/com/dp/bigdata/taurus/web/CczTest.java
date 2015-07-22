@@ -1,6 +1,7 @@
 package com.dp.bigdata.taurus.web;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,22 +12,54 @@ import net.sf.json.JSONObject;
 
 import org.json.JSONException;
 import org.junit.Test;
+import org.restlet.Client;
+import org.restlet.data.Protocol;
 import org.restlet.ext.json.JsonRepresentation;
+import org.restlet.resource.ClientResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.integration.http.converter.SerializingHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-import com.dp.bigdata.taurus.generated.module.Task;
 import com.dp.bigdata.taurus.restlet.shared.HostDTO;
+import com.dp.bigdata.taurus.restlet.shared.UserDTO;
 
 public class CczTest {
 	
 	private Logger log = LoggerFactory.getLogger(this.getClass());
-
+	private RestTemplate restTemplate = new RestTemplate(
+			new ArrayList<HttpMessageConverter<?>>(
+					Arrays.asList(
+							new SerializingHttpMessageConverter())));
+	private String RESTLET_URL_BASE = "http://alpha.taurus.dp:8192/api/";
+	
 	@Test
+	public void testRest(){
+		
+		/*ArrayList<UserDTO> users = restTemplate.getForObject(RESTLET_URL_BASE + "user", ArrayList.class);
+		
+		for(UserDTO user : users){
+			System.out.println(user.getName());
+		}*/
+        
+		UserDTO userDto = new UserDTO();
+		userDto.setName("test.test");
+		userDto.setMail("test@mail.com");
+		//restTemplate.postForObject(RESTLET_URL_BASE + "user", userDto, void.class);
+        
+		
+		ClientResource cr = new ClientResource(RESTLET_URL_BASE + "user" + "/chongze.chen");
+		//cr.post(userDto);
+		//ArrayList<UserDTO> users = cr.get(ArrayList.class);
+		Boolean flag = cr.get(Boolean.class);
+		System.out.println(flag);
+		cr.release();
+	}
+	
+	//@Test
 	public void testRestlet(){
 		
 		String url = "http://beta.taurus.dp:8192/api/host";

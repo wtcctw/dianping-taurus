@@ -3,7 +3,7 @@ package com.dp.bigdata.taurus.springmvc.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.dp.bigdata.taurus.generated.mapper.UserGroupMapper;
+//import com.dp.bigdata.taurus.generated.mapper.UserGroupMapper;
 import com.dp.bigdata.taurus.springmvc.service.ITestService;
 
 /**
@@ -14,13 +14,13 @@ import com.dp.bigdata.taurus.springmvc.service.ITestService;
 @Service
 public class TestService implements ITestService {
 
-	@Autowired
-    private UserGroupMapper userGroupMapper;
+//	@Autowired
+//    private UserGroupMapper userGroupMapper;
 
 	@Override
 	public Integer deleteById(Integer id) {
 		
-		return userGroupMapper.deleteByPrimaryKey(id);
+		return null;//userGroupMapper.deleteByPrimaryKey(id);
 	}
 	
 	

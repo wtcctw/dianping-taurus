@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.restlet.data.MediaType;
@@ -22,13 +21,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.dp.bigdata.taurus.restlet.resource.IAttemptResource;
-import com.dp.bigdata.taurus.restlet.resource.IExistTaskRunning;
-import com.dp.bigdata.taurus.restlet.resource.IHostResource;
-import com.dp.bigdata.taurus.restlet.resource.ILogResource;
 import com.dp.bigdata.taurus.restlet.shared.AttemptDTO;
 import com.dp.bigdata.taurus.restlet.shared.HostDTO;
-import com.dp.bigdata.taurus.restlet.utils.ReFlashHostLoadTask;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
 
@@ -53,10 +47,9 @@ public class AttemptProxyController {
         String action = request.getParameter("action") == null ? "" : request.getParameter("action").toLowerCase();
 
         ClientResource attemptCr = new ClientResource(InitController.RESTLET_URL_BASE + "attempt/" + attemptID);
-        ILogResource attemptResource = attemptCr.wrap(ILogResource.class);
 
         if (action.equals(KILL)) {
-            attemptResource.kill();
+        	attemptCr.delete();
             response.setStatus(attemptCr.getStatus().getCode());
         } else if (action.equals(LOG)) {
             response.setContentType("text/html;charset=utf-8");
@@ -99,9 +92,7 @@ public class AttemptProxyController {
                     fileSizeAttribute = "agentlogs";
                     String hostName = request.getParameter("hostname");
                     ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "host/" + hostName);
-                    IHostResource hostResource = cr.wrap(IHostResource.class);
-                    cr.accept(MediaType.APPLICATION_XML);
-                    HostDTO hostDTO = hostResource.retrieve();
+                    HostDTO hostDTO = cr.get(HostDTO.class);
                     String agentPort = "";
                     if (hostDTO.getInfo().getAgentVersion().equals("0.5.0")) {
                         agentPort = InitController.AGENT_PORT;
@@ -133,8 +124,7 @@ public class AttemptProxyController {
                     lastTimeFileSize = Long.parseLong(contentLenStr);
                 }
 
-                IAttemptResource attemptLogResource = attemptLogCr.wrap(IAttemptResource.class);
-                AttemptDTO dto = attemptLogResource.retrieve();
+                AttemptDTO dto = attemptLogCr.get(AttemptDTO.class);
 
                 if (dto != null) {
                     hostIp = dto.getExecHost();
@@ -160,9 +150,7 @@ public class AttemptProxyController {
 
                     try {
                         ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "host/" + hostIp);
-                        IHostResource hostResource = cr.wrap(IHostResource.class);
-                        cr.accept(MediaType.APPLICATION_XML);
-                        HostDTO hostDTO = hostResource.retrieve();
+                        HostDTO hostDTO = cr.get(HostDTO.class);
                         String agentPort;
                         if (hostDTO.getInfo().getAgentVersion().equals("0.5.0")) {
                             agentPort = InitController.AGENT_PORT;
@@ -260,8 +248,7 @@ public class AttemptProxyController {
         } else if (action.equals(ISEND)) {
             String host = "";
             ClientResource attemptLogCr = new ClientResource(InitController.RESTLET_URL_BASE + "getattemptbyid/" + attemptID);
-            IAttemptResource attemptLogResource = attemptLogCr.wrap(IAttemptResource.class);
-            AttemptDTO dto = attemptLogResource.retrieve();
+            AttemptDTO dto = attemptLogCr.get(AttemptDTO.class);
 
             if (dto != null) {
                 host = dto.getExecHost();
@@ -273,9 +260,7 @@ public class AttemptProxyController {
                 output.close();
             } else {
                 ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "host/" + host);
-                IHostResource hostResource = cr.wrap(IHostResource.class);
-                cr.accept(MediaType.APPLICATION_XML);
-                HostDTO hostDTO = hostResource.retrieve();
+                HostDTO hostDTO = cr.get(HostDTO.class);
                 String agentPort = "";
                 if (hostDTO.getInfo().getAgentVersion().equals("0.5.0")) {
                     agentPort = InitController.AGENT_PORT;
@@ -295,8 +280,7 @@ public class AttemptProxyController {
         } else if (action.equals(STATUS)) {
             String taskStatus = "";
             ClientResource attemptLogCr = new ClientResource(InitController.RESTLET_URL_BASE + "getattemptbyid/" + attemptID);
-            IAttemptResource attemptLogResource = attemptLogCr.wrap(IAttemptResource.class);
-            AttemptDTO dto = attemptLogResource.retrieve();
+            AttemptDTO dto = attemptLogCr.get(AttemptDTO.class);
 
             if (dto != null) {
                 taskStatus = dto.getStatus();
@@ -308,14 +292,11 @@ public class AttemptProxyController {
         } else if (action.equals(ISNEW)) {
             OutputStream output = response.getOutputStream();
             ClientResource attemptLogCr = new ClientResource(InitController.RESTLET_URL_BASE + "getattemptbyid/" + attemptID);
-            IAttemptResource attemptLogResource = attemptLogCr.wrap(IAttemptResource.class);
-            AttemptDTO dto = attemptLogResource.retrieve();
+            AttemptDTO dto = attemptLogCr.get(AttemptDTO.class);
             String isNew;
             if (dto != null) {
                 ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "host/" + dto.getExecHost());
-                IHostResource hostResource = cr.wrap(IHostResource.class);
-                cr.accept(MediaType.APPLICATION_XML);
-                HostDTO hostDTO = hostResource.retrieve();
+                HostDTO hostDTO = cr.get(HostDTO.class);
                 String agentPort = "";
                 if (hostDTO.getInfo().getAgentVersion().equals("0.5.0")) {
                     agentPort = InitController.AGENT_PORT;
@@ -354,8 +335,7 @@ public class AttemptProxyController {
             String taskId = request.getParameter("taskId");
 
             ClientResource runningTaskCr = new ClientResource(InitController.RESTLET_URL_BASE + "runningtask/" + taskId);
-            IExistTaskRunning taskRunningResource = runningTaskCr.wrap(IExistTaskRunning.class);
-            String isExist = taskRunningResource.retrieve();
+            String isExist = runningTaskCr.get(String.class);
 
             output.write(isExist.getBytes());
             output.close();
@@ -403,70 +383,10 @@ public class AttemptProxyController {
     }
 
     public static boolean isHostOverLoad(String ip) {
-        String hostName = getHostName(ip);
-        boolean result = true;
-        if (hostName == null || hostName.isEmpty()) {
-            result = true;
-        } else {
-            String jsonString = ReFlashHostLoadTask.hostLoadJsonData;
-            if (jsonString == null || jsonString.isEmpty()) {
-                result = true;
-            } else {
-                try {
-                    JSONArray jsonArray = new JSONArray(jsonString);
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jo = (JSONObject) jsonArray.get(i);
-                        if (jo == null) {
-                            result = true;
-                            return result;
-                        }
-
-                        String zabbixHostName = "";
-
-                        if (jo.get("hostName") != null) {
-                            zabbixHostName = jo.get("hostName").toString();
-                        }
-
-                        if (StringUtils.isNotBlank(zabbixHostName)) {
-                            if (zabbixHostName.equals(hostName)) {
-                                String cpuLoad = "";
-                                if (jo.get("cpuLoad") != null) {
-                                    cpuLoad = jo.get("cpuLoad").toString();
-                                }
-
-                                if (StringUtils.isNotBlank(cpuLoad)) {
-                                    Double highValue;
-                                    if (cpuLoad.trim().equals("null")) {
-                                        highValue = 10.0;
-                                    } else {
-                                        highValue = Double.parseDouble(cpuLoad);
-                                    }
-
-                                    if (highValue <= 4.0) {
-                                        result = false;
-                                    } else {
-                                        result = true;
-                                    }
-
-                                } else {
-                                    result = true;
-                                }
-
-                                break;
-                            }
-
-                        } else {
-                            result = true;
-                        }
-
-                    }
-
-                    return result;
-                } catch (JSONException e) {
-                    return true;
-                }
-            }
-        }
-        return result;
+        
+    	String hostName = getHostName(ip);
+        ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "reflashHostLoad/" + hostName);
+        
+        return cr.get(boolean.class);
     }
 }

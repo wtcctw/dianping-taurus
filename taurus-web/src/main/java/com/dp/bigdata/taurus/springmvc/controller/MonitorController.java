@@ -2,14 +2,11 @@ package com.dp.bigdata.taurus.springmvc.controller;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.restlet.data.MediaType;
 import org.restlet.resource.ClientResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,16 +15,9 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.dp.bigdata.taurus.core.AttemptStatus;
-import com.dp.bigdata.taurus.generated.module.Task;
-import com.dp.bigdata.taurus.restlet.resource.IGetAttemptsByStatus;
-import com.dp.bigdata.taurus.restlet.resource.IGetTaskLastStatus;
-import com.dp.bigdata.taurus.restlet.resource.IGetTasks;
-import com.dp.bigdata.taurus.restlet.resource.IHostsResource;
-import com.dp.bigdata.taurus.restlet.resource.IUserTasks;
 import com.dp.bigdata.taurus.restlet.shared.AttemptDTO;
-import com.dp.bigdata.taurus.restlet.shared.HostDTO;
-import com.dp.bigdata.taurus.restlet.utils.ReFlashHostLoadTask;
+import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
+import com.dp.bigdata.taurus.zookeeper.execute.helper.ExecuteStatus;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -38,7 +28,9 @@ public class MonitorController {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 	
+	//这里要不要考虑同步的问题？
     private static ArrayList<AttemptDTO> attempts;
+    private static ArrayList<TaskDTO> tasks;
     
 
     @RequestMapping(value = "/jobdetail", method = RequestMethod.POST)
@@ -47,21 +39,14 @@ public class MonitorController {
 							HttpServletResponse response) throws IOException 
     {
 		log.info("--------------init the jobdetail------------");
-    	
-    	ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "host");
-        IHostsResource hostsResource = cr.wrap(IHostsResource.class);
-        cr.accept(MediaType.APPLICATION_XML);
-        ArrayList<HostDTO> hosts = hostsResource.retrieve();
         
-        OutputStream output = response.getOutputStream();
         String start = request.getParameter("start");
         String end = request.getParameter("end");
 
-        cr = new ClientResource(InitController.RESTLET_URL_BASE + "jobdetail/" + "/" + start + "/" + end);
-        IUserTasks userTasks = cr.wrap(IUserTasks.class);
-        cr.accept(MediaType.APPLICATION_XML);
-        String jsonString = userTasks.retrieve();
+        ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "jobdetail/" + "/" + start + "/" + end);
+        String jsonString = cr.get(String.class);
         
+        OutputStream output = response.getOutputStream();
         output.write(jsonString.getBytes());
         output.close();
 	}
@@ -80,22 +65,20 @@ public class MonitorController {
     {
 		log.info("--------------init the reflash_attempts------------");
     	
-    	ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "host");
-        IHostsResource hostsResource = cr.wrap(IHostsResource.class);
-        cr.accept(MediaType.APPLICATION_XML);
-        ArrayList<HostDTO> hosts = hostsResource.retrieve();
+        String taskTime = request.getParameter("start");
+        String url = InitController.RESTLET_URL_BASE + "getattemptsbystatus/";
+        ClientResource cr = new ClientResource(url + taskTime);
+        attempts = cr.get(ArrayList.class);
+
+        cr = new ClientResource(InitController.RESTLET_URL_BASE + "reflashHostLoad");
+        tasks = cr.put(null, ArrayList.class);
+        
+        if (tasks == null) {
+            ClientResource crTask = new ClientResource(InitController.RESTLET_URL_BASE + "gettasks");
+            tasks = crTask.get(ArrayList.class);
+        }
         
         OutputStream output = response.getOutputStream();
-        String start = request.getParameter("start");
-        String taskTime = start;
-
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-        String url = InitController.RESTLET_URL_BASE + "getattemptsbystatus/";
-
-        cr = new ClientResource(url + taskTime);
-        IGetAttemptsByStatus resource = cr.wrap(IGetAttemptsByStatus.class);
-        attempts = resource.retrieve();
-
         output.write("success".getBytes());
         output.close();
 	}
@@ -107,22 +90,6 @@ public class MonitorController {
     {
 		log.info("--------------init the runningtasks------------");
     	
-    	ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "host");
-        IHostsResource hostsResource = cr.wrap(IHostsResource.class);
-        cr.accept(MediaType.APPLICATION_XML);
-        ArrayList<HostDTO> hosts = hostsResource.retrieve();
-        
-        String hourTimeStr = request.getParameter("hourTime");
-        Long hourTime = 60 * 60 * 1000L;
-        
-        if (hourTimeStr != null && hourTimeStr.isEmpty()) {
-            hourTime = Long.parseLong(hourTimeStr);
-        }
-
-        ClientResource crTask = new ClientResource(InitController.RESTLET_URL_BASE + "gettasks");
-        IGetTasks taskResource = crTask.wrap(IGetTasks.class);
-        ArrayList<Task> tasks = taskResource.retrieve();
-        
         modelMap.addAttribute("attempts", attempts);
         modelMap.addAttribute("tasks", tasks);
         modelMap.addAttribute("mHelper", new MonitorHelper());
@@ -138,20 +105,6 @@ public class MonitorController {
     {
 		log.info("--------------init the submitfail------------");
     	
-    	ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "host");
-        IHostsResource hostsResource = cr.wrap(IHostsResource.class);
-        cr.accept(MediaType.APPLICATION_XML);
-        ArrayList<HostDTO> hosts = hostsResource.retrieve();
-        ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
-        
-        if (tasks == null) {
-            ClientResource crTask = new ClientResource(InitController.RESTLET_URL_BASE + "gettasks");
-            IGetTasks taskResource = crTask.wrap(IGetTasks.class);
-            tasks = taskResource.retrieve();
-            ReFlashHostLoadTask.allTasks = tasks;
-            ReFlashHostLoadTask.lastReadDataTime = new Date().getTime();
-        }
-
         modelMap.addAttribute("attempts", attempts);
         modelMap.addAttribute("tasks", tasks);
         modelMap.addAttribute("mHelper", new MonitorHelper());
@@ -166,23 +119,8 @@ public class MonitorController {
     {
 		log.info("--------------init the dependencypass------------");
     	
-    	ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "host");
-        IHostsResource hostsResource = cr.wrap(IHostsResource.class);
-        cr.accept(MediaType.APPLICATION_XML);
-        ArrayList<HostDTO> hosts = hostsResource.retrieve();
-        ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
-        
-        if (tasks == null) {
-            ClientResource crTask = new ClientResource(InitController.RESTLET_URL_BASE + "gettasks");
-            IGetTasks taskResource = crTask.wrap(IGetTasks.class);
-            tasks = taskResource.retrieve();
-            ReFlashHostLoadTask.allTasks = tasks;
-            ReFlashHostLoadTask.lastReadDataTime = new Date().getTime();
-        }
-
         modelMap.addAttribute("attempts", attempts);
         modelMap.addAttribute("tasks", tasks);
-        modelMap.addAttribute("mHelper", new MonitorHelper());
         
         return "/monitor/dependencypass.ftl";
 	}
@@ -194,20 +132,6 @@ public class MonitorController {
     {
 		log.info("--------------init the failedtasks------------");
     	
-    	ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "host");
-        IHostsResource hostsResource = cr.wrap(IHostsResource.class);
-        cr.accept(MediaType.APPLICATION_XML);
-        ArrayList<HostDTO> hosts = hostsResource.retrieve();
-        ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
-        
-        if (tasks == null) {
-            ClientResource crTask = new ClientResource(InitController.RESTLET_URL_BASE + "gettasks");
-            IGetTasks taskResource = crTask.wrap(IGetTasks.class);
-            tasks = taskResource.retrieve();
-            ReFlashHostLoadTask.allTasks = tasks;
-            ReFlashHostLoadTask.lastReadDataTime = new Date().getTime();
-        }
-
         modelMap.addAttribute("attempts", attempts);
         modelMap.addAttribute("tasks", tasks);
         modelMap.addAttribute("mHelper", new MonitorHelper());
@@ -222,20 +146,6 @@ public class MonitorController {
     {
 		log.info("--------------init the dependencytimeout------------");
     	
-    	ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "host");
-        IHostsResource hostsResource = cr.wrap(IHostsResource.class);
-        cr.accept(MediaType.APPLICATION_XML);
-        ArrayList<HostDTO> hosts = hostsResource.retrieve();
-        ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
-        
-        if (tasks == null) {
-            ClientResource crTask = new ClientResource(InitController.RESTLET_URL_BASE + "gettasks");
-            IGetTasks taskResource = crTask.wrap(IGetTasks.class);
-            tasks = taskResource.retrieve();
-            ReFlashHostLoadTask.allTasks = tasks;
-            ReFlashHostLoadTask.lastReadDataTime = new Date().getTime();
-        }
-
         modelMap.addAttribute("attempts", attempts);
         modelMap.addAttribute("tasks", tasks);
         modelMap.addAttribute("mHelper", new MonitorHelper());
@@ -250,20 +160,6 @@ public class MonitorController {
     {
 		log.info("--------------init the timeout------------");
     	
-    	ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "host");
-        IHostsResource hostsResource = cr.wrap(IHostsResource.class);
-        cr.accept(MediaType.APPLICATION_XML);
-        ArrayList<HostDTO> hosts = hostsResource.retrieve();
-        ArrayList<Task> tasks = ReFlashHostLoadTask.getTasks();
-        
-        if (tasks == null) {
-            ClientResource crTask = new ClientResource(InitController.RESTLET_URL_BASE + "gettasks");
-            IGetTasks taskResource = crTask.wrap(IGetTasks.class);
-            tasks = taskResource.retrieve();
-            ReFlashHostLoadTask.allTasks = tasks;
-            ReFlashHostLoadTask.lastReadDataTime = new Date().getTime();
-        }
-
         modelMap.addAttribute("attempts", attempts);
         modelMap.addAttribute("tasks", tasks);
         modelMap.addAttribute("mHelper", new MonitorHelper());
@@ -279,18 +175,19 @@ public class MonitorController {
     	 * @return
     	 */
     	public boolean isViewLog(String ip){
-    		boolean result = AttemptProxyController.isHostOverLoad(ip);
-    		String zabbixSwitch = InitController.ZABBIX_SWITCH;
+    		boolean result = false;
 
-            if (zabbixSwitch.equals("false")){
+            if (InitController.ZABBIX_SWITCH.equals("false")) {
             	result = false;
+            } else {
+            	result = AttemptProxyController.isHostOverLoad(ip);
             }
             
             return result;
     	}
     	
     	/**
-    	 * submitfail.ftl辅助方法
+    	 * submitfail.ftl等辅助方法
     	 * @param taskID
     	 * @return
     	 */
@@ -300,9 +197,7 @@ public class MonitorController {
             
             try {
             	ClientResource cr = new ClientResource(status_api + "/" + taskID);
-                IGetTaskLastStatus statusResource = cr.wrap(IGetTaskLastStatus.class);
-                cr.accept(MediaType.APPLICATION_XML);
-                status = statusResource.retrieve();
+                status = cr.get(String.class);
             } catch (Exception e) {
                 status = null;
             }
@@ -319,7 +214,7 @@ public class MonitorController {
 
                     taskState = statusValue.getAsInt();
 
-                    lastTaskStatus = AttemptStatus.getInstanceRunState(taskState);
+                    lastTaskStatus = ExecuteStatus.getInstanceRunState(taskState);
                 } catch (Exception e) {
                     lastTaskStatus = "NULL";
                 }

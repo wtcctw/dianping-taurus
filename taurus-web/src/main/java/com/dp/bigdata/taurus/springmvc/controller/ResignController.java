@@ -7,17 +7,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.restlet.data.MediaType;
 import org.restlet.resource.ClientResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import com.dp.bigdata.taurus.restlet.resource.IGetUserId;
-import com.dp.bigdata.taurus.restlet.resource.IUpdateAlertRule;
-import com.dp.bigdata.taurus.restlet.resource.IUpdateCreator;
 
 @Controller
 public class ResignController {
@@ -49,18 +44,14 @@ public class ResignController {
 
 
             cr = new ClientResource(InitController.RESTLET_URL_BASE + "updatecreator/" + creator.trim() + "/" + taskName.trim() + "/resign");
-            IUpdateCreator updateCreator = cr.wrap(IUpdateCreator.class);
-            cr.accept(MediaType.APPLICATION_XML);
-            int result = updateCreator.retrieve();
+            int result = cr.get(int.class);
             /*IClearDependencyPassTask clearTasks = cr.wrap(IClearDependencyPassTask.class);
             cr.accept(MediaType.APPLICATION_XML);
             int result = clearTasks.retrieve();*/
 
 
             cr = new ClientResource(InitController.RESTLET_URL_BASE + "getuserid/" + creator.trim());
-            IGetUserId getUserId = cr.wrap(IGetUserId.class);
-            cr.accept(MediaType.APPLICATION_XML);
-            int creatorId = getUserId.retrieve();
+            int creatorId = cr.get(int.class);
 
 
             switch (result) {
@@ -101,9 +92,7 @@ public class ResignController {
                             for (int j = 0; j < tmpUsers.length; j++) {
                                 String user = tmpUsers[j];
                                 cr = new ClientResource(InitController.RESTLET_URL_BASE + "getuserid/" + user.trim());
-                                getUserId = cr.wrap(IGetUserId.class);
-                                cr.accept(MediaType.APPLICATION_XML);
-                                int userIdAlert = getUserId.retrieve();
+                                int userIdAlert = cr.get(int.class);
                                 
                                 //告警人列表不包含作业原creator
                                 if (j == tmpUsers.length - 1) {
@@ -123,10 +112,7 @@ public class ResignController {
                                 String user = tmpUsers[j];
 
                                 cr = new ClientResource(InitController.RESTLET_URL_BASE + "getuserid/" + user.trim());
-                                getUserId = cr.wrap(IGetUserId.class);
-                                cr.accept(MediaType.APPLICATION_XML);
-
-                                int userIdAlert = getUserId.retrieve();
+                                int userIdAlert = cr.get(int.class);
 
                                 if (j == tmpUsers.length - 1) {
                                     if (user.equals(older)) {
@@ -147,9 +133,7 @@ public class ResignController {
                         }
 
                         cr = new ClientResource(InitController.RESTLET_URL_BASE + "updatealert/" + newUserId.trim() + "/" + tmpJobId.trim() + "");
-                        IUpdateAlertRule updateAlertRule = cr.wrap(IUpdateAlertRule.class);
-                        cr.accept(MediaType.APPLICATION_XML);
-                        updateAlertRule.retrieve();
+                        cr.get(int.class);
 
                     }
 

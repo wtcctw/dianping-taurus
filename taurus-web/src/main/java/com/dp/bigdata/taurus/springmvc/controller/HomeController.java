@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import jodd.util.StringUtil;
 
 import org.codehaus.plexus.util.StringUtils;
-import org.restlet.data.MediaType;
 import org.restlet.resource.ClientResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,17 +24,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
-import com.dp.bigdata.taurus.generated.module.Task;
-import com.dp.bigdata.taurus.restlet.resource.IAttemptStatusResource;
-import com.dp.bigdata.taurus.restlet.resource.IGetAttemptsByStatus;
-import com.dp.bigdata.taurus.restlet.resource.IGetTasks;
-import com.dp.bigdata.taurus.restlet.resource.IHostResource;
-import com.dp.bigdata.taurus.restlet.resource.IHostsResource;
-import com.dp.bigdata.taurus.restlet.resource.IPoolsResource;
-import com.dp.bigdata.taurus.restlet.resource.ITaskResource;
-import com.dp.bigdata.taurus.restlet.resource.ITasksResource;
-import com.dp.bigdata.taurus.restlet.resource.IUserGroupsResource;
-import com.dp.bigdata.taurus.restlet.resource.IUsersResource;
 import com.dp.bigdata.taurus.restlet.shared.AttemptDTO;
 import com.dp.bigdata.taurus.restlet.shared.HostDTO;
 import com.dp.bigdata.taurus.restlet.shared.PoolDTO;
@@ -117,17 +105,17 @@ public class HomeController {
 		Long weekHour = 7 * dayHour;
 		Long monthHour = 30 * dayHour;
 		
-		String OneMonthEarlierTime = urlDateFormat.format(new Date(dateHour - monthHour));
-		String OneMonthEarlierTip = tipDateFormat.format(new Date(dateHour - monthHour)) + "~" + baseDateTip;
-		String OneMonthEarlierHistoryTip = tipDateFormat.format(new Date(dateHour - monthHour)) + "~" + nowDateTip;
+		String oneMonthEarlierTime = urlDateFormat.format(new Date(dateHour - monthHour));
+		String oneMonthEarlierTip = tipDateFormat.format(new Date(dateHour - monthHour)) + "~" + baseDateTip;
+		String oneMonthEarlierHistoryTip = tipDateFormat.format(new Date(dateHour - monthHour)) + "~" + nowDateTip;
 		
-		String OneWeekEarlierTime = urlDateFormat.format(new Date(dateHour - weekHour));
-		String OneWeekEarlierTip = tipDateFormat.format(new Date(dateHour - weekHour)) + "~" + baseDateTip;
-		String OneWeekEarlierHistoryTip = tipDateFormat.format(new Date(dateHour - weekHour)) + "~" + nowDateTip;
+		String oneWeekEarlierTime = urlDateFormat.format(new Date(dateHour - weekHour));
+		String oneWeekEarlierTip = tipDateFormat.format(new Date(dateHour - weekHour)) + "~" + baseDateTip;
+		String oneWeekEarlierHistoryTip = tipDateFormat.format(new Date(dateHour - weekHour)) + "~" + nowDateTip;
 		
-		String OneDayEarlierTime = urlDateFormat.format(new Date(dateHour - dayHour));
-		String OneDayEarlierTip = tipDateFormat.format(new Date(dateHour - dayHour)) + "~" + baseDateTip;
-		String OneDayEarlierHistoryTip = tipDateFormat.format(new Date(dateHour - dayHour)) + "~" + nowDateTip;
+		String oneDayEarlierTime = urlDateFormat.format(new Date(dateHour - dayHour));
+		String oneDayEarlierTip = tipDateFormat.format(new Date(dateHour - dayHour)) + "~" + baseDateTip;
+		String oneDayEarlierHistoryTip = tipDateFormat.format(new Date(dateHour - dayHour)) + "~" + nowDateTip;
 		
 		String todayTime = urlDateFormat.format(nowDate);
 		String todayTip = tipDateFormat.format(new Date(nowDate.getTime() -dayHour)) + "~" + nowDateTip;
@@ -140,54 +128,54 @@ public class HomeController {
 		cal.setTime(baseDate);
 		cal.add(Calendar.HOUR, 1);
 		
-		String OneHourLaterTime = urlDateFormat.format(cal.getTime());
+		String oneHourLaterTime = urlDateFormat.format(cal.getTime());
 		
-		String OneDayLaterTime = null;
-		String OneWeekLaterTime = null;
-		String OneMonthLaterTime = null;
+		String oneDayLaterTime = null;
+		String oneWeekLaterTime = null;
+		String oneMonthLaterTime = null;
 		
-		if (urlDateFormat.parse(OneHourLaterTime).after(nowDate)) {
-			OneDayLaterTime = OneWeekLaterTime = OneMonthLaterTime = todayTime;
+		if (urlDateFormat.parse(oneHourLaterTime).after(nowDate)) {
+			oneDayLaterTime = oneWeekLaterTime = oneMonthLaterTime = todayTime;
 		} else {
-			OneDayLaterTime = urlDateFormat.format(new Date(dateHour + dayHour));
-			OneWeekLaterTime = urlDateFormat.format(new Date(dateHour + weekHour));
-			OneMonthLaterTime = urlDateFormat.format(new Date(dateHour + monthHour));
+			oneDayLaterTime = urlDateFormat.format(new Date(dateHour + dayHour));
+			oneWeekLaterTime = urlDateFormat.format(new Date(dateHour + weekHour));
+			oneMonthLaterTime = urlDateFormat.format(new Date(dateHour + monthHour));
 		}
 		
-		String OneDayLaterTip = baseDateTip + "~" + tipDateFormat.format(new Date(dateHour + dayHour));
-		String OneWeekLaterTip = baseDateTip + "~" + tipDateFormat.format(new Date(dateHour + weekHour));
-		String OneMonthLaterTip = baseDateTip + "~" + tipDateFormat.format(new Date(dateHour + monthHour));
+		String oneDayLaterTip = baseDateTip + "~" + tipDateFormat.format(new Date(dateHour + dayHour));
+		String oneWeekLaterTip = baseDateTip + "~" + tipDateFormat.format(new Date(dateHour + weekHour));
+		String oneMonthLaterTip = baseDateTip + "~" + tipDateFormat.format(new Date(dateHour + monthHour));
 		
-		String OneDayLaterHistoryTip = tipDateFormat.format(new Date(dateHour + dayHour)) + "~" + nowDateTip;
-		String OneWeekLaterHistoryTip = tipDateFormat.format(new Date(dateHour + weekHour)) + "~" + nowDateTip;
-		String OneMonthLaterHistoryTip = tipDateFormat.format(new Date(dateHour + monthHour)) + "~" + nowDateTip;
+		String oneDayLaterHistoryTip = tipDateFormat.format(new Date(dateHour + dayHour)) + "~" + nowDateTip;
+		String oneWeekLaterHistoryTip = tipDateFormat.format(new Date(dateHour + weekHour)) + "~" + nowDateTip;
+		String oneMonthLaterHistoryTip = tipDateFormat.format(new Date(dateHour + monthHour)) + "~" + nowDateTip;
 		
 		
 		// op = day
-		modelMap.addAttribute("bf1mD", OneMonthEarlierTime);
-		modelMap.addAttribute("bf1mDtip", OneMonthEarlierTip);
-		modelMap.addAttribute("bf1wD", OneWeekEarlierTime);
-		modelMap.addAttribute("bf1wDtip", OneWeekEarlierTip);
-		modelMap.addAttribute("bf1dD", OneDayEarlierTime);
-		modelMap.addAttribute("bf1dDtip", OneDayEarlierTip);
+		modelMap.addAttribute("bf1mD", oneMonthEarlierTime);
+		modelMap.addAttribute("bf1mDtip", oneMonthEarlierTip);
+		modelMap.addAttribute("bf1wD", oneWeekEarlierTime);
+		modelMap.addAttribute("bf1wDtip", oneWeekEarlierTip);
+		modelMap.addAttribute("bf1dD", oneDayEarlierTime);
+		modelMap.addAttribute("bf1dDtip", oneDayEarlierTip);
 		
 		modelMap.addAttribute("todayD", todayTime);
 		modelMap.addAttribute("todayDtip", todayTip);
 		
-		modelMap.addAttribute("af1dD", OneDayLaterTime);
-		modelMap.addAttribute("af1dDtip", OneDayLaterTip);
-		modelMap.addAttribute("af1wD", OneWeekLaterTime);
-		modelMap.addAttribute("af1wDtip", OneWeekLaterTip);
-		modelMap.addAttribute("af1mD", OneMonthLaterTime);
-		modelMap.addAttribute("af1mDtip", OneMonthLaterTip);
+		modelMap.addAttribute("af1dD", oneDayLaterTime);
+		modelMap.addAttribute("af1dDtip", oneDayLaterTip);
+		modelMap.addAttribute("af1wD", oneWeekLaterTime);
+		modelMap.addAttribute("af1wDtip", oneWeekLaterTip);
+		modelMap.addAttribute("af1mD", oneMonthLaterTime);
+		modelMap.addAttribute("af1mDtip", oneMonthLaterTip);
 		
 		// op = history
-		modelMap.addAttribute("bf1mHtip", OneMonthEarlierHistoryTip);
-		modelMap.addAttribute("bf1wHtip", OneWeekEarlierHistoryTip);
-		modelMap.addAttribute("bf1dHtip", OneDayEarlierHistoryTip);
-		modelMap.addAttribute("af1dHtip", OneDayLaterHistoryTip);
-		modelMap.addAttribute("af1wHtip", OneWeekLaterHistoryTip);
-		modelMap.addAttribute("af1mHtip", OneMonthLaterHistoryTip);
+		modelMap.addAttribute("bf1mHtip", oneMonthEarlierHistoryTip);
+		modelMap.addAttribute("bf1wHtip", oneWeekEarlierHistoryTip);
+		modelMap.addAttribute("bf1dHtip", oneDayEarlierHistoryTip);
+		modelMap.addAttribute("af1dHtip", oneDayLaterHistoryTip);
+		modelMap.addAttribute("af1wHtip", oneWeekLaterHistoryTip);
+		modelMap.addAttribute("af1mHtip", oneMonthLaterHistoryTip);
 		
 		modelMap.addAttribute("now_s", baseDateTip);
 		modelMap.addAttribute("step", stepStr);
@@ -392,27 +380,19 @@ public class HomeController {
 		modelMap.addAttribute("ip", ip);
 		
 		globalViewVariable.cr = new ClientResource(globalViewVariable.host + "pool");
-		IPoolsResource poolResource = globalViewVariable.cr.wrap(IPoolsResource.class);
-		globalViewVariable.cr.accept(MediaType.APPLICATION_XML);
-		ArrayList<PoolDTO> pools = poolResource.retrieve();
+		ArrayList<PoolDTO> pools = globalViewVariable.cr.get(ArrayList.class);
 		int UNALLOCATED = 1;
 		
 		globalViewVariable.cr = new ClientResource(globalViewVariable.host + "host");
-		IHostsResource hostResource = globalViewVariable.cr.wrap(IHostsResource.class);
-		globalViewVariable.cr.accept(MediaType.APPLICATION_XML);
-		ArrayList<HostDTO> hosts = hostResource.retrieve();
+		ArrayList<HostDTO> hosts = globalViewVariable.cr.get(ArrayList.class);
 		modelMap.addAttribute("hosts", hosts);
 		
 		globalViewVariable.cr = new ClientResource(globalViewVariable.host + "status");
-		IAttemptStatusResource attemptResource = globalViewVariable.cr.wrap(IAttemptStatusResource.class);
-		globalViewVariable.cr.accept(MediaType.APPLICATION_XML);
-		ArrayList<StatusDTO> statuses = attemptResource.retrieve();
+		ArrayList<StatusDTO> statuses = globalViewVariable.cr.get(ArrayList.class);
 		modelMap.addAttribute("statuses",statuses);
 		
 		globalViewVariable.cr = new ClientResource(globalViewVariable.host + "group");
-		IUserGroupsResource groupResource = globalViewVariable.cr.wrap(IUserGroupsResource.class);
-		globalViewVariable.cr.accept(MediaType.APPLICATION_XML);
-		ArrayList<UserGroupDTO> groups = groupResource.retrieve();
+		ArrayList<UserGroupDTO> groups = globalViewVariable.cr.get(ArrayList.class);
 		modelMap.addAttribute("groups",groups);
 		
 		return "/task.ftl";
@@ -463,23 +443,17 @@ public class HomeController {
 		String[] types = {"hadoop", "spring", "other"};
 
 		globalViewVariable.cr = new ClientResource(globalViewVariable.host + "status");
-	    IAttemptStatusResource attemptResource = globalViewVariable.cr.wrap(IAttemptStatusResource.class);
-	    globalViewVariable.cr.accept(MediaType.APPLICATION_XML);
-	    ArrayList<StatusDTO> statuses = attemptResource.retrieve();
+	    ArrayList<StatusDTO> statuses = globalViewVariable.cr.get(ArrayList.class);
 	    modelMap.addAttribute("statuses", statuses);
 	    
 	    globalViewVariable.cr = new ClientResource(globalViewVariable.host + "group");
-	    IUserGroupsResource groupResource = globalViewVariable.cr.wrap(IUserGroupsResource.class);
-	    globalViewVariable.cr.accept(MediaType.APPLICATION_XML);
-	    ArrayList<UserGroupDTO> groups = groupResource.retrieve();
+	    ArrayList<UserGroupDTO> groups = globalViewVariable.cr.get(ArrayList.class);
 	    modelMap.addAttribute("groups",groups);
 	    
 	    String taskId = request.getParameter("task_id");
 	    globalViewVariable.cr = new ClientResource(globalViewVariable.host + "task/" + taskId.trim());
-	    ITaskResource taskResource = globalViewVariable.cr.wrap(ITaskResource.class);
-	    globalViewVariable.cr.accept(MediaType.APPLICATION_XML);
-	    TaskDTO dto = taskResource.retrieve();
-	    String conditionStr = dto.getAlertRule().getConditions();
+	    TaskDTO dto = globalViewVariable.cr.get(TaskDTO.class);
+	    String conditionStr = dto.getConditions();
 	    modelMap.addAttribute("dto", dto);
 	    modelMap.addAttribute("conditionStr", conditionStr);
 	    
@@ -562,9 +536,7 @@ public class HomeController {
 		String qq = null;
 		
 		globalViewVariable.cr = new ClientResource(globalViewVariable.host + "task/" + taskId);
-		ITaskResource taskResource = globalViewVariable.cr.wrap(ITaskResource.class);
-		globalViewVariable.cr.accept(MediaType.APPLICATION_XML);
-		TaskDTO dto = taskResource.retrieve();
+		TaskDTO dto = globalViewVariable.cr.get(TaskDTO.class);
 		creator = dto.getCreator();
 		
 		if (StringUtil.isNotBlank(from) && from.equals("monitor")) {
@@ -718,9 +690,7 @@ public class HomeController {
 		modelMap.addAttribute("isAdmin", globalViewVariable.isAdmin);
 
 		globalViewVariable.cr = new ClientResource(globalViewVariable.host + "host");
-	    IHostsResource hostsResource = globalViewVariable.cr.wrap(IHostsResource.class);
-	    globalViewVariable.cr.accept(MediaType.APPLICATION_XML);
-	    ArrayList<HostDTO> hosts = hostsResource.retrieve();
+	    ArrayList<HostDTO> hosts = globalViewVariable.cr.get(ArrayList.class);
 	    
 	    //hostList.jsp todo
 	    modelMap.addAttribute("host", globalViewVariable.host);
@@ -731,9 +701,7 @@ public class HomeController {
 	    String hostName = request.getParameter("hostName");
 	    String op = request.getParameter("op");
 	    globalViewVariable.cr = new ClientResource(globalViewVariable.host + "host/" + hostName);
-	    IHostResource hostResource = globalViewVariable.cr.wrap(IHostResource.class);
-	    globalViewVariable.cr.accept(MediaType.APPLICATION_XML);
-	    HostDTO dto = hostResource.retrieve();
+	    HostDTO dto = globalViewVariable.cr.get(HostDTO.class);
 	    
 	    Map<String, String> maps = new HashMap<String, String>();
 	    maps.put("up", "上线");
@@ -757,9 +725,8 @@ public class HomeController {
 	    // 任务监控标签 start
 	    
 	    // 正在运行的任务RUNNING
-	    ClientResource crTask = new ClientResource(globalViewVariable.host + "gettasks");
-        com.dp.bigdata.taurus.restlet.resource.IGetTasks taskResource = crTask.wrap(IGetTasks.class);
-        ArrayList<Task> tasks = taskResource.retrieve();
+		globalViewVariable.cr = new ClientResource(globalViewVariable.host + "gettasks");
+        ArrayList<TaskDTO> tasks = globalViewVariable.cr.get(ArrayList.class);
 
         String url = globalViewVariable.host + "getattemptsbystatus/";
 
@@ -768,35 +735,30 @@ public class HomeController {
         Date taskDateTime = new Date(nowDate.getTime() - 24 * hourTime);
         
         globalViewVariable.cr = new ClientResource(url + 6);//正在运行？
-        IGetAttemptsByStatus resource = globalViewVariable.cr.wrap(IGetAttemptsByStatus.class);
-        ArrayList<AttemptDTO> attempts = resource.retrieve();
+        ArrayList<AttemptDTO> attempts = globalViewVariable.cr.get(ArrayList.class);
 	    modelMap.addAttribute("attempts", attempts);
 	    modelMap.addAttribute("tasks", tasks);
 	    modelMap.addAttribute("nowTime", nowDate);
 	    
 	    // 提交失败的任务 SUBMIT_FAIL
-	    ClientResource submitFailCr = new ClientResource(url + 5);//提交失败？
-        IGetAttemptsByStatus submitFailResource = submitFailCr.wrap(IGetAttemptsByStatus.class);
-        ArrayList<AttemptDTO> submitFailAttempts = submitFailResource.retrieve();
+	    globalViewVariable.cr = new ClientResource(url + 5);//提交失败？
+        ArrayList<AttemptDTO> submitFailAttempts = globalViewVariable.cr.get(ArrayList.class);
         modelMap.addAttribute("submitFailAttempts", submitFailAttempts);
         modelMap.addAttribute("taskDateTime", taskDateTime);
         
         // 失败的任务 FAILED
-        ClientResource failCr = new ClientResource(url + 8);//失败？
-        IGetAttemptsByStatus failResource = failCr.wrap(IGetAttemptsByStatus.class);
-        ArrayList<AttemptDTO> failAttempts = failResource.retrieve();
+        globalViewVariable.cr = new ClientResource(url + 8);//失败？
+        ArrayList<AttemptDTO> failAttempts = globalViewVariable.cr.get(ArrayList.class);
         modelMap.addAttribute("failAttempts", failAttempts);
         
         // 依赖超时的任务 DEPENDENCY_TIMEOUT
-        ClientResource dependencyTimeOutCr = new ClientResource(url + 3);//依赖超时？
-        IGetAttemptsByStatus dependencyTimeOutResource = dependencyTimeOutCr.wrap(IGetAttemptsByStatus.class);
-        ArrayList<AttemptDTO> dependencyTimeOutAttempts = dependencyTimeOutResource.retrieve();
+        globalViewVariable.cr = new ClientResource(url + 3);//依赖超时？
+        ArrayList<AttemptDTO> dependencyTimeOutAttempts = globalViewVariable.cr.get(ArrayList.class);
         modelMap.addAttribute("dependencyTimeOutAttempts", dependencyTimeOutAttempts);
         
         // 超时的任务 TIMEOUT
-        ClientResource timeOutCr = new ClientResource(url + 9);//超时？
-        IGetAttemptsByStatus timeOutResource = timeOutCr.wrap(IGetAttemptsByStatus.class);
-        ArrayList<AttemptDTO> timeOutAttempts = timeOutResource.retrieve();
+        globalViewVariable.cr = new ClientResource(url + 9);//超时？
+        ArrayList<AttemptDTO> timeOutAttempts = globalViewVariable.cr.get(ArrayList.class);
         modelMap.addAttribute("timeOutAttempts", timeOutAttempts);
         
 	    // 任务监控标签 end
@@ -832,9 +794,7 @@ public class HomeController {
 		modelMap.addAttribute("now_s", nowTimeFormat);
 		
 		globalViewVariable.cr = new ClientResource(globalViewVariable.host + "host");
-		IHostsResource hostResource = globalViewVariable.cr.wrap(IHostsResource.class);
-		globalViewVariable.cr.accept(MediaType.APPLICATION_XML);
-		ArrayList<HostDTO> hosts = hostResource.retrieve();
+		ArrayList<HostDTO> hosts = globalViewVariable.cr.get(ArrayList.class);
 		modelMap.addAttribute("hosts", hosts);
 		
 		return "/host_history.ftl";
@@ -861,9 +821,7 @@ public class HomeController {
 		modelMap.addAttribute("users", globalViewVariable.users);
 		
 		globalViewVariable.cr = new ClientResource(globalViewVariable.host + "group");
-		IUserGroupsResource groupResource = globalViewVariable.cr.wrap(IUserGroupsResource.class);
-		globalViewVariable.cr.accept(MediaType.APPLICATION_XML);
-		ArrayList<UserGroupDTO> groups = groupResource.retrieve();
+		ArrayList<UserGroupDTO> groups = globalViewVariable.cr.get(ArrayList.class);
 		modelMap.addAttribute("groups", groups);
 		
 		//用户分组列表显示
@@ -875,7 +833,7 @@ public class HomeController {
 		    	modelMap.addAttribute("user", user);
 		    }
 		    
-		    //TODO 多分组重新改写(完成)
+		    // 多分组重新改写(完成)
 		    String groupNamesWithComma = user.getGroup();
 		    if (StringUtil.isBlank(groupNamesWithComma)) { groupNamesWithComma = "未分组"; }
 		    
@@ -917,10 +875,6 @@ public class HomeController {
 		modelMap.addAttribute("isAdmin", globalViewVariable.isAdmin);
 		modelMap.addAttribute("userId", globalViewVariable.userId);
 		
-		globalViewVariable.cr = new ClientResource(globalViewVariable.host + "group");
-		IUserGroupsResource groupResource = globalViewVariable.cr.wrap(IUserGroupsResource.class);
-		globalViewVariable.cr.accept(MediaType.APPLICATION_XML);
-		
 		Map<String, String> map = new HashMap<String, String>();
 		
 		for (UserDTO user : globalViewVariable.users) {
@@ -929,7 +883,7 @@ public class HomeController {
 		    	modelMap.addAttribute("user", user);
 		    }
 		    
-		    //TODO 多分组重新改写(完成)
+		    // 多分组重新改写(完成)
 		    String groupNamesWithComma = user.getGroup();
 		    if (StringUtil.isBlank(groupNamesWithComma)) { groupNamesWithComma = "未分组"; }
 		    
@@ -960,9 +914,7 @@ public class HomeController {
 		}
 		
 		globalViewVariable.cr = new ClientResource(task_api);
-		ITasksResource resource = globalViewVariable.cr.wrap(ITasksResource.class);
-		globalViewVariable.cr.accept(MediaType.APPLICATION_XML);
-		ArrayList<TaskDTO> tasks = resource.retrieve();
+		ArrayList<TaskDTO> tasks = globalViewVariable.cr.get(ArrayList.class);
 		modelMap.addAttribute("tasks", tasks);
 		
 		modelMap.addAttribute("hHelper", new HomeHelper());
@@ -1120,9 +1072,7 @@ public class HomeController {
 		
 		globalViewVariable.isAdmin = false;
 		globalViewVariable.cr = new ClientResource(globalViewVariable.host + "user");
-		globalViewVariable.userResource = globalViewVariable.cr.wrap(IUsersResource.class);
-		globalViewVariable.cr.accept(MediaType.APPLICATION_XML);
-		globalViewVariable.users = globalViewVariable.userResource.retrieve();
+		globalViewVariable.users = globalViewVariable.cr.get(ArrayList.class);
 		globalViewVariable.userMap = new HashMap<String, UserDTO>();
 		
 		for (UserDTO user : globalViewVariable.users) {
@@ -1130,7 +1080,7 @@ public class HomeController {
 			if (user.getName().equals(globalViewVariable.currentUser)) {
 				
 				globalViewVariable.userId = user.getId();
-				//TODO support multi group(完成)
+				// support multi group
 				String[] userGroups = user.getGroup().split(",");
 				for(String userGroup : userGroups){
 					if ("admin".equals(userGroup)) {
@@ -1159,7 +1109,6 @@ public class HomeController {
 		private int userId = -1;
 		private boolean isAdmin = false;
 		private ClientResource cr = null;
-		private IUsersResource userResource = null;
 		private ArrayList<UserDTO> users = null;
 		private HashMap<String, UserDTO> userMap = null;
 		
@@ -1176,9 +1125,7 @@ public class HomeController {
 		public HostDTO getDtos(String host, String dtoName){
 			
 			ClientResource cr = new ClientResource(host + "host/" + dtoName);
-			IHostResource hostResource = cr.wrap(IHostResource.class);
-			cr.accept(MediaType.APPLICATION_XML);
-			HostDTO dtos = hostResource.retrieve();
+			HostDTO dtos = cr.get(HostDTO.class);
 			
 			return dtos;
 		}

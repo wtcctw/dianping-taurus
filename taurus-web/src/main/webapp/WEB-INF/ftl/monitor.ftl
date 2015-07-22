@@ -957,7 +957,7 @@ $(document).ready(function () {
 </script>
 <script type="text/javascript" charset="utf-8" language="javascript" src="${rc.contextPath}/js/jquery.dataTables.js"></script>
 <script type="text/javascript" charset="utf-8" language="javascript" src="${rc.contextPath}/js/DT_bootstrap.js"></script>
-<script type="text/javascript" charset="utf-8" language="javascript" src="${rc.contextPath}/static/js/attempt.js"></script>
+<#-- script type="text/javascript" charset="utf-8" language="javascript" src="${rc.contextPath}/static/js/attempt.js"></script -->
 
 </body>
 </html>

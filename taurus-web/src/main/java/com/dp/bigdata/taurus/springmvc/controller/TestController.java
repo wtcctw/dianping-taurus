@@ -24,9 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.dp.bigdata.taurus.restlet.resource.IAllHosts;
-import com.dp.bigdata.taurus.restlet.resource.IUserGroupsResource;
-import com.dp.bigdata.taurus.restlet.resource.IUsersResource;
 import com.dp.bigdata.taurus.restlet.shared.UserDTO;
 import com.dp.bigdata.taurus.restlet.shared.UserGroupDTO;
 import com.dp.bigdata.taurus.springmvc.bean.WebResult;
@@ -141,9 +138,7 @@ public class TestController {
 		//result.addAttr("users", globalViewVariable.users);
 		
 		globalViewVariable.cr = new ClientResource(globalViewVariable.host + "group");
-		IUserGroupsResource groupResource = globalViewVariable.cr.wrap(IUserGroupsResource.class);
-		globalViewVariable.cr.accept(MediaType.APPLICATION_XML);
-		ArrayList<UserGroupDTO> groups = groupResource.retrieve();
+		ArrayList<UserGroupDTO> groups = globalViewVariable.cr.get(ArrayList.class);
 		result.addAttr("groups", groups);
 		
 		
@@ -179,9 +174,7 @@ public class TestController {
 
 		// 检测正常Agent 发现异常 告警
 		ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "allhosts");
-        IAllHosts allOnlineHostsResource = cr.wrap(IAllHosts.class);
-        cr.accept(MediaType.APPLICATION_XML);
-        String onlineHosts = allOnlineHostsResource.retrieve();
+        String onlineHosts = cr.get(String.class);
         
         
         JSONObject jsonObj = JSONObject.fromObject(onlineHosts);
@@ -221,9 +214,7 @@ public void commonnav(HttpServletRequest request,GlobalViewVariable globalViewVa
 		
 		globalViewVariable.isAdmin = false;
 		globalViewVariable.cr = new ClientResource(globalViewVariable.host + "user");
-		globalViewVariable.userResource = globalViewVariable.cr.wrap(IUsersResource.class);
-		globalViewVariable.cr.accept(MediaType.APPLICATION_XML);
-		globalViewVariable.users = globalViewVariable.userResource.retrieve();
+		globalViewVariable.users = globalViewVariable.cr.get(ArrayList.class);
 		globalViewVariable.userMap = new HashMap<String, UserDTO>();
 		
 		for (UserDTO user : globalViewVariable.users) {
@@ -260,7 +251,6 @@ public void commonnav(HttpServletRequest request,GlobalViewVariable globalViewVa
 		private int userId = -1;
 		private boolean isAdmin = false;
 		private ClientResource cr = null;
-		private IUsersResource userResource = null;
 		private ArrayList<UserDTO> users = null;
 		private HashMap<String, UserDTO> userMap = null;
 		

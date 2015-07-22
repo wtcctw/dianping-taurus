@@ -14,7 +14,7 @@ import javax.naming.ldap.LdapContext;
 
 import org.apache.log4j.Logger;
 
-import com.dp.bigdata.taurus.generated.module.User;
+import com.dp.bigdata.taurus.restlet.shared.UserDTO;
 
 public class LDAPAuthenticationService {
 	private static Logger logger = Logger.getLogger(LDAPAuthenticationService.class);
@@ -29,8 +29,8 @@ public class LDAPAuthenticationService {
 	private String solidUsername = "lionauth";
 	private String solidPwd = "bxHxXopGJOy78Jze3LWi";
 	
-	public User authenticate(String userName, String password) throws Exception {
-		User user = null;
+	public UserDTO authenticate(String userName, String password) throws Exception {
+		UserDTO user = null;
 		LdapContext ctx = null;
 		Hashtable<String, String> env = null;
 		String fullName = null;
@@ -63,8 +63,8 @@ public class LDAPAuthenticationService {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public User getUserInfo(String cn, LdapContext ctx, String userName) {
-		User user = new User();
+	public UserDTO getUserInfo(String cn, LdapContext ctx, String userName) {
+		UserDTO user = new UserDTO();
 		try {
 			SearchControls constraints = new SearchControls();
 			constraints.setSearchScope(SearchControls.SUBTREE_SCOPE);

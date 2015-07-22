@@ -3,10 +3,6 @@ package com.dp.bigdata.taurus.restlet.shared;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.dp.bigdata.taurus.core.TaskStatus;
-import com.dp.bigdata.taurus.generated.module.AlertRule;
-import com.dp.bigdata.taurus.generated.module.Task;
-
 public class TaskDTO implements Serializable {
 
 	/**
@@ -82,17 +78,6 @@ public class TaskDTO implements Serializable {
 		return addtime;
 	}
 
-	public AlertRule getAlertRule() {
-		AlertRule rule = new AlertRule();
-		rule.setConditions(conditions);
-		rule.setGroupid(groupid);
-		rule.setHasmail(hasmail);
-		rule.setHassms(hassms);
-		rule.setId(ruleID);
-		rule.setJobid(taskid);
-		rule.setUserid(userid);
-		return rule;
-	}
 
 	public String getCommand() {
 		return command;
@@ -178,45 +163,6 @@ public class TaskDTO implements Serializable {
 		return status;
 	}
 
-	public Task getTask() {
-		Task task = new Task();
-		task.setAddtime(addtime);
-		if (getType() != null && getType().equalsIgnoreCase("spring")) {
-			String springCommand;
-			if (mainClass != null) {
-				springCommand = mainClass + " " + command;
-			} else {
-				springCommand = command;
-			}
-			task.setCommand(springCommand);
-			task.setFilename(taskUrl);
-		} else {
-			task.setCommand(command);
-			task.setFilename(filename);
-		}
-		task.setCreator(creator);
-		task.setCrontab(crontab);
-		task.setDependencyexpr(dependencyexpr);
-		task.setDescription(description);
-		task.setExecutiontimeout(executiontimeout);
-		task.setHostname(hostname);
-		task.setIsautoretry(isautoretry);
-		task.setIsautokill(isAutoKill);
-		task.setName(name);
-		task.setLastscheduletime(lastscheduletime);
-		task.setPoolid(poolid);
-		task.setProxyuser(proxyuser);
-		task.setRetrytimes(retrytimes);
-		task.setStatus(TaskStatus.getTaskRunState(status));
-		task.setTaskid(taskid);
-		task.setType(type);
-		task.setUpdatetime(updatetime);
-		task.setWaittimeout(waittimeout);
-		task.setHadoopname(hadoopName);
-		task.setAppname(appName);
-		task.setIskillcongexp(iskillcongexp);
-		return task;
-	}
 
 	public String getTaskid() {
 		return taskid;
