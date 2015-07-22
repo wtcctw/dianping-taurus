@@ -195,11 +195,11 @@
     <div class="controls">
         <select class="input-small field" id="alertType" name="alertType"
                 disabled>
-        <#if dto.getAlertRule().getHasmail() && dto.getAlertRule().getHassms()>
+        <#if dto.isHasmail() && dto.isHassms()>
             <option id="1">邮件</option>
             <option id="2">短信</option>
             <option id="3" selected="selected">邮件和短信</option>
-        <#elseif !dto.getAlertRule().getHasmail() && dto.getAlertRule().getHassms()>
+        <#elseif !dto.isHasmail() && dto.isHassms()>
             <option id="1">邮件</option>
             <option id="2" selected="selected">短信</option>
             <option id="3">邮件和短信</option>
@@ -218,7 +218,7 @@
 
     <div class="controls">
         <input type="text" class="input-large field" id="alertUser"
-               name="alertUser" value="${dto.getAlertRule().getUserid()!}" disabled>
+               name="alertUser" value="${dto.userid!}" disabled>
     </div>
 </div>
 <br>
@@ -227,7 +227,7 @@
 
     <div class="controls">
         <input type="text" class="input-large field" id="alertGroup"
-               name="alertGroup" value="${dto.getAlertRule().getGroupid()!}" disabled>
+               name="alertGroup" value="${dto.groupid!}" disabled>
     </div>
 </div>
 <input type="text" class="field" style="display: none" id="creator"
