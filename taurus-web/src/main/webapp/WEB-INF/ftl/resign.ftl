@@ -156,7 +156,7 @@
                                 <td class="hide">${dto.taskid!}</td>
                                 <td class="fixLength-td"><input type="checkbox" class="field taskcheckbox"
                                                                 id="${dto.creator!}" name="taskcheckbox"
-                                                                value="${dto.name!}" alertUser = "${dto.getAlertRule().userid!}" alertId="${dto.getAlertRule().jobid!}" >${dto.name!}
+                                                                value="${dto.name!}" alertUser = "${dto.userid!}" alertId="${dto.jobid!}" >${dto.name!}
                                 </td>
                                 <td>${dto.hostname!}</td>
                                 <td>${dto.creator!}</td>

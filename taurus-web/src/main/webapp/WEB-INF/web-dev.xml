@@ -4,13 +4,14 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
 	<display-name>Taurus Web</display-name>
-    <context-param>
+
+	<context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
         	classpath*:applicationContext*.xml
 		</param-value>
     </context-param>
-
+    
 	<!-- 日志记录 -->
     <context-param>
         <!-- 日志配置文件路径 -->

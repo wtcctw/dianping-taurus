@@ -17,10 +17,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.dp.bigdata.taurus.core.AttemptStatus;
-import com.dp.bigdata.taurus.restlet.resource.IGetTaskLastStatus;
-import com.dp.bigdata.taurus.restlet.resource.ITasksResource;
 import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
+import com.dp.bigdata.taurus.zookeeper.execute.helper.ExecuteStatus;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -63,9 +61,7 @@ public class ScheduleController {
                 task_api = task_api + "&appname=" + appname;
             }
             cr = new ClientResource(task_api);
-            ITasksResource resource = cr.wrap(ITasksResource.class);
-            cr.accept(MediaType.APPLICATION_XML);
-            ArrayList<TaskDTO> tasks = resource.retrieve();
+            ArrayList<TaskDTO> tasks = cr.get(ArrayList.class);
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             for (TaskDTO dto : tasks) {
                 JsonObject sechedule = new JsonObject();
@@ -76,9 +72,7 @@ public class ScheduleController {
                     String status;
                     try {
                         cr = new ClientResource(status_api + "/" + dto.getTaskid());
-                        IGetTaskLastStatus statusResource = cr.wrap(IGetTaskLastStatus.class);
-                        cr.accept(MediaType.APPLICATION_XML);
-                        status = statusResource.retrieve();
+                        status = cr.get(String.class);
                     } catch (Exception e) {
                         status = null;
                     }
@@ -94,7 +88,7 @@ public class ScheduleController {
 
                             taskState = statusValue.getAsInt();
 
-                            lastTaskStatus = AttemptStatus.getInstanceRunState(taskState);
+                            lastTaskStatus = ExecuteStatus.getInstanceRunState(taskState);
                         } catch (Exception e) {
                             lastTaskStatus = "NULL";
                         }

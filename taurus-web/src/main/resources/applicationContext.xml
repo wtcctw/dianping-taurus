@@ -5,13 +5,22 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
-    <bean name="placeholder" lazy-init="false" class="com.dianping.lion.client.InitializeConfig">
-        <property name="propertiesPath" value="config/applicationContext.properties" />
-    </bean>
+	<bean name="placeholder" lazy-init="false" class="com.dianping.lion.client.InitializeConfig">
+		<property name="propertiesPath" value="config/applicationContext.properties" />
+	</bean>
 
-    <bean id="startRestLet" class="com.dp.bigdata.taurus.restlet.TaurusServer" init-method="start" destroy-method="stop"/>
-    <bean id="alertBean" class="com.dp.bigdata.taurus.alert.TaurusAlert" />
+	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
+		<property name="messageConverters">
+			<list>
+				<bean class="org.springframework.http.converter.ResourceHttpMessageConverter" />
+				<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
+				<bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter" />
+				<bean class="org.springframework.http.converter.FormHttpMessageConverter" />
+				<bean class="org.springframework.http.converter.StringHttpMessageConverter" />
+				<bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter" />
+				<bean class="org.springframework.integration.http.converter.SerializingHttpMessageConverter" />
+			</list>
+		</property>
+	</bean>
+
 </beans>
-
-
-	

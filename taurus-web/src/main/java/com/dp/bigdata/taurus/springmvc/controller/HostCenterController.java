@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.restlet.data.MediaType;
 import org.restlet.resource.ClientResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,9 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.dp.bigdata.taurus.restlet.resource.IHostsResource;
 import com.dp.bigdata.taurus.restlet.shared.HostDTO;
-import com.dp.bigdata.taurus.restlet.utils.ReFlashHostLoadTask;
 
 @Controller
 public class HostCenterController {
@@ -34,9 +31,7 @@ public class HostCenterController {
 		
 		String action = request.getParameter("action");
         ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "host");
-        IHostsResource hostsResource = cr.wrap(IHostsResource.class);
-        cr.accept(MediaType.APPLICATION_XML);
-        ArrayList<HostDTO> hosts = hostsResource.retrieve();
+        ArrayList<HostDTO> hosts = cr.get(ArrayList.class);
 
         if (HOST.equals(action)) {
             String type = request.getParameter("gettype");
@@ -105,15 +100,17 @@ public class HostCenterController {
             OutputStream output = response.getOutputStream();
 
             String queryType = request.getParameter("queryType");
+            
+            cr = new ClientResource(InitController.RESTLET_URL_BASE + "reflashHostLoad");
 
-            String jsonString = ReFlashHostLoadTask.hostLoadJsonData;
+            String jsonString = cr.get(String.class);
 
             if (StringUtils.isNotBlank(queryType) && "reflash".equals(queryType)) {
-                jsonString = ReFlashHostLoadTask.read();
+                jsonString = cr.post(null, String.class);
             }
 
             if (StringUtils.isBlank(jsonString)) {
-                jsonString = ReFlashHostLoadTask.read();
+                jsonString = cr.post(null, String.class);
             }
 
             output.write(jsonString.getBytes());

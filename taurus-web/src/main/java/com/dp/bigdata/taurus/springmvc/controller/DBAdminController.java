@@ -15,8 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.dp.bigdata.taurus.core.MultiInstanceFilter;
-import com.dp.bigdata.taurus.restlet.resource.IClearDependencyPassTask;
 import com.dp.bigdata.taurus.zookeeper.common.infochannel.ZooKeeperCleaner;
 
 @Controller
@@ -49,9 +47,7 @@ public class DBAdminController {
                 String status = request.getParameter("status");
 
                 cr = new ClientResource(InitController.RESTLET_URL_BASE + "deletedependency/" + taskId + "/" + status);
-                IClearDependencyPassTask clearTasks = cr.wrap(IClearDependencyPassTask.class);
-                cr.accept(MediaType.APPLICATION_XML);
-                int result = clearTasks.retrieve();
+                int result = cr.get(int.class);
 
                 switch (result) {
                     case SERVICE_EXCEPTION:
@@ -65,7 +61,6 @@ public class DBAdminController {
                         break;
                     default:
                         reusult_str = "执行成功~";
-                        MultiInstanceFilter.jobAlert.remove(taskId.trim());
                         break;
 
                 }
@@ -114,9 +109,7 @@ public class DBAdminController {
             if (adminUser.contains(user)) {
 
                 cr = new ClientResource(InitController.RESTLET_URL_BASE + "updatecreator/" + creator + "/" + taskName + "/update");
-                IClearDependencyPassTask clearTasks = cr.wrap(IClearDependencyPassTask.class);
-                cr.accept(MediaType.APPLICATION_XML);
-                int result = clearTasks.retrieve();
+                int result = cr.get(int.class);
 
                 switch (result) {
                     case SERVICE_EXCEPTION:

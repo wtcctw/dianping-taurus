@@ -109,7 +109,7 @@ final public class Engine implements Scheduler {
 	 * load data from the database;
 	 */
 	public synchronized void load() {
-		LOG.info("Engine trys to refresh the database...");
+		//LOG.info("Engine trys to refresh the database...");
 
 		Map<String, Task> tmp_registedTasks = new ConcurrentHashMap<String, Task>();
 		Map<String, String> tmp_tasksMapCache = new ConcurrentHashMap<String, String>();
@@ -365,7 +365,7 @@ final public class Engine implements Scheduler {
 		@Override
 		public void run() {
 			while (true) {
-				LOG.info("DepedencyTriggle trys to triggle the jobs...");
+				//LOG.info("DepedencyTriggle trys to triggle the jobs...");
 
 				Transaction t = Cat.newTransaction("Engine", "Schedule");
 				try {

@@ -1,13 +1,8 @@
 package com.dp.bigdata.taurus.core;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.NameValuePair;
-import org.apache.commons.httpclient.methods.PostMethod;
 import org.junit.Test;
 
 import com.dianping.ops.http.HttpPoster;
@@ -16,6 +11,24 @@ import com.dianping.ops.http.HttpResult;
 public class AlarmInfoTest {
 
 	@Test
+	public void testOpsAlarmHelper(){
+		String dataBaseUrl = "jdbc:mysql://10.1.101.216:3306/Taurus?characterEncoding=utf-8";
+		OpsAlarmHelper oaHelper = new OpsAlarmHelper();
+		
+		HttpResult result = oaHelper.buildTypeObject("Taurus")
+									.buildTypeItem("Service")
+									.buildTypeAttribute("Status")
+									.buildSource("taurus")
+									.buildDomain(dataBaseUrl.split(":")[2].split("/")[2])
+									.buildTitle("本地单元测试告警接口")
+									.buildContent("本地单元测试告警接口")
+									.buildUrl(dataBaseUrl)
+									.buildReceiver("dpop@dianping.com")
+									.sendAlarmPost("http://192.168.215.148/report/alarm/post");
+		System.out.println(result.isSuccess);
+	}
+	
+	//@Test
 	public void test3(){
 		String dataBaseUrl = "jdbc:mysql://10.1.101.216:3306/Taurus?characterEncoding=utf-8";
 		Map<String, String> header = new HashMap<String, String>();

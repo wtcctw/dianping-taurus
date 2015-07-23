@@ -7,16 +7,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.restlet.data.MediaType;
 import org.restlet.resource.ClientResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import com.dp.bigdata.taurus.restlet.resource.IGroupTasks;
-import com.dp.bigdata.taurus.restlet.resource.IUserTasks;
 
 @Controller
 public class MonitorCenterController {
@@ -40,9 +36,7 @@ public class MonitorCenterController {
             String end = request.getParameter("end");
 
             cr = new ClientResource(InitController.RESTLET_URL_BASE + "usertasks/" + username + "/" + start + "/" + end);
-            IUserTasks userTasks = cr.wrap(IUserTasks.class);
-            cr.accept(MediaType.APPLICATION_XML);
-            String jsonString = userTasks.retrieve();
+            String jsonString = cr.get(String.class);
             output.write(jsonString.getBytes());
             output.close();
 
@@ -53,9 +47,7 @@ public class MonitorCenterController {
             String end = request.getParameter("end");
 
             cr = new ClientResource(InitController.RESTLET_URL_BASE + "grouptasks/" + username + "/" + start + "/" + end);
-            IGroupTasks groupTasks = cr.wrap(IGroupTasks.class);
-            cr.accept(MediaType.APPLICATION_XML);
-            String jsonString = groupTasks.retrieve();
+            String jsonString = cr.get(String.class);
             output.write(jsonString.getBytes());
             output.close();
         }

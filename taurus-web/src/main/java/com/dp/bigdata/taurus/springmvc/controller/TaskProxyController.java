@@ -14,8 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.dp.bigdata.taurus.restlet.resource.IManualTaskResource;
-import com.dp.bigdata.taurus.restlet.resource.ITaskResource;
 import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
 import com.google.gson.Gson;
 
@@ -38,29 +36,26 @@ public class TaskProxyController {
         String taskID = request.getParameter("id").trim();
         
         ClientResource taskCr = new ClientResource(InitController.RESTLET_URL_BASE + "task/" + taskID);
-        ITaskResource taskResource = taskCr.wrap(ITaskResource.class);
-
         ClientResource manualCr = new ClientResource(InitController.RESTLET_URL_BASE + "manualtask/" + taskID);
-        IManualTaskResource manualResource = manualCr.wrap(IManualTaskResource.class);
 
         if(action.equals(DELETE)){
-            taskResource.remove();
-            System.out.println("Delete result code : " + manualCr.getStatus().getCode());
+        	taskCr.delete();
+            System.out.println("Delete result code : " + taskCr.getStatus().getCode());
             response.setStatus(taskCr.getStatus().getCode());
         }else if(action.equals(SUSPEND)){
-            manualResource.suspend();
+        	manualCr.put(null);
             System.out.println("Suspend result code : " + manualCr.getStatus().getCode());
             response.setStatus(manualCr.getStatus().getCode());
         }else if(action.equals(EXECUTE)){
-            manualResource.start();
+        	manualCr.get();
             System.out.println("Execute result code : " + manualCr.getStatus().getCode());
             response.setStatus(manualCr.getStatus().getCode());
         } else if (action.equals(RESUME)) {
-            manualResource.resume();
+        	manualCr.post(null);
             System.out.println("Resume result code : " + manualCr.getStatus().getCode());
             response.setStatus(manualCr.getStatus().getCode());
         } else if (action.equals(DETAIL)){
-            TaskDTO task = taskResource.retrieve();
+            TaskDTO task = taskCr.get(TaskDTO.class);
             response.setContentType("application/json");
             Gson gson = new Gson();  
             String json = gson.toJson(task);    

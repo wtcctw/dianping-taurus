@@ -4,25 +4,22 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.restlet.data.MediaType;
 import org.restlet.resource.ClientResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.dp.bigdata.taurus.core.Scheduler;
-import com.dp.bigdata.taurus.generated.module.Task;
-import com.dp.bigdata.taurus.restlet.resource.IAttemptsResource;
 import com.dp.bigdata.taurus.restlet.shared.AttemptDTO;
+import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -33,18 +30,16 @@ public class AttemptController {
 	
 	private final String ATTEMPT = "attempt";
 	
-	@Autowired
-    private Scheduler scheduler;
-	
 	@RequestMapping(value = "/attempt.do", method = RequestMethod.POST)
 	public void attemptDoPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		log.info("--------------init the attemptDoPost------------");
 		
 		String action = request.getParameter("action");
-        ClientResource cr;
+        ClientResource cr = null;
 
         if (ATTEMPT.equals(action)) { // 作业调度历史 attempt.ftl
-            Map<String ,Task> map = scheduler.getAllRegistedTask();
+        	cr = new ClientResource(InitController.RESTLET_URL_BASE + "registedTasks");
+        	Map<String ,TaskDTO> map = cr.get(HashMap.class);
 
             OutputStream output = response.getOutputStream();
 
@@ -54,14 +49,13 @@ public class AttemptController {
             String url = InitController.RESTLET_URL_BASE + "attempt?task_id=" + taskID;
             cr = new ClientResource(url);
             cr.setRequestEntityBuffering(true);
-            IAttemptsResource resource = cr.wrap(IAttemptsResource.class);
-            cr.accept(MediaType.APPLICATION_XML);
-            ArrayList<AttemptDTO> attempts = resource.retrieve();
-            Task task = map.get(taskID);
+            ArrayList<AttemptDTO> attempts = cr.get(ArrayList.class);
+            TaskDTO task = map.get(taskID);
             String taskName = task.getName();
-            String zabbixSwitch = InitController.ZABBIX_SWITCH;
+            
             boolean isViewLog = false;
-            if (zabbixSwitch.equals("false")){
+            
+            if (InitController.ZABBIX_SWITCH.equals("false")){
                 isViewLog = false;
             }else{
             	isViewLog = AttemptProxyController.isHostOverLoad(task.getHostname());

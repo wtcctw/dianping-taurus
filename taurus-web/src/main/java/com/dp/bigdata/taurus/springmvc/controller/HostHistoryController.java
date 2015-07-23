@@ -8,15 +8,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.restlet.data.MediaType;
 import org.restlet.resource.ClientResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import com.dp.bigdata.taurus.restlet.resource.IHostTaskExecTime;
 
 @Controller
 public class HostHistoryController {
@@ -37,10 +34,8 @@ public class HostHistoryController {
             String ip = request.getParameter("ip");
             String time = request.getParameter("time");
             cr = new ClientResource(InitController.RESTLET_URL_BASE + "runningMap/" + time + "/" + ip);
-            IHostTaskExecTime hostTaskExecTime = cr.wrap(IHostTaskExecTime.class);
-            cr.accept(MediaType.APPLICATION_XML);
             try {
-                String jsonString = hostTaskExecTime.retrieve();
+                String jsonString = cr.get(String.class);
                 if (StringUtils.isBlank(jsonString)){
                     output.write("[]".getBytes());
                 }else {
