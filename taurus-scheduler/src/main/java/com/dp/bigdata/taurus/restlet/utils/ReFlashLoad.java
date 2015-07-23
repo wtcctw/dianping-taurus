@@ -1,28 +1,24 @@
 package com.dp.bigdata.taurus.restlet.utils;
 
-import com.dp.bigdata.taurus.restlet.resource.IGetTasks;
-import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.restlet.resource.ClientResource;
 
-import java.util.ArrayList;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 /**
  * Created by kirinli on 14-10-11.
  */
 public class ReFlashLoad {
 
-    public static ArrayList<TaskDTO> getTasks(){
-        ClientResource crTask = new ClientResource("http://localhost:8192/api/gettasks");
-        IGetTasks taskResource = crTask.wrap(IGetTasks.class);
-        ArrayList<TaskDTO> tasks = taskResource.retrieve();
-        return  tasks;
-    }
+//    public static ArrayList<TaskDTO> getTasks(){
+//    	ClientResource crTask = new ClientResource("http://localhost:8192/gettasks");
+//        IGetTasks taskResource = crTask.wrap(IGetTasks.class);
+//        ArrayList<TaskDTO> tasks = taskResource.retrieve();
+//        return tasks;
+//    }
+    
     public static String reFlashHostLoadData(){
         ZabbixUtil.init();
         String jsonData = ZabbixUtil.getHosts();

@@ -13,8 +13,13 @@ import net.sf.json.JSONObject;
 import org.json.JSONException;
 import org.junit.Test;
 import org.restlet.Client;
+import org.restlet.Request;
+import org.restlet.Response;
+import org.restlet.Uniform;
+import org.restlet.data.Form;
 import org.restlet.data.Protocol;
 import org.restlet.ext.json.JsonRepresentation;
+import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +30,9 @@ import org.springframework.integration.http.converter.SerializingHttpMessageConv
 import org.springframework.web.client.RestTemplate;
 
 import com.dp.bigdata.taurus.restlet.shared.HostDTO;
+import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
 import com.dp.bigdata.taurus.restlet.shared.UserDTO;
+import com.dp.bigdata.taurus.springmvc.controller.InitController;
 
 public class CczTest {
 	
@@ -37,6 +44,35 @@ public class CczTest {
 	private String RESTLET_URL_BASE = "http://alpha.taurus.dp:8192/api/";
 	
 	@Test
+	public void testLocal(){
+		
+		String url = "http://localhost:8192/api/reflashHostLoad";
+		ClientResource cr = new ClientResource(url);
+		cr.setOnResponse(new Uniform() {
+		    @Override
+		    public void handle(Request request, Response response) {
+		        int statusCode = response.getStatus().getCode();
+		        System.out.println(statusCode);
+		    }
+		});
+		String hostLoadJsonData = cr.get(String.class);
+		//System.out.println(hostLoadJsonData);
+		System.out.println(cr.getStatus().getCode());
+//		Form form = new Form();
+//		Representation re = form.getWebRepresentation();
+//		re.setMediaType(MediaType.APPLICATION_XML);
+		hostLoadJsonData = cr.post(null, String.class);
+		System.out.println(hostLoadJsonData);
+		System.out.println(cr.getStatus().getCode());
+		ArrayList<TaskDTO> tasks = cr.put(null, ArrayList.class);
+		System.out.println(cr.getStatus().getCode());
+		
+//		for(TaskDTO task: tasks){
+//        	System.out.println(task.getName());
+//        }
+	}
+	
+	//@Test
 	public void testRest(){
 		
 		/*ArrayList<UserDTO> users = restTemplate.getForObject(RESTLET_URL_BASE + "user", ArrayList.class);
