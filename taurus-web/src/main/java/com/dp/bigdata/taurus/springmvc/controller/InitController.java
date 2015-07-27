@@ -79,15 +79,7 @@ public class InitController implements ServletContextAware {
 			MAIL_TO = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.feedback.mail.to");
 			SSO_LOGOUT_URL = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("cas-server-webapp.logoutUrl");
 		} catch (LionException e) {
-			/*RESTLET_URL_BASE = servletContext.getInitParameter("RESTLET_SERVER");
-			AGENT_PORT = "8080";
-			NEW_AGENT_PORT = "8088";
-			SWITCH_URL_ALL = "http://alpha.taurus.dp:8080,http://beta.taurus.dp,http://ppe.taurus.dp,http://taurus.dp";
-			DOMAIN = "http://taurus.dp";
-			ZABBIX_SWITCH = "true";
-			ADMIN_USER = "kirin.li,ling.su,chongze.chen";
-			MAIL_TO = "kirin.li@dianping.com";
-			SSO_LOGOUT_URL = "https://sso.dper.com/logout";*/
+			System.out.println("LION CONGIG ERROR++++++++:"+e.getMessage());
 			Cat.logError("LionException", e);
 		} catch (Exception e) {
 			Cat.logError("LionException", e);

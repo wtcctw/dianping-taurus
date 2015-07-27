@@ -30,17 +30,7 @@ import jodd.util.StringUtil;
  * Created by kirinli on 15/1/30.
  */
 public class AlertOfflineAgentTask  extends TimerTask {
-    private  static  String restlet_url_base;
-    static {
-        try {
-            restlet_url_base = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.restlet.url");
-        } catch (LionException e) {
-            restlet_url_base = "http://localhost:8192/api/";
-            Cat.logError("LionException", e);
-        } catch (Exception e) {
-            Cat.logError("LionException", e);
-        }
-    }
+    private final static String restlet_url_base = new String("http://localhost:8192/api/").intern();
 
     public void run() {
         // 监测异常的Agent 告警

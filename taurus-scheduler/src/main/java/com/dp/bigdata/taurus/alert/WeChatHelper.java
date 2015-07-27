@@ -25,7 +25,7 @@ public class WeChatHelper {
             wechat_url = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.wechat.api");
         } catch (LionException e) {
             e.printStackTrace();
-            wechat_url = "http://10.101.2.28:8080";
+            wechat_url = "http://common.dp:8080";
         }
 
         String wechat_api = wechat_url+ "/api";

@@ -5,6 +5,7 @@ import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
 import com.dianping.lion.client.LionException;
 import com.google.gson.JsonObject;
+
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,7 +49,8 @@ public class ZabbixUtil {
             authID = user_login();
 
         } catch (LionException e) {
-
+        	e.printStackTrace();
+        	System.out.println("LION CONGIG ERROR++++++++:"+e.getMessage());
         } catch (IOException e) {
             e.printStackTrace();
         }
