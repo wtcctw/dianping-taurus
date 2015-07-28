@@ -135,6 +135,12 @@
 	      <groupId>org.restlet.jee</groupId>
 	      <artifactId>org.restlet.ext.spring</artifactId>
 	      <version>${restletVersion}</version>
+	      <exclusions>
+	      	<exclusion>
+            	<artifactId>spring-asm</artifactId>
+                <groupId>org.springframework</groupId>
+            </exclusion>
+          </exclusions>
 	    </dependency>
 	    <dependency>
             <groupId>org.restlet.jse</groupId>
@@ -146,7 +152,6 @@
             <artifactId>org.restlet.ext.fileupload</artifactId>
             <version>${restletVersion}</version>
         </dependency>
-        
         <dependency>
             <groupId>org.restlet.jse</groupId>
             <artifactId>org.restlet</artifactId>
@@ -175,7 +180,7 @@
                     <artifactId>spring-expression</artifactId>
                     <groupId>org.springframework</groupId>
                 </exclusion>
-                 <exclusion>
+                <exclusion>
                     <artifactId>spring-asm</artifactId>
                     <groupId>org.springframework</groupId>
                 </exclusion>
