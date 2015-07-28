@@ -1,22 +1,19 @@
 package com.dp.bigdata.taurus.restlet.resource.impl;
 
-import com.dp.bigdata.taurus.generated.mapper.HostMapper;
-import com.dp.bigdata.taurus.generated.module.Host;
-import com.dp.bigdata.taurus.restlet.resource.IAllHosts;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import org.eclipse.jetty.util.ajax.JSON;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.restlet.ext.json.JsonRepresentation;
-import org.restlet.representation.Representation;
-import org.restlet.resource.ServerResource;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.restlet.ext.json.JsonRepresentation;
+import org.restlet.resource.ServerResource;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.dp.bigdata.taurus.generated.mapper.HostMapper;
+import com.dp.bigdata.taurus.generated.module.Host;
+import com.dp.bigdata.taurus.restlet.resource.IAllHosts;
 
 /**
  * Created by kirinli on 15/1/30.

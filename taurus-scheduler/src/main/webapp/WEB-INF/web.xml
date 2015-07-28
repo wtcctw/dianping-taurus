@@ -6,6 +6,11 @@
 	<display-name>Taurus Scheduler</display-name>
 	
 	<context-param>
+		<param-name>org.restlet.component</param-name>
+		<param-value>basecampComponent</param-value>
+	</context-param>
+	
+	<context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
         	classpath*:applicationContext*.xml
@@ -42,5 +47,16 @@
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
+	
+	<servlet>
+		<servlet-name>basecamp</servlet-name>
+		<servlet-class>org.restlet.ext.spring.SpringServerServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>basecamp</servlet-name>
+		<url-pattern>/*</url-pattern>
+	</servlet-mapping>
 	
 </web-app>

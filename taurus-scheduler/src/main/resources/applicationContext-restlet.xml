@@ -6,7 +6,7 @@
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
 
-	<bean id="component" class="org.restlet.ext.spring.SpringComponent">
+	<!-- <bean id="component" class="org.restlet.ext.spring.SpringComponent">
 		<property name="server" ref="server" />
 		<property name="defaultTarget" ref="router" />
 	</bean>
@@ -17,9 +17,18 @@
 	<bean id="server" class="org.restlet.ext.spring.SpringServer">
 		<constructor-arg value="http" />
 		<constructor-arg value="${taurus.web.restlet.port}" />
+	</bean> -->
+	
+
+	<bean id="basecampComponent" class="org.restlet.ext.spring.SpringComponent">
+		<property name="defaultTarget" ref="baseCampApplication" />
 	</bean>
-
-
+	
+	<bean id="baseCampApplication" class="com.dp.bigdata.taurus.restlet.utils.BaseCampApplication">
+		<property name="inboundRoot" ref="router" />
+	</bean>
+	
+	<!--  Define the router -->
 	<bean name="router" class="org.restlet.ext.spring.SpringBeanRouter" />
 
 	<!-- Singleton instance of RESTful Resource -->

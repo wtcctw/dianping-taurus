@@ -12,13 +12,6 @@ import com.google.gson.JsonObject;
  */
 public class ReFlashLoad {
 
-//    public static ArrayList<TaskDTO> getTasks(){
-//    	ClientResource crTask = new ClientResource("http://localhost:8192/gettasks");
-//        IGetTasks taskResource = crTask.wrap(IGetTasks.class);
-//        ArrayList<TaskDTO> tasks = taskResource.retrieve();
-//        return tasks;
-//    }
-    
     public static String reFlashHostLoadData(){
         ZabbixUtil.init();
         String jsonData = ZabbixUtil.getHosts();
