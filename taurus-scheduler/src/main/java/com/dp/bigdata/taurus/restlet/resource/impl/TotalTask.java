@@ -6,7 +6,6 @@ import com.dp.bigdata.taurus.generated.mapper.UserGroupMappingMapper;
 import com.dp.bigdata.taurus.generated.mapper.UserMapper;
 import com.dp.bigdata.taurus.generated.module.*;
 import com.dp.bigdata.taurus.restlet.resource.ITotalTask;
-import com.dp.bigdata.taurus.restlet.shared.UserDTO;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

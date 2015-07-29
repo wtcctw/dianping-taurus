@@ -11,6 +11,7 @@ import jodd.util.StringUtil;
 
 import com.dp.bigdata.taurus.restlet.resource.IUserResource;
 import com.dp.bigdata.taurus.restlet.shared.UserDTO;
+import com.dp.bigdata.taurus.restlet.utils.UserConverter;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -71,7 +72,7 @@ public class UserResource extends ServerResource implements IUserResource {
 		
 		if(users.size() == 1){
 			
-			result = new UserDTO(users.get(0));
+			result = UserConverter.toUserDTO(users.get(0));
 			UserGroupMappingExample mappingExample = new UserGroupMappingExample();
             mappingExample.or().andUseridEqualTo(result.getId());
             List<UserGroupMapping> userGroups = mappingMapper.selectByExample(mappingExample);
@@ -111,7 +112,7 @@ public class UserResource extends ServerResource implements IUserResource {
 		
 		Form form = new Form(re);
 		Map<String, String> formMap = new HashMap<String, String>(form.getValuesMap());
-		UserDTO user = new UserDTO();
+		UserDTO userDTO = new UserDTO();
 		String groupName = "";
 		
 		if (re == null) {
@@ -123,25 +124,25 @@ public class UserResource extends ServerResource implements IUserResource {
 			String key = entry.getKey();
 			String value = entry.getValue() == null ? "" : entry.getValue().trim();
 			if(key.equals(USER_ID)){
-				user.setId(Integer.parseInt(value));
+				userDTO.setId(Integer.parseInt(value));
 			} else if(key.equals(EMAIL)){
-				user.setMail(value);
+				userDTO.setMail(value);
 			} else if(key.equals(TEL)){
-				user.setTel(value);
+				userDTO.setTel(value);
 			} else if(key.equals(GROUP)){
-				user.setGroup(value);
+				userDTO.setGroup(value);
 				groupName = value;
 			} else if(key.equals(NAME)){
-				user.setName(value);
+				userDTO.setName(value);
 			}else if(key.equals(QQ)){
-                user.setQq(value);
+                userDTO.setQq(value);
             }
 
 		}
 		
-		userMapper.updateByPrimaryKey(user.getUser());
+		userMapper.updateByPrimaryKey(UserConverter.toUser(userDTO));
 		if(StringUtil.isNotBlank(groupName)){
-			// TODO 用户多分组保存用户表，分组表，用户分组映射表(完成)
+			// 用户多分组保存用户表，分组表，用户分组映射表(完成)
 			String[] userGroups = groupName.split(",");
 			List<Integer> groupIDs = new ArrayList<Integer>();
 			for(String userGroup : userGroups){
@@ -149,7 +150,7 @@ public class UserResource extends ServerResource implements IUserResource {
 				groupIDs.add(groupID);
 				//addUserGroupMapping(groupID,user.getId());
 			}
-			updateMultiUserGroupMapping(groupIDs, user.getId());
+			updateMultiUserGroupMapping(groupIDs, userDTO.getId());
 		}
 	}
 	//更新维护用户分组映射表（至多3个）

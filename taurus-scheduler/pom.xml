@@ -12,7 +12,7 @@
 
 	<properties>
 		<webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
-		<restletVersion>2.1.1</restletVersion>
+		<restletVersion>2.1.2</restletVersion>
 		<argLine>-Dfile.encoding=UTF-8</argLine>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<springFramework.version>4.0.5.RELEASE</springFramework.version>
@@ -144,16 +144,6 @@
 	    </dependency>
 	    <dependency>
             <groupId>org.restlet.jse</groupId>
-            <artifactId>org.restlet.ext.json</artifactId>
-            <version>${restletVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.restlet.jse</groupId>
-            <artifactId>org.restlet.ext.fileupload</artifactId>
-            <version>${restletVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.restlet.jse</groupId>
             <artifactId>org.restlet</artifactId>
             <version>${restletVersion}</version>
         </dependency>
@@ -164,7 +154,17 @@
         </dependency>
         <dependency>
             <groupId>org.restlet.jse</groupId>
+            <artifactId>org.restlet.ext.fileupload</artifactId>
+            <version>${restletVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.restlet.jse</groupId>
             <artifactId>org.restlet.ext.slf4j</artifactId>
+            <version>${restletVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.restlet.jse</groupId>
+            <artifactId>org.restlet.ext.json</artifactId>
             <version>${restletVersion}</version>
         </dependency>
         <dependency>
@@ -180,7 +180,7 @@
                     <artifactId>spring-expression</artifactId>
                     <groupId>org.springframework</groupId>
                 </exclusion>
-                <exclusion>
+                 <exclusion>
                     <artifactId>spring-asm</artifactId>
                     <groupId>org.springframework</groupId>
                 </exclusion>
