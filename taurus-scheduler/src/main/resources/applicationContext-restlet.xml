@@ -138,6 +138,8 @@
 		  scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.ReflashHostLoadResource" />
 	<bean name="/api/reflashHostLoad" id="reflashHostsLoadResource" autowire="byName" 
 		  scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.ReflashHostsLoadResource" />
+	<bean name="/api/healthCheck" id="healthCheckResource" autowire="byName" 
+		  scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.HealthCheckResource" />
 
 		<!-- Core Service -->
 		<bean id="agentDeployUtils"
