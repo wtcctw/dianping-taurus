@@ -148,6 +148,8 @@ final public class Engine implements Scheduler {
        }catch (DataAccessException e){
            Cat.logEvent("DataAccessException",e.getMessage());
            String dataBaseUrl = "";
+           OpsAlarmHelper oaHelper = new OpsAlarmHelper();
+           
            try {
                dataBaseUrl = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.jdbc.url");
 
@@ -174,24 +176,17 @@ final public class Engine implements Scheduler {
                    reportToOps = "http://pulse.dp/report/alarm/post";
                    le.printStackTrace();
                }
-               // 给运维报警
                
-               Map<String, String> header = new HashMap<String, String>();
-               Map<String, String> body = new HashMap<String, String>();
-               
-               body.put("typeObject", "Taurus");
-               body.put("typeItem", "Service");
-               body.put("typeAttribute", "Status");
-               body.put("source", "taurus");
-               // 摘出数据库ip给运维报警
-               body.put("domain", dataBaseUrl.split(":")[2].split("/")[2]);
-               body.put("title", "Taurus数据库连接异常");
-               body.put("content",exceptContext);
-               //此处动态修改
-               body.put("url", dataBaseUrl);
-               body.put("receiver", "dpop@dianping.com");
-				
-               HttpPoster.postWithoutException(reportToOps, header, body);
+               oaHelper.buildTypeObject("Taurus")
+						.buildTypeItem("Service")
+						.buildTypeAttribute("Status")
+						.buildSource("taurus")
+						.buildDomain(dataBaseUrl.split(":")[2].split("/")[2])
+						.buildTitle("Taurus数据库连接异常")
+						.buildContent(exceptContext)
+						.buildUrl(dataBaseUrl)
+						.buildReceiver("dpop@dianping.com")
+						.sendAlarmPost(reportToOps);
                
            }catch (LionException le){
                Cat.logEvent("LionException",le.getMessage());
@@ -231,15 +226,15 @@ final public class Engine implements Scheduler {
 				Cat.logEvent("DisConnected", ip);
 				try {
 					
-				String webDomain = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).
-               		   getProperty("taurus.web.serverName");
-                String exceptContext = "您好，taurus-agent的job主机 ["
+					OpsAlarmHelper oaHelper = new OpsAlarmHelper();
+					String webDomain = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.serverName");
+					String exceptContext = "您好，taurus-agent的job主机 ["
                         + ip
                         + "] 服务已经挂掉请重启，监控连接如下：" + webDomain + "/hosts?hostName="
                         + ip
                         +"，谢谢~";
 
-                String context = "您好，taurus-agent的job主机 ["
+					String context = "您好，taurus-agent的job主机 ["
                         + ip
                         + "] 心跳异常，监控连接如下：" + webDomain + "/hosts?hostName="
                         + ip
@@ -265,23 +260,17 @@ final public class Engine implements Scheduler {
                        MailHelper.sendMail("kirin.li@dianping.com", context, "Taurus-Agent主机心跳异常告警服务");
                        MailHelper.sendWeChat("kirin.li",context, "Taurus-Agent主机心跳异常告警服务");
 
-                       // 给运维报警
-                       Map<String, String> header = new HashMap<String, String>();
-                       Map<String, String> body = new HashMap<String, String>();
                        
-                       body.put("typeObject", "Taurus");
-                       body.put("typeItem", "Service");
-                       body.put("typeAttribute", "Status");
-                       body.put("source", "taurus");
-                       //此处动态修改
-                       body.put("domain", ip);
-                       body.put("title", "Taurus-Agent主机心跳异常告警服务");
-                       body.put("content",context);
-                       //此处动态修改
-                       body.put("url", webDomain + "/hosts?hostName=" + ip);
-                       body.put("receiver", "dpop@dianping.com");
-        				
-                       HttpPoster.postWithoutException(reportToOps, header, body);
+                        oaHelper.buildTypeObject("Taurus")
+								.buildTypeItem("Service")
+								.buildTypeAttribute("Status")
+								.buildSource("taurus")
+								.buildDomain(ip)
+								.buildTitle("Taurus-Agent主机心跳异常告警服务")
+								.buildContent(context)
+								.buildUrl(webDomain + "/hosts?hostName=" + ip)
+								.buildReceiver("dpop@dianping.com")
+								.sendAlarmPost(reportToOps);
                        
                     } else {
                         MailHelper.sendWeChat("kirin.li",exceptContext, "Taurus-Agent主机失联系告警服务");
@@ -292,24 +281,16 @@ final public class Engine implements Scheduler {
                         }
 
                         
-                        // 给运维报警
-                        Map<String, String> header = new HashMap<String, String>();
-                        Map<String, String> body = new HashMap<String, String>();
-                        
-                        body.put("typeObject", "Taurus");
-                        body.put("typeItem", "Service");
-                        body.put("typeAttribute", "Status");
-                        body.put("source", "taurus");
-                        //此处动态修改
-                        body.put("domain", ip);
-                        body.put("title", "Taurus-Agent主机失联系告警服务");
-                        body.put("content",exceptContext);
-                        //此处动态修改
-                        body.put("url", webDomain + "/hosts?hostName=" + ip);
-                        body.put("receiver", "monitor@dianping.com");
-         				
-                        HttpPoster.postWithoutException(reportToOps, header, body);
-                        
+                        oaHelper.buildTypeObject("Taurus")
+								.buildTypeItem("Service")
+								.buildTypeAttribute("Status")
+								.buildSource("taurus")
+								.buildDomain(ip)
+								.buildTitle("Taurus-Agent主机失联系告警服务")
+								.buildContent(exceptContext)
+								.buildUrl(webDomain + "/hosts?hostName=" + ip)
+								.buildReceiver("monitor@dianping.com")
+								.sendAlarmPost(reportToOps);
                         
                     }
 
@@ -830,7 +811,7 @@ final public class Engine implements Scheduler {
 
 	@Override
 	public void ExpireCongestionAttempt(String attemptID) {
-		// TODO Auto-generated method stub（待测试）
+		// Auto-generated method stub（待测试）
 		TaskAttemptExample example = new TaskAttemptExample();
         example.or().andAttemptidEqualTo(attemptID);
         List<TaskAttempt> attempts = taskAttemptMapper.selectByExample(example);
