@@ -274,6 +274,10 @@
                 	<artifactId>httpcore</artifactId>
                 	<groupId>org.apache.httpcomponents</groupId>
                 </exclusion>
+                <exclusion>
+                	<artifactId>cat-client</artifactId>
+                	<groupId>com.dianping.cat</groupId>
+                </exclusion>
             </exclusions>
 		</dependency>
 		<!-- 模块依赖 -->
