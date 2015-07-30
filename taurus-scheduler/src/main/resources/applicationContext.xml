@@ -7,6 +7,7 @@
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
     <bean name="placeholder" lazy-init="false" class="com.dianping.lion.client.InitializeConfig">
         <property name="propertiesPath" value="config/applicationContext.properties" />
+        <property name="includeLocalProps" value="false"></property>
     </bean>
 
     <bean id="startRestLet" class="com.dp.bigdata.taurus.restlet.TaurusServer" init-method="start" destroy-method="stop"/>
