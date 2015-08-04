@@ -210,6 +210,11 @@ final public class Engine implements Scheduler {
 			monitorThread.start();
 		}
 
+		Thread schedulerMonitor = new SchedulerMonitor();
+		schedulerMonitor.setDaemon(true);
+		schedulerMonitor.setName("Thread-" + SchedulerMonitor.class.getName());
+		schedulerMonitor.start();
+		
 		Thread refreshThread = new RefreshThread();
 		refreshThread.setDaemon(true);
 		refreshThread.setName("Thread-" + RefreshThread.class.getName());
@@ -342,6 +347,32 @@ final public class Engine implements Scheduler {
 	public void stop() {
 	}
 
+	class SchedulerMonitor extends Thread {
+		
+		private AtomicBoolean isInterrupted = new AtomicBoolean(false);
+
+		@Override
+		public void run() {
+
+			try {
+				while (!isInterrupted.get()) {
+
+
+					Thread.sleep(30 * 1000);
+				}
+			} catch (InterruptedException e) {
+				isInterrupted.set(true);
+				LOG.error("SchedulerMonitor was interrupted!", e);
+			}
+
+		}
+
+		public void shutdown() {
+			isInterrupted.set(true);
+		}
+		
+	}
+	
 	class TriggleTask extends Thread {
 		@Override
 		public void run() {

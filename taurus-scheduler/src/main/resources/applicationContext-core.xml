@@ -69,6 +69,10 @@
 	<bean id="statusChecker" class="com.dp.bigdata.taurus.core.DefaultAttemptStatusCheck" />
 	<bean id="agentMonitor" class="com.dp.bigdata.taurus.zookeeper.heartbeat.helper.PollingAgentMonitor"/>
 	<bean id="alert" class="com.dp.bigdata.taurus.alert.TaurusAlert" init-method="load"/>
+	
+	<bean id="schedulerHostLoadMonitor" class="">
+		<property name="next" ref="filter.maxConcurrency" />
+	</bean>
 </beans>
 
 
