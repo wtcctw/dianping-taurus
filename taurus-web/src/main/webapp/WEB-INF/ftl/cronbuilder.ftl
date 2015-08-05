@@ -497,13 +497,13 @@
             指定
         </div>
         <div class="imp weekList">
-            <input type="checkbox" value="1">1
-            <input type="checkbox" value="2">2
-            <input type="checkbox" value="3">3
-            <input type="checkbox" value="4">4
-            <input type="checkbox" value="5">5
-            <input type="checkbox" value="6">6
-            <input type="checkbox" value="7">7
+            <input type="checkbox" value="1">周日
+            <input type="checkbox" value="2">周一
+            <input type="checkbox" value="3">周二
+            <input type="checkbox" value="4">周三
+            <input type="checkbox" value="5">周四
+            <input type="checkbox" value="6">周五
+            <input type="checkbox" value="7">周六
         </div>
     </div>
 </div>
