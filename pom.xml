@@ -160,9 +160,9 @@ org.eclipse.jdt.core.compiler.compliance=1.6
 		<module>taurus-framework</module>
 		<module>taurus-zookeeper-helper</module>
 		<module>taurus-core</module>
-		<module>taurus-scheduler</module>
 		<module>taurus-web</module>
 		<module>taurus-agent</module>
+		<module>taurus-scheduler</module>
 		<module>taurus-spring-test</module>
 	</modules>
 </project>
