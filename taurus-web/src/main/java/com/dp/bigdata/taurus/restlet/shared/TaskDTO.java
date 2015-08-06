@@ -3,6 +3,10 @@ package com.dp.bigdata.taurus.restlet.shared;
 import java.io.Serializable;
 import java.util.Date;
 
+import com.dp.bigdata.taurus.core.TaskStatus;
+import com.dp.bigdata.taurus.generated.module.AlertRule;
+import com.dp.bigdata.taurus.generated.module.Task;
+
 public class TaskDTO implements Serializable {
 
 	/**
@@ -73,11 +77,52 @@ public class TaskDTO implements Serializable {
 	private String hadoopName;
 	
 	private Boolean iskillcongexp;
+	
+	public TaskDTO(){ }
+	
+	public TaskDTO(Task task){
+		//TODO 不知道跟spring类型的作业有什么需要注意的事项
+		this.setAddtime(task.getAddtime());
+		this.setAppName(task.getAppname());
+		this.setCommand(task.getCommand());
+		this.setCreator(task.getCreator());
+		this.setCrontab(task.getCrontab());
+		this.setDependencyexpr(task.getDependencyexpr());
+		this.setDescription(task.getDescription());
+		this.setExecutiontimeout(task.getExecutiontimeout());
+		this.setFilename(task.getFilename());
+		this.setHadoopName(task.getHadoopname());
+		this.setHostname(task.getHostname());
+		this.setAutoKill(task.getIsautokill());
+		this.setIsautoretry(task.getIsautoretry());
+		this.setIskillcongexp(task.getIskillcongexp());
+		this.setLastscheduletime(task.getLastscheduletime());
+		this.setName(task.getName());
+		this.setPoolid(task.getPoolid());
+		this.setProxyuser(task.getProxyuser());
+		this.setRetrytimes(task.getRetrytimes());
+		this.setStatus(TaskStatus.getTaskRunState(task.getStatus()));
+		this.setTaskid(task.getTaskid());
+		this.setType(task.getType());
+		this.setUpdatetime(task.getUpdatetime());
+		this.setWaittimeout(task.getWaittimeout());
+	}
 
 	public Date getAddtime() {
 		return addtime;
 	}
 
+	public AlertRule getAlertRule() {
+		AlertRule rule = new AlertRule();
+		rule.setConditions(conditions);
+		rule.setGroupid(groupid);
+		rule.setHasmail(hasmail);
+		rule.setHassms(hassms);
+		rule.setId(ruleID);
+		rule.setJobid(taskid);
+		rule.setUserid(userid);
+		return rule;
+	}
 
 	public String getCommand() {
 		return command;
@@ -163,6 +208,45 @@ public class TaskDTO implements Serializable {
 		return status;
 	}
 
+	public Task getTask() {
+		Task task = new Task();
+		task.setAddtime(addtime);
+		if (getType() != null && getType().equalsIgnoreCase("spring")) {
+			String springCommand;
+			if (mainClass != null) {
+				springCommand = mainClass + " " + command;
+			} else {
+				springCommand = command;
+			}
+			task.setCommand(springCommand);
+			task.setFilename(taskUrl);
+		} else {
+			task.setCommand(command);
+			task.setFilename(filename);
+		}
+		task.setCreator(creator);
+		task.setCrontab(crontab);
+		task.setDependencyexpr(dependencyexpr);
+		task.setDescription(description);
+		task.setExecutiontimeout(executiontimeout);
+		task.setHostname(hostname);
+		task.setIsautoretry(isautoretry);
+		task.setIsautokill(isAutoKill);
+		task.setName(name);
+		task.setLastscheduletime(lastscheduletime);
+		task.setPoolid(poolid);
+		task.setProxyuser(proxyuser);
+		task.setRetrytimes(retrytimes);
+		task.setStatus(TaskStatus.getTaskRunState(status));
+		task.setTaskid(taskid);
+		task.setType(type);
+		task.setUpdatetime(updatetime);
+		task.setWaittimeout(waittimeout);
+		task.setHadoopname(hadoopName);
+		task.setAppname(appName);
+		task.setIskillcongexp(iskillcongexp);
+		return task;
+	}
 
 	public String getTaskid() {
 		return taskid;

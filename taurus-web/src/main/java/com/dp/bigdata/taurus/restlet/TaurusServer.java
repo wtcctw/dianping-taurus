@@ -33,11 +33,11 @@ public class TaurusServer {
         try {
         	//System.out.println(new Date() + " [" + this.getClass().getName() + "] start restlet....");
             //restlet.start();
-//            alert.start(-1);
-//            engine.start();
-//            ClearLogsTimerManager.getClearLogsTimerManager().start();
-//            MonitorAgentOffLineTaskTimer.getMonitorAgentOffLineTimeManager().start();
-//            ReFlashHostLoadTaskTimer.getReFlashHostLoadManager().start();
+            alert.start(-1);
+            engine.start();
+            ClearLogsTimerManager.getClearLogsTimerManager().start();
+            MonitorAgentOffLineTaskTimer.getMonitorAgentOffLineTimeManager().start();
+            ReFlashHostLoadTaskTimer.getReFlashHostLoadManager().start();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -47,7 +47,7 @@ public class TaurusServer {
     public void stop() {
         System.setProperty("org.restlet.engine.loggerFacadeClass", "org.restlet.ext.slf4j.Slf4jLoggerFacade");
 
-        //engine.stop();
+        engine.stop();
 //        try {
 //            restlet.stop();
 //        } catch (Exception e) {

@@ -64,22 +64,6 @@
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.integration</groupId>
-			<artifactId>spring-integration-http</artifactId>
-			<version>${springFramework.version}</version>
-			<exclusions>
-				<exclusion>
-					<artifactId>rome-fetcher</artifactId>
-					<groupId>net.java.dev.rome</groupId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.ws</groupId>
-			<artifactId>spring-xml</artifactId>
-			<version>2.2.0.RELEASE</version>
-		</dependency>
 		<!-- freemarker视图模板引擎 -->
 		<dependency>
 		  <groupId>org.freemarker</groupId>
@@ -190,6 +174,27 @@
 		</dependency>
         <!-- restlet -->
         <dependency>
+	      <groupId>org.restlet.jee</groupId>
+	      <artifactId>org.restlet</artifactId>
+	      <version>${restletVersion}</version>
+	    </dependency>
+	    <dependency>
+	      <groupId>org.restlet.jee</groupId>
+	      <artifactId>org.restlet.ext.servlet</artifactId>
+	      <version>${restletVersion}</version>
+	    </dependency>
+	    <dependency>
+	      <groupId>org.restlet.jee</groupId>
+	      <artifactId>org.restlet.ext.spring</artifactId>
+	      <version>${restletVersion}</version>
+	      <exclusions>
+	      	<exclusion>
+            	<artifactId>spring-asm</artifactId>
+                <groupId>org.springframework</groupId>
+            </exclusion>
+          </exclusions>
+	    </dependency>
+	    <dependency>
             <groupId>org.restlet.jse</groupId>
             <artifactId>org.restlet</artifactId>
             <version>${restletVersion}</version>
@@ -281,6 +286,11 @@
             </exclusions>
 		</dependency>
 		<!-- 模块依赖 -->
+		<dependency>
+			<groupId>com.dp.bigdata</groupId>
+			<artifactId>taurus-core</artifactId>
+			<version>0.5.0</version>
+		</dependency>
 		<dependency>
 			<groupId>com.dp.bigdata</groupId>
 			<artifactId>taurus-zookeeper-helper</artifactId>

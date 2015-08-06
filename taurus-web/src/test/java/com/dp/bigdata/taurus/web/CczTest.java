@@ -25,8 +25,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.integration.http.converter.SerializingHttpMessageConverter;
+//import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+//import org.springframework.integration.http.converter.SerializingHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
 import com.dp.bigdata.taurus.restlet.shared.HostDTO;
@@ -37,10 +37,10 @@ import com.dp.bigdata.taurus.springmvc.controller.InitController;
 public class CczTest {
 	
 	private Logger log = LoggerFactory.getLogger(this.getClass());
-	private RestTemplate restTemplate = new RestTemplate(
+	/*private RestTemplate restTemplate = new RestTemplate(
 			new ArrayList<HttpMessageConverter<?>>(
 					Arrays.asList(
-							new SerializingHttpMessageConverter())));
+							new SerializingHttpMessageConverter())));*/
 	private String RESTLET_URL_BASE = "http://alpha.taurus.dp:8192/api/";
 	
 	@Test
@@ -98,23 +98,19 @@ public class CczTest {
 	//@Test
 	public void testRestlet(){
 		
-		String url = "http://beta.taurus.dp:8192/api/host";
-		
-        RestTemplate restTemplate = new RestTemplate();
-        List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
-        SerializingHttpMessageConverter myHttpMessageConverter = new SerializingHttpMessageConverter();
-//        List<MediaType> supportedMediaTypes = new ArrayList<MediaType>();
-//        supportedMediaTypes.add(new MediaType("application", "x-java-serialized-object"));
-//        myHttpMessageConverter.setSupportedMediaTypes(supportedMediaTypes);
-        messageConverters.add(myHttpMessageConverter);
-        restTemplate.setMessageConverters(messageConverters);
-        
-        //ResponseEntity<ArrayList> responseEntity = restTemplate.getForEntity(url, ArrayList.class);
-        ArrayList<HostDTO> hosts = restTemplate.getForObject(url, ArrayList.class);
-        
-        for(HostDTO host: hosts){
-        	System.out.println(host.getIp());
-        }
+//		String url = "http://beta.taurus.dp:8192/api/host";
+//		
+//        RestTemplate restTemplate = new RestTemplate();
+//        List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
+//        SerializingHttpMessageConverter myHttpMessageConverter = new SerializingHttpMessageConverter();
+//        messageConverters.add(myHttpMessageConverter);
+//        restTemplate.setMessageConverters(messageConverters);
+//        
+//        ArrayList<HostDTO> hosts = restTemplate.getForObject(url, ArrayList.class);
+//        
+//        for(HostDTO host: hosts){
+//        	System.out.println(host.getIp());
+//        }
         
 	}
 	

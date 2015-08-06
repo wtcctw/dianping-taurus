@@ -210,10 +210,10 @@ final public class Engine implements Scheduler {
 			monitorThread.start();
 		}
 
-		Thread schedulerMonitor = new SchedulerMonitor();
+		/*Thread schedulerMonitor = new SchedulerMonitor();
 		schedulerMonitor.setDaemon(true);
 		schedulerMonitor.setName("Thread-" + SchedulerMonitor.class.getName());
-		schedulerMonitor.start();
+		schedulerMonitor.start();*/
 		
 		Thread refreshThread = new RefreshThread();
 		refreshThread.setDaemon(true);

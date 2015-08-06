@@ -9,19 +9,9 @@
 		<property name="propertiesPath" value="config/applicationContext.properties" />
 		<property name="includeLocalProps" value="false"></property>
 	</bean>
+	
+	<bean id="startRestLet" class="com.dp.bigdata.taurus.restlet.TaurusServer" init-method="start" destroy-method="stop"/>
+    <bean id="alertBean" class="com.dp.bigdata.taurus.alert.TaurusAlert" />
 
-	<bean id="restTemplate" class="org.springframework.web.client.RestTemplate">
-		<property name="messageConverters">
-			<list>
-				<bean class="org.springframework.http.converter.ResourceHttpMessageConverter" />
-				<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
-				<bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter" />
-				<bean class="org.springframework.http.converter.FormHttpMessageConverter" />
-				<bean class="org.springframework.http.converter.StringHttpMessageConverter" />
-				<bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter" />
-				<bean class="org.springframework.integration.http.converter.SerializingHttpMessageConverter" />
-			</list>
-		</property>
-	</bean>
 
 </beans>
