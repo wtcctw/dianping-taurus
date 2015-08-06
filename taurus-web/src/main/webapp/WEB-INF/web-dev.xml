@@ -72,7 +72,7 @@
 	</session-config>
 
 	<!-- restlet 配置 -->
-	<context-param>
+	<!-- <context-param>
 		<param-name>org.restlet.component</param-name>
 		<param-value>basecampComponent</param-value>
 	</context-param>
@@ -84,7 +84,7 @@
 	<servlet-mapping>
 		<servlet-name>basecamp</servlet-name>
 		<url-pattern>/api/*</url-pattern>
-	</servlet-mapping>
+	</servlet-mapping> -->
 
 	<!-- spirng mvc 配置 -->
 	<servlet>
