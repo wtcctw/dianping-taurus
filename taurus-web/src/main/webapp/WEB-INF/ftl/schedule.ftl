@@ -177,257 +177,119 @@
             },
             success: function (response, textStatus) {
 
-                if(isAdmin == "false"){
-                    var jsonarray = $.parseJSON(response);
-                    scheduleBody += " <table cellpadding='0' cellspacing='0' border='0' class='table table-striped table-bordered table-hover' width='100%' id='example'>"
-                            + "<thead>"
-                            + "<tr>"
-                            + "<th class='hide'>ID</th>"
-                            + "<th width='15%'>名称</th>"
-                            + "<th>IP</th>"
-                            + "<th>调度人</th>"
-                            + "<th>调度身份</th>"
-                            + "<th class='hide'>组</th>"
-                            + "<th>创建时间</th>"
-                            + "<th>Crontab</th>"
-                            + "<th>状态</th>"
-                            + "<th>最后执行结果</th>"
-                            + "<th class='center'>-</th>"
-                            + "<th class='center'>-</th>"
-                            + "</tr>"
-                            + " </thead>"
-                            + "<tbody>";
+                var jsonarray = $.parseJSON(response);
+                scheduleBody += " <table cellpadding='0' cellspacing='0' border='0' class='table table-striped table-bordered table-hover' width='100%' id='example'>"
+                        + "<thead>"
+                        + "<tr>"
+                        + "<th class='hide'>ID</th>"
+                        + "<th width='15%'>名称</th>"
+                        + "<th>IP</th>"
+                        + "<th>调度人</th>"
+                        + "<th>调度身份</th>"
+                        + "<th class='hide'>组</th>"
+                        + "<th>创建时间</th>"
+                        + "<th>Crontab</th>"
+                        + "<th>状态</th>"
+                        + "<th class='center'>-</th>"
+                        + "<th class='center'>-</th>"
+                        + "</tr>"
+                        + " </thead>"
+                        + "<tbody>";
 
 
-                    $.each(jsonarray, function (i, item) {
-                        var state = item.state;
-                        var taskState = item.lastTaskStatus;
-                        var taskStatsLabel ="";
-                        if(taskState == "SUCCEEDED" ||taskState == "RUNNING"){
-                            taskStatsLabel = "<span class='label label-info'>"
-                                    + item.lastTaskStatus
-                                    + "</span>";
-                        }else{
-                            taskStatsLabel = "<span class='label label-important'>"
-                                    + item.lastTaskStatus
-                                    + "</span>";
-                        }
-                        var isRunning = true;
-                        if (state == "SUSPEND") {
-                            isRunning = false;
-                        }
+                $.each(jsonarray, function (i, item) {
+                    var state = item.state;
+                    var isRunning = true;
+                    if (state == "SUSPEND") {
+                        isRunning = false;
+                    }
 
-                        if (isRunning) {
-                            scheduleBody += "<tr id='" + item.taskId + "'>"
-                                    + "<td class='hide'>" + item.taskId + "</td>"
-                                    + "<td class='fixLength-td'>"
-                                    + item.taskName
-                                    + "</td>"
-                                    + "<td>"
-                                    + item.hostName
-                                    + "</td>"
-                                    + "<td>"
-                                    + item.creator
-                                    + "</td>"
-                                    + "<td>"
-                                    + item.proxyUser
-                                    + "</td>"
-                                    + "<td class='hide'>arch(mock)</td>"
-                                    + "<td>"
-                                    + item.addTime
-                                    + "</td>"
-                                    + "<td>"
-                                    + item.crontab
-                                    + "</td>"
-                                    + "<td>"
-                                    + "<span class='label label-info'>"
-                                    + item.state
-                                    + "</span>"
-                                    + "</td>"
-                                    +"<td>"
-                                    + taskStatsLabel
-                                    +"</td>"
-                                    + "<td>"
-                                    + "<div class='btn-group'>"
-                                    + "<button class='btn btn-success dropdown-toggle' data-toggle='dropdown'>"
-                                    + "Action"
-                                    + "<span class='icon-angle-down'></span></button>"
-                                    + "<ul class='dropdown-menu'>"
-                                    + "<li><a href='#confirm' onClick=\"action($(this).parents('tr').find('td')[0].textContent,1)\">删除</a></li>"
-                                    + "<li><a href='#confirm' onClick=\"action($(this).parents('tr').find('td')[0].textContent,2)\">暂停</a></li>"
-                                    + "<li><a href='#confirm' onClick=\"action($(this).parents('tr').find('td')[0].textContent,3)\">执行</a></li>"
-                                    + "<li><a class='detailBtn' href='${rc.contextPath}/task_form?task_id="
-                                    + item.taskId
-                                    + "' >详细</a></li></ul></div>"
-                                    +"</td>"
-                                    + "<td><a id='attempts' class='btn btn-primary btn-small' href='${rc.contextPath}/attempt?taskID=" + item.taskId + "' target= 'blank'>运行历史</a></td></tr>";
-                        } else {
-                            scheduleBody += "<tr id='" + item.taskId + "' class='error'>"
-                                    +"<td class='hide'>" + item.taskId + "</td>"
-                                    + "<td class='fixLength-td'>"
-                                    + item.taskName
-                                    + "</td>"
-                                    + "<td>"
-                                    + item.hostName
-                                    + "</td>"
-                                    + "<td>"
-                                    + item.creator
-                                    + "</td>"
-                                    + "<td>"
-                                    + item.proxyUser
-                                    + "</td>"
-                                    + "<td class='hide'>arch(mock)</td>"
-                                    + "<td>"
-                                    + item.addTime
-                                    + "</td>"
-                                    + "<td>"
-                                    + item.crontab
-                                    + "</td>"
-                                    +"<td>"
-                                    +"<span class='label label-important'>"
-                                    + item.state
-                                    + "</span>"
-                                    +"</td>"
-                                    +"<td>"
-                                    + taskStatsLabel
-                                    +"</td>"
-                                    +"<td>"
-                                    + "<div class='btn-group'>"
-                                    + "<button class='btn btn-success dropdown-toggle' data-toggle='dropdown'>"
-                                    + "Action"
-                                    + "<span class='icon-angle-down'></span></button>"
-                                    + "<ul class='dropdown-menu'>"
-                                    + "<li><a href='#confirm' onClick=\"action($(this).parents('tr').find('td')[0].textContent,1)\">删除</a></li>"
-                                    +"<li><a href='#confirm' onClick=\"action($(this).parents('tr').find('td')[0].textContent,2)\">恢复</a></li>"
-                                    +"<li><a href='#confirm' onClick=\"action($(this).parents('tr').find('td')[0].textContent,3)\">执行</a></li>"
-                                    + "<li><a class='detailBtn' href='${rc.contextPath}/task_form?task_id="
-                                    + item.taskId
-                                    + "' >详细</a></li></ul></div>"
-                                    +"</td>"
-                                    + "<td><a id='attempts' class='btn btn-primary btn-small' href='${rc.contextPath}/attempt?taskID=" + item.taskId + "' target= 'blank'>运行历史</a></td></tr>"
+                    if (isRunning) {
+                        scheduleBody += "<tr id='" + item.taskId + "'>"
+                                + "<td class='hide'>" + item.taskId + "</td>"
+                                + "<td class='fixLength-td'>"
+                                + item.taskName
+                                + "</td>"
+                                + "<td>"
+                                + item.hostName
+                                + "</td>"
+                                + "<td>"
+                                + item.creator
+                                + "</td>"
+                                + "<td>"
+                                + item.proxyUser
+                                + "</td>"
+                                + "<td class='hide'>arch(mock)</td>"
+                                + "<td>"
+                                + item.addTime
+                                + "</td>"
+                                + "<td>"
+                                + item.crontab
+                                + "</td>"
+                                + "<td>"
+                                + "<span class='label label-info'>"
+                                + item.state
+                                + "</span>"
+                                + "</td>"
+                                + "<td>"
+                                + "<div class='btn-group'>"
+                                + "<button class='btn btn-success dropdown-toggle' data-toggle='dropdown'>"
+                                + "Action"
+                                + "<span class='icon-angle-down'></span></button>"
+                                + "<ul class='dropdown-menu'>"
+                                + "<li><a href='#confirm' onClick=\"action($(this).parents('tr').find('td')[0].textContent,1)\">删除</a></li>"
+                                + "<li><a href='#confirm' onClick=\"action($(this).parents('tr').find('td')[0].textContent,2)\">暂停</a></li>"
+                                + "<li><a href='#confirm' onClick=\"action($(this).parents('tr').find('td')[0].textContent,3)\">执行</a></li>"
+                                + "<li><a class='detailBtn' href='${rc.contextPath}/task_form?task_id="
+                                + item.taskId
+                                + "' >详细</a></li></ul></div>"
+                                +"</td>"
+                                + "<td><a id='attempts' class='btn btn-primary btn-small' href='${rc.contextPath}/attempt?taskID=" + item.taskId + "' target= 'blank'>运行历史</a></td></tr>";
+                    } else {
+                        scheduleBody += "<tr id='" + item.taskId + "' class='error'>"
+                                +"<td class='hide'>" + item.taskId + "</td>"
+                                + "<td class='fixLength-td'>"
+                                + item.taskName
+                                + "</td>"
+                                + "<td>"
+                                + item.hostName
+                                + "</td>"
+                                + "<td>"
+                                + item.creator
+                                + "</td>"
+                                + "<td>"
+                                + item.proxyUser
+                                + "</td>"
+                                + "<td class='hide'>arch(mock)</td>"
+                                + "<td>"
+                                + item.addTime
+                                + "</td>"
+                                + "<td>"
+                                + item.crontab
+                                + "</td>"
+                                +"<td>"
+                                +"<span class='label label-important'>"
+                                + item.state
+                                + "</span>"
+                                +"</td>"
+                                +"<td>"
+                                + "<div class='btn-group'>"
+                                + "<button class='btn btn-success dropdown-toggle' data-toggle='dropdown'>"
+                                + "Action"
+                                + "<span class='icon-angle-down'></span></button>"
+                                + "<ul class='dropdown-menu'>"
+                                + "<li><a href='#confirm' onClick=\"action($(this).parents('tr').find('td')[0].textContent,1)\">删除</a></li>"
+                                +"<li><a href='#confirm' onClick=\"action($(this).parents('tr').find('td')[0].textContent,2)\">恢复</a></li>"
+                                +"<li><a href='#confirm' onClick=\"action($(this).parents('tr').find('td')[0].textContent,3)\">执行</a></li>"
+                                + "<li><a class='detailBtn' href='${rc.contextPath}/task_form?task_id="
+                                + item.taskId
+                                + "' >详细</a></li></ul></div>"
+                                +"</td>"
+                                + "<td><a id='attempts' class='btn btn-primary btn-small' href='${rc.contextPath}/attempt?taskID=" + item.taskId + "' target= 'blank'>运行历史</a></td></tr>"
 
-                        }
+                    }
 
-
-
-
-
-                    });
-                }else{
-                    var jsonarray = $.parseJSON(response);
-                    scheduleBody += " <table cellpadding='0' cellspacing='0' border='0' class='table table-striped table-bordered table-hover' width='100%' id='example'>"
-                            + "<thead>"
-                            + "<tr>"
-                            + "<th class='hide'>ID</th>"
-                            + "<th width='15%'>名称</th>"
-                            + "<th>IP</th>"
-                            + "<th>调度人</th>"
-                            + "<th>调度身份</th>"
-                            + "<th class='hide'>组</th>"
-                            + "<th>创建时间</th>"
-                            + "<th>Crontab</th>"
-                            + "<th>状态</th>"
-                            + "<th class='center'>-</th>"
-                            + "<th class='center'>-</th>"
-                            + "</tr>"
-                            + " </thead>"
-                            + "<tbody>";
-
-
-                    $.each(jsonarray, function (i, item) {
-                        var state = item.state;
-                        var isRunning = true;
-                        if (state == "SUSPEND") {
-                            isRunning = false;
-                        }
-
-                        if (isRunning) {
-                            scheduleBody += "<tr id='" + item.taskId + "'>"
-                                    + "<td class='hide'>" + item.taskId + "</td>"
-                                    + "<td class='fixLength-td'>"
-                                    + item.taskName
-                                    + "</td>"
-                                    + "<td>"
-                                    + item.hostName
-                                    + "</td>"
-                                    + "<td>"
-                                    + item.creator
-                                    + "</td>"
-                                    + "<td>"
-                                    + item.proxyUser
-                                    + "</td>"
-                                    + "<td class='hide'>arch(mock)</td>"
-                                    + "<td>"
-                                    + item.addTime
-                                    + "</td>"
-                                    + "<td>"
-                                    + item.crontab
-                                    + "</td>"
-                                    + "<td>"
-                                    + "<span class='label label-info'>"
-                                    + item.state
-                                    + "</span>"
-                                    + "</td>"
-                                    + "<td>"
-                                    + "<div class='btn-group'>"
-                                    + "<button class='btn btn-success dropdown-toggle' data-toggle='dropdown'>"
-                                    + "Action"
-                                    + "<span class='icon-angle-down'></span></button>"
-                                    + "<ul class='dropdown-menu'>"
-                                    + "<li><a href='#confirm' onClick=\"action($(this).parents('tr').find('td')[0].textContent,1)\">删除</a></li>"
-                                    + "<li><a href='#confirm' onClick=\"action($(this).parents('tr').find('td')[0].textContent,2)\">暂停</a></li>"
-                                    + "<li><a href='#confirm' onClick=\"action($(this).parents('tr').find('td')[0].textContent,3)\">执行</a></li>"
-                                    + "<li><a class='detailBtn' href='${rc.contextPath}/task_form?task_id="
-                                    + item.taskId
-                                    + "' >详细</a></li></ul></div>"
-                                    +"</td>"
-                                    + "<td><a id='attempts' class='btn btn-primary btn-small' href='${rc.contextPath}/attempt?taskID=" + item.taskId + "' target= 'blank'>运行历史</a></td></tr>";
-                        } else {
-                            scheduleBody += "<tr id='" + item.taskId + "' class='error'>"
-                                    +"<td class='hide'>" + item.taskId + "</td>"
-                                    + "<td class='fixLength-td'>"
-                                    + item.taskName
-                                    + "</td>"
-                                    + "<td>"
-                                    + item.hostName
-                                    + "</td>"
-                                    + "<td>"
-                                    + item.creator
-                                    + "</td>"
-                                    + "<td>"
-                                    + item.proxyUser
-                                    + "</td>"
-                                    + "<td class='hide'>arch(mock)</td>"
-                                    + "<td>"
-                                    + item.addTime
-                                    + "</td>"
-                                    + "<td>"
-                                    + item.crontab
-                                    + "</td>"
-                                    +"<td>"
-                                    +"<span class='label label-important'>"
-                                    + item.state
-                                    + "</span>"
-                                    +"</td>"
-                                    +"<td>"
-                                    + "<div class='btn-group'>"
-                                    + "<button class='btn btn-success dropdown-toggle' data-toggle='dropdown'>"
-                                    + "Action"
-                                    + "<span class='icon-angle-down'></span></button>"
-                                    + "<ul class='dropdown-menu'>"
-                                    + "<li><a href='#confirm' onClick=\"action($(this).parents('tr').find('td')[0].textContent,1)\">删除</a></li>"
-                                    +"<li><a href='#confirm' onClick=\"action($(this).parents('tr').find('td')[0].textContent,2)\">恢复</a></li>"
-                                    +"<li><a href='#confirm' onClick=\"action($(this).parents('tr').find('td')[0].textContent,3)\">执行</a></li>"
-                                    + "<li><a class='detailBtn' href='${rc.contextPath}/task_form?task_id="
-                                    + item.taskId
-                                    + "' >详细</a></li></ul></div>"
-                                    +"</td>"
-                                    + "<td><a id='attempts' class='btn btn-primary btn-small' href='${rc.contextPath}/attempt?taskID=" + item.taskId + "' target= 'blank'>运行历史</a></td></tr>"
-
-                        }
-
-                    });
-                }
+                });
 
                 scheduleBody +="</tbody> </table>";
 

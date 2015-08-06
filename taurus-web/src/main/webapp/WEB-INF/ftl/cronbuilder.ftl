@@ -444,6 +444,9 @@
 <div class="tab-pane " id="weektab">
     <div title="" class="panel-body panel-body-noheader panel-body-noborder" style="width: 830px; height: 320px;">
         <div class="line">
+            <span><font style="color:red;">注意，此处周日对应1，周六对应数字7</font></span>
+        </div>
+        <div class="line">
             <input type="radio" checked="checked" name="week" onclick="everyTime(this)">
             周 允许的通配符[, - * / L #]
         </div>

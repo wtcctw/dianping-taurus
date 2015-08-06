@@ -58,7 +58,7 @@
 		<filter-class>com.dp.bigdata.taurus.web.servlet.filter.AuthenticationFilter</filter-class>
 		<init-param>
 			<param-name>excludePage</param-name>
-			<param-value>/login.do,/signin,/rest/ssologin,/rest/ssologout,/error,/static/,/js/,/css/,/files/,/img/,/lib/,/resource/</param-value>
+			<param-value>/login.do,/signin,/rest/ssologin,/rest/ssologout,/error,/api/,/test/,/static/,/js/,/css/,/files/,/img/,/lib/,/resource/</param-value>
 		</init-param>
 	</filter>
 	<filter-mapping>
@@ -71,6 +71,20 @@
 		<session-timeout>720</session-timeout>
 	</session-config>
 
+	<!-- restlet 配置 -->
+	<context-param>
+		<param-name>org.restlet.component</param-name>
+		<param-value>basecampComponent</param-value>
+	</context-param>
+	<servlet>
+		<servlet-name>basecamp</servlet-name>
+		<servlet-class>org.restlet.ext.spring.SpringServerServlet</servlet-class>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>basecamp</servlet-name>
+		<url-pattern>/api/*</url-pattern>
+	</servlet-mapping>
 
 	<!-- spirng mvc 配置 -->
 	<servlet>
@@ -80,7 +94,7 @@
 			<param-name>contextConfigLocation</param-name>
 			<param-value>classpath:spring-mvc.xml</param-value>
 		</init-param>
-		<load-on-startup>2</load-on-startup>
+		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>springmvc-servlet</servlet-name>

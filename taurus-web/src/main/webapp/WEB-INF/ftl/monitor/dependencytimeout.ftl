@@ -4,7 +4,6 @@
 	<tr id="${dto.attemptID!}">
 	<#list tasks as task>
 	<#if task.taskid == dto.taskID>
-	<#assign lastTaskStatus = mHelper.getLastTaskStatus(dto.taskID)>
 		<td>${dto.taskID!}</td>
 		<td>${task.name!}</td>
 		<td>${(dto.startTime?string("yyyy-MM-dd HH:mm"))!"NULL"}</td>

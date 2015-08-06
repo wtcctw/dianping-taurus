@@ -9,7 +9,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.restlet.data.MediaType;
 import org.restlet.resource.ClientResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,11 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
-import com.dp.bigdata.taurus.zookeeper.execute.helper.ExecuteStatus;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 @Controller
 public class ScheduleController {
@@ -41,12 +37,12 @@ public class ScheduleController {
             OutputStream output = response.getOutputStream();
 
             String task_api = InitController.RESTLET_URL_BASE + "task";
-            String status_api = InitController.RESTLET_URL_BASE + "getlaststatus";
+            //String status_api = InitController.RESTLET_URL_BASE + "getlaststatus";
 
             String name = request.getParameter("name");
             String appname = request.getParameter("appname");
             String currentUser = request.getParameter("currentUser");
-            String isAdmin = request.getParameter("isAdmin");
+            //String isAdmin = request.getParameter("isAdmin");
 
             JsonArray sechedulesArray = new JsonArray();
 
@@ -66,7 +62,7 @@ public class ScheduleController {
             for (TaskDTO dto : tasks) {
                 JsonObject sechedule = new JsonObject();
                 String state = dto.getStatus();
-                String lastTaskStatus;
+                /*String lastTaskStatus;
 
                 if (isAdmin != null && isAdmin.equals("false")&& !state.equals("SUSPEND")) {
                     String status;
@@ -99,7 +95,7 @@ public class ScheduleController {
                     }
                 } else {
                     lastTaskStatus = "NULL";
-                }
+                }*/
 
 
                 sechedule.addProperty("state", state);
@@ -111,7 +107,7 @@ public class ScheduleController {
                 sechedule.addProperty("proxyUser", dto.getProxyuser());
                 sechedule.addProperty("addTime", formatter.format(dto.getAddtime()));
                 sechedule.addProperty("crontab", dto.getCrontab());
-                sechedule.addProperty("lastTaskStatus", lastTaskStatus);
+                //sechedule.addProperty("lastTaskStatus", lastTaskStatus);
                 sechedulesArray.add(sechedule);
             }
 

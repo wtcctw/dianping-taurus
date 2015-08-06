@@ -178,7 +178,7 @@ public class MonitorController {
              * @param taskID
              * @return
              */
-        public String getLastTaskStatus(String taskID) {
+        /*public String getLastTaskStatus(String taskID) {
             String status_api = InitController.RESTLET_URL_BASE +
                 "getlaststatus";
             String status = null;
@@ -210,6 +210,6 @@ public class MonitorController {
             }
 
             return lastTaskStatus;
-        }
+        }*/
     }
 }
