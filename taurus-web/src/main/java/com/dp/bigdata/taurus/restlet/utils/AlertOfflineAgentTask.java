@@ -26,7 +26,7 @@ import com.dp.bigdata.taurus.restlet.resource.IExceptionHosts;
  * Created by kirinli on 15/1/30.
  */
 public class AlertOfflineAgentTask  extends TimerTask {
-    private final static String Local_Restlet_Base = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.scheduler.restlet.url");
+    private final static String Local_Restlet_Base = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.restlet.url");
 
     
     public void run() {
