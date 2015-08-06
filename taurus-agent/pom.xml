@@ -120,11 +120,6 @@
             </exclusions>
         </dependency>
         <!-- 公司以及模块依赖 -->
-        <dependency>
-            <groupId>com.dianping.cat</groupId>
-            <artifactId>cat-core</artifactId>   
-            <version>1.2.7</version>
-        </dependency>
 		<dependency>
 			<groupId>com.dp.bigdata</groupId>
 			<artifactId>taurus-framework</artifactId>
