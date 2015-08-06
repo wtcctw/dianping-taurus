@@ -142,7 +142,7 @@
 		  scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.HealthCheckResource" />
 
 		<!-- Core Service -->
-		<bean id="agentDeployUtils"
+		<!-- <bean id="agentDeployUtils"
 			class="com.dp.bigdata.taurus.restlet.utils.DefaultAgentDeploymentUtils" />
 		<bean id="requestExtractor"
 			class="com.dp.bigdata.taurus.restlet.utils.TaskRequestExtractor" />
@@ -152,7 +152,7 @@
 			init-method="init" />
 		<bean id="filePathManager" class="com.dp.bigdata.taurus.restlet.utils.FilePathManager" />
 		<bean id="hostManager"
-			class="com.dp.bigdata.taurus.zookeeper.host.helper.DefaultHostManager" />
+			class="com.dp.bigdata.taurus.zookeeper.host.helper.DefaultHostManager" /> -->
 </beans>
 
 	
