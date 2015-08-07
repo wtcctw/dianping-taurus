@@ -3,7 +3,11 @@ package com.dp.bigdata.taurus.restlet.utils;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.StringTokenizer;
+
+import net.sf.json.JSONObject;
 
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
@@ -41,7 +45,8 @@ public class HostLoadUtil {
 	}
 
 	public static void main(String[] args){
-		HostLoadUtil hlu = new HostLoadUtil();
+		
+		/*HostLoadUtil hlu = new HostLoadUtil();
 		hlu.setFreeMemory(Runtime.getRuntime().freeMemory() / kb);
 		
 		System.out.println(hlu.getFreeMemory());
@@ -57,25 +62,41 @@ public class HostLoadUtil {
 		
 		System.out.println(cpuLoad.getLast1minLoad());
 		System.out.println(cpuLoad.getLast5minLoad());
-		System.out.println(cpuLoad.getLast15minLoad());
+		System.out.println(cpuLoad.getLast15minLoad());*/
 		
 		CommandLine cmdLine = new CommandLine("bash");
         cmdLine.addArgument("-c");
-        cmdLine.addArgument("uptime", false);
+        cmdLine.addArgument("echo conf | nc 192.168.7.41 2181", false);
         
-//        try {
-//        	OutputStream outAndErr = new ByteArrayOutputStream();
-//			int result = execcmd(cmdLine, null, outAndErr);
-//			System.out.println(outAndErr.toString());
-//			outAndErr.flush();
-//			outAndErr.close();
-//			
-//		} catch (ExecuteException e) {
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		} 
-        
+        try {
+        	OutputStream outAndErr = new ByteArrayOutputStream();
+			int exitValue = execcmd(cmdLine, null, outAndErr);
+			StringTokenizer stringTokenizer = new StringTokenizer(outAndErr.toString(),"\n");
+			
+			Map<String, String> map = new HashMap<String, String>();
+			
+			while(stringTokenizer.hasMoreTokens()) {
+				
+				StringTokenizer st = new StringTokenizer(stringTokenizer.nextToken(), "=");
+				String key = st.nextToken();
+				String value = st.nextToken();
+				map.put(key, value);
+				
+			}
+			
+			System.out.println(map.toString());
+			
+			//System.out.println(outAndErr.toString());
+			System.out.println("process exit value: " + exitValue);
+			outAndErr.flush();
+			outAndErr.close();
+			
+		} catch (ExecuteException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	
