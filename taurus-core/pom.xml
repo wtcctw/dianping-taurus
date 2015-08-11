@@ -9,7 +9,7 @@
 	<artifactId>taurus-core</artifactId>
 	<name>taurus-core</name>
 	<properties>
-		<springFramework.version>4.0.5.RELEASE</springFramework.version>
+		<springFramework.version>3.2.3.RELEASE</springFramework.version>
     </properties>
 	<dependencies>
 		<dependency>

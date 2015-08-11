@@ -9,6 +9,7 @@ import org.restlet.Component;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.dp.bigdata.taurus.core.Engine;
+import com.dp.bigdata.taurus.jersey.MyGrizzlyApp;
 
 /**
  * TaurusRestletServer mode: standalone | all
@@ -23,6 +24,7 @@ public class TaurusServer {
     public TaurusAlert alert;
     @Autowired
     public Component restlet;
+    
 
     public void start() {
 
@@ -33,9 +35,13 @@ public class TaurusServer {
             restlet.start();
             alert.start(-1);
             engine.start();
+            
             ClearLogsTimerManager.getClearLogsTimerManager().start();
             MonitorAgentOffLineTaskTimer.getMonitorAgentOffLineTimeManager().start();
             ReFlashHostLoadTaskTimer.getReFlashHostLoadManager().start();
+            
+            //MyGrizzlyApp.init();
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -46,8 +52,12 @@ public class TaurusServer {
         System.setProperty("org.restlet.engine.loggerFacadeClass", "org.restlet.ext.slf4j.Slf4jLoggerFacade");
 
         engine.stop();
+        
+        //MyGrizzlyApp.stop();
+        
         try {
             restlet.stop();
+            
         } catch (Exception e) {
             e.printStackTrace();
         }

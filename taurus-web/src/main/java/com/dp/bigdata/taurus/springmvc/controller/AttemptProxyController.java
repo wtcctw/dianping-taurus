@@ -8,8 +8,13 @@ import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
 
 import org.apache.commons.lang.StringUtils;
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.client.ClientProperties;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.restlet.data.MediaType;
@@ -23,8 +28,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.dp.bigdata.taurus.restlet.shared.AttemptDTO;
 import com.dp.bigdata.taurus.restlet.shared.HostDTO;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.WebResource;
 
 @Controller
 public class AttemptProxyController {
@@ -344,11 +347,19 @@ public class AttemptProxyController {
     
     
     public static String getAgentRestService(String restUrl) {
-        Client client = Client.create();
+    	
+    	ClientConfig configuration = new ClientConfig();
+    	configuration = configuration.property(ClientProperties.CONNECT_TIMEOUT, 1000);
+    	configuration = configuration.property(ClientProperties.READ_TIMEOUT, 1000);
+    	Client client = ClientBuilder.newClient(configuration);
+    	WebTarget target = client.target(restUrl);
+    	return target.request().get(String.class);
+    	
+        /*Client client = Client.create();
         client.setConnectTimeout(1000);
         client.setReadTimeout(1000);
         WebResource webResource = client.resource(restUrl);
-        return webResource.get(String.class);
+        return webResource.get(String.class);*/
     }
     
     private static String getHostName(String ip) {

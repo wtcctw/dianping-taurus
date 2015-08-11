@@ -29,6 +29,7 @@ import org.springframework.http.converter.HttpMessageConverter;
 //import org.springframework.integration.http.converter.SerializingHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+import com.dp.bigdata.taurus.jersey.MyGrizzlyApp;
 import com.dp.bigdata.taurus.restlet.shared.HostDTO;
 import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
 import com.dp.bigdata.taurus.restlet.shared.UserDTO;
@@ -43,7 +44,7 @@ public class CczTest {
 							new SerializingHttpMessageConverter())));*/
 	private String RESTLET_URL_BASE = "http://alpha.taurus.dp:8192/api/";
 	
-	@Test
+	//@Test
 	public void testLocal(){
 		
 		String url = "http://localhost:8192/api/reflashHostLoad";
