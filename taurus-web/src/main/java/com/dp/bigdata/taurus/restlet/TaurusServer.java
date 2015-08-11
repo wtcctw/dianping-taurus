@@ -51,9 +51,9 @@ public class TaurusServer {
     public void stop() {
         System.setProperty("org.restlet.engine.loggerFacadeClass", "org.restlet.ext.slf4j.Slf4jLoggerFacade");
 
-        engine.stop();
+      //MyGrizzlyApp.stop();
         
-        //MyGrizzlyApp.stop();
+        engine.stop();
         
         try {
             restlet.stop();

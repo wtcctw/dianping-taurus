@@ -3,6 +3,9 @@ package com.dp.bigdata.taurus.jersey;
 import java.net.URI;
 import java.text.MessageFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
 
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.filter.LoggingFilter;
@@ -63,7 +66,12 @@ public class MyGrizzlyApp {
 	}
 	
 	public static ResourceConfig createApp() {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("contextConfigLocation", "classpath:grizzlyContext.xml");
+		params.put(FreemarkerMvcFeature.TEMPLATES_BASE_PATH, "/freemarker");
+		
         return new ResourceConfig()
+        		.setProperties(params)
 		        .register(RequestContextFilter.class)
 		        .register(LoggingFilter.class)
 		        .register(FreemarkerMvcFeature.class)
@@ -77,6 +85,18 @@ public class MyGrizzlyApp {
 	}
 	
 	public static void main(String[] args){
-		log("INFO", "Grizzly Server is closed!");
+		init();
+		System.out.println("Print 'quit' and hit ENTER to quit app!");
+		Scanner sc = new Scanner(System.in);
+		sc.useDelimiter("\n");
+		
+		while (sc.hasNext()) {
+			
+			if("quit".equals(sc.next())){
+				stop();
+				break;
+			}
+			
+		}
 	}
 }
