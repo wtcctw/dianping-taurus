@@ -85,6 +85,11 @@ public class RestServiceServlet extends HttpServlet {
             OutputStream output = response.getOutputStream();
             output.write(respStr.getBytes());
             output.close();
+        } else {
+        	String respStr = "unknown";
+        	OutputStream output = response.getOutputStream();
+            output.write(respStr.getBytes());
+            output.close();
         }
 
     }
