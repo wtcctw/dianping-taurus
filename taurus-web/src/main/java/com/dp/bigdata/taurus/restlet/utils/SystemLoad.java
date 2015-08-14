@@ -1,6 +1,6 @@
 package com.dp.bigdata.taurus.restlet.utils;
 
-public class CpuLoad {
+public class SystemLoad {
 	
 	private String last1minLoad;
 	

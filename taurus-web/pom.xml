@@ -21,6 +21,7 @@
 		<jersey.version>2.6</jersey.version>
 		<springFramework.version>3.2.3.RELEASE</springFramework.version>
 		<spring-integration.version>3.0.0.RELEASE</spring-integration.version>
+		<dp.zebra.version>2.7.5</dp.zebra.version>
 		<webXmlPath>src/main/webapp/WEB-INF/web.xml</webXmlPath>
 		<webXmlPathDev>src/main/webapp/WEB-INF/web-dev.xml</webXmlPathDev>
     </properties>
@@ -293,6 +294,11 @@
 			<artifactId>ops-http-client</artifactId>
 			<version>1.0.16</version>
 		</dependency>
+		<dependency>
+            <groupId>com.dianping.zebra</groupId>
+            <artifactId>zebra-ds-monitor-client</artifactId>
+            <version>${dp.zebra.version}</version>
+        </dependency>
 		<dependency>
             <groupId>com.dianping</groupId>
             <artifactId>avatar-cache</artifactId>
