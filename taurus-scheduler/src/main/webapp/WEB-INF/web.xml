@@ -47,6 +47,15 @@
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
+    
+    <filter>
+		<filter-name>CoreFilter</filter-name>
+		<filter-class>com.dp.bigdata.taurus.scheduler.filter.CoreFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>CoreFilter</filter-name>
+		<url-pattern>/api/*</url-pattern>
+	</filter-mapping>
 	
 	<servlet>
 		<servlet-name>basecamp</servlet-name>

@@ -13,6 +13,7 @@
 	<properties>
 		<webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
 		<restletVersion>2.1.1</restletVersion>
+		<jersey.version>2.6</jersey.version>
 		<argLine>-Dfile.encoding=UTF-8</argLine>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<springFramework.version>4.0.5.RELEASE</springFramework.version>
@@ -33,6 +34,19 @@
 		    <groupId>xml-apis</groupId>
 		    <artifactId>xml-apis</artifactId>
 		    <version>1.4.01</version>
+		</dependency>
+		<!-- jersey -->
+		<dependency>
+		    <groupId>org.glassfish.jersey.containers</groupId>
+		    <!-- if your container implements Servlet API older than 3.0, use "jersey-container-servlet-core"  -->
+		    <artifactId>jersey-container-servlet</artifactId>
+		    <version>${jersey.version}</version>
+		</dependency>
+		<!-- Required only when you are using JAX-RS Client -->
+		<dependency>
+		    <groupId>org.glassfish.jersey.core</groupId>
+		    <artifactId>jersey-client</artifactId>
+		    <version>${jersey.version}</version>
 		</dependency>
 		<!-- spring framework -->
 		<dependency>

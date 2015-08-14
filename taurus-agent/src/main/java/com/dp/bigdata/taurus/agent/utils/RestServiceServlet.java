@@ -18,10 +18,7 @@ public class RestServiceServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        	String respStr = "imok";
-        	OutputStream output = resp.getOutputStream();
-            output.write(respStr.getBytes());
-            output.close();
+        	doPost(req, resp);
     }
 
     @Override
@@ -88,7 +85,12 @@ public class RestServiceServlet extends HttpServlet {
             OutputStream output = response.getOutputStream();
             output.write(respStr.getBytes());
             output.close();
-        } 
+        } else {
+        	String respStr = "imok";
+        	OutputStream output = response.getOutputStream();
+            output.write(respStr.getBytes());
+            output.close();
+        }
 
     }
 
