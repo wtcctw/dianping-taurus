@@ -153,16 +153,6 @@ public class LoginController {
 			if (userDTO != null) {
 				HttpSession session = request.getSession();
 				session.setAttribute(USER_NAME, userName);
-                CookieGenerator cookie = new CookieGenerator();
-                cookie.setCookieDomain(".taurus.dp");//这个也要设置才能实现上面的两个网站共用
-                cookie.setCookieMaxAge(1 * 24 * 60 * 60);
-                BASE64Encoder base64Encoder = new BASE64Encoder();
-
-                String cookieInfo = base64Encoder.encode(userName.getBytes());
-                String cookieName ="cookie_user_jsessionid";
-                cookie.setCookieName(cookieName);
-                cookie.addCookie(response, cookieInfo);
-                COOKIE_USER = userName;
                 
 				if(isInfoCompleted(userName)){
 					response.setStatus(200);
@@ -177,15 +167,6 @@ public class LoginController {
 		} else {
 			HttpSession session = request.getSession();
 			session.setAttribute(USER_NAME, userName);
-            CookieGenerator cookie = new CookieGenerator();
-            cookie.setCookieDomain(".taurus.dp");//这个也要设置才能实现上面的两个网站共用
-            cookie.setCookieMaxAge(1 * 24 * 60 * 60);
-            BASE64Encoder base64Encoder = new BASE64Encoder();
-            String cookieInfo = base64Encoder.encode(userName.getBytes());
-            String cookieName ="cookie_user_jsessionid";
-            cookie.setCookieName(cookieName);
-            COOKIE_USER = userName;
-            cookie.addCookie(response, cookieInfo);
             System.out.println("login success!");
 
 			ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "user");
