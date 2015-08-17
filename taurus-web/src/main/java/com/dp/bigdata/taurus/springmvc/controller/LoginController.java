@@ -144,8 +144,6 @@ public class LoginController {
 			e.printStackTrace();
 		}
 
-		log.info("found new ldap user: " + user.getName());
-		
 		if (user == null) {
 			ClientResource cr = new ClientResource(String.format("%s/%s", InitController.RESTLET_URL_BASE + "user", userName));
 			UserDTO userDTO = cr.get(UserDTO.class);
