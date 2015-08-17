@@ -10,17 +10,17 @@ public class ExecuteStatus {
 
     public static final int INITIALIZED = 1;
     public static final int DEPENDENCY_PASS = 2;
-    public static final int DEPENDENCY_TIMEOUT = 3;
+    public static final int DEPENDENCY_TIMEOUT = 3;//依赖超时
     public static final int SUBMIT_SUCCESS = 4;
     public static final int SUBMIT_FAIL = 5;
     public static final int RUNNING = 6;
     public static final int SUCCEEDED = 7;
     public static final int FAILED = 8;
-    public static final int TIMEOUT = 9;
-    public static final int AUTO_KILLED = 10;
+    public static final int TIMEOUT = 9;//执行时间超时
+    public static final int AUTO_KILLED = 10;//执行时间超时被自动杀死
     public static final int UNKNOWN = 11;
-    public static final int EXPIRED = 12;
-    public static final int MAN_KILLED = 13;
+    public static final int EXPIRED = 12;//拥塞调度过期
+    public static final int MAN_KILLED = 13;//人工杀死调度
 
     private static final String[] runStates = { "INITIALIZED", "DEPENDENCY_PASS", "DEPENDENCY_TIMEOUT", "SUBMIT_SUCCESS",
             "SUBMIT_FAIL", "RUNNING", "SUCCEEDED", "FAILED", "TIMEOUT", "KILLED", "UNKNOWN" , "EXPIRED", "MAN_KILLED" };

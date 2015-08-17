@@ -269,8 +269,7 @@
                 </div>
             </div>
             <div class="control-group col-sm-12 no-padding-left">
-                <label class="label label-lg label-info arrowed-right col-sm-2" for="multiInstance">自动kill
-                    timeout实例*</label>
+                <label class="label label-lg label-info arrowed-right col-sm-2" for="multiInstance">自动kill执行超时实例*</label>
 
                 <div class="controls field" id="isAutoKill">
                     <input type="radio" value="1" name="isAutoKill" checked> 是

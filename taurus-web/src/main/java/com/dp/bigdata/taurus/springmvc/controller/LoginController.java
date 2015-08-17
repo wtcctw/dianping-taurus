@@ -16,14 +16,29 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.util.CookieGenerator;
 
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
+
+import com.dp.bigdata.taurus.restlet.resource.IUserResource;
+import com.dp.bigdata.taurus.restlet.resource.IUsersResource;
 import com.dp.bigdata.taurus.restlet.shared.UserDTO;
+import com.dp.bigdata.taurus.web.servlet.LDAPAuthenticationService;
 
 @Controller
 public class LoginController {
 	
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 	
+	public static final String USER_NAME = "taurus-user";
+
+	public static final String USER_GROUP = "taurus-group";
+
+	public static final String USER_POWER = "taurus-user-power";
+	
+    public static  String COOKIE_USER = "";
+    
 	/**
 	 * 登陆sso
 	 * @param modelMap
@@ -120,7 +135,76 @@ public class LoginController {
 			return;
 		}
 		
-		ClientResource cr = new ClientResource(String.format("%s/%s", InitController.RESTLET_URL_BASE + "user", userName));
+		LDAPAuthenticationService authService = new LDAPAuthenticationService();
+		UserDTO user = null;
+
+		try {
+			user = authService.authenticate(userName, password);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		log.info("found new ldap user: " + user.getName());
+		
+		if (user == null) {
+			ClientResource cr = new ClientResource(String.format("%s/%s", InitController.RESTLET_URL_BASE + "user", userName));
+			UserDTO userDTO = cr.get(UserDTO.class);
+			
+			if (userDTO != null) {
+				HttpSession session = request.getSession();
+				session.setAttribute(USER_NAME, userName);
+                CookieGenerator cookie = new CookieGenerator();
+                cookie.setCookieDomain(".taurus.dp");//这个也要设置才能实现上面的两个网站共用
+                cookie.setCookieMaxAge(1 * 24 * 60 * 60);
+                BASE64Encoder base64Encoder = new BASE64Encoder();
+
+                String cookieInfo = base64Encoder.encode(userName.getBytes());
+                String cookieName ="cookie_user_jsessionid";
+                cookie.setCookieName(cookieName);
+                cookie.addCookie(response, cookieInfo);
+                COOKIE_USER = userName;
+                
+				if(isInfoCompleted(userName)){
+					response.setStatus(200);
+				} else{
+					response.setStatus(201);
+				}
+				
+			} else {
+				response.setStatus(401);
+			}
+			
+		} else {
+			HttpSession session = request.getSession();
+			session.setAttribute(USER_NAME, userName);
+            CookieGenerator cookie = new CookieGenerator();
+            cookie.setCookieDomain(".taurus.dp");//这个也要设置才能实现上面的两个网站共用
+            cookie.setCookieMaxAge(1 * 24 * 60 * 60);
+            BASE64Encoder base64Encoder = new BASE64Encoder();
+            String cookieInfo = base64Encoder.encode(userName.getBytes());
+            String cookieName ="cookie_user_jsessionid";
+            cookie.setCookieName(cookieName);
+            COOKIE_USER = userName;
+            cookie.addCookie(response, cookieInfo);
+            System.out.println("login success!");
+
+			ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "user");
+			IUsersResource resource = cr.wrap(IUsersResource.class);
+			UserDTO dto = new UserDTO();
+			dto.setName(userName);
+			dto.setMail(user.getMail());
+			resource.createIfNotExist(dto);
+			
+			if(isInfoCompleted(userName)){
+				response.setStatus(200);
+			} else{
+				response.setStatus(201);
+			}
+			
+		}
+		
+		
+		/*ClientResource cr = new ClientResource(String.format("%s/%s", InitController.RESTLET_URL_BASE + "user", userName));
 		UserDTO userDTO = cr.get(UserDTO.class);
 		if (userDTO != null) {
 			HttpSession session = request.getSession();
@@ -133,7 +217,7 @@ public class LoginController {
 			}
 		} else {
 			response.setStatus(401);
-		}
+		}*/
 		
 	}
 	/**

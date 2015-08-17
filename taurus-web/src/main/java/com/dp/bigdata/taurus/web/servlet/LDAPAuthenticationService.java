@@ -18,16 +18,16 @@ import com.dp.bigdata.taurus.restlet.shared.UserDTO;
 
 public class LDAPAuthenticationService {
 	private static Logger logger = Logger.getLogger(LDAPAuthenticationService.class);
-	private static String loginAttribute = "sAMAccountName";
+	private static String loginAttribute = "uid";
 	
-	private String ldapUrl = "ldap://idcldap.dianpingoa.com:389/DC=dianpingoa,DC=com";
+	private String ldapUrl = "ldap://192.168.104.12:389/DC=mkirin,DC=com";
 	private String ldapFactory = "com.sun.jndi.ldap.LdapCtxFactory"; 
 
 	private Control[] connCtls = null;
 	
-	private String solidDN = "cn=Users,DC=dianpingoa,DC=com";
-	private String solidUsername = "lionauth";
-	private String solidPwd = "bxHxXopGJOy78Jze3LWi";
+	private String solidDN = "ou=Group,dc=mkirin,dc=com";
+	private String solidUsername = "test1";
+	private String solidPwd = "123456";
 	
 	public UserDTO authenticate(String userName, String password) throws Exception {
 		UserDTO user = null;
