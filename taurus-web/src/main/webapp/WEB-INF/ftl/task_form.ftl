@@ -66,6 +66,7 @@
     </div>
 </div>
 <br>
+
 <div class="control-group col-sm-12">
     <label class="label label-lg label-info arrowed-right col-sm-2" for="crontab">Crontab*</label>
 
@@ -75,6 +76,7 @@
     </div>
 </div>
 <br>
+
 <div class="control-group col-sm-12">
     <label class="label label-lg label-info arrowed-right col-sm-2" for="taskCommand">命令*</label>
 
@@ -84,6 +86,7 @@
     </div>
 </div>
 <br>
+
 <div class="control-group col-sm-12">
     <label class="label label-lg label-info arrowed-right col-sm-2" for="proxyUser">运行身份（不可为root）*</label>
 
@@ -93,6 +96,7 @@
     </div>
 </div>
 <br>
+
 <div class="control-group col-sm-12">
     <label class="label label-lg label-info arrowed-right col-sm-2" for="description">描述*</label>
 
@@ -102,8 +106,9 @@
     </div>
 </div>
 <br>
+
 <div class="control-group col-sm-12">
-    <label class="label label-lg label-info arrowed-right col-sm-2">最长执行时间（分钟）*</label>
+    <label class="label label-lg label-info arrowed-right col-sm-2">作业最长执行时间(分钟)*</label>
 
     <div class="controls">
         <input type="number" class="input-small field "
@@ -112,38 +117,9 @@
     </div>
 </div>
 <br>
-<div class="control-group col-sm-12">
-    <label class="label label-lg label-info arrowed-right col-sm-2">依赖</label>
 
-    <div class="controls">
-        <input type="text" class="input-large field " id="dependency"
-               name="dependency" placeholder="dependency expression"
-               value="${dto.dependencyexpr!}" disabled>
-    </div>
-</div>
-<br>
 <div class="control-group col-sm-12">
-    <label class="label label-lg label-info arrowed-right col-sm-2">最长等待时间（分钟）*</label>
-
-    <div class="controls">
-        <input type="number" class="input-small field " id="maxWaitTime"
-               name="maxWaitTime" style="text-align: right"
-               value=${dto.waittimeout!} disabled>
-    </div>
-</div>
-<br>
-<div class="control-group col-sm-12">
-    <label class="label label-lg label-info arrowed-right col-sm-2">重试次数*</label>
-
-    <div class="controls">
-        <input type="number" class="input-small field " id="retryTimes"
-               name="retryTimes" style="text-align: right"
-               value=${dto.retrytimes!} disabled>
-    </div>
-</div>
-<br>
-<div class="control-group col-sm-12">
-    <label class="label label-lg label-info arrowed-right col-sm-4">自动kill timeout实例*</label>
+    <label class="label label-lg label-info arrowed-right col-sm-4">自动kill执行超时实例*</label>
 
     <div class="controls field" id="isAutoKill">
     <#if dto.isAutoKill() >
@@ -156,8 +132,42 @@
     </div>
 </div>
 <br>
+
 <div class="control-group col-sm-12">
-    <label class="label label-lg label-info arrowed-right col-sm-4">放弃拥塞后续实例*</label>
+    <label class="label label-lg label-info arrowed-right col-sm-2">作业依赖</label>
+
+    <div class="controls">
+        <input type="text" class="input-large field " id="dependency"
+               name="dependency" placeholder="dependency expression"
+               value="${dto.dependencyexpr!}" disabled>
+    </div>
+</div>
+
+<br>
+<div class="control-group col-sm-12">
+    <label class="label label-lg label-info arrowed-right col-sm-2">依赖最长等待时间(分钟)*</label>
+
+    <div class="controls">
+        <input type="number" class="input-small field " id="maxWaitTime"
+               name="maxWaitTime" style="text-align: right"
+               value=${dto.waittimeout!} disabled>
+    </div>
+</div>
+<br>
+
+<div class="control-group col-sm-12">
+    <label class="label label-lg label-info arrowed-right col-sm-2">作业失败重试次数*</label>
+
+    <div class="controls">
+        <input type="number" class="input-small field " id="retryTimes"
+               name="retryTimes" style="text-align: right"
+               value=${dto.retrytimes!} disabled>
+    </div>
+</div>
+
+<br>
+<div class="control-group col-sm-12">
+    <label class="label label-lg label-info arrowed-right col-sm-4">丢弃拥塞实例*</label>
 
     <div class="controls field" id="iskillcongexp">
     <#if dto.iskillcongexp >

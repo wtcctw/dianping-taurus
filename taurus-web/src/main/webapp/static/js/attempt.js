@@ -3,7 +3,7 @@ var taskId;
 function redo(id){
     taskId = id;
     $("#id_header").html("重跑");
-    var info = "确定要重跑任务<strong>" + id + "</strong>";
+    var info = "<span style='color:red;'>确定生成新实例并立即执行<strong>" + id + "</strong>吗？(注意：此处可以使多个任务实例并行执行)</span>";
     bootbox.confirm(info, function(result) {
         if(result) {
             redo_ok();

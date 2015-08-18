@@ -232,39 +232,11 @@
             <legend>可选设置</legend>
             <div class="control-group col-sm-12 no-padding-left">
                 <label class="label label-lg label-info arrowed-right col-sm-2"
-                       for="maxExecutionTime">最长执行时间（分钟）*</label>
-
+                       for="maxExecutionTime">作业最长执行时间(分钟)*</label>
+                       
                 <div class="controls">
                     <input type="number" class="input-small field" id="maxExecutionTime" name="maxExecutionTime"
                            style="text-align:right" value=60>
-                    <a href="${rc.contextPath}/about#config" target="view_window">帮助</a>
-                </div>
-            </div>
-            <div class="control-group col-sm-12 no-padding-left">
-                <label class="label label-lg label-info arrowed-right col-sm-2" for="dependency">依赖</label>
-
-                <div class="controls">
-                    <input type="text" class="input-large field" id="dependency" name="dependency"
-                           placeholder="dependency expression" value="">
-                    <a href="${rc.contextPath}/about#config" target="view_window">帮助</a>
-                </div>
-            </div>
-            <div class="control-group col-sm-12 no-padding-left">
-                <label class="label label-lg label-info arrowed-right col-sm-2" for="maxWaitTime">最长等待时间（分钟）*</label>
-
-                <div class="controls">
-                    <input type="number" class="input-small field" id="maxWaitTime" name="maxWaitTime"
-                           style="text-align:right" value=60>
-                    <a href="${rc.contextPath}/about#config" target="view_window">帮助</a>
-                </div>
-            </div>
-
-            <div class="control-group col-sm-12 no-padding-left">
-                <label class="label label-lg label-info arrowed-right col-sm-2" for="retryTimes">重试次数*</label>
-
-                <div class="controls">
-                    <input type="number" class="input-small field" id="retryTimes" name="retryTimes"
-                           style="text-align:right" value=0>
                     <a href="${rc.contextPath}/about#config" target="view_window">帮助</a>
                 </div>
             </div>
@@ -277,8 +249,38 @@
                     <span class="label">不要轻易修改，除非你确定其含义：<a href="${rc.contextPath}/about#config" target="view_window">帮助</a></span>
                 </div>
             </div>
+
             <div class="control-group col-sm-12 no-padding-left">
-                <label class="label label-lg label-info arrowed-right col-sm-2" for="multiInstance">放弃拥塞后续实例*</label>
+                <label class="label label-lg label-info arrowed-right col-sm-2" for="dependency">作业依赖</label>
+
+                <div class="controls">
+                    <input type="text" class="input-large field" id="dependency" name="dependency"
+                           placeholder="dependency expression" value="">
+                    <a href="${rc.contextPath}/about#config" target="view_window">帮助</a>
+                </div>
+            </div>
+            <div class="control-group col-sm-12 no-padding-left">
+                <label class="label label-lg label-info arrowed-right col-sm-2" for="maxWaitTime">依赖最长等待时间(分钟)*</label>
+
+                <div class="controls">
+                    <input type="number" class="input-small field" id="maxWaitTime" name="maxWaitTime"
+                           style="text-align:right" value=60>
+                    <a href="${rc.contextPath}/about#config" target="view_window">帮助</a>
+                </div>
+            </div>
+
+            <div class="control-group col-sm-12 no-padding-left">
+                <label class="label label-lg label-info arrowed-right col-sm-2" for="retryTimes">作业失败重试次数*</label>
+
+                <div class="controls">
+                    <input type="number" class="input-small field" id="retryTimes" name="retryTimes"
+                           style="text-align:right" value=0>
+                    <a href="${rc.contextPath}/about#config" target="view_window">帮助</a>
+                </div>
+            </div>
+            
+            <div class="control-group col-sm-12 no-padding-left">
+                <label class="label label-lg label-info arrowed-right col-sm-2" for="multiInstance">丢弃拥塞实例*</label>
 
                 <div class="controls field" id="iskillcongexp">
                     <input type="radio" value="1" name="iskillcongexp"> 是

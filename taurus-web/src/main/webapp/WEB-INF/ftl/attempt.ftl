@@ -35,7 +35,7 @@
             </li>
         </ul>
         <div style="float:right;padding-right: 5%">
-            <a class="btn btn-info" href='#' onClick="redo('${RequestParameters.taskID!}')"><i class="icon-repeat">重跑该任务</i></a>
+            <a class="btn btn-info" href='#' onClick="redo('${RequestParameters.taskID!}')"><i class="icon-repeat">生成新实例并立即执行</i></a>
         </div>
     </div>
 
