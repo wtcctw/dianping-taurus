@@ -28,7 +28,6 @@ import com.dianping.cat.message.Transaction;
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
 import com.dianping.lion.client.LionException;
-import com.dianping.ops.http.HttpPoster;
 import com.dp.bigdata.taurus.generated.mapper.HostMapper;
 import com.dp.bigdata.taurus.generated.mapper.TaskAttemptMapper;
 import com.dp.bigdata.taurus.generated.mapper.TaskMapper;
