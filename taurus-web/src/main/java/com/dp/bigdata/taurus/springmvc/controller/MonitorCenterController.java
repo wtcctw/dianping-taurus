@@ -14,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
+
 @Controller
 public class MonitorCenterController {
 
@@ -35,7 +37,7 @@ public class MonitorCenterController {
             String start = request.getParameter("start");
             String end = request.getParameter("end");
 
-            cr = new ClientResource(InitController.RESTLET_URL_BASE + "usertasks/" + username + "/" + start + "/" + end);
+            cr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "usertasks/" + username + "/" + start + "/" + end);
             String jsonString = cr.get(String.class);
             output.write(jsonString.getBytes());
             output.close();
@@ -46,7 +48,7 @@ public class MonitorCenterController {
             String start = request.getParameter("start");
             String end = request.getParameter("end");
 
-            cr = new ClientResource(InitController.RESTLET_URL_BASE + "grouptasks/" + username + "/" + start + "/" + end);
+            cr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "grouptasks/" + username + "/" + start + "/" + end);
             String jsonString = cr.get(String.class);
             output.write(jsonString.getBytes());
             output.close();

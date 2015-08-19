@@ -31,6 +31,7 @@ import com.dp.bigdata.taurus.restlet.shared.StatusDTO;
 import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
 import com.dp.bigdata.taurus.restlet.shared.UserDTO;
 import com.dp.bigdata.taurus.restlet.shared.UserGroupDTO;
+import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
 
 @Controller
 public class HomeController {
@@ -1068,7 +1069,7 @@ public class HomeController {
 		globalViewVariable.currentUser = (String) request.getSession().getAttribute(InitController.USER_NAME);
 		globalViewVariable.userId = -1;
 		
-		globalViewVariable.host = InitController.RESTLET_URL_BASE;
+		globalViewVariable.host = LionConfigUtil.RESTLET_API_BASE;
 		
 		globalViewVariable.isAdmin = false;
 		globalViewVariable.cr = new ClientResource(globalViewVariable.host + "user");

@@ -14,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
+
 @Controller
 public class TaskCenterController {
 	private Logger log = LoggerFactory.getLogger(this.getClass());
@@ -33,7 +35,7 @@ public class TaskCenterController {
             OutputStream output = response.getOutputStream();
             String start = request.getParameter("start");
             String end = request.getParameter("end");
-            String apiUrl = InitController.RESTLET_URL_BASE + "totaltaskload/" + start + "/" + end;
+            String apiUrl = LionConfigUtil.RESTLET_API_BASE + "totaltaskload/" + start + "/" + end;
             ClientResource crToal = new ClientResource(apiUrl);
 
             String jsonString = crToal.get(String.class);
@@ -44,7 +46,7 @@ public class TaskCenterController {
             OutputStream output = response.getOutputStream();
             String start = request.getParameter("start");
             String end = request.getParameter("end");
-            String apiUrl = InitController.RESTLET_URL_BASE + "failedtaskload/" + start + "/" + end;
+            String apiUrl = LionConfigUtil.RESTLET_API_BASE + "failedtaskload/" + start + "/" + end;
             ClientResource crFail = new ClientResource(apiUrl);
 
             String jsonString = crFail.get(String.class);
@@ -56,7 +58,7 @@ public class TaskCenterController {
             String start = request.getParameter("start");
             String end = request.getParameter("end");
 
-            cr = new ClientResource(InitController.RESTLET_URL_BASE + "totaltasks/" + start + "/" + end);
+            cr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "totaltasks/" + start + "/" + end);
             String jsonString = cr.get(String.class);
             output.write(jsonString.getBytes());
             output.close();

@@ -75,4 +75,10 @@ public class DefaultAgentMonitor implements AgentMonitor {
         });
     }
 
+	@Override
+	public void interruptMonitor(boolean interrupt) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dp.bigdata.taurus.restlet.shared.UserDTO;
 import com.dp.bigdata.taurus.restlet.shared.UserGroupDTO;
+import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
 import com.dp.bigdata.taurus.springmvc.bean.WebResult;
 import com.dp.bigdata.taurus.springmvc.service.ITestService;
 
@@ -77,7 +78,7 @@ public class TestController {
 		log.info("--------------init the test/saveUser------------");
 		
 		WebResult result = new WebResult(request);
-		ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "user/" + request.getParameter("userName"));
+		ClientResource cr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "user/" + request.getParameter("userName"));
 
 		Form form = new Form();
 		
@@ -173,7 +174,7 @@ public class TestController {
 		WebResult result = new WebResult(request);
 
 		// 检测正常Agent 发现异常 告警
-		ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "allhosts");
+		ClientResource cr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "allhosts");
         String onlineHosts = cr.get(String.class);
         
         
@@ -210,7 +211,7 @@ public void commonnav(HttpServletRequest request,GlobalViewVariable globalViewVa
 		globalViewVariable.currentUser = (String) request.getSession().getAttribute(InitController.USER_NAME);
 		globalViewVariable.userId = -1;
 		
-		globalViewVariable.host = InitController.RESTLET_URL_BASE;
+		globalViewVariable.host = LionConfigUtil.RESTLET_API_BASE;
 		
 		globalViewVariable.isAdmin = false;
 		globalViewVariable.cr = new ClientResource(globalViewVariable.host + "user");

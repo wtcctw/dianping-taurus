@@ -16,7 +16,13 @@ public class ClearLogsTimerManager {
     
     private Logger log = LoggerFactory.getLogger(this.getClass());
     
-    private ClearLogsTimerManager (){}
+    private Timer timer;
+    
+    public Timer getTimer() {
+		return timer;
+	}
+
+	private ClearLogsTimerManager (){}
     
     //时间间隔
     private static final long PERIOD_DAY = 24 * 60 * 60 * 1000;
@@ -44,11 +50,19 @@ public class ClearLogsTimerManager {
 
         Date date=calendar.getTime(); //第一次执行定时任务的时间
 
-        Timer timer = new Timer();
+        timer = new Timer();
 
         ClearLogsTask task = new ClearLogsTask();
         //安排指定的任务在指定的时间开始进行重复的固定延迟执行。
         timer.schedule(task,date,PERIOD_DAY);
+        
+    }
+    
+    public void stop(){
+    	log.info("stop ClearLogsTimerManager");
+    	
+    	timer.cancel();
+    	timer = null;
     }
 
 

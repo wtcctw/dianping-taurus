@@ -21,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
 import com.dp.bigdata.taurus.zookeeper.deploy.helper.DeployStatus;
 
 @Controller
@@ -41,7 +42,7 @@ public class DeployController {
 		if (action.equals(STATUS)){
 		    String deployId = request.getParameter("deployId");
 		    String name = request.getParameter("appName");
-		    cr = new ClientResource(InitController.RESTLET_URL_BASE + "deploy?" + request.getQueryString());
+		    cr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "deploy?" + request.getQueryString());
 		    Representation result = cr.get();
 		    JsonRepresentation jr = new JsonRepresentation(result);
 		    

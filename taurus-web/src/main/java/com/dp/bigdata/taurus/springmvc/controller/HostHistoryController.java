@@ -15,6 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
+
 @Controller
 public class HostHistoryController {
 	
@@ -33,7 +35,7 @@ public class HostHistoryController {
             OutputStream output = response.getOutputStream();
             String ip = request.getParameter("ip");
             String time = request.getParameter("time");
-            cr = new ClientResource(InitController.RESTLET_URL_BASE + "runningMap/" + time + "/" + ip);
+            cr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "runningMap/" + time + "/" + ip);
             try {
                 String jsonString = cr.get(String.class);
                 if (StringUtils.isBlank(jsonString)){

@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.dp.bigdata.taurus.restlet.shared.AttemptDTO;
 import com.dp.bigdata.taurus.restlet.shared.HostDTO;
+import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
 
 @Controller
 public class AttemptProxyController {
@@ -49,7 +50,7 @@ public class AttemptProxyController {
 		String attemptID = request.getParameter("id");
         String action = request.getParameter("action") == null ? "" : request.getParameter("action").toLowerCase();
 
-        ClientResource attemptCr = new ClientResource(InitController.RESTLET_URL_BASE + "attempt/" + attemptID);
+        ClientResource attemptCr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "attempt/" + attemptID);
 
         if (action.equals(KILL)) {
         	attemptCr.delete();
@@ -81,7 +82,7 @@ public class AttemptProxyController {
 
             Date startTime = null;
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            ClientResource attemptLogCr = new ClientResource(InitController.RESTLET_URL_BASE + "getattemptbyid/" + attemptID);
+            ClientResource attemptLogCr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "getattemptbyid/" + attemptID);
 
             try {
 
@@ -94,7 +95,7 @@ public class AttemptProxyController {
                 } else {
                     fileSizeAttribute = "agentlogs";
                     String hostName = request.getParameter("hostname");
-                    ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "host/" + hostName);
+                    ClientResource cr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "host/" + hostName);
                     HostDTO hostDTO = cr.get(HostDTO.class);
                     String agentPort = "";
                     if (hostDTO.getInfo().getAgentVersion().equals("0.5.0")) {
@@ -152,7 +153,7 @@ public class AttemptProxyController {
                 } else {
 
                     try {
-                        ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "host/" + hostIp);
+                        ClientResource cr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "host/" + hostIp);
                         HostDTO hostDTO = cr.get(HostDTO.class);
                         String agentPort;
                         if (hostDTO.getInfo().getAgentVersion().equals("0.5.0")) {
@@ -219,7 +220,7 @@ public class AttemptProxyController {
                         String exceptMessage = e.getMessage();
                         if (exceptMessage.equals("Connection Error") || exceptMessage.equals("Not Found")) {
                             response.setContentType("text/html;charset=utf-8");
-                            ClientResource oldAgentCr = new ClientResource(InitController.RESTLET_URL_BASE + "attempt/" + attemptID);
+                            ClientResource oldAgentCr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "attempt/" + attemptID);
                             try {
                                 Representation rep = oldAgentCr.get(MediaType.TEXT_HTML);
                                 if (attemptCr.getStatus().getCode() == 200) {
@@ -250,7 +251,7 @@ public class AttemptProxyController {
 
         } else if (action.equals(ISEND)) {
             String host = "";
-            ClientResource attemptLogCr = new ClientResource(InitController.RESTLET_URL_BASE + "getattemptbyid/" + attemptID);
+            ClientResource attemptLogCr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "getattemptbyid/" + attemptID);
             AttemptDTO dto = attemptLogCr.get(AttemptDTO.class);
 
             if (dto != null) {
@@ -262,7 +263,7 @@ public class AttemptProxyController {
                 OutputStream output = response.getOutputStream();
                 output.close();
             } else {
-                ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "host/" + host);
+                ClientResource cr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "host/" + host);
                 HostDTO hostDTO = cr.get(HostDTO.class);
                 String agentPort = "";
                 if (hostDTO.getInfo().getAgentVersion().equals("0.5.0")) {
@@ -282,7 +283,7 @@ public class AttemptProxyController {
             output.close();
         } else if (action.equals(STATUS)) {
             String taskStatus = "";
-            ClientResource attemptLogCr = new ClientResource(InitController.RESTLET_URL_BASE + "getattemptbyid/" + attemptID);
+            ClientResource attemptLogCr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "getattemptbyid/" + attemptID);
             AttemptDTO dto = attemptLogCr.get(AttemptDTO.class);
 
             if (dto != null) {
@@ -294,11 +295,11 @@ public class AttemptProxyController {
             output.close();
         } else if (action.equals(ISNEW)) {
             OutputStream output = response.getOutputStream();
-            ClientResource attemptLogCr = new ClientResource(InitController.RESTLET_URL_BASE + "getattemptbyid/" + attemptID);
+            ClientResource attemptLogCr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "getattemptbyid/" + attemptID);
             AttemptDTO dto = attemptLogCr.get(AttemptDTO.class);
             String isNew;
             if (dto != null) {
-                ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "host/" + dto.getExecHost());
+                ClientResource cr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "host/" + dto.getExecHost());
                 HostDTO hostDTO = cr.get(HostDTO.class);
                 String agentPort = "";
                 if (hostDTO.getInfo().getAgentVersion().equals("0.5.0")) {
@@ -337,7 +338,7 @@ public class AttemptProxyController {
 
             String taskId = request.getParameter("taskId");
 
-            ClientResource runningTaskCr = new ClientResource(InitController.RESTLET_URL_BASE + "runningtask/" + taskId);
+            ClientResource runningTaskCr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "runningtask/" + taskId);
             String isExist = runningTaskCr.get(String.class);
 
             output.write(isExist.getBytes());
@@ -396,7 +397,7 @@ public class AttemptProxyController {
     public static boolean isHostOverLoad(String ip) {
         
     	String hostName = getHostName(ip);
-        ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "reflashHostLoad/" + hostName);
+        ClientResource cr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "reflashHostLoad/" + hostName);
         
         return cr.get(boolean.class);
     }

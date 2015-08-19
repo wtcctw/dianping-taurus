@@ -27,6 +27,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
+
 @Controller
 public class CreateTaskController {
 
@@ -42,9 +44,9 @@ public class CreateTaskController {
         StringBuffer uri = new StringBuffer();
         
         if(req.getParameter("update") != null){
-            uri.append(InitController.RESTLET_URL_BASE + "task").append("/").append(req.getParameter("update"));
+            uri.append(LionConfigUtil.RESTLET_API_BASE + "task").append("/").append(req.getParameter("update"));
         } else {
-            uri.append(InitController.RESTLET_URL_BASE + "task");
+            uri.append(LionConfigUtil.RESTLET_API_BASE + "task");
         }
         log.info("Access URI : " + uri.toString());
         // Get HTTP method
@@ -145,7 +147,7 @@ public class CreateTaskController {
 		StringBuffer uri = new StringBuffer();
         
 		if (req.getParameter("name") != null){
-            uri.append(InitController.RESTLET_URL_BASE + "name?task_name=").append(req.getParameter("name"));
+            uri.append(LionConfigUtil.RESTLET_API_BASE + "name?task_name=").append(req.getParameter("name"));
             log.info("Access URI : " + uri.toString());
             ClientResource cr = new ClientResource(uri.toString());
             boolean hasName = cr.get(boolean.class);

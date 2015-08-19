@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
+import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
 import com.google.gson.Gson;
 
 @Controller
@@ -35,8 +36,8 @@ public class TaskProxyController {
 		String action = request.getParameter("action").toLowerCase();
         String taskID = request.getParameter("id").trim();
         
-        ClientResource taskCr = new ClientResource(InitController.RESTLET_URL_BASE + "task/" + taskID);
-        ClientResource manualCr = new ClientResource(InitController.RESTLET_URL_BASE + "manualtask/" + taskID);
+        ClientResource taskCr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "task/" + taskID);
+        ClientResource manualCr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "manualtask/" + taskID);
 
         if(action.equals(DELETE)){
         	taskCr.delete();

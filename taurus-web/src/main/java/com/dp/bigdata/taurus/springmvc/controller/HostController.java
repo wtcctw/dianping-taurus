@@ -15,6 +15,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
+
 @Controller
 public class HostController {
 	
@@ -36,7 +38,7 @@ public class HostController {
 				req.setAttribute("statusCode", "500");
 				return;
 			}
-			ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "host/"
+			ClientResource cr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "host/"
 					+ req.getParameter("hostName"));
 			cr.post(op);
 			Status status = cr.getResponse().getStatus();

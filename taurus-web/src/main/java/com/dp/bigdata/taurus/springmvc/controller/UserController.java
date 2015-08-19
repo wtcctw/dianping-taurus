@@ -16,6 +16,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
+
 @Controller
 @RequestMapping("/rest")
 public class UserController {
@@ -33,7 +35,7 @@ public class UserController {
 	public void saveUser(HttpServletRequest request,HttpServletResponse response) {
 		log.info("--------------init the rest/saveUser------------");
 		
-		ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "user/" + request.getParameter("userName"));
+		ClientResource cr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "user/" + request.getParameter("userName"));
 
 		//TODO 服务端验证恶意分组或其他信息(完成)
 		Form form = new Form();

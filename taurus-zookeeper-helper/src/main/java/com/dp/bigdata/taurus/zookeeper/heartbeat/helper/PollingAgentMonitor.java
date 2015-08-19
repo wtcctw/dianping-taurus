@@ -18,9 +18,11 @@ package com.dp.bigdata.taurus.zookeeper.heartbeat.helper;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
+
 import org.I0Itec.zkclient.ZkClient;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -42,6 +44,8 @@ public class PollingAgentMonitor implements AgentMonitor {
     private static final String ZKCONFIG = "zooKeeper.properties";
     private static final long TIMEOUT = 5 * 60 * 1000;
     private static final Log LOGGER = LogFactory.getLog(PollingAgentMonitor.class);
+    
+    private final AtomicBoolean isInterrupt = new AtomicBoolean(false);
 
     public PollingAgentMonitor() {
         Properties props = new Properties();
@@ -66,12 +70,15 @@ public class PollingAgentMonitor implements AgentMonitor {
             @Override
             public void run() {
                 while (true) {
+                	
                     try {
                         checkAgentStatus(handler);
                         Thread.sleep(THIRTY_SECONDS);
                     } catch (InterruptedException e) {
                         LOGGER.error(e, e);
                     }
+                    
+                    while(isInterrupt.get()){}
                 }
             }
         });
@@ -136,5 +143,11 @@ public class PollingAgentMonitor implements AgentMonitor {
             return true;
         }
     }
+
+	@Override
+	public void interruptMonitor(boolean interrupt) {
+		boolean current = isInterrupt.get();
+		isInterrupt.compareAndSet(current, interrupt);
+	}
 
 }

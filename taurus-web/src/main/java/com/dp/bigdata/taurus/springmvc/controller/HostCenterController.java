@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.dp.bigdata.taurus.restlet.shared.HostDTO;
+import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
 
 @Controller
 public class HostCenterController {
@@ -30,7 +31,7 @@ public class HostCenterController {
 		log.info("--------------init the hostCenterDoPost------------");
 		
 		String action = request.getParameter("action");
-        ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "host");
+        ClientResource cr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "host");
         ArrayList<HostDTO> hosts = cr.get(ArrayList.class);
 
         if (HOST.equals(action)) {
@@ -101,7 +102,7 @@ public class HostCenterController {
 
             String queryType = request.getParameter("queryType");
             
-            cr = new ClientResource(InitController.RESTLET_URL_BASE + "reflashHostLoad");
+            cr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "reflashHostLoad");
 
             String jsonString = cr.get(String.class);
 

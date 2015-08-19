@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.dp.bigdata.taurus.restlet.shared.AttemptDTO;
 import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
+import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -38,7 +39,7 @@ public class AttemptController {
         ClientResource cr = null;
 
         if (ATTEMPT.equals(action)) { // 作业调度历史 attempt.ftl
-        	cr = new ClientResource(InitController.RESTLET_URL_BASE + "registedTasks");
+        	cr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "registedTasks");
         	Map<String ,TaskDTO> map = cr.get(HashMap.class);
 
             OutputStream output = response.getOutputStream();
@@ -46,7 +47,7 @@ public class AttemptController {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             JsonArray jsonArray = new JsonArray();
             String taskID = request.getParameter("taskID");
-            String url = InitController.RESTLET_URL_BASE + "attempt?task_id=" + taskID;
+            String url = LionConfigUtil.RESTLET_API_BASE + "attempt?task_id=" + taskID;
             cr = new ClientResource(url);
             cr.setRequestEntityBuffering(true);
             ArrayList<AttemptDTO> attempts = cr.get(ArrayList.class);

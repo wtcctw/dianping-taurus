@@ -20,8 +20,6 @@ public class InitController implements ServletContextAware {
 	
 	public static ServletContext servletContext;
 
-	public static String RESTLET_URL_BASE = null;
-	
 	public static String ERROR_PAGE = null;
 	
 	public static String AGENT_PORT = null;
@@ -66,10 +64,9 @@ public class InitController implements ServletContextAware {
 		log.info("----------- 中文测试 ------------");
 	}
 	
-	public static void dynamicLoad(){
+	public static synchronized void dynamicLoad(){
 		log.info("----------- into dynamicLoad ------------");
 		try {
-			RESTLET_URL_BASE = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.restlet.url");
 			AGENT_PORT = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.restlet.port");
 			NEW_AGENT_PORT = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.restlet.new.port");
 			SWITCH_URL_ALL = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.url.switch");

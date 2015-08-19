@@ -22,9 +22,12 @@ public class AttemptStatusMonitor implements Runnable {
 	private static final Log LOG = LogFactory.getLog(AttemptStatusMonitor.class);
 
 	private final AtomicBoolean isInterrupt = new AtomicBoolean(false);
+	
+	private volatile boolean attemptStatusMonitorRestFlag = false;
 
 	private final Scheduler scheduler;
 
+	
 	@Autowired
 	public AttemptStatusMonitor(Scheduler scheduler) {
 		this.scheduler = scheduler;
@@ -33,7 +36,10 @@ public class AttemptStatusMonitor implements Runnable {
 	@Override
 	public void run() {
 		LOG.info("Starting to monitor attempts status");
-		while (!isInterrupt.get()) {
+		
+		while (true) {
+			attemptStatusMonitorRestFlag = false;
+			
 			try {
 				List<AttemptContext> runningAttempts = scheduler.getAllRunningAttempt();
 				for (AttemptContext attempt : runningAttempts) {
@@ -90,10 +96,17 @@ public class AttemptStatusMonitor implements Runnable {
 
 				Cat.logError(ie);
 			}
+			
+			while(isInterrupt.get()){ attemptStatusMonitorRestFlag = true; }
 		}
 	}
 
 	public void isInterrupt(boolean interrupt) {
-		isInterrupt.compareAndSet(false, true);
+		boolean current = isInterrupt.get();
+		isInterrupt.compareAndSet(current, interrupt);
+	}
+
+	public boolean isAttemptStatusMonitorRestFlag() {
+		return attemptStatusMonitorRestFlag;
 	}
 }

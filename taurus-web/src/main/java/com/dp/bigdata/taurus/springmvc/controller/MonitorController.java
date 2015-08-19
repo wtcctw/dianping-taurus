@@ -2,27 +2,22 @@ package com.dp.bigdata.taurus.springmvc.controller;
 
 import com.dp.bigdata.taurus.restlet.shared.AttemptDTO;
 import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
+import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
 import com.dp.bigdata.taurus.zookeeper.execute.helper.ExecuteStatus;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import org.restlet.resource.ClientResource;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.stereotype.Controller;
-
 import org.springframework.ui.ModelMap;
-
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.io.IOException;
 import java.io.OutputStream;
-
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,7 +39,7 @@ public class MonitorController {
 
         String start = request.getParameter("start");
         String end = request.getParameter("end");
-        ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE +
+        ClientResource cr = new ClientResource(LionConfigUtil.RESTLET_API_BASE +
                 "jobdetail/" + "/" + start + "/" + end);
         String jsonString = cr.get(String.class);
         OutputStream output = response.getOutputStream();
@@ -65,16 +60,16 @@ public class MonitorController {
         log.info("--------------init the reflash_attempts------------");
 
         String taskTime = request.getParameter("start");
-        String url = InitController.RESTLET_URL_BASE + "getattemptsbystatus/";
+        String url = LionConfigUtil.RESTLET_API_BASE + "getattemptsbystatus/";
         ClientResource cr = new ClientResource(url + taskTime);
         attempts = cr.get(ArrayList.class);
 
-        cr = new ClientResource(InitController.RESTLET_URL_BASE +
+        cr = new ClientResource(LionConfigUtil.RESTLET_API_BASE +
                 "reflashHostLoad");
         tasks = cr.put(null, ArrayList.class);
 
         if (tasks == null) {
-            ClientResource crTask = new ClientResource(InitController.RESTLET_URL_BASE +
+            ClientResource crTask = new ClientResource(LionConfigUtil.RESTLET_API_BASE +
                     "gettasks");
             tasks = crTask.get(ArrayList.class);
         }
@@ -179,7 +174,7 @@ public class MonitorController {
              * @return
              */
         /*public String getLastTaskStatus(String taskID) {
-            String status_api = InitController.RESTLET_URL_BASE +
+            String status_api = LionConfigUtil.RESTLET_API_BASE +
                 "getlaststatus";
             String status = null;
 

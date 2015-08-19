@@ -1,10 +1,12 @@
 package com.dp.bigdata.taurus.web;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import jodd.util.StringUtil;
 import net.sf.json.JSONArray;
@@ -12,28 +14,18 @@ import net.sf.json.JSONObject;
 
 import org.json.JSONException;
 import org.junit.Test;
-import org.restlet.Client;
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.Uniform;
-import org.restlet.data.Form;
-import org.restlet.data.Protocol;
 import org.restlet.ext.json.JsonRepresentation;
-import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.HttpMessageConverter;
-//import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-//import org.springframework.integration.http.converter.SerializingHttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
 
-import com.dp.bigdata.taurus.jersey.MyGrizzlyApp;
-import com.dp.bigdata.taurus.restlet.shared.HostDTO;
 import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
 import com.dp.bigdata.taurus.restlet.shared.UserDTO;
-import com.dp.bigdata.taurus.springmvc.controller.InitController;
+//import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+//import org.springframework.integration.http.converter.SerializingHttpMessageConverter;
 
 public class CczTest {
 	
@@ -43,6 +35,70 @@ public class CczTest {
 					Arrays.asList(
 							new SerializingHttpMessageConverter())));*/
 	private String RESTLET_URL_BASE = "http://alpha.taurus.dp:8192/api/";
+	
+	private final AtomicBoolean isInterrupt = new AtomicBoolean(true);
+	
+	@Test
+	public void testRun() throws InterruptedException{
+		Thread thread = new Thread(Alert.getAlert());
+		thread.setName("alertThread");
+		thread.start();
+		
+		Thread.sleep(2 * 1000);
+		Alert.getAlert().isInterrupt(true);
+		Thread.sleep(2 * 1000);
+		Alert.getAlert().isInterrupt(false);
+		Thread.sleep(2 * 1000);
+		Alert.getAlert().isInterrupt(true);
+		Thread.sleep(2 * 1000);
+		Alert.getAlert().isInterrupt(false);
+		
+		while(!Alert.getAlert().isRestflag()){}
+		
+		quit();
+	}
+	
+	
+	
+	//@Test
+	public void testLatch() throws InterruptedException{
+		CountDownLatch latch=new CountDownLatch(1);
+		reload(latch);
+    	latch.await();
+    	
+    	System.out.println("testLatch");
+	}
+	
+	private void reload(CountDownLatch latch){
+		TaskDTO taskDTO = null;
+		int i = 3;
+		
+		while (i > 0) {
+			try {
+				//taskDTO.getCreator();
+			} catch (Exception e) {
+				e.printStackTrace();
+				--i;
+				continue;
+			}
+			break;
+		}
+		
+		if(i == 0){
+			System.out.println("i: " + i);
+			return ;
+		}
+		
+		latch.countDown();
+	}
+	
+	//@Test
+	public void testAtomic(){
+		boolean interrupt = false;
+		boolean current = isInterrupt.get();
+		isInterrupt.compareAndSet(current, interrupt);
+		System.out.println(isInterrupt.get());
+	}
 	
 	//@Test
 	public void testLocal(){
@@ -150,5 +206,20 @@ public class CczTest {
 		}
 		
 		
+	}
+	
+	
+	private void quit(){
+		System.out.println("Print 'quit' and hit ENTER to quit app!");
+		Scanner sc = new Scanner(System.in);
+		sc.useDelimiter("\n");
+		
+		while (sc.hasNext()) {
+			
+			if("quit".equals(sc.next())){
+				break;
+			}
+			
+		}
 	}
 }

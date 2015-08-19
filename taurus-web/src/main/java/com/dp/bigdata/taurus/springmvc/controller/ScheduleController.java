@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
+import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -36,8 +37,8 @@ public class ScheduleController {
         if (SCHEDULE.equals(action)) {
             OutputStream output = response.getOutputStream();
 
-            String task_api = InitController.RESTLET_URL_BASE + "task";
-            //String status_api = InitController.RESTLET_URL_BASE + "getlaststatus";
+            String task_api = LionConfigUtil.RESTLET_API_BASE + "task";
+            //String status_api = LionConfigUtil.RESTLET_API_BASE + "getlaststatus";
 
             String name = request.getParameter("name");
             String appname = request.getParameter("appname");

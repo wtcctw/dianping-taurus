@@ -34,6 +34,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
 import com.google.gson.Gson;
 
 @Controller
@@ -68,7 +69,7 @@ public class BatchTaskController {
 			List<Representation> repList = createRepFromExcel(file, username);
 			List<String> taskList = getTaskFromExcel(file);
 			List<Result> results = new ArrayList<Result>();
-            ClientResource taskResource = new ClientResource(InitController.RESTLET_URL_BASE + "task");
+            ClientResource taskResource = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "task");
 			for(int i = 0; i < repList.size(); i++){
 				boolean success = false;
 				try{

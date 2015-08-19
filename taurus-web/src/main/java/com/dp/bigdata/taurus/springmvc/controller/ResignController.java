@@ -14,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
+
 @Controller
 public class ResignController {
 	
@@ -43,14 +45,14 @@ public class ResignController {
             String reusult_str = "";
 
 
-            cr = new ClientResource(InitController.RESTLET_URL_BASE + "updatecreator/" + creator.trim() + "/" + taskName.trim() + "/resign");
+            cr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "updatecreator/" + creator.trim() + "/" + taskName.trim() + "/resign");
             int result = cr.get(int.class);
             /*IClearDependencyPassTask clearTasks = cr.wrap(IClearDependencyPassTask.class);
             cr.accept(MediaType.APPLICATION_XML);
             int result = clearTasks.retrieve();*/
 
 
-            cr = new ClientResource(InitController.RESTLET_URL_BASE + "getuserid/" + creator.trim());
+            cr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "getuserid/" + creator.trim());
             int creatorId = cr.get(int.class);
 
 
@@ -91,7 +93,7 @@ public class ResignController {
                         if (isHaveAlert) {
                             for (int j = 0; j < tmpUsers.length; j++) {
                                 String user = tmpUsers[j];
-                                cr = new ClientResource(InitController.RESTLET_URL_BASE + "getuserid/" + user.trim());
+                                cr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "getuserid/" + user.trim());
                                 int userIdAlert = cr.get(int.class);
                                 
                                 //告警人列表不包含作业原creator
@@ -111,7 +113,7 @@ public class ResignController {
                             for (int j = 0; j < tmpUsers.length; j++) {
                                 String user = tmpUsers[j];
 
-                                cr = new ClientResource(InitController.RESTLET_URL_BASE + "getuserid/" + user.trim());
+                                cr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "getuserid/" + user.trim());
                                 int userIdAlert = cr.get(int.class);
 
                                 if (j == tmpUsers.length - 1) {
@@ -132,7 +134,7 @@ public class ResignController {
                             }
                         }
 
-                        cr = new ClientResource(InitController.RESTLET_URL_BASE + "updatealert/" + newUserId.trim() + "/" + tmpJobId.trim() + "");
+                        cr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "updatealert/" + newUserId.trim() + "/" + tmpJobId.trim() + "");
                         cr.get(int.class);
 
                     }

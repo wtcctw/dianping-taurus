@@ -92,7 +92,28 @@ final public class Engine implements Scheduler {
 
 	@Autowired
 	private AgentMonitor agentMonitor;
+	
+	private final AtomicBoolean isInterrupt = new AtomicBoolean(false);
+	
+	private volatile boolean triggleThreadRestFlag = false;
 
+	private volatile boolean refreshThreadRestFlag = false;
+
+	public void isInterrupt(boolean interrupt) {
+		boolean current = isInterrupt.get();
+		isInterrupt.compareAndSet(current, interrupt);
+		((AttemptStatusMonitor) progressMonitor).isInterrupt(interrupt);
+		agentMonitor.interruptMonitor(interrupt);
+	}
+	
+	public boolean isTriggleThreadRestFlag() {
+		return triggleThreadRestFlag;
+	}
+	
+	public boolean isRefreshThreadRestFlag() {
+		return refreshThreadRestFlag;
+	}
+	
 	/**
 	 * Maximum concurrent running attempt number
 	 */
@@ -201,12 +222,16 @@ final public class Engine implements Scheduler {
 	 * start the engine;
 	 */
 	public void start() {
+		
+		
+		
 		if (progressMonitor != null) {// spring注入了AttemptStatusMonitor
 			//System.out.println("progressMonitor is: " + progressMonitor.toString());
 			Thread monitorThread = new Thread(progressMonitor);
 			monitorThread.setName("Thread-" + AttemptStatusMonitor.class.getName());
 			monitorThread.setDaemon(true);
 			monitorThread.start();
+			
 		}
 
 		/*Thread schedulerMonitor = new SchedulerMonitor();
@@ -218,7 +243,7 @@ final public class Engine implements Scheduler {
 		refreshThread.setDaemon(true);
 		refreshThread.setName("Thread-" + RefreshThread.class.getName());
 		refreshThread.start();
-
+		
 		Thread triggleThread = new TriggleTask();
 		triggleThread.setDaemon(true);
 		triggleThread.setName("Thread-" + TriggleTask.class.getName());
@@ -338,6 +363,7 @@ final public class Engine implements Scheduler {
 				return result;
 			}
 		});
+		
 	}
 
 	/**
@@ -376,7 +402,7 @@ final public class Engine implements Scheduler {
 		@Override
 		public void run() {
 			while (true) {
-				//LOG.info("DepedencyTriggle trys to triggle the jobs...");
+				triggleThreadRestFlag = false;
 
 				Transaction t = Cat.newTransaction("Engine", "Schedule");
 				try {
@@ -409,34 +435,40 @@ final public class Engine implements Scheduler {
 				} catch (InterruptedException e) {
 					LOG.error("Interrupted exception", e);
 				}
+				
+				while(isInterrupt.get()){
+					triggleThreadRestFlag = true;
+				}
 			}
 		}
 	}
 
 	class RefreshThread extends Thread {
 
-		private AtomicBoolean isInterrupted = new AtomicBoolean(false);
-
 		@Override
 		public void run() {
 
-			try {
-				while (!isInterrupted.get()) {
-
+			
+			while (true) {
+				refreshThreadRestFlag = false;
+				
+				try {
 					load();
-
+					
 					Thread.sleep(20 * 1000);
+					
+				}catch (InterruptedException e) {
+					LOG.error("RefreshThread was interrupted!", e);
 				}
-			} catch (InterruptedException e) {
-				isInterrupted.set(true);
-				LOG.error("RefreshThread was interrupted!", e);
+				
+				while(isInterrupt.get()){ 
+					refreshThreadRestFlag = true;
+				}
 			}
+			
 
 		}
 
-		public void shutdown() {
-			isInterrupted.set(true);
-		}
 	}
 
 	@Override

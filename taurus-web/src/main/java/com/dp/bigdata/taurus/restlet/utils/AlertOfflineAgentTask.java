@@ -26,19 +26,17 @@ import com.dp.bigdata.taurus.restlet.resource.IExceptionHosts;
  * Created by kirinli on 15/1/30.
  */
 public class AlertOfflineAgentTask  extends TimerTask {
-    private final static String Local_Restlet_Base = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.restlet.url");
-
     
     public void run() {
         
         // 监测异常的Agent 告警
-        ClientResource cr = new ClientResource(Local_Restlet_Base + "exceptionhosts");
+        ClientResource cr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "exceptionhosts");
         IExceptionHosts hostsResource = cr.wrap(IExceptionHosts.class);
         cr.accept(MediaType.APPLICATION_XML);
         String exceptionHosts = hostsResource.retrieve();
         
         // 检测正常Agent 发现异常 告警
-        cr = new ClientResource(Local_Restlet_Base + "allhosts");
+        cr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "allhosts");
         IAllHosts allOnlineHostsResource = cr.wrap(IAllHosts.class);
         cr.accept(MediaType.APPLICATION_XML);
         String onlineHostsJsonStr = allOnlineHostsResource.retrieve();

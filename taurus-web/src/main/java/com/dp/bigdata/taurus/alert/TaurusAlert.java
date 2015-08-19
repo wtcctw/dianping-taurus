@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.mail.MessagingException;
 
@@ -71,9 +72,24 @@ public class TaurusAlert {
 	private UserMapper userMapper;
 
 	private Map<Integer, User> userMap;
+	
+	private final AtomicBoolean isInterrupt = new AtomicBoolean(false);
+	
+	private volatile boolean metaDataThreadRestFlag = false;
+	
+	private volatile boolean alertThreadRestFlag = false;
+
+	public boolean isMetaDataThreadRestFlag() {
+		return metaDataThreadRestFlag;
+	}
+
+	public boolean isAlertThreadRestFlag() {
+		return alertThreadRestFlag;
+	}
 
 	public void load() {
-		System.out.println(new Date() + " [" + this.getClass().getName() + "] load alert....");
+		LOG.info("load alert....");
+		
 		Map<String, AlertRule> ruleMap = new ConcurrentHashMap<String, AlertRule>();
 		List<AlertRule> commonRules = new ArrayList<AlertRule>();
 		Map<Integer, User> userMap = new ConcurrentHashMap<Integer, User>();
@@ -198,6 +214,8 @@ public class TaurusAlert {
 		@Override
 		public void run() {
 			while (true) {
+				alertThreadRestFlag = false;
+				
 				try {
 					Date now = new Date();
 					TaskAttemptExample example = new TaskAttemptExample();
@@ -217,6 +235,10 @@ public class TaurusAlert {
 				}
 
 				m_lastNotifyTime = new Date();
+				
+				while(isInterrupt.get()) {
+					alertThreadRestFlag = true;
+				}
 			}
 		}
 
@@ -322,7 +344,10 @@ public class TaurusAlert {
 	public class MetaDataUpdatedThread implements Runnable {
 		@Override
 		public void run() {
+			
 			while (true) {
+				metaDataThreadRestFlag = false;
+				
 				try {
 					load();
 					Thread.sleep(META_INTERVAL);
@@ -330,11 +355,21 @@ public class TaurusAlert {
 					Cat.logError(e);
 					LOG.error(e, e);
 				}
+				
+				while(isInterrupt.get()) {
+					metaDataThreadRestFlag = true;
+				}
 			}
 		}
 
 
 	}
+	
+	public void isInterrupt(boolean interrupt) {
+		boolean current = isInterrupt.get();
+		isInterrupt.compareAndSet(current, interrupt);
+	}
+	
     public  void startAlert(){
         TaurusAlert alert = new TaurusAlert();
 

@@ -24,6 +24,7 @@ import sun.misc.BASE64Encoder;
 import com.dp.bigdata.taurus.restlet.resource.IUserResource;
 import com.dp.bigdata.taurus.restlet.resource.IUsersResource;
 import com.dp.bigdata.taurus.restlet.shared.UserDTO;
+import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
 import com.dp.bigdata.taurus.web.servlet.LDAPAuthenticationService;
 
 @Controller
@@ -74,7 +75,7 @@ public class LoginController {
 		session.setAttribute(InitController.USER_NAME, userName);
         System.out.println("login success!");
 
-		ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "user");
+		ClientResource cr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "user");
 		cr.post(userDTO);//createIfNotExist
 		
 		if(isInfoCompleted(userName)){
@@ -145,7 +146,7 @@ public class LoginController {
 		}
 
 		if (user == null) {
-			ClientResource cr = new ClientResource(String.format("%s/%s", InitController.RESTLET_URL_BASE + "user", userName));
+			ClientResource cr = new ClientResource(String.format("%s/%s", LionConfigUtil.RESTLET_API_BASE + "user", userName));
 			UserDTO userDTO = cr.get(UserDTO.class);
 			
 			if (userDTO != null) {
@@ -167,7 +168,7 @@ public class LoginController {
 			session.setAttribute(USER_NAME, userName);
             System.out.println("login success!");
 
-			ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "user");
+			ClientResource cr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "user");
 			IUsersResource resource = cr.wrap(IUsersResource.class);
 			UserDTO dto = new UserDTO();
 			dto.setName(userName);
@@ -183,7 +184,7 @@ public class LoginController {
 		}
 		
 		
-		/*ClientResource cr = new ClientResource(String.format("%s/%s", InitController.RESTLET_URL_BASE + "user", userName));
+		/*ClientResource cr = new ClientResource(String.format("%s/%s", LionConfigUtil.RESTLET_API_BASE + "user", userName));
 		UserDTO userDTO = cr.get(UserDTO.class);
 		if (userDTO != null) {
 			HttpSession session = request.getSession();
@@ -206,7 +207,7 @@ public class LoginController {
 	 */
 	private boolean isInfoCompleted(String userName){
 		
-		ClientResource cr = new ClientResource(InitController.RESTLET_URL_BASE + "user/" + userName);
+		ClientResource cr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "user/" + userName);
 		UserDTO userDTO = cr.get(UserDTO.class);
   	    
 		boolean result = false;
