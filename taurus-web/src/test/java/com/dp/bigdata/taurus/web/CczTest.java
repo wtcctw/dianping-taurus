@@ -39,6 +39,16 @@ public class CczTest {
 	private final AtomicBoolean isInterrupt = new AtomicBoolean(true);
 	
 	@Test
+	public void testboo(){
+		boolean a = false;
+		boolean b = false;
+		while(!(a && b)){
+			//wait the engine to finish last schedule
+		}
+		quit();
+	}
+	
+	//@Test
 	public void testRun() throws InterruptedException{
 		Thread thread = new Thread(Alert.getAlert());
 		thread.setName("alertThread");

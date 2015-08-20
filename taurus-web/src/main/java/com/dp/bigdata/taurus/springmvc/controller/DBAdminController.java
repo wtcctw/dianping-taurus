@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dp.bigdata.taurus.alert.TaurusAlert;
+import com.dp.bigdata.taurus.core.AttemptStatusMonitor;
 import com.dp.bigdata.taurus.core.Engine;
 import com.dp.bigdata.taurus.restlet.utils.ClearLogsTimerManager;
 import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
@@ -43,6 +44,8 @@ public class DBAdminController {
     public Engine engine;
     @Autowired
     public TaurusAlert alert;
+    @Autowired
+    public AttemptStatusMonitor statusMonitor;
 	
     @RequestMapping(value = "/dbadmin/changeServer", method = RequestMethod.POST)
     @ResponseBody
@@ -91,6 +94,11 @@ public class DBAdminController {
             		
             		if(ReFlashHostLoadTaskTimer.getReFlashHostLoadManager().getTimer() != null){
             			ReFlashHostLoadTaskTimer.getReFlashHostLoadManager().stop();
+            		}
+            		
+            		while(!(engine.isTriggleThreadRestFlag()
+            				&& statusMonitor.isAttemptStatusMonitorRestFlag())){
+            			//wait the engine to finish last schedule
             		}
             		
             		result.setMessage("Change master server to " + LionConfigUtil.SERVER_MASTER_IP);
