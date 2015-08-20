@@ -59,6 +59,8 @@ public class DBAdminController {
         		
         		//设置为master server并启动调度
             	if(LionConfigUtil.SERVER_MASTER_IP.equals(IPUtils.getFirstNoLoopbackIP4Address())){
+            		engine.load();
+            		alert.load();
             		alert.isInterrupt(false);
             		engine.isInterrupt(false);
             		

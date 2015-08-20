@@ -214,6 +214,10 @@ public class TaurusAlert {
 		@Override
 		public void run() {
 			while (true) {
+				
+				while(isInterrupt.get()) {
+					alertThreadRestFlag = true;
+				}
 				alertThreadRestFlag = false;
 				
 				try {
@@ -236,9 +240,6 @@ public class TaurusAlert {
 
 				m_lastNotifyTime = new Date();
 				
-				while(isInterrupt.get()) {
-					alertThreadRestFlag = true;
-				}
 			}
 		}
 
@@ -346,6 +347,10 @@ public class TaurusAlert {
 		public void run() {
 			
 			while (true) {
+				
+				while(isInterrupt.get()) {
+					metaDataThreadRestFlag = true;
+				}
 				metaDataThreadRestFlag = false;
 				
 				try {
@@ -356,9 +361,6 @@ public class TaurusAlert {
 					LOG.error(e, e);
 				}
 				
-				while(isInterrupt.get()) {
-					metaDataThreadRestFlag = true;
-				}
 			}
 		}
 

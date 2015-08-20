@@ -402,6 +402,10 @@ final public class Engine implements Scheduler {
 		@Override
 		public void run() {
 			while (true) {
+				
+				while(isInterrupt.get()){
+					triggleThreadRestFlag = true;
+				}
 				triggleThreadRestFlag = false;
 
 				Transaction t = Cat.newTransaction("Engine", "Schedule");
@@ -436,9 +440,6 @@ final public class Engine implements Scheduler {
 					LOG.error("Interrupted exception", e);
 				}
 				
-				while(isInterrupt.get()){
-					triggleThreadRestFlag = true;
-				}
 			}
 		}
 	}
@@ -450,6 +451,10 @@ final public class Engine implements Scheduler {
 
 			
 			while (true) {
+				
+				while(isInterrupt.get()){ 
+					refreshThreadRestFlag = true;
+				}
 				refreshThreadRestFlag = false;
 				
 				try {
@@ -461,9 +466,6 @@ final public class Engine implements Scheduler {
 					LOG.error("RefreshThread was interrupted!", e);
 				}
 				
-				while(isInterrupt.get()){ 
-					refreshThreadRestFlag = true;
-				}
 			}
 			
 

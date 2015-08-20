@@ -38,6 +38,8 @@ public class AttemptStatusMonitor implements Runnable {
 		LOG.info("Starting to monitor attempts status");
 		
 		while (true) {
+			
+			while(isInterrupt.get()){ attemptStatusMonitorRestFlag = true; }
 			attemptStatusMonitorRestFlag = false;
 			
 			try {
@@ -97,7 +99,6 @@ public class AttemptStatusMonitor implements Runnable {
 				Cat.logError(ie);
 			}
 			
-			while(isInterrupt.get()){ attemptStatusMonitorRestFlag = true; }
 		}
 	}
 

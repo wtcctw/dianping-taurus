@@ -32,6 +32,7 @@ public class Alert implements Runnable {
 		
 		while (true) {
 			
+			while(isInterrupt.get()){ restflag = true; }
 			restflag = false;
 			
 			try {
@@ -40,8 +41,6 @@ public class Alert implements Runnable {
 			} catch (Throwable e) {
 				e.printStackTrace();
 			}
-			
-			while(isInterrupt.get()){ restflag = true; }
 			
 		}
 		

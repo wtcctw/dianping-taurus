@@ -71,6 +71,8 @@ public class PollingAgentMonitor implements AgentMonitor {
             public void run() {
                 while (true) {
                 	
+                	while(isInterrupt.get()){}
+                	
                     try {
                         checkAgentStatus(handler);
                         Thread.sleep(THIRTY_SECONDS);
@@ -78,7 +80,6 @@ public class PollingAgentMonitor implements AgentMonitor {
                         LOGGER.error(e, e);
                     }
                     
-                    while(isInterrupt.get()){}
                 }
             }
         });
