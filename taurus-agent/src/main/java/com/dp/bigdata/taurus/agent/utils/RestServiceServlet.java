@@ -99,7 +99,7 @@ public class RestServiceServlet extends HttpServlet {
             output.close();
         }
         
-        log.info("Call agent at"+ new Date());
+        log.info("Call agent rest api...");
         
     }
 
