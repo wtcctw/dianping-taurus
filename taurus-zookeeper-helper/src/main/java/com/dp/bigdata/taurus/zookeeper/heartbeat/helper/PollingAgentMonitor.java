@@ -132,7 +132,7 @@ public class PollingAgentMonitor implements AgentMonitor {
         Long time = null;
         try{
             time = zkClient.readData(WATCH_PATH + "/" + ip, true);
-            LOGGER.info("Agent " + ip + "'s last heartbeat time is" + new Date(time));
+            //LOGGER.info("Agent " + ip + "'s last heartbeat time is" + new Date(time));
         } catch(Exception e){
             LOGGER.error(e,e);
         }
