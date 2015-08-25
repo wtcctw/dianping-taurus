@@ -16,6 +16,7 @@
 package com.dp.bigdata.taurus.zookeeper.heartbeat.helper;
 
 import java.io.InputStream;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -131,6 +132,7 @@ public class PollingAgentMonitor implements AgentMonitor {
         Long time = null;
         try{
             time = zkClient.readData(WATCH_PATH + "/" + ip, true);
+            LOGGER.info("Agent " + ip + "'s last heartbeat time is" + new Date(time));
         } catch(Exception e){
             LOGGER.error(e,e);
         }

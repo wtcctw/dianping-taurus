@@ -70,6 +70,7 @@ public abstract class TaurusZKInfoChannel implements ClusterInfoChannel{
     public void updateRealtimeHeartbeatInfo(MachineType mt, String ip) {
         try{
             setData(System.currentTimeMillis(), BASE, HEARTBEATS, mt.getName(), REALTIME, ip);
+            LOG.info("Update agent "+ ip + "'s heartbeat successfully!");
         } catch(Exception e){
             throw new TaurusZKException(e);
         }

@@ -3,10 +3,15 @@ package com.dp.bigdata.taurus.agent.utils;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.Date;
 
 /**
  * Created by kirinli on 14-8-19.
@@ -15,6 +20,8 @@ public class RestServiceServlet extends HttpServlet {
     private static final String GETLOG = "getlog";
     private static final String ISEND = "isend";
     private static final String ISNEW = "isnew";
+    
+    private Logger log = LoggerFactory.getLogger(this.getClass());
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -91,7 +98,9 @@ public class RestServiceServlet extends HttpServlet {
             output.write(respStr.getBytes());
             output.close();
         }
-
+        
+        log.info("Call agent at"+ new Date());
+        
     }
 
 }
