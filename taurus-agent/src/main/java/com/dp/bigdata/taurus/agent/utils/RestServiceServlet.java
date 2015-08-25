@@ -88,6 +88,7 @@ public class RestServiceServlet extends HttpServlet {
             output.write(respStr.getBytes());
             output.close();
         } else if (action.equals(ISNEW)) {
+        	log.info("Call agent rest api...action: [isnew]");
             String respStr = "true";
             OutputStream output = response.getOutputStream();
             output.write(respStr.getBytes());
@@ -98,8 +99,6 @@ public class RestServiceServlet extends HttpServlet {
             output.write(respStr.getBytes());
             output.close();
         }
-        
-        log.info("Call agent rest api...");
         
     }
 
