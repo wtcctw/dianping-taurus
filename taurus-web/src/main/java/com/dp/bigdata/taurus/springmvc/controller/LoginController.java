@@ -140,7 +140,7 @@ public class LoginController {
 		UserDTO user = null;
 
 		try {
-			user = authService.authenticate(userName, password);
+			//user = authService.authenticate(userName, password);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
