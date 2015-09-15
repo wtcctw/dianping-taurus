@@ -1,7 +1,5 @@
 package com.dp.bigdata.taurus.restlet;
 
-import java.util.Date;
-
 import org.restlet.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +11,6 @@ import com.dp.bigdata.taurus.restlet.utils.ClearLogsTimerManager;
 import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
 import com.dp.bigdata.taurus.restlet.utils.MonitorAgentOffLineTaskTimer;
 import com.dp.bigdata.taurus.restlet.utils.ReFlashHostLoadTaskTimer;
-import com.dp.bigdata.taurus.springmvc.controller.InitController;
 import com.dp.bigdata.taurus.zookeeper.common.utils.IPUtils;
 
 /**
@@ -23,7 +20,7 @@ import com.dp.bigdata.taurus.zookeeper.common.utils.IPUtils;
  */
 public class TaurusServer {
 
-	private static Logger log = LoggerFactory.getLogger(InitController.class);
+	private Logger log = LoggerFactory.getLogger(this.getClass());
 	
     @Autowired
     public Engine engine;
