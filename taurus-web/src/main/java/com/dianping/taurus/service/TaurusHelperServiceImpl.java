@@ -1,4 +1,4 @@
-package com.dp.bigdata.taurus.pigeon.service;
+package com.dianping.taurus.service;
 
 import java.util.ArrayList;
 
