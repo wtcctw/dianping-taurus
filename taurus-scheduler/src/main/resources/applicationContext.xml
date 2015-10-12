@@ -9,6 +9,8 @@
         <property name="propertiesPath" value="config/applicationContext.properties" />
         <property name="includeLocalProps" value="false"></property>
     </bean>
+    
+    <bean name="configHolder" class="com.dp.bigdata.taurus.scheduler.lion.ConfigHolder" init-method="init" />
 </beans>
 
 

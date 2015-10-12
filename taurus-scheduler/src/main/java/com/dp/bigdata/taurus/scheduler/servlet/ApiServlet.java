@@ -18,10 +18,9 @@ import com.dianping.ba.es.qyweixin.adapter.api.exception.QyWeixinAdaperException
 import com.dianping.ba.es.qyweixin.adapter.api.service.MessageService;
 import com.dianping.ba.hris.md.api.dto.EmployeeDto;
 import com.dianping.ba.hris.md.api.service.EmployeeService;
-import com.dianping.lion.EnvZooKeeperConfig;
-import com.dianping.lion.client.ConfigCache;
-import com.dianping.lion.client.LionException;
 import com.dianping.pigeon.remoting.ServiceFactory;
+import com.dp.bigdata.taurus.scheduler.lion.ConfigHolder;
+import com.dp.bigdata.taurus.scheduler.lion.LionKeys;
 import com.google.gson.JsonObject;
 
 public class ApiServlet extends HttpServlet {
@@ -33,24 +32,14 @@ public class ApiServlet extends HttpServlet {
 	
 	private static final String PUSH = "push";
 	
-    private static String BLACK_LIST_ID = "";
-    private static String BLACK_LIST_NAME = "";
-    private static String BLACK_LIST_EMAIL = "";
+    private static EmployeeService employeeService;
+    private static MessageService messageService;
 	
 	@Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        
-        try {
-            BLACK_LIST_ID = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("push-wechat-service.blacklist.id");
-            BLACK_LIST_NAME = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("push-wechat-service.blacklist.name");
-            BLACK_LIST_EMAIL = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("push-wechat-service.blacklist.email");
-        } catch (LionException e) {
-            e.printStackTrace();
-            BLACK_LIST_ID = "0000001,0000033,0008232,0000569,0000028,0010637,0013490,0006739,0002356,0000024,0000006,0008077";
-            BLACK_LIST_NAME = "tao.zhang,shihai.gong,jerry.huang,yueping.jiang,jason.li,elaine,daofeng.luo,lei.sun,ray.wang,shuhong.ye,bo.zhang,peter.zheng";
-            BLACK_LIST_EMAIL = "tao.zhang@dianping.com,shihai.gong@dianping.com,jerry.huang@dianping.com,yueping.jiang@dianping.com,jason.li@dianping.com,elaine@dianping.com,daofeng.luo@dianping.com,lei.sun@dianping.com,ray.wang@dianping.com,shuhong.ye@dianping.com,bo.zhang@dianping.com,peter.zheng@dianping.com";
-        }
+        employeeService = ServiceFactory.getService("http://service.dianping.com/ba/hris/masterdata/EmployeeService_1.0.0",EmployeeService.class , 5000);
+        messageService = ServiceFactory.getService("http://service.dianping.com/ba/es/qyweixin/adapter/MessageService_1.0.0", MessageService.class, 5000);
     }
 	
 	@Override
@@ -77,7 +66,6 @@ public class ApiServlet extends HttpServlet {
                 output.write(result.toString().getBytes());
                 output.close();
             } else {
-            	EmployeeService employeeService = ServiceFactory.getService("http://service.dianping.com/ba/hris/masterdata/EmployeeService_1.0.0",EmployeeService.class , 5000);
         		
             	List<EmployeeDto> employeeDtos = employeeService.queryEmployeeByKeyword(keyword);
         		EmployeeDto employeeDto = null;
@@ -104,9 +92,8 @@ public class ApiServlet extends HttpServlet {
                 messageDto.setPriority(MessageDto.BATCH_MSG);
                 messageDto.setTouser(users);
                 messageDto.setSafe(0);
-                messageDto.setAgentid(15);
-                
-                MessageService messageService = ServiceFactory.getService("http://service.dianping.com/ba/es/qyweixin/adapter/MessageService_1.0.0", MessageService.class, 5000);
+                int agentid = Integer.parseInt(ConfigHolder.get(LionKeys.MESSAGE_AGENTID));
+                messageDto.setAgentid(agentid);
                 
                 try {
         			messageService.sendMessage(messageDto);
@@ -146,7 +133,7 @@ public class ApiServlet extends HttpServlet {
 
         if (isId) {
             int id = Integer.parseInt(keyWord);
-            String[] idLists = BLACK_LIST_ID.split(",");
+            String[] idLists = ConfigHolder.get(LionKeys.BLACK_LIST_ID).split(",");
 
             for (int i = 0; i < idLists.length; i++) {
                 int tmpId = Integer.parseInt(idLists[i]);
@@ -159,7 +146,7 @@ public class ApiServlet extends HttpServlet {
 
             return isblack;
         } else {
-            String[] nameLists = BLACK_LIST_NAME.split(",");
+            String[] nameLists = ConfigHolder.get(LionKeys.BLACK_LIST_NAME).split(",");
 
 
             for (int i = 0; i < nameLists.length; i++) {
@@ -174,7 +161,7 @@ public class ApiServlet extends HttpServlet {
             if (isblack) {
                 return isblack;
             } else {
-                String[] emailLists = BLACK_LIST_EMAIL.split(",");
+                String[] emailLists = ConfigHolder.get(LionKeys.BLACK_LIST_EMAIL).split(",");
                 for (int i = 0; i < emailLists.length; i++) {
                     String tmpEmail = emailLists[i].trim();
 
