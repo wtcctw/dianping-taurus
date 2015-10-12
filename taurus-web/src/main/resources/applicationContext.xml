@@ -15,6 +15,8 @@
 		<property name="includeLocalProps" value="false"></property>
 	</bean>
 	
+	<bean name="configHolder" class="com.dp.bigdata.taurus.lion.ConfigHolder" init-method="init" />
+	
 	<bean id="startRestLet" class="com.dp.bigdata.taurus.restlet.TaurusServer" init-method="start" destroy-method="stop"/>
     <bean id="alertBean" class="com.dp.bigdata.taurus.alert.TaurusAlert" />
     

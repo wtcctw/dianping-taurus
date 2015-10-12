@@ -7,6 +7,7 @@ import java.net.URL;
 import java.util.TimerTask;
 
 import org.apache.commons.lang.StringUtils;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -19,6 +20,8 @@ import com.dianping.lion.client.ConfigCache;
 import com.dianping.lion.client.LionException;
 import com.dp.bigdata.taurus.core.MailHelper;
 import com.dp.bigdata.taurus.core.OpsAlarmHelper;
+import com.dp.bigdata.taurus.lion.ConfigHolder;
+import com.dp.bigdata.taurus.lion.LionKeys;
 import com.dp.bigdata.taurus.restlet.resource.IAllHosts;
 import com.dp.bigdata.taurus.restlet.resource.IExceptionHosts;
 
@@ -83,8 +86,9 @@ public class AlertOfflineAgentTask  extends TimerTask {
                     String isAlive2 = get_data(url2);
 
                     if ((isAlive1!= null && isAlive1.equals("true"))||(isAlive2!= null && isAlive2.equals("true"))){
-                        MailHelper.sendMail("kirin.li@dianping.com", context, "Taurus-Agent主机心跳异常告警服务");
-                        MailHelper.sendWeChat("kirin.li",context, "Taurus-Agent主机心跳异常告警服务");
+                    	String admin = ConfigHolder.get(LionKeys.ADMIN_USER);
+                    	MailHelper.sendMail(admin+"@dianping.com", context, "Taurus-Agent主机心跳异常告警服务");
+                        MailHelper.sendWeChat(admin,context, "Taurus-Agent主机心跳异常告警服务");
                         
                         oaHelper.buildTypeObject("Taurus")
 								.buildTypeItem("Service")
@@ -98,7 +102,8 @@ public class AlertOfflineAgentTask  extends TimerTask {
 								.sendAlarmPost(reportToOps);
                     }else
                     {
-                        MailHelper.sendWeChat("kirin.li",exceptContext, "Taurus-Agent主机失联系告警服务");
+                    	String admin = ConfigHolder.get(LionKeys.ADMIN_USER);
+                        MailHelper.sendWeChat(admin,exceptContext, "Taurus-Agent主机失联系告警服务");
                         String toMails = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.down.mail.to");
                         String [] toLists = toMails.split(",");
                         for (String to:toLists){
@@ -148,7 +153,8 @@ public class AlertOfflineAgentTask  extends TimerTask {
                     String isAlive2 = get_data(url2);
 
                     if(isAlive1 == null && isAlive2 == null) {//agent服务器无响应
-                        MailHelper.sendWeChat("kirin.li",exceptContext, "Taurus-Agent主机失联系告警服务");
+                    	String admin = ConfigHolder.get(LionKeys.ADMIN_USER);
+                        MailHelper.sendWeChat(admin,exceptContext, "Taurus-Agent主机失联系告警服务");
                         String toMails = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.down.mail.to");
                         String [] toLists = toMails.split(",");
                         for (String to:toLists){

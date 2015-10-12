@@ -8,6 +8,9 @@ import com.dianping.cat.Cat;
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
 import com.dianping.lion.client.LionException;
+import com.dp.bigdata.taurus.lion.ConfigHolder;
+import com.dp.bigdata.taurus.lion.LionKeys;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -87,8 +90,8 @@ public class MultiInstanceFilter implements Filter {
                         					+ "/attempt?taskID=" 
                         					+ context.getTaskid();
                         try {
-                            MailHelper.sendWeChat("kirin.li", alertontext, "Taurus-Job拥塞告警服务");
-                            //MailHelper.sendWeChat("chongze.chen", alertontext, "Taurus-Job拥塞告警服务");
+                        	String alertAdmin = ConfigHolder.get(LionKeys.CONGESTION_ADMIN_USER);
+                            MailHelper.sendWeChat(alertAdmin, alertontext, "Taurus-Job拥塞告警服务");
                             MailHelper.sendWeChat(context.getCreator(), alertontext, "Taurus-Job拥塞告警服务");
                             MailHelper.sendMail(context.getCreator() + "@dianping.com", alertontext, "Taurus-Job拥塞告警服务");
 

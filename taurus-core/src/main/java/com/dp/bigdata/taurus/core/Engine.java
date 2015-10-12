@@ -36,6 +36,8 @@ import com.dp.bigdata.taurus.generated.module.Task;
 import com.dp.bigdata.taurus.generated.module.TaskAttempt;
 import com.dp.bigdata.taurus.generated.module.TaskAttemptExample;
 import com.dp.bigdata.taurus.generated.module.TaskExample;
+import com.dp.bigdata.taurus.lion.ConfigHolder;
+import com.dp.bigdata.taurus.lion.LionKeys;
 import com.dp.bigdata.taurus.zookeeper.execute.helper.ExecuteException;
 import com.dp.bigdata.taurus.zookeeper.execute.helper.ExecuteStatus;
 import com.dp.bigdata.taurus.zookeeper.execute.helper.ExecutorManager;
@@ -181,8 +183,9 @@ final public class Engine implements Scheduler {
                    +"数据库连接串："
                    +dataBaseUrl;
            try {
-               MailHelper.sendMail("kirin.li@dianping.com", exceptContext, "Taurus数据库连接异常告警服务");
-               MailHelper.sendWeChat("kirin.li",exceptContext, "Taurus数据库连接异常告警服务");
+        	   String admin = ConfigHolder.get(LionKeys.ADMIN_USER);
+               MailHelper.sendMail(admin + "@dianping.com", exceptContext, "Taurus数据库连接异常告警服务");
+               MailHelper.sendWeChat(admin, exceptContext, "Taurus数据库连接异常告警服务");
                String toMails = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.down.mail.to");
                String [] toLists = toMails.split(",");
                for (String to:toLists){
@@ -286,8 +289,9 @@ final public class Engine implements Scheduler {
                     }
                     
                     if ((isAlive1!= null && isAlive1.equals("true"))||(isAlive2!= null && isAlive2.equals("true"))){
-                       MailHelper.sendMail("kirin.li@dianping.com", context, "Taurus-Agent主机心跳异常告警服务");
-                       MailHelper.sendWeChat("kirin.li",context, "Taurus-Agent主机心跳异常告警服务");
+                    	String admin = ConfigHolder.get(LionKeys.ADMIN_USER);
+                    	MailHelper.sendMail(admin + "@dianping.com", context, "Taurus-Agent主机心跳异常告警服务");
+                       MailHelper.sendWeChat(admin,context, "Taurus-Agent主机心跳异常告警服务");
 
                        
                         oaHelper.buildTypeObject("Taurus")
@@ -302,7 +306,8 @@ final public class Engine implements Scheduler {
 								.sendAlarmPost(reportToOps);
                        
                     } else {
-                        MailHelper.sendWeChat("kirin.li",exceptContext, "Taurus-Agent主机失联系告警服务");
+                    	String admin = ConfigHolder.get(LionKeys.ADMIN_USER);
+                        MailHelper.sendWeChat(admin,exceptContext, "Taurus-Agent主机失联系告警服务");
                         String toMails = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.down.mail.to");
                         String [] toLists = toMails.split(",");
                         for (String to:toLists){

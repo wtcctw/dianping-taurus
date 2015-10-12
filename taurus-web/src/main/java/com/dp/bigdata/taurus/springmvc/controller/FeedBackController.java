@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.dp.bigdata.taurus.alert.MailHelper;
 import com.dp.bigdata.taurus.alert.WeChatHelper;
+import com.dp.bigdata.taurus.lion.ConfigHolder;
+import com.dp.bigdata.taurus.lion.LionKeys;
 
 @Controller
 public class FeedBackController {
@@ -52,7 +54,8 @@ public class FeedBackController {
 
             try {
                 MailHelper.sendMail(to,"Taurus反馈服务",content);
-                WeChatHelper.sendWeChat("kirin.li",wccontent);
+                String adminuser = ConfigHolder.get(LionKeys.ADMIN_USER);
+                WeChatHelper.sendWeChat(adminuser, wccontent);
             } catch (MessagingException e) {
                 output.write("error".getBytes());
                 output.close();
