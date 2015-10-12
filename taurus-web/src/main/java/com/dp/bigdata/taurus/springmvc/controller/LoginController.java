@@ -71,7 +71,7 @@ public class LoginController {
 		UserDTO userDTO = setUserInfo(userName);
 		
 		//sso登录成功之后
-		HttpSession session = request.getSession();
+		HttpSession session = request.getSession(true);
 		session.setAttribute(InitController.USER_NAME, userName);
         System.out.println("login success!");
 
