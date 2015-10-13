@@ -77,25 +77,25 @@
 
                                 <div class="col-sm-12">
                                     <div class="col-sm-1"></div>
-                                    <div class="col-sm-4"><i class="icon-user-md">&nbsp;&nbsp; 李明 </i></div>
+                                    <div class="col-sm-4"><i class="icon-user-md">&nbsp;&nbsp; ${on_duty_name!} </i></div>
                                 </div>
                                 <div class="col-sm-12">
                                     <div class="col-sm-1"></div>
-                                    <div class="col-sm-4"><i class="icon-phone">&nbsp;&nbsp; 13661871541</i></div>
+                                    <div class="col-sm-4"><i class="icon-phone">&nbsp;&nbsp; ${on_duty_phone!}</i></div>
                                 </div>
                                 <div class="col-sm-12">
                                     <div class="col-sm-1"></div>
-                                    <div class="col-sm-4"><a target="_blank" style="color: orangered;" href="http://wpa.qq.com/msgrd?v=3&uin=767762405&site=qq&menu=yes"><img border="0" src="${rc.contextPath}/img/qq.png"  width="18" height="18"  alt="点我QQ在线反馈" title="点我QQ在线反馈"/>&nbsp;&nbsp;点我QQ在线反馈</a></div>
+                                    <div class="col-sm-4">企业QQ：${on_duty_qyqq!}</div>
                                 </div>
                                 <div class="col-sm-12">
                                     <div class="col-sm-1"></div>
-                                    <div class="col-sm-4"><i class="icon-envelope">&nbsp;&nbsp;&nbsp;kirin.li@dianping.com</i>
+                                    <div class="col-sm-4"><i class="icon-envelope">&nbsp;&nbsp;&nbsp;${alert_admin!}@dianping.com</i>
                                     </div>
-                                </div>
+                                </div> 
                                 <div class="col-sm-12">
                                     <div class="col-sm-1"></div>
                                     <div class="col-sm-4"><i class="icon-group"><strong>
-                                        &nbsp;&nbsp;155326270</strong></i></div>
+                                        &nbsp;&nbsp;229081714</strong></i></div>
                                 </div>
 
                             </div>

@@ -1,17 +1,14 @@
 package com.dp.bigdata.taurus.alert;
 
-import com.dianping.lion.EnvZooKeeperConfig;
-import com.dianping.lion.client.ConfigCache;
-import com.dianping.lion.client.LionException;
-import org.apache.commons.httpclient.NameValuePair;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
+
+import com.dp.bigdata.taurus.lion.ConfigHolder;
+import com.dp.bigdata.taurus.lion.LionKeys;
 
 /**
  * Created by kirinli on 14/12/17.
@@ -20,13 +17,7 @@ public class WeChatHelper {
 
     public static void sendWeChat(String user,String content){
 
-        String wechat_url = "";
-        try {
-            wechat_url = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.wechat.api");
-        } catch (LionException e) {
-            e.printStackTrace();
-            wechat_url = "http://10.101.2.28:8080";
-        }
+        String wechat_url = ConfigHolder.get(LionKeys.WECHAT_API.value(), "http://core.dp:8080");
 
         String wechat_api = wechat_url+ "/api";
 

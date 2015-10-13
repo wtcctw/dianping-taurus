@@ -103,7 +103,7 @@
                     <h5 class="widget-title">
                         <i class="icon-tasks"></i>
                         <a class="atip tooltip-info" data-toggle="tooltip" data-placement="bottom"
-                           data-original-title="你只能把自己组的任务指派给自己组的成员，如果你需要交接给别的组请联系 李明 【kirin.li@dianping.com】">[提示] </a>
+                           data-original-title="你只能把自己组的任务指派给自己组的成员，如果你需要交接给别的组请联系 ${on_duty_name!}">[提示] </a>
                         选择你要交接的任务
                     </h5>
 

@@ -68,7 +68,7 @@
 
                         <div class="controls">
                             <input type="text" class="" id="alertUser"
-                                   name="alertUser" value="kirin.li"
+                                   name="alertUser" value="${alert_admin!}"
                                     >
                         </div>
                     </div>

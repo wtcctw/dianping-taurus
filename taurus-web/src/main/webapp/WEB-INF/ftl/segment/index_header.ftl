@@ -72,14 +72,14 @@
         </#if>
         </div>
         <div class="pull-right" style="margin:10px;color: white;">
-            <a rel="popoverpic" style="color:white;"><i class="icon-group">加入后援团: 155326270</i></a>
+            <a rel="popoverpic" style="color:white;"><i class="icon-group">加入后援团: 229081714</i></a>
         </div>
 <script>
     $(function(){
         $("a[rel=popoverpic]").popover({
             trigger:'manual',
             placement : 'bottom', //placement of the popover. also can use top, bottom, left or right
-            //title : '<div style="text-align:center; color:gray; font-size:20px;">Taurus后援团:155326270</div>', //this is the top title bar of the popover. add some basic css
+            //title : '<div style="text-align:center; color:gray; font-size:20px;">企业QQ后援团:229081714</div>', //this is the top title bar of the popover. add some basic css
             html: 'true', //needed to show html of course
             content : '<div id="popOverBox"><img src="${rc.contextPath}/static/img/taurus.png" width="246px" height="246px" alt="暂无" /></div>', //this is the content of the html box. add the image here or anything you want really.
             animation: false
@@ -100,10 +100,8 @@
     });
 </script>
         <div class="pull-right ng-binding" style="margin:10px;color: white;" ng-bind="monitorMessage"><i
-                class="icon-user-md">开发者：李明 <a target="_blank" style="margin:10px;color: white;"
-                                               href="http://wpa.qq.com/msgrd?v=3&uin=767762405&site=qq&menu=yes"><img
-                border="0" src="${rc.contextPath}/img/qq.png" width="20" height="20" color="white" alt="点我报错" title="点我报错"/>点我报错</a></i>
-            <i class="icon-phone">: 13661871541</i>
+                class="icon-user-md">值班：${on_duty_name!} 企业QQ：${on_duty_qyqq!}</i>
+            <i class="icon-phone">: ${on_duty_phone!}</i>
         </div>
 
     </div>

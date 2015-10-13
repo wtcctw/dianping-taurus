@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
+import com.dp.bigdata.taurus.lion.ConfigHolder;
+import com.dp.bigdata.taurus.lion.LionKeys;
 import com.dp.bigdata.taurus.restlet.shared.AttemptDTO;
 import com.dp.bigdata.taurus.restlet.shared.HostDTO;
 import com.dp.bigdata.taurus.restlet.shared.PoolDTO;
@@ -83,6 +85,7 @@ public class HomeController {
 		commonnav(request,globalViewVariable);
 		modelMap.addAttribute("currentUser", globalViewVariable.currentUser);
 		modelMap.addAttribute("isAdmin", globalViewVariable.isAdmin);
+		commonAttr(modelMap);
 		
 		String stepStr = request.getParameter("step");//查询间隔时间段的“步数”
 		String baseDateStr = request.getParameter("date");//查询所基于的时间
@@ -207,6 +210,7 @@ public class HomeController {
 		commonnav(request,globalViewVariable);
 		modelMap.addAttribute("currentUser", globalViewVariable.currentUser);
 		modelMap.addAttribute("isAdmin", globalViewVariable.isAdmin);
+		commonAttr(modelMap);
 		
 		String stepStr = request.getParameter("step");//查询间隔时间段的“步数”
 		String baseDateStr = request.getParameter("date");//查询所基于的时间
@@ -328,6 +332,7 @@ public class HomeController {
 		commonnav(request,globalViewVariable);
 		modelMap.addAttribute("currentUser", globalViewVariable.currentUser);
 		modelMap.addAttribute("isAdmin", globalViewVariable.isAdmin);
+		commonAttr(modelMap);
 	    
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHH");
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -367,6 +372,7 @@ public class HomeController {
 		modelMap.addAttribute("currentUser", globalViewVariable.currentUser);
 		modelMap.addAttribute("isAdmin", globalViewVariable.isAdmin);
 		modelMap.addAttribute("users", globalViewVariable.users);
+		commonAttr(modelMap);
 		
 		String name = request.getParameter("appname");
 		String path = request.getParameter("path");
@@ -417,6 +423,7 @@ public class HomeController {
 		commonnav(request,globalViewVariable);
 		modelMap.addAttribute("currentUser", globalViewVariable.currentUser);
 		modelMap.addAttribute("isAdmin", globalViewVariable.isAdmin);
+		commonAttr(modelMap);
 	    
 		return "/schedule.ftl";
 	}
@@ -440,6 +447,7 @@ public class HomeController {
 		modelMap.addAttribute("currentUser", globalViewVariable.currentUser);
 		modelMap.addAttribute("isAdmin", globalViewVariable.isAdmin);
 		modelMap.addAttribute("users", globalViewVariable.users);
+		commonAttr(modelMap);
 		
 		String[] types = {"hadoop", "spring", "other"};
 
@@ -479,6 +487,7 @@ public class HomeController {
 		commonnav(request,globalViewVariable);
 		modelMap.addAttribute("currentUser", globalViewVariable.currentUser);
 		modelMap.addAttribute("isAdmin", globalViewVariable.isAdmin);
+		commonAttr(modelMap);
 	    
 		return "/attempt.ftl";
 	}
@@ -501,6 +510,7 @@ public class HomeController {
 		commonnav(request,globalViewVariable);
 		modelMap.addAttribute("currentUser", globalViewVariable.currentUser);
 		modelMap.addAttribute("isAdmin", globalViewVariable.isAdmin);
+		commonAttr(modelMap);
 	    
 		return "/viewlog.ftl";
 	}
@@ -524,6 +534,7 @@ public class HomeController {
 		modelMap.addAttribute("currentUser", globalViewVariable.currentUser);
 		modelMap.addAttribute("isAdmin", globalViewVariable.isAdmin);
 		modelMap.addAttribute("users", globalViewVariable.users);
+		commonAttr(modelMap);
 		
 		String attemptId = request.getParameter("id");
 		String taskName = request.getParameter("taskName");
@@ -569,6 +580,9 @@ public class HomeController {
 		modelMap.addAttribute("logUrl", logUrl);
 		modelMap.addAttribute("qq", qq);
 		
+		String alert_admin = ConfigHolder.get(LionKeys.ADMIN_USER);
+		modelMap.addAttribute("alert_admin", alert_admin);
+		
 		return "/feederror.ftl";
 	}
 	
@@ -589,6 +603,7 @@ public class HomeController {
 		commonnav(request,globalViewVariable);
 		modelMap.addAttribute("currentUser", globalViewVariable.currentUser);
 		modelMap.addAttribute("isAdmin", globalViewVariable.isAdmin);
+		commonAttr(modelMap);
 	    
 		String stepStr = request.getParameter("step");//查询间隔时间段的“步数”
 		String baseDateStr = request.getParameter("date");//查询所基于的时间
@@ -689,6 +704,7 @@ public class HomeController {
 		commonnav(request,globalViewVariable);
 		modelMap.addAttribute("currentUser", globalViewVariable.currentUser);
 		modelMap.addAttribute("isAdmin", globalViewVariable.isAdmin);
+		commonAttr(modelMap);
 
 		globalViewVariable.cr = new ClientResource(globalViewVariable.host + "host");
 	    ArrayList<HostDTO> hosts = globalViewVariable.cr.get(ArrayList.class);
@@ -786,6 +802,7 @@ public class HomeController {
 		commonnav(request,globalViewVariable);
 		modelMap.addAttribute("currentUser", globalViewVariable.currentUser);
 		modelMap.addAttribute("isAdmin", globalViewVariable.isAdmin);
+		commonAttr(modelMap);
 		
 		String ip = request.getParameter("ip");
 		modelMap.addAttribute("ip", ip);
@@ -820,6 +837,7 @@ public class HomeController {
 		modelMap.addAttribute("currentUser", globalViewVariable.currentUser);
 		modelMap.addAttribute("isAdmin", globalViewVariable.isAdmin);
 		modelMap.addAttribute("users", globalViewVariable.users);
+		commonAttr(modelMap);
 		
 		globalViewVariable.cr = new ClientResource(globalViewVariable.host + "group");
 		ArrayList<UserGroupDTO> groups = globalViewVariable.cr.get(ArrayList.class);
@@ -875,6 +893,7 @@ public class HomeController {
 		modelMap.addAttribute("currentUser", globalViewVariable.currentUser);
 		modelMap.addAttribute("isAdmin", globalViewVariable.isAdmin);
 		modelMap.addAttribute("userId", globalViewVariable.userId);
+		commonAttr(modelMap);
 		
 		Map<String, String> map = new HashMap<String, String>();
 		
@@ -941,6 +960,7 @@ public class HomeController {
 		commonnav(request,globalViewVariable);
 		modelMap.addAttribute("currentUser", globalViewVariable.currentUser);
 		modelMap.addAttribute("isAdmin", globalViewVariable.isAdmin);
+		commonAttr(modelMap);
 	    
 	    return "/dbadmin.ftl";
 	}
@@ -963,6 +983,7 @@ public class HomeController {
 		commonnav(request,globalViewVariable);
 		modelMap.addAttribute("currentUser", globalViewVariable.currentUser);
 		modelMap.addAttribute("isAdmin", globalViewVariable.isAdmin);
+		commonAttr(modelMap);
 	    
 	    Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
@@ -989,6 +1010,10 @@ public class HomeController {
 		commonnav(request,globalViewVariable);
 		modelMap.addAttribute("currentUser", globalViewVariable.currentUser);
 		modelMap.addAttribute("isAdmin", globalViewVariable.isAdmin);
+		commonAttr(modelMap);
+		
+		String alert_admin = ConfigHolder.get(LionKeys.ADMIN_USER);
+		modelMap.addAttribute("alert_admin", alert_admin);
 	    
 	    return "/feedback.ftl";
 	}
@@ -1011,6 +1036,7 @@ public class HomeController {
 		commonnav(request,globalViewVariable);
 		modelMap.addAttribute("currentUser", globalViewVariable.currentUser);
 		modelMap.addAttribute("isAdmin", globalViewVariable.isAdmin);
+		commonAttr(modelMap);
 	    
 	    return "/update.ftl";
 	}
@@ -1033,6 +1059,7 @@ public class HomeController {
 		commonnav(request,globalViewVariable);
 		modelMap.addAttribute("currentUser", globalViewVariable.currentUser);
 		modelMap.addAttribute("isAdmin", globalViewVariable.isAdmin);
+		commonAttr(modelMap);
 	    
 	    return "/about.ftl";
 	}
@@ -1055,6 +1082,7 @@ public class HomeController {
 		commonnav(request,globalViewVariable);
 		modelMap.addAttribute("currentUser", globalViewVariable.currentUser);
 		modelMap.addAttribute("isAdmin", globalViewVariable.isAdmin);
+		commonAttr(modelMap);
 	    
 	    return "/error.ftl";
 	}
@@ -1096,6 +1124,16 @@ public class HomeController {
 			}
 		}
 	    
+	}
+	
+	private void commonAttr(ModelMap modelMap){
+		String on_duty_name = ConfigHolder.get(LionKeys.ON_DUTY_ADMIN);
+		String on_duty_qyqq = ConfigHolder.get(LionKeys.ON_DUTY_QYQQ);
+		String on_duty_phone = ConfigHolder.get(LionKeys.ON_DUTY_PHONE);
+		
+		modelMap.addAttribute("on_duty_name", on_duty_name);
+		modelMap.addAttribute("on_duty_qyqq", on_duty_qyqq);
+		modelMap.addAttribute("on_duty_phone", on_duty_phone);
 	}
 	
 	/**
