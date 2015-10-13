@@ -7,6 +7,8 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.dp.bigdata.taurus.lion.ConfigHolder;
 import com.dp.bigdata.taurus.lion.LionKeys;
 
@@ -17,10 +19,15 @@ public class WeChatHelper {
 
     public static void sendWeChat(String user,String content){
 
+    	if(StringUtils.isBlank(user) || StringUtils.isBlank(content)) {
+    		System.out.println("SendWechat error! user or content can't be blank!");
+        	return;
+        }
+    	
         String wechat_url = ConfigHolder.get(LionKeys.WECHAT_API.value(), "http://core.dp:8080");
 
         String wechat_api = wechat_url+ "/api";
-
+        
         String params = "action=push&sysName=ezc&keyword=" + user.trim()
                 + "&title=Taurus 微信告警服务&content= " + content.trim();
 

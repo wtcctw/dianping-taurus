@@ -9,6 +9,8 @@ package com.dp.bigdata.taurus.core;
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
 import com.dianping.lion.client.LionException;
+import com.dp.bigdata.taurus.lion.ConfigHolder;
+import com.dp.bigdata.taurus.lion.LionKeys;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -16,6 +18,9 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+
+import org.apache.commons.lang.StringUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -73,13 +78,13 @@ public class MailHelper{
         MailHelper.sendMail(mail);
     }
     public static void sendWeChat(String user,String content, String title){
-        String wechat_url = "";
-        try {
-            wechat_url = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.wechat.api");
-        } catch (LionException e) {
-            e.printStackTrace();
-            wechat_url = "http://10.101.2.28:8080";
+    	
+    	if(StringUtils.isBlank(user) || StringUtils.isBlank(content)) {
+    		System.out.println("SendWechat error! user or content can't be blank!");
+        	return;
         }
+    	
+        String wechat_url = ConfigHolder.get(LionKeys.WECHAT_API.value(), "http://core.dp:8080");
 
         String wechat_api = wechat_url+ "/api";
 
