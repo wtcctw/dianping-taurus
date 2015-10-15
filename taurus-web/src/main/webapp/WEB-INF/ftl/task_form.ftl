@@ -207,16 +207,16 @@
                 disabled>
         <#if dto.isHasmail() && dto.isHassms()>
             <option id="1">邮件</option>
-            <option id="2">短信</option>
-            <option id="3" selected="selected">邮件和短信</option>
+            <option id="2">微信</option>
+            <option id="3" selected="selected">邮件和微信</option>
         <#elseif !dto.isHasmail() && dto.isHassms()>
             <option id="1">邮件</option>
-            <option id="2" selected="selected">短信</option>
-            <option id="3">邮件和短信</option>
+            <option id="2" selected="selected">微信</option>
+            <option id="3">邮件和微信</option>
         <#else>
             <option id="1" selected="selected">邮件</option>
-            <option id="2">短信</option>
-            <option id="3">邮件和短信</option>
+            <option id="2">微信</option>
+            <option id="3">邮件和微信</option>
         </#if>
         </select>
     </div>

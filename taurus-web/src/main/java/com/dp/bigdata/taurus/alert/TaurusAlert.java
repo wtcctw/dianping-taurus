@@ -202,8 +202,9 @@ public class TaurusAlert {
 
 					}
 
-					if (rule.getHassms() && StringUtils.isNotBlank(user.getTel())) {
-						sendSMS(user.getTel(), attempt);
+					if (rule.getHassms() /*&& StringUtils.isNotBlank(user.getTel())*/) {
+		                sendWeChat(user.getName(),attempt);
+						//sendSMS(user.getTel(), attempt);
 					}
 				} else {
 					Cat.logError("Cannot find user id : " + id, null);
@@ -280,8 +281,8 @@ public class TaurusAlert {
 
 			try {
 				sendMail(mailTo, sbMailContent.toString());
-                Cat.logEvent("Alert.WeChat",userName );
-                sendWeChat(userName,attempt);
+                /*Cat.logEvent("Alert.WeChat",userName );
+                sendWeChat(userName,attempt);*/
 
 			} catch (Exception e) {
 				LOG.error("fail to send mail to " + mailTo, e);

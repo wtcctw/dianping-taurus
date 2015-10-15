@@ -46,9 +46,9 @@ public class TaskRequestExtractor implements RequestExtrator<TaskDTO> {
 
 	private static final String MAIL_ONLY = "1";
 
-	private static final String SMS_ONLY = "2";
+	private static final String WECHAT_ONLY = "2";
 
-	private static final String MAIL_AND_SMS = "3";
+	private static final String MAIL_AND_WECHAT = "3";
 
 	@Autowired
 	private IDFactory idFactory;
@@ -218,9 +218,9 @@ public class TaskRequestExtractor implements RequestExtrator<TaskDTO> {
 				if (StringUtils.isNotBlank(value)) {
 					if (value.equalsIgnoreCase(MAIL_ONLY)) {
 						task.setHasmail(true);
-					} else if (value.equalsIgnoreCase(SMS_ONLY)) {
+					} else if (value.equalsIgnoreCase(WECHAT_ONLY)) {
 						task.setHassms(true);
-					} else if (value.equalsIgnoreCase(MAIL_AND_SMS)) {
+					} else if (value.equalsIgnoreCase(MAIL_AND_WECHAT)) {
 						task.setHasmail(true);
 						task.setHassms(true);
 					} else {
