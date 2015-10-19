@@ -1,4 +1,4 @@
-package com.dp.bigdata.taurus.core;
+package com.dp.bigdata.taurus.alert;
 
 /**
  * 运维告警接口异常

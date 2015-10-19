@@ -28,6 +28,9 @@ import com.dianping.cat.message.Transaction;
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
 import com.dianping.lion.client.LionException;
+import com.dp.bigdata.taurus.alert.MailHelper;
+import com.dp.bigdata.taurus.alert.OpsAlarmHelper;
+import com.dp.bigdata.taurus.alert.WeChatHelper;
 import com.dp.bigdata.taurus.generated.mapper.HostMapper;
 import com.dp.bigdata.taurus.generated.mapper.TaskAttemptMapper;
 import com.dp.bigdata.taurus.generated.mapper.TaskMapper;
@@ -185,7 +188,7 @@ final public class Engine implements Scheduler {
            try {
         	   String admin = ConfigHolder.get(LionKeys.ADMIN_USER);
                MailHelper.sendMail(admin + "@dianping.com", exceptContext, "Taurus数据库连接异常告警服务");
-               MailHelper.sendWeChat(admin, exceptContext, "Taurus数据库连接异常告警服务");
+               WeChatHelper.sendWeChat(admin, exceptContext, "Taurus数据库连接异常告警服务");
                String toMails = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.down.mail.to");
                String [] toLists = toMails.split(",");
                for (String to:toLists){
@@ -291,7 +294,7 @@ final public class Engine implements Scheduler {
                     if ((isAlive1!= null && isAlive1.equals("true"))||(isAlive2!= null && isAlive2.equals("true"))){
                     	String admin = ConfigHolder.get(LionKeys.ADMIN_USER);
                     	MailHelper.sendMail(admin + "@dianping.com", context, "Taurus-Agent主机心跳异常告警服务");
-                       MailHelper.sendWeChat(admin,context, "Taurus-Agent主机心跳异常告警服务");
+                    	WeChatHelper.sendWeChat(admin,context, "Taurus-Agent主机心跳异常告警服务");
 
                        
                         oaHelper.buildTypeObject("Taurus")
@@ -307,7 +310,7 @@ final public class Engine implements Scheduler {
                        
                     } else {
                     	String admin = ConfigHolder.get(LionKeys.ADMIN_USER);
-                        MailHelper.sendWeChat(admin,exceptContext, "Taurus-Agent主机失联系告警服务");
+                    	WeChatHelper.sendWeChat(admin,exceptContext, "Taurus-Agent主机失联系告警服务");
                         String toMails = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.down.mail.to");
                         String [] toLists = toMails.split(",");
                         for (String to:toLists){

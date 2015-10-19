@@ -1,4 +1,4 @@
-package com.dp.bigdata.taurus.core;
+package com.dp.bigdata.taurus.alert;
 
 import java.util.HashMap;
 import java.util.Map;

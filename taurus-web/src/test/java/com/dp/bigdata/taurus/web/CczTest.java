@@ -12,6 +12,7 @@ import jodd.util.StringUtil;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.json.JSONException;
 import org.junit.Test;
 import org.restlet.Request;
@@ -38,7 +39,25 @@ public class CczTest {
 	
 	private final AtomicBoolean isInterrupt = new AtomicBoolean(true);
 	
+	String mailUrl = "http://web.paas.dp/mail/send";
+	
 	@Test
+	public void testEmail() {
+		FormDataMultiPart formDataMultiPart = new FormDataMultiPart();
+    	formDataMultiPart.field("title", "ccz邮件测试");
+    	formDataMultiPart.field("recipients", "chongze.chen@dianping.com,mingdong.li@dianping.com");
+    	formDataMultiPart.field("body", "邮件正文");
+    	
+		try {
+			String result = RestCallUtils.postRestCall(mailUrl, formDataMultiPart, String.class, 5000, 5000);
+			log.info(result);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	//@Test
 	public void testboo(){
 		boolean a = false;
 		boolean b = false;

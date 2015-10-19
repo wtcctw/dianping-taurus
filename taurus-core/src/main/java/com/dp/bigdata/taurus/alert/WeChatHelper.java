@@ -36,6 +36,25 @@ public class WeChatHelper {
         System.out.println(resp);
 
     }
+    
+    public static void sendWeChat(String user,String content, String title){
+    	
+    	if(StringUtils.isBlank(user) || StringUtils.isBlank(content)) {
+    		System.out.println("SendWechat error! user or content can't be blank!");
+        	return;
+        }
+    	
+        String wechat_url = ConfigHolder.get(LionKeys.WECHAT_API.value(), "http://core.dp:8080");
+
+        String wechat_api = wechat_url+ "/api";
+
+        String params = "action=push&sysName=ezc&keyword=" + user.trim()
+                + "&title=" + title.trim() + "&content=" + content.trim();
+
+        sendPost(wechat_api, params);
+
+
+    }
 
     public static String sendPost(String url, String param) {
         PrintWriter out = null;

@@ -18,8 +18,9 @@ import com.dianping.cat.Cat;
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
 import com.dianping.lion.client.LionException;
-import com.dp.bigdata.taurus.core.MailHelper;
-import com.dp.bigdata.taurus.core.OpsAlarmHelper;
+import com.dp.bigdata.taurus.alert.MailHelper;
+import com.dp.bigdata.taurus.alert.OpsAlarmHelper;
+import com.dp.bigdata.taurus.alert.WeChatHelper;
 import com.dp.bigdata.taurus.lion.ConfigHolder;
 import com.dp.bigdata.taurus.lion.LionKeys;
 import com.dp.bigdata.taurus.restlet.resource.IAllHosts;
@@ -88,7 +89,7 @@ public class AlertOfflineAgentTask  extends TimerTask {
                     if ((isAlive1!= null && isAlive1.equals("true"))||(isAlive2!= null && isAlive2.equals("true"))){
                     	String admin = ConfigHolder.get(LionKeys.ADMIN_USER);
                     	MailHelper.sendMail(admin+"@dianping.com", context, "Taurus-Agent主机心跳异常告警服务");
-                        MailHelper.sendWeChat(admin,context, "Taurus-Agent主机心跳异常告警服务");
+                    	WeChatHelper.sendWeChat(admin,context, "Taurus-Agent主机心跳异常告警服务");
                         
                         oaHelper.buildTypeObject("Taurus")
 								.buildTypeItem("Service")
@@ -103,7 +104,7 @@ public class AlertOfflineAgentTask  extends TimerTask {
                     }else
                     {
                     	String admin = ConfigHolder.get(LionKeys.ADMIN_USER);
-                        MailHelper.sendWeChat(admin,exceptContext, "Taurus-Agent主机失联系告警服务");
+                        WeChatHelper.sendWeChat(admin,exceptContext, "Taurus-Agent主机失联系告警服务");
                         String toMails = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.down.mail.to");
                         String [] toLists = toMails.split(",");
                         for (String to:toLists){
@@ -154,7 +155,7 @@ public class AlertOfflineAgentTask  extends TimerTask {
 
                     if(isAlive1 == null && isAlive2 == null) {//agent服务器无响应
                     	String admin = ConfigHolder.get(LionKeys.ADMIN_USER);
-                        MailHelper.sendWeChat(admin,exceptContext, "Taurus-Agent主机失联系告警服务");
+                    	WeChatHelper.sendWeChat(admin,exceptContext, "Taurus-Agent主机失联系告警服务");
                         String toMails = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.down.mail.to");
                         String [] toLists = toMails.split(",");
                         for (String to:toLists){

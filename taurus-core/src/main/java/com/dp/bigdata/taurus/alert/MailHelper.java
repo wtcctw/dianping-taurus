@@ -5,9 +5,8 @@
 
 package com.dp.bigdata.taurus.alert;
 
-
-
 import java.util.Properties;
+
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -15,14 +14,34 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 
-public class MailHelper{
+import com.dp.bigdata.taurus.utils.RestCallUtils;
+
+public class MailHelper {
+	
+	private final static String mailUrl = "http://web.paas.dp/mail/send";
+	
+	public static void sendMail(MailInfo mailInfo) {
+		FormDataMultiPart formDataMultiPart = new FormDataMultiPart();
+    	formDataMultiPart.field("title", mailInfo.getSubject());
+    	formDataMultiPart.field("recipients", mailInfo.getTo());
+    	formDataMultiPart.field("body", mailInfo.getContent());
+    	
+    	try {
+			RestCallUtils.postRestCall(mailUrl, formDataMultiPart, String.class, 2000, 2000);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		}
+	}
 	/**
 	* send email
 	* @throws javax.mail.MessagingException
 	* @throws Exception
 	*/
-	public static void sendMail(MailInfo mailInfo) throws MessagingException{
+	public static void sendMailWith51ping(MailInfo mailInfo) throws MessagingException{
 		Properties props = new Properties();
 		props.put("mail.smtp.host", mailInfo.getHost());
 		props.put("mail.smtp.auth", "true");
