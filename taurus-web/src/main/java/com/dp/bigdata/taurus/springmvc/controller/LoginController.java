@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
+import org.restlet.Client;
+import org.restlet.data.Protocol;
 import org.restlet.resource.ClientResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -107,7 +109,7 @@ public class LoginController {
 		// 只销毁了session。在线用户库里的注销工作在session的SessionDestroyedListener里完成
         request.getSession().invalidate(); 
         
-        System.out.println("logout success!");
+        log.info("logout success!");
         
         String ssoLogoutUrl = InitController.SSO_LOGOUT_URL;
         String taurusUrl = InitController.DOMAIN;
@@ -207,7 +209,11 @@ public class LoginController {
 	 */
 	private boolean isInfoCompleted(String userName){
 		
+		Client client = new Client(Protocol.HTTP);
+		client.setConnectTimeout(1000);
+		
 		ClientResource cr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "user/" + userName);
+		cr.setNext(client);
 		UserDTO userDTO = cr.get(UserDTO.class);
   	    
 		boolean result = false;

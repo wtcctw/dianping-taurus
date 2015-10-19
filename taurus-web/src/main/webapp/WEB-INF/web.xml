@@ -53,7 +53,20 @@
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
-	
+    
+	<filter>
+        <filter-name>NonAuthFilter</filter-name>
+        <filter-class>com.dp.bigdata.taurus.web.servlet.filter.NonAuthFilter</filter-class>
+        <init-param>
+            <param-name>excludes</param-name>
+            <param-value>/login.do,/signin,/rest/ssologin,/rest/ssologout,/error,/api/,/test/,/static/,/js/,/css/,/files/,/img/,/lib/,/resource/</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>NonAuthFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
 	<!-- sso文档给的顺序不对，必须按下面这个顺序严格排放 -->
 	<filter>
 	    <filter-name>CAS Authentication Filter</filter-name>
@@ -76,7 +89,7 @@
 	    <!-- 免登录url，支持通配符*，多个用,分隔 -->
 	    <init-param>
 	        <param-name>excludeURLs</param-name>
-	        <param-value>/rest/ssologout,/error,/api/*,/test/*,/static/*,/js/*,/css/*,/files/*,/img/*,/lib/*,/resource/*</param-value>
+	        <param-value></param-value>
 	    </init-param>
 	    <init-param>
             <param-name>formal</param-name>
@@ -150,7 +163,7 @@
 		<filter-class>com.dp.bigdata.taurus.web.servlet.filter.AuthenticationFilter</filter-class>
 		<init-param>
 			<param-name>excludePage</param-name>
-			<param-value>/login.do,/signin,/rest/ssologin,/rest/ssologout,/error,/api/,/test/,/static/,/js/,/css/,/files/,/img/,/lib/,/resource/</param-value>
+			<param-value></param-value>
 		</init-param>
 	</filter>
 	<filter-mapping>
