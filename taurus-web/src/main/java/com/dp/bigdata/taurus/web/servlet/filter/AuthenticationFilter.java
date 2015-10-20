@@ -45,54 +45,31 @@ public class AuthenticationFilter implements Filter {
 	      ServletException {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
-		
 		String userInfoStr = req.getRemoteUser();
-		log.info("ssoUserInfo: " + userInfoStr);
 		
 		if(StringUtils.isBlank(userInfoStr)){
 			res.sendRedirect(req.getContextPath() + "/error");
 			return ;
 		}
 		
-		String userName = userInfoStr.split("\\|")[0];
-		UserDTO userDTO = setUserInfo(userName);
-		
-		//sso登录成功之后
+		String dpaccount = userInfoStr.split("\\|")[0];
 		HttpSession session = req.getSession(true);
-		session.setAttribute(InitController.USER_NAME, userName);
+		String sessionAccount = (String) session.getAttribute(InitController.USER_NAME);
+		
+		if(dpaccount.equalsIgnoreCase(sessionAccount)){
+			log.info(dpaccount + " already logged in.");
+			chain.doFilter(request, response);
+			return;
+		}
+		
+		UserDTO userDTO = setUserInfo(dpaccount);
+		session.setAttribute(InitController.USER_NAME, dpaccount);
 		
 		ClientResource cr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "user");
 		cr.post(userDTO);//createIfNotExist
 		
 		chain.doFilter(request, response);
 		
-		
-		/*String requestURI = req.getRequestURI();
-		
-		// Filter出口1. 登录/ssologin 本机放行，cas不能放行，否则可以伪造cas认证信息；登出/ssologout 本机和cas都放行
-		for (String uri : excludePages) {
-			if (requestURI.toLowerCase().startsWith(uri)){
-				chain.doFilter(request, response);
-				return;
-			}
-		}
-		
-		if (StringUtil.isNotBlank(req.getQueryString())) {
-			requestURI = requestURI + "?" + req.getQueryString();
-		}
-		
-		HttpSession session = req.getSession(true);
-		Object currentUser = session.getAttribute(InitController.USER_NAME);
-		
-		//未登录
-		if (currentUser == null) {
-			String loginUrl =  req.getContextPath() 
-								+ "/rest/ssologin?redirect-url=" 
-								+ URLEncoder.encode(requestURI, "UTF-8");
-			req.getRequestDispatcher(loginUrl).forward(req, res);
-		} else {// Filter出口2.
-			chain.doFilter(request, response);
-		}*/
 	}
 
 	@Override
