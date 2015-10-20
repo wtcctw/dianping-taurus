@@ -75,7 +75,7 @@ public class MailHelper {
 		transport.close();
 	}
 
-    public static void sendMail(String to, String subject, String content) throws MessagingException {
+    public static void sendMail(String to, String content, String subject) throws MessagingException {
         MailInfo mail = new MailInfo();
         mail.setTo(to);
         mail.setContent(content);

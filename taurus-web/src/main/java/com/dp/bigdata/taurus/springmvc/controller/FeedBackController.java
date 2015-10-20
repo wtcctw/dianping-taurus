@@ -53,7 +53,7 @@ public class FeedBackController {
             to += ","+ user +"@dianping.com";
 
             try {
-                MailHelper.sendMail(to,"Taurus反馈服务",content);
+                MailHelper.sendMail(to,content,"Taurus反馈服务");
                 String adminuser = ConfigHolder.get(LionKeys.ADMIN_USER);
                 WeChatHelper.sendWeChat(adminuser, wccontent);
             } catch (MessagingException e) {
