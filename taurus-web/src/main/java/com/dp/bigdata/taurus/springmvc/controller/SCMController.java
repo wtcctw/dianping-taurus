@@ -51,6 +51,10 @@ public class SCMController extends BaseController {
 		modelMap.addAttribute("isAdmin", globalViewVariable.isAdmin);
 		commonAttr(modelMap);
 		
+		if(globalViewVariable.isAdmin == false) { 
+			return "/error.ftl";
+		}
+		
 		return "/usergroups/index.ftl";
 	}
 	
@@ -122,6 +126,10 @@ public class SCMController extends BaseController {
 		modelMap.addAttribute("currentUser", globalViewVariable.currentUser);
 		modelMap.addAttribute("isAdmin", globalViewVariable.isAdmin);
 		commonAttr(modelMap);
+		
+		if(globalViewVariable.isAdmin == false) { 
+			return "/error.ftl";
+		}
 		
 		return "/usergroupmappings/index.ftl";
 	}

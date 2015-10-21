@@ -96,4 +96,11 @@ public class UserGroup {
     public void setDescription(String description) {
         this.description = description;
     }
+
+	@Override
+	public String toString() {
+		return "UserGroup [id=" + id + ", groupname=" + groupname
+				+ ", description=" + description + "]";
+	}
+    
 }

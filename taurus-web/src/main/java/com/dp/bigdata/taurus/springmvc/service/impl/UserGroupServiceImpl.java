@@ -2,11 +2,17 @@ package com.dp.bigdata.taurus.springmvc.service.impl;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dp.bigdata.taurus.generated.mapper.UserGroupMapper;
+import com.dp.bigdata.taurus.generated.mapper.UserGroupMappingMapper;
 import com.dp.bigdata.taurus.generated.module.UserGroup;
+import com.dp.bigdata.taurus.generated.module.UserGroupExample;
+import com.dp.bigdata.taurus.generated.module.UserGroupMapping;
+import com.dp.bigdata.taurus.generated.module.UserGroupMappingExample;
 import com.dp.bigdata.taurus.springmvc.bean.JqGridRespBean;
 import com.dp.bigdata.taurus.springmvc.service.UserGroupService;
 
@@ -17,8 +23,11 @@ import com.dp.bigdata.taurus.springmvc.service.UserGroupService;
 @Service
 public class UserGroupServiceImpl implements UserGroupService {
 
+	private Logger log = LoggerFactory.getLogger(this.getClass());
 	@Autowired
 	private UserGroupMapper userGroupMapper;
+	@Autowired
+	private UserGroupMappingMapper userGroupMappingMapper;
 	
 	@Override
 	public List<UserGroup> retrieveByPageAndRows(int page, int rows) {
@@ -56,7 +65,24 @@ public class UserGroupServiceImpl implements UserGroupService {
 			
 			try {
 				id = Integer.parseInt(ids);
-				count = userGroupMapper.deleteByPrimaryKey(id);
+				
+				//check whether there is usergroupmappings
+				UserGroupMappingExample userGroupMappingExample = new UserGroupMappingExample();
+				userGroupMappingExample.createCriteria().andGroupidEqualTo(id);
+				List<UserGroupMapping> userGroupMappings = userGroupMappingMapper.selectByExample(userGroupMappingExample);
+				
+				if(userGroupMappings.size() > 0) {
+					log.error("can't delete while there is user belongs to this group!");
+				} else {
+					UserGroupExample userGroupExample = new UserGroupExample();
+					userGroupExample.createCriteria().andIdEqualTo(id);
+					List<UserGroup> userGroups = userGroupMapper.selectByExample(userGroupExample);
+					
+					if(userGroups.size() > 0) {
+						log.info("begin to delete userGroup: " + userGroups.get(0).toString());
+						count = userGroupMapper.deleteByPrimaryKey(id);
+					}
+				}
 				
 			} catch (NumberFormatException e) {
 				e.printStackTrace();
