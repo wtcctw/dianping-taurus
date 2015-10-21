@@ -65,24 +65,7 @@ public class UserGroupServiceImpl implements UserGroupService {
 			
 			try {
 				id = Integer.parseInt(ids);
-				
-				//check whether there is usergroupmappings
-				UserGroupMappingExample userGroupMappingExample = new UserGroupMappingExample();
-				userGroupMappingExample.createCriteria().andGroupidEqualTo(id);
-				List<UserGroupMapping> userGroupMappings = userGroupMappingMapper.selectByExample(userGroupMappingExample);
-				
-				if(userGroupMappings.size() > 0) {
-					log.error("can't delete while there is user belongs to this group!");
-				} else {
-					UserGroupExample userGroupExample = new UserGroupExample();
-					userGroupExample.createCriteria().andIdEqualTo(id);
-					List<UserGroup> userGroups = userGroupMapper.selectByExample(userGroupExample);
-					
-					if(userGroups.size() > 0) {
-						log.info("begin to delete userGroup: " + userGroups.get(0).toString());
-						count = userGroupMapper.deleteByPrimaryKey(id);
-					}
-				}
+				count = deleteById(id);
 				
 			} catch (NumberFormatException e) {
 				e.printStackTrace();
@@ -101,6 +84,31 @@ public class UserGroupServiceImpl implements UserGroupService {
 		
 		if(userGroup.getId() != null) {
 			sqlSucCount = userGroupMapper.updateByPrimaryKeySelective(userGroup);
+		}
+		
+		return sqlSucCount;
+	}
+
+	@Override
+	public int deleteById(Integer id) {
+		int sqlSucCount = 0;
+		
+		//check whether there is usergroupmappings
+		UserGroupMappingExample userGroupMappingExample = new UserGroupMappingExample();
+		userGroupMappingExample.createCriteria().andGroupidEqualTo(id);
+		List<UserGroupMapping> userGroupMappings = userGroupMappingMapper.selectByExample(userGroupMappingExample);
+		
+		if(userGroupMappings.size() > 0) {
+			log.error("can't delete while there is user belongs to this group!");
+		} else {
+			UserGroupExample userGroupExample = new UserGroupExample();
+			userGroupExample.createCriteria().andIdEqualTo(id);
+			List<UserGroup> userGroups = userGroupMapper.selectByExample(userGroupExample);
+			
+			if(userGroups.size() > 0) {
+				log.info("begin to delete userGroup: " + userGroups.get(0).toString());
+				sqlSucCount = userGroupMapper.deleteByPrimaryKey(id);
+			}
 		}
 		
 		return sqlSucCount;

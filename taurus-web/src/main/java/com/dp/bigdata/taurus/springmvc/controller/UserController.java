@@ -1,7 +1,5 @@
 package com.dp.bigdata.taurus.springmvc.controller;
 
-import java.util.Date;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
 
 @Controller
-@RequestMapping("/rest")
 public class UserController {
 	
 	private Logger log = LoggerFactory.getLogger(this.getClass());
@@ -31,7 +28,7 @@ public class UserController {
 	 * @param request
 	 * @param response
 	 */
-	@RequestMapping(value = "/saveUser", method = RequestMethod.POST)
+	@RequestMapping(value = "/rest/saveUser", method = RequestMethod.POST)
 	public void saveUser(HttpServletRequest request,HttpServletResponse response) {
 		log.info("--------------init the rest/saveUser------------");
 		
@@ -63,6 +60,7 @@ public class UserController {
 			form.add(formFieldName, formFieldValue);
 			
 		}
+		
 		Representation re = form.getWebRepresentation();
 		re.setMediaType(MediaType.APPLICATION_XML);
 		cr.post(re);

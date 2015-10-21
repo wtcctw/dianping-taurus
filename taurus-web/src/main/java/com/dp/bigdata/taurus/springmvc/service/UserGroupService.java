@@ -16,6 +16,8 @@ public interface UserGroupService {
 	public JqGridRespBean retrieveByJqGrid(int page, int rows);
 	
 	public int deleteByIdSplitByComma(String idsComma);
+	
+	public int deleteById(Integer id);
 
 	/**
 	 * @author chenchongze

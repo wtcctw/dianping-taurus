@@ -1,7 +1,6 @@
 package com.dp.bigdata.taurus.restlet.resource.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,15 +11,16 @@ import jodd.util.StringUtil;
 import com.dp.bigdata.taurus.restlet.resource.IUserResource;
 import com.dp.bigdata.taurus.restlet.shared.UserDTO;
 import com.dp.bigdata.taurus.restlet.utils.UserConverter;
+import com.dp.bigdata.taurus.springmvc.service.UserGroupService;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.dp.bigdata.taurus.generated.mapper.UserGroupMapper;
@@ -40,7 +40,7 @@ import com.dp.bigdata.taurus.generated.module.UserGroupMappingExample;
  */
 public class UserResource extends ServerResource implements IUserResource {
 	
-    private static final Log LOG = LogFactory.getLog(TaskResource.class);
+	private Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Autowired
 	private UserMapper userMapper;
@@ -50,6 +50,9 @@ public class UserResource extends ServerResource implements IUserResource {
 	
 	@Autowired
 	private UserGroupMappingMapper mappingMapper;
+	
+	@Autowired
+	private UserGroupService userGroupService;
 
 	private static final String USER_ID="id";
 	private static final String TEL="tel";
@@ -102,7 +105,7 @@ public class UserResource extends ServerResource implements IUserResource {
 		try{ 
 			updateInternal(re);
 		} catch(Exception e){
-			LOG.error(e,e);
+			log.error("update user info error",e);
 			getResponse().setStatus(Status.SERVER_ERROR_INTERNAL);
 		}
 		
@@ -188,6 +191,11 @@ public class UserResource extends ServerResource implements IUserResource {
 				for( ; i < mappingSize; ++i){//删除多余记录
 					mappingMapper.deleteByPrimaryKey(mappings.get(i).getId());
 				}
+			}
+			
+			//删除多余分组
+			for(UserGroupMapping mapping : mappings) {
+				userGroupService.deleteById(mapping.getGroupid());
 			}
 			
 		} else {

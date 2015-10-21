@@ -43,14 +43,10 @@ public class CczTest {
 	
 	@Test
 	public void testSplitNull(){
-		String userInfoStr = "";
-		boolean a = userInfoStr.equalsIgnoreCase(null);
-		log.info(a+"");
-		try {
-			String dpaccount = userInfoStr.split("\\|")[0];
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		String test= "1,2,3,";
+		String[] aa = test.split(",");
+		for(String a:aa){
+			log.info(a);
 		}
 		log.info("here?");
 	}
