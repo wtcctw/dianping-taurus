@@ -29,11 +29,12 @@ import com.dp.bigdata.taurus.restlet.shared.UserGroupDTO;
 import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
 import com.dp.bigdata.taurus.springmvc.bean.WebResult;
 import com.dp.bigdata.taurus.springmvc.service.ITestService;
+import com.dp.bigdata.taurus.springmvc.utils.GlobalViewVariable;
 
 
 @Controller
 @RequestMapping("/test")
-public class TestController {
+public class TestController extends BaseController {
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 	
 	@Resource
@@ -204,57 +205,5 @@ public class TestController {
 		private String getName() {
 			return name;
 		}
-	}
-	
-public void commonnav(HttpServletRequest request,GlobalViewVariable globalViewVariable){
-		
-		globalViewVariable.currentUser = (String) request.getSession().getAttribute(InitController.USER_NAME);
-		globalViewVariable.userId = -1;
-		
-		globalViewVariable.host = LionConfigUtil.RESTLET_API_BASE;
-		
-		globalViewVariable.isAdmin = false;
-		globalViewVariable.cr = new ClientResource(globalViewVariable.host + "user");
-		globalViewVariable.users = globalViewVariable.cr.get(ArrayList.class);
-		globalViewVariable.userMap = new HashMap<String, UserDTO>();
-		
-		for (UserDTO user : globalViewVariable.users) {
-			globalViewVariable.userMap.put(user.getName(),user);
-			if (user.getName().equals(globalViewVariable.currentUser)) {
-				
-				globalViewVariable.userId = user.getId();
-				//TODO support multi group(完成)
-				String[] userGroups = user.getGroup().split(",");
-				for(String userGroup : userGroups){
-					if ("admin".equals(userGroup)) {
-						globalViewVariable.isAdmin = true;
-						break;
-					} else {
-						globalViewVariable.isAdmin = false;
-					}
-				}
-				
-
-			}
-		}
-	    
-	}
-	
-	/**
-	 * jsp/common-nav.jsp所需公共变量
-	 * @author chenchongze
-	 *
-	 */
-	public class GlobalViewVariable{
-		
-		private String currentUser = null;
-		private String host = null;
-		private int userId = -1;
-		private boolean isAdmin = false;
-		private ClientResource cr = null;
-		private ArrayList<UserDTO> users = null;
-		private HashMap<String, UserDTO> userMap = null;
-		
-		public GlobalViewVariable(){};
 	}
 }

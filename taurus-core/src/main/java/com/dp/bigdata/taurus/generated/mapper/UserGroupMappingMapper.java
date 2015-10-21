@@ -1,8 +1,11 @@
 package com.dp.bigdata.taurus.generated.mapper;
 
+import com.dp.bigdata.taurus.generated.module.UserGroup;
 import com.dp.bigdata.taurus.generated.module.UserGroupMapping;
 import com.dp.bigdata.taurus.generated.module.UserGroupMappingExample;
+
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface UserGroupMappingMapper {
@@ -93,4 +96,12 @@ public interface UserGroupMappingMapper {
      * @mbggenerated Thu May 15 16:53:11 HKT 2014
      */
     int updateByPrimaryKey(UserGroupMapping record);
+
+	/**
+	 * @author chenchongze
+	 * @param offset
+	 * @param rows
+	 * @return not null but size can be 0
+	 */
+	List<UserGroup> selectByPageAndRows(@Param("offset") Integer offset, @Param("rows") Integer rows);
 }

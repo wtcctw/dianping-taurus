@@ -13,9 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.restlet.resource.ClientResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.dp.bigdata.taurus.restlet.shared.UserDTO;
 import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
@@ -28,7 +28,7 @@ import com.dp.bigdata.taurus.springmvc.controller.InitController;
  */
 public class AuthenticationFilter implements Filter {
 	
-	private Logger log = LogManager.getLogger();
+	private Logger log = LoggerFactory.getLogger(this.getClass());
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
@@ -73,10 +73,6 @@ public class AuthenticationFilter implements Filter {
 			chain.doFilter(request, response);
 			return;
 		}
-		
-		
-		
-		
 		
 	}
 

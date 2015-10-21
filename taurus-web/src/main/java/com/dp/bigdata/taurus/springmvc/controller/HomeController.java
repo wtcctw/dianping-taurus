@@ -33,10 +33,10 @@ import com.dp.bigdata.taurus.restlet.shared.StatusDTO;
 import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
 import com.dp.bigdata.taurus.restlet.shared.UserDTO;
 import com.dp.bigdata.taurus.restlet.shared.UserGroupDTO;
-import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
+import com.dp.bigdata.taurus.springmvc.utils.GlobalViewVariable;
 
 @Controller
-public class HomeController {
+public class HomeController extends BaseController {
 
 	private Logger log = LoggerFactory.getLogger(this.getClass());
     
@@ -961,6 +961,10 @@ public class HomeController {
 		modelMap.addAttribute("currentUser", globalViewVariable.currentUser);
 		modelMap.addAttribute("isAdmin", globalViewVariable.isAdmin);
 		commonAttr(modelMap);
+		
+		if(globalViewVariable.isAdmin == false) { 
+			return "/error.ftl";
+		}
 	    
 	    return "/dbadmin.ftl";
 	}
@@ -1087,73 +1091,6 @@ public class HomeController {
 	    return "/error.ftl";
 	}
 	
-	/**
-	 * 重构jsp/common-nav.jsp
-	 * @param modelMap
-	 * @param request
-	 */
-	public void commonnav(HttpServletRequest request,GlobalViewVariable globalViewVariable){
-		
-		globalViewVariable.currentUser = (String) request.getSession().getAttribute(InitController.USER_NAME);
-		globalViewVariable.userId = -1;
-		
-		globalViewVariable.host = LionConfigUtil.RESTLET_API_BASE;
-		
-		globalViewVariable.isAdmin = false;
-		globalViewVariable.cr = new ClientResource(globalViewVariable.host + "user");
-		globalViewVariable.users = globalViewVariable.cr.get(ArrayList.class);
-		globalViewVariable.userMap = new HashMap<String, UserDTO>();
-		
-		for (UserDTO user : globalViewVariable.users) {
-			globalViewVariable.userMap.put(user.getName(),user);
-			if (user.getName().equals(globalViewVariable.currentUser)) {
-				
-				globalViewVariable.userId = user.getId();
-				// support multi group
-				String[] userGroups = user.getGroup().split(",");
-				for(String userGroup : userGroups){
-					if ("admin".equals(userGroup)) {
-						globalViewVariable.isAdmin = true;
-						break;
-					} else {
-						globalViewVariable.isAdmin = false;
-					}
-				}
-				
-
-			}
-		}
-	    
-	}
-	
-	private void commonAttr(ModelMap modelMap){
-		String on_duty_name = ConfigHolder.get(LionKeys.ON_DUTY_ADMIN);
-		String on_duty_qyqq = ConfigHolder.get(LionKeys.ON_DUTY_QYQQ);
-		String on_duty_phone = ConfigHolder.get(LionKeys.ON_DUTY_PHONE);
-		
-		modelMap.addAttribute("on_duty_name", on_duty_name);
-		modelMap.addAttribute("on_duty_qyqq", on_duty_qyqq);
-		modelMap.addAttribute("on_duty_phone", on_duty_phone);
-	}
-	
-	/**
-	 * jsp/common-nav.jsp所需公共变量
-	 * @author chenchongze
-	 *
-	 */
-	public class GlobalViewVariable{
-		
-		private String currentUser = null;
-		private String host = null;
-		private int userId = -1;
-		private boolean isAdmin = false;
-		private ClientResource cr = null;
-		private ArrayList<UserDTO> users = null;
-		private HashMap<String, UserDTO> userMap = null;
-		
-		public GlobalViewVariable(){};
-	}
-
 	/**
 	 * freemarker帮助类
 	 * @author chenchongze
