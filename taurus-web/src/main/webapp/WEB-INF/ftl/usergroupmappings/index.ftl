@@ -233,7 +233,7 @@ jQuery(function($) {
 			delicon : 'ace-icon fa fa-trash-o red',
 			search: false,
 			searchicon : 'ace-icon fa fa-search orange',
-			refresh: false,
+			refresh: true,
 			refreshicon : 'ace-icon fa fa-refresh green',
 			view: false,
 			viewicon : 'ace-icon fa fa-search-plus grey',
