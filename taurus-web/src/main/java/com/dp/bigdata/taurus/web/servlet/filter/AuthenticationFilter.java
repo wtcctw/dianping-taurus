@@ -30,14 +30,8 @@ public class AuthenticationFilter implements Filter {
 	
 	private Logger log = LogManager.getLogger();
 
-	private String[] excludePages;
-
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
-		if (filterConfig != null) {
-			String excludePage = filterConfig.getInitParameter("excludePage");
-			excludePages = excludePage.split(",");
-		}
 	}
 
 	@Override
@@ -47,28 +41,42 @@ public class AuthenticationFilter implements Filter {
 		HttpServletResponse res = (HttpServletResponse) response;
 		String userInfoStr = req.getRemoteUser();
 		
-		if(StringUtils.isBlank(userInfoStr)){
-			res.sendRedirect(req.getContextPath() + "/error");
-			return ;
+		String dpaccount = null;
+		try {
+			dpaccount = userInfoStr.split("\\|")[0];
+		} catch (Exception e) {
+			log.error("get remote user error!", e);
 		}
 		
-		String dpaccount = userInfoStr.split("\\|")[0];
 		HttpSession session = req.getSession(true);
 		String sessionAccount = (String) session.getAttribute(InitController.USER_NAME);
 		
-		if(dpaccount.equalsIgnoreCase(sessionAccount)){
-			log.info(dpaccount + " already logged in.");
+		if(StringUtils.isNotBlank(sessionAccount)){
+			log.info(sessionAccount + " already logged in.");
 			chain.doFilter(request, response);
 			return;
 		}
 		
-		UserDTO userDTO = setUserInfo(dpaccount);
-		session.setAttribute(InitController.USER_NAME, dpaccount);
+		if(StringUtils.isBlank(sessionAccount)) {
+			
+			if(StringUtils.isBlank(dpaccount)){
+				res.sendRedirect(req.getContextPath() + "/error");
+				return ;
+			}
+			
+			UserDTO userDTO = setUserInfo(dpaccount);
+			session.setAttribute(InitController.USER_NAME, dpaccount);
+			
+			ClientResource cr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "user");
+			cr.post(userDTO);//createIfNotExist
+			
+			chain.doFilter(request, response);
+			return;
+		}
 		
-		ClientResource cr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "user");
-		cr.post(userDTO);//createIfNotExist
 		
-		chain.doFilter(request, response);
+		
+		
 		
 	}
 

@@ -42,6 +42,20 @@ public class CczTest {
 	String mailUrl = "http://web.paas.dp/mail/send";
 	
 	@Test
+	public void testSplitNull(){
+		String userInfoStr = "";
+		boolean a = userInfoStr.equalsIgnoreCase(null);
+		log.info(a+"");
+		try {
+			String dpaccount = userInfoStr.split("\\|")[0];
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		log.info("here?");
+	}
+	
+	//@Test
 	public void testEmail() {
 		FormDataMultiPart formDataMultiPart = new FormDataMultiPart();
     	formDataMultiPart.field("title", "ccz邮件测试");
