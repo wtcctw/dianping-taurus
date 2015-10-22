@@ -81,7 +81,7 @@
 		scope="prototype"
 		class="com.dp.bigdata.taurus.restlet.resource.impl.UserGroupMappingsResource" />
 	<bean name="/api/user/{user_name}" id="userResource" autowire="byName"
-		scope="singleton" class="com.dp.bigdata.taurus.restlet.resource.impl.UserResource" />
+		scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.UserResource" />
 
 	<bean name="/api/hostip" id="hostIpResource" autowire="byName"
 		scope="prototype" class="com.dp.bigdata.taurus.restlet.resource.impl.HostIpResource"/>
