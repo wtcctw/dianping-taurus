@@ -22,4 +22,6 @@
     
     <pigeon:annotation />
     
+    <context:component-scan base-package="com.dp.bigdata.taurus.springmvc.service"/>
+    
 </beans>

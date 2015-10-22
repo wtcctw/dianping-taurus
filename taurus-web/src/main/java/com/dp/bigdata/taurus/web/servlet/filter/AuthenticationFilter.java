@@ -45,7 +45,7 @@ public class AuthenticationFilter implements Filter {
 		try {
 			dpaccount = userInfoStr.split("\\|")[0];
 		} catch (Exception e) {
-			log.error("get remote user error!", e);
+			log.error("get remote user error!");
 		}
 		
 		HttpSession session = req.getSession(true);

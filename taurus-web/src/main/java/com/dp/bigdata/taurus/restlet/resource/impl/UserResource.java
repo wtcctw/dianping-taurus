@@ -8,11 +8,6 @@ import java.util.Map.Entry;
 
 import jodd.util.StringUtil;
 
-import com.dp.bigdata.taurus.restlet.resource.IUserResource;
-import com.dp.bigdata.taurus.restlet.shared.UserDTO;
-import com.dp.bigdata.taurus.restlet.utils.UserConverter;
-import com.dp.bigdata.taurus.springmvc.service.UserGroupService;
-
 import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -32,6 +27,10 @@ import com.dp.bigdata.taurus.generated.module.UserGroup;
 import com.dp.bigdata.taurus.generated.module.UserGroupExample;
 import com.dp.bigdata.taurus.generated.module.UserGroupMapping;
 import com.dp.bigdata.taurus.generated.module.UserGroupMappingExample;
+import com.dp.bigdata.taurus.restlet.resource.IUserResource;
+import com.dp.bigdata.taurus.restlet.shared.UserDTO;
+import com.dp.bigdata.taurus.restlet.utils.UserConverter;
+import com.dp.bigdata.taurus.springmvc.service.UserGroupService;
 
 /**
  * UsersResource url : http://xxx/api/user/{user_name}
@@ -41,7 +40,7 @@ import com.dp.bigdata.taurus.generated.module.UserGroupMappingExample;
 public class UserResource extends ServerResource implements IUserResource {
 	
 	private Logger log = LoggerFactory.getLogger(this.getClass());
-
+	
 	@Autowired
 	private UserMapper userMapper;
 	
@@ -197,9 +196,11 @@ public class UserResource extends ServerResource implements IUserResource {
 			for(UserGroupMapping mapping : mappings) {
 				userGroupService.deleteById(mapping.getGroupid());
 			}
+			getResponse().setStatus(Status.SUCCESS_OK);
 			
 		} else {
-			throw new RuntimeException("Found user " + userID + " belongs to more than " + MAX_USERGROUP_NUM + " groups");
+			log.error("Found user " + userID + " belongs to more than " + MAX_USERGROUP_NUM + " groups");
+			getResponse().setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 		} 
 	}
 	

@@ -63,6 +63,7 @@ public class UserController {
 		
 		Representation re = form.getWebRepresentation();
 		re.setMediaType(MediaType.APPLICATION_XML);
+		
 		cr.post(re);
 		Status status = cr.getResponse().getStatus();
 		response.setStatus(status.getCode());

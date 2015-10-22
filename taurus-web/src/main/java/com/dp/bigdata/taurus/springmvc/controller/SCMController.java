@@ -35,6 +35,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Controller
 public class SCMController extends BaseController {
 
+	
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 	@Autowired
 	UserGroupService userGroupService;
@@ -201,5 +202,5 @@ public class SCMController extends BaseController {
 		
 		return jqGridTableBean;
 	}
-	
+
 }
