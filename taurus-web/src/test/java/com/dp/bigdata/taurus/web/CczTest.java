@@ -41,7 +41,7 @@ public class CczTest {
 	
 	String mailUrl = "http://web.paas.dp/mail/send";
 	
-	@Test
+	//@Test
 	public void testSplitNull(){
 		String test= "1,2,3,";
 		String[] aa = test.split(",");
@@ -51,11 +51,11 @@ public class CczTest {
 		log.info("here?");
 	}
 	
-	//@Test
+	@Test
 	public void testEmail() {
 		FormDataMultiPart formDataMultiPart = new FormDataMultiPart();
     	formDataMultiPart.field("title", "ccz邮件测试");
-    	formDataMultiPart.field("recipients", "chongze.chen@dianping.com,mingdong.li@dianping.com");
+    	formDataMultiPart.field("recipients", "chongze.chen@dianping.com");
     	formDataMultiPart.field("body", "邮件正文");
     	
 		try {

@@ -15,10 +15,14 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.dp.bigdata.taurus.utils.RestCallUtils;
 
 public class MailHelper {
+	
+	private static Logger log = LoggerFactory.getLogger(MailHelper.class);
 	
 	private final static String mailUrl = "http://web.paas.dp/mail/send";
 	
@@ -31,8 +35,7 @@ public class MailHelper {
     	try {
 			RestCallUtils.postRestCall(mailUrl, formDataMultiPart, String.class, 2000, 2000);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error("send mail failed", e);
 			
 		}
 	}

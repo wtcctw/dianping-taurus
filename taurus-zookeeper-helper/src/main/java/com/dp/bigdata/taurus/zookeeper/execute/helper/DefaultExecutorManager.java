@@ -66,7 +66,7 @@ public class DefaultExecutorManager implements ExecutorManager{
         Map<String,String> otherConfs = context.getExtendedConfs();
         
         ScheduleStatus status = (ScheduleStatus) dic.getStatus(agentIP, attemptID);
-        if(status == null){            
+        if(status == null){
             ScheduleConf conf = new ScheduleConf();
             conf.setTaskID(taskID);
             conf.setAttemptID(attemptID);

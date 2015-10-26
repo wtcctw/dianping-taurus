@@ -64,6 +64,11 @@
 		    <artifactId>masterdata-api</artifactId>
 		    <version>0.1.1</version>
 		</dependency>
+		<dependency>
+            <groupId>com.dianping</groupId>
+            <artifactId>mail-api</artifactId>
+            <version>1.0.1</version>
+        </dependency>
 		<!-- 一般依赖 -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
