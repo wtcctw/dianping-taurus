@@ -106,7 +106,7 @@
                 action: "attempt",
                 taskID:taskID
             },
-            timeout: 2000,
+            timeout: 5000,
             type: "POST",
             url: "${rc.contextPath}/attempt.do",
             error: function () {

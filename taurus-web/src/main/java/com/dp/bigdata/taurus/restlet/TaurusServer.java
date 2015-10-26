@@ -5,8 +5,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.dianping.cat.Cat;
 import com.dp.bigdata.taurus.alert.TaurusAlert;
+import com.dp.bigdata.taurus.alert.WeChatHelper;
 import com.dp.bigdata.taurus.core.Engine;
+import com.dp.bigdata.taurus.lion.ConfigHolder;
+import com.dp.bigdata.taurus.lion.LionKeys;
 import com.dp.bigdata.taurus.restlet.utils.ClearLogsTimerManager;
 import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
 import com.dp.bigdata.taurus.restlet.utils.MonitorAgentOffLineTaskTimer;
@@ -43,12 +47,15 @@ public class TaurusServer {
                     MonitorAgentOffLineTaskTimer.getMonitorAgentOffLineTimeManager().start();
                     ReFlashHostLoadTaskTimer.getReFlashHostLoadManager().start();
                     log.info("start master server....");
+                    Cat.logEvent("Taurus.Master", IPUtils.getFirstNoLoopbackIP4Address());
+                    WeChatHelper.sendWeChat(ConfigHolder.get(LionKeys.ADMIN_USER), "Taurus master start: "+ IPUtils.getFirstNoLoopbackIP4Address());
                     
         		}else{
             		alert.isInterrupt(true);
             		engine.isInterrupt(true);
-            		log.info("change master server....");
-            		
+            		log.info("start slave server....");
+            		Cat.logEvent("Taurus.Slave", IPUtils.getFirstNoLoopbackIP4Address());
+            		WeChatHelper.sendWeChat(ConfigHolder.get(LionKeys.ADMIN_USER), "Taurus slave start: "+ IPUtils.getFirstNoLoopbackIP4Address());
             	}
         		
         	}else{

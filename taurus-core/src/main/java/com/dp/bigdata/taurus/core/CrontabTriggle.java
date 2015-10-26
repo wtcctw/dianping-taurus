@@ -39,7 +39,7 @@ public class CrontabTriggle implements Triggle {
 		this.scheduler = scheduler;
 	}
 
-	public void triggle(Date now) {
+	public void triggle(final Date now) {
 		Map<String, Task> tasks = scheduler.getAllRegistedTask();
 
 		for (Task task : tasks.values()) {
@@ -104,7 +104,7 @@ public class CrontabTriggle implements Triggle {
 		triggle(new Date());
 	}
 
-	private Date getPreviousFireTime(Task task, Date now) {
+	private Date getPreviousFireTime(final Task task, final Date now) {
 		List<TaskAttempt> attempts = retrieveLatestTaskAttemptByTaskID(task.getTaskid());
 		Date previousFireTime;
 		// if it is the first time to execute this task, set time to now; otherwise set to the first attempt's schedule time.
