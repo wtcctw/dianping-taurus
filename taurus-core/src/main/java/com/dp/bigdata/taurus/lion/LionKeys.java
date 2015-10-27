@@ -2,6 +2,7 @@ package com.dp.bigdata.taurus.lion;
 
 public enum LionKeys {
 
+	AGENT_DOWN_MAIL_TO("taurus.agent.down.mail.to"),
 	SERVER_BASE_URL("taurus.web.serverName"),
 	WECHAT_API("taurus.wechat.api"),
 	ON_DUTY_PHONE("taurus.onduty.phone"),

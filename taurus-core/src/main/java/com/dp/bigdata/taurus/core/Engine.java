@@ -187,13 +187,11 @@ final public class Engine implements Scheduler {
                    +dataBaseUrl;
            try {
         	   String admin = ConfigHolder.get(LionKeys.ADMIN_USER);
-               MailHelper.sendMail(admin + "@dianping.com", exceptContext, "Taurus数据库连接异常告警服务");
-               WeChatHelper.sendWeChat(admin, exceptContext, "Taurus数据库连接异常告警服务");
-               String toMails = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.down.mail.to");
-               String [] toLists = toMails.split(",");
-               for (String to:toLists){
-                   MailHelper.sendMail(to, exceptContext, "Taurus数据库连接异常告警服务");
-               }
+        	   
+        	   if(StringUtils.isNotBlank(admin)) {
+        		   MailHelper.sendMail(admin + "@dianping.com", exceptContext, "Taurus数据库连接异常告警服务");
+                   WeChatHelper.sendWeChat(admin, exceptContext, "Taurus数据库连接异常告警服务");
+        	   }
                
                String reportToOps = null;
                try {
@@ -311,7 +309,7 @@ final public class Engine implements Scheduler {
                     } else {
                     	String admin = ConfigHolder.get(LionKeys.ADMIN_USER);
                     	WeChatHelper.sendWeChat(admin,exceptContext, "Taurus-Agent主机失联系告警服务");
-                        String toMails = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.down.mail.to");
+                        String toMails = ConfigHolder.get(LionKeys.AGENT_DOWN_MAIL_TO);
                         String [] toLists = toMails.split(",");
                         for (String to:toLists){
                             MailHelper.sendMail(to, exceptContext, "Taurus-Agent主机失联系告警服务");
