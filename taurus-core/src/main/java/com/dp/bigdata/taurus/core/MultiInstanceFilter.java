@@ -93,8 +93,8 @@ public class MultiInstanceFilter implements Filter {
                         					+ context.getTaskid();
                         try {
                         	String alertAdmin = ConfigHolder.get(LionKeys.CONGESTION_ADMIN_USER);
-                        	WeChatHelper.sendWeChat(alertAdmin, alertontext, "Taurus-Job拥塞告警服务");
-                            WeChatHelper.sendWeChat(context.getCreator(), alertontext, "Taurus-Job拥塞告警服务");
+                        	WeChatHelper.sendWeChat(alertAdmin, alertontext, "Taurus-Job拥塞告警服务", 12);
+                            WeChatHelper.sendWeChat(context.getCreator(), alertontext, "Taurus-Job拥塞告警服务", 12);
                             MailHelper.sendMail(context.getCreator() + "@dianping.com", alertontext, "Taurus-Job拥塞告警服务");
 
                         } catch (Exception e) {

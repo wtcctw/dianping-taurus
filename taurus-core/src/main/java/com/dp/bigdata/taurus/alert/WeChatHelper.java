@@ -17,7 +17,7 @@ import com.dp.bigdata.taurus.lion.LionKeys;
  */
 public class WeChatHelper {
 
-    public static void sendWeChat(String user,String content){
+    public static void sendWeChat(String user, String content, int agentid){
 
     	if(StringUtils.isBlank(user) || StringUtils.isBlank(content)) {
     		System.out.println("SendWechat error! user or content can't be blank!");
@@ -29,7 +29,7 @@ public class WeChatHelper {
         String wechat_api = wechat_url+ "/api";
         
         String params = "action=push&sysName=ezc&keyword=" + user.trim()
-                + "&title=Taurus 微信告警服务&content= " + content.trim();
+                + "&title=Taurus 微信告警服务&content= " + content.trim() + "&agentid=" + agentid;
 
         String resp = sendPost(wechat_api, params);
 
@@ -37,7 +37,7 @@ public class WeChatHelper {
 
     }
     
-    public static void sendWeChat(String user,String content, String title){
+    public static void sendWeChat(String user, String content, String title, int agentid){
     	
     	if(StringUtils.isBlank(user) || StringUtils.isBlank(content)) {
     		System.out.println("SendWechat error! user or content can't be blank!");
@@ -49,7 +49,7 @@ public class WeChatHelper {
         String wechat_api = wechat_url+ "/api";
 
         String params = "action=push&sysName=ezc&keyword=" + user.trim()
-                + "&title=" + title.trim() + "&content=" + content.trim();
+                + "&title=" + title.trim() + "&content=" + content.trim() + "&agentid=" + agentid;
 
         sendPost(wechat_api, params);
 

@@ -335,7 +335,7 @@ public class TaurusAlert {
             sbMailContent.append("※ 点评工具组 ※");
 
             try {
-                WeChatHelper.sendWeChat( task.getCreator(),sbMailContent.toString());
+                WeChatHelper.sendWeChat( task.getCreator(),sbMailContent.toString(), 12);
             } catch (Exception e) {
                 LOG.error("fail to send WeChat to " + user, e);
                 Cat.logError(e);

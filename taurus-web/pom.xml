@@ -388,7 +388,7 @@
 					<source>1.6</source>
 					<target>1.6</target>
 					<encoding>UTF8</encoding>
-					<webXml>${webXmlPath}</webXml>
+					<!--<webXml>${webXmlPath}</webXml>-->
 				</configuration>
 			</plugin>
 			<plugin>
@@ -398,7 +398,9 @@
 				<configuration>
                     <contextPath>/</contextPath>
                     <webXml>${webXmlPath}</webXml>
-                </configuration>
+					<stopKey/>
+					<stopPort/>
+				</configuration>
 			</plugin>
         </plugins>
 	</build>
