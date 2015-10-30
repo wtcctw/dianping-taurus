@@ -29,6 +29,8 @@ import com.dianping.pigeon.remoting.ServiceFactory;
 import com.dp.bigdata.taurus.scheduler.lion.ConfigHolder;
 import com.dp.bigdata.taurus.scheduler.lion.LionKeys;
 import com.google.gson.JsonObject;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ApiServlet extends HttpServlet {
 
@@ -36,6 +38,8 @@ public class ApiServlet extends HttpServlet {
 	 * 
 	 */
 	private static final long serialVersionUID = -5414595942703057721L;
+
+    private Logger log = LogManager.getLogger();
 	
 	private static final String PUSH = "push";
 	private static final String MAIL = "mail";
@@ -68,6 +72,14 @@ public class ApiServlet extends HttpServlet {
 
             String content = request.getParameter("content");
             String keyword = request.getParameter("keyword");
+            String aIdStr = request.getParameter("agentid");
+            int agentid = 12;
+            try {
+                agentid = Integer.parseInt(aIdStr);
+            } catch (NumberFormatException e) {
+                log.warn(aIdStr + " is not the valid number!");
+                agentid = Integer.parseInt(ConfigHolder.get(LionKeys.MESSAGE_AGENTID));
+            }
 
             boolean isBlack = isBlackList(keyword);
 
@@ -103,7 +115,6 @@ public class ApiServlet extends HttpServlet {
                 messageDto.setPriority(MessageDto.BATCH_MSG);
                 messageDto.setTouser(users);
                 messageDto.setSafe(0);
-                int agentid = Integer.parseInt(ConfigHolder.get(LionKeys.MESSAGE_AGENTID));
                 messageDto.setAgentid(agentid);
                 
                 try {
@@ -165,11 +176,6 @@ public class ApiServlet extends HttpServlet {
     
     /**
 	 * @author chenchongze
-	 * @param i
-	 * @param recipientList
-	 * @param title
-	 * @param body
-	 * @param object
 	 */
 	private boolean sendEmail(int typeCode, List<String> recipients, String title, String body, String reEmail) {
 		Map<String, String> subPair = new HashMap<String, String>();
@@ -192,7 +198,6 @@ public class ApiServlet extends HttpServlet {
 
 	/**
 	 * @author chenchongze
-	 * @param list
 	 * @return
 	 */
 	private List<String> normalizeRecipients(List<String> origin) {
@@ -211,7 +216,6 @@ public class ApiServlet extends HttpServlet {
 	/**
 	 * @author chenchongze
 	 * @param recipients
-	 * @param maxrecipientsnum2
 	 * @return
 	 */
 	private List<List<String>> splitList(List<String> recipients, int maxSize) {
