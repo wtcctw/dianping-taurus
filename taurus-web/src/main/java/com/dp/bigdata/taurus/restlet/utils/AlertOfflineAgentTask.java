@@ -89,7 +89,7 @@ public class AlertOfflineAgentTask  extends TimerTask {
                     if ((isAlive1!= null && isAlive1.equals("true"))||(isAlive2!= null && isAlive2.equals("true"))){
                     	String admin = ConfigHolder.get(LionKeys.ADMIN_USER);
                     	MailHelper.sendMail(admin+"@dianping.com", context, "Taurus-Agent主机心跳异常告警服务");
-                    	WeChatHelper.sendWeChat(admin,context, "Taurus-Agent主机心跳异常告警服务", 12);
+                    	WeChatHelper.sendWeChat(admin,context, "Taurus-Agent主机心跳异常告警服务", ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
                         
                         oaHelper.buildTypeObject("Taurus")
 								.buildTypeItem("Service")
@@ -104,7 +104,7 @@ public class AlertOfflineAgentTask  extends TimerTask {
                     }else
                     {
                     	String admin = ConfigHolder.get(LionKeys.ADMIN_USER);
-                        WeChatHelper.sendWeChat(admin,exceptContext, "Taurus-Agent主机失联系告警服务", 12);
+                        WeChatHelper.sendWeChat(admin,exceptContext, "Taurus-Agent主机失联系告警服务", ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
                         String toMails = ConfigHolder.get(LionKeys.AGENT_DOWN_MAIL_TO);
                         String [] toLists = toMails.split(",");
                         for (String to:toLists){
@@ -155,7 +155,7 @@ public class AlertOfflineAgentTask  extends TimerTask {
 
                     if(isAlive1 == null && isAlive2 == null) {//agent服务器无响应
                     	String admin = ConfigHolder.get(LionKeys.ADMIN_USER);
-                    	WeChatHelper.sendWeChat(admin,exceptContext, "Taurus-Agent主机失联系告警服务", 12);
+                    	WeChatHelper.sendWeChat(admin,exceptContext, "Taurus-Agent主机失联系告警服务", ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
                         String toMails = ConfigHolder.get(LionKeys.AGENT_DOWN_MAIL_TO);
                         String [] toLists = toMails.split(",");
                         for (String to:toLists){

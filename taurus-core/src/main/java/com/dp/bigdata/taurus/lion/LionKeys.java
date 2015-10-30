@@ -2,6 +2,7 @@ package com.dp.bigdata.taurus.lion;
 
 public enum LionKeys {
 
+	ADMIN_WECHAT_AGENTID("taurus.wechat.admin.agentid"),
 	AGENT_DOWN_MAIL_TO("taurus.agent.down.mail.to"),
 	SERVER_BASE_URL("taurus.web.serverName"),
 	WECHAT_API("taurus.wechat.api"),

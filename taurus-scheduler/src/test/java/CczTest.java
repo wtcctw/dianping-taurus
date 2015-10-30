@@ -7,7 +7,7 @@ public class CczTest {
 		int agentid = 12;
 		String aIdStr = null;
 		try {
-			agentid = Integer.parseInt(aIdStr);
+
 		} catch (NumberFormatException e) {
 			stdout(aIdStr + " is not the valid number!");
 		}

@@ -17,7 +17,7 @@ import com.dp.bigdata.taurus.lion.LionKeys;
  */
 public class WeChatHelper {
 
-    public static void sendWeChat(String user, String content, int agentid){
+    public static void sendWeChat(String user, String content, String agentid){
 
     	if(StringUtils.isBlank(user) || StringUtils.isBlank(content)) {
     		System.out.println("SendWechat error! user or content can't be blank!");
@@ -37,7 +37,7 @@ public class WeChatHelper {
 
     }
     
-    public static void sendWeChat(String user, String content, String title, int agentid){
+    public static void sendWeChat(String user, String content, String title, String agentid){
     	
     	if(StringUtils.isBlank(user) || StringUtils.isBlank(content)) {
     		System.out.println("SendWechat error! user or content can't be blank!");

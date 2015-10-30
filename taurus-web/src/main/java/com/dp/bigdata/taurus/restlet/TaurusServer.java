@@ -48,14 +48,14 @@ public class TaurusServer {
                     ReFlashHostLoadTaskTimer.getReFlashHostLoadManager().start();
                     log.info("start master server....");
                     Cat.logEvent("Taurus.Master", IPUtils.getFirstNoLoopbackIP4Address());
-                    WeChatHelper.sendWeChat(ConfigHolder.get(LionKeys.ADMIN_USER), "Taurus master start: "+ IPUtils.getFirstNoLoopbackIP4Address(), 12);
+                    WeChatHelper.sendWeChat(ConfigHolder.get(LionKeys.ADMIN_USER), "Taurus master start: "+ IPUtils.getFirstNoLoopbackIP4Address(), ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
                     
         		}else{
             		alert.isInterrupt(true);
             		engine.isInterrupt(true);
             		log.info("start slave server....");
             		Cat.logEvent("Taurus.Slave", IPUtils.getFirstNoLoopbackIP4Address());
-            		WeChatHelper.sendWeChat(ConfigHolder.get(LionKeys.ADMIN_USER), "Taurus slave start: "+ IPUtils.getFirstNoLoopbackIP4Address(), 12);
+            		WeChatHelper.sendWeChat(ConfigHolder.get(LionKeys.ADMIN_USER), "Taurus slave start: "+ IPUtils.getFirstNoLoopbackIP4Address(), ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
             	}
         		
         	}else{

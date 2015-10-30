@@ -55,7 +55,7 @@ public class FeedBackController {
             try {
                 MailHelper.sendMail(to,content,"Taurus反馈服务");
                 String adminuser = ConfigHolder.get(LionKeys.ADMIN_USER);
-                WeChatHelper.sendWeChat(adminuser, wccontent, 12);
+                WeChatHelper.sendWeChat(adminuser, wccontent, ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
             } catch (MessagingException e) {
                 output.write("error".getBytes());
                 output.close();
@@ -174,10 +174,10 @@ public class FeedBackController {
 
 
                     for (int i = 0; i < toList.length; i ++){
-                        WeChatHelper.sendWeChat(toList[i],wccontent, 12);
+                        WeChatHelper.sendWeChat(toList[i],wccontent, "12");
                     }
 
-                    WeChatHelper.sendWeChat(user,wcreply, 12);
+                    WeChatHelper.sendWeChat(user,wcreply, ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
 
                     MailHelper.sendMail(to,"Taurus报错服务",content);
                     MailHelper.sendMail(replyTo,"Taurus报错服务",reply);
@@ -210,7 +210,7 @@ public class FeedBackController {
                         +"※点评工具组※";
                 String[] toList = mailTo.split(",");
                 for (int i = 0; i < toList.length; i ++){
-                    WeChatHelper.sendWeChat(toList[i],wccontent, 12);
+                    WeChatHelper.sendWeChat(toList[i],wccontent, "12");
                 }
             }
 
