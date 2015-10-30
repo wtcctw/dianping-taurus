@@ -138,7 +138,7 @@ public class ApiServlet extends HttpServlet {
         	String recipients = request.getParameter("recipients");
         	String body = request.getParameter("body");
         	
-        	if(StringUtils.isBlank(recipients) || (StringUtils.isBlank(title) && StringUtils.isBlank(body))) {
+        	if(StringUtils.isBlank(recipients) || StringUtils.isBlank(title)) {
         		result.addProperty("result", "Email or content cannot be blank!");
                 result.addProperty("status", 403);
                 output.write(result.toString().getBytes());
