@@ -45,6 +45,8 @@ public class InitController implements ServletContextAware {
 	public static String MAIL_TO = null;
 	
 	public static String SSO_LOGOUT_URL = null;
+
+	public static String NON_SSO_FLAG = "is-non-sso";
 	
     @Override
 	public void setServletContext(ServletContext sc) {

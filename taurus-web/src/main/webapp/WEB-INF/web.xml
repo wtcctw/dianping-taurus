@@ -59,7 +59,7 @@
         <filter-class>com.dp.bigdata.taurus.web.servlet.filter.NonAuthFilter</filter-class>
         <init-param>
             <param-name>excludes</param-name>
-            <param-value>/login.do,/signin,/rest/ssologin,/rest/ssologout,/error,/api/,/test/,/static/,/js/,/css/,/files/,/img/,/lib/,/resource/</param-value>
+            <param-value>/login.do,/signin,/rest/ssologin,/rest/ssologout,/error,/api/,/test/,/static/,/js/,/css/,/files/,/img/,/lib/,/resource/,/rocket/</param-value>
         </init-param>
     </filter>
     <filter-mapping>
@@ -161,10 +161,6 @@
 	<filter>
 		<filter-name>AuthenticationFilter</filter-name>
 		<filter-class>com.dp.bigdata.taurus.web.servlet.filter.AuthenticationFilter</filter-class>
-		<init-param>
-			<param-name>excludePage</param-name>
-			<param-value></param-value>
-		</init-param>
 	</filter>
 	<filter-mapping>
 		<filter-name>AuthenticationFilter</filter-name>

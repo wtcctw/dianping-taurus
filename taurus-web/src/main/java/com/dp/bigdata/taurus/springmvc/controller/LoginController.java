@@ -1,36 +1,33 @@
 package com.dp.bigdata.taurus.springmvc.controller;
 
-import java.io.IOException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
+import com.dp.bigdata.taurus.restlet.resource.IUsersResource;
+import com.dp.bigdata.taurus.restlet.shared.UserDTO;
+import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
+import com.dp.bigdata.taurus.springmvc.service.IUserService;
+import com.dp.bigdata.taurus.springmvc.utils.GlobalViewVariable;
+import com.dp.bigdata.taurus.web.servlet.LDAPAuthenticationService;
 import org.apache.commons.lang.StringUtils;
 import org.restlet.Client;
 import org.restlet.data.Protocol;
 import org.restlet.resource.ClientResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.util.CookieGenerator;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
-
-import com.dp.bigdata.taurus.restlet.resource.IUserResource;
-import com.dp.bigdata.taurus.restlet.resource.IUsersResource;
-import com.dp.bigdata.taurus.restlet.shared.UserDTO;
-import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
-import com.dp.bigdata.taurus.web.servlet.LDAPAuthenticationService;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 
 @Controller
-public class LoginController {
+public class LoginController extends BaseController {
 	
 	private Logger log = LoggerFactory.getLogger(this.getClass());
 	
@@ -41,14 +38,45 @@ public class LoginController {
 	public static final String USER_POWER = "taurus-user-power";
 	
     public static  String COOKIE_USER = "";
-    
+
+	@Autowired
+	private IUserService userService;
+
+	@RequestMapping(value = "/rocket/{dpAccount:.+}")
+	public String rocketlogin(@PathVariable final String dpAccount, ModelMap modelMap,
+							  HttpServletRequest request, HttpServletResponse response) {
+		HttpSession session = request.getSession(true);
+		String sessionAccount = (String) session.getAttribute(InitController.USER_NAME);
+
+		if(dpAccount.equals(sessionAccount) != true) {
+			boolean isUserExists = userService.checkExists(dpAccount);
+
+			if(isUserExists == false) {
+				log.warn("taurus数据库中找不到用户，请至少用sso登陆一次");
+				return "/error.ftl";
+			}
+
+			session.setAttribute(InitController.USER_NAME, dpAccount);
+		}
+
+		session.setAttribute(InitController.NON_SSO_FLAG, true);
+		log.info("rocket login success!");
+
+		GlobalViewVariable globalViewVariable = new GlobalViewVariable();
+		commonnav(request, globalViewVariable);
+		modelMap.addAttribute("currentUser", globalViewVariable.currentUser);
+		modelMap.addAttribute("isAdmin", globalViewVariable.isAdmin);
+		commonAttr(modelMap);
+
+		return "/update.ftl";
+	}
+
 	/**
 	 * 登陆sso
 	 * @param modelMap
 	 * @param request
 	 * @param response
-	 * @param encodeRedirectUri
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	@RequestMapping(value = "/rest/ssologin", method = RequestMethod.GET)
 	public void ssologin(ModelMap modelMap, 

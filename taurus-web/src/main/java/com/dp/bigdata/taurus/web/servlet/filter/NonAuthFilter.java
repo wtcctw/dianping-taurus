@@ -1,5 +1,9 @@
 package com.dp.bigdata.taurus.web.servlet.filter;
 
+import com.dianping.lion.client.Lion;
+import com.dp.bigdata.taurus.springmvc.controller.InitController;
+import org.apache.commons.lang.StringUtils;
+
 import java.io.IOException;
 
 import javax.servlet.Filter;
@@ -9,12 +13,15 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 public class NonAuthFilter implements Filter {
 	
 	private static String[] excludes;
 	
 	static final String ALREADY_FILTERED_ATTRIBUTE = NonAuthFilter.class.getName() + ".FILTERED";
+
+	private static final String CAN_SKIP_SSO = Lion.get("taurus.canskip.sso", "false");
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
@@ -35,6 +42,18 @@ public class NonAuthFilter implements Filter {
             request.setAttribute(ALREADY_FILTERED_ATTRIBUTE, Boolean.TRUE);
             
     		String requestURI = ((HttpServletRequest) request).getRequestURI();
+
+			if("true".equalsIgnoreCase(CAN_SKIP_SSO)) {
+				HttpServletRequest req = (HttpServletRequest) request;
+				HttpSession session = req.getSession(true);
+				Boolean isNonSso = (Boolean) session.getAttribute(InitController.NON_SSO_FLAG);
+				String sessionAccount = (String) session.getAttribute(InitController.USER_NAME);
+
+				if( Boolean.TRUE.equals(isNonSso) && StringUtils.isNotBlank(sessionAccount)) {
+					request.getRequestDispatcher(requestURI).forward(request, response);
+					return;
+				}
+			}
     		
     		for (String uri : excludes) {
     			

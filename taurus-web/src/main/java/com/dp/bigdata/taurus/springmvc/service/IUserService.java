@@ -6,5 +6,5 @@ package com.dp.bigdata.taurus.springmvc.service;
  */
 public interface IUserService {
 
-	
+	public boolean checkExists(String dpAccount);
 }
