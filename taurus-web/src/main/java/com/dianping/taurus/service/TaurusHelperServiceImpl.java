@@ -12,7 +12,7 @@ import com.dp.bigdata.taurus.lion.ConfigHolder;
 import com.dp.bigdata.taurus.lion.LionKeys;
 import com.google.gson.JsonObject;
 
-@Service
+@Service(url="http://service.dianping.com/arch/taurus/service/TaurusHelperService_1.0.0")
 public class TaurusHelperServiceImpl implements TaurusHelperService{
 
 	@Autowired
