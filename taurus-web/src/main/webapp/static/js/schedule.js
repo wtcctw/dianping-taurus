@@ -47,6 +47,8 @@ function action(id, index) {
             info = "确定要执行任务<strong>" + id + "</strong>";
 		} else if (action_chinese == '恢复') {
             info = "确定要恢复任务<strong>" + id + "</strong>";
+		} else if (action_chinese == '清理拥塞') {
+			info = "确定要清理任务拥塞<strong>" + id + "</strong>吗？清理拥塞任务将会暂停当前任务调度，清理完成后请手动恢复任务调度。";
 		}
     bootbox.confirm(info, function(result) {
         if(result) {

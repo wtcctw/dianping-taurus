@@ -240,6 +240,7 @@
                                 + "<li><a href='#confirm' onClick=\"action($(this).parents('tr').find('td')[0].textContent,1)\">删除</a></li>"
                                 + "<li><a href='#confirm' onClick=\"action($(this).parents('tr').find('td')[0].textContent,2)\">暂停</a></li>"
                                 + "<li><a href='#confirm' onClick=\"action($(this).parents('tr').find('td')[0].textContent,3)\">执行</a></li>"
+                                + "<li><a href='#confirm' onClick=\"action($(this).parents('tr').find('td')[0].textContent,4)\">清理拥塞</a></li>"
                                 + "<li><a class='detailBtn' href='${rc.contextPath}/task_form?task_id="
                                 + item.taskId
                                 + "' >详细</a></li></ul></div>"

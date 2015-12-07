@@ -9,7 +9,7 @@
 	<artifactId>taurus-core</artifactId>
 	<name>taurus-core</name>
 	<properties>
-		<springFramework.version>3.2.3.RELEASE</springFramework.version>
+		<spring.version>3.2.3.RELEASE</spring.version>
 		<jersey.version>2.6</jersey.version>
     </properties>
 	<dependencies>
@@ -79,28 +79,28 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
-			<version>${springFramework.version}</version>
+			<version>${spring.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>  
             <groupId>org.springframework</groupId>  
             <artifactId>spring-core</artifactId>  
-            <version>${springFramework.version}</version>  
+            <version>${spring.version}</version>
         </dependency> 
         <dependency>  
             <groupId>org.springframework</groupId>  
             <artifactId>spring-beans</artifactId>  
-            <version>${springFramework.version}</version>  
+            <version>${spring.version}</version>
         </dependency> 
         <dependency>  
             <groupId>org.springframework</groupId>  
             <artifactId>spring-context</artifactId>  
-            <version>${springFramework.version}</version>  
+            <version>${spring.version}</version>
         </dependency> 
         <dependency>  
             <groupId>org.springframework</groupId>  
             <artifactId>spring-jdbc</artifactId>  
-            <version>${springFramework.version}</version>  
+            <version>${spring.version}</version>
         </dependency> 
 		<dependency>
 			<groupId>c3p0</groupId>

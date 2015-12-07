@@ -95,7 +95,7 @@ public class KillTaskThread extends BaseEnvManager {
 				br.close();
 				LOGGER.debug("Ready to kill " + attemptID + ", pid is " + pid);
                 String killCMD = "sh " + killJob;
-				String kill = String.format(KILL_COMMAND, killCMD, pid, "9");
+				String kill = String.format("%s %s %s", killCMD, pid, "9");
 				returnCode = executor.execute("kill", System.out, System.err, kill);
 				try {
 					new File(fileName).delete();
@@ -112,6 +112,7 @@ public class KillTaskThread extends BaseEnvManager {
 		}
 
 		if (returnCode == 0) {
+			//TODO 加入清理/delete节点,防止一直杀进程
 			cs.removeRunningJob(localIp, jobInstanceId);
 			status.setStatus(ScheduleStatus.DELETE_SUCCESS);
 		}

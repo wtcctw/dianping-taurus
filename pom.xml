@@ -7,6 +7,20 @@
 	<version>0.5.0</version>
 	<packaging>pom</packaging>
 	<name>taurus-parent</name>
+
+	<distributionManagement>
+		<repository>
+			<id>dianping.repo</id>
+			<name>Dian Ping internal repository for released artifacts</name>
+			<url>http://mvn.dianpingoa.com/dianping-releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>dianping.repo.snapshots</id>
+			<name>Dian Ping internal repository for snapshots artifacts</name>
+			<url>http://mvn.dianpingoa.com/dianping-snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+
 	<build>
 		<pluginManagement>
 			<plugins>

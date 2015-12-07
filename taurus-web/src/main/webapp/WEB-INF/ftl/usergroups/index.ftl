@@ -147,7 +147,15 @@ jQuery(function($) {
 					keys:true,
 					//delbutton: false,//disable delete button
 					
-					delOptions:{recreateForm: true, beforeShowForm:beforeDeleteCallback},
+					delOptions:{recreateForm: true,
+						beforeShowForm:beforeDeleteCallback,
+                        onclickSubmit: function (params) {
+                            //console.log(params);
+                            var extraParameters = [];
+							var arraySelected = jQuery(grid_selector).jqGrid('getGridParam', 'selarrrow');
+                            return { groupname: $(grid_selector).getRowData(arraySelected[0]).groupname };
+                        }
+					},
 					//editformbutton:true, editOptions:{recreateForm: true, beforeShowForm:beforeEditCallback}
 				}
 			},
@@ -264,11 +272,27 @@ jQuery(function($) {
 		},
 		{
 			//delete record form
+			mtype:"POST",
+            /*reloadAfterSubmit:true,
+            serializeDelData: function (postdata) {
+                var rowdata = jQuery('#tags').getRowData(postdata.id);
+                // append postdata with any information
+                return {id: postdata.id, oper: postdata.oper, user_id: rowdata.user_id};
+            },*/
+            onclickSubmit: function (params) {
+				//console.log(params);
+                var extraParameters = [];  var arraySelected = jQuery(grid_selector).jqGrid('getGridParam', 'selarrrow');
+                for (var i = 0; i < arraySelected.length; i++) {
+                    extraParameters.push($(grid_selector).getRowData(arraySelected[i]).groupname)
+                }
+                return { groupname: extraParameters.join(',') };
+            },
+
 			recreateForm: true,
 			beforeShowForm : function(e) {
 				var form = $(e[0]);
 				if(form.data('styled')) return false;
-				
+
 				form.closest('.ui-jqdialog').find('.ui-jqdialog-titlebar').wrapInner('<div class="widget-header" />')
 				style_delete_form(form);
 				

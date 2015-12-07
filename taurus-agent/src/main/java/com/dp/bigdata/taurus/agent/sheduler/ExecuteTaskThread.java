@@ -208,7 +208,7 @@ public final class ExecuteTaskThread extends BaseEnvManager{
                     returnCode = kinitRV;
                 }
                 if(returnCode == 0) {
-                  //execute cmd
+                    //execute cmd
                     String escapedCmd = command.replaceAll("\\\\", "\\\\\\\\");
                     escapedCmd = escapedCmd.replaceAll("\"", "\\\\\\\"");
                     cmdLine = new CommandLine("bash");

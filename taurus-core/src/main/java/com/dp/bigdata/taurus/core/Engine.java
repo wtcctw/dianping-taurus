@@ -139,69 +139,69 @@ final public class Engine implements Scheduler {
 		Map<String, Task> tmp_registedTasks = new ConcurrentHashMap<String, Task>();
 		Map<String, String> tmp_tasksMapCache = new ConcurrentHashMap<String, String>();
 		Map<String, HashMap<String, AttemptContext>> tmp_runningAttempts = new ConcurrentHashMap<String, HashMap<String, AttemptContext>>();
-       try {
-           // load all tasks
-           TaskExample example = new TaskExample();
-           example.or().andStatusEqualTo(TaskStatus.RUNNING);
-           example.or().andStatusEqualTo(TaskStatus.SUSPEND);
-           List<Task> tasks = taskMapper.selectByExample(example);
-           for (Task task : tasks) {
-               tmp_registedTasks.put(task.getTaskid(), task);
-               tmp_tasksMapCache.put(task.getName(), task.getTaskid());
-           }
+		try {
+			// load all tasks
+			TaskExample example = new TaskExample();
+			example.or().andStatusEqualTo(TaskStatus.RUNNING);
+			example.or().andStatusEqualTo(TaskStatus.SUSPEND);
+			List<Task> tasks = taskMapper.selectByExample(example);
+			for (Task task : tasks) {
+				tmp_registedTasks.put(task.getTaskid(), task);
+				tmp_tasksMapCache.put(task.getName(), task.getTaskid());
+			}
 
-           // load running attempts
-           TaskAttemptExample example1 = new TaskAttemptExample();
-           example1.or().andStatusEqualTo(AttemptStatus.RUNNING);
-           example1.or().andStatusEqualTo(AttemptStatus.TIMEOUT);
-           List<TaskAttempt> attempts = taskAttemptMapper.selectByExample(example1);
-           for (TaskAttempt attempt : attempts) {
-               Task task = tmp_registedTasks.get(attempt.getTaskid());
+			// load running attempts
+			TaskAttemptExample example1 = new TaskAttemptExample();
+			example1.or().andStatusEqualTo(AttemptStatus.RUNNING);
+			example1.or().andStatusEqualTo(AttemptStatus.TIMEOUT);
+			List<TaskAttempt> attempts = taskAttemptMapper.selectByExample(example1);
+			for (TaskAttempt attempt : attempts) {
+				Task task = tmp_registedTasks.get(attempt.getTaskid());
 
-               if (task != null) {
-                   AttemptContext context = new AttemptContext(attempt, task);
-                   HashMap<String, AttemptContext> contexts = new HashMap<String, AttemptContext>();
-                   contexts.put(context.getAttemptid(), context);
-                   tmp_runningAttempts.put(context.getTaskid(), contexts);
-               }
-           }
+				if (task != null) {
+					AttemptContext context = new AttemptContext(attempt, task);
+					HashMap<String, AttemptContext> contexts = new HashMap<String, AttemptContext>();
+					contexts.put(context.getAttemptid(), context);
+					tmp_runningAttempts.put(context.getTaskid(), contexts);
+				}
+			}
 
-           // switch
-           registedTasks = tmp_registedTasks;
-           tasksMapCache = tmp_tasksMapCache;
-           runningAttempts = tmp_runningAttempts;
-       }catch (DataAccessException e){
-           Cat.logEvent("DataAccessException",e.getMessage());
-           String dataBaseUrl = "";
-           OpsAlarmHelper oaHelper = new OpsAlarmHelper();
-           
-           try {
-               dataBaseUrl = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.jdbc.url");
+			// switch
+			registedTasks = tmp_registedTasks;
+			tasksMapCache = tmp_tasksMapCache;
+			runningAttempts = tmp_runningAttempts;
+		}catch (DataAccessException e){
+			Cat.logEvent("DataAccessException",e.getMessage());
+			String dataBaseUrl = "";
+			OpsAlarmHelper oaHelper = new OpsAlarmHelper();
 
-           }catch (LionException le){
-               dataBaseUrl = "jdbc:mysql://10.1.101.216:3306/Taurus?characterEncoding=utf-8";
-           }
-           
-           String exceptContext = "您好，taurus的数据库连接发生异常 请及时查看"
-                   +"数据库连接串："
-                   +dataBaseUrl;
-           try {
-        	   String admin = ConfigHolder.get(LionKeys.ADMIN_USER);
-        	   
-        	   if(StringUtils.isNotBlank(admin)) {
-        		   MailHelper.sendMail(admin + "@dianping.com", exceptContext, "Taurus数据库连接异常告警服务");
-                   WeChatHelper.sendWeChat(admin, exceptContext, "Taurus数据库连接异常告警服务", ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
-        	   }
-               
-               String reportToOps = null;
-               try {
-                   reportToOps = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.down.ops.report.alarm.post");
-               } catch (LionException le) {
-                   reportToOps = "http://pulse.dp/report/alarm/post";
-                   le.printStackTrace();
-               }
-               
-               oaHelper.buildTypeObject("Taurus")
+			try {
+			   dataBaseUrl = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.jdbc.url");
+
+			}catch (LionException le){
+			   dataBaseUrl = "jdbc:mysql://10.1.101.216:3306/Taurus?characterEncoding=utf-8";
+			}
+
+			String exceptContext = "您好，taurus的数据库连接发生异常 请及时查看"
+				   +"数据库连接串："
+				   +dataBaseUrl;
+			try {
+				String admin = ConfigHolder.get(LionKeys.ADMIN_USER);
+
+				if(StringUtils.isNotBlank(admin)) {
+					MailHelper.sendMail(admin + "@dianping.com", exceptContext, "Taurus数据库连接异常告警服务");
+					WeChatHelper.sendWeChat(admin, exceptContext, "Taurus数据库连接异常告警服务", ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
+				}
+
+				String reportToOps = null;
+				try {
+					reportToOps = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.down.ops.report.alarm.post");
+				} catch (LionException le) {
+					reportToOps = "http://pulse.dp/report/alarm/post";
+					le.printStackTrace();
+				}
+
+				oaHelper.buildTypeObject("Taurus")
 						.buildTypeItem("Service")
 						.buildTypeAttribute("Status")
 						.buildSource("taurus")
@@ -211,14 +211,14 @@ final public class Engine implements Scheduler {
 						.buildUrl(dataBaseUrl)
 						.buildReceiver("dpop@dianping.com")
 						.sendAlarmPost(reportToOps);
-               
-           }catch (LionException le){
-               Cat.logEvent("LionException",le.getMessage());
-           }catch (MessagingException me){
-               Cat.logEvent("MessagingException",me.getMessage());
-           }
 
-       }
+			}catch (LionException le){
+				Cat.logEvent("LionException",le.getMessage());
+			}catch (MessagingException me){
+				Cat.logEvent("MessagingException",me.getMessage());
+			}
+
+		}
 
 	}
 

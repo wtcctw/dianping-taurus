@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.dianping.ba.qyqq.adapter.api.dto.BroadcastDto;
+import com.dianping.ba.qyqq.adapter.api.service.QyqqMessageService;
 import org.apache.commons.lang.StringUtils;
 
 import com.dianping.ba.es.qyweixin.adapter.api.dto.MessageDto;
@@ -43,11 +45,13 @@ public class ApiServlet extends HttpServlet {
 	
 	private static final String PUSH = "push";
 	private static final String MAIL = "mail";
+    private static final String QYQQ = "qyqq";
 	private static final int maxRecipientsNum = 15;
 	
     private static EmployeeService employeeService;
     private static MessageService messageService;
     private static MailService mailService;
+    private static QyqqMessageService qyqqMessageService;
 	
 	@Override
     public void init(ServletConfig config) throws ServletException {
@@ -55,6 +59,7 @@ public class ApiServlet extends HttpServlet {
         employeeService = ServiceFactory.getService("http://service.dianping.com/ba/hris/masterdata/EmployeeService_1.0.0",EmployeeService.class , 5000);
         messageService = ServiceFactory.getService("http://service.dianping.com/ba/es/qyweixin/adapter/MessageService_1.0.0", MessageService.class, 5000);
         mailService = ServiceFactory.getService("http://service.dianping.com/mailService/mailService_1.0.0",MailService.class , 5000);
+        qyqqMessageService = ServiceFactory.getService("com.dianping.ba.qyqq.adapter.api.service.QyqqMessageService",QyqqMessageService.class, 5000);
     }
 	
 	@Override
@@ -163,6 +168,35 @@ public class ApiServlet extends HttpServlet {
     		output.write(result.toString().getBytes());
             output.close();
     		
+        } else if (QYQQ.equals(action)){
+            String title = request.getParameter("title");
+            String content = request.getParameter("content");
+            String keyword = request.getParameter("keyword");
+            List<EmployeeDto> employeeDtos = employeeService.queryEmployeeByKeyword(keyword);
+            EmployeeDto employeeDto = null;
+
+            if(employeeDtos != null && employeeDtos.size() == 1) {
+                employeeDto = employeeDtos.get(0);
+            } else {
+                result.addProperty("result", "Params Invalid! Can not found only user");
+                result.addProperty("status", 400);
+                output.write(result.toString().getBytes());
+                output.close();
+                return;
+            }
+
+            String user = employeeDto.getEmployeeId();
+            ArrayList<String> users = new ArrayList<String>();
+            users.add(user);
+
+            BroadcastDto broadcastDto = new BroadcastDto();
+            broadcastDto.setTitle(title);
+            broadcastDto.setContent(content);
+            broadcastDto.setIsOnline(1);
+            broadcastDto.setIsRich(0);
+            broadcastDto.setRecvDeptIds(null);
+            broadcastDto.setRecvEmployeeIds(users);
+
         } else {
 
             result.addProperty("result", "Permission Denied!");
