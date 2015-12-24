@@ -8,6 +8,53 @@
 	<packaging>pom</packaging>
 	<name>taurus-parent</name>
 
+	<properties>
+		<env>dev</env>
+		<argLine>-Dfile.encoding=UTF-8</argLine>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<dp.cat.version>1.3.8</dp.cat.version>
+		<dp.lion.version>0.5.4</dp.lion.version>
+		<dp.pigeon.version>2.7.1</dp.pigeon.version>
+		<dp.tracker.version>2.2.5</dp.tracker.version>
+		<spring.version>3.2.3.RELEASE</spring.version>
+		<jersey.version>2.6</jersey.version>
+		<mybatis.version>3.2.4</mybatis.version>
+		<aspectj.version>1.7.4</aspectj.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- 点评依赖包start -->
+			<dependency>
+				<groupId>com.dianping.cat</groupId>
+				<artifactId>cat-client</artifactId>
+				<version>${dp.cat.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.dianping.lion</groupId>
+				<artifactId>lion-client</artifactId>
+				<version>${dp.lion.version}</version>
+				<exclusions>
+					<exclusion>
+						<artifactId>slf4j-log4j12</artifactId>
+						<groupId>org.slf4j</groupId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>com.dianping</groupId>
+				<artifactId>avatar-tracker</artifactId>
+				<version>${dp.tracker.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.dianping.dpsf</groupId>
+				<artifactId>dpsf-net</artifactId>
+				<version>${dp.pigeon.version}</version>
+			</dependency>
+			<!-- 点评依赖包end -->
+		</dependencies>
+	</dependencyManagement>
+
 	<distributionManagement>
 		<repository>
 			<id>dianping.repo</id>
