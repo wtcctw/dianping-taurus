@@ -294,6 +294,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>4.2.0.Final</version>
+		</dependency>
 		<!-- 公司依赖 -->
 		<dependency>
 			<groupId>com.dianping</groupId>
@@ -306,9 +311,9 @@
             <version>${dp.zebra.version}</version>
         </dependency>
 		<dependency>
-            <groupId>com.dianping</groupId>
-            <artifactId>avatar-tracker</artifactId>
-        </dependency>
+			<groupId>com.dianping</groupId>
+			<artifactId>avatar-cache</artifactId>
+		</dependency>
         <dependency>
         	<groupId>com.dianping.dpsf</groupId>
             <artifactId>dpsf-net</artifactId>
