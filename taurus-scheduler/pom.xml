@@ -42,18 +42,22 @@
 		<dependency>
 			<groupId>com.dianping.lion</groupId>
 			<artifactId>lion-client</artifactId>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.dianping.cat</groupId>
 			<artifactId>cat-client</artifactId>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 		    <groupId>com.dianping.dpsf</groupId>
 		    <artifactId>dpsf-net</artifactId>
+			<scope>compile</scope>
 	    </dependency>
 		<dependency>
 			<groupId>com.dianping</groupId>
 			<artifactId>avatar-tracker</artifactId>
+			<scope>compile</scope>
 		</dependency>
 	    <dependency>
             <groupId>com.dianping</groupId>
