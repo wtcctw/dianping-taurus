@@ -20,8 +20,8 @@
 	<bean id="startRestLet" class="com.dp.bigdata.taurus.restlet.TaurusServer" init-method="start" destroy-method="stop"/>
     <bean id="alertBean" class="com.dp.bigdata.taurus.alert.TaurusAlert" />
     
-    <pigeon:annotation />
+    <!--<pigeon:annotation />-->
     
-    <context:component-scan base-package="com.dp.bigdata.taurus.springmvc.service"/>
+    <context:component-scan base-package="com.dp.bigdata.taurus.springmvc.service,com.dp.bigdata.taurus.web.servlet.web.common"/>
     
 </beans>

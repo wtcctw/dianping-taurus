@@ -70,7 +70,7 @@
 	<!-- sso文档给的顺序不对，必须按下面这个顺序严格排放 -->
 	<filter>
 	    <filter-name>CAS Authentication Filter</filter-name>
-	    <filter-class>org.jasig.cas.client.authentication.Saml11AuthenticationFilter</filter-class>
+	    <filter-class>com.dp.bigdata.taurus.web.servlet.filter.decorator.Saml11AuthenticationFilterDecorator</filter-class>
 	    <!-- SSO 登录页面的lion key，不用改写 -->
 	    <init-param>
 	        <param-name>casServerLoginUrlLionKey</param-name>
@@ -96,10 +96,10 @@
             <param-value>false</param-value>
         </init-param>
 	</filter>
-	
+
 	<filter>
 	    <filter-name>CAS Validation Filter</filter-name>
-	    <filter-class>org.jasig.cas.client.validation.Saml11TicketValidationFilter</filter-class>
+	    <filter-class>com.dp.bigdata.taurus.web.servlet.filter.decorator.Saml11TicketValidationFilterDecorator</filter-class>
 	    <init-param>
 	        <param-name>casServerUrlPrefixLionKey</param-name>
 	        <param-value>cas-server-webapp.serverName</param-value>
@@ -124,21 +124,21 @@
 	        <param-value>60000</param-value>
 	    </init-param>
 	</filter>
-	
+
 	<filter>
 	  <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
-	  <filter-class>org.jasig.cas.client.util.HttpServletRequestWrapperFilter</filter-class>
+	  <filter-class>com.dp.bigdata.taurus.web.servlet.filter.decorator.HttpServletRequestWrapperFilterDecorator</filter-class>
 	</filter>
-	
+
 	<filter>
 	   <filter-name>CAS Single Sign Out Filter</filter-name>
-	   <filter-class>org.jasig.cas.client.session.SingleSignOutFilter</filter-class>
+	   <filter-class>com.dp.bigdata.taurus.web.servlet.filter.decorator.SingleSignOutFilterDecorator</filter-class>
 	   <init-param>
 	       <param-name>artifactParameterName</param-name>
 	       <param-value>SAMLart</param-value>
 	   </init-param>
 	</filter>
-	
+
 	<!-- 不要修改 filter-mapping的顺序 -->
 	<filter-mapping>
 	  <filter-name>CAS Single Sign Out Filter</filter-name>
@@ -156,11 +156,17 @@
 	  <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
 	  <url-pattern>/*</url-pattern>
 	</filter-mapping>
-	
+
 	<!-- 本机身份验证 -->
 	<filter>
 		<filter-name>AuthenticationFilter</filter-name>
 		<filter-class>com.dp.bigdata.taurus.web.servlet.filter.AuthenticationFilter</filter-class>
+		<init-param>
+			<param-name>userName</param-name>
+			<param-value>
+				mingdong.li
+			</param-value>
+		</init-param>
 	</filter>
 	<filter-mapping>
 		<filter-name>AuthenticationFilter</filter-name>
