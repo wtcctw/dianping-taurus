@@ -40,4 +40,6 @@ public interface LeaderElector {
 
     String getPreviousLeaderIp();
 
+    boolean needAlarm();
+
 }

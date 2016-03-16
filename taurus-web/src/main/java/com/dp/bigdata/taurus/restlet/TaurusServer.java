@@ -162,12 +162,12 @@ public class TaurusServer implements LeaderChangedListener {
                 ReFlashHostLoadTaskTimer.getReFlashHostLoadManager().stop();
             }
 
-            while (!(engine.isTriggleThreadRestFlag()
-                    && statusMonitor.isAttemptStatusMonitorRestFlag())) {
-                //wait the engine to finish last schedule
-            }
-
-            if (!started.get()) {
+            if (started.get()) {
+                while (!(engine.isTriggleThreadRestFlag()
+                        && statusMonitor.isAttemptStatusMonitorRestFlag())) {
+                    //wait the engine to finish last schedule
+                }
+            } else {
                 started.set(true);
                 start();
                 log.info("start slave server....");
@@ -179,8 +179,10 @@ public class TaurusServer implements LeaderChangedListener {
             IpInfoLeaderElectorVisitor visitor = new IpInfoLeaderElectorVisitor();
             if (source instanceof TaurusZKLeaderElector) {
                 TaurusZKLeaderElector taurusZKLeaderElector = (TaurusZKLeaderElector) source;
-                visitor.visitLeaderElector(taurusZKLeaderElector);
-                WeChatHelper.sendWeChat(ConfigHolder.get(LionKeys.ADMIN_USER), visitor.getContent(), ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
+                if (taurusZKLeaderElector.needAlarm()) {
+                    visitor.visitLeaderElector(taurusZKLeaderElector);
+                    WeChatHelper.sendWeChat(ConfigHolder.get(LionKeys.ADMIN_USER), visitor.getContent(), ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
+                }
             }
         }
     }
