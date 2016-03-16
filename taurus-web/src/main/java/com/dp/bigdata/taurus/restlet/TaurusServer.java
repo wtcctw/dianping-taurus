@@ -77,7 +77,7 @@ public class TaurusServer implements LeaderChangedListener {
 
         try {
 
-            if (!LionConfigUtil.loadServerConf()) {
+            if (!LionConfigUtil.loadServerConf(leaderElector.getCurrentLeaderIp())) {
                 alert.isInterrupt(true);
                 engine.isInterrupt(true);
                 log.info("lion config error....");
