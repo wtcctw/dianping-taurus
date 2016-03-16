@@ -66,7 +66,7 @@ public class HostsResource extends ServerResource implements IHostsResource {
 			}
 
 		}
-		Collections.sort(hosts, new HostComparator());
+     		Collections.sort(hosts, new HostComparator());
 		return hosts;
 	}
 

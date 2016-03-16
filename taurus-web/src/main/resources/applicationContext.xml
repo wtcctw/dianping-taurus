@@ -17,9 +17,10 @@
 	
 	<bean name="configHolder" class="com.dp.bigdata.taurus.lion.ConfigHolder" init-method="init" />
 	
-	<bean id="startRestLet" class="com.dp.bigdata.taurus.restlet.TaurusServer" init-method="start" destroy-method="stop"/>
+	<bean id="startRestLet" class="com.dp.bigdata.taurus.restlet.TaurusServer"  destroy-method="stop"/>
     <bean id="alertBean" class="com.dp.bigdata.taurus.alert.TaurusAlert" />
-    
+    <bean id="healthChecker" class="com.dp.bigdata.taurus.alert.healthcheck.LeaderElectorHealthChecker" />
+
     <!--<pigeon:annotation />-->
     
     <context:component-scan base-package="com.dp.bigdata.taurus.springmvc.service,com.dp.bigdata.taurus.web.servlet.web.common"/>

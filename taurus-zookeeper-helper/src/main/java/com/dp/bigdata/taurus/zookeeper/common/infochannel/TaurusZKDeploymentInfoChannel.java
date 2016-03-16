@@ -1,19 +1,18 @@
 package com.dp.bigdata.taurus.zookeeper.common.infochannel;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
+import com.dp.bigdata.taurus.zookeeper.common.MachineType;
+import com.dp.bigdata.taurus.zookeeper.common.TaurusZKException;
+import com.dp.bigdata.taurus.zookeeper.common.infochannel.interfaces.DeploymentInfoChannel;
+import com.google.inject.Inject;
 import org.I0Itec.zkclient.IZkChildListener;
 import org.I0Itec.zkclient.IZkDataListener;
 import org.I0Itec.zkclient.ZkClient;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.dp.bigdata.taurus.zookeeper.common.MachineType;
-import com.dp.bigdata.taurus.zookeeper.common.TaurusZKException;
-import com.dp.bigdata.taurus.zookeeper.common.infochannel.interfaces.DeploymentInfoChannel;
-import com.google.inject.Inject;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public class TaurusZKDeploymentInfoChannel extends TaurusZKInfoChannel implements DeploymentInfoChannel{
 
@@ -22,7 +21,7 @@ public class TaurusZKDeploymentInfoChannel extends TaurusZKInfoChannel implement
 	private static final String STATUS = "status";
 	private static final String NEW = "new";
 	private static final String DELETE = "delete";
-	   private static final Log LOGGER = LogFactory.getLog(TaurusZKDeploymentInfoChannel.class);
+	private static final Log LOGGER = LogFactory.getLog(TaurusZKDeploymentInfoChannel.class);
 
 	@Inject
 	TaurusZKDeploymentInfoChannel(ZkClient zk) {

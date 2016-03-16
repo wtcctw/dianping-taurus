@@ -1,5 +1,9 @@
 package com.dp.bigdata.taurus.alert;
 
+import com.dp.bigdata.taurus.lion.ConfigHolder;
+import com.dp.bigdata.taurus.lion.LionKeys;
+import org.apache.commons.lang.StringUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -7,51 +11,50 @@ import java.io.PrintWriter;
 import java.net.URL;
 import java.net.URLConnection;
 
-import org.apache.commons.lang.StringUtils;
-
-import com.dp.bigdata.taurus.lion.ConfigHolder;
-import com.dp.bigdata.taurus.lion.LionKeys;
-
 /**
  * Created by kirinli on 14/12/17.
  */
 public class WeChatHelper {
 
-    public static void sendWeChat(String user, String content, String agentid){
+    public static void sendWeChat(String user, String content, String agentid) {
 
-    	if(StringUtils.isBlank(user) || StringUtils.isBlank(content)) {
-    		System.out.println("SendWechat error! user or content can't be blank!");
-        	return;
+        if (StringUtils.isBlank(user) || StringUtils.isBlank(content)) {
+            System.out.println("SendWechat error! user or content can't be blank!");
+            return;
         }
-    	
+
         String wechat_url = ConfigHolder.get(LionKeys.WECHAT_API.value(), "http://core.dp:8080");
 
-        String wechat_api = wechat_url+ "/api";
-        
-        String params = "action=push&sysName=ezc&keyword=" + user.trim()
-                + "&title=Taurus 微信告警服务&content= " + content.trim() + "&agentid=" + agentid;
+        String wechat_api = wechat_url + "/api";
 
-        String resp = sendPost(wechat_api, params);
+        for (String admin : user.split(",")) {
+            String params = "action=push&sysName=ezc&keyword=" + admin.trim()
+                    + "&title=Taurus 微信告警服务&content= " + content.trim() + "&agentid=" + agentid;
 
-        System.out.println(resp);
+            String resp = sendPost(wechat_api, params);
+
+            System.out.println(resp);
+        }
 
     }
-    
-    public static void sendWeChat(String user, String content, String title, String agentid){
-    	
-    	if(StringUtils.isBlank(user) || StringUtils.isBlank(content)) {
-    		System.out.println("SendWechat error! user or content can't be blank!");
-        	return;
+
+    public static void sendWeChat(String user, String content, String title, String agentid) {
+
+        if (StringUtils.isBlank(user) || StringUtils.isBlank(content)) {
+            System.out.println("SendWechat error! user or content can't be blank!");
+            return;
         }
-    	
+
         String wechat_url = ConfigHolder.get(LionKeys.WECHAT_API.value(), "http://core.dp:8080");
 
-        String wechat_api = wechat_url+ "/api";
+        String wechat_api = wechat_url + "/api";
 
-        String params = "action=push&sysName=ezc&keyword=" + user.trim()
-                + "&title=" + title.trim() + "&content=" + content.trim() + "&agentid=" + agentid;
+        for (String admin : user.split(",")) {
+            String params = "action=push&sysName=ezc&keyword=" + admin.trim()
+                    + "&title=" + title.trim() + "&content=" + content.trim() + "&agentid=" + agentid;
 
-        sendPost(wechat_api, params);
+            sendPost(wechat_api, params);
+        }
 
 
     }
@@ -86,20 +89,19 @@ public class WeChatHelper {
                 result += line;
             }
         } catch (Exception e) {
-            System.out.println("发送 POST 请求出现异常！"+e);
+            System.out.println("发送 POST 请求出现异常！" + e);
             e.printStackTrace();
         }
         //使用finally块来关闭输出流、输入流
-        finally{
-            try{
-                if(out!=null){
+        finally {
+            try {
+                if (out != null) {
                     out.close();
                 }
-                if(in!=null){
+                if (in != null) {
                     in.close();
                 }
-            }
-            catch(IOException ex){
+            } catch (IOException ex) {
                 ex.printStackTrace();
             }
         }

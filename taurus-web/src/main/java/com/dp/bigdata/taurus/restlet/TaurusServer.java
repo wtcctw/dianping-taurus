@@ -1,13 +1,9 @@
 package com.dp.bigdata.taurus.restlet;
 
-import org.restlet.Component;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.dianping.cat.Cat;
 import com.dp.bigdata.taurus.alert.TaurusAlert;
 import com.dp.bigdata.taurus.alert.WeChatHelper;
+import com.dp.bigdata.taurus.core.AttemptStatusMonitor;
 import com.dp.bigdata.taurus.core.Engine;
 import com.dp.bigdata.taurus.lion.ConfigHolder;
 import com.dp.bigdata.taurus.lion.LionKeys;
@@ -15,63 +11,84 @@ import com.dp.bigdata.taurus.restlet.utils.ClearLogsTimerManager;
 import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
 import com.dp.bigdata.taurus.restlet.utils.MonitorAgentOffLineTaskTimer;
 import com.dp.bigdata.taurus.restlet.utils.ReFlashHostLoadTaskTimer;
+import com.dp.bigdata.taurus.zookeeper.common.elect.LeaderElector;
+import com.dp.bigdata.taurus.zookeeper.common.elect.TaurusZKLeaderElector;
+import com.dp.bigdata.taurus.zookeeper.common.elect.lock.LockAction;
+import com.dp.bigdata.taurus.zookeeper.common.event.LeaderChangeEvent;
+import com.dp.bigdata.taurus.zookeeper.common.event.LeaderChangedListener;
+import com.dp.bigdata.taurus.zookeeper.common.infochannel.guice.LeaderElectorChanelModule;
 import com.dp.bigdata.taurus.zookeeper.common.utils.IPUtils;
+import com.dp.bigdata.taurus.zookeeper.common.visit.IpInfoLeaderElectorVisitor;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import org.I0Itec.zkclient.IZkStateListener;
+import org.apache.zookeeper.Watcher;
+import org.restlet.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.annotation.PostConstruct;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * TaurusRestletServer mode: standalone | all
  *
  * @author damon.zhu
  */
-public class TaurusServer {
+public class TaurusServer implements LeaderChangedListener {
 
-	private Logger log = LoggerFactory.getLogger(this.getClass());
-	
+    private Logger log = LoggerFactory.getLogger(this.getClass());
+
     @Autowired
     public Engine engine;
     @Autowired
     public TaurusAlert alert;
     @Autowired
     public Component restlet;
-    
+
+    @Autowired
+    public AttemptStatusMonitor statusMonitor;
+
+    private LeaderElector leaderElector;
+
+    private final Object eventLock = new Object();
+
+    private AtomicBoolean started = new AtomicBoolean(false);
+
+    @PostConstruct
+    public void initLeaderElector() {
+
+        Injector injector = Guice.createInjector(new LeaderElectorChanelModule());
+        leaderElector = injector.getInstance(LeaderElector.class);
+        log.info("LeaderElector is initialized");
+
+        leaderElector.addLeaderChangeListener(this);
+        log.info("add listener TaurusServer to LeaderElector");
+
+        leaderElector.addStateListener(new SessionExpirationListener());
+        leaderElector.startup();
+        log.info("LeaderElector startup");
+    }
 
     public void start() {
 
         System.setProperty("org.restlet.engine.loggerFacadeClass", "org.restlet.ext.slf4j.Slf4jLoggerFacade");
 
         try {
-        	
-        	if(LionConfigUtil.loadServerConf()){
-        		if(LionConfigUtil.SERVER_MASTER_IP.equals(IPUtils.getFirstNoLoopbackIP4Address())){
-        			
-                    ClearLogsTimerManager.getClearLogsTimerManager().start();
-                    MonitorAgentOffLineTaskTimer.getMonitorAgentOffLineTimeManager().start();
-                    ReFlashHostLoadTaskTimer.getReFlashHostLoadManager().start();
-                    log.info("start master server....");
-                    Cat.logEvent("Taurus.Master", IPUtils.getFirstNoLoopbackIP4Address());
-                    WeChatHelper.sendWeChat(ConfigHolder.get(LionKeys.ADMIN_USER), "Taurus master start: "+ IPUtils.getFirstNoLoopbackIP4Address(), ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
-                    
-        		}else{
-            		alert.isInterrupt(true);
-            		engine.isInterrupt(true);
-            		log.info("start slave server....");
-            		Cat.logEvent("Taurus.Slave", IPUtils.getFirstNoLoopbackIP4Address());
-            		WeChatHelper.sendWeChat(ConfigHolder.get(LionKeys.ADMIN_USER), "Taurus slave start: "+ IPUtils.getFirstNoLoopbackIP4Address(), ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
-            	}
-        		
-        	}else{
-        		alert.isInterrupt(true);
-        		engine.isInterrupt(true);
-        		log.info("lion config error....");
-        	}
-        	
-        	restlet.start();
+
+            if (!LionConfigUtil.loadServerConf()) {
+                alert.isInterrupt(true);
+                engine.isInterrupt(true);
+                log.info("lion config error....");
+            }
+
+            restlet.start();
             alert.start(-1);
             engine.start();
-            
+
             log.info("taurus start....");
-            
-            //MyGrizzlyApp.init();
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -81,15 +98,112 @@ public class TaurusServer {
     public void stop() {
         System.setProperty("org.restlet.engine.loggerFacadeClass", "org.restlet.ext.slf4j.Slf4jLoggerFacade");
 
-      //MyGrizzlyApp.stop();
-        
+        //MyGrizzlyApp.stop();
+
         engine.stop();
-        
+
         try {
             restlet.stop();
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onBecomingLeader(LeaderChangeEvent leaderChangeEvent) {
+
+        synchronized (eventLock) {
+
+            engine.load();
+            alert.load();
+            alert.isInterrupt(false);
+            engine.isInterrupt(false);
+
+            if (ClearLogsTimerManager.getClearLogsTimerManager().getTimer() == null) {
+                ClearLogsTimerManager.getClearLogsTimerManager().start();
+            }
+
+            if (MonitorAgentOffLineTaskTimer.getMonitorAgentOffLineTimeManager().getTimer() == null) {
+                MonitorAgentOffLineTaskTimer.getMonitorAgentOffLineTimeManager().start();
+            }
+
+            if (ReFlashHostLoadTaskTimer.getReFlashHostLoadManager().getTimer() == null) {
+                ReFlashHostLoadTaskTimer.getReFlashHostLoadManager().start();
+            }
+
+            if (!started.get()) {
+                started.set(true);
+                start();
+                log.info("start master server....");
+                Cat.logEvent("Taurus.Master", IPUtils.getFirstNoLoopbackIP4Address());
+                WeChatHelper.sendWeChat(ConfigHolder.get(LionKeys.ADMIN_USER), "Taurus master start: " + IPUtils.getFirstNoLoopbackIP4Address(), ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
+            }
+        }
+    }
+
+    @Override
+    public void onResigningAsLeader(LeaderChangeEvent leaderChangeEvent) {
+
+        synchronized (eventLock) {
+
+            alert.isInterrupt(true);
+            engine.isInterrupt(true);
+
+            if (ClearLogsTimerManager.getClearLogsTimerManager().getTimer() != null) {
+                ClearLogsTimerManager.getClearLogsTimerManager().stop();
+            }
+
+            if (MonitorAgentOffLineTaskTimer.getMonitorAgentOffLineTimeManager().getTimer() != null) {
+                MonitorAgentOffLineTaskTimer.getMonitorAgentOffLineTimeManager().stop();
+            }
+
+            if (ReFlashHostLoadTaskTimer.getReFlashHostLoadManager().getTimer() != null) {
+                ReFlashHostLoadTaskTimer.getReFlashHostLoadManager().stop();
+            }
+
+            while (!(engine.isTriggleThreadRestFlag()
+                    && statusMonitor.isAttemptStatusMonitorRestFlag())) {
+                //wait the engine to finish last schedule
+            }
+
+            if (!started.get()) {
+                started.set(true);
+                start();
+                log.info("start slave server....");
+                Cat.logEvent("Taurus.Slave", IPUtils.getFirstNoLoopbackIP4Address());
+                WeChatHelper.sendWeChat(ConfigHolder.get(LionKeys.ADMIN_USER), "Taurus slave start: " + IPUtils.getFirstNoLoopbackIP4Address(), ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
+            }
+
+            Object source = leaderChangeEvent.getSource();
+            IpInfoLeaderElectorVisitor visitor = new IpInfoLeaderElectorVisitor();
+            if (source instanceof TaurusZKLeaderElector) {
+                TaurusZKLeaderElector taurusZKLeaderElector = (TaurusZKLeaderElector) source;
+                visitor.visitLeaderElector(taurusZKLeaderElector);
+                WeChatHelper.sendWeChat(ConfigHolder.get(LionKeys.ADMIN_USER), visitor.getContent(), ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
+            }
+        }
+    }
+
+    class SessionExpirationListener implements IZkStateListener {
+
+        @Override
+        public void handleStateChanged(Watcher.Event.KeeperState state) throws Exception {
+            // do nothing, since zkclient will do reconnect for us.
+        }
+
+        @Override
+        public void handleNewSession() throws Exception {
+
+            log.info("ZK expired; shut down schedule server and try to re-elect");
+            leaderElector.getLock().doAction(new LockAction() {
+                @Override
+                public void doAction() {
+                    onResigningAsLeader(new LeaderChangeEvent(this));
+                    leaderElector.elect();
+                }
+            });
+        }
+
     }
 }

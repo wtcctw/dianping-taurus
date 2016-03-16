@@ -1,14 +1,14 @@
 package com.dp.bigdata.taurus.zookeeper.common.infochannel;
 
 
-import java.io.IOException;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+import com.dp.bigdata.taurus.zookeeper.common.MachineType;
+import com.dp.bigdata.taurus.zookeeper.common.TaurusZKException;
+import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.HeartbeatInfo;
+import com.dp.bigdata.taurus.zookeeper.common.infochannel.interfaces.ClusterInfoChannel;
+import com.google.inject.Inject;
 import org.I0Itec.zkclient.IZkChildListener;
 import org.I0Itec.zkclient.IZkDataListener;
+import org.I0Itec.zkclient.IZkStateListener;
 import org.I0Itec.zkclient.ZkClient;
 import org.I0Itec.zkclient.exception.ZkNodeExistsException;
 import org.apache.commons.logging.Log;
@@ -16,18 +16,18 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.KeeperException;
 
-import com.dp.bigdata.taurus.zookeeper.common.MachineType;
-import com.dp.bigdata.taurus.zookeeper.common.TaurusZKException;
-import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.HeartbeatInfo;
-import com.dp.bigdata.taurus.zookeeper.common.infochannel.interfaces.ClusterInfoChannel;
-import com.google.inject.Inject;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public abstract class TaurusZKInfoChannel implements ClusterInfoChannel{
 
     private static final Log LOG = LogFactory.getLog(TaurusZKInfoChannel.class);
 
 	protected static final String SEP = "/";
-	protected static final String BASE = "taurus";
+	public static final String BASE = "taurus";
 	private static final String HEARTBEATS = "heartbeats";
 	private static final String REALTIME = "realtime";
 	private static final String INFO = "info";
@@ -38,7 +38,7 @@ public abstract class TaurusZKInfoChannel implements ClusterInfoChannel{
 	protected String ip;
 
 	@Inject
-	TaurusZKInfoChannel(ZkClient zk){
+	public TaurusZKInfoChannel(ZkClient zk){
 		this.zk = zk;
 		
 	}
@@ -189,7 +189,7 @@ public abstract class TaurusZKInfoChannel implements ClusterInfoChannel{
 	        LOG.error(path + " not exists");
 	        throw new RuntimeException();
 	    }
-	    zk.writeData( getFullPath(node),data);
+	    zk.writeData(getFullPath(node), data);
 	}
 
 	protected Object getData(String... node) {
@@ -211,5 +211,9 @@ public abstract class TaurusZKInfoChannel implements ClusterInfoChannel{
 	protected void rmChildListener(IZkChildListener childListener, String... node){
         zk.unsubscribeChildChanges(getFullPath(node), childListener);
     }
+
+	public void addStateListener(IZkStateListener stateListener){
+		zk.subscribeStateChanges(stateListener);
+	}
 	
 }
