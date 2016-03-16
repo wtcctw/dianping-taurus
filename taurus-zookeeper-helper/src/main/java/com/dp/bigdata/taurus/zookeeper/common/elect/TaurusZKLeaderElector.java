@@ -83,7 +83,17 @@ public class TaurusZKLeaderElector extends TaurusZKInfoChannel implements Leader
         currentLeaderIp = getLeaderIpFromZk();
         if (StringUtils.isNotBlank(currentLeaderIp)) {
             logger.info(String.format("Schedule server %s has been elected as leader, so stopping the election process.", currentLeaderIp));
-            return amILeader();
+            boolean isLeader = amILeader();
+            if(!isLeader){
+                for (LeaderChangedListener listener : listeners) {
+                    listener.onResigningAsLeader(new LeaderChangeEvent(this));
+                }
+            }else {
+                for (LeaderChangedListener listener : listeners) {
+                    listener.onBecomingLeader(new LeaderChangeEvent(this));
+                }
+            }
+            return isLeader;
         }
 
         try {
