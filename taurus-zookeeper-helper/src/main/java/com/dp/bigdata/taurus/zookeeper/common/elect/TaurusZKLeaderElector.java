@@ -29,7 +29,7 @@ public class TaurusZKLeaderElector extends TaurusZKInfoChannel implements Leader
 
     private final Log logger = LogFactory.getLog(getClass());
 
-    private String hostIp = IPUtils.getIP4Address();
+    private String hostIp = IPUtils.getFirstNoLoopbackIP4Address();
 
     private String currentLeaderIp;
 

@@ -63,16 +63,4 @@ public class IPUtils {
         }
     }
 
-    public static String getIP4Address() {
-
-        String result;
-        try {
-            InetAddress addr = InetAddress.getLocalHost();
-            result = addr.getHostAddress().toString();
-        } catch (UnknownHostException e) {
-            result = getFirstNoLoopbackIP4Address();
-        }
-        return result;
-    }
-
 }
