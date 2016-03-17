@@ -220,7 +220,7 @@ public class TaurusAlert {
 					}
 
 					if(!healthChecker.isHealthy()){
-						WeChatHelper.sendWeChat(ConfigHolder.get(LionKeys.ADMIN_USER), "ZK上没有注册任何Taurus服务器", ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
+						WeChatHelper.sendWeChat(ConfigHolder.get(LionKeys.ADMIN_USER), "zk上没有注册任何Taurus服务器", ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
 					}
 
 					Thread.sleep(ALERT_INTERVAL);

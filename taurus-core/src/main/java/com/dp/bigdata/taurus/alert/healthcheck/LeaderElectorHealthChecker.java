@@ -11,4 +11,10 @@ public class LeaderElectorHealthChecker extends AbstractHealthChecker implements
         return "/taurus/leader/election";
     }
 
+    public static void main(String[] args) {
+        LeaderElectorHealthChecker leaderElectorHealthChecker = new LeaderElectorHealthChecker();
+        leaderElectorHealthChecker.initZkClient();
+        System.out.println(leaderElectorHealthChecker.getData(leaderElectorHealthChecker.getCheckPath()));
+    }
+
 }

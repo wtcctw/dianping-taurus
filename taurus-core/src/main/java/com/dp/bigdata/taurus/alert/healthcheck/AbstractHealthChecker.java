@@ -4,12 +4,15 @@ import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
 import com.dp.bigdata.taurus.zookeeper.common.utils.ClassLoaderUtils;
 import org.I0Itec.zkclient.ZkClient;
+import org.I0Itec.zkclient.ZkConnection;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.zookeeper.data.Stat;
 
 import javax.annotation.PostConstruct;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
 /**
@@ -30,6 +33,8 @@ public abstract class AbstractHealthChecker implements HealthChecker {
 
     private ZkClient zk;
 
+    private ZkConnection zkConnection;
+
     @PostConstruct
     public void initZkClient() {
         Properties props = new Properties();
@@ -39,7 +44,9 @@ public abstract class AbstractHealthChecker implements HealthChecker {
             in.close();
             String connectString = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.zookeeper.connectstring");
             int sessionTimeout = Integer.parseInt(props.getProperty(KEY_SESSION_TIMEOUT));
+            zkConnection = new ZkConnection(connectString, sessionTimeout);
             zk = new ZkClient(connectString, sessionTimeout, CONNECTION_TIMEOUT);
+            //zkConnection.connect(zk);
         } catch (Exception e) {
             logger.info("init zkclient error", e);
         }
@@ -73,9 +80,15 @@ public abstract class AbstractHealthChecker implements HealthChecker {
     protected String getData(String path) {
 
         try {
-            return zk.readData(path, true).toString();
-        }catch (Exception e){
-            logger.error(String.format("read data form path %s error", path));
+            byte[] data = zkConnection.getZookeeper().getData(path, false, new Stat());
+            try {
+                return new String(data, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                logger.error(String.format("read data form path %s error", path), e);
+                return StringUtils.EMPTY;
+            }
+        } catch (Exception e) {
+            logger.error(String.format("read data form path %s error", path), e);
             return StringUtils.EMPTY;
         }
 
@@ -86,4 +99,5 @@ public abstract class AbstractHealthChecker implements HealthChecker {
     }
 
     protected abstract String getCheckPath();
+
 }
