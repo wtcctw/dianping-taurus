@@ -13,7 +13,11 @@ public class LeaderElectorHealthChecker extends AbstractHealthChecker implements
 
     public static void main(String[] args) {
         LeaderElectorHealthChecker leaderElectorHealthChecker = new LeaderElectorHealthChecker();
-        leaderElectorHealthChecker.initZkClient();
+        try {
+            leaderElectorHealthChecker.afterPropertiesSet();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         System.out.println(leaderElectorHealthChecker.getData(leaderElectorHealthChecker.getCheckPath()));
     }
 
