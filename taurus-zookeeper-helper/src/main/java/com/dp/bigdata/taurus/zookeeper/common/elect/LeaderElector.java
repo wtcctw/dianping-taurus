@@ -10,7 +10,7 @@ import java.io.File;
  * Author   mingdongli
  * 16/3/15  下午1:53.
  */
-public interface LeaderElector {
+public interface LeaderElector extends ZkOperator{
 
     String LEADER = "leader";
 

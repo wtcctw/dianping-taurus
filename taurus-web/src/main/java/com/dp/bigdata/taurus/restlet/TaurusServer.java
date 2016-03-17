@@ -3,6 +3,7 @@ package com.dp.bigdata.taurus.restlet;
 import com.dianping.cat.Cat;
 import com.dp.bigdata.taurus.alert.TaurusAlert;
 import com.dp.bigdata.taurus.alert.WeChatHelper;
+import com.dp.bigdata.taurus.common.util.SleepUtil;
 import com.dp.bigdata.taurus.core.AttemptStatusMonitor;
 import com.dp.bigdata.taurus.core.Engine;
 import com.dp.bigdata.taurus.lion.ConfigHolder;
@@ -42,8 +43,10 @@ public class TaurusServer implements LeaderChangedListener {
 
     @Autowired
     public Engine engine;
+
     @Autowired
     public TaurusAlert alert;
+
     @Autowired
     public Component restlet;
 
@@ -97,9 +100,6 @@ public class TaurusServer implements LeaderChangedListener {
 
     public void stop() {
         System.setProperty("org.restlet.engine.loggerFacadeClass", "org.restlet.ext.slf4j.Slf4jLoggerFacade");
-
-        //MyGrizzlyApp.stop();
-
         engine.stop();
 
         try {
@@ -115,6 +115,12 @@ public class TaurusServer implements LeaderChangedListener {
 
         synchronized (eventLock) {
 
+            while(leaderElector.exists(LeaderElector.SCHEDULE_SCHEDULING)){
+                SleepUtil.sleep();
+            }
+            leaderElector.create(LeaderElector.SCHEDULE_SCHEDULING);
+
+            LionConfigUtil.loadServerConf(leaderElector.getCurrentLeaderIp());
             engine.load();
             alert.load();
             alert.isInterrupt(false);
@@ -133,12 +139,12 @@ public class TaurusServer implements LeaderChangedListener {
             }
 
             if (!started.get()) {
-                started.set(true);
-                start();
-                log.info("start master server....");
-                Cat.logEvent("Taurus.Master", IPUtils.getFirstNoLoopbackIP4Address());
-                WeChatHelper.sendWeChat(ConfigHolder.get(LionKeys.ADMIN_USER), "Taurus master start: " + IPUtils.getFirstNoLoopbackIP4Address(), ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
+                starting();
             }
+
+            log.info("start as master server....");
+            Cat.logEvent("Taurus.Master", IPUtils.getFirstNoLoopbackIP4Address());
+            WeChatHelper.sendWeChat(ConfigHolder.get(LionKeys.ADMIN_USER), "Taurus master start: " + IPUtils.getFirstNoLoopbackIP4Address(), ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
         }
     }
 
@@ -167,13 +173,14 @@ public class TaurusServer implements LeaderChangedListener {
                         && statusMonitor.isAttemptStatusMonitorRestFlag())) {
                     //wait the engine to finish last schedule
                 }
+                leaderElector.delete(LeaderElector.SCHEDULE_SCHEDULING);
             } else {
-                started.set(true);
-                start();
-                log.info("start slave server....");
-                Cat.logEvent("Taurus.Slave", IPUtils.getFirstNoLoopbackIP4Address());
-                WeChatHelper.sendWeChat(ConfigHolder.get(LionKeys.ADMIN_USER), "Taurus slave start: " + IPUtils.getFirstNoLoopbackIP4Address(), ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
+                starting();
             }
+
+            log.info("start as slave server....");
+            Cat.logEvent("Taurus.Slave", IPUtils.getIP4Address());
+            WeChatHelper.sendWeChat(ConfigHolder.get(LionKeys.ADMIN_USER), "Taurus slave start: " + IPUtils.getIP4Address(), ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
 
             Object source = leaderChangeEvent.getSource();
             IpInfoLeaderElectorVisitor visitor = new IpInfoLeaderElectorVisitor();
@@ -185,6 +192,11 @@ public class TaurusServer implements LeaderChangedListener {
                 }
             }
         }
+    }
+
+    private void starting(){
+        started.set(true);
+        start();
     }
 
     class SessionExpirationListener implements IZkStateListener {

@@ -79,8 +79,7 @@ public class HomeController extends BaseController {
 						HttpServletRequest request,
 						HttpServletResponse response) throws ParseException 
 	{
-		log.info("--------------init the index------------");
-		
+
 		GlobalViewVariable globalViewVariable = new GlobalViewVariable();
 		commonnav(request,globalViewVariable);
 		modelMap.addAttribute("currentUser", globalViewVariable.currentUser);

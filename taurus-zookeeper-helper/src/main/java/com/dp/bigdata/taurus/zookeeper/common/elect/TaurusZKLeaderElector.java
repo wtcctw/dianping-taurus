@@ -193,6 +193,23 @@ public class TaurusZKLeaderElector extends TaurusZKInfoChannel implements Leader
         electorVisitor.visitLeaderElector(this);
     }
 
+    @Override
+    public boolean exists(String path) {
+        return super.existPath(path);
+    }
+
+    @Override
+    public void create(String path) {
+        super.mkPathIfNotExists(path);
+        logger.info(String.format("server %s create %s", hostIp, SCHEDULE_SCHEDULING));
+    }
+
+    @Override
+    public void delete(String path) {
+        super.rmPath(path);
+        logger.info(String.format("server %s delete %s", hostIp, SCHEDULE_SCHEDULING));
+    }
+
     class LeaderChangeListener implements IZkDataListener {
 
         @Override
@@ -212,7 +229,7 @@ public class TaurusZKLeaderElector extends TaurusZKInfoChannel implements Leader
                             listener.onResigningAsLeader(new LeaderChangeEvent(this));
                         }
                     } else {
-                        logger.info("Leader doesn't change!");
+                        logger.info(String.format("Previous leader is %s, current leader is %s", previousLeaderIp, currentLeaderIp));
                     }
                 }
             });

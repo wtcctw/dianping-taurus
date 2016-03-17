@@ -134,7 +134,6 @@ final public class Engine implements Scheduler {
 	 * load data from the database;
 	 */
 	public synchronized void load() {
-		//LOG.info("Engine trys to refresh the database...");
 
 		Map<String, Task> tmp_registedTasks = new ConcurrentHashMap<String, Task>();
 		Map<String, String> tmp_tasksMapCache = new ConcurrentHashMap<String, String>();

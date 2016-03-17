@@ -1,17 +1,16 @@
 package com.dp.bigdata.taurus.springmvc.controller;
 
-import javax.annotation.PostConstruct;
-import javax.servlet.ServletContext;
-
+import com.dianping.cat.Cat;
+import com.dianping.lion.EnvZooKeeperConfig;
+import com.dianping.lion.client.ConfigCache;
+import com.dianping.lion.client.LionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.context.ServletContextAware;
 
-import com.dianping.cat.Cat;
-import com.dianping.lion.EnvZooKeeperConfig;
-import com.dianping.lion.client.ConfigCache;
-import com.dianping.lion.client.LionException;
+import javax.annotation.PostConstruct;
+import javax.servlet.ServletContext;
 
 @Controller
 public class InitController implements ServletContextAware {
@@ -78,7 +77,7 @@ public class InitController implements ServletContextAware {
 			MAIL_TO = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.feedback.mail.to");
 			SSO_LOGOUT_URL = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("cas-server-webapp.logoutUrl");
 		} catch (LionException e) {
-			System.out.println("LION CONGIG ERROR++++++++:"+e.getMessage());
+			log.info("LION CONGIG ERROR++++++++:"+e.getMessage());
 			Cat.logError("LionException", e);
 		} catch (Exception e) {
 			Cat.logError("LionException", e);

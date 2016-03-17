@@ -205,7 +205,6 @@ public class TaurusAlert {
 					alertThreadRestFlag = true;
 				}
 				alertThreadRestFlag = false;
-				LOG.info("****************Alert started*****************");
 
 				try {
 					Date now = new Date();
