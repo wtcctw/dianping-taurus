@@ -20,7 +20,7 @@ import java.util.Properties;
  * Author   mingdongli
  * 16/3/16  下午2:43.
  */
-public abstract class AbstractHealthChecker implements HealthChecker ,InitializingBean, DisposableBean{
+public abstract class AbstractHealthChecker implements HealthChecker, InitializingBean, DisposableBean {
 
     protected final Log logger = LogFactory.getLog(getClass());
 
@@ -54,7 +54,7 @@ public abstract class AbstractHealthChecker implements HealthChecker ,Initializi
     }
 
     @Override
-    public void destroy() throws Exception{
+    public void destroy() throws Exception {
         zkConnection.close();
         zk.close();
     }
@@ -76,6 +76,7 @@ public abstract class AbstractHealthChecker implements HealthChecker ,Initializi
             }
 
             if (retry >= RETRY_TIME) {
+                logger.info(String.format("Health check failed for path %s", getCheckPath()));
                 return false;
             }
             return true;
@@ -91,7 +92,7 @@ public abstract class AbstractHealthChecker implements HealthChecker ,Initializi
             try {
                 return new String(data, "UTF-8");
             } catch (UnsupportedEncodingException e) {
-                logger.error(String.format("read data form path %s error", path), e);
+                logger.error(String.format("UnsupportedEncodingException path of %s", path), e);
                 return StringUtils.EMPTY;
             }
         } catch (Exception e) {

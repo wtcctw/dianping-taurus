@@ -16,6 +16,8 @@ public interface LeaderElector extends ZkOperator{
 
     String LEADER_ELECTION = LEADER + File.separatorChar + "election";
 
+    String SCHEDULE_SCHEDULING = "taurus/taskscheduling";
+
     void startup();
 
     boolean amILeader();

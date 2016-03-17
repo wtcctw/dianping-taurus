@@ -6,8 +6,6 @@ package com.dp.bigdata.taurus.zookeeper.common.elect;
  */
 public interface ZkOperator {
 
-    String SCHEDULE_SCHEDULING = "taurus/taskscheduling";
-
     boolean exists(String path);
 
     void createEphemeral(String path);

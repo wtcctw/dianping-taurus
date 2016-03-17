@@ -15,7 +15,7 @@ import java.util.concurrent.CountDownLatch;
  * Author   mingdongli
  * 16/3/15  下午4:29.
  */
-public class ZKCheckedEphemeral {
+public class ZKEphemeralOperator implements ZkOperator{
 
     private final Log logger = LogFactory.getLog(getClass());
 
@@ -35,7 +35,7 @@ public class ZKCheckedEphemeral {
 
     KeeperException.Code result = KeeperException.Code.OK;
 
-    public ZKCheckedEphemeral(String path, String data, ZooKeeper zkHandle, boolean isSecure) {
+    public ZKEphemeralOperator(String path, String data, ZooKeeper zkHandle, boolean isSecure) {
         this.path = path;
         this.data = data;
         this.zkHandle = zkHandle;
@@ -44,12 +44,6 @@ public class ZKCheckedEphemeral {
 
     public void create() {
 
-//        int index = path.indexOf('/', 1) == -1 ? path.length() : path.indexOf('/', 1);
-//        String prefix = path.substring(0, index);
-//        String suffix = path.substring(index, path.length());
-//        logger.info(String.format("Path: %s, Prefix: %s, Suffix: %s", path, prefix, suffix));
-//        logger.info(String.format("Creating %s (is it secure? %b)", path, isSecure));
-//        createRecursive(prefix, suffix);
         createEphemeral();
         KeeperException.Code result = waitUntilResolved();
         logger.info(String.format("Result of znode creation is: %s", result));
@@ -57,42 +51,6 @@ public class ZKCheckedEphemeral {
             throw ZkException.create(KeeperException.create(result));
         }
     }
-
-//    private void createRecursive(String prefix, String suffix) {
-//
-//        logger.info("Path: %s, Prefix: %s, Suffix: %s".format(path, prefix, suffix));
-//        if (suffix.isEmpty()) {
-//            createEphemeral();
-//        } else {
-//            zkHandle.create(prefix, new byte[0], defaultAcls(isSecure), CreateMode.PERSISTENT, new AsyncCallback.StringCallback() {
-//
-//                        @Override
-//                        public void processResult(int rc, String path, Object ctx, String name) {
-//
-//                            KeeperException.Code code = KeeperException.Code.get(rc);
-//
-//                            if (KeeperException.Code.CONNECTIONLOSS == code) {
-//                                String suffix = (String) ctx;
-//                                createRecursive(path, suffix);
-//                            } else if (KeeperException.Code.OK == code || KeeperException.Code.NODEEXISTS == code) {
-//                                logger.info(String.format("code is %s", code.toString()));
-//                                // do nothing
-//                            } else {
-//                                setResult(KeeperException.Code.get(rc));
-//                                logger.info(String.format("code is %s", code.toString()));
-//                            }
-//                        }
-//                    },
-//                    suffix);
-//            // Update prefix and suffix
-//            int index = suffix.indexOf('/', 1) == -1 ? suffix.length() : suffix.indexOf('/', 1);
-//            // Get new prefix
-//            String newPrefix = prefix + suffix.substring(0, index);
-//            // Get new suffix
-//            String newSuffix = suffix.substring(index, suffix.length());
-//            createRecursive(newPrefix, newSuffix);
-//        }
-//    }
 
     private KeeperException.Code waitUntilResolved() {
         try {
@@ -110,8 +68,7 @@ public class ZKCheckedEphemeral {
 
     private void createEphemeral() {
 
-        ZKStringSerializer serializer = new ZKStringSerializer();
-        zkHandle.create(path, serializer.serialize(data), defaultAcls(isSecure), CreateMode.EPHEMERAL, createCallback, null);
+        createEphemeral(path);
     }
 
     private List<ACL> defaultAcls(boolean isSecure) {
@@ -125,6 +82,24 @@ public class ZKCheckedEphemeral {
             return ZooDefs.Ids.OPEN_ACL_UNSAFE;
         }
 
+    }
+
+    @Override
+    public boolean exists(String path) {
+        throw new UnsupportedOperationException("not support");
+    }
+
+    @Override
+    public void createEphemeral(String path) {
+
+        ZKStringSerializer serializer = new ZKStringSerializer();
+        zkHandle.create(path, serializer.serialize(data), defaultAcls(isSecure), CreateMode.EPHEMERAL, createCallback, null);
+    }
+
+    @Override
+    public void delete(String path) {
+
+        throw new UnsupportedOperationException("not support");
     }
 
     private class CreateCallback implements AsyncCallback.StringCallback {

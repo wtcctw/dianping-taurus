@@ -106,8 +106,8 @@ public class TaurusZKLeaderElector extends TaurusZKInfoChannel implements Leader
         }
 
         try {
-            ZKCheckedEphemeral zkCheckedEphemeral = new ZKCheckedEphemeral(getLeaderElectionPath(), hostIp, zkConnection.getZookeeper(), JaasUtils.isZkSecurityEnabled());
-            zkCheckedEphemeral.create();
+            ZKEphemeralOperator zKEphemeralOperator = new ZKEphemeralOperator(getLeaderElectionPath(), hostIp, zkConnection.getZookeeper(), JaasUtils.isZkSecurityEnabled());
+            zKEphemeralOperator.create();
             logger.info(hostIp + " successfully elected as leader");
             previousLeaderIp = currentLeaderIp;
             currentLeaderIp = hostIp;
@@ -200,7 +200,7 @@ public class TaurusZKLeaderElector extends TaurusZKInfoChannel implements Leader
 
     @Override
     public void createEphemeral(String path) {
-        ZKCheckedEphemeral ephemeral = new ZKCheckedEphemeral(File.separatorChar + path, "", zkConnection.getZookeeper(), JaasUtils.isZkSecurityEnabled());
+        ZKEphemeralOperator ephemeral = new ZKEphemeralOperator(File.separatorChar + path, "", zkConnection.getZookeeper(), JaasUtils.isZkSecurityEnabled());
         ephemeral.create();
         logger.info(String.format("server %s create %s", hostIp, SCHEDULE_SCHEDULING));
     }
