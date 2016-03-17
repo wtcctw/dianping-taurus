@@ -118,7 +118,7 @@ public class TaurusServer implements LeaderChangedListener {
             while(leaderElector.exists(LeaderElector.SCHEDULE_SCHEDULING)){
                 SleepUtil.sleep();
             }
-            leaderElector.create(LeaderElector.SCHEDULE_SCHEDULING);
+            leaderElector.createEphemeral(LeaderElector.SCHEDULE_SCHEDULING);
 
             LionConfigUtil.loadServerConf(leaderElector.getCurrentLeaderIp());
             engine.load();

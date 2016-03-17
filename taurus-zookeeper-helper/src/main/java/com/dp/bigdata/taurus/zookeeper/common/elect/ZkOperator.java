@@ -10,7 +10,7 @@ public interface ZkOperator {
 
     boolean exists(String path);
 
-    void create(String path);
+    void createEphemeral(String path);
 
     void delete(String path);
 }

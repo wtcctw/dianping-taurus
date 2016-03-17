@@ -199,8 +199,9 @@ public class TaurusZKLeaderElector extends TaurusZKInfoChannel implements Leader
     }
 
     @Override
-    public void create(String path) {
-        super.mkPathIfNotExists(path);
+    public void createEphemeral(String path) {
+        ZKCheckedEphemeral ephemeral = new ZKCheckedEphemeral(File.separatorChar + path, "", zkConnection.getZookeeper(), JaasUtils.isZkSecurityEnabled());
+        ephemeral.create();
         logger.info(String.format("server %s create %s", hostIp, SCHEDULE_SCHEDULING));
     }
 
