@@ -8,7 +8,6 @@ import org.I0Itec.zkclient.ZkConnection;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.zookeeper.data.Stat;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 
@@ -88,7 +87,7 @@ public abstract class AbstractHealthChecker implements HealthChecker, Initializi
     protected String getData(String path) {
 
         try {
-            byte[] data = zkConnection.getZookeeper().getData(path, false, new Stat());
+            byte[] data = zkConnection.getZookeeper().getData(path, false, null);
             try {
                 return new String(data, "UTF-8");
             } catch (UnsupportedEncodingException e) {
