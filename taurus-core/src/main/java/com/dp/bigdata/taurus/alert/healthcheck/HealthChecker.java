@@ -7,4 +7,5 @@ package com.dp.bigdata.taurus.alert.healthcheck;
 public interface HealthChecker {
 
     boolean isHealthy();
+
 }

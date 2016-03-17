@@ -9,8 +9,9 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.zookeeper.data.Stat;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.InitializingBean;
 
-import javax.annotation.PostConstruct;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
@@ -19,7 +20,7 @@ import java.util.Properties;
  * Author   mingdongli
  * 16/3/16  下午2:43.
  */
-public abstract class AbstractHealthChecker implements HealthChecker {
+public abstract class AbstractHealthChecker implements HealthChecker ,InitializingBean, DisposableBean{
 
     protected final Log logger = LogFactory.getLog(getClass());
 
@@ -35,8 +36,8 @@ public abstract class AbstractHealthChecker implements HealthChecker {
 
     private ZkConnection zkConnection;
 
-    @PostConstruct
-    public void initZkClient() {
+    @Override
+    public void afterPropertiesSet() throws Exception {
         Properties props = new Properties();
         try {
             InputStream in = ClassLoaderUtils.getDefaultClassLoader().getResourceAsStream(ZK_CONF);
@@ -50,6 +51,12 @@ public abstract class AbstractHealthChecker implements HealthChecker {
         } catch (Exception e) {
             logger.info("init zkclient error", e);
         }
+    }
+
+    @Override
+    public void destroy() throws Exception{
+        zkConnection.close();
+        zk.close();
     }
 
     @Override
