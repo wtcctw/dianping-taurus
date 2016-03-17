@@ -1,18 +1,12 @@
 package com.dp.bigdata.taurus.springmvc.controller;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.dianping.lion.EnvZooKeeperConfig;
+import com.dianping.lion.client.ConfigCache;
+import com.dp.bigdata.taurus.lion.ConfigHolder;
+import com.dp.bigdata.taurus.lion.LionKeys;
+import com.dp.bigdata.taurus.restlet.shared.*;
+import com.dp.bigdata.taurus.springmvc.utils.GlobalViewVariable;
 import jodd.util.StringUtil;
-
 import org.codehaus.plexus.util.StringUtils;
 import org.restlet.resource.ClientResource;
 import org.slf4j.Logger;
@@ -22,18 +16,11 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.dianping.lion.EnvZooKeeperConfig;
-import com.dianping.lion.client.ConfigCache;
-import com.dp.bigdata.taurus.lion.ConfigHolder;
-import com.dp.bigdata.taurus.lion.LionKeys;
-import com.dp.bigdata.taurus.restlet.shared.AttemptDTO;
-import com.dp.bigdata.taurus.restlet.shared.HostDTO;
-import com.dp.bigdata.taurus.restlet.shared.PoolDTO;
-import com.dp.bigdata.taurus.restlet.shared.StatusDTO;
-import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
-import com.dp.bigdata.taurus.restlet.shared.UserDTO;
-import com.dp.bigdata.taurus.restlet.shared.UserGroupDTO;
-import com.dp.bigdata.taurus.springmvc.utils.GlobalViewVariable;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller
 public class HomeController extends BaseController {
@@ -1036,7 +1023,7 @@ public class HomeController extends BaseController {
 		log.info("--------------init the update------------");
 		
 		GlobalViewVariable globalViewVariable = new GlobalViewVariable();
-		commonnav(request,globalViewVariable);
+		commonnav(request, globalViewVariable);
 		modelMap.addAttribute("currentUser", globalViewVariable.currentUser);
 		modelMap.addAttribute("isAdmin", globalViewVariable.isAdmin);
 		commonAttr(modelMap);
@@ -1088,6 +1075,11 @@ public class HomeController extends BaseController {
 		commonAttr(modelMap);
 	    
 	    return "/error.ftl";
+	}
+
+	@RequestMapping(value = "/health", method = {RequestMethod.GET,RequestMethod.POST})
+	public Object health() {
+		return "/health.ftl";
 	}
 	
 	/**

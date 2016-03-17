@@ -89,7 +89,7 @@
 	    <!-- 免登录url，支持通配符*，多个用,分隔 -->
 	    <init-param>
 	        <param-name>excludeURLs</param-name>
-	        <param-value></param-value>
+	        <param-value>/health</param-value>
 	    </init-param>
 	    <init-param>
             <param-name>formal</param-name>
