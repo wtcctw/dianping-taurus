@@ -204,7 +204,7 @@ public class TaurusServer implements LeaderChangedListener {
         @Override
         public void handleStateChanged(Watcher.Event.KeeperState state) throws Exception {
             // do nothing, since zkclient will do reconnect for us.
-            log.info("seaaion expired and state is %s", state.getIntValue());
+            log.info("session expired and state is %d", state.getIntValue());
         }
 
         @Override
