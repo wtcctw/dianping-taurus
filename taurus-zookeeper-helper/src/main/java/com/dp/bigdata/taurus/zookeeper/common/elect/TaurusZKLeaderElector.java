@@ -229,6 +229,10 @@ public class TaurusZKLeaderElector extends TaurusZKInfoChannel implements Leader
                         for (LeaderChangedListener listener : listeners) {
                             listener.onResigningAsLeader(new LeaderChangeEvent(this));
                         }
+                    } else if(!amILeaderBeforeDataChange && amILeader()){
+                        for (LeaderChangedListener listener : listeners) {
+                            listener.onBecomingLeader(new LeaderChangeEvent(this));
+                        }
                     } else {
                         logger.info(String.format("Previous leader is %s, current leader is %s", previousLeaderIp, currentLeaderIp));
                     }

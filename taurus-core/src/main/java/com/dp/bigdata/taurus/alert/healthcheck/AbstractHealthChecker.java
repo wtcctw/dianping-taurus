@@ -18,7 +18,7 @@ import java.util.Properties;
  */
 public abstract class AbstractHealthChecker implements HealthChecker {
 
-    protected final Log LOG = LogFactory.getLog(getClass());
+    protected final Log logger = LogFactory.getLog(getClass());
 
     private static final String ZK_CONF = "zooKeeper.properties";
 
@@ -31,7 +31,7 @@ public abstract class AbstractHealthChecker implements HealthChecker {
     private ZkClient zk;
 
     @PostConstruct
-    public void initZkClient(){
+    public void initZkClient() {
         Properties props = new Properties();
         try {
             InputStream in = ClassLoaderUtils.getDefaultClassLoader().getResourceAsStream(ZK_CONF);
@@ -39,9 +39,9 @@ public abstract class AbstractHealthChecker implements HealthChecker {
             in.close();
             String connectString = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.zookeeper.connectstring");
             int sessionTimeout = Integer.parseInt(props.getProperty(KEY_SESSION_TIMEOUT));
-            zk = new ZkClient(connectString, sessionTimeout,CONNECTION_TIMEOUT);
+            zk = new ZkClient(connectString, sessionTimeout, CONNECTION_TIMEOUT);
         } catch (Exception e) {
-            LOG.info("init zkclient error", e);
+            logger.info("init zkclient error", e);
         }
     }
 
@@ -52,16 +52,16 @@ public abstract class AbstractHealthChecker implements HealthChecker {
         while (retry < RETRY_TIME) {
             retry++;
 
-            if(!existPath(checkPath)){
+            if (!existPath(checkPath)) {
                 continue;
-            }else {
-                String leaderIp = getData(checkPath).toString();
-                if(StringUtils.isBlank(leaderIp)){
+            } else {
+                String leaderIp = getData(checkPath);
+                if (StringUtils.isBlank(leaderIp)) {
                     continue;
                 }
             }
 
-            if(retry >= RETRY_TIME){
+            if (retry >= RETRY_TIME) {
                 return false;
             }
             return true;
@@ -70,8 +70,15 @@ public abstract class AbstractHealthChecker implements HealthChecker {
         return false;
     }
 
-    protected Object getData(String path) {
-        return zk.readData(path, true);
+    protected String getData(String path) {
+
+        try {
+            return zk.readData(path, true).toString();
+        }catch (Exception e){
+            logger.error(String.format("read data form path %s error", path));
+            return StringUtils.EMPTY;
+        }
+
     }
 
     protected boolean existPath(String path) {
