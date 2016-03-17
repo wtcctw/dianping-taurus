@@ -46,7 +46,7 @@ public abstract class AbstractHealthChecker implements HealthChecker {
             int sessionTimeout = Integer.parseInt(props.getProperty(KEY_SESSION_TIMEOUT));
             zkConnection = new ZkConnection(connectString, sessionTimeout);
             zk = new ZkClient(connectString, sessionTimeout, CONNECTION_TIMEOUT);
-            //zkConnection.connect(zk);
+            zkConnection.connect(zk);
         } catch (Exception e) {
             logger.info("init zkclient error", e);
         }
