@@ -12,6 +12,7 @@ import com.dp.bigdata.taurus.restlet.utils.ClearLogsTimerManager;
 import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
 import com.dp.bigdata.taurus.restlet.utils.MonitorAgentOffLineTaskTimer;
 import com.dp.bigdata.taurus.restlet.utils.ReFlashHostLoadTaskTimer;
+import com.dp.bigdata.taurus.utils.EnvUtil;
 import com.dp.bigdata.taurus.zookeeper.common.elect.LeaderElector;
 import com.dp.bigdata.taurus.zookeeper.common.elect.TaurusZKLeaderElector;
 import com.dp.bigdata.taurus.zookeeper.common.elect.lock.LockAction;
@@ -144,7 +145,7 @@ public class TaurusServer implements LeaderChangedListener {
 
             log.info("start as master server....");
             Cat.logEvent("Taurus.Master", IPUtils.getFirstNoLoopbackIP4Address());
-            WeChatHelper.sendWeChat(ConfigHolder.get(LionKeys.ADMIN_USER), "Taurus master start: " + IPUtils.getFirstNoLoopbackIP4Address(), ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
+            WeChatHelper.sendWeChat(ConfigHolder.get(LionKeys.ADMIN_USER), EnvUtil.getEnv() + " taurus master start: " + IPUtils.getFirstNoLoopbackIP4Address(), ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
         }
     }
 

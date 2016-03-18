@@ -10,16 +10,18 @@ import com.dp.bigdata.taurus.generated.mapper.*;
 import com.dp.bigdata.taurus.generated.module.*;
 import com.dp.bigdata.taurus.lion.ConfigHolder;
 import com.dp.bigdata.taurus.lion.LionKeys;
-import com.dp.bigdata.taurus.zookeeper.common.utils.IPUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import com.dp.bigdata.taurus.utils.EnvUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.mail.MessagingException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+;
 
 /**
  * TaurusAlert
@@ -220,7 +222,7 @@ public class TaurusAlert {
 					}
 
 					if(!healthChecker.isHealthy()){
-						WeChatHelper.sendWeChat(ConfigHolder.get(LionKeys.ADMIN_USER), "zk上没有注册任何Taurus服务器", ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
+						WeChatHelper.sendWeChat(ConfigHolder.get(LionKeys.ADMIN_USER), EnvUtil.getEnv() + " zk上没有注册任何Taurus服务器", ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
 					}
 
 					Thread.sleep(ALERT_INTERVAL);

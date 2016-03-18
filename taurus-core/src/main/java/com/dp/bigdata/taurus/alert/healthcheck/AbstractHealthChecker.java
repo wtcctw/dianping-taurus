@@ -8,6 +8,7 @@ import org.I0Itec.zkclient.ZkConnection;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.zookeeper.KeeperException;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 
@@ -90,12 +91,20 @@ public abstract class AbstractHealthChecker implements HealthChecker, Initializi
             byte[] data = zkConnection.getZookeeper().getData(path, false, null);
             try {
                 return new String(data, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                logger.error(String.format("UnsupportedEncodingException path of %s", path), e);
+            } catch (UnsupportedEncodingException e1) {
+                logger.error(String.format("UnsupportedEncodingException path of %s", path), e1);
                 return StringUtils.EMPTY;
             }
-        } catch (Exception e) {
-            logger.error(String.format("read data form path %s error", path), e);
+        } catch(KeeperException.SessionExpiredException e2){
+            try {
+                zkConnection.close();
+                zkConnection.connect(zk);
+            } catch (InterruptedException e) {
+                logger.info("reconnec to zk failed");
+            }
+            return StringUtils.EMPTY;
+        } catch (Exception e3) {
+            logger.error(String.format("read data form path %s error", path), e3);
             return StringUtils.EMPTY;
         }
 
