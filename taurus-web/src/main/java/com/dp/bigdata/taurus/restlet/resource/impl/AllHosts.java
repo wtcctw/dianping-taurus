@@ -1,19 +1,15 @@
 package com.dp.bigdata.taurus.restlet.resource.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.dp.bigdata.taurus.generated.mapper.HostMapper;
+import com.dp.bigdata.taurus.generated.module.Host;
+import com.dp.bigdata.taurus.restlet.resource.IAllHosts;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.resource.ServerResource;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.dp.bigdata.taurus.generated.mapper.HostMapper;
-import com.dp.bigdata.taurus.generated.module.Host;
-import com.dp.bigdata.taurus.restlet.resource.IAllHosts;
+import java.util.*;
 
 /**
  * Created by kirinli on 15/1/30.
@@ -36,7 +32,7 @@ public class AllHosts extends ServerResource implements IAllHosts {
                     ips.add(host.getIp());
 
                 }
-
+                Collections.shuffle(ips);
                 result.put("hosts", ips);
 
             }

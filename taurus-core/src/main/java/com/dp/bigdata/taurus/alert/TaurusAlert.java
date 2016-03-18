@@ -1,43 +1,25 @@
 package com.dp.bigdata.taurus.alert;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import javax.mail.MessagingException;
-
+import com.dianping.cat.Cat;
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
 import com.dianping.lion.client.LionException;
-
+import com.dp.bigdata.taurus.alert.healthcheck.HealthChecker;
+import com.dp.bigdata.taurus.core.AttemptStatus;
+import com.dp.bigdata.taurus.generated.mapper.*;
+import com.dp.bigdata.taurus.generated.module.*;
+import com.dp.bigdata.taurus.lion.ConfigHolder;
+import com.dp.bigdata.taurus.lion.LionKeys;
+import com.dp.bigdata.taurus.zookeeper.common.utils.IPUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.dianping.cat.Cat;
-import com.dp.bigdata.taurus.core.AttemptStatus;
-import com.dp.bigdata.taurus.generated.mapper.AlertRuleMapper;
-import com.dp.bigdata.taurus.generated.mapper.TaskAttemptMapper;
-import com.dp.bigdata.taurus.generated.mapper.TaskMapper;
-import com.dp.bigdata.taurus.generated.mapper.UserGroupMappingMapper;
-import com.dp.bigdata.taurus.generated.mapper.UserMapper;
-import com.dp.bigdata.taurus.generated.module.AlertRule;
-import com.dp.bigdata.taurus.generated.module.AlertRuleExample;
-import com.dp.bigdata.taurus.generated.module.Task;
-import com.dp.bigdata.taurus.generated.module.TaskAttempt;
-import com.dp.bigdata.taurus.generated.module.TaskAttemptExample;
-import com.dp.bigdata.taurus.generated.module.User;
-import com.dp.bigdata.taurus.generated.module.UserExample;
-import com.dp.bigdata.taurus.generated.module.UserGroupMapping;
-import com.dp.bigdata.taurus.generated.module.UserGroupMappingExample;
+import javax.mail.MessagingException;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * TaurusAlert
@@ -70,6 +52,9 @@ public class TaurusAlert {
 
 	@Autowired
 	private UserMapper userMapper;
+
+	@Autowired
+	private HealthChecker healthChecker;
 
 	private Map<Integer, User> userMap;
 	
@@ -220,7 +205,7 @@ public class TaurusAlert {
 					alertThreadRestFlag = true;
 				}
 				alertThreadRestFlag = false;
-				
+
 				try {
 					Date now = new Date();
 					TaskAttemptExample example = new TaskAttemptExample();
@@ -232,6 +217,10 @@ public class TaurusAlert {
 					}
 					for (TaskAttempt at : attempts) {
 						handle(at);
+					}
+
+					if(!healthChecker.isHealthy()){
+						WeChatHelper.sendWeChat(ConfigHolder.get(LionKeys.ADMIN_USER), "zk上没有注册任何Taurus服务器", ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
 					}
 
 					Thread.sleep(ALERT_INTERVAL);

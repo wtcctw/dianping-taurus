@@ -1,21 +1,17 @@
 package com.dp.bigdata.taurus.zookeeper.common.utils;
 
-import java.net.Inet6Address;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 
 /**
  * @author Leo Liang
- *
  */
 public class IPUtils {
     /**
      * 获取第一个no loop address
-     * 
+     *
      * @return first no loop address, or null if not exists
      */
     public static String getFirstNoLoopbackIP4Address() {
@@ -66,4 +62,5 @@ public class IPUtils {
             throw new RuntimeException(e.getMessage(), e);
         }
     }
+
 }

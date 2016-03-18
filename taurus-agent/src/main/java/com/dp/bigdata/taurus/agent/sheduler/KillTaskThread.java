@@ -15,21 +15,20 @@
  */
 package com.dp.bigdata.taurus.agent.sheduler;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.util.concurrent.locks.Lock;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import com.dp.bigdata.taurus.agent.common.BaseEnvManager;
 import com.dp.bigdata.taurus.agent.exec.Executor;
 import com.dp.bigdata.taurus.agent.utils.LockHelper;
 import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.ScheduleConf;
 import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.ScheduleStatus;
 import com.dp.bigdata.taurus.zookeeper.common.infochannel.interfaces.ScheduleInfoChannel;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.concurrent.locks.Lock;
 
 /**
  * TODO Comment of KillThread
@@ -68,7 +67,7 @@ public class KillTaskThread extends BaseEnvManager {
 
 			ScheduleStatus status = (ScheduleStatus) cs.getStatus(localIp, jobInstanceId);
 
-            System.out.println("KILL TASK THREAD|jobInstanceId:"+ jobInstanceId + "| ip:"+ localIp + "  |conf:" + conf + "  |status:" + status);
+			LOGGER.info("KILL TASK THREAD|jobInstanceId:"+ jobInstanceId + "| ip:"+ localIp + "  |conf:" + conf + "  |status:" + status);
 
             if (conf!= null && status != null){
                 killTask(localIp, conf, status);
