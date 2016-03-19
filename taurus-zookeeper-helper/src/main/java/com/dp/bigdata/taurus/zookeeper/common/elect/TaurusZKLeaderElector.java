@@ -25,7 +25,7 @@ import java.util.List;
  * Author   mingdongli
  * 16/3/15  下午2:02.
  */
-public class TaurusZKLeaderElector extends TaurusZKInfoChannel implements LeaderElector ,ILeaderElectorVisit {
+public class TaurusZKLeaderElector extends TaurusZKInfoChannel implements LeaderElector, ILeaderElectorVisit {
 
     private final Log logger = LogFactory.getLog(getClass());
 
@@ -72,9 +72,9 @@ public class TaurusZKLeaderElector extends TaurusZKInfoChannel implements Leader
     }
 
     @Override
-    public boolean needAlarm(){
-        if(StringUtils.isNotBlank(previousLeaderIp) && StringUtils.isNotBlank(currentLeaderIp)
-                && previousLeaderIp.equalsIgnoreCase(currentLeaderIp) ){
+    public boolean needAlarm() {
+        if (StringUtils.isNotBlank(previousLeaderIp) && StringUtils.isNotBlank(currentLeaderIp)
+                && previousLeaderIp.equalsIgnoreCase(currentLeaderIp)) {
             return true;
         }
         return false;
@@ -93,11 +93,11 @@ public class TaurusZKLeaderElector extends TaurusZKInfoChannel implements Leader
         if (StringUtils.isNotBlank(currentLeaderIp)) {
             logger.info(String.format("Schedule server %s has been elected as leader, so stopping the election process.", currentLeaderIp));
             boolean isLeader = amILeader();
-            if(!isLeader){
+            if (!isLeader) {
                 for (LeaderChangedListener listener : listeners) {
                     listener.onResigningAsLeader(new LeaderChangeEvent(this));
                 }
-            }else {
+            } else {
                 for (LeaderChangedListener listener : listeners) {
                     listener.onBecomingLeader(new LeaderChangeEvent(this));
                 }
@@ -205,10 +205,15 @@ public class TaurusZKLeaderElector extends TaurusZKInfoChannel implements Leader
         logger.info(String.format("server %s create %s", hostIp, SCHEDULE_SCHEDULING));
     }
 
+    //删除taurus/taskscheduling,只能主删
     @Override
     public void delete(String path) {
-        super.rmPath(path);
-        logger.info(String.format("server %s delete %s", hostIp, SCHEDULE_SCHEDULING));
+        if (amILeader()) {
+            super.rmPath(path);
+            logger.info(String.format("server %s delete %s", hostIp, SCHEDULE_SCHEDULING));
+        }else{
+            logger.info(String.format("server %s is not master, skip delete %s", hostIp, SCHEDULE_SCHEDULING));
+        }
     }
 
     class LeaderChangeListener implements IZkDataListener {
@@ -229,7 +234,7 @@ public class TaurusZKLeaderElector extends TaurusZKInfoChannel implements Leader
                         for (LeaderChangedListener listener : listeners) {
                             listener.onResigningAsLeader(new LeaderChangeEvent(this));
                         }
-                    } else if(!amILeaderBeforeDataChange && amILeader()){
+                    } else if (!amILeaderBeforeDataChange && amILeader()) {
                         for (LeaderChangedListener listener : listeners) {
                             listener.onBecomingLeader(new LeaderChangeEvent(this));
                         }
