@@ -10,5 +10,7 @@ public interface ZkOperator {
 
     void createEphemeral(String path);
 
+    void createPersistent(String path);
+
     void delete(String path);
 }

@@ -6,8 +6,8 @@ package com.dp.bigdata.taurus.common.util;
  */
 public class SleepUtil {
 
-    public static void sleep() {
-        sleep(100L);
+    public static void sleepHalfSecond() {
+        sleep(500L);
     }
 
     public static void sleep(final long millis) {

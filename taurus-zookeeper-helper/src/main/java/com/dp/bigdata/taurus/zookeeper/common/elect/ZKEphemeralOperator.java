@@ -97,6 +97,11 @@ public class ZKEphemeralOperator implements ZkOperator{
     }
 
     @Override
+    public void createPersistent(String path) {
+        throw new UnsupportedOperationException("not support");
+    }
+
+    @Override
     public void delete(String path) {
 
         throw new UnsupportedOperationException("not support");

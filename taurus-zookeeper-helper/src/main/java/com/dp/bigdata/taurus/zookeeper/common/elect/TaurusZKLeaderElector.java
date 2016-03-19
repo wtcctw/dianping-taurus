@@ -180,14 +180,6 @@ public class TaurusZKLeaderElector extends TaurusZKInfoChannel implements Leader
         rmPath(BASE, LEADER_ELECTION);
     }
 
-    public void sleep(final long millis) {
-        try {
-            Thread.sleep(millis);
-        } catch (final InterruptedException ex) {
-            Thread.currentThread().interrupt();
-        }
-    }
-
     @Override
     public void accept(LeaderElectorVisitor electorVisitor) {
         electorVisitor.visitLeaderElector(this);
@@ -203,6 +195,17 @@ public class TaurusZKLeaderElector extends TaurusZKInfoChannel implements Leader
         ZKEphemeralOperator ephemeral = new ZKEphemeralOperator(File.separatorChar + path, "", zkConnection.getZookeeper(), JaasUtils.isZkSecurityEnabled());
         ephemeral.create();
         logger.info(String.format("server %s create %s", hostIp, SCHEDULE_SCHEDULING));
+    }
+
+    @Override
+    public void createPersistent(String path) {
+        if(StringUtils.isBlank(path)){
+            return;
+        }
+        if(path.startsWith(String.valueOf(File.separatorChar))){
+            path = path.substring(1, path.length());
+        }
+        super.mkPathIfNotExists(path);
     }
 
     //删除taurus/taskscheduling,只能主删
