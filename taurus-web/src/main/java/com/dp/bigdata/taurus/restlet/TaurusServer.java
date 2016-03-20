@@ -43,7 +43,7 @@ public class TaurusServer implements LeaderChangedListener {
 
     private Logger log = LoggerFactory.getLogger(this.getClass());
 
-    private static final String PING = LionConfigUtil.RESTLET_API_BASE + "runningtask/task_520"; //只是健康测试
+    private static final String PING = LionConfigUtil.RESTLET_API_BASE + "healthCheck"; //只是健康测试,返回false
 
     @Autowired
     public Engine engine;
@@ -120,7 +120,7 @@ public class TaurusServer implements LeaderChangedListener {
         synchronized (eventLock) {
 
             //等待master调度完成，如果master宕机，SCHEDULE_SCHEDULING不会被删除，需要检测是否活着
-            while (leaderElector.exists(LeaderElector.SCHEDULE_SCHEDULING) && !isMasterDown()) {
+            while (leaderElector.exists(LeaderElector.SCHEDULE_SCHEDULING) && isMasterLive()) {
                 SleepUtil.sleepHalfSecond();
             }
             leaderElector.createPersistent(LeaderElector.SCHEDULE_SCHEDULING);
@@ -204,13 +204,13 @@ public class TaurusServer implements LeaderChangedListener {
         start();
     }
 
-    private boolean isMasterDown() {
+    private boolean isMasterLive() {
 
         try {
-            RestCallUtils.getRestCall(PING, String.class);
-            return false;
-        } catch (Exception e){
+            RestCallUtils.getRestCall(PING, String.class, 3000, 1000);
             return true;
+        } catch (Exception e){
+            return false;
         }
     }
 
