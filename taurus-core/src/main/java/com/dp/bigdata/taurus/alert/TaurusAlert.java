@@ -10,6 +10,7 @@ import com.dp.bigdata.taurus.generated.mapper.*;
 import com.dp.bigdata.taurus.generated.module.*;
 import com.dp.bigdata.taurus.lion.ConfigHolder;
 import com.dp.bigdata.taurus.lion.LionKeys;
+import com.dp.bigdata.taurus.utils.SleepUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -205,6 +206,7 @@ public class TaurusAlert {
 				
 				while(isInterrupt.get()) {
 					alertThreadRestFlag = true;
+					SleepUtil.sleep(5000);
 				}
 				alertThreadRestFlag = false;
 
@@ -342,6 +344,7 @@ public class TaurusAlert {
 				
 				while(isInterrupt.get()) {
 					metaDataThreadRestFlag = true;
+					SleepUtil.sleep(5000);
 				}
 				metaDataThreadRestFlag = false;
 				

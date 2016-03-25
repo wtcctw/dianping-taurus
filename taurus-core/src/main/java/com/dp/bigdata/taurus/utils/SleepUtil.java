@@ -1,4 +1,4 @@
-package com.dp.bigdata.taurus.common.util;
+package com.dp.bigdata.taurus.utils;
 
 /**
  * Author   mingdongli

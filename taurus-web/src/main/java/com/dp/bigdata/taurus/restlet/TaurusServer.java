@@ -3,7 +3,7 @@ package com.dp.bigdata.taurus.restlet;
 import com.dianping.cat.Cat;
 import com.dp.bigdata.taurus.alert.TaurusAlert;
 import com.dp.bigdata.taurus.alert.WeChatHelper;
-import com.dp.bigdata.taurus.common.util.SleepUtil;
+import com.dp.bigdata.taurus.utils.SleepUtil;
 import com.dp.bigdata.taurus.core.AttemptStatusMonitor;
 import com.dp.bigdata.taurus.core.Engine;
 import com.dp.bigdata.taurus.lion.ConfigHolder;

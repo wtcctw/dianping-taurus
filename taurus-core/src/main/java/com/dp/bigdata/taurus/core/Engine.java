@@ -15,6 +15,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.mail.MessagingException;
 
+import com.dp.bigdata.taurus.utils.SleepUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -410,6 +411,7 @@ final public class Engine implements Scheduler {
 				
 				while(isInterrupt.get()){
 					triggleThreadRestFlag = true;
+					SleepUtil.sleep(5000);
 				}
 				triggleThreadRestFlag = false;
 
@@ -459,6 +461,7 @@ final public class Engine implements Scheduler {
 				
 				while(isInterrupt.get()){ 
 					refreshThreadRestFlag = true;
+					SleepUtil.sleep(5000);
 				}
 				refreshThreadRestFlag = false;
 				
