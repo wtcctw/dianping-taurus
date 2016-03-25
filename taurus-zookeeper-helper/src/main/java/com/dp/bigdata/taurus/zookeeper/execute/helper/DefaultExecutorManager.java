@@ -1,18 +1,5 @@
 package com.dp.bigdata.taurus.zookeeper.execute.helper;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
-import org.I0Itec.zkclient.IZkDataListener;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-
 import com.dp.bigdata.taurus.zookeeper.common.MachineType;
 import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.ScheduleConf;
 import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.ScheduleStatus;
@@ -21,6 +8,17 @@ import com.dp.bigdata.taurus.zookeeper.common.infochannel.interfaces.ScheduleInf
 import com.dp.bigdata.taurus.zookeeper.common.utils.IPUtils;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import org.I0Itec.zkclient.IZkDataListener;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 
@@ -162,7 +160,7 @@ public class DefaultExecutorManager implements ExecutorManager{
 
     	ScheduleStatus status = (ScheduleStatus) dic.getStatus(agentIP, attemptID);
         if(status == null) {
-            LOGGER.error("Fail to get status for attempt " +  agentIP + " : " + attemptID);
+            //LOGGER.error("Fail to get status for attempt " +  agentIP + " : " + attemptID);
             throw new ExecuteException("Fail to get status");
         }
         ExecuteStatus result = null;
