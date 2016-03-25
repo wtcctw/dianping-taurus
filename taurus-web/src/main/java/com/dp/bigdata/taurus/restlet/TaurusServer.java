@@ -185,7 +185,7 @@ public class TaurusServer implements LeaderChangedListener {
 
             log.info("start as slave server....");
             Cat.logEvent("Taurus.Slave", IPUtils.getFirstNoLoopbackIP4Address());
-            WeChatHelper.sendWeChat(ConfigHolder.get(LionKeys.ADMIN_USER), EnvUtil.getEnv() + "Taurus slave start: " + IPUtils.getFirstNoLoopbackIP4Address(), ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
+            WeChatHelper.sendWeChat(ConfigHolder.get(LionKeys.ADMIN_USER), EnvUtil.getEnv() + " taurus slave start: " + IPUtils.getFirstNoLoopbackIP4Address(), ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
 
             Object source = leaderChangeEvent.getSource();
             IpInfoLeaderElectorVisitor visitor = new IpInfoLeaderElectorVisitor();
