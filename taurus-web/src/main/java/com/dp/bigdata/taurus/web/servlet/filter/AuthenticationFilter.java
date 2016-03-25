@@ -52,7 +52,6 @@ public class AuthenticationFilter implements Filter {
         String sessionAccount = (String) session.getAttribute(InitController.USER_NAME);
 
         if (StringUtils.isNotBlank(sessionAccount)) {
-            log.info(sessionAccount + " already logged in.");
             chain.doFilter(request, response);
             return;
         }
