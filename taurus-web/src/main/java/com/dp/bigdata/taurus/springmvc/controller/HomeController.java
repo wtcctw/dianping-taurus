@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -1077,9 +1079,11 @@ public class HomeController extends BaseController {
 	    return "/error.ftl";
 	}
 
-	@RequestMapping(value = "/health", method = {RequestMethod.GET,RequestMethod.POST})
-	public Object health() {
-		return "/health.ftl";
+	@RequestMapping(value = "/health")
+	public void health(HttpServletResponse response) throws IOException {
+		response.setContentType("text/plain;charset=utf-8");
+		PrintWriter writer = response.getWriter();
+		writer.write("ok");
 	}
 	
 	/**
