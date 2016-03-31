@@ -74,6 +74,7 @@ public class RestletUtils {
         @Override
         public void handle(Request request, Response response) {
             result = response.getEntity();
+            latch.countDown();
         }
 
         public Representation getResult(long timeout, TimeUnit unit) throws InterruptedException {

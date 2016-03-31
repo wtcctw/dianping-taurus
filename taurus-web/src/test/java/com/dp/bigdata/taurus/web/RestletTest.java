@@ -45,9 +45,9 @@ public class RestletTest {
 
     @Test
     public void testResource() {
-        RestletUtils.get("http://localhost:8080/ruok", null, 1000);
-        /*String result = RestletUtils.get("http://localhost:8080/ruok", String.class, 1000);
-        System.out.println(result);*/
+        //RestletUtils.get("http://localhost:8080/ruok", null, 1000);
+        String result = RestletUtils.get("http://localhost:8080/sleep", String.class, 15000);
+        System.out.println(result);
     }
 
     public static void main(String[] args) {
