@@ -66,8 +66,13 @@ public class AuthenticationFilter implements Filter {
             UserDTO userDTO = setUserInfo(dpaccount);
             session.setAttribute(InitController.USER_NAME, dpaccount);
 
-            ClientResource cr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "user");
-            cr.post(userDTO);//createIfNotExist
+            ClientResource cr = null;
+            try {
+                cr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "user");
+                cr.post(userDTO);//createIfNotExist
+            } finally {
+                cr.release();
+            }
 
             chain.doFilter(request, response);
             return;
