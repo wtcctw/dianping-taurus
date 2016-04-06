@@ -1,4 +1,4 @@
-package com.dp.bigdata.taurus.web;
+package com.dp.bigdata.taurus.restlet.utils;
 
 import org.restlet.Request;
 import org.restlet.Response;
@@ -13,6 +13,30 @@ import java.util.concurrent.TimeUnit;
  * Created by chenchongze on 16/3/31.
  */
 public class RestletUtils {
+
+    public static <T> T blockGet(ClientResource cr, Class<T> resultClass) {
+        try {
+            return cr.get(resultClass);
+        } finally {
+            cr.release();
+        }
+    }
+
+    public static <T> T blockGet(String uri, Class<T> resultClass) {
+        return blockGet(new ClientResource(uri), resultClass);
+    }
+
+    public static <T> T blockPost(ClientResource cr, Representation entity, Class<T> resultClass) {
+        try {
+            return resultClass!=null ? cr.toObject(cr.post(entity), resultClass) : null;
+        } finally {
+            cr.release();
+        }
+    }
+
+    public static <T> T blockPost(String uri, Representation entity, Class<T> resultClass) {
+        return blockPost(new ClientResource(uri), entity, resultClass);
+    }
 
     public static <T> T get(ClientResource cr, Class<T> resultClass, long waitTimeout) {
         try {
