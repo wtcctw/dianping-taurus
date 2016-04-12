@@ -2,11 +2,7 @@ package com.dp.bigdata.taurus.restlet.utils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 import com.dp.bigdata.taurus.restlet.exception.DuplicatedNameException;
@@ -128,7 +124,11 @@ public class TaskRequestExtractor implements RequestExtrator<TaskDTO> {
 				task.setCommand(value);
 			} else if (key.equals(TaskDetailControlName.CRONTAB.getName())) {
 				if (StringUtils.isNotBlank(value)) {
-					task.setCrontab("0 " + value);
+					if(value.split("\\s+").length == 5){
+						task.setCrontab("0 " + value);
+					}else{
+						task.setCrontab(value);
+					}
 				}
 			} else if (key.equals(TaskDetailControlName.DEPENDENCY.getName())) {
 				task.setDependencyexpr(value);
@@ -292,6 +292,17 @@ public class TaskRequestExtractor implements RequestExtrator<TaskDTO> {
 		} catch (Exception e) {
 			throw e;
 		}
+	}
+
+	public static void main(String[] args) {
+		String cron = "*/10    6-23    *   *  ?";
+		System.out.println(cron.split("\\s+").length);
+		cron = "0/10 0-7,10-23 * * ?";
+		System.out.println(cron.split("\\s+").length);
+		cron = "0 6,10,12,15,18 * * ?";
+		System.out.println(cron.split("\\s+").length);
+		cron = "0 5 ? * 2,4,6";
+		System.out.println(cron.split("\\s+").length);
 	}
 
 }
