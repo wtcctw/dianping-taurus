@@ -32,7 +32,7 @@ public class TaskConverter {
         dto.setUpdatetime(task.getUpdatetime());
         dto.setCommand(task.getCommand());
         dto.setCreator(task.getCreator());
-        dto.setCrontab(task.getCrontab().substring(2));
+        dto.setCrontab(task.getCrontab());
         dto.setDependencyexpr(task.getDependencyexpr());
         dto.setExecutiontimeout(task.getExecutiontimeout());
         dto.setIsautoretry(task.getIsautoretry());
