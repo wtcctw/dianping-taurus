@@ -47,7 +47,9 @@
 <div class="row">
 <div class="col-sm-12">
 <ul class="nav nav-tabs">
-    <li class="active"><a data-toggle="tab" data-toggle="tab" href="#mintab"><span class="tabs-title">分钟</span><span
+    <li class="active"><a data-toggle="tab" data-toggle="tab" href="#sectab"><span class="tabs-title">秒</span><span
+            class="tabs-icon"></span></a></li>
+    <li class=""><a data-toggle="tab" data-toggle="tab" href="#mintab"><span class="tabs-title">分钟</span><span
             class="tabs-icon"></span></a></li>
     <li class=""><a href="#hourtab" data-toggle="tab"><span class="tabs-title">小时</span><span
             class="tabs-icon"></span></a></li>
@@ -61,7 +63,7 @@
             class="tabs-title">年</span><span class="tabs-icon"></span></a></li>
 </ul>
 <div class="tab-content " style="width: 830px; height: 325px;">
-<div class="tab-pane active" id="mintab">
+<div class="tab-pane" id="mintab">
     <div title="" class="panel-body panel-body-noheader panel-body-noborder" style="width: 830px; height: 320px;">
 
         <div class="line">
@@ -171,6 +173,129 @@
             <input type="checkbox" value="50">50
         </div>
         <div class="imp minList">
+            <input type="checkbox" value="51">51
+            <input type="checkbox" value="52">52
+            <input type="checkbox" value="53">53
+            <input type="checkbox" value="54">54
+            <input type="checkbox" value="55">55
+            <input type="checkbox" value="56">56
+            <input type="checkbox" value="57">57
+            <input type="checkbox" value="58">58
+            <input type="checkbox" value="59">59
+            <input type="checkbox" value="0">00
+        </div>
+    </div>
+</div>
+<div class="tab-pane active" id="sectab">
+    <div title="" class="panel-body panel-body-noheader panel-body-noborder" style="width: 830px; height: 320px;">
+
+        <div class="line">
+            <input type="radio" checked="checked" name="sec" onclick="everyTime(this)">
+            秒 允许的通配符[, - * /]
+        </div>
+        <div class="line">
+            <input type="radio" name="sec" onclick="cycle(this)">
+            周期从
+            <span class="spinner" style="width: 58px; height: 20px;"><input
+                    class="numberspinner numberspinner-f spinner-text spinner-f validatebox-text numberbox-f"
+                    style="width: 36px; height: 20px; " data-options="min:1,max:58" value="1"
+                    id="secStart_0"><input type="hidden" value="1"><span class="spinner-arrow"
+                                                                         style="height: 20px;"><span
+                    class="spinner-arrow-up" style="height: 10px;"></span><span class="spinner-arrow-down"
+                                                                                style="height: 10px;"></span></span></span>
+            -
+            <span class="spinner" style="width: 58px; height: 20px;"><input
+                    class="numberspinner numberspinner-f spinner-text spinner-f validatebox-text numberbox-f"
+                    style="width: 36px; height: 20px; " data-options="min:2,max:59" value="2"
+                    id="secEnd_0"><input type="hidden" value="2"><span class="spinner-arrow" style="height: 20px;"><span
+                    class="spinner-arrow-up" style="height: 10px;"></span><span class="spinner-arrow-down"
+                                                                                style="height: 10px;"></span></span></span>
+            秒
+        </div>
+        <div class="line">
+            <input type="radio" name="sec" onclick="startOn(this)">
+            从
+            <span class="spinner" style="width: 58px; height: 20px;"><input
+                    class="numberspinner numberspinner-f spinner-text spinner-f validatebox-text numberbox-f"
+                    style="width: 36px; height: 20px; " data-options="min:0,max:59" value="0"
+                    id="secStart_1"><input type="hidden" value="0"><span class="spinner-arrow"
+                                                                         style="height: 20px;"><span
+                    class="spinner-arrow-up" style="height: 10px;"></span><span class="spinner-arrow-down"
+                                                                                style="height: 10px;"></span></span></span>
+            秒开始,每
+            <span class="spinner" style="width: 58px; height: 20px;"><input
+                    class="numberspinner numberspinner-f spinner-text spinner-f validatebox-text numberbox-f"
+                    style="width: 36px; height: 20px; " data-options="min:1,max:59" value="1"
+                    id="secEnd_1"><input type="hidden" value="1"><span class="spinner-arrow" style="height: 20px;"><span
+                    class="spinner-arrow-up" style="height: 10px;"></span><span class="spinner-arrow-down"
+                                                                                style="height: 10px;"></span></span></span>
+            秒执行一次
+        </div>
+        <div class="line">
+            <input type="radio" name="sec" id="sec_appoint">
+            指定
+        </div>
+        <div class="imp secList">
+            <input type="checkbox" value="1">01
+            <input type="checkbox" value="2">02
+            <input type="checkbox" value="3">03
+            <input type="checkbox" value="4">04
+            <input type="checkbox" value="5">05
+            <input type="checkbox" value="6">06
+            <input type="checkbox" value="7">07
+            <input type="checkbox" value="8">08
+            <input type="checkbox" value="9">09
+            <input type="checkbox" value="10">10
+        </div>
+        <div class="imp secList">
+            <input type="checkbox" value="11">11
+            <input type="checkbox" value="12">12
+            <input type="checkbox" value="13">13
+            <input type="checkbox" value="14">14
+            <input type="checkbox" value="15">15
+            <input type="checkbox" value="16">16
+            <input type="checkbox" value="17">17
+            <input type="checkbox" value="18">18
+            <input type="checkbox" value="19">19
+            <input type="checkbox" value="20">20
+        </div>
+        <div class="imp secList">
+            <input type="checkbox" value="21">21
+            <input type="checkbox" value="22">22
+            <input type="checkbox" value="23">23
+            <input type="checkbox" value="24">24
+            <input type="checkbox" value="25">25
+            <input type="checkbox" value="26">26
+            <input type="checkbox" value="27">27
+            <input type="checkbox" value="28">28
+            <input type="checkbox" value="29">29
+            <input type="checkbox" value="30">30
+        </div>
+        <div class="imp secList">
+            <input type="checkbox" value="31">31
+            <input type="checkbox" value="32">32
+            <input type="checkbox" value="33">33
+            <input type="checkbox" value="34">34
+            <input type="checkbox" value="35">35
+            <input type="checkbox" value="36">36
+            <input type="checkbox" value="37">37
+            <input type="checkbox" value="38">38
+            <input type="checkbox" value="39">39
+            <input type="checkbox" value="40">40
+        </div>
+        <div class="imp secList">
+            <input type="checkbox" value="41">41
+            <input type="checkbox" value="42">42
+            <input type="checkbox" value="43">43
+            <input type="checkbox" value="44">44
+            <input type="checkbox" value="45">45
+            <input type="checkbox" value="46">46
+            <input type="checkbox" value="47">47
+            <input type="checkbox" value="48">48
+            <input type="checkbox" value="49">49
+            <input type="checkbox" value="50">50
+        </div>
+        <div class="imp secList">
             <input type="checkbox" value="51">51
             <input type="checkbox" value="52">52
             <input type="checkbox" value="53">53
@@ -552,6 +677,9 @@
             <td>
             </td>
             <td align="center">
+                秒
+            </td>
+            <td align="center">
                 分钟
             </td>
             <td align="center">
@@ -575,6 +703,9 @@
                 表达式字段:
             </td>
             <td>
+                <input type="text" name="v_sec" class="col" value="0" readonly="readonly" id="sec_input">
+            </td>
+            <td>
                 <input type="text" name="v_min" class="col" value="0" readonly="readonly" id="min_input">
             </td>
             <td>
@@ -596,13 +727,13 @@
         <tr>
             <td>UI结果:</td>
             <td colspan="6"><input type="text" class="input" name="showvalue" style="width: 100%;" value=""
-                                   readonly="readonly" value="0 * * * ? " id="showvalue" >
+                                   readonly="readonly" value="0 0 * * * ? " id="showvalue" >
             </td>
         </tr>
 
         <tr>
             <td>Cron 表达式:</td>
-            <td colspan="6"><input type="text" name="cronvalue" style="width: 100%;" value="0 * * * ?" id="cronvalue">
+            <td colspan="6"><input type="text" name="cronvalue" style="width: 100%;" value="0 0 * * * ?" id="cronvalue">
             </td>
             <td>
                 <button class="btn btn-info" type="button" id="btnFan" onclick="btnFan()"><i
@@ -639,23 +770,25 @@
 
             if (txt) {
                 var regs = txt.split(' ');
-                $("input[name=v_min]").val(regs[0]);
-                $("input[name=v_hour]").val(regs[1]);
-                $("input[name=v_day]").val(regs[2]);
-                $("input[name=v_month]").val(regs[3]);
-                $("input[name=v_week]").val(regs[4]);
+                $("input[name=v_sec]").val(regs[0]);
+                $("input[name=v_min]").val(regs[1]);
+                $("input[name=v_hour]").val(regs[2]);
+                $("input[name=v_day]").val(regs[3]);
+                $("input[name=v_month]").val(regs[4]);
+                $("input[name=v_week]").val(regs[5]);
 
                 //initObj(regs[0], "min");
                 //initObj(regs[1], "hour");
-                initMin(regs[0]);
-                initHour(regs[1]);
-                initDay(regs[2]);
-                initMonth(regs[3]);
-                initWeek(regs[4]);
+                initSec(regs[0]);
+                initMin(regs[1]);
+                initHour(regs[2]);
+                initDay(regs[3]);
+                initMonth(regs[4]);
+                initWeek(regs[5]);
 
-                if (regs.length > 5) {
-                    $("input[name=v_year]").val(regs[5]);
-                    initYear(regs[5]);
+                if (regs.length > 6) {
+                    $("input[name=v_year]").val(regs[6]);
+                    initYear(regs[6]);
                 }
             }
         }
@@ -686,6 +819,36 @@
                     }
                     for (var i = 0; i < ary.length; i++) {
                         $("." + strid + "List input[value='" + ary[i] + "']").prop("checked", true);
+                    }
+                }
+            }
+        }
+
+        function initSec(strVal) {
+            var ary = null;
+            var objRadio = $("input[name='sec'");
+            if (strVal == "*") {
+                objRadio.eq(0).prop("checked", "checked");
+            } else if (strVal.split('-').length > 1) {
+                ary = strVal.split('-');
+                objRadio.eq(1).prop("checked", "checked");
+                $("#secStart_0").numberspinner('setValue', ary[0]);
+                $("#secEnd_0").numberspinner('setValue', ary[1]);
+            } else if (strVal.split('/').length > 1) {
+                ary = strVal.split('/');
+                objRadio.eq(2).prop("checked", "checked");
+                $("#secStart_1").numberspinner('setValue', ary[0]);
+                $("#secEnd_1").numberspinner('setValue', ary[1]);
+            } else {
+                objRadio.eq(3).prop("checked", "checked");
+                if (strVal != "?") {
+                    ary = strVal.split(",");
+                    $tmpList = $(".secList input");
+                    for(var j = 0;j< $tmpList.length; ++j){
+                        $tmpList.eq(j).prop("checked", false);
+                    }
+                    for (var i = 0; i < ary.length; i++) {
+                        $(".secList input[value='" + ary[i] + "']").prop("checked", true);
                     }
                 }
             }

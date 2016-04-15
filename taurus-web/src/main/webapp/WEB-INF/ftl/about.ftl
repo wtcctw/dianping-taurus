@@ -372,9 +372,8 @@
     <h1>Crontab表达式</h1>
 </div>
 <h4>
-    Taurus的crontab表达式使用的是Quartz的格式。但是需要注意的是，我们不支持秒级的调度，所以只保留了Quartz格式的后五位。
-    所以填写crontab表达式的时候<span style="color: red">只填写后五位，去掉秒位</span>。<span style="color: red">特别注意的是，如果指定小时级别的范围，一定要首先指定分钟域，分钟域不能为*
-    如：* 0/1 * * ? 这个不是每小时执行，而是每分钟，因为分钟域没指定，默认为秒域</span><br/>
+    Taurus的crontab表达式使用的是Quartz的格式。<span style="color: red">特别注意的是，如果指定小时级别的范围，一定要首先指定分钟域，分钟域不能为*
+    如：* * 0/1 * * ? 这个不是每小时执行，而是每分钟，因为分钟域没指定，默认为秒域</span><br/>
 </h4>
 <h4>以下是Taurus表达式的规范文档:</h4>
 
@@ -385,11 +384,11 @@
     表达式存放执行计划。引用了 cron 表达式的<span style="color: #800080">CronTrigger</span>
     在计划的时间里会与 job 关联上。<br> 另一个与 UNIX cron
     表达式的不同点是在表达式中支持域的数目。UNIX 给出五个域(<span style="color: #800080">分、时、日、月和周</span>)，Taurus(Quartz)
-    提供六个域。表 5.1 列出了 Taurus(Quartz)  cron 表达式支持的六个域。<br>
+    提供七个域。表 5.1 列出了 Taurus(Quartz)  cron 表达式支持的七个域。<br>
 </p>
 <table border="0" width="650">
     <caption>
-        <strong>表 5.1. Taurus(Quartz) Cron 表达式支持到六个域</strong>
+        <strong>表 5.1. Taurus(Quartz) Cron 表达式支持到七个域</strong>
     </caption>
     <caption></caption>
     <tbody>
@@ -399,7 +398,7 @@
         <td><strong>允许值</strong></td>
         <td><strong><span style="color: #800080">特殊字符</span></strong></td>
     </tr>
-    <tr class="hide">
+    <tr>
         <td>秒</td>
         <td>是</td>
         <td>0-59</td>
@@ -454,7 +453,7 @@
     <br> <strong><span style="color: #800080">* </span>星号</strong><br>
     <br> 使用星号(*) 指示着你想在这个域上包含所有合法的值。例如，在月份域上使用星号意味着每个月都会触发这个
     trigger。<br> <br> 表达式样例：<br> <br> <span
-        style="color: #800080">0/1 17 * * ?<br>
+        style="color: #800080">0 0/1 17 * * ?<br>
 						</span><br> 意义：每天从下午5点到下午5:59中的每分钟激发一次 trigger。它停在下午 5:59 是因为值 17
     在小时域上，在下午 6 点时，小时变为 18 了，也就不再理会这个 trigger，直到下一天的下午5点。<br> <br>
     在你希望 trigger 在该域的所有有效值上被激发时使用 <span style="color: #800080">*</span>
@@ -471,23 +470,23 @@
     仅在每个月的11号，且正好又是星期三那天被激发？还是在每个星期三的11号被激发呢？要去除这种不明确性的办法就是不能同时在这两个域上指定值。<br>
     <br> 只要记住，假如你为这两域的其中一个指定了值，那就必须在另一个字值上放一个 <span
         style="color: #800080">?</span>。<br> <br> 表达式样例：<br>
-    <br> <span style="color: #800080">10,44 14 ? 3 WEB</span><br>
+    <br> <span style="color: #800080">0 10,44 14 ? 3 WEB</span><br>
     <br> 意义：在三月中的每个星期三的下午 2:10 和 下午 2:44 被触发。<br> <br>
     <strong><span style="color: #800080">,</span> 逗号</strong><br>
     <br> 逗号 (<span style="color: #800080">,</span>)
     是用来在给某个域上指定一个值列表的。例如，使用值 0,15,30,45 在分钟域上意味着每15分触发一个 trigger。<br>
     <br> 表达式样例：<br> <br> <span style="color: #800080">
-							0,15,30,45 * * * ?</span><br> <br> 意义：每刻钟触发一次 trigger。<br>
+							0 0,15,30,45 * * * ?</span><br> <br> 意义：每刻钟触发一次 trigger。<br>
     <br> <strong><span style="color: #800080">/</span>
     斜杠</strong><br> <br> 斜杠 (<span style="color: #800080">/</span>)
     是用于时间表的递增的。我们刚刚用了逗号来表示每15分钟的递增，但是我们也能写成这样<span
         style="color: #800080">0/15</span>。<br> <br> 表达式样例：<br>
-    <br> <span style="color: #800080">0/15 0/30  * * ?<br>
+    <br> <span style="color: #800080">0 0/15 0/30 * * ?<br>
 						</span><br> 意义：在整点和半点时每15分触发 trigger。<br> <br> <strong>-
     中划线</strong><br> <br> 中划线 (<span style="color: #800080">-</span>)
     用于指定一个范围。例如，在小时域上的 3-8 意味着 "3,4,5,6,7 和 8 点。" 域的值不允许回卷，所以像 50-10
     这样的值是不允许的。<br> <br> 表达式样例：<br> <br> <span
-        style="color: #800080">45 3-8 ? * *<br>
+        style="color: #800080">0 45 3-8 ? * *<br>
 						</span><br> 意义：在上午的3点至上午的8点的45分时触发 trigger。<br> <br> <strong><span
         style="color: #800080">L</span> 字母<br> </strong><br> <span
         style="color: #800080">L</span> 说明了某域上允许的最后一个值。它仅被<span
@@ -497,14 +496,14 @@
         style="color: #800080">L</span> 会促使 trigger 在1月31号被触发。假如<span
         style="color: #800080">月</span>域上是<span style="color: #800080">SEP</span>，那么
     L 会预示着在9月30号触发。换句话说，就是不管指定了哪个月，都是在相应月份的时最后一天触发 trigger。<br> <br>
-    表达式 <span style="color: #800080">0 8 L * ?</span> 意义是在每个月最后一天的上午
+    表达式 <span style="color: #800080">0 0 8 L * ?</span> 意义是在每个月最后一天的上午
     8:00 触发 trigger。在<span style="color: #800080">月</span>域上的 * 说明是
     "每个月"。<br> <br> 当 <span style="color: #800080">L</span>
     字母用于周域上，指示着周的最后一天，就是星期六 (或者数字7)。所以如果你需要在每个月的最后一个星期六下午的 11:59 触发
-    trigger，你可以用这样的表达式<span style="color: #800080">59 23 ? *
+    trigger，你可以用这样的表达式<span style="color: #800080">0 59 23 ? *
 							L</span>。<br> <br> 当使用于<span style="color: #800080">周</span>域上，你可以用一个数字与
     <span style="color: #800080"> L</span> 连起来表示月份的最后一个星期 X。例如，表达式 <span
-        style="color: #800080">0 12 ? * 2L</span> 说的是在每个月的最后一个星期一触发
+        style="color: #800080">0 0 12 ? * 2L</span> 说的是在每个月的最后一个星期一触发
     trigger。<br>
 </p>
 <table border="1" width="70%" align="center"
@@ -557,21 +556,21 @@
     </tr>
     <tr>
         <td>每天的从 5:00 PM 至 5:59 PM 中的每分钟触发</td>
-        <td><span style="color: #800080">0/1 17 * * ?</span></td>
+        <td><span style="color: #800080">0 0/1 17 * * ?</span></td>
     </tr>
     <tr>
         <td>每天的从 11:00 PM 至 11:55 PM 中的每五分钟触发</td>
-        <td><span style="color: #800080">0/5 23 * * ?<br>
+        <td><span style="color: #800080">0 0/5 23 * * ?<br>
 								</span></td>
     </tr>
     <tr>
         <td>每天的从 3:00 至 3:55 PM 和 6:00 PM 至 6:55 PM 之中的每五分钟触发</td>
-        <td><span style="color: #800080">0/5 15,18 * * ?<br>
+        <td><span style="color: #800080">0 0/5 15,18 * * ?<br>
 								</span></td>
     </tr>
     <tr>
         <td>每天的从 5:00 AM 至 5:05 AM 中的每分钟触发</td>
-        <td><span style="color: #800080">0-5 5 * * ?</span></td>
+        <td><span style="color: #800080">0 0-5 5 * * ?</span></td>
     </tr>
     </tbody>
 </table>
@@ -587,19 +586,19 @@
     </tr>
     <tr>
         <td>每天的 3:00 AM</td>
-        <td><span style="color: #800080">0 3 * * ?</span></td>
+        <td><span style="color: #800080">0 0 3 * * ?</span></td>
     </tr>
     <tr>
         <td>每天的 3:00 AM (另一种写法)</td>
-        <td><span style="color: #800080">0 3 ? * *</span></td>
+        <td><span style="color: #800080">0 0 3 ? * *</span></td>
     </tr>
     <tr>
         <td>每天的 12:00 PM (中午)</td>
-        <td><span style="color: #800080">0 12 * * ?</span></td>
+        <td><span style="color: #800080">0 0 12 * * ?</span></td>
     </tr>
     <tr>
         <td>在 2015 中每天的 10:15 AM</td>
-        <td><span style="color: #800080">15 10 * * ? 2015</span></td>
+        <td><span style="color: #800080">0 15 10 * * ? 2015</span></td>
     </tr>
     </tbody>
 </table>
@@ -615,40 +614,40 @@
     </tr>
     <tr>
         <td>在每个周一,二, 三和周四的 10:15 AM</td>
-        <td><span style="color: #800080">15 10 ? * 1-5</span></td>
+        <td><span style="color: #800080">0 15 10 ? * 1-5</span></td>
     </tr>
     <tr>
         <td>每月15号的 10:15 AM</td>
-        <td><span style="color: #800080">15 10 15 * ?</span></td>
+        <td><span style="color: #800080">0 15 10 15 * ?</span></td>
     </tr>
     <tr>
         <td>每月最后一天的 10:15 AM</td>
-        <td><span style="color: #800080">15 10 L * ?</span></td>
+        <td><span style="color: #800080">0 15 10 L * ?</span></td>
     </tr>
     <tr>
         <td>每月最后一个周五的 10:15 AM</td>
-        <td><span style="color: #800080">15 10 ? * 6L</span></td>
+        <td><span style="color: #800080">0 15 10 ? * 6L</span></td>
     </tr>
     <tr>
         <td>在 2012, 2013, 2014, 和 2015 年中的每月最后一个周五的 10:15 AM</td>
-        <td><span style="color: #800080">15 10 ? * 6L
+        <td><span style="color: #800080">0 15 10 ? * 6L
 										2012-2015</span></td>
     </tr>
     <tr>
         <td>每月第三个周五的 10:15 AM</td>
-        <td><span style="color: #800080">15 10 ? * 6#3</span></td>
+        <td><span style="color: #800080">0 15 10 ? * 6#3</span></td>
     </tr>
     <tr>
         <td>每月从第一天算起每五天的 12:00 PM (中午)</td>
-        <td><span style="color: #800080">0 12 1/5 * ?</span></td>
+        <td><span style="color: #800080">0 0 12 1/5 * ?</span></td>
     </tr>
     <tr>
         <td>每一个 11 月 11 号的 11:11 AM</td>
-        <td><span style="color: #800080">11 11 11 11 ?</span></td>
+        <td><span style="color: #800080">0 11 11 11 11 ?</span></td>
     </tr>
     <tr>
         <td>三月份每个周三的 2:10 PM 和 2:44 PM</td>
-        <td><span style="color: #800080">10,44 14 ? 3 WED</span></td>
+        <td><span style="color: #800080">0 10,44 14 ? 3 WED</span></td>
     </tr>
     </tbody>
 </table>
