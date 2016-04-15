@@ -569,7 +569,7 @@ final public class Engine implements Scheduler {
 		}
 	}
 
-	public synchronized void executeAttempt(AttemptContext context) throws ScheduleException {
+	public void executeAttempt(AttemptContext context) throws ScheduleException {
 		TaskAttempt attempt = context.getAttempt();
 		Task task = context.getTask();
 		Host host;
@@ -798,7 +798,7 @@ final public class Engine implements Scheduler {
 		return contexts;
 	}
 
-	private void registAttemptContext(AttemptContext context) {
+	private synchronized void registAttemptContext(AttemptContext context) {
 		HashMap<String, AttemptContext> contexts = runningAttempts.get(context.getTaskid());
 		if (contexts == null) {
 			contexts = new HashMap<String, AttemptContext>();
