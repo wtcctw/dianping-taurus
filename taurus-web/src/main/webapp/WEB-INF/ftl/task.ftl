@@ -162,7 +162,7 @@
                 <label class="label label-lg label-info arrowed-right col-sm-2" for="crontab">Crontab*</label>
 
                 <div class="controls col-sm-9">
-                    <input type="text" class="input-xxlarge field" id="crontab" name="crontab" value="0 0 * * ?">
+                    <input type="text" class="input-xxlarge field" id="crontab" name="crontab" value="0 0 0 * * ?">
                     <a href="${rc.contextPath}/about#crontab" target="view_window">帮助</a>
                 </div>
                 <br>

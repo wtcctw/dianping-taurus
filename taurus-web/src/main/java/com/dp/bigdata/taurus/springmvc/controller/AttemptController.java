@@ -1,16 +1,10 @@
 package com.dp.bigdata.taurus.springmvc.controller;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.dp.bigdata.taurus.restlet.shared.AttemptDTO;
+import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
+import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.restlet.resource.ClientResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,11 +12,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.dp.bigdata.taurus.restlet.shared.AttemptDTO;
-import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
-import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 public class AttemptController {
@@ -44,7 +42,7 @@ public class AttemptController {
 
             OutputStream output = response.getOutputStream();
 
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             JsonArray jsonArray = new JsonArray();
             String taskID = request.getParameter("taskID");
             String url = LionConfigUtil.RESTLET_API_BASE + "attempt?task_id=" + taskID;
