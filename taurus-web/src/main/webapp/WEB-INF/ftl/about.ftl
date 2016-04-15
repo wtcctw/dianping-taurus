@@ -384,7 +384,7 @@
     表达式存放执行计划。引用了 cron 表达式的<span style="color: #800080">CronTrigger</span>
     在计划的时间里会与 job 关联上。<br> 另一个与 UNIX cron
     表达式的不同点是在表达式中支持域的数目。UNIX 给出五个域(<span style="color: #800080">分、时、日、月和周</span>)，Taurus(Quartz)
-    提供六个域。表 5.1 列出了 Taurus(Quartz)  cron 表达式支持的七个域。<br>
+    提供七个域。表 5.1 列出了 Taurus(Quartz)  cron 表达式支持的七个域。<br>
 </p>
 <table border="0" width="650">
     <caption>

@@ -42,7 +42,7 @@
 
     <div class="controls">
         <input type="text" id="taskType"
-               name="taskType" class="input-big" value="${dto.type!}" readonly>
+               name="taskType" class="input-big field" value="${dto.type!}" disabled>
     </div>
 </div>
 <#if dto.type?exists && dto.type == "hadoop" >
