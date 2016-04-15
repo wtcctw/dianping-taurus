@@ -1,9 +1,5 @@
 package com.dp.bigdata.taurus.core;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import com.dianping.cat.Cat;
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
@@ -12,9 +8,12 @@ import com.dp.bigdata.taurus.alert.MailHelper;
 import com.dp.bigdata.taurus.alert.WeChatHelper;
 import com.dp.bigdata.taurus.lion.ConfigHolder;
 import com.dp.bigdata.taurus.lion.LionKeys;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * MultiInstanceFilter
@@ -122,7 +121,7 @@ public class MultiInstanceFilter implements Filter {
                         jobAlert.remove(context.getTaskid());
                     }
                 }
-
+                //这里控制同时只有一个执行
                 if (ctx == null) {
                     maps.put(context.getTaskid(), context);
                 }

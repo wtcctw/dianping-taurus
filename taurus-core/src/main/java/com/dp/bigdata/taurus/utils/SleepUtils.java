@@ -4,7 +4,7 @@ package com.dp.bigdata.taurus.utils;
  * Author   mingdongli
  * 16/3/17  上午11:44.
  */
-public class SleepUtil {
+public class SleepUtils {
 
     public static void sleepHalfSecond() {
         sleep(500L);

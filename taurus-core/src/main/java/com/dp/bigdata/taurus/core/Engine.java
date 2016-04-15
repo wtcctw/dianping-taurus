@@ -1,28 +1,5 @@
 package com.dp.bigdata.taurus.core;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import javax.mail.MessagingException;
-
-import com.dp.bigdata.taurus.utils.SleepUtil;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.dao.DataAccessException;
-
 import com.dianping.cat.Cat;
 import com.dianping.cat.message.Message;
 import com.dianping.cat.message.Transaction;
@@ -35,18 +12,32 @@ import com.dp.bigdata.taurus.alert.WeChatHelper;
 import com.dp.bigdata.taurus.generated.mapper.HostMapper;
 import com.dp.bigdata.taurus.generated.mapper.TaskAttemptMapper;
 import com.dp.bigdata.taurus.generated.mapper.TaskMapper;
-import com.dp.bigdata.taurus.generated.module.Host;
-import com.dp.bigdata.taurus.generated.module.Task;
-import com.dp.bigdata.taurus.generated.module.TaskAttempt;
-import com.dp.bigdata.taurus.generated.module.TaskAttemptExample;
-import com.dp.bigdata.taurus.generated.module.TaskExample;
+import com.dp.bigdata.taurus.generated.module.*;
 import com.dp.bigdata.taurus.lion.ConfigHolder;
 import com.dp.bigdata.taurus.lion.LionKeys;
+import com.dp.bigdata.taurus.utils.SleepUtils;
+import com.dp.bigdata.taurus.utils.ThreadUtils;
 import com.dp.bigdata.taurus.zookeeper.execute.helper.ExecuteException;
 import com.dp.bigdata.taurus.zookeeper.execute.helper.ExecuteStatus;
 import com.dp.bigdata.taurus.zookeeper.execute.helper.ExecutorManager;
 import com.dp.bigdata.taurus.zookeeper.heartbeat.helper.AgentHandler;
 import com.dp.bigdata.taurus.zookeeper.heartbeat.helper.AgentMonitor;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataAccessException;
+
+import javax.mail.MessagingException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Engine is the default implementation of the <code>Scheduler</code>.
@@ -65,6 +56,8 @@ final public class Engine implements Scheduler {
 	private Map<String, HashMap<String, AttemptContext>> runningAttempts; // Map<taskID,HashMap<attemptID,AttemptContext>>
 
 	private Runnable progressMonitor;
+
+	private ExecutorService attemptExecutor = ThreadUtils.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2, "AttemptExector");
 
 	@Autowired
 	@Qualifier("triggle.crontab")
@@ -411,7 +404,7 @@ final public class Engine implements Scheduler {
 				
 				while(isInterrupt.get()){
 					triggleThreadRestFlag = true;
-					SleepUtil.sleep(5000);
+					SleepUtils.sleep(5000);
 				}
 				triggleThreadRestFlag = false;
 
@@ -425,11 +418,7 @@ final public class Engine implements Scheduler {
 
 					if (contexts != null) {
 						for (final AttemptContext context : contexts) {
-							try {
-								executeAttempt(context);
-							} catch (ScheduleException se) {
-								Cat.logError("fail to schedule the attempt : " + context.getAttemptid(), se);
-							}
+							attemptExecutor.execute(new AttemptTask(context));
 						}
 					}
 
@@ -461,7 +450,7 @@ final public class Engine implements Scheduler {
 				
 				while(isInterrupt.get()){ 
 					refreshThreadRestFlag = true;
-					SleepUtil.sleep(5000);
+					SleepUtils.sleep(5000);
 				}
 				refreshThreadRestFlag = false;
 				
@@ -914,5 +903,22 @@ final public class Engine implements Scheduler {
             return null;
         }
     }
+
+	class AttemptTask extends Thread{
+		AttemptContext context;
+
+		public AttemptTask(AttemptContext context){
+			this.context = context;
+		}
+
+		@Override
+		public void run(){
+			try {
+				executeAttempt(context);
+			} catch (ScheduleException se) {
+				Cat.logError("fail to schedule the attempt : " + context.getAttemptid(), se);
+			}
+		}
+	}
 
 }

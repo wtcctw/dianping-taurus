@@ -9,7 +9,7 @@ import java.util.Set;
  * Author   mingdongli
  * 16/3/17  下午8:13.
  */
-public class EnvUtil {
+public class EnvUtils {
 
     private static final String env;
 
