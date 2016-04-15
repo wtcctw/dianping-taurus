@@ -1,6 +1,9 @@
 
 function btnShow() {
     var show_v;
+    var sec_v = $("#sec_input").val();
+    show_v = sec_v + " ";
+
     var min_v = $("#min_input").val();
     show_v = min_v + " ";
 
@@ -129,18 +132,18 @@ $(function() {
         cron.val(item.join(" "));
     });
 
-    var secondList = $(".secondList").children();
-    $("#sencond_appoint").click(function(){
+    var secList = $(".secList").children();
+    $("#sec_appoint").click(function(){
         if(this.checked){
-            secondList.eq(0).change();
+            secList.eq(0).change();
         }
     });
 
-    secondList.change(function() {
-        var sencond_appoint = $("#sencond_appoint").prop("checked");
-        if (sencond_appoint) {
+    secList.change(function() {
+        var sec_appoint = $("#sec_appoint").prop("checked");
+        if (sec_appoint) {
             var vals = [];
-            secondList.each(function() {
+            secList.each(function() {
                 if (this.checked) {
                     vals.push(this.value);
                 }
@@ -151,9 +154,10 @@ $(function() {
             }else if(vals.length == 59){
                 val = "*";
             }
-            var item = $("input[name=v_second]");
+            var item = $("input[name=v_sec]");
             item.val(val);
             item.change();
+            btnShow();
         }
     });
 
