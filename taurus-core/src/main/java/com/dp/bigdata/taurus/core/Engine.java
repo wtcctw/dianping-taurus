@@ -410,11 +410,20 @@ final public class Engine implements Scheduler {
 
 				Transaction t = Cat.newTransaction("Engine", "Schedule");
 				try {
+					Transaction crontab = Cat.newTransaction("Engine", "Crontab");
 					crontabTriggle.triggle();
+					crontab.setStatus(Message.SUCCESS);
+					crontab.complete();
 
+					Transaction depend = Cat.newTransaction("Engine", "Depend");
 					dependencyTriggle.triggle();
+					depend.setStatus(Message.SUCCESS);
+					depend.complete();
 
+					Transaction fil = Cat.newTransaction("Engine", "Filter");
 					List<AttemptContext> contexts = filter.filter(getReadyToRunAttempt());
+					fil.setStatus(Message.SUCCESS);
+					fil.complete();
 
 					if (contexts != null) {
 						for (final AttemptContext context : contexts) {
