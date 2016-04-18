@@ -9,6 +9,7 @@ import com.dianping.lion.client.LionException;
 import com.dp.bigdata.taurus.alert.MailHelper;
 import com.dp.bigdata.taurus.alert.OpsAlarmHelper;
 import com.dp.bigdata.taurus.alert.WeChatHelper;
+import com.dp.bigdata.taurus.core.listener.DependPassAttemptListener;
 import com.dp.bigdata.taurus.core.listener.DependTimeoutAttemptListener;
 import com.dp.bigdata.taurus.core.listener.InitializedAttemptListener;
 import com.dp.bigdata.taurus.generated.mapper.HostMapper;
@@ -50,7 +51,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author damon.zhu
  * @see Scheduler
  */
-final public class Engine implements Scheduler, InitializedAttemptListener, DependTimeoutAttemptListener {
+final public class Engine implements Scheduler, InitializedAttemptListener, DependTimeoutAttemptListener, DependPassAttemptListener {
 
 	private static final Log LOG = LogFactory.getLog(Engine.class);
 
@@ -140,8 +141,8 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
 
 	private void clearCache(){
 		attemptsOfStatusInitialized.clear();
-		attemptsOfStatusDependTimeout.clear();
-		attemptsOfStatusDependPass.clear();
+		//attemptsOfStatusDependPass.clear();
+		//attemptsOfStatusDependTimeout.clear();
 	}
 
 	public void isInterrupt(boolean interrupt) {
@@ -420,11 +421,19 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
 	@Override
 	public void addDependTimeoutAttempt(TaskAttempt taskAttempt) {
 		attemptsOfStatusDependTimeout.add(taskAttempt);
+		attemptsOfStatusInitialized.remove(taskAttempt);
 	}
 
 	@Override
 	public void addnitializedAttempt(TaskAttempt taskAttempt) {
 		attemptsOfStatusInitialized.add(taskAttempt);
+	}
+
+	@Override
+	public void addDependPassAttempt(TaskAttempt taskAttempt) {
+		attemptsOfStatusDependPass.add(taskAttempt);
+		attemptsOfStatusInitialized.remove(taskAttempt);
+		attemptsOfStatusDependTimeout.remove(taskAttempt);
 	}
 
 	class SchedulerMonitor extends Thread {

@@ -10,6 +10,7 @@ import com.dp.bigdata.taurus.generated.mapper.TaskAttemptMapper;
 import com.dp.bigdata.taurus.generated.module.Task;
 import com.dp.bigdata.taurus.generated.module.TaskAttempt;
 import com.mysql.jdbc.StringUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +67,13 @@ public class DependencyTriggle implements Triggle {
 
 	@Override
 	public void triggle(final Collection<TaskAttempt> taskAttempts) {
+		Collections.sort((List<TaskAttempt>) taskAttempts, new Comparator<TaskAttempt>() {
+			@Override
+			public int compare(TaskAttempt t0, TaskAttempt t1) {
+				return t0.getScheduletime().before(t1.getScheduletime()) == true ? -1 :
+						(t0.getScheduletime().after(t1.getScheduletime()) ? 1 : 0);
+			}
+		});
 		final Map<String, Task> tasks = scheduler.getAllRegistedTask();
 		for (TaskAttempt attempt : taskAttempts) {
 			triggle(attempt, tasks.get(attempt.getTaskid()));
@@ -74,9 +82,11 @@ public class DependencyTriggle implements Triggle {
 
 	@Override
 	public void registerAttemptListener(GenericAttemptListener genericAttemptListener) {
+
 		if(genericAttemptListener instanceof DependTimeoutAttemptListener){
 			dependTimeoutAttemptListeners.add((DependTimeoutAttemptListener) genericAttemptListener);
-		}else if(genericAttemptListener instanceof DependPassAttemptListener){
+		}
+		if(genericAttemptListener instanceof DependPassAttemptListener){
 			dependPassAttemptListeners.add((DependPassAttemptListener) genericAttemptListener);
 		}
 	}
