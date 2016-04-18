@@ -123,7 +123,7 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
 	private void initCache(){
 		List<TaskAttempt> tmpInitialized = taskAttemptMapper.getAttemptByStatus(ExecuteStatus.INITIALIZED);
 		List<TaskAttempt> tmpDependTimeout = taskAttemptMapper.getAttemptByStatus(ExecuteStatus.DEPENDENCY_TIMEOUT);
-		List<TaskAttempt> tmpDependPass = taskAttemptMapper.getAttemptByStatus(ExecuteStatus.DEPENDENCY_TIMEOUT);
+		List<TaskAttempt> tmpDependPass = taskAttemptMapper.getAttemptByStatus(ExecuteStatus.DEPENDENCY_PASS);
 		if(tmpInitialized != null){
 //			initAttemptsOfInitialized = tmpInitialized;
 			attemptsOfStatusInitialized.addAll(tmpInitialized);
