@@ -374,6 +374,11 @@
         from TaurusTaskAttempt where attemptid = #{attemptId}
     </select>
 
+  <select id="getAttemptByStatus" resultMap="BaseResultMap">
+       select *
+        from TaurusTaskAttempt where status = #{status} order by scheduletime asc
+    </select>
+
     <select id="getAttempts" resultMap="BaseResultMap">
 
         select

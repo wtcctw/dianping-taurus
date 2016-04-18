@@ -1,21 +1,21 @@
 package com.dp.bigdata.taurus.core;
 
-import java.text.ParseException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.dianping.cat.Cat;
+import com.dp.bigdata.taurus.core.listener.DependPassAttemptListener;
+import com.dp.bigdata.taurus.core.listener.DependTimeoutAttemptListener;
+import com.dp.bigdata.taurus.core.listener.GenericAttemptListener;
+import com.dp.bigdata.taurus.core.listener.InitializedAttemptListener;
 import com.dp.bigdata.taurus.core.parser.DependencyParser;
 import com.dp.bigdata.taurus.generated.mapper.TaskAttemptMapper;
 import com.dp.bigdata.taurus.generated.module.Task;
 import com.dp.bigdata.taurus.generated.module.TaskAttempt;
 import com.mysql.jdbc.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.text.ParseException;
+import java.util.*;
 
 /**
  * DependencyTriggle
@@ -35,6 +35,10 @@ public class DependencyTriggle implements Triggle {
 	private final DependencyParser parser;
 
 	private final Scheduler scheduler;
+
+	private List<DependTimeoutAttemptListener> dependTimeoutAttemptListeners = new ArrayList<DependTimeoutAttemptListener>();
+
+	private List<DependPassAttemptListener> dependPassAttemptListeners = new ArrayList<DependPassAttemptListener>();
 
 	@Autowired
 	public DependencyTriggle(Scheduler scheduler) {
@@ -57,6 +61,23 @@ public class DependencyTriggle implements Triggle {
 		final Map<String, Task> tasks = scheduler.getAllRegistedTask();
 		for (TaskAttempt attempt : attempts) {
 			triggle(attempt, tasks.get(attempt.getTaskid()));
+		}
+	}
+
+	@Override
+	public void triggle(final Collection<TaskAttempt> taskAttempts) {
+		final Map<String, Task> tasks = scheduler.getAllRegistedTask();
+		for (TaskAttempt attempt : taskAttempts) {
+			triggle(attempt, tasks.get(attempt.getTaskid()));
+		}
+	}
+
+	@Override
+	public void registerAttemptListener(GenericAttemptListener genericAttemptListener) {
+		if(genericAttemptListener instanceof DependTimeoutAttemptListener){
+			dependTimeoutAttemptListeners.add((DependTimeoutAttemptListener) genericAttemptListener);
+		}else if(genericAttemptListener instanceof DependPassAttemptListener){
+			dependPassAttemptListeners.add((DependPassAttemptListener) genericAttemptListener);
 		}
 	}
 
@@ -94,6 +115,9 @@ public class DependencyTriggle implements Triggle {
 
 			attempt.setStatus(AttemptStatus.DEPENDENCY_PASS);
 			taskAttemptMapper.updateByPrimaryKeySelective(attempt);
+			for(DependPassAttemptListener listener : dependPassAttemptListeners){
+				listener.addDependPassAttempt(attempt);
+			}
 		} else {
 			/*
 			 * check whether the attempt has expire the wait-time
@@ -108,6 +132,9 @@ public class DependencyTriggle implements Triggle {
 				attempt.setStatus(AttemptStatus.DEPENDENCY_TIMEOUT);
 				attempt.setEndtime(new Date());
 				taskAttemptMapper.updateByPrimaryKeySelective(attempt);
+				for(DependTimeoutAttemptListener listener : dependTimeoutAttemptListeners){
+					listener.addDependTimeoutAttempt(attempt);
+				}
 			}
 		}
 	}

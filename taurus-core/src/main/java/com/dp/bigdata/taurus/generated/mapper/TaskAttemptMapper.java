@@ -1,13 +1,15 @@
 package com.dp.bigdata.taurus.generated.mapper;
 
-import com.dp.bigdata.taurus.generated.module.*;
+import com.dp.bigdata.taurus.generated.module.GroupTaskExample;
+import com.dp.bigdata.taurus.generated.module.TaskAttempt;
+import com.dp.bigdata.taurus.generated.module.TaskAttemptExample;
+import com.dp.bigdata.taurus.generated.module.TotalTaskExample;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.dao.DataAccessException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import org.apache.ibatis.annotations.Param;
-import org.springframework.dao.DataAccessException;
 
 public interface TaskAttemptMapper {
     /**
@@ -102,6 +104,7 @@ public interface TaskAttemptMapper {
 
 
     public TaskAttempt getAttemptById(@Param("attemptId")String attemptId);
+    public ArrayList<TaskAttempt> getAttemptByStatus(@Param("status")int status);
 
     public ArrayList<TaskAttempt> getAttempts(@Param("now")String now);
     public ArrayList<TaskAttempt> getAttemptsByStatus(@Param("now")String now,@Param("status")String status);

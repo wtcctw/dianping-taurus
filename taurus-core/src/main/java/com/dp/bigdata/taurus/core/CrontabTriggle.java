@@ -1,11 +1,12 @@
 package com.dp.bigdata.taurus.core;
 
 import java.text.ParseException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import com.dp.bigdata.taurus.core.listener.DependPassAttemptListener;
+import com.dp.bigdata.taurus.core.listener.DependTimeoutAttemptListener;
+import com.dp.bigdata.taurus.core.listener.GenericAttemptListener;
+import com.dp.bigdata.taurus.core.listener.InitializedAttemptListener;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,8 @@ public class CrontabTriggle implements Triggle {
 	private IDFactory idFactory;
 
 	private final Scheduler scheduler;
+
+	private List<InitializedAttemptListener> initializedAttemptListeners = new ArrayList<InitializedAttemptListener>();
 
 	@Autowired
 	public CrontabTriggle(Scheduler scheduler) {
@@ -85,6 +88,9 @@ public class CrontabTriggle implements Triggle {
                         attempt.setStatus(AttemptStatus.INITIALIZED);
                         attempt.setAttemptid(attemptID);
                         attemptMapper.insert(attempt);
+						for(InitializedAttemptListener listener : initializedAttemptListeners){
+							listener.addnitializedAttempt(attempt);
+						}
                         LOG.info(String.format("New attempt (%s) fired.", attemptID));
                         Cat.logEvent("Crontab.Fire", task.getName());
                         nextFireTime = ce.getNextValidTimeAfter(nextFireTime);
@@ -102,6 +108,18 @@ public class CrontabTriggle implements Triggle {
 	@Override
 	public void triggle() {
 		triggle(new Date());
+	}
+
+	@Override
+	public void triggle(Collection<TaskAttempt> taskAttempts) {
+		throw new UnsupportedOperationException("not support");
+	}
+
+	@Override
+	public void registerAttemptListener(GenericAttemptListener genericAttemptListener) {
+		if(genericAttemptListener instanceof InitializedAttemptListener){
+			initializedAttemptListeners.add((InitializedAttemptListener) genericAttemptListener);
+		}
 	}
 
 	private Date getPreviousFireTime(final Task task, final Date now) {

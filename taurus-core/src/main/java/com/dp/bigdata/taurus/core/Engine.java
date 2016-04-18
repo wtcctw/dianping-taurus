@@ -9,6 +9,8 @@ import com.dianping.lion.client.LionException;
 import com.dp.bigdata.taurus.alert.MailHelper;
 import com.dp.bigdata.taurus.alert.OpsAlarmHelper;
 import com.dp.bigdata.taurus.alert.WeChatHelper;
+import com.dp.bigdata.taurus.core.listener.DependTimeoutAttemptListener;
+import com.dp.bigdata.taurus.core.listener.InitializedAttemptListener;
 import com.dp.bigdata.taurus.generated.mapper.HostMapper;
 import com.dp.bigdata.taurus.generated.mapper.TaskAttemptMapper;
 import com.dp.bigdata.taurus.generated.mapper.TaskMapper;
@@ -22,6 +24,7 @@ import com.dp.bigdata.taurus.zookeeper.execute.helper.ExecuteStatus;
 import com.dp.bigdata.taurus.zookeeper.execute.helper.ExecutorManager;
 import com.dp.bigdata.taurus.zookeeper.heartbeat.helper.AgentHandler;
 import com.dp.bigdata.taurus.zookeeper.heartbeat.helper.AgentMonitor;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -29,6 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 
+import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -39,13 +43,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+
 /**
  * Engine is the default implementation of the <code>Scheduler</code>.
  * 
  * @author damon.zhu
  * @see Scheduler
  */
-final public class Engine implements Scheduler {
+final public class Engine implements Scheduler, InitializedAttemptListener, DependTimeoutAttemptListener {
 
 	private static final Log LOG = LogFactory.getLog(Engine.class);
 
@@ -97,6 +102,47 @@ final public class Engine implements Scheduler {
 	private volatile boolean triggleThreadRestFlag = false;
 
 	private volatile boolean refreshThreadRestFlag = false;
+
+//	private List<TaskAttempt> initAttemptsOfInitialized = new ArrayList<TaskAttempt>();
+//
+//	private List<TaskAttempt> initAttemptsOfDependTimeout = new ArrayList<TaskAttempt>();
+
+	private List<TaskAttempt> attemptsOfStatusInitialized = new ArrayList<TaskAttempt>();
+
+	private List<TaskAttempt> attemptsOfStatusDependTimeout = new ArrayList<TaskAttempt>();
+
+	private List<TaskAttempt> attemptsOfStatusDependPass = new ArrayList<TaskAttempt>();
+
+	@PostConstruct
+	public void loadAttept(){
+		initCache();
+		crontabTriggle.registerAttemptListener(this);
+		dependencyTriggle.registerAttemptListener(this);
+	}
+
+	private void initCache(){
+		List<TaskAttempt> tmpInitialized = taskAttemptMapper.getAttemptByStatus(ExecuteStatus.INITIALIZED);
+		List<TaskAttempt> tmpDependTimeout = taskAttemptMapper.getAttemptByStatus(ExecuteStatus.DEPENDENCY_TIMEOUT);
+		List<TaskAttempt> tmpDependPass = taskAttemptMapper.getAttemptByStatus(ExecuteStatus.DEPENDENCY_TIMEOUT);
+		if(tmpInitialized != null){
+//			initAttemptsOfInitialized = tmpInitialized;
+			attemptsOfStatusInitialized.addAll(tmpInitialized);
+		}
+		if(tmpDependTimeout != null){
+//			initAttemptsOfDependTimeout = tmpDependTimeout;
+			attemptsOfStatusDependTimeout.addAll(tmpDependTimeout);
+		}
+		if(tmpDependPass != null){
+//			initAttemptsOfDependTimeout = tmpDependTimeout;
+			attemptsOfStatusDependPass.addAll(tmpDependPass);
+		}
+	}
+
+	private void clearCache(){
+		attemptsOfStatusInitialized.clear();
+		attemptsOfStatusDependTimeout.clear();
+		attemptsOfStatusDependPass.clear();
+	}
 
 	public void isInterrupt(boolean interrupt) {
 		boolean current = isInterrupt.get();
@@ -371,6 +417,16 @@ final public class Engine implements Scheduler {
 	public void stop() {
 	}
 
+	@Override
+	public void addDependTimeoutAttempt(TaskAttempt taskAttempt) {
+		attemptsOfStatusDependTimeout.add(taskAttempt);
+	}
+
+	@Override
+	public void addnitializedAttempt(TaskAttempt taskAttempt) {
+		attemptsOfStatusInitialized.add(taskAttempt);
+	}
+
 	class SchedulerMonitor extends Thread {
 		
 		private AtomicBoolean isInterrupted = new AtomicBoolean(false);
@@ -416,7 +472,7 @@ final public class Engine implements Scheduler {
 					crontab.complete();
 
 					Transaction depend = Cat.newTransaction("Engine", "Depend");
-					dependencyTriggle.triggle();
+					dependencyTriggle.triggle(CollectionUtils.union(attemptsOfStatusInitialized, attemptsOfStatusDependTimeout));
 					depend.setStatus(Message.SUCCESS);
 					depend.complete();
 
@@ -440,6 +496,7 @@ final public class Engine implements Scheduler {
 				}
 
 				try {
+					clearCache();
 					Thread.sleep(SCHDUELE_INTERVAL);
 				} catch (InterruptedException e) {
 					LOG.error("Interrupted exception", e);
@@ -794,11 +851,11 @@ final public class Engine implements Scheduler {
 
 	private List<AttemptContext> getReadyToRunAttempt() {
 		List<AttemptContext> contexts = new ArrayList<AttemptContext>();
-		TaskAttemptExample example = new TaskAttemptExample();
-		example.or().andStatusEqualTo(AttemptStatus.DEPENDENCY_PASS);
-		example.setOrderByClause("scheduleTime");
-		List<TaskAttempt> attempts = taskAttemptMapper.selectByExample(example);
-		for (TaskAttempt attempt : attempts) {
+//		TaskAttemptExample example = new TaskAttemptExample();
+//		example.or().andStatusEqualTo(AttemptStatus.DEPENDENCY_PASS);
+//		example.setOrderByClause("scheduleTime");
+//		List<TaskAttempt> attempts = taskAttemptMapper.selectByExample(example);
+		for (TaskAttempt attempt : attemptsOfStatusDependPass) {
 			Task task = registedTasks.get(attempt.getTaskid());
 			if (task != null) {
 				contexts.add(new AttemptContext(attempt, task));
@@ -928,6 +985,20 @@ final public class Engine implements Scheduler {
 				Cat.logError("fail to schedule the attempt : " + context.getAttemptid(), se);
 			}
 		}
+	}
+
+	public static void main(String[] args) {
+		List<Integer> a = new ArrayList<Integer>();
+		List<Integer> b = new ArrayList<Integer>();
+		a.add(1);
+		a.add(2);
+		b.add(3);
+		b.add(4);
+		Collection<Integer> c = CollectionUtils.union(a, b);
+		c.add(5);
+		System.out.println(a);
+		System.out.println(b);
+		System.out.println(c);
 	}
 
 }

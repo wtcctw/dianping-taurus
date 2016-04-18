@@ -1,0 +1,12 @@
+package com.dp.bigdata.taurus.core.listener;
+
+import com.dp.bigdata.taurus.generated.module.TaskAttempt;
+
+/**
+ * Author   mingdongli
+ * 16/4/18  下午11:02.
+ */
+public interface InitializedAttemptListener extends GenericAttemptListener{
+
+    void addnitializedAttempt(TaskAttempt taskAttempt);
+}
