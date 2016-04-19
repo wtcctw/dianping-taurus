@@ -628,9 +628,10 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
 			attemptsOfStatusDependTimeout.addAll(tmpDependTimeout);
 		}
 
+		//暂停时清空了
 		List<TaskAttempt> tmpDependPass = taskAttemptMapper.selectDependencyTask(taskId, ExecuteStatus.DEPENDENCY_PASS);
 		if(tmpDependPass != null){
-			dependPassMap.get(taskId).addAll(tmpDependPass);
+			dependPassMap.put(taskId, tmpDependPass);
 		}
 	}
 
