@@ -52,6 +52,26 @@ public class DependencyTriggle implements Triggle {
 		calender.add(Calendar.MINUTE, -10);
 
 		System.out.println(calender.getTime());
+
+		List<TaskAttempt> taskAttempts = new ArrayList<TaskAttempt>();
+		Long now = System.currentTimeMillis();
+		TaskAttempt t1 = new TaskAttempt();
+		t1.setScheduletime(new Date(now -3));
+		t1.setAttemptid("attempt1");
+		TaskAttempt t2 = new TaskAttempt();
+		t2.setScheduletime(new Date(now - 2));
+		t2.setAttemptid("attempt2");
+		TaskAttempt t3 = new TaskAttempt();
+		t3.setScheduletime(new Date(now -1));
+		t3.setAttemptid("attempt3");
+
+		taskAttempts.add(t3);
+		taskAttempts.add(t2);
+		taskAttempts.add(t1);
+		System.out.println(taskAttempts.toString());
+
+		Collections.sort(taskAttempts, new TaskAttemptComparator());
+		System.out.println(taskAttempts.toString());
 	}
 
 	@Override
@@ -65,13 +85,7 @@ public class DependencyTriggle implements Triggle {
 
 	@Override
 	public void triggle(final Collection<TaskAttempt> taskAttempts) {
-		Collections.sort((List<TaskAttempt>) taskAttempts, new Comparator<TaskAttempt>() {
-			@Override
-			public int compare(TaskAttempt t0, TaskAttempt t1) {
-				return t0.getScheduletime().before(t1.getScheduletime()) == true ? -1 :
-						(t0.getScheduletime().after(t1.getScheduletime()) ? 1 : 0);
-			}
-		});
+		Collections.sort((List<TaskAttempt>) taskAttempts, new TaskAttemptComparator());
 		final Map<String, Task> tasks = scheduler.getAllRegistedTask();
 		for (TaskAttempt attempt : taskAttempts) {
 			triggle(attempt, tasks.get(attempt.getTaskid()));

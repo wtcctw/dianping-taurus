@@ -130,6 +130,7 @@ public class MultiInstanceFilter implements Filter {
                 //这里控制同时只有一个执行
                 if (ctx == null) {
                     maps.put(context.getTaskid(), context);
+                    //将要被调度，进入Running状态，避免多次调度所以需要移除
                     for(DependPassAttemptListener listener : dependPassAttemptListeners){
                         listener.removeDependPassAttempt(context.getAttempt());
                     }

@@ -41,6 +41,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -97,7 +98,7 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
 
 	@Autowired
 	private AgentMonitor agentMonitor;
-	
+
 	private final AtomicBoolean isInterrupt = new AtomicBoolean(false);
 	
 	private volatile boolean triggleThreadRestFlag = false;
@@ -112,7 +113,11 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
 
 	private List<TaskAttempt> attemptsOfStatusDependTimeout = new ArrayList<TaskAttempt>();
 
-	private List<TaskAttempt> attemptsOfStatusDependPass = new ArrayList<TaskAttempt>();
+//	private List<TaskAttempt> attemptsOfStatusDependPass = new ArrayList<TaskAttempt>();
+
+	private ConcurrentMap<String, List<TaskAttempt>> dependPassMap = new ConcurrentHashMap<String, List<TaskAttempt>>();
+
+	private static final int DEPEND_PASS_SIZE = 150;
 
 	@PostConstruct
 	public void loadAttept(){
@@ -136,8 +141,26 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
 		}
 		if(tmpDependPass != null){
 //			initAttemptsOfDependTimeout = tmpDependTimeout;
-			attemptsOfStatusDependPass.addAll(tmpDependPass);
+			for(TaskAttempt taskAttempt : tmpDependPass){
+				addLastTaskAttempt(taskAttempt);
+			}
+//			attemptsOfStatusDependPass.addAll(tmpDependPass);
 		}
+	}
+
+	private void addLastTaskAttempt(TaskAttempt taskAttempt){
+		String taskId = taskAttempt.getTaskid();
+		if(StringUtils.isBlank(taskId)){
+			return;
+		}
+		List<TaskAttempt> taskAttemptList = dependPassMap.get(taskId);
+		if(taskAttemptList == null){
+			taskAttemptList = new ArrayList<TaskAttempt>();
+		}
+		if(taskAttemptList.size() < DEPEND_PASS_SIZE){
+			taskAttemptList.add(taskAttempt);
+		}
+		dependPassMap.put(taskId, taskAttemptList);
 	}
 
 	private void clearCache(){
@@ -432,14 +455,17 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
 
 	@Override
 	public void addDependPassAttempt(TaskAttempt taskAttempt) {
-		attemptsOfStatusDependPass.add(taskAttempt);
+		addLastTaskAttempt(taskAttempt);
 		attemptsOfStatusInitialized.remove(taskAttempt);
 		attemptsOfStatusDependTimeout.remove(taskAttempt);
 	}
 
 	@Override
 	public void removeDependPassAttempt(TaskAttempt taskAttempt) {
-		attemptsOfStatusDependPass.remove(taskAttempt);
+		String taskId = taskAttempt.getTaskid();
+		if(StringUtils.isNotBlank(taskId)){
+			dependPassMap.get(taskId).remove(taskAttempt);
+		}
 	}
 
 	class SchedulerMonitor extends Thread {
@@ -870,7 +896,12 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
 //		example.or().andStatusEqualTo(AttemptStatus.DEPENDENCY_PASS);
 //		example.setOrderByClause("scheduleTime");
 //		List<TaskAttempt> attempts = taskAttemptMapper.selectByExample(example);
-		for (TaskAttempt attempt : attemptsOfStatusDependPass) {
+		List<TaskAttempt> attempts = new ArrayList<TaskAttempt>();
+		for(Map.Entry<String, List<TaskAttempt>> entry : dependPassMap.entrySet()){
+			attempts.addAll(entry.getValue());
+		}
+		Collections.sort(attempts, new TaskAttemptComparator());
+		for (TaskAttempt attempt : attempts) {
 			Task task = registedTasks.get(attempt.getTaskid());
 			if (task != null) {
 				contexts.add(new AttemptContext(attempt, task));
@@ -1000,6 +1031,18 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
 				Cat.logError("fail to schedule the attempt : " + context.getAttemptid(), se);
 			}
 		}
+	}
+
+	public List<TaskAttempt> getAttemptsOfStatusInitialized() {
+		return attemptsOfStatusInitialized;
+	}
+
+	public List<TaskAttempt> getAttemptsOfStatusDependTimeout() {
+		return attemptsOfStatusDependTimeout;
+	}
+
+	public ConcurrentMap<String, List<TaskAttempt>> getDependPassMap() {
+		return dependPassMap;
 	}
 
 	public static void main(String[] args) {

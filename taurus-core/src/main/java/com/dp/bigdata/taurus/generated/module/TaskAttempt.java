@@ -290,4 +290,19 @@ public class TaskAttempt {
     public void setExechost(String exechost) {
         this.exechost = exechost;
     }
+
+    @Override
+    public String toString() {
+        return "TaskAttempt{" +
+                "attemptid='" + attemptid + '\'' +
+                ", instanceid='" + instanceid + '\'' +
+                ", taskid='" + taskid + '\'' +
+                ", starttime=" + starttime +
+                ", endtime=" + endtime +
+                ", scheduletime=" + scheduletime +
+                ", status=" + status +
+                ", returnvalue=" + returnvalue +
+                ", exechost='" + exechost + '\'' +
+                '}';
+    }
 }

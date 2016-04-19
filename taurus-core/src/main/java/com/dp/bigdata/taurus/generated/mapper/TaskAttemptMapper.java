@@ -119,6 +119,7 @@ public interface TaskAttemptMapper {
     public TaskAttempt isExitRunningTask(@Param("taskId")String taskId);
 
     public int deleteDependencyPassTask(@Param("taskId")String taskId,@Param("status")int status);
+    public ArrayList<TaskAttempt> selectDependencyTask(@Param("taskId")String taskId,@Param("status")int status);
     public int getTaskLastStatus(@Param("taskId")String taskId);
 
     public ArrayList<TaskAttempt> getTaskAttemptsHistory(@Param("ip")String ip,@Param("time")String time);
