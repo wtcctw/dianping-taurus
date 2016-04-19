@@ -1,12 +1,8 @@
 package com.dp.bigdata.taurus.springmvc.controller;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
+import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
+import com.google.gson.Gson;
 import org.restlet.resource.ClientResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,9 +10,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
-import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
-import com.google.gson.Gson;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 @Controller
 public class TaskProxyController {
@@ -28,7 +26,7 @@ public class TaskProxyController {
 	private final String EXECUTE = "execute";
 	private final String RESUME = "resume";
 	private final String DETAIL = "detail";
-	
+
 	@RequestMapping(value = "/tasks.do", method = RequestMethod.POST)
 	public void tasksDoPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		log.info("--------------init the tasksDoPost------------");
