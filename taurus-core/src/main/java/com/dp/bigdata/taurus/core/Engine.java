@@ -105,11 +105,11 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
 
 	private volatile boolean refreshThreadRestFlag = false;
 
-	private List<TaskAttempt> attemptsOfStatusInitialized = new ArrayList<TaskAttempt>();
+	private volatile List<TaskAttempt> attemptsOfStatusInitialized = new ArrayList<TaskAttempt>();
 
-	private List<TaskAttempt> attemptsOfStatusDependTimeout = new ArrayList<TaskAttempt>();
+	private volatile List<TaskAttempt> attemptsOfStatusDependTimeout = new ArrayList<TaskAttempt>();
 
-	private ConcurrentMap<String, List<TaskAttempt>> dependPassMap = new ConcurrentHashMap<String, List<TaskAttempt>>();
+	private volatile ConcurrentMap<String, List<TaskAttempt>> dependPassMap = new ConcurrentHashMap<String, List<TaskAttempt>>();
 
 	private static final int DEPEND_PASS_SIZE = 150;
 
@@ -138,7 +138,7 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
 		}
 	}
 
-	private void addLastTaskAttempt(TaskAttempt taskAttempt){
+	private synchronized void addLastTaskAttempt(TaskAttempt taskAttempt){
 		String taskId = taskAttempt.getTaskid();
 		if(StringUtils.isBlank(taskId)){
 			return;
@@ -432,8 +432,9 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
 
 	@Override
 	public void addDependTimeoutAttempt(TaskAttempt taskAttempt) {
-		attemptsOfStatusDependTimeout.add(taskAttempt);
+		removeDependPassAttempt(taskAttempt);
 		attemptsOfStatusInitialized.remove(taskAttempt);
+		attemptsOfStatusDependTimeout.add(taskAttempt);
 	}
 
 	@Override
@@ -443,16 +444,19 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
 
 	@Override
 	public void addDependPassAttempt(TaskAttempt taskAttempt) {
-		addLastTaskAttempt(taskAttempt);
 		attemptsOfStatusInitialized.remove(taskAttempt);
 		attemptsOfStatusDependTimeout.remove(taskAttempt);
+		addLastTaskAttempt(taskAttempt);
 	}
 
 	@Override
 	public void removeDependPassAttempt(TaskAttempt taskAttempt) {
 		String taskId = taskAttempt.getTaskid();
 		if(StringUtils.isNotBlank(taskId)){
-			dependPassMap.get(taskId).remove(taskAttempt);
+			List<TaskAttempt> tmpTask = dependPassMap.get(taskId);
+			if(tmpTask != null) {
+				tmpTask.remove(taskAttempt);
+			}
 		}
 	}
 
@@ -592,28 +596,32 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
 			taskMapper.updateByPrimaryKeySelective(task);
 			registedTasks.remove(taskID);
 			tasksMapCache.remove(task.getName());
-			removeTaskAttempt(taskID);
+			removeTaskAttempt(taskID, true);
 
 			Cat.logEvent("Task-Delete", task.getName());
 		}
 	}
 
-	private void removeTaskAttempt(String taskId){
-
-		List<TaskAttempt> origin = dependPassMap.get(taskId);
-		if(origin != null){
-			origin.clear();
-		}
+	private void removeTaskAttempt(String taskId, boolean delete){
 
 		List<TaskAttempt> removed = new ArrayList<TaskAttempt>();
 
-		for(TaskAttempt taskAttempt : attemptsOfStatusDependTimeout){
-			if(taskAttempt.getTaskid().equals(taskId)){
-				removed.add(taskAttempt);
+		if(delete){
+			List<TaskAttempt> origin = dependPassMap.get(taskId);
+			if (origin != null) {
+				origin.clear();
 			}
+
+
+			for (TaskAttempt taskAttempt : attemptsOfStatusDependTimeout) {
+				if (taskAttempt.getTaskid().equals(taskId)) {
+					removed.add(taskAttempt);
+				}
+			}
+			attemptsOfStatusDependTimeout.removeAll(removed);
+			removed.clear();
 		}
-		attemptsOfStatusDependTimeout.removeAll(removed);
-		removed.clear();
+
 		for(TaskAttempt taskAttempt : attemptsOfStatusInitialized){
 			if(taskAttempt.getTaskid().equals(taskId)){
 				removed.add(taskAttempt);
@@ -679,7 +687,7 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
 			task.setStatus(TaskStatus.SUSPEND);
 			task.setUpdatetime(new Date());
 			taskMapper.updateByPrimaryKeySelective(task);
-			removeTaskAttempt(taskID);
+			removeTaskAttempt(taskID, false); //继续调度pass的job
 
 			Cat.logEvent("Task-Suspend", task.getName());
 		} else {
