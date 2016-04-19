@@ -1,5 +1,7 @@
 package com.dp.bigdata.taurus.core;
 
+import com.dp.bigdata.taurus.core.listener.GenericAttemptListener;
+
 import java.util.List;
 
 /**
@@ -15,5 +17,7 @@ public interface Filter {
      * @param contexts
      * @return List<AttemptContext>
      */
-    public List<AttemptContext> filter(List<AttemptContext> contexts);
+    List<AttemptContext> filter(List<AttemptContext> contexts);
+
+    void registerAttemptListener(GenericAttemptListener genericAttemptListener);
 }

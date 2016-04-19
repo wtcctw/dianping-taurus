@@ -6,6 +6,8 @@ import com.dianping.lion.client.ConfigCache;
 import com.dianping.lion.client.LionException;
 import com.dp.bigdata.taurus.alert.MailHelper;
 import com.dp.bigdata.taurus.alert.WeChatHelper;
+import com.dp.bigdata.taurus.core.listener.DependPassAttemptListener;
+import com.dp.bigdata.taurus.core.listener.GenericAttemptListener;
 import com.dp.bigdata.taurus.lion.ConfigHolder;
 import com.dp.bigdata.taurus.lion.LionKeys;
 import org.apache.commons.lang.StringUtils;
@@ -25,7 +27,11 @@ public class MultiInstanceFilter implements Filter {
     private Filter next;
 
     private Scheduler scheduler;
+
     public static HashMap<String, Integer> jobAlert = new HashMap<String, Integer>();
+
+    private List<DependPassAttemptListener> dependPassAttemptListeners = new ArrayList<DependPassAttemptListener>();
+
     private static final int ALERT_SILENCE_MAX_COUNT = 30;
 
     @Autowired
@@ -124,6 +130,9 @@ public class MultiInstanceFilter implements Filter {
                 //这里控制同时只有一个执行
                 if (ctx == null) {
                     maps.put(context.getTaskid(), context);
+                    for(DependPassAttemptListener listener : dependPassAttemptListeners){
+                        listener.removeDependPassAttempt(context.getAttempt());
+                    }
                 }
             }
         }
@@ -137,6 +146,13 @@ public class MultiInstanceFilter implements Filter {
             return next.filter(results);
         } else {
             return results;
+        }
+    }
+
+    @Override
+    public void registerAttemptListener(GenericAttemptListener genericAttemptListener) {
+        if(genericAttemptListener instanceof DependPassAttemptListener){
+            dependPassAttemptListeners.add((DependPassAttemptListener) genericAttemptListener);
         }
     }
 

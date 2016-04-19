@@ -1,14 +1,14 @@
 package com.dp.bigdata.taurus.core;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.dianping.cat.Cat;
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
 import com.dianping.lion.client.LionException;
+import com.dp.bigdata.taurus.core.listener.GenericAttemptListener;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.dianping.cat.Cat;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * MaximumConcurrentTaskFilter
@@ -50,6 +50,11 @@ public class MaximumConcurrentTaskFilter implements Filter {
         } else {
             return results;
         }
+    }
+
+    @Override
+    public void registerAttemptListener(GenericAttemptListener genericAttemptListener) {
+        throw new UnsupportedOperationException("not support");
     }
 
     public Filter getNext() {

@@ -119,6 +119,7 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
 		initCache();
 		crontabTriggle.registerAttemptListener(this);
 		dependencyTriggle.registerAttemptListener(this);
+		filter.registerAttemptListener(this);
 	}
 
 	private void initCache(){
@@ -434,6 +435,11 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
 		attemptsOfStatusDependPass.add(taskAttempt);
 		attemptsOfStatusInitialized.remove(taskAttempt);
 		attemptsOfStatusDependTimeout.remove(taskAttempt);
+	}
+
+	@Override
+	public void removeDependPassAttempt(TaskAttempt taskAttempt) {
+		attemptsOfStatusDependPass.remove(taskAttempt);
 	}
 
 	class SchedulerMonitor extends Thread {

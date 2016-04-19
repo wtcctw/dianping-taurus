@@ -9,4 +9,6 @@ import com.dp.bigdata.taurus.generated.module.TaskAttempt;
 public interface DependPassAttemptListener extends GenericAttemptListener{
 
     void addDependPassAttempt(TaskAttempt taskAttempt);
+
+    void removeDependPassAttempt(TaskAttempt taskAttempt);
 }
