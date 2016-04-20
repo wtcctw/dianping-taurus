@@ -1,14 +1,9 @@
 package com.dp.bigdata.taurus.springmvc.controller;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
+import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.restlet.resource.ClientResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,10 +11,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
-import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 @Controller
 public class ScheduleController {
@@ -59,7 +57,7 @@ public class ScheduleController {
             }
             cr = new ClientResource(task_api);
             ArrayList<TaskDTO> tasks = cr.get(ArrayList.class);
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             for (TaskDTO dto : tasks) {
                 JsonObject sechedule = new JsonObject();
                 String state = dto.getStatus();

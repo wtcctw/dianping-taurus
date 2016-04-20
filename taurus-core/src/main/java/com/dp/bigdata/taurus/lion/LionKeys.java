@@ -10,8 +10,9 @@ public enum LionKeys {
 	ON_DUTY_QYQQ("taurus.onduty.qyqq"),
 	ON_DUTY_ADMIN("taurus.onduty.admin"),
 	CONGESTION_ADMIN_USER("taurus.task.congestion.wechat.to"),
-	ADMIN_USER("taurus.dbadmin.user");
-	
+	ADMIN_USER("taurus.dbadmin.user"),
+	MAX_CAPACITY("taurus.dependencypass.max");
+
 	private String value;
 	
 	private LionKeys(String value){

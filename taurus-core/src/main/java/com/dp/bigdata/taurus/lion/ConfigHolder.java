@@ -1,14 +1,13 @@
 package com.dp.bigdata.taurus.lion;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
+import com.dianping.lion.client.ConfigChange;
+import com.dianping.lion.client.Lion;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.codehaus.plexus.util.StringUtils;
 
-import com.dianping.lion.client.ConfigChange;
-import com.dianping.lion.client.Lion;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ConfigHolder {
 	
@@ -31,6 +30,12 @@ public class ConfigHolder {
 		
 		try {
 			result = lionConfigMap.get(key);
+			if(result == null){
+				result = getFromLion(key);
+				if(StringUtils.isBlank(result)){
+					result = defaultValue;
+				}
+			}
 		} catch (Exception e) {
 			log.info("Read Lion Key Error, read from defaultValue: " + defaultValue);
 			result = defaultValue;
@@ -48,14 +53,8 @@ public class ConfigHolder {
 					log.info("ConfigHolder initialize ...");
 					
 					for(LionKeys key : LionKeys.values()){
-						
-						String lionValue = Lion.get(key.value());
-						
-						if(StringUtils.isBlank(lionValue)) {
-							lionValue = "";
-						}
-						
-						lionConfigMap.put(key.value(), lionValue);
+
+						getFromLion(key.value());
 					}
 					
 					Lion.addConfigChangeListener(new ConfigChange(){
@@ -76,6 +75,17 @@ public class ConfigHolder {
 			
 		}
 	}
-	
+
+	private static String getFromLion(String key){
+		String lionValue = Lion.get(key);
+
+		if(StringUtils.isBlank(lionValue)) {
+			lionValue = "";
+		}
+
+		lionConfigMap.put(key, lionValue);
+
+		return lionValue;
+	}
 	
 }

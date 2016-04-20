@@ -129,6 +129,8 @@ public class TaurusServer implements LeaderChangedListener {
             engine.load();
             alert.load();
             alert.isInterrupt(false);
+            engine.clearCache();
+            engine.initCache();
             engine.isInterrupt(false);
 
             if (ClearLogsTimerManager.getClearLogsTimerManager().getTimer() == null) {
@@ -160,6 +162,7 @@ public class TaurusServer implements LeaderChangedListener {
 
             alert.isInterrupt(true);
             engine.isInterrupt(true);
+            engine.clearCache();
 
             if (ClearLogsTimerManager.getClearLogsTimerManager().getTimer() != null) {
                 ClearLogsTimerManager.getClearLogsTimerManager().stop();
