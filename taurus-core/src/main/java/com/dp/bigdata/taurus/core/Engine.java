@@ -656,8 +656,13 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
         }
 
         List<TaskAttempt> tmpDependPass = taskAttemptMapper.selectDependencyTask(taskId, ExecuteStatus.DEPENDENCY_PASS);
-        if (tmpDependPass != null) {
-            dependPassMap.put(taskId, (MaxCapacityList<TaskAttempt>) tmpDependPass);
+        if (tmpDependPass != null && !tmpDependPass.isEmpty()) {
+            MaxCapacityList<TaskAttempt> origin = dependPassMap.get(taskId);
+            if (origin == null) {
+                origin = new DefaultMaxCapacityList<TaskAttempt>();
+            }
+            origin.addAll(tmpDependPass);
+            dependPassMap.put(taskId, origin);
         }
     }
 
@@ -860,7 +865,7 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
         Cat.logEvent("Attempt-Failed", context.getName(), Message.SUCCESS, context.getAttemptid());
 
 		/*
-		 * Check whether it is necessary to retry this failed attempt. If true, insert new attempt into the database; Otherwise, do
+         * Check whether it is necessary to retry this failed attempt. If true, insert new attempt into the database; Otherwise, do
 		 * nothing.
 		 */
         Task task = context.getTask();
@@ -1087,30 +1092,12 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
         }
     }
 
-    public List<TaskAttempt> getAttemptsOfStatusInitialized() {
-        return attemptsOfStatusInitialized;
-    }
-
     public List<TaskAttempt> getAttemptsOfStatusDependTimeout() {
         return attemptsOfStatusDependTimeout;
     }
 
     public ConcurrentMap<String, MaxCapacityList<TaskAttempt>> getDependPassMap() {
         return dependPassMap;
-    }
-
-    public static void main(String[] args) {
-        List<Integer> a = new ArrayList<Integer>();
-        List<Integer> b = new ArrayList<Integer>();
-        a.add(1);
-        a.add(2);
-        b.add(3);
-        b.add(4);
-        Collection<Integer> c = CollectionUtils.union(a, b);
-        c.add(5);
-        System.out.println(a);
-        System.out.println(b);
-        System.out.println(c);
     }
 
 }
