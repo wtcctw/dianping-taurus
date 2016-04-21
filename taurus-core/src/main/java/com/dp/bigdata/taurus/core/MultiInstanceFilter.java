@@ -131,9 +131,7 @@ public class MultiInstanceFilter implements Filter {
                 if (ctx == null) {
                     maps.put(context.getTaskid(), context);
                     //将要被调度，进入Running状态，避免多次调度所以需要移除
-                    for(DependPassAttemptListener listener : dependPassAttemptListeners){
-                        listener.removeDependPassAttempt(context.getAttempt());
-                    }
+                    scheduler.ExpireCongestionAttempt(context.getAttemptid());
                 }
             }
         }

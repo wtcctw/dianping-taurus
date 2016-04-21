@@ -155,21 +155,7 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
         }
 
         if (!taskAttemptList.addOrDiscard(taskAttempt)) {
-            Cat.logEvent("DEPENDENCY_PASS", taskId);
-            Task task = taskMapper.getTaskById(taskId);
-            if (task != null) {
-                String user = task.getCreator();
-                String content = new StringBuilder().append(EnvUtils.getEnv()).append(": ").append(taskId).append("调度状态为DEPENDENCY_PASS的个数多于")
-                        .append(MaxCapacityList.MAX_CAPACITY_SIZE).toString();
-//                sendAlarm(taskId, user, content);
-            }
-        } else {
-            int size = taskAttemptList.size();
-            if (size > MaxCapacityList.MAX_CAPACITY_SIZE / 2) {
-                String content = new StringBuilder().append(EnvUtils.getEnv()).append(": ").append(taskId).append("调度状态为DEPENDENCY_PASS的个数多于")
-                        .append(size).append("个, 如果再不处理，新的调度实例将被丢弃").toString();
-                sendAlarm(ConfigHolder.get(LionKeys.ADMIN_USER), content);
-            }
+            Cat.logEvent("DISCARD_DEPENDENCY_PASS", taskId);
         }
 
         dependPassMap.put(taskId, taskAttemptList);
@@ -331,6 +317,11 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
         refreshThread.setDaemon(true);
         refreshThread.setName("Thread-" + RefreshThread.class.getName());
         refreshThread.start();
+
+        Thread dependPassThread = new DependPassThread();
+        dependPassThread.setDaemon(true);
+        dependPassThread.setName("Thread-" + DependPassThread.class.getName());
+        dependPassThread.start();
 
         Thread triggleThread = new TriggleTask();
         triggleThread.setDaemon(true);
@@ -589,6 +580,43 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
                     load();
 
                     Thread.sleep(20 * 1000);
+
+                } catch (InterruptedException e) {
+                    LOG.error("RefreshThread was interrupted!", e);
+                }
+
+            }
+
+
+        }
+
+    }
+
+    class DependPassThread extends Thread {
+
+        @Override
+        public void run() {
+
+
+            while (true) {
+
+                while (isInterrupt.get()) {
+                    refreshThreadRestFlag = true;
+                    SleepUtils.sleep(5000);
+                }
+                refreshThreadRestFlag = false;
+
+                try {
+                    for(Map.Entry<String, MaxCapacityList<TaskAttempt>> entry :dependPassMap.entrySet()){
+                        MaxCapacityList<TaskAttempt> value = entry.getValue();
+                        if(value.size() > MaxCapacityList.MAX_CAPACITY_SIZE / 2){
+                            String content = new StringBuilder().append(EnvUtils.getEnv()).append(": ").append(entry.getKey()).append("调度状态为DEPENDENCY_PASS的个数为")
+                                    .append(value.size()).append("个, 如果再不处理，拥堵个数达到").append(MaxCapacityList.MAX_CAPACITY_SIZE).append("后，新的调度实例将被丢弃").toString();
+                            sendAlarm(ConfigHolder.get(LionKeys.ADMIN_USER), content);
+                        }
+                    }
+
+                    Thread.sleep(5 * 60 * 1000);
 
                 } catch (InterruptedException e) {
                     LOG.error("RefreshThread was interrupted!", e);
@@ -1066,6 +1094,7 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
         attempt.setStatus(AttemptStatus.EXPIRED);
         attempt.setEndtime(new Date());
         taskAttemptMapper.updateByPrimaryKeySelective(attempt);
+        removeDependPassAttempt(attempt);
 
         Cat.logEvent("Congestion-Expire-Attempt", attempt.getTaskid(), Message.SUCCESS, attempt.getAttemptid());
     }
