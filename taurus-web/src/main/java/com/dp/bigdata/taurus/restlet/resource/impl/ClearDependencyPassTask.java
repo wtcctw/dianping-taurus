@@ -2,6 +2,7 @@ package com.dp.bigdata.taurus.restlet.resource.impl;
 
 import com.dp.bigdata.taurus.core.Engine;
 import com.dp.bigdata.taurus.core.MultiInstanceFilter;
+import com.dp.bigdata.taurus.core.structure.MaxCapacityList;
 import com.dp.bigdata.taurus.generated.mapper.TaskAttemptMapper;
 import com.dp.bigdata.taurus.generated.module.TaskAttempt;
 import com.dp.bigdata.taurus.restlet.resource.IClearDependencyPassTask;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Created by kirinli on 14/10/28.
@@ -48,9 +50,13 @@ public class ClearDependencyPassTask extends ServerResource implements IClearDep
                     List<TaskAttempt> taskAttemptList = taskAttemptMapper.selectDependencyTask(taskId, status);
                     if (taskAttemptList != null) {
                         if (status == ExecuteStatus.DEPENDENCY_PASS) {
-                            List<TaskAttempt> tmpList = engine.getDependPassMap().get(taskId);
-                            if (tmpList != null) {
-                                tmpList.removeAll(taskAttemptList);
+                            ConcurrentMap<String, MaxCapacityList<TaskAttempt>> map = engine.getDependPassMap();
+                            if(map != null){
+                                MaxCapacityList<TaskAttempt> tmpTaskAttempt = map.get(taskId);
+                                if (tmpTaskAttempt != null) {
+                                    tmpTaskAttempt.removeAll(taskAttemptList);
+                                }
+                                map.put(taskId, tmpTaskAttempt);
                             }
                         } else {
                             engine.getAttemptsOfStatusDependTimeout().removeAll(taskAttemptList);
