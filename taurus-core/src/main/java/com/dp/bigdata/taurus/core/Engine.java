@@ -153,18 +153,31 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
         if (taskAttemptList == null) {
             taskAttemptList = new DefaultMaxCapacityList<TaskAttempt>();
         }
+
         if (!taskAttemptList.addOrDiscard(taskAttempt)) {
             Cat.logEvent("DEPENDENCY_PASS", taskId);
             Task task = taskMapper.getTaskById(taskId);
             if (task != null) {
-
                 String user = task.getCreator();
                 String content = new StringBuilder().append(EnvUtils.getEnv()).append(": ").append(taskId).append("调度状态为DEPENDENCY_PASS的个数多于")
                         .append(MaxCapacityList.MAX_CAPACITY_SIZE).toString();
-//                WeChatHelper.sendWeChat(user, content, ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
+//                sendAlarm(taskId, user, content);
+            }
+        } else {
+            int size = taskAttemptList.size();
+            if (size > MaxCapacityList.MAX_CAPACITY_SIZE / 2) {
+                String content = new StringBuilder().append(EnvUtils.getEnv()).append(": ").append(taskId).append("调度状态为DEPENDENCY_PASS的个数多于")
+                        .append(size).append("个, 如果再不处理，新的调度实例将被丢弃").toString();
+                sendAlarm(ConfigHolder.get(LionKeys.ADMIN_USER), content);
             }
         }
+
         dependPassMap.put(taskId, taskAttemptList);
+    }
+
+    private void sendAlarm(String user, String content) {
+
+        WeChatHelper.sendWeChat(user, content, ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
     }
 
     private void clearInitialized() {
