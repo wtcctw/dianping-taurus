@@ -5,7 +5,7 @@ function btnShow() {
     show_v = sec_v + " ";
 
     var min_v = $("#min_input").val();
-    show_v = min_v + " ";
+    show_v += min_v + " ";
 
     var hour_v = $("#hour_input").val();
     show_v += hour_v + " ";
