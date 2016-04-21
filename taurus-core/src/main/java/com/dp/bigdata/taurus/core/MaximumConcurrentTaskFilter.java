@@ -1,23 +1,27 @@
 package com.dp.bigdata.taurus.core;
 
 import com.dianping.cat.Cat;
-import com.dianping.lion.EnvZooKeeperConfig;
-import com.dianping.lion.client.ConfigCache;
-import com.dianping.lion.client.LionException;
 import com.dp.bigdata.taurus.core.listener.GenericAttemptListener;
+import com.dp.bigdata.taurus.core.structure.StringTo;
+import com.dp.bigdata.taurus.core.structure.StringToInteger;
+import com.dp.bigdata.taurus.lion.AbstractLionPropertyInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * MaximumConcurrentTaskFilter
- * 
- * @author damon.zhu
+ * Author   mingdongli
+ * 16/4/21  下午08:15.
  */
-public class MaximumConcurrentTaskFilter implements Filter {
+public class MaximumConcurrentTaskFilter extends AbstractLionPropertyInitializer<Integer> implements Filter {
+
+    private static final String MAX_TASK_NUM = "taurus.engine.maxtasknum";
+
+    private static final int DEFAULT_MAX_TASK_NUM = 1000;
 
     private Filter next;
+
     private Scheduler scheduler;
 
     @Autowired
@@ -27,17 +31,11 @@ public class MaximumConcurrentTaskFilter implements Filter {
 
     public List<AttemptContext> filter(List<AttemptContext> contexts) {
         List<AttemptContext> results;
-        String maxJobNums;
-        try {
-            maxJobNums  =  ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.engine.maxtasknum");
-        } catch (LionException e) {
-            maxJobNums = "1000";
-        }
-        int max = Integer.parseInt(maxJobNums) - scheduler.getAllRunningAttempt().size();
+        int max = lionValue - scheduler.getAllRunningAttempt().size();
 
         if (max <= 0) {
             results = new ArrayList<AttemptContext>();
-            
+
             Cat.logEvent("Exception", "Capacity-Error");
         } else if (max >= contexts.size()) {
             results = contexts;
@@ -64,4 +62,35 @@ public class MaximumConcurrentTaskFilter implements Filter {
     public void setNext(Filter next) {
         this.next = next;
     }
+
+    @Override
+    public void onConfigChange(String key, String value) throws Exception {
+
+        if (key != null && key.equals(MAX_TASK_NUM)) {
+            if (logger.isInfoEnabled()) {
+                logger.info("[onChange][" + MAX_TASK_NUM + "]" + value);
+            }
+            this.lionValue = converter.stringConvertTo(value.trim());
+        } else {
+            if (logger.isInfoEnabled()) {
+                logger.info("not match");
+            }
+        }
+    }
+
+    @Override
+    protected String getKey() {
+        return MAX_TASK_NUM;
+    }
+
+    @Override
+    protected Integer getDefaultValue() {
+        return DEFAULT_MAX_TASK_NUM;
+    }
+
+    @Override
+    protected StringTo getConvert() {
+        return new StringToInteger();
+    }
+
 }

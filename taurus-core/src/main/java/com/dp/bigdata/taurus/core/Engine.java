@@ -512,6 +512,7 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
 
                     if (contexts != null) {
                         for (final AttemptContext context : contexts) {
+                            removeDependPassAttempt(context.getAttempt()); //已调度的从缓存删除
                             attemptExecutor.execute(new AttemptTask(context));
                         }
                     }
@@ -1056,8 +1057,8 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
     }
 
     @Override
-    public void ExpireCongestionAttempt(String attemptID) {
-        // Auto-generated method stub（待测试）
+    public void expireCongestionAttempt(String attemptID) {
+        // Auto-generated method stub
         TaskAttemptExample example = new TaskAttemptExample();
         example.or().andAttemptidEqualTo(attemptID);
         List<TaskAttempt> attempts = taskAttemptMapper.selectByExample(example);

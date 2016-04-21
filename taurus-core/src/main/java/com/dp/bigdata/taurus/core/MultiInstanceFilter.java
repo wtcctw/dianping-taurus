@@ -1,19 +1,19 @@
 package com.dp.bigdata.taurus.core;
 
 import com.dianping.cat.Cat;
-import com.dianping.lion.EnvZooKeeperConfig;
-import com.dianping.lion.client.ConfigCache;
-import com.dianping.lion.client.LionException;
 import com.dp.bigdata.taurus.alert.MailHelper;
 import com.dp.bigdata.taurus.alert.WeChatHelper;
 import com.dp.bigdata.taurus.core.listener.DependPassAttemptListener;
 import com.dp.bigdata.taurus.core.listener.GenericAttemptListener;
+import com.dp.bigdata.taurus.core.structure.StringTo;
+import com.dp.bigdata.taurus.core.structure.StringToListString;
+import com.dp.bigdata.taurus.lion.AbstractLionPropertyInitializer;
 import com.dp.bigdata.taurus.lion.ConfigHolder;
 import com.dp.bigdata.taurus.lion.LionKeys;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -22,7 +22,13 @@ import java.util.List;
  *
  * @author damon.zhu
  */
-public class MultiInstanceFilter implements Filter {
+public class MultiInstanceFilter extends AbstractLionPropertyInitializer<List<String>> implements Filter {
+
+    private static final String NOT_ALERT = "taurus.web.taskblock.notalert";
+
+    private static final String SERVER_NAME = "taurus.web.serverName";
+
+    private static final int ALERT_SILENCE_MAX_COUNT = 30;
 
     private Filter next;
 
@@ -32,7 +38,13 @@ public class MultiInstanceFilter implements Filter {
 
     private List<DependPassAttemptListener> dependPassAttemptListeners = new ArrayList<DependPassAttemptListener>();
 
-    private static final int ALERT_SILENCE_MAX_COUNT = 30;
+    private String serverName;
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        super.afterPropertiesSet();
+        serverName = lionDynamicConfig.get(SERVER_NAME);
+    }
 
     @Autowired
     public MultiInstanceFilter(Scheduler scheduler) {
@@ -47,9 +59,9 @@ public class MultiInstanceFilter implements Filter {
             AttemptContext ctx = maps.get(context.getTaskid());
 
             if (runnings != null && runnings.size() > 0) {
-                //TODO 根据用户设置，决定是否设置拥塞的任务调度的新调度为过期状态，不执行（待测试）
+                //TODO 根据用户设置，决定是否设置拥塞的任务调度的新调度为过期状态，不执行
                 if (context.getTask().getIskillcongexp()) {
-                    scheduler.ExpireCongestionAttempt(context.getAttemptid());
+                    scheduler.expireCongestionAttempt(context.getAttemptid());
                     continue;
                 }
                 // 拥堵了~应该告警用户任务堵住了~
@@ -61,39 +73,21 @@ public class MultiInstanceFilter implements Filter {
                 if (null == jobAlertCount) {
                     jobAlert.put(context.getTaskid(), 0);
                 } else if (jobAlertCount == 0) {
-                    String notAlertJobs;
-                    try {
-                        notAlertJobs = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.taskblock.notalert");
-                    } catch (LionException e) {
-                        notAlertJobs = "";
-                    }
                     boolean needAlert = true;
-                    if (StringUtils.isNotBlank(notAlertJobs)) {
-
-                        String[] notAlertLists = notAlertJobs.split(",");
-
-                        for (String notalert : notAlertLists) {
-                            if (notalert.equals(context.getName())) {
-                                needAlert = false;
-                                break;
-                            }
+                    for (String notalert : lionValue) {
+                        if (notalert.equals(context.getName())) {
+                            needAlert = false;
+                            break;
                         }
                     }
 
                     if (needAlert) {
                         // 告警加入domain
-                        String domain = null;
-                        try {
-                            domain = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.serverName");
-                        } catch (LionException e) {
-                            domain = "http://taurus.dp";
-                            e.printStackTrace();
-                        }
                         String alertontext = "您好，你的Taurus Job【"
                                 + context.getTask().getName()
                                 + "】发生拥堵，请及时关注，谢谢~"
                                 + "作业调度历史："
-                                + domain
+                                + serverName
                                 + "/attempt?taskID="
                                 + context.getTaskid();
                         try {
@@ -130,10 +124,6 @@ public class MultiInstanceFilter implements Filter {
                 //这里控制同时只有一个执行
                 if (ctx == null) {
                     maps.put(context.getTaskid(), context);
-                    //将要被调度，进入Running状态，避免多次调度所以需要移除
-                    for (DependPassAttemptListener listener : dependPassAttemptListeners) {
-                        listener.removeDependPassAttempt(context.getAttempt());
-                    }
                 }
             }
         }
@@ -165,4 +155,18 @@ public class MultiInstanceFilter implements Filter {
         this.next = next;
     }
 
+    @Override
+    protected String getKey() {
+        return NOT_ALERT;
+    }
+
+    @Override
+    protected List<String> getDefaultValue() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    protected StringTo<List<String>> getConvert() {
+        return new StringToListString();
+    }
 }
