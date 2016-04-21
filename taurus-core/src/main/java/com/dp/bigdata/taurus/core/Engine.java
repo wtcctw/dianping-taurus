@@ -1113,4 +1113,11 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
     public void stop() {
     }
 
+    public List<TaskAttempt> getAttemptsOfStatusDependTimeout() {
+        return attemptsOfStatusDependTimeout;
+    }
+
+    public ConcurrentMap<String, MaxCapacityList<TaskAttempt>> getDependPassMap() {
+        return dependPassMap;
+    }
 }
