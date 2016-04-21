@@ -18,4 +18,4 @@ public class DefaultMaxCapacityList<E> extends ArrayList<E> implements MaxCapaci
         }
         return false;
     }
-git }
+}
