@@ -715,7 +715,7 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
         taskAttemptMapper.insertSelective(attempt);
         Task task = registedTasks.get(taskID);
         AttemptContext context = new AttemptContext(attempt, task);
-        executeAttempt(context);
+        attemptExecutor.submit(new AttemptTask(context));
     }
 
     @Override
