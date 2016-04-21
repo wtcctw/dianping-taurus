@@ -483,32 +483,6 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
         }
     }
 
-    class SchedulerMonitor extends Thread {
-
-        private AtomicBoolean isInterrupted = new AtomicBoolean(false);
-
-        @Override
-        public void run() {
-
-            try {
-                while (!isInterrupted.get()) {
-
-
-                    Thread.sleep(30 * 1000);
-                }
-            } catch (InterruptedException e) {
-                isInterrupted.set(true);
-                LOG.error("SchedulerMonitor was interrupted!", e);
-            }
-
-        }
-
-        public void shutdown() {
-            isInterrupted.set(true);
-        }
-
-    }
-
     class TriggleTask extends Thread {
         @Override
         public void run() {

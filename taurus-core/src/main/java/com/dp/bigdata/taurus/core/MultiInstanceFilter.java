@@ -47,11 +47,11 @@ public class MultiInstanceFilter implements Filter {
             AttemptContext ctx = maps.get(context.getTaskid());
 
             if (runnings != null && runnings.size() > 0) {
-            	//TODO 根据用户设置，决定是否设置拥塞的任务调度的新调度为过期状态，不执行（待测试）
-            	if(context.getTask().getIskillcongexp()){
-					scheduler.ExpireCongestionAttempt(context.getAttemptid());
-            		continue;
-            	}
+                //TODO 根据用户设置，决定是否设置拥塞的任务调度的新调度为过期状态，不执行（待测试）
+                if (context.getTask().getIskillcongexp()) {
+                    scheduler.ExpireCongestionAttempt(context.getAttemptid());
+                    continue;
+                }
                 // 拥堵了~应该告警用户任务堵住了~
                 Integer jobAlertCount = null;
                 if (jobAlert.containsKey(context.getTaskid())) {
@@ -81,24 +81,24 @@ public class MultiInstanceFilter implements Filter {
                     }
 
                     if (needAlert) {
-                    	// 告警加入domain
-                    	String domain = null;
-                    	try {
-                    		domain = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.serverName");
-                        } catch (LionException e) {
-                        	domain = "http://taurus.dp";
-                        	e.printStackTrace();
-                        }
-                        String alertontext = "您好，你的Taurus Job【" 
-                        					+ context.getTask().getName() 
-                        					+ "】发生拥堵，请及时关注，谢谢~"
-                        					+ "作业调度历史：" 
-                        					+ domain 
-                        					+ "/attempt?taskID=" 
-                        					+ context.getTaskid();
+                        // 告警加入domain
+                        String domain = null;
                         try {
-                        	String alertAdmin = ConfigHolder.get(LionKeys.CONGESTION_ADMIN_USER);
-                        	WeChatHelper.sendWeChat(alertAdmin, alertontext, "Taurus-Job拥塞告警服务", ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
+                            domain = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.serverName");
+                        } catch (LionException e) {
+                            domain = "http://taurus.dp";
+                            e.printStackTrace();
+                        }
+                        String alertontext = "您好，你的Taurus Job【"
+                                + context.getTask().getName()
+                                + "】发生拥堵，请及时关注，谢谢~"
+                                + "作业调度历史："
+                                + domain
+                                + "/attempt?taskID="
+                                + context.getTaskid();
+                        try {
+                            String alertAdmin = ConfigHolder.get(LionKeys.CONGESTION_ADMIN_USER);
+                            WeChatHelper.sendWeChat(alertAdmin, alertontext, "Taurus-Job拥塞告警服务", ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
                             WeChatHelper.sendWeChat(context.getCreator(), alertontext, "Taurus-Job拥塞告警服务", "12");
                             MailHelper.sendMail(context.getCreator() + "@dianping.com", alertontext, "Taurus-Job拥塞告警服务");
 
@@ -131,7 +131,9 @@ public class MultiInstanceFilter implements Filter {
                 if (ctx == null) {
                     maps.put(context.getTaskid(), context);
                     //将要被调度，进入Running状态，避免多次调度所以需要移除
-                    scheduler.ExpireCongestionAttempt(context.getAttemptid());
+                    for (DependPassAttemptListener listener : dependPassAttemptListeners) {
+                        listener.removeDependPassAttempt(context.getAttempt());
+                    }
                 }
             }
         }
@@ -150,7 +152,7 @@ public class MultiInstanceFilter implements Filter {
 
     @Override
     public void registerAttemptListener(GenericAttemptListener genericAttemptListener) {
-        if(genericAttemptListener instanceof DependPassAttemptListener){
+        if (genericAttemptListener instanceof DependPassAttemptListener) {
             dependPassAttemptListeners.add((DependPassAttemptListener) genericAttemptListener);
         }
     }
