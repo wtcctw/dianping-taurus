@@ -3,8 +3,6 @@ package com.dp.bigdata.taurus.core;
 import java.text.ParseException;
 import java.util.*;
 
-import com.dp.bigdata.taurus.core.listener.DependPassAttemptListener;
-import com.dp.bigdata.taurus.core.listener.DependTimeoutAttemptListener;
 import com.dp.bigdata.taurus.core.listener.GenericAttemptListener;
 import com.dp.bigdata.taurus.core.listener.InitializedAttemptListener;
 import org.apache.commons.logging.Log;
@@ -89,7 +87,7 @@ public class CrontabTriggle implements Triggle {
                         attempt.setAttemptid(attemptID);
                         attemptMapper.insert(attempt);
 						for(InitializedAttemptListener listener : initializedAttemptListeners){
-							listener.addnitializedAttempt(attempt);
+							listener.addInitializedAttempt(attempt);
 						}
                         LOG.info(String.format("New attempt (%s) fired.", attemptID));
                         Cat.logEvent("Crontab.Fire", task.getName());

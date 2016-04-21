@@ -447,33 +447,32 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
 
     }
 
-    /**
-     * graceful shutdown the server;
-     */
-    public void stop() {
+    @Override
+    public synchronized void addInitializedAttempt(TaskAttempt taskAttempt) {
+        attemptsOfStatusInitialized.add(taskAttempt);
     }
 
     @Override
-    public void addDependTimeoutAttempt(TaskAttempt taskAttempt) {
+    public synchronized void addDependTimeoutAttempt(TaskAttempt taskAttempt) {
         removeDependPassAttempt(taskAttempt);
         attemptsOfStatusInitialized.remove(taskAttempt);
         attemptsOfStatusDependTimeout.add(taskAttempt);
     }
 
     @Override
-    public void addnitializedAttempt(TaskAttempt taskAttempt) {
-        attemptsOfStatusInitialized.add(taskAttempt);
-    }
-
-    @Override
-    public void addDependPassAttempt(TaskAttempt taskAttempt) {
+    public synchronized void addDependPassAttempt(TaskAttempt taskAttempt) {
         attemptsOfStatusInitialized.remove(taskAttempt);
         attemptsOfStatusDependTimeout.remove(taskAttempt);
         addLastTaskAttempt(taskAttempt);
     }
 
     @Override
-    public void removeDependPassAttempt(TaskAttempt taskAttempt) {
+    public synchronized void removeDependTimeoutAttempt(TaskAttempt taskAttempt) {
+        attemptsOfStatusDependTimeout.remove(taskAttempt);
+    }
+
+    @Override
+    public synchronized void removeDependPassAttempt(TaskAttempt taskAttempt) {
         String taskId = taskAttempt.getTaskid();
         if (StringUtils.isNotBlank(taskId)) {
             MaxCapacityList<TaskAttempt> tmpTask = dependPassMap.get(taskId);
@@ -1108,12 +1107,10 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
         }
     }
 
-    public List<TaskAttempt> getAttemptsOfStatusDependTimeout() {
-        return attemptsOfStatusDependTimeout;
-    }
-
-    public ConcurrentMap<String, MaxCapacityList<TaskAttempt>> getDependPassMap() {
-        return dependPassMap;
+    /**
+     * graceful shutdown the server;
+     */
+    public void stop() {
     }
 
 }

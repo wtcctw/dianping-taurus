@@ -1,7 +1,9 @@
 package com.dp.bigdata.taurus.restlet.resource.impl;
 
-import com.dp.bigdata.taurus.core.Engine;
 import com.dp.bigdata.taurus.core.MultiInstanceFilter;
+import com.dp.bigdata.taurus.core.listener.DependPassAttemptListener;
+import com.dp.bigdata.taurus.core.listener.DependTimeoutAttemptListener;
+import com.dp.bigdata.taurus.core.listener.GenericAttemptListener;
 import com.dp.bigdata.taurus.generated.mapper.TaskAttemptMapper;
 import com.dp.bigdata.taurus.generated.module.TaskAttempt;
 import com.dp.bigdata.taurus.restlet.resource.IClearDependencyPassTask;
@@ -9,6 +11,7 @@ import com.dp.bigdata.taurus.zookeeper.execute.helper.ExecuteStatus;
 import org.restlet.resource.ServerResource;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,8 +23,9 @@ public class ClearDependencyPassTask extends ServerResource implements IClearDep
     @Autowired
     private TaskAttemptMapper taskAttemptMapper;
 
-    @Autowired
-    private Engine engine;
+    private List<DependPassAttemptListener> dependPassAttemptListeners = new ArrayList<DependPassAttemptListener>();
+
+    private List<DependTimeoutAttemptListener> dependTimeoutAttemptListeners = new ArrayList<DependTimeoutAttemptListener>();
 
     private static final int SERVICE_EXCEPTION = -1;
     private static final int TASKID_IS_NOT_FOUND = -2;
@@ -47,12 +51,17 @@ public class ClearDependencyPassTask extends ServerResource implements IClearDep
                     List<TaskAttempt> taskAttemptList = taskAttemptMapper.selectDependencyTask(taskId, status);
                     if (taskAttemptList != null) {
                         if (status == ExecuteStatus.DEPENDENCY_PASS) {
-                            List<TaskAttempt> tmpList = engine.getDependPassMap().get(taskId);
-                            if(tmpList != null){
-                                tmpList.removeAll(taskAttemptList);
+                            for (DependPassAttemptListener listener : dependPassAttemptListeners) {
+                                for (TaskAttempt taskAttempt : taskAttemptList) {
+                                    listener.removeDependPassAttempt(taskAttempt);
+                                }
                             }
                         } else {
-                            engine.getAttemptsOfStatusDependTimeout().removeAll(taskAttemptList);
+                            for (DependTimeoutAttemptListener listener : dependTimeoutAttemptListeners) {
+                                for (TaskAttempt taskAttempt : taskAttemptList) {
+                                    listener.removeDependTimeoutAttempt(taskAttempt);
+                                }
+                            }
                         }
                     }
                 }
@@ -71,4 +80,13 @@ public class ClearDependencyPassTask extends ServerResource implements IClearDep
         return result;
     }
 
+    @Override
+    public void registerAttemptListener(GenericAttemptListener genericAttemptListener) {
+        if (genericAttemptListener instanceof DependPassAttemptListener) {
+            dependPassAttemptListeners.add((DependPassAttemptListener) genericAttemptListener);
+        }
+        if (genericAttemptListener instanceof DependTimeoutAttemptListener) {
+            dependTimeoutAttemptListeners.add((DependTimeoutAttemptListener) genericAttemptListener);
+        }
+    }
 }

@@ -1,6 +1,6 @@
 package com.dp.bigdata.taurus.core;
 
-import com.dp.bigdata.taurus.core.listener.GenericAttemptListener;
+import com.dp.bigdata.taurus.core.listener.ListenerAdder;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import java.util.List;
  * @author damon.zhu
  *
  */
-public interface Filter {
+public interface Filter extends ListenerAdder {
     
     /**
      * filter the input contexts
@@ -19,5 +19,4 @@ public interface Filter {
      */
     List<AttemptContext> filter(List<AttemptContext> contexts);
 
-    void registerAttemptListener(GenericAttemptListener genericAttemptListener);
 }

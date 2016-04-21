@@ -4,9 +4,9 @@ import com.dp.bigdata.taurus.generated.module.TaskAttempt;
 
 /**
  * Author   mingdongli
- * 16/4/18  下午11:02.
+ * 16/4/18  下午08:02.
  */
 public interface InitializedAttemptListener extends GenericAttemptListener{
 
-    void addnitializedAttempt(TaskAttempt taskAttempt);
+    void addInitializedAttempt(TaskAttempt taskAttempt);
 }
