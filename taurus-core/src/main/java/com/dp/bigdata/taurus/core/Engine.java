@@ -161,7 +161,7 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
                 String user = task.getCreator();
                 String content = new StringBuilder().append(EnvUtils.getEnv()).append(": ").append(taskId).append("调度状态为DEPENDENCY_PASS的个数多于")
                         .append(MaxCapacityList.MAX_CAPACITY_SIZE).toString();
-                WeChatHelper.sendWeChat(user, content, ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
+//                WeChatHelper.sendWeChat(user, content, ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
             }
         }
         dependPassMap.put(taskId, taskAttemptList);
