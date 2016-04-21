@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * Author   mingdongli
  * 16/4/21  下午08:52.
  */
-public abstract class AbstractLionPropertyInitializer<T> implements InitializingBean, ConfigChangeListener{
+public abstract class AbstractLionPropertyInitializer<T> implements InitializingBean, ConfigChangeListener {
 
     protected final Log logger = LogFactory.getLog(getClass());
 
@@ -30,7 +30,11 @@ public abstract class AbstractLionPropertyInitializer<T> implements Initializing
             String value = lionDynamicConfig.get(getKey());
             lionValue = converter.stringConvertTo(value);
         } catch (Exception e) {
+            //lion无法获取值，或者转换失败取默认值
             lionValue = getDefaultValue();
+        }
+        if (logger.isInfoEnabled()) {
+            logger.info(getClass().getSimpleName() + " : Init [lionValue] to " + lionValue);
         }
 
         lionDynamicConfig.addConfigChangeListener(this);
