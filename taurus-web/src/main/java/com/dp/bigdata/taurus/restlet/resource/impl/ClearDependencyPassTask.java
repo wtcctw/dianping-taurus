@@ -47,20 +47,17 @@ public class ClearDependencyPassTask extends ServerResource implements IClearDep
                 }
 
                 if (status == ExecuteStatus.DEPENDENCY_PASS || status == ExecuteStatus.DEPENDENCY_TIMEOUT) {
-                    List<TaskAttempt> taskAttemptList = taskAttemptMapper.selectDependencyTask(taskId, status);
-                    if (taskAttemptList != null) {
-                        if (status == ExecuteStatus.DEPENDENCY_PASS) {
-                            ConcurrentMap<String, MaxCapacityList<TaskAttempt>> map = engine.getDependPassMap();
-                            if(map != null){
-                                MaxCapacityList<TaskAttempt> tmpTaskAttempt = map.get(taskId);
-                                if (tmpTaskAttempt != null) {
-                                    tmpTaskAttempt.removeAll(taskAttemptList);
-                                }
-                                map.put(taskId, tmpTaskAttempt);
+                    if (status == ExecuteStatus.DEPENDENCY_PASS) {
+                        ConcurrentMap<String, MaxCapacityList<TaskAttempt>> map = engine.getDependPassMap();
+                        if (map != null) {
+                            MaxCapacityList<TaskAttempt> tmpTaskAttempt = map.get(taskId);
+                            if (tmpTaskAttempt != null) {
+                                tmpTaskAttempt.clear();
                             }
-                        } else {
-                            engine.getAttemptsOfStatusDependTimeout().removeAll(taskAttemptList);
+                            map.put(taskId, tmpTaskAttempt);
                         }
+                    } else {
+                        engine.getAttemptsOfStatusDependTimeout().clear();
                     }
                 }
                 result = taskAttemptMapper.deleteDependencyPassTask(taskId, status);
