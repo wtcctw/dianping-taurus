@@ -119,13 +119,16 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
 
     private ConcurrentMap<String, MaxCapacityList<TaskAttempt>> dependPassMap = new ConcurrentHashMap<String, MaxCapacityList<TaskAttempt>>();
 
-    @PostConstruct
-    public void loadAttempt() {
 
+    @Override
+    public void afterPropertiesSet() throws Exception {
+
+        super.afterPropertiesSet();
         initCache();
         crontabTriggle.registerAttemptListener(this);
         dependencyTriggle.registerAttemptListener(this);
         filter.registerAttemptListener(this);
+
     }
 
     public void initCache() {
