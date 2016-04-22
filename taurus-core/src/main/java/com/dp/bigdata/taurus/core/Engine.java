@@ -45,6 +45,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -113,6 +114,8 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
 
     private volatile boolean refreshThreadRestFlag = false;
 
+    private Map<String, CronExpression> registeredCron = new HashMap<String, CronExpression>();
+
     private List<TaskAttempt> attemptsOfStatusInitialized = new ArrayList<TaskAttempt>();
 
     private List<TaskAttempt> attemptsOfStatusDependTimeout = new ArrayList<TaskAttempt>();
@@ -148,6 +151,21 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
                 addLastTaskAttempt(taskAttempt);
             }
         }
+
+        TaskExample example = new TaskExample();
+        example.or().andStatusEqualTo(TaskStatus.RUNNING);
+        example.or().andStatusEqualTo(TaskStatus.SUSPEND);
+        List<Task> tasks = taskMapper.selectByExample(example);
+        for (Task task : tasks) {
+            String cronExpression = task.getCrontab();
+            try {
+                CronExpression ce = new CronExpression(cronExpression);
+                registeredCron.put(task.getTaskid(), ce);
+            } catch (ParseException e) {
+                LOG.error(String.format("crontab of %s:%s is wrong", task.getName(), cronExpression));
+            }
+        }
+
     }
 
     private synchronized void addLastTaskAttempt(TaskAttempt taskAttempt) {
@@ -640,6 +658,7 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
             task = taskMapper.selectByPrimaryKey(task.getTaskid());
             registedTasks.put(task.getTaskid(), task);
             tasksMapCache.put(task.getName(), task.getTaskid());
+            addOrUpdateCronCache(task);
 
             Cat.logEvent("Task-Create", task.getName());
         } else {
@@ -661,6 +680,7 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
             registedTasks.remove(taskID);
             tasksMapCache.remove(task.getName());
             removeTaskAttempt(taskID, true);
+            registeredCron.remove(taskID);
 
             Cat.logEvent("Task-Delete", task.getName());
         }
@@ -694,6 +714,22 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
         attemptsOfStatusInitialized.removeAll(removed);
     }
 
+    @Override
+    public synchronized void addOrUpdateCronCache(Task task) {
+        String cronExpression = task.getCrontab();
+        try {
+            CronExpression ce = new CronExpression(cronExpression);
+            registeredCron.put(task.getTaskid(), ce);
+        } catch (ParseException e) {
+            LOG.error(String.format("crontab of %s:%s is wrong", task.getName(), cronExpression));
+        }
+    }
+
+    @Override
+    public CronExpression getCronExpression(String taskId) {
+        return registeredCron.get(taskId);
+    }
+
     private void loadTaskAttempt(String taskId) {
         List<TaskAttempt> tmpDependTimeout = taskAttemptMapper.selectDependencyTask(taskId, ExecuteStatus.DEPENDENCY_TIMEOUT);
         if (tmpDependTimeout != null) {
@@ -725,6 +761,7 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
             registedTasks.remove(task.getTaskid());
             Task tmp = taskMapper.selectByPrimaryKey(task.getTaskid());
             registedTasks.put(task.getTaskid(), tmp);
+            addOrUpdateCronCache(task);
 
             Cat.logEvent("Task-Update", task.getName());
         } else {

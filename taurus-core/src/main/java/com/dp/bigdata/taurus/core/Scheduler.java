@@ -168,5 +168,9 @@ public interface Scheduler {
 	  * @param attemptID
 	  */
 	 public void expireCongestionAttempt(String attemptID);
+
+	 public CronExpression getCronExpression(String taskId);
+
+	 public void addOrUpdateCronCache(Task task);
 	 
 }
