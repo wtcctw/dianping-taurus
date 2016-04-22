@@ -123,7 +123,10 @@ public class MultiInstanceFilter extends AbstractLionPropertyInitializer<List<St
                 }
                 //这里控制同时只有一个执行
                 if (ctx == null) {
-                    maps.put(context.getTaskid(), context);
+                    String taskId = context.getTaskid();
+                    if (maps.get(taskId) == null) { //按升序排列好的，只添加第一个
+                        maps.put(context.getTaskid(), context);
+                    }
                 }
             }
         }

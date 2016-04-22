@@ -609,9 +609,12 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
                 refreshThreadRestFlag = false;
 
                 try {
+                    Thread.sleep(5 * 60 * 1000);
+
                     for (Map.Entry<String, MaxCapacityList<TaskAttempt>> entry : dependPassMap.entrySet()) {
                         MaxCapacityList<TaskAttempt> value = entry.getValue();
-                        if (value.size() > MaxCapacityList.MAX_CAPACITY_SIZE / 2) {
+                        int size = value.size();
+                        if (size > MaxCapacityList.MAX_CAPACITY_SIZE / 2) {
                             String taskId = entry.getKey();
                             Task task = registedTasks.get(taskId);
                             String name;
@@ -623,13 +626,11 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
                             List<String> whitelist = filter.fetchLionValue();  //增加白名单
                             if (!whitelist.contains(name)) {
                                 String content = new StringBuilder().append(EnvUtils.getEnv()).append(": ").append(name).append("调度状态为DEPENDENCY_PASS的个数为")
-                                        .append(value.size()).append("个, 如果再不处理，拥堵个数达到").append(MaxCapacityList.MAX_CAPACITY_SIZE).append("后，新的调度实例将被丢弃").toString();
+                                        .append(size).append("个, 如果再不处理，拥堵个数达到").append(MaxCapacityList.MAX_CAPACITY_SIZE).append("后，新的调度实例将被丢弃").toString();
                                 sendAlarm(ConfigHolder.get(LionKeys.ADMIN_USER), content);
                             }
                         }
                     }
-
-                    Thread.sleep(5 * 60 * 1000);
 
                 } catch (InterruptedException e) {
                     LOG.error("RefreshThread was interrupted!", e);
