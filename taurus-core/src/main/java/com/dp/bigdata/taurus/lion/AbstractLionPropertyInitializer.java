@@ -33,9 +33,7 @@ public abstract class AbstractLionPropertyInitializer<T> implements Initializing
             //lion无法获取值，或者转换失败取默认值
             lionValue = getDefaultValue();
         }
-        if (logger.isInfoEnabled()) {
-            logger.info(getClass().getSimpleName() + " : Init [lionValue] to " + lionValue);
-        }
+        logger.info(getClass().getSimpleName() + " : Init [lionValue] to " + lionValue);
 
         lionDynamicConfig.addConfigChangeListener(this);
     }
@@ -44,14 +42,10 @@ public abstract class AbstractLionPropertyInitializer<T> implements Initializing
     public void onConfigChange(String key, String value) throws Exception {
 
         if (key != null && key.equals(getKey())) {
-            if (logger.isInfoEnabled()) {
-                logger.info("[onChange][" + getKey() + "]" + value);
-            }
+            logger.info("[onChange][" + getKey() + "]" + value);
             lionValue = converter.stringConvertTo(value.trim());
         } else {
-            if (logger.isInfoEnabled()) {
-                logger.info("not match");
-            }
+            logger.info("not match");
         }
     }
 

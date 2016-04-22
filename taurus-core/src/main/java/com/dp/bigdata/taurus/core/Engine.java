@@ -14,10 +14,13 @@ import com.dp.bigdata.taurus.core.listener.DependTimeoutAttemptListener;
 import com.dp.bigdata.taurus.core.listener.InitializedAttemptListener;
 import com.dp.bigdata.taurus.core.structure.DefaultMaxCapacityList;
 import com.dp.bigdata.taurus.core.structure.MaxCapacityList;
+import com.dp.bigdata.taurus.core.structure.StringTo;
+import com.dp.bigdata.taurus.core.structure.StringToBoolean;
 import com.dp.bigdata.taurus.generated.mapper.HostMapper;
 import com.dp.bigdata.taurus.generated.mapper.TaskAttemptMapper;
 import com.dp.bigdata.taurus.generated.mapper.TaskMapper;
 import com.dp.bigdata.taurus.generated.module.*;
+import com.dp.bigdata.taurus.lion.AbstractLionPropertyInitializer;
 import com.dp.bigdata.taurus.lion.ConfigHolder;
 import com.dp.bigdata.taurus.lion.LionKeys;
 import com.dp.bigdata.taurus.utils.EnvUtils;
@@ -55,7 +58,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author damon.zhu
  * @see Scheduler
  */
-final public class Engine implements Scheduler, InitializedAttemptListener, DependTimeoutAttemptListener, DependPassAttemptListener {
+final public class Engine extends AbstractLionPropertyInitializer<Boolean> implements Scheduler, InitializedAttemptListener, DependTimeoutAttemptListener, DependPassAttemptListener {
+
+    private static final String DEPENDENCE_PASS_DISCARD = "taurus.core.depend.discard";
 
     private static final Log LOG = LogFactory.getLog(Engine.class);
 
@@ -155,7 +160,12 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
         }
 
         if (!taskAttemptList.addOrDiscard(taskAttempt)) {
-            Cat.logEvent("DISCARD_DEPENDENCY_PASS", taskId);
+            if (lionValue) {
+                Cat.logEvent("DISCARD_DEPENDENCY_PASS", taskId);
+            }else {
+                taskAttemptList.add(taskAttempt);
+                Cat.logEvent("READD_DEPENDENCY_PASS", taskId);
+            }
         }
 
         dependPassMap.put(taskId, taskAttemptList);
@@ -482,6 +492,21 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
         }
     }
 
+    @Override
+    protected String getKey() {
+        return DEPENDENCE_PASS_DISCARD;
+    }
+
+    @Override
+    protected Boolean getDefaultValue() {
+        return true;
+    }
+
+    @Override
+    protected StringTo<Boolean> getConvert() {
+        return new StringToBoolean();
+    }
+
     class TriggleTask extends Thread {
         @Override
         public void run() {
@@ -586,10 +611,15 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
                         if (value.size() > MaxCapacityList.MAX_CAPACITY_SIZE / 2) {
                             String taskId = entry.getKey();
                             Task task = registedTasks.get(taskId);
-                            String name = task.getName();
+                            String name;
+                            if (task != null) {
+                                name = task.getName();
+                            } else {
+                                name = taskId;
+                            }
                             List<String> whitelist = filter.fetchLionValue();  //增加白名单
                             if (!whitelist.contains(name)) {
-                                String content = new StringBuilder().append(EnvUtils.getEnv()).append(": ").append(entry.getKey()).append("调度状态为DEPENDENCY_PASS的个数为")
+                                String content = new StringBuilder().append(EnvUtils.getEnv()).append(": ").append(name).append("调度状态为DEPENDENCY_PASS的个数为")
                                         .append(value.size()).append("个, 如果再不处理，拥堵个数达到").append(MaxCapacityList.MAX_CAPACITY_SIZE).append("后，新的调度实例将被丢弃").toString();
                                 sendAlarm(ConfigHolder.get(LionKeys.ADMIN_USER), content);
                             }
