@@ -165,7 +165,7 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
         if (!taskAttemptList.addOrDiscard(taskAttempt)) {
             if (lionValue) {
                 Cat.logEvent("DISCARD_DEPENDENCY_PASS", taskId);
-            }else {
+            } else {
                 taskAttemptList.add(taskAttempt);
                 Cat.logEvent("READD_DEPENDENCY_PASS", taskId);
             }
@@ -1000,7 +1000,10 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
 //		List<TaskAttempt> attempts = taskAttemptMapper.selectByExample(example);
         List<TaskAttempt> attempts = new ArrayList<TaskAttempt>();
         for (Map.Entry<String, MaxCapacityList<TaskAttempt>> entry : dependPassMap.entrySet()) {
-            attempts.addAll(entry.getValue());
+            MaxCapacityList<TaskAttempt> tmpAttempts = entry.getValue();
+            if (tmpAttempts != null && tmpAttempts.size() > 0) {
+                attempts.add(tmpAttempts.get(0));  //只取第一个, 不取全部
+            }
         }
         Collections.sort(attempts, new TaskAttemptComparator());
         for (TaskAttempt attempt : attempts) {
