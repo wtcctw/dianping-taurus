@@ -10,12 +10,15 @@ import com.dp.bigdata.taurus.core.structure.StringToListString;
 import com.dp.bigdata.taurus.lion.AbstractLionPropertyInitializer;
 import com.dp.bigdata.taurus.lion.ConfigHolder;
 import com.dp.bigdata.taurus.lion.LionKeys;
+import com.dp.bigdata.taurus.utils.ThreadUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.mail.MessagingException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 /**
  * MultiInstanceFilter
@@ -40,6 +43,8 @@ public class MultiInstanceFilter extends AbstractLionPropertyInitializer<List<St
 
     private String serverName;
 
+    private ExecutorService alertExecutor = ThreadUtils.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2, "AlertSender");
+
     @Override
     public void afterPropertiesSet() throws Exception {
         super.afterPropertiesSet();
@@ -55,8 +60,9 @@ public class MultiInstanceFilter extends AbstractLionPropertyInitializer<List<St
         HashMap<String, AttemptContext> maps = new HashMap<String, AttemptContext>();
 
         for (AttemptContext context : contexts) {
-            List<AttemptContext> runnings = scheduler.getRunningAttemptsByTaskID(context.getTaskid());
-            AttemptContext ctx = maps.get(context.getTaskid());
+            String taskId = context.getTaskid();
+            List<AttemptContext> runnings = scheduler.getRunningAttemptsByTaskID(taskId);
+            AttemptContext ctx = maps.get(taskId);
 
             if (runnings != null && runnings.size() > 0) {
                 //TODO 根据用户设置，决定是否设置拥塞的任务调度的新调度为过期状态，不执行
@@ -66,12 +72,12 @@ public class MultiInstanceFilter extends AbstractLionPropertyInitializer<List<St
                 }
                 // 拥堵了~应该告警用户任务堵住了~
                 Integer jobAlertCount = null;
-                if (jobAlert.containsKey(context.getTaskid())) {
-                    jobAlertCount = jobAlert.get(context.getTaskid());
+                if (jobAlert.containsKey(taskId)) {
+                    jobAlertCount = jobAlert.get(taskId);
                 }
 
                 if (null == jobAlertCount) {
-                    jobAlert.put(context.getTaskid(), 0);
+                    jobAlert.put(taskId, 0);
                 } else if (jobAlertCount == 0) {
                     boolean needAlert = true;
                     for (String notalert : lionValue) {
@@ -89,41 +95,32 @@ public class MultiInstanceFilter extends AbstractLionPropertyInitializer<List<St
                                 + "作业调度历史："
                                 + serverName
                                 + "/attempt?taskID="
-                                + context.getTaskid();
-                        try {
-                            String alertAdmin = ConfigHolder.get(LionKeys.CONGESTION_ADMIN_USER);
-                            WeChatHelper.sendWeChat(alertAdmin, alertontext, "Taurus-Job拥塞告警服务", ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
-                            WeChatHelper.sendWeChat(context.getCreator(), alertontext, "Taurus-Job拥塞告警服务", "12");
-                            MailHelper.sendMail(context.getCreator() + "@dianping.com", alertontext, "Taurus-Job拥塞告警服务");
-
-                        } catch (Exception e) {
-                            Cat.logError(e);
-                        }
+                                + taskId;
+                        alertExecutor.submit(new AlertTask(context, alertontext));
                     }
 
-
-                    jobAlert.put(context.getTaskid(), jobAlertCount + 1);
+                    jobAlert.put(taskId, jobAlertCount + 1);
 
                 } else {
-                    jobAlert.put(context.getTaskid(), jobAlertCount + 1);
+                    jobAlert.put(taskId, jobAlertCount + 1);
                 }
 
             } else {
 
                 Integer jobAlertCount = null;
-                if (jobAlert.containsKey(context.getTaskid())) {
-                    jobAlertCount = jobAlert.get(context.getTaskid());
+                if (jobAlert.containsKey(taskId)) {
+                    jobAlertCount = jobAlert.get(taskId);
                 }
 
                 if (jobAlertCount != null) {
                     //如果超出了静默告警数，者清除MAP中得count，就会重新告警一次，默认每20个拥堵告警一次
                     if (jobAlertCount >= ALERT_SILENCE_MAX_COUNT) {
-                        jobAlert.remove(context.getTaskid());
+                        jobAlert.remove(taskId);
                     }
                 }
                 //这里控制同时只有一个执行
                 if (ctx == null) {
-                        maps.put(context.getTaskid(), context);
+                    maps.put(taskId, context);
                 }
             }
         }
@@ -173,5 +170,34 @@ public class MultiInstanceFilter extends AbstractLionPropertyInitializer<List<St
     @Override
     public List<String> fetchLionValue() {
         return lionValue;
+    }
+
+
+    class AlertTask extends Thread {
+
+        private String content;
+
+        private AttemptContext context;
+
+        public AlertTask(AttemptContext context, String content) {
+            this.context = context;
+            this.content = content;
+        }
+
+        @Override
+        public void run() {
+            sendAlerm(context, content);
+        }
+
+        private void sendAlerm(AttemptContext context, String content) {
+            String alertAdmin = ConfigHolder.get(LionKeys.CONGESTION_ADMIN_USER);
+            WeChatHelper.sendWeChat(alertAdmin, content, "Taurus-Job拥塞告警服务", ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
+            WeChatHelper.sendWeChat(context.getCreator(), content, "Taurus-Job拥塞告警服务", "12");
+            try {
+                MailHelper.sendMail(context.getCreator() + "@dianping.com", content, "Taurus-Job拥塞告警服务");
+            } catch (MessagingException e) {
+                Cat.logError(e);
+            }
+        }
     }
 }

@@ -971,9 +971,7 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
             return contexts;
         }
 
-        for (AttemptContext context : runningAttempts.get(taskID).values()) {
-            contexts.add(context);
-        }
+        contexts.addAll(maps.values());
 
         return Collections.unmodifiableList(contexts);
     }
