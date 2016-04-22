@@ -14,7 +14,7 @@ import java.util.List;
  * Author   mingdongli
  * 16/4/21  下午08:15.
  */
-public class MaximumConcurrentTaskFilter extends AbstractLionPropertyInitializer<Integer> implements Filter {
+public class MaximumConcurrentTaskFilter extends AbstractLionPropertyInitializer<Integer> implements Filter<Integer> {
 
     private static final String MAX_TASK_NUM = "taurus.engine.maxtasknum";
 
@@ -93,4 +93,8 @@ public class MaximumConcurrentTaskFilter extends AbstractLionPropertyInitializer
         return new StringToInteger();
     }
 
+    @Override
+    public Integer fetchLionValue() {
+        return lionValue;
+    }
 }

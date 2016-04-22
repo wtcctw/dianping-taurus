@@ -22,7 +22,7 @@ import java.util.List;
  *
  * @author damon.zhu
  */
-public class MultiInstanceFilter extends AbstractLionPropertyInitializer<List<String>> implements Filter {
+public class MultiInstanceFilter extends AbstractLionPropertyInitializer<List<String>> implements Filter<List<String>> {
 
     private static final String NOT_ALERT = "taurus.web.taskblock.notalert";
 
@@ -168,5 +168,10 @@ public class MultiInstanceFilter extends AbstractLionPropertyInitializer<List<St
     @Override
     protected StringTo<List<String>> getConvert() {
         return new StringToListString();
+    }
+
+    @Override
+    public List<String> fetchLionValue() {
+        return lionValue;
     }
 }

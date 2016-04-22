@@ -79,7 +79,7 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
 
     @Autowired
     @Qualifier("filter.isAllowMutilInstance")
-    private Filter filter;
+    private Filter<List<String>> filter;
 
     @Autowired
     private TaskAssignPolicy assignPolicy;
@@ -581,12 +581,18 @@ final public class Engine implements Scheduler, InitializedAttemptListener, Depe
                 refreshThreadRestFlag = false;
 
                 try {
-                    for(Map.Entry<String, MaxCapacityList<TaskAttempt>> entry :dependPassMap.entrySet()){
+                    for (Map.Entry<String, MaxCapacityList<TaskAttempt>> entry : dependPassMap.entrySet()) {
                         MaxCapacityList<TaskAttempt> value = entry.getValue();
-                        if(value.size() > MaxCapacityList.MAX_CAPACITY_SIZE / 2){
-                            String content = new StringBuilder().append(EnvUtils.getEnv()).append(": ").append(entry.getKey()).append("调度状态为DEPENDENCY_PASS的个数为")
-                                    .append(value.size()).append("个, 如果再不处理，拥堵个数达到").append(MaxCapacityList.MAX_CAPACITY_SIZE).append("后，新的调度实例将被丢弃").toString();
-                            sendAlarm(ConfigHolder.get(LionKeys.ADMIN_USER), content);
+                        if (value.size() > MaxCapacityList.MAX_CAPACITY_SIZE / 2) {
+                            String taskId = entry.getKey();
+                            Task task = registedTasks.get(taskId);
+                            String name = task.getName();
+                            List<String> whitelist = filter.fetchLionValue();  //增加白名单
+                            if (!whitelist.contains(name)) {
+                                String content = new StringBuilder().append(EnvUtils.getEnv()).append(": ").append(entry.getKey()).append("调度状态为DEPENDENCY_PASS的个数为")
+                                        .append(value.size()).append("个, 如果再不处理，拥堵个数达到").append(MaxCapacityList.MAX_CAPACITY_SIZE).append("后，新的调度实例将被丢弃").toString();
+                                sendAlarm(ConfigHolder.get(LionKeys.ADMIN_USER), content);
+                            }
                         }
                     }
 
