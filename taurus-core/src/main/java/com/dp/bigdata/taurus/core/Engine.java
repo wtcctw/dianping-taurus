@@ -9,20 +9,14 @@ import com.dianping.lion.client.LionException;
 import com.dp.bigdata.taurus.alert.MailHelper;
 import com.dp.bigdata.taurus.alert.OpsAlarmHelper;
 import com.dp.bigdata.taurus.alert.WeChatHelper;
-import com.dp.bigdata.taurus.core.listener.DependPassAttemptListener;
-import com.dp.bigdata.taurus.core.listener.DependTimeoutAttemptListener;
-import com.dp.bigdata.taurus.core.listener.InitializedAttemptListener;
 import com.dp.bigdata.taurus.core.structure.MaxCapacityList;
-import com.dp.bigdata.taurus.core.structure.StringTo;
-import com.dp.bigdata.taurus.core.structure.StringToBoolean;
 import com.dp.bigdata.taurus.generated.mapper.HostMapper;
-import com.dp.bigdata.taurus.generated.mapper.TaskAttemptMapper;
-import com.dp.bigdata.taurus.generated.mapper.TaskMapper;
-import com.dp.bigdata.taurus.generated.module.*;
-import com.dp.bigdata.taurus.lion.AbstractLionPropertyInitializer;
+import com.dp.bigdata.taurus.generated.module.Host;
+import com.dp.bigdata.taurus.generated.module.Task;
+import com.dp.bigdata.taurus.generated.module.TaskAttempt;
+import com.dp.bigdata.taurus.generated.module.TaskAttemptExample;
 import com.dp.bigdata.taurus.lion.ConfigHolder;
 import com.dp.bigdata.taurus.lion.LionKeys;
-import com.dp.bigdata.taurus.utils.EnvUtils;
 import com.dp.bigdata.taurus.utils.SleepUtils;
 import com.dp.bigdata.taurus.utils.ThreadUtils;
 import com.dp.bigdata.taurus.zookeeper.execute.helper.ExecuteException;
@@ -32,27 +26,15 @@ import com.dp.bigdata.taurus.zookeeper.heartbeat.helper.AgentHandler;
 import com.dp.bigdata.taurus.zookeeper.heartbeat.helper.AgentMonitor;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.dao.DataAccessException;
 
-import javax.mail.MessagingException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.ParseException;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 
 /**
  * Engine is the default implementation of the <code>Scheduler</code>.
@@ -60,21 +42,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author damon.zhu
  * @see Scheduler
  */
-final public class Engine extends AbstractLionPropertyInitializer<Boolean> implements Scheduler, InitializedAttemptListener, DependTimeoutAttemptListener, DependPassAttemptListener, ApplicationContextAware {
-
-    private static final String DEPENDENCE_PASS_DISCARD = "taurus.core.depend.discard";
-
-    private static final Log LOG = LogFactory.getLog(Engine.class);
-
-    private Map<String, Task> registedTasks; // Map<taskID, task>
-
-    private Map<String, String> tasksMapCache; // Map<name, taskID>
-
-    private Map<String, HashMap<String, AttemptContext>> runningAttempts; // Map<taskID,HashMap<attemptID,AttemptContext>>
-
-    private Runnable progressMonitor;
-
-    private ExecutorService attemptExecutor = ThreadUtils.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2, "AttemptExector");
+final public class Engine extends ListenableCachedScheduler implements Scheduler {
 
     @Autowired
     @Qualifier("triggle.crontab")
@@ -92,12 +60,6 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
     private TaskAssignPolicy assignPolicy;
 
     @Autowired
-    private TaskAttemptMapper taskAttemptMapper;
-
-    @Autowired
-    private TaskMapper taskMapper;
-
-    @Autowired
     private IDFactory idFactory;
 
     @Autowired
@@ -109,229 +71,28 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
     @Autowired
     private AgentMonitor agentMonitor;
 
-    private ApplicationContext applicationContext;
+    private Runnable progressMonitor;
 
-    private final AtomicBoolean isInterrupt = new AtomicBoolean(false);
-
-    private volatile boolean triggleThreadRestFlag = false;
-
-    private volatile boolean refreshThreadRestFlag = false;
-
-    private Map<String, CronExpression> registeredCron = new HashMap<String, CronExpression>();
-
-    private List<TaskAttempt> attemptsOfStatusInitialized = new ArrayList<TaskAttempt>();
-
-    private List<TaskAttempt> attemptsOfStatusDependTimeout = new ArrayList<TaskAttempt>();
-
-    private ConcurrentMap<String, MaxCapacityList<TaskAttempt>> dependPassMap = new ConcurrentHashMap<String, MaxCapacityList<TaskAttempt>>();
-
+    private ExecutorService attemptExecutor = ThreadUtils.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2, "AttemptExector");
 
     @Override
     public void afterPropertiesSet() throws Exception {
 
         super.afterPropertiesSet();
-        initCache();
         crontabTriggle.registerAttemptListener(this);
         dependencyTriggle.registerAttemptListener(this);
         filter.registerAttemptListener(this);
 
     }
 
-    public void initCache() {
-
-        List<TaskAttempt> tmpInitialized = taskAttemptMapper.getAttemptByStatus(ExecuteStatus.INITIALIZED);
-        List<TaskAttempt> tmpDependTimeout = taskAttemptMapper.getAttemptByStatus(ExecuteStatus.DEPENDENCY_TIMEOUT);
-        List<TaskAttempt> tmpDependPass = taskAttemptMapper.getAttemptByStatus(ExecuteStatus.DEPENDENCY_PASS);
-
-        if (tmpInitialized != null) {
-            attemptsOfStatusInitialized.addAll(tmpInitialized);
-        }
-        if (tmpDependTimeout != null) {
-            attemptsOfStatusDependTimeout.addAll(tmpDependTimeout);
-        }
-        if (tmpDependPass != null) {
-            for (TaskAttempt taskAttempt : tmpDependPass) {
-                addLastTaskAttempt(taskAttempt);
-            }
-        }
-
-        TaskExample example = new TaskExample();
-        example.or().andStatusEqualTo(TaskStatus.RUNNING);
-        example.or().andStatusEqualTo(TaskStatus.SUSPEND);
-        List<Task> tasks = taskMapper.selectByExample(example);
-        for (Task task : tasks) {
-            String cronExpression = task.getCrontab();
-            try {
-                CronExpression ce = new CronExpression(cronExpression);
-                registeredCron.put(task.getTaskid(), ce);
-            } catch (ParseException e) {
-                LOG.error(String.format("crontab of %s:%s is wrong", task.getName(), cronExpression));
-            }
-        }
-
-    }
-
-    private synchronized void addLastTaskAttempt(TaskAttempt taskAttempt) {
-
-        String taskId = taskAttempt.getTaskid();
-        if (StringUtils.isBlank(taskId)) {
-            return;
-        }
-
-        MaxCapacityList<TaskAttempt> taskAttemptList = dependPassMap.get(taskId);
-        if (taskAttemptList == null) {
-            taskAttemptList = applicationContext.getBean(MaxCapacityList.class);
-        }
-
-        if (!taskAttemptList.addOrDiscard(taskAttempt)) {
-            if (lionValue) {
-                Cat.logEvent("DISCARD_DEPENDENCY_PASS", taskId);
-            } else {
-                taskAttemptList.add(taskAttempt);
-                Cat.logEvent("READD_DEPENDENCY_PASS", taskId);
-            }
-        }
-
-        dependPassMap.put(taskId, taskAttemptList);
-    }
-
-    private void sendAlarm(String user, String content) {
-
-        WeChatHelper.sendWeChat(user, content, ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
-    }
-
-    private void clearInitialized() {
-        attemptsOfStatusInitialized.clear();
-    }
-
-    public void clearCache() {
-        attemptsOfStatusInitialized.clear();
-        attemptsOfStatusDependTimeout.clear();
-        dependPassMap.clear();
-    }
-
-    public void isInterrupt(boolean interrupt) {
-        boolean current = isInterrupt.get();
-        isInterrupt.compareAndSet(current, interrupt);
-        ((AttemptStatusMonitor) progressMonitor).isInterrupt(interrupt);
-        agentMonitor.interruptMonitor(interrupt);
-    }
-
-    public boolean isTriggleThreadRestFlag() {
-        return triggleThreadRestFlag;
-    }
-
-    public boolean isRefreshThreadRestFlag() {
-        return refreshThreadRestFlag;
-    }
-
-    /**
-     * Maximum concurrent running attempt number
-     */
-    private int maxConcurrency = 50;
-
     public Engine() {
-        registedTasks = new ConcurrentHashMap<String, Task>();
-        tasksMapCache = new ConcurrentHashMap<String, String>();
-        runningAttempts = new ConcurrentHashMap<String, HashMap<String, AttemptContext>>();
-    }
-
-    /**
-     * load data from the database;
-     */
-    public synchronized void load() {
-
-        Map<String, Task> tmp_registedTasks = new ConcurrentHashMap<String, Task>();
-        Map<String, String> tmp_tasksMapCache = new ConcurrentHashMap<String, String>();
-        Map<String, HashMap<String, AttemptContext>> tmp_runningAttempts = new ConcurrentHashMap<String, HashMap<String, AttemptContext>>();
-        try {
-            // load all tasks
-            TaskExample example = new TaskExample();
-            example.or().andStatusEqualTo(TaskStatus.RUNNING);
-            example.or().andStatusEqualTo(TaskStatus.SUSPEND);
-            List<Task> tasks = taskMapper.selectByExample(example);
-            for (Task task : tasks) {
-                tmp_registedTasks.put(task.getTaskid(), task);
-                tmp_tasksMapCache.put(task.getName(), task.getTaskid());
-            }
-
-            // load running attempts
-            TaskAttemptExample example1 = new TaskAttemptExample();
-            example1.or().andStatusEqualTo(AttemptStatus.RUNNING);
-            example1.or().andStatusEqualTo(AttemptStatus.TIMEOUT);
-            List<TaskAttempt> attempts = taskAttemptMapper.selectByExample(example1);
-            for (TaskAttempt attempt : attempts) {
-                Task task = tmp_registedTasks.get(attempt.getTaskid());
-
-                if (task != null) {
-                    AttemptContext context = new AttemptContext(attempt, task);
-                    HashMap<String, AttemptContext> contexts = new HashMap<String, AttemptContext>();
-                    contexts.put(context.getAttemptid(), context);
-                    tmp_runningAttempts.put(context.getTaskid(), contexts);
-                }
-            }
-
-            // switch
-            registedTasks = tmp_registedTasks;
-            tasksMapCache = tmp_tasksMapCache;
-            runningAttempts = tmp_runningAttempts;
-        } catch (DataAccessException e) {
-            Cat.logEvent("DataAccessException", e.getMessage());
-            String dataBaseUrl = "";
-            OpsAlarmHelper oaHelper = new OpsAlarmHelper();
-
-            try {
-                dataBaseUrl = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.jdbc.url");
-
-            } catch (LionException le) {
-                dataBaseUrl = "jdbc:mysql://10.1.101.216:3306/Taurus?characterEncoding=utf-8";
-            }
-
-            String exceptContext = "您好，taurus的数据库连接发生异常 请及时查看"
-                    + "数据库连接串："
-                    + dataBaseUrl;
-            try {
-                String admin = ConfigHolder.get(LionKeys.ADMIN_USER);
-
-                if (StringUtils.isNotBlank(admin)) {
-                    MailHelper.sendMail(admin + "@dianping.com", exceptContext, "Taurus数据库连接异常告警服务");
-                    WeChatHelper.sendWeChat(admin, exceptContext, "Taurus数据库连接异常告警服务", ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
-                }
-
-                String reportToOps = null;
-                try {
-                    reportToOps = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.agent.down.ops.report.alarm.post");
-                } catch (LionException le) {
-                    reportToOps = "http://pulse.dp/report/alarm/post";
-                    le.printStackTrace();
-                }
-
-                oaHelper.buildTypeObject("Taurus")
-                        .buildTypeItem("Service")
-                        .buildTypeAttribute("Status")
-                        .buildSource("taurus")
-                        .buildDomain(dataBaseUrl.split(":")[2].split("/")[2])
-                        .buildTitle("Taurus数据库连接异常")
-                        .buildContent(exceptContext)
-                        .buildUrl(dataBaseUrl)
-                        .buildReceiver("dpop@dianping.com")
-                        .sendAlarmPost(reportToOps);
-
-            } catch (LionException le) {
-                Cat.logEvent("LionException", le.getMessage());
-            } catch (MessagingException me) {
-                Cat.logEvent("MessagingException", me.getMessage());
-            }
-
-        }
-
+        super();
     }
 
     /**
      * start the engine;
      */
     public void start() {
-
 
         if (progressMonitor != null) {// spring注入了AttemptStatusMonitor
             //System.out.println("progressMonitor is: " + progressMonitor.toString());
@@ -341,11 +102,6 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
             monitorThread.start();
 
         }
-
-		/*Thread schedulerMonitor = new SchedulerMonitor();
-        schedulerMonitor.setDaemon(true);
-		schedulerMonitor.setName("Thread-" + SchedulerMonitor.class.getName());
-		schedulerMonitor.start();*/
 
         Thread refreshThread = new RefreshThread();
         refreshThread.setDaemon(true);
@@ -481,62 +237,12 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
 
     }
 
-    @Override
-    public synchronized void addInitializedAttempt(TaskAttempt taskAttempt) {
-        attemptsOfStatusInitialized.add(taskAttempt);
-    }
-
-    @Override
-    public synchronized void addDependTimeoutAttempt(TaskAttempt taskAttempt) {
-        removeDependPassAttempt(taskAttempt);
-        attemptsOfStatusInitialized.remove(taskAttempt);
-        attemptsOfStatusDependTimeout.add(taskAttempt);
-    }
-
-    @Override
-    public synchronized void addDependPassAttempt(TaskAttempt taskAttempt) {
-        attemptsOfStatusInitialized.remove(taskAttempt);
-        attemptsOfStatusDependTimeout.remove(taskAttempt);
-        addLastTaskAttempt(taskAttempt);
-    }
-
-    @Override
-    public synchronized void removeDependPassAttempt(TaskAttempt taskAttempt) {
-        String taskId = taskAttempt.getTaskid();
-        if (StringUtils.isNotBlank(taskId)) {
-            MaxCapacityList<TaskAttempt> tmpTask = dependPassMap.get(taskId);
-            if (tmpTask != null) {
-                tmpTask.remove(taskAttempt);
-            }
-        }
-    }
-
-    @Override
-    protected String getKey() {
-        return DEPENDENCE_PASS_DISCARD;
-    }
-
-    @Override
-    protected Boolean getDefaultValue() {
-        return true;
-    }
-
-    @Override
-    protected StringTo<Boolean> getConvert() {
-        return new StringToBoolean();
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
-
     class TriggleTask extends Thread {
         @Override
         public void run() {
             while (true) {
 
-                while (isInterrupt.get()) {
+                while (interrupted.get()) {
                     triggleThreadRestFlag = true;
                     SleepUtils.sleep(5000);
                 }
@@ -559,7 +265,7 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
                     t.setStatus(Message.SUCCESS);
                 } catch (Throwable e) {
                     Cat.logError(e);
-                    LOG.error(e);
+                    logger.error(e);
                 } finally {
                     t.complete();
                 }
@@ -568,9 +274,26 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
                     clearInitialized();
                     Thread.sleep(SCHDUELE_INTERVAL);
                 } catch (InterruptedException e) {
-                    LOG.error("Interrupted exception", e);
+                    logger.error("Interrupted exception", e);
                 }
 
+            }
+        }
+    }
+
+    class AttemptTask extends Thread {
+        AttemptContext context;
+
+        public AttemptTask(AttemptContext context) {
+            this.context = context;
+        }
+
+        @Override
+        public void run() {
+            try {
+                executeAttempt(context);
+            } catch (ScheduleException se) {
+                Cat.logError("fail to schedule the attempt : " + context.getAttemptid(), se);
             }
         }
     }
@@ -583,7 +306,7 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
 
             while (true) {
 
-                while (isInterrupt.get()) {
+                while (interrupted.get()) {
                     refreshThreadRestFlag = true;
                     SleepUtils.sleep(5000);
                 }
@@ -595,57 +318,7 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
                     Thread.sleep(20 * 1000);
 
                 } catch (InterruptedException e) {
-                    LOG.error("RefreshThread was interrupted!", e);
-                }
-
-            }
-
-
-        }
-
-    }
-
-    class DependPassThread extends Thread {
-
-        @Override
-        public void run() {
-
-
-            while (true) {
-
-                while (isInterrupt.get()) {
-                    refreshThreadRestFlag = true;
-                    SleepUtils.sleep(5000);
-                }
-                refreshThreadRestFlag = false;
-
-                try {
-                    Thread.sleep(5 * 60 * 1000);
-
-                    for (Map.Entry<String, MaxCapacityList<TaskAttempt>> entry : dependPassMap.entrySet()) {
-                        MaxCapacityList<TaskAttempt> value = entry.getValue();
-                        int size = value.size();
-                        int capacity = value.getMaxCapacity();
-                        if (size > capacity / 2) {
-                            String taskId = entry.getKey();
-                            Task task = registedTasks.get(taskId);
-                            String name;
-                            if (task != null) {
-                                name = task.getName();
-                            } else {
-                                name = taskId;
-                            }
-                            List<String> whitelist = filter.fetchLionValue();  //增加白名单
-                            if (!whitelist.contains(name)) {
-                                String content = new StringBuilder().append(EnvUtils.getEnv()).append(": ").append(name).append("调度状态为DEPENDENCY_PASS的个数为")
-                                        .append(size).append("个, 如果再不处理，拥堵个数达到").append(capacity).append("后，新的调度实例将被丢弃").toString();
-                                sendAlarm(ConfigHolder.get(LionKeys.ADMIN_USER), content);
-                            }
-                        }
-                    }
-
-                } catch (InterruptedException e) {
-                    LOG.error("RefreshThread was interrupted!", e);
+                    logger.error("RefreshThread was interrupted!", e);
                 }
 
             }
@@ -687,67 +360,6 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
             registeredCron.remove(taskID);
 
             Cat.logEvent("Task-Delete", task.getName());
-        }
-    }
-
-    private void removeTaskAttempt(String taskId, boolean delete) {
-
-        List<TaskAttempt> removed = new ArrayList<TaskAttempt>();
-
-        if (delete) {
-            MaxCapacityList<TaskAttempt> origin = dependPassMap.get(taskId);
-            if (origin != null) {
-                origin.clear();
-            }
-
-
-            for (TaskAttempt taskAttempt : attemptsOfStatusDependTimeout) {
-                if (taskAttempt.getTaskid().equals(taskId)) {
-                    removed.add(taskAttempt);
-                }
-            }
-            attemptsOfStatusDependTimeout.removeAll(removed);
-            removed.clear();
-        }
-
-        for (TaskAttempt taskAttempt : attemptsOfStatusInitialized) {
-            if (taskAttempt.getTaskid().equals(taskId)) {
-                removed.add(taskAttempt);
-            }
-        }
-        attemptsOfStatusInitialized.removeAll(removed);
-    }
-
-    @Override
-    public synchronized void addOrUpdateCronCache(Task task) {
-        String cronExpression = task.getCrontab();
-        try {
-            CronExpression ce = new CronExpression(cronExpression);
-            registeredCron.put(task.getTaskid(), ce);
-        } catch (ParseException e) {
-            LOG.error(String.format("crontab of %s:%s is wrong", task.getName(), cronExpression));
-        }
-    }
-
-    @Override
-    public CronExpression getCronExpression(String taskId) {
-        return registeredCron.get(taskId);
-    }
-
-    private void loadTaskAttempt(String taskId) {
-        List<TaskAttempt> tmpDependTimeout = taskAttemptMapper.selectDependencyTask(taskId, ExecuteStatus.DEPENDENCY_TIMEOUT);
-        if (tmpDependTimeout != null) {
-            attemptsOfStatusDependTimeout.addAll(tmpDependTimeout);
-        }
-
-        List<TaskAttempt> tmpDependPass = taskAttemptMapper.selectDependencyTask(taskId, ExecuteStatus.DEPENDENCY_PASS);
-        if (tmpDependPass != null && !tmpDependPass.isEmpty()) {
-            MaxCapacityList<TaskAttempt> origin = dependPassMap.get(taskId);
-            if (origin == null) {
-                origin = applicationContext.getBean(MaxCapacityList.class);
-            }
-            origin.addAll(tmpDependPass);
-            dependPassMap.put(taskId, origin);
         }
     }
 
@@ -838,7 +450,7 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
 
         try {
             zookeeper.execute(context.getContext());
-            LOG.info("Attempt " + attempt.getAttemptid() + " is running now...");
+            logger.info("Attempt " + attempt.getAttemptid() + " is running now...");
             Cat.logEvent("Attempt.Scheduled", context.getName(), Message.SUCCESS, context.getAttemptid());
         } catch (Exception ee) {
             Cat.logError(ee);
@@ -860,18 +472,6 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
     }
 
     @Override
-    public boolean isRuningAttempt(String attemptID) {
-        HashMap<String, AttemptContext> contexts = runningAttempts.get(AttemptID.getTaskID(attemptID));
-        AttemptContext context = contexts.get(attemptID);
-        if (context == null) {
-            return false;
-        } else {
-            return true;
-        }
-
-    }
-
-    @Override
     public synchronized void killAttempt(String attemptID) throws ScheduleException {
         HashMap<String, AttemptContext> contexts = runningAttempts.get(AttemptID.getTaskID(attemptID));
         AttemptContext context = contexts.get(attemptID);
@@ -881,7 +481,7 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
         try {
             zookeeper.kill(context.getContext());
         } catch (Exception ee) {
-            LOG.error("Fail to kill attemptID :  " + attemptID + " on host : " + context.getExechost());
+            logger.error("Fail to kill attemptID :  " + attemptID + " on host : " + context.getExechost());
         }
 
         context.getAttempt().setStatus(AttemptStatus.AUTO_KILLED);
@@ -903,7 +503,7 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
         try {
             zookeeper.kill(context.getContext());
         } catch (Exception ee) {
-            LOG.error("Fail to kill attemptID :  " + attemptID + " on host : " + context.getExechost());
+            logger.error("Fail to kill attemptID :  " + attemptID + " on host : " + context.getExechost());
         }
 
         context.getAttempt().setStatus(AttemptStatus.MAN_KILLED);
@@ -966,7 +566,7 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
             } else {
                 Cat.logEvent("Attempt-Expired-Retry", context.getName(), Message.SUCCESS, context.getAttemptid());
 
-                LOG.info("Attempt " + attempt.getAttemptid() + " fail, begin to retry the attempt...");
+                logger.info("Attempt " + attempt.getAttemptid() + " fail, begin to retry the attempt...");
                 String instanceID = attempt.getInstanceid();
                 TaskAttempt retry = new TaskAttempt();
                 String id = idFactory.newAttemptID(instanceID);
@@ -990,31 +590,6 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
         unregistAttemptContext(context);
 
         Cat.logEvent("Attempt-Unknown", context.getName(), Message.SUCCESS, context.getAttemptid());
-    }
-
-    @Override
-    public List<AttemptContext> getAllRunningAttempt() {
-        List<AttemptContext> contexts = new ArrayList<AttemptContext>();
-        for (HashMap<String, AttemptContext> maps : runningAttempts.values()) {
-            for (AttemptContext context : maps.values()) {
-                contexts.add(context);
-            }
-        }
-        return Collections.unmodifiableList(contexts);
-    }
-
-    @Override
-    public List<AttemptContext> getRunningAttemptsByTaskID(String taskID) {
-        List<AttemptContext> contexts = new ArrayList<AttemptContext>();
-        HashMap<String, AttemptContext> maps = runningAttempts.get(taskID);
-
-        if (maps == null) {
-            return contexts;
-        }
-
-        contexts.addAll(maps.values());
-
-        return Collections.unmodifiableList(contexts);
     }
 
     @Override
@@ -1074,42 +649,8 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
         }
     }
 
-    @Override
-    public Map<String, Task> getAllRegistedTask() {
-        return Collections.unmodifiableMap(registedTasks);
-    }
-
-    @Override
-    public synchronized Task getTaskByName(String name) throws ScheduleException {
-        if (tasksMapCache.containsKey(name)) {
-            String taskID = tasksMapCache.get(name);
-            Task task = registedTasks.get(taskID);
-            if (task == null) {
-                throw new ScheduleException("Cannot found tasks for the given name.");
-            } else {
-                return task;
-            }
-        } else {
-            throw new ScheduleException("Cannot found tasks for the given name.");
-        }
-    }
-
-    public Runnable getProgressMonitor() {
-        return progressMonitor;
-    }
-
     public void setProgressMonitor(Runnable progressMonitor) {
         this.progressMonitor = progressMonitor;
-    }
-
-    @Override
-    public int getMaxConcurrency() {
-        return maxConcurrency;
-    }
-
-    @Override
-    public void setMaxConcurrency(int maxConcurrency) {
-        this.maxConcurrency = maxConcurrency;
     }
 
     @Override
@@ -1140,6 +681,7 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
         attempt.setStatus(AttemptStatus.EXPIRED);
         attempt.setEndtime(new Date());
         taskAttemptMapper.updateByPrimaryKeySelective(attempt);
+
         removeDependPassAttempt(attempt);
 
         Cat.logEvent("Congestion-Expire-Attempt", attempt.getTaskid(), Message.SUCCESS, attempt.getAttemptid());
@@ -1163,34 +705,22 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
         }
     }
 
-    class AttemptTask extends Thread {
-        AttemptContext context;
-
-        public AttemptTask(AttemptContext context) {
-            this.context = context;
-        }
-
-        @Override
-        public void run() {
-            try {
-                executeAttempt(context);
-            } catch (ScheduleException se) {
-                Cat.logError("fail to schedule the attempt : " + context.getAttemptid(), se);
-            }
-        }
-    }
-
     /**
      * graceful shutdown the server;
      */
     public void stop() {
     }
 
-    public List<TaskAttempt> getAttemptsOfStatusDependTimeout() {
-        return attemptsOfStatusDependTimeout;
+    public void isInterrupt(boolean interrupt) {
+        boolean current = interrupted.get();
+        interrupted.compareAndSet(current, interrupt);
+        ((AttemptStatusMonitor) progressMonitor).isInterrupt(interrupt);
+        agentMonitor.interruptMonitor(interrupt);
     }
 
-    public ConcurrentMap<String, MaxCapacityList<TaskAttempt>> getDependPassMap() {
-        return dependPassMap;
+    @Override
+    protected Filter<List<String>> getFilter() {
+        return filter;
     }
+
 }
