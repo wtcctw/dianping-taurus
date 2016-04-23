@@ -74,6 +74,7 @@ public abstract class CachedScheduler extends ConfigedScheduler implements Sched
         initCache();
     }
 
+    @Override
     public void initCache() {
 
         List<TaskAttempt> tmpInitialized = taskAttemptMapper.getAttemptByStatus(ExecuteStatus.INITIALIZED);
@@ -108,11 +109,18 @@ public abstract class CachedScheduler extends ConfigedScheduler implements Sched
 
     }
 
+    @Override
+    public void clearCache() {
+        attemptsOfStatusInitialized.clear();
+        attemptsOfStatusDependTimeout.clear();
+        dependPassMap.clear();
+        registeredCron.clear();
+    }
+
     /**
      * load data from the database;
      */
     public synchronized void load() {
-
 
         Map<String, Task> tmp_registedTasks = new ConcurrentHashMap<String, Task>();
         Map<String, String> tmp_tasksMapCache = new ConcurrentHashMap<String, String>();
@@ -363,18 +371,10 @@ public abstract class CachedScheduler extends ConfigedScheduler implements Sched
         attemptsOfStatusInitialized.clear();
     }
 
-    public void clearCache() {
-        attemptsOfStatusInitialized.clear();
-        attemptsOfStatusDependTimeout.clear();
-        dependPassMap.clear();
-        registeredCron.clear();
-    }
-
     class DependPassThread extends Thread {
 
         @Override
         public void run() {
-
 
             while (true) {
 
@@ -415,11 +415,9 @@ public abstract class CachedScheduler extends ConfigedScheduler implements Sched
 
             }
 
-
         }
 
         private void sendAlarm(String user, String content) {
-
             WeChatHelper.sendWeChat(user, content, ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
         }
 

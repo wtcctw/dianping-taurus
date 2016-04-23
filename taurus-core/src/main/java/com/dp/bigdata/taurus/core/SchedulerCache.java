@@ -12,6 +12,10 @@ import java.util.Map;
  */
 public interface SchedulerCache extends SchedulerConfig{
 
+    void clearCache();
+
+    void initCache();
+
     List<AttemptContext> getAllRunningAttempt();
 
     List<AttemptContext> getRunningAttemptsByTaskID(String taskID);

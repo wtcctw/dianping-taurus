@@ -10,7 +10,7 @@ import com.dp.bigdata.taurus.generated.module.TaskAttempt;
  * @author damon.zhu
  * 
  */
-public interface Scheduler extends SchedulerCache{
+public interface Scheduler extends ListenableSchedulerCache{
 
 	/**
 	 * Submit a new task into Engine, waiting to be scheduled.
