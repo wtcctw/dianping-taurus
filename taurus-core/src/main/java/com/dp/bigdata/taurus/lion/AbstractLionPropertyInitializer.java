@@ -14,7 +14,7 @@ public abstract class AbstractLionPropertyInitializer<T> implements Initializing
 
     protected final Log logger = LogFactory.getLog(getClass());
 
-    public T lionValue;
+    protected T lionValue;
 
     protected StringTo<T> converter;
 
@@ -47,10 +47,6 @@ public abstract class AbstractLionPropertyInitializer<T> implements Initializing
         } else {
             logger.info("not match");
         }
-    }
-
-    public T getLionValue() {
-        return lionValue;
     }
 
     protected abstract String getKey();

@@ -17,7 +17,7 @@ public class DefaultDynamicMaxCapacity extends AbstractLionPropertyInitializer<I
 
     @Override
     protected Integer getDefaultValue() {
-        return 12 * 60 * 6;  //对于每隔5s的调度，允许6个小时，到达一半会告警。
+        return 12 * 60 * 24;  //对于每隔5s的调度，允许24个小时，到达一半会告警。
     }
 
     @Override
