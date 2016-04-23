@@ -95,7 +95,6 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
     public void start() {
 
         if (progressMonitor != null) {// spring注入了AttemptStatusMonitor
-            //System.out.println("progressMonitor is: " + progressMonitor.toString());
             Thread monitorThread = new Thread(progressMonitor);
             monitorThread.setName("Thread-" + AttemptStatusMonitor.class.getName());
             monitorThread.setDaemon(true);
@@ -137,8 +136,6 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
                             + "] 心跳异常，监控连接如下：" + webDomain + "/hosts?hostName="
                             + ip
                             + "，谢谢~";
-
-                    //String agentPort = "";
 
 
                     String url1 = "http://" + ip + ":8080/agentrest.do?action=isnew";

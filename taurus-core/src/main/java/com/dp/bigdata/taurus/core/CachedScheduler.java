@@ -38,11 +38,11 @@ import java.util.concurrent.ConcurrentMap;
  */
 public abstract class CachedScheduler extends ConfigedScheduler implements SchedulerCache, ApplicationContextAware {
 
-    protected Map<String, Task> registedTasks; // Map<taskID, task>
+    protected Map<String, Task> registedTasks = new ConcurrentHashMap<String, Task>(); // Map<taskID, task>
 
-    protected Map<String, String> tasksMapCache; // Map<name, taskID>
+    protected Map<String, String> tasksMapCache = new ConcurrentHashMap<String, String>(); // Map<name, taskID>
 
-    protected Map<String, HashMap<String, AttemptContext>> runningAttempts; // Map<taskID,HashMap<attemptID,AttemptContext>>
+    protected Map<String, HashMap<String, AttemptContext>> runningAttempts = new ConcurrentHashMap<String, HashMap<String, AttemptContext>>(); // Map<taskID,HashMap<attemptID,AttemptContext>>
 
     //s级调度增加的4个缓存
     protected Map<String, CronExpression> registeredCron = new HashMap<String, CronExpression>();
@@ -62,10 +62,7 @@ public abstract class CachedScheduler extends ConfigedScheduler implements Sched
     private ApplicationContext applicationContext;
 
     public CachedScheduler() {
-
-        registedTasks = new ConcurrentHashMap<String, Task>();
-        tasksMapCache = new ConcurrentHashMap<String, String>();
-        runningAttempts = new ConcurrentHashMap<String, HashMap<String, AttemptContext>>();
+        super();
     }
 
     @Override
