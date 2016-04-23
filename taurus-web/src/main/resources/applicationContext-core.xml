@@ -95,6 +95,10 @@
 		class="com.dp.bigdata.taurus.zookeeper.execute.helper.DefaultExecutorManager" />
 	<bean id="lionDynamicConfig"
 		class="com.dp.bigdata.taurus.lion.LionDynamicConfig" />
+	<bean id="dynamicMaxCapacity"
+		class="com.dp.bigdata.taurus.core.structure.DefaultDynamicMaxCapacity" />
+	<bean id="maxCapacityList"
+		class="com.dp.bigdata.taurus.core.structure.DefaultMaxCapacityList" scope="prototype"/>
 	<bean id="statusChecker" class="com.dp.bigdata.taurus.core.DefaultAttemptStatusCheck" />
 	<bean id="agentMonitor" class="com.dp.bigdata.taurus.zookeeper.heartbeat.helper.PollingAgentMonitor"/>
 	<bean id="alert" class="com.dp.bigdata.taurus.alert.TaurusAlert" init-method="load"/>

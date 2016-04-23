@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public abstract class AbstractDynamicConfig implements DynamicConfig{
 
-    protected static final Log logger = LogFactory.getLog(ConfigHolder.class);
+    protected final Log logger = LogFactory.getLog(getClass());
 
     private Map<ConfigChangeListener, Object> listeners = new HashMap<ConfigChangeListener, Object>();
 

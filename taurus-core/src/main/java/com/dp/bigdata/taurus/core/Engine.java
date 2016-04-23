@@ -12,7 +12,6 @@ import com.dp.bigdata.taurus.alert.WeChatHelper;
 import com.dp.bigdata.taurus.core.listener.DependPassAttemptListener;
 import com.dp.bigdata.taurus.core.listener.DependTimeoutAttemptListener;
 import com.dp.bigdata.taurus.core.listener.InitializedAttemptListener;
-import com.dp.bigdata.taurus.core.structure.DefaultMaxCapacityList;
 import com.dp.bigdata.taurus.core.structure.MaxCapacityList;
 import com.dp.bigdata.taurus.core.structure.StringTo;
 import com.dp.bigdata.taurus.core.structure.StringToBoolean;
@@ -35,11 +34,13 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.dao.DataAccessException;
 
-import javax.annotation.PostConstruct;
 import javax.mail.MessagingException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -59,7 +60,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * @author damon.zhu
  * @see Scheduler
  */
-final public class Engine extends AbstractLionPropertyInitializer<Boolean> implements Scheduler, InitializedAttemptListener, DependTimeoutAttemptListener, DependPassAttemptListener {
+final public class Engine extends AbstractLionPropertyInitializer<Boolean> implements Scheduler, InitializedAttemptListener, DependTimeoutAttemptListener, DependPassAttemptListener, ApplicationContextAware {
 
     private static final String DEPENDENCE_PASS_DISCARD = "taurus.core.depend.discard";
 
@@ -107,6 +108,8 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
 
     @Autowired
     private AgentMonitor agentMonitor;
+
+    private ApplicationContext applicationContext;
 
     private final AtomicBoolean isInterrupt = new AtomicBoolean(false);
 
@@ -177,7 +180,7 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
 
         MaxCapacityList<TaskAttempt> taskAttemptList = dependPassMap.get(taskId);
         if (taskAttemptList == null) {
-            taskAttemptList = new DefaultMaxCapacityList<TaskAttempt>();
+            taskAttemptList = applicationContext.getBean(MaxCapacityList.class);
         }
 
         if (!taskAttemptList.addOrDiscard(taskAttempt)) {
@@ -498,11 +501,6 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
     }
 
     @Override
-    public synchronized void removeDependTimeoutAttempt(TaskAttempt taskAttempt) {
-        attemptsOfStatusDependTimeout.remove(taskAttempt);
-    }
-
-    @Override
     public synchronized void removeDependPassAttempt(TaskAttempt taskAttempt) {
         String taskId = taskAttempt.getTaskid();
         if (StringUtils.isNotBlank(taskId)) {
@@ -526,6 +524,11 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
     @Override
     protected StringTo<Boolean> getConvert() {
         return new StringToBoolean();
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 
     class TriggleTask extends Thread {
@@ -622,7 +625,8 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
                     for (Map.Entry<String, MaxCapacityList<TaskAttempt>> entry : dependPassMap.entrySet()) {
                         MaxCapacityList<TaskAttempt> value = entry.getValue();
                         int size = value.size();
-                        if (size > MaxCapacityList.MAX_CAPACITY_SIZE / 2) {
+                        int capacity = value.getMaxCapacity();
+                        if (size > capacity / 2) {
                             String taskId = entry.getKey();
                             Task task = registedTasks.get(taskId);
                             String name;
@@ -634,7 +638,7 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
                             List<String> whitelist = filter.fetchLionValue();  //增加白名单
                             if (!whitelist.contains(name)) {
                                 String content = new StringBuilder().append(EnvUtils.getEnv()).append(": ").append(name).append("调度状态为DEPENDENCY_PASS的个数为")
-                                        .append(size).append("个, 如果再不处理，拥堵个数达到").append(MaxCapacityList.MAX_CAPACITY_SIZE).append("后，新的调度实例将被丢弃").toString();
+                                        .append(size).append("个, 如果再不处理，拥堵个数达到").append(capacity).append("后，新的调度实例将被丢弃").toString();
                                 sendAlarm(ConfigHolder.get(LionKeys.ADMIN_USER), content);
                             }
                         }
@@ -740,7 +744,7 @@ final public class Engine extends AbstractLionPropertyInitializer<Boolean> imple
         if (tmpDependPass != null && !tmpDependPass.isEmpty()) {
             MaxCapacityList<TaskAttempt> origin = dependPassMap.get(taskId);
             if (origin == null) {
-                origin = new DefaultMaxCapacityList<TaskAttempt>();
+                origin = applicationContext.getBean(MaxCapacityList.class);
             }
             origin.addAll(tmpDependPass);
             dependPassMap.put(taskId, origin);

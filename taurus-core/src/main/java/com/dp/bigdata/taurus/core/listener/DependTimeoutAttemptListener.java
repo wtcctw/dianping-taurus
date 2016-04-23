@@ -9,6 +9,4 @@ import com.dp.bigdata.taurus.generated.module.TaskAttempt;
 public interface DependTimeoutAttemptListener extends GenericAttemptListener{
 
     void addDependTimeoutAttempt(TaskAttempt taskAttempt);
-
-    void removeDependTimeoutAttempt(TaskAttempt taskAttempt);
 }
