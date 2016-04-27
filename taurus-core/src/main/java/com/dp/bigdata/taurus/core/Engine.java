@@ -9,7 +9,7 @@ import com.dianping.lion.client.LionException;
 import com.dp.bigdata.taurus.alert.MailHelper;
 import com.dp.bigdata.taurus.alert.OpsAlarmHelper;
 import com.dp.bigdata.taurus.alert.WeChatHelper;
-import com.dp.bigdata.taurus.core.structure.MaxCapacityList;
+import com.dp.bigdata.taurus.core.structure.BoundedList;
 import com.dp.bigdata.taurus.generated.mapper.HostMapper;
 import com.dp.bigdata.taurus.generated.module.Host;
 import com.dp.bigdata.taurus.generated.module.Task;
@@ -612,8 +612,8 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
 //		example.setOrderByClause("scheduleTime");
 //		List<TaskAttempt> attempts = taskAttemptMapper.selectByExample(example);
         List<TaskAttempt> attempts = new ArrayList<TaskAttempt>();
-        for (Map.Entry<String, MaxCapacityList<TaskAttempt>> entry : dependPassMap.entrySet()) {
-            MaxCapacityList<TaskAttempt> tmpAttempts = entry.getValue();
+        for (Map.Entry<String, BoundedList<TaskAttempt>> entry : dependPassMap.entrySet()) {
+            BoundedList<TaskAttempt> tmpAttempts = entry.getValue();
             if (tmpAttempts != null && tmpAttempts.size() > 0) {
                 attempts.add(tmpAttempts.get(0));  //只取第一个, 不取全部
             }

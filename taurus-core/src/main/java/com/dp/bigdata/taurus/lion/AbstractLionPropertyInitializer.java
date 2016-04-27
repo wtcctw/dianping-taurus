@@ -1,6 +1,6 @@
 package com.dp.bigdata.taurus.lion;
 
-import com.dp.bigdata.taurus.core.structure.StringTo;
+import com.dp.bigdata.taurus.core.structure.Converter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -16,7 +16,7 @@ public abstract class AbstractLionPropertyInitializer<T> implements Initializing
 
     protected T lionValue;
 
-    protected StringTo<T> converter;
+    protected Converter<T> converter;
 
     @Autowired
     protected LionDynamicConfig lionDynamicConfig;
@@ -28,7 +28,7 @@ public abstract class AbstractLionPropertyInitializer<T> implements Initializing
 
         try {
             String value = lionDynamicConfig.get(getKey());
-            lionValue = converter.stringConvertTo(value);
+            lionValue = converter.convertTo(value);
         } catch (Exception e) {
             //lion无法获取值，或者转换失败取默认值
             lionValue = getDefaultValue();
@@ -43,7 +43,7 @@ public abstract class AbstractLionPropertyInitializer<T> implements Initializing
 
         if (key != null && key.equals(getKey())) {
             logger.info("[onChange][" + getKey() + "]" + value);
-            lionValue = converter.stringConvertTo(value.trim());
+            lionValue = converter.convertTo(value.trim());
         } else {
             logger.info("not match");
         }
@@ -53,5 +53,5 @@ public abstract class AbstractLionPropertyInitializer<T> implements Initializing
 
     protected abstract T getDefaultValue();
 
-    protected abstract StringTo<T> getConvert();
+    protected abstract Converter<T> getConvert();
 }

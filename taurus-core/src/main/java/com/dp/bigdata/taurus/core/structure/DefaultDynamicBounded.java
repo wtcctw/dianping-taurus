@@ -6,7 +6,7 @@ import com.dp.bigdata.taurus.lion.AbstractLionPropertyInitializer;
  * Author   mingdongli
  * 16/4/23  上午12:16.
  */
-public class DefaultDynamicMaxCapacity extends AbstractLionPropertyInitializer<Integer> implements DynamicMaxCapacity {
+public class DefaultDynamicBounded extends AbstractLionPropertyInitializer<Integer> implements DynamicBounded {
 
     private static final String DEPENDENCY_PASS = "taurus.dependencypass.max";
 
@@ -21,12 +21,12 @@ public class DefaultDynamicMaxCapacity extends AbstractLionPropertyInitializer<I
     }
 
     @Override
-    protected StringTo<Integer> getConvert() {
-        return new StringToInteger();
+    protected Converter<Integer> getConvert() {
+        return new IntegerConverter();
     }
 
     @Override
-    public int getMaxCapacity() {
+    public int getCapacity() {
         return lionValue;
     }
 }

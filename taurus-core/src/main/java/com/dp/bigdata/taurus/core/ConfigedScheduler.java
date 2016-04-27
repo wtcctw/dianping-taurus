@@ -1,7 +1,7 @@
 package com.dp.bigdata.taurus.core;
 
-import com.dp.bigdata.taurus.core.structure.StringTo;
-import com.dp.bigdata.taurus.core.structure.StringToBoolean;
+import com.dp.bigdata.taurus.core.structure.Converter;
+import com.dp.bigdata.taurus.core.structure.BooleanConverter;
 import com.dp.bigdata.taurus.lion.AbstractLionPropertyInitializer;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -45,7 +45,7 @@ public class ConfigedScheduler extends AbstractLionPropertyInitializer<Boolean> 
     }
 
     @Override
-    protected StringTo<Boolean> getConvert() {
-        return new StringToBoolean();
+    protected Converter<Boolean> getConvert() {
+        return new BooleanConverter();
     }
 }

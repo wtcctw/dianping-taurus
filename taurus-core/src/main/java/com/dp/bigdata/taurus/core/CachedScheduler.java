@@ -7,7 +7,7 @@ import com.dianping.lion.client.LionException;
 import com.dp.bigdata.taurus.alert.MailHelper;
 import com.dp.bigdata.taurus.alert.OpsAlarmHelper;
 import com.dp.bigdata.taurus.alert.WeChatHelper;
-import com.dp.bigdata.taurus.core.structure.MaxCapacityList;
+import com.dp.bigdata.taurus.core.structure.BoundedList;
 import com.dp.bigdata.taurus.generated.mapper.TaskAttemptMapper;
 import com.dp.bigdata.taurus.generated.mapper.TaskMapper;
 import com.dp.bigdata.taurus.generated.module.Task;
@@ -51,7 +51,7 @@ public abstract class CachedScheduler extends ConfigedScheduler implements Sched
 
     protected List<TaskAttempt> attemptsOfStatusDependTimeout = new ArrayList<TaskAttempt>();
 
-    protected ConcurrentMap<String, MaxCapacityList<TaskAttempt>> dependPassMap = new ConcurrentHashMap<String, MaxCapacityList<TaskAttempt>>();
+    protected ConcurrentMap<String, BoundedList<TaskAttempt>> dependPassMap = new ConcurrentHashMap<String, BoundedList<TaskAttempt>>();
 
     @Autowired
     protected TaskAttemptMapper taskAttemptMapper;
@@ -212,9 +212,9 @@ public abstract class CachedScheduler extends ConfigedScheduler implements Sched
             return;
         }
 
-        MaxCapacityList<TaskAttempt> taskAttemptList = dependPassMap.get(taskId);
+        BoundedList<TaskAttempt> taskAttemptList = dependPassMap.get(taskId);
         if (taskAttemptList == null) {
-            taskAttemptList = applicationContext.getBean(MaxCapacityList.class);
+            taskAttemptList = applicationContext.getBean(BoundedList.class);
         }
 
         if (!taskAttemptList.addOrDiscard(taskAttempt)) {
@@ -237,9 +237,9 @@ public abstract class CachedScheduler extends ConfigedScheduler implements Sched
 
         List<TaskAttempt> tmpDependPass = taskAttemptMapper.selectDependencyTask(taskId, ExecuteStatus.DEPENDENCY_PASS);
         if (tmpDependPass != null && !tmpDependPass.isEmpty()) {
-            MaxCapacityList<TaskAttempt> origin = dependPassMap.get(taskId);
+            BoundedList<TaskAttempt> origin = dependPassMap.get(taskId);
             if (origin == null) {
-                origin = applicationContext.getBean(MaxCapacityList.class);
+                origin = applicationContext.getBean(BoundedList.class);
             }
             origin.addAll(tmpDependPass);
             dependPassMap.put(taskId, origin);
@@ -252,7 +252,7 @@ public abstract class CachedScheduler extends ConfigedScheduler implements Sched
         List<TaskAttempt> removed = new ArrayList<TaskAttempt>();
 
         if (delete) {
-            MaxCapacityList<TaskAttempt> origin = dependPassMap.get(taskId);
+            BoundedList<TaskAttempt> origin = dependPassMap.get(taskId);
             if (origin != null) {
                 origin.clear();
             }
@@ -336,7 +336,7 @@ public abstract class CachedScheduler extends ConfigedScheduler implements Sched
         return registeredCron.get(taskId);
     }
 
-    public ConcurrentMap<String, MaxCapacityList<TaskAttempt>> getDependPassMap() {
+    public ConcurrentMap<String, BoundedList<TaskAttempt>> getDependPassMap() {
         return dependPassMap;
     }
 
@@ -384,8 +384,8 @@ public abstract class CachedScheduler extends ConfigedScheduler implements Sched
                 try {
                     Thread.sleep(5 * 60 * 1000);
 
-                    for (Map.Entry<String, MaxCapacityList<TaskAttempt>> entry : dependPassMap.entrySet()) {
-                        MaxCapacityList<TaskAttempt> value = entry.getValue();
+                    for (Map.Entry<String, BoundedList<TaskAttempt>> entry : dependPassMap.entrySet()) {
+                        BoundedList<TaskAttempt> value = entry.getValue();
                         int size = value.size();
                         int capacity = value.getMaxCapacity();
                         if (size > capacity / 2) {

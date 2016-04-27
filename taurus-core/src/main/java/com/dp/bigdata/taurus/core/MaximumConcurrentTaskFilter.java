@@ -2,8 +2,8 @@ package com.dp.bigdata.taurus.core;
 
 import com.dianping.cat.Cat;
 import com.dp.bigdata.taurus.core.listener.GenericAttemptListener;
-import com.dp.bigdata.taurus.core.structure.StringTo;
-import com.dp.bigdata.taurus.core.structure.StringToInteger;
+import com.dp.bigdata.taurus.core.structure.Converter;
+import com.dp.bigdata.taurus.core.structure.IntegerConverter;
 import com.dp.bigdata.taurus.lion.AbstractLionPropertyInitializer;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -70,7 +70,7 @@ public class MaximumConcurrentTaskFilter extends AbstractLionPropertyInitializer
             if (logger.isInfoEnabled()) {
                 logger.info("[onChange][" + MAX_TASK_NUM + "]" + value);
             }
-            this.lionValue = converter.stringConvertTo(value.trim());
+            this.lionValue = converter.convertTo(value.trim());
         } else {
             if (logger.isInfoEnabled()) {
                 logger.info("not match");
@@ -89,8 +89,8 @@ public class MaximumConcurrentTaskFilter extends AbstractLionPropertyInitializer
     }
 
     @Override
-    protected StringTo getConvert() {
-        return new StringToInteger();
+    protected Converter getConvert() {
+        return new IntegerConverter();
     }
 
     @Override

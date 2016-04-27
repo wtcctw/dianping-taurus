@@ -1,6 +1,6 @@
 package com.dp.bigdata.taurus.core;
 
-import com.dp.bigdata.taurus.core.structure.MaxCapacityList;
+import com.dp.bigdata.taurus.core.structure.BoundedList;
 import com.dp.bigdata.taurus.generated.module.TaskAttempt;
 import org.apache.commons.lang.StringUtils;
 
@@ -25,7 +25,7 @@ public abstract class ListenableCachedScheduler extends CachedScheduler implemen
     public synchronized void removeDependPassAttempt(TaskAttempt taskAttempt) {
         String taskId = taskAttempt.getTaskid();
         if (StringUtils.isNotBlank(taskId)) {
-            MaxCapacityList<TaskAttempt> tmpTask = dependPassMap.get(taskId);
+            BoundedList<TaskAttempt> tmpTask = dependPassMap.get(taskId);
             if (tmpTask != null) {
                 tmpTask.remove(taskAttempt);
             }

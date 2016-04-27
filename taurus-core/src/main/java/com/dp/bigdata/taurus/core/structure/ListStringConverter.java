@@ -10,10 +10,10 @@ import java.util.List;
  * Author   mingdongli
  * 16/4/22  上午12:18.
  */
-public class StringToListString implements StringTo<List<String>> {
+public class ListStringConverter implements Converter<List<String>> {
 
     @Override
-    public List<String> stringConvertTo(String lionValue) {
+    public List<String> convertTo(String lionValue) {
         if(StringUtils.isNotBlank(lionValue)){
             String[] array = StringUtils.split(lionValue, ",");
             return Arrays.asList(array);

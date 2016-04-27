@@ -8,16 +8,16 @@ import java.util.ArrayList;
  * Author   mingdongli
  * 16/4/20  下午3:48.
  */
-public class DefaultMaxCapacityList<E> extends ArrayList<E> implements MaxCapacityList<E>{
+public class DefaultBoundedList<E> extends ArrayList<E> implements BoundedList<E> {
 
     @Autowired
-    private DynamicMaxCapacity dynamicMaxCapacity;
+    private DynamicBounded dynamicMaxCapacity;
 
     @Override
     public boolean addOrDiscard(E entry) {
 
         int size = size();
-        int capacity = dynamicMaxCapacity.getMaxCapacity();
+        int capacity = dynamicMaxCapacity.getCapacity();
 
         if(size < capacity){
             add(entry);
@@ -31,7 +31,7 @@ public class DefaultMaxCapacityList<E> extends ArrayList<E> implements MaxCapaci
 
     @Override
     public int getMaxCapacity() {
-        return dynamicMaxCapacity.getMaxCapacity();
+        return dynamicMaxCapacity.getCapacity();
     }
 
 }

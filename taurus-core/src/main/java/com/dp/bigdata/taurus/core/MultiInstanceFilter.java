@@ -5,8 +5,8 @@ import com.dp.bigdata.taurus.alert.MailHelper;
 import com.dp.bigdata.taurus.alert.WeChatHelper;
 import com.dp.bigdata.taurus.core.listener.DependPassAttemptListener;
 import com.dp.bigdata.taurus.core.listener.GenericAttemptListener;
-import com.dp.bigdata.taurus.core.structure.StringTo;
-import com.dp.bigdata.taurus.core.structure.StringToListString;
+import com.dp.bigdata.taurus.core.structure.Converter;
+import com.dp.bigdata.taurus.core.structure.ListStringConverter;
 import com.dp.bigdata.taurus.lion.AbstractLionPropertyInitializer;
 import com.dp.bigdata.taurus.lion.ConfigHolder;
 import com.dp.bigdata.taurus.lion.LionKeys;
@@ -163,8 +163,8 @@ public class MultiInstanceFilter extends AbstractLionPropertyInitializer<List<St
     }
 
     @Override
-    protected StringTo<List<String>> getConvert() {
-        return new StringToListString();
+    protected Converter<List<String>> getConvert() {
+        return new ListStringConverter();
     }
 
     @Override

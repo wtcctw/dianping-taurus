@@ -1,6 +1,6 @@
 package com.dp.bigdata.taurus.core;
 
-import com.dp.bigdata.taurus.core.listener.ListenerAdder;
+import com.dp.bigdata.taurus.core.listener.AttemptListenable;
 import com.dp.bigdata.taurus.lion.LionValueGetter;
 
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
  * @author damon.zhu
  *
  */
-public interface Filter<T> extends ListenerAdder, LionValueGetter<T> {
+public interface Filter<T> extends AttemptListenable, LionValueGetter<T> {
     
     /**
      * filter the input contexts
