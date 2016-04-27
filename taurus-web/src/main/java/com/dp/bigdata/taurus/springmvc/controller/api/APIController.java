@@ -9,13 +9,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -40,22 +39,17 @@ public class APIController{
 
     @RequestMapping(value = "/jobList", method = {RequestMethod.GET})
     @ResponseBody
-    public Result getJobList( String jobIds) {
+    public Result getJobList( String jobIds) { //jobIds映射到任务名
         Result result = null;
-        BAInfoModel baInfoModel = (BAInfoModel) request.getAttribute(APIAuthorizationUtils.BA_REQUST_ATTRIBUTE_CLIENTID);
-        String jobLine = baInfoModel.getJobLine();
-        String jobGroup = baInfoModel.getJobGroup();
-        String clientId = baInfoModel.getClientId();
+        String userGroup = (String) request.getAttribute(APIAuthorizationUtils.BA_REQUST_ATTRIBUTE_CLIENTID);
         //校验参数是否为空
-        log.info("APIController  jobList begin  jobIds:" + jobIds + " ,clientId:" + clientId);
+        log.info("APIController  jobList begin  jobIds:" + jobIds + " ,clientId:" + userGroup);
         if (StringUtils.isBlank(jobIds)) {
             result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED_PARAM_NULL.getCode(), ErrorCodeEnum.OPERATION_FAILED_PARAM_NULL.getField());
             return result;
         }
         JobIdsParam jobIdsParam = new JobIdsParam();
         jobIdsParam.setIds(jobIds.split(","));
-        jobIdsParam.setJobGroup(jobGroup);
-        jobIdsParam.setJobLine(jobLine);
 
 //        try {
 //            List<JobDetailOutModel> list = scheduleAPIService.queryJobDetailByIds(jobIdsParam);
@@ -73,6 +67,55 @@ public class APIController{
         log.info("ScheduleAPIController  jobList end  jobIds:" + jobIds + " ,clientId:" + clientId);
         return result;
 
+    }
+
+    @RequestMapping(value = "/quaryJobList", method = {RequestMethod.GET})
+    @ResponseBody
+    public Result quaryJobList(JobInfoQueryParam queryParam) {
+        Result result = null;
+        BAInfoModel baInfoModel = null;
+//        baInfoModel = this.getBAinfo();
+//        log.info("ScheduleAPIController  quaryJobList begin  queryParam:" + queryParam + " ,clientId:" + baInfoModel.getClientId());
+//        queryParam.setJobLine(baInfoModel.getJobLine());
+//        queryParam.setJobGroup(baInfoModel.getJobGroup());
+//        try {
+//            List<JobDetailOutModel> list = scheduleAPIService.queryJobDetailByParam(queryParam);
+//            result = Result.getInstance(true, list, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
+//        } catch (MSException e) {
+//            log.error("quaryJobList jobDetailAPIList ", e);
+//            result = Result.getInstance(false, null, e.getCode(), e.getMessage());
+//            return result;
+//        }
+        log.info("ScheduleAPIController  quaryJobList end  queryParam:" + queryParam + " ,clientId:" + baInfoModel.getClientId());
+        return result;
+    }
+
+    @RequestMapping(value = "/addJob", method = {RequestMethod.POST}, produces = "application/json;charset=UTF-8")
+    @ResponseBody
+    public Result addJob(@RequestBody JobSimpleInfoParam jobSimpleInfoParam) {
+        {
+            Result result = null;
+            try {
+                // 组装唯一码
+                String jobUniqueCode = ScheduleUtil.getJobUniqueCode(this.getBAinfo().getJobLine(), this.getBAinfo().getJobGroup(), jobSimpleInfoParam.getJobCode());
+                jobSimpleInfoParam.setJobUniqueCode(jobUniqueCode);
+                List<Integer> jobIdList = new ArrayList<Integer>();
+                log.info("ScheduleAPIController addJob begin,jobUniqueCode = " + jobUniqueCode + " ,clientId:" + this.getBAinfo().getClientId());
+                JobInfo jobInfo = verifyJobInfo(jobSimpleInfoParam);
+                List<JobNotifyAlarm> jobNotifyAlarmList = verfyJobNotifyAlarm(jobSimpleInfoParam.getJobNotifyAlarmList(), jobUniqueCode);
+                scheduleAPIService.addJobAndAlarm(jobInfo, jobNotifyAlarmList);
+                JobInfoOutModel jobInfoOutModel = new JobInfoOutModel();
+                jobInfoOutModel.setId(jobInfo.getId());
+                jobInfoOutModel.setJobUniqueCode(jobInfo.getJobUniqueCode());
+                result = Result.getInstance(true, jobInfoOutModel, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
+                log.info("ScheduleAPIController addJob end,jobUniqueCode = " + jobUniqueCode + " ,clientId:" + this.getBAinfo().getClientId());
+            } catch (MSException e) {
+                log.error("addJob" + e);
+                result = Result.getInstance(false, null, e.getCode(), e.getMessage());
+                return result;
+            }
+            return result;
+        }
     }
 
     private static class Result<T>{

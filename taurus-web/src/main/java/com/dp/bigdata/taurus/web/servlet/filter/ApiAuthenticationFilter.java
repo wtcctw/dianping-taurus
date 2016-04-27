@@ -1,7 +1,6 @@
 package com.dp.bigdata.taurus.web.servlet.filter;
 
 import com.dp.bigdata.taurus.lion.LionDynamicConfig;
-import com.dp.bigdata.taurus.springmvc.controller.api.APIController;
 import com.dp.bigdata.taurus.utils.APIAuthorizationUtils;
 import com.sankuai.meituan.config.MtConfigClient;
 import org.apache.commons.lang3.StringUtils;
@@ -110,11 +109,7 @@ public class ApiAuthenticationFilter implements Filter {
             if (StringUtils.equals(requestSignature, APIAuthorizationUtils.getSignature(stringToSign.getBytes(), clientSecret.getBytes()))) {
                 String[] jobLineAndGroup = clientId.split("_");
                 if (null != jobLineAndGroup && jobLineAndGroup.length == 2) {
-                    APIController.BAInfoModel baInfoModel = new APIController.BAInfoModel();
-                    baInfoModel.setClientId(clientId);
-                    baInfoModel.setJobLine(jobLineAndGroup[0]);
-                    baInfoModel.setJobGroup(jobLineAndGroup[1]);
-                    request.setAttribute(APIAuthorizationUtils.BA_REQUST_ATTRIBUTE_CLIENTID, baInfoModel);
+                    request.setAttribute(APIAuthorizationUtils.BA_REQUST_ATTRIBUTE_CLIENTID, clientId);
                     return true;
                 }
             }
