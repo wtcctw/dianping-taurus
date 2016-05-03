@@ -23,7 +23,7 @@ import org.restlet.resource.ClientResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,7 +44,6 @@ import java.util.List;
  */
 @API
 @Controller
-@Scope("prototype")
 public class APIController {
 
     private Logger log = LoggerFactory.getLogger(getClass());
@@ -137,36 +136,34 @@ public class APIController {
     @RequestMapping(value = "/addJob", method = {RequestMethod.POST})
     @ResponseBody
     public Result addJob(@RequestBody TaskApiDTO taskApiDTO) {
-        {
 
-            Result result;
-            String taskName = taskApiDTO.getTaskName();
-            HashMap<String, String> tasks = taskMapper.isExitTaskName(taskName);
-            if(tasks != null && !tasks.isEmpty()){
-                result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_ADD_FAILED_UNIQUE_CODE_REPEAT.getCode(), ErrorCodeEnum.OPERATION_ADD_FAILED_UNIQUE_CODE_REPEAT.getField());
-                return result;
-            }
-
-            TaskDTO taskDTO = initTaskDTO();
-            fulfillTaskDTO(taskApiDTO, taskDTO);
-
-            try {
-                validate(taskDTO);
-                log.info(String.format("APIController addJob begin for %s", taskDTO.getName()));
-                scheduler.registerTask(taskDTO.getTask());
-                alertRuleMapper.insertSelective(taskDTO.getAlertRule());
-                JobInfoOutModel jobInfoOutModel = new JobInfoOutModel();
-                jobInfoOutModel.setId(taskDTO.getTaskid());
-                jobInfoOutModel.setJobUniqueCode(taskDTO.getName());
-                result = Result.getInstance(true, jobInfoOutModel, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
-                log.info(String.format("APIController addJob end for %s", taskDTO.getName()));
-            } catch (Exception e) {
-                log.error("addJob" + e);
-                e.printStackTrace();
-                result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED.getCode(), ErrorCodeEnum.OPERATION_FAILED.getField());
-            }
+        Result result;
+        String taskName = taskApiDTO.getTaskName();
+        HashMap<String, String> tasks = taskMapper.isExitTaskName(taskName);
+        if (tasks != null && !tasks.isEmpty()) {
+            result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_ADD_FAILED_UNIQUE_CODE_REPEAT.getCode(), ErrorCodeEnum.OPERATION_ADD_FAILED_UNIQUE_CODE_REPEAT.getField());
             return result;
         }
+
+        TaskDTO taskDTO = initTaskDTO();
+        fulfillTaskDTO(taskApiDTO, taskDTO);
+
+        try {
+            validate(taskDTO);
+            log.info(String.format("APIController addJob begin for %s", taskDTO.getName()));
+            scheduler.registerTask(taskDTO.getTask());
+            alertRuleMapper.insertSelective(taskDTO.getAlertRule());
+            JobInfoOutModel jobInfoOutModel = new JobInfoOutModel();
+            jobInfoOutModel.setId(taskDTO.getTaskid());
+            jobInfoOutModel.setJobUniqueCode(taskDTO.getName());
+            result = Result.getInstance(true, jobInfoOutModel, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
+            log.info(String.format("APIController addJob end for %s", taskDTO.getName()));
+        } catch (Exception e) {
+            log.error("addJob" + e);
+            e.printStackTrace();
+            result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED.getCode(), ErrorCodeEnum.OPERATION_FAILED.getField());
+        }
+        return result;
     }
 
     @RequestMapping(value = "/modifyJob", method = {RequestMethod.POST})
@@ -256,7 +253,7 @@ public class APIController {
     public Result getJobTrace(String jobCodes) {
 
 
-            Result result = null;
+        Result result = null;
         try {
 
             ClientResource cr;
@@ -266,7 +263,7 @@ public class APIController {
             cr.setRequestEntityBuffering(true);
             ArrayList<AttemptDTO> attempts = cr.get(ArrayList.class);
             result = Result.getInstance(true, attempts, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
-        }catch (Exception e){
+        } catch (Exception e) {
             log.error("getJobTrace  error", e);
             result = Result.getInstance(true, null, ErrorCodeEnum.OPERATION_FAILED.getCode(), ErrorCodeEnum.OPERATION_FAILED.getField());
         }
@@ -274,7 +271,7 @@ public class APIController {
         return result;
     }
 
-    private TaskDTO initTaskDTO(){
+    private TaskDTO initTaskDTO() {
 
         TaskDTO taskDTO = new TaskDTO();
         Date current = new Date();
@@ -287,7 +284,7 @@ public class APIController {
         return taskDTO;
     }
 
-    private void fulfillTaskDTO(TaskApiDTO taskApiDTO, TaskDTO taskDTO){
+    private void fulfillTaskDTO(TaskApiDTO taskApiDTO, TaskDTO taskDTO) {
 
         String condition = taskApiDTO.getAlertCondition();
         if (StringUtils.isBlank(condition)) {
@@ -373,6 +370,7 @@ public class APIController {
         taskDTO.setCrontab(taskApiDTO.getCrontab());
         taskDTO.setDependencyexpr(taskApiDTO.getDependency());
         taskDTO.setProxyuser(taskApiDTO.getProxyUser());
+        taskDTO.setCreator(taskApiDTO.getCreator());
         taskDTO.setExecutiontimeout(taskApiDTO.getMaxExecutionTime());
         taskDTO.setWaittimeout(taskApiDTO.getMaxWaitTime());
         taskDTO.setDescription(taskApiDTO.getDescription());
@@ -380,11 +378,12 @@ public class APIController {
         taskDTO.setMainClass(taskApiDTO.getMainClass());
         taskDTO.setTaskUrl(taskApiDTO.getTaskUrl());
         taskDTO.setIskillcongexp(taskApiDTO.iskillcongexp());
+        taskDTO.setHostname(taskApiDTO.getHostName());
         int retryTimes = taskApiDTO.getRetryTimes();
         taskDTO.setRetrytimes(retryTimes);
-        if(retryTimes > 0){
+        if (retryTimes > 0) {
             taskDTO.setIsautoretry(true);
-        }else {
+        } else {
             taskDTO.setIsautoretry(false);
         }
     }
@@ -576,7 +575,7 @@ public class APIController {
         }
     }
 
-    private static class JobInfoOutModel{
+    private static class JobInfoOutModel {
 
         private String id;//id
 

@@ -44,6 +44,8 @@ public class TaskApiDTO {
 
     private boolean iskillcongexp;
 
+    private String hostName;
+
     public String getTaskName() {
         return taskName;
     }
@@ -194,5 +196,13 @@ public class TaskApiDTO {
 
     public void setIskillcongexp(boolean iskillcongexp) {
         this.iskillcongexp = iskillcongexp;
+    }
+
+    public String getHostName() {
+        return hostName;
+    }
+
+    public void setHostName(String hostName) {
+        this.hostName = hostName;
     }
 }
