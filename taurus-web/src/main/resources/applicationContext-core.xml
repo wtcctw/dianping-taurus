@@ -99,10 +99,19 @@
 		class="com.dp.bigdata.taurus.core.structure.DefaultDynamicBounded" />
 	<bean id="maxCapacityList"
 		class="com.dp.bigdata.taurus.core.structure.DefaultBoundedList" scope="prototype"/>
+	<!--ba 认证filter-->
+	<bean id="mtConfigClient" class="com.sankuai.meituan.config.MtConfigClient" init-method="init" destroy-method="destroy">
+		<property name="nodeName" value="sample.hotel.mschedule"/> <!-- 配置所在路径 -->
+	</bean>
+	<bean id="apiAuthenticationFilter"
+		  class="com.dp.bigdata.taurus.web.servlet.filter.ApiAuthenticationFilter">
+		<property name="mtConfigClient" ref="mtConfigClient"></property>
+		<property name="lionConfig" ref="lionDynamicConfig"></property>
+	</bean>
 	<bean id="statusChecker" class="com.dp.bigdata.taurus.core.DefaultAttemptStatusCheck" />
 	<bean id="agentMonitor" class="com.dp.bigdata.taurus.zookeeper.heartbeat.helper.PollingAgentMonitor"/>
 	<bean id="alert" class="com.dp.bigdata.taurus.alert.TaurusAlert" init-method="load"/>
-	
+
 </beans>
 
 

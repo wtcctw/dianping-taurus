@@ -3,12 +3,12 @@ package com.dp.bigdata.taurus.generated.mapper;
 import com.dp.bigdata.taurus.generated.module.Host;
 import com.dp.bigdata.taurus.generated.module.Task;
 import com.dp.bigdata.taurus.generated.module.TaskExample;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.dao.DataAccessException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import org.apache.ibatis.annotations.Param;
-import org.springframework.dao.DataAccessException;
 
 public interface TaskMapper {
     /**
@@ -108,4 +108,7 @@ public interface TaskMapper {
     ArrayList<Task> getRealTasksByHost(String hostname);
     public HashMap<String, String> isExitTaskName(@Param("taskName")String taskName);
     int updateCreator(@Param("creator")String creator,@Param("taskName")String taskName);
+
+    ArrayList<Task> selectJobInfoDetailByIds(@Param("ids")String[]  ids, @Param("creators")String[] creators );
+    ArrayList<Task> selectJobInfoDetailByParamForApi(@Param("task")Task  task);
 }

@@ -13,7 +13,9 @@
     http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
    
 	<!-- 扫描controller（controller层注入） -->
-	<context:component-scan base-package="com.dp.bigdata.taurus.springmvc.controller"/>
+	<context:component-scan base-package="com.dp.bigdata.taurus.springmvc.controller" >
+		<context:exclude-filter type="annotation" expression="com.dp.bigdata.taurus.springmvc.controller.api.API"/>
+	</context:component-scan>
 
 	<mvc:resources location="/static/" mapping="/static/**" />
 	<mvc:resources location="/js/" mapping="/js/**" />
