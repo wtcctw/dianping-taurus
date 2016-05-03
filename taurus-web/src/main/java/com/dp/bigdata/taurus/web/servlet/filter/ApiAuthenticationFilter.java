@@ -86,11 +86,12 @@ public class ApiAuthenticationFilter implements Filter {
                 logger.info("clientId:" + clientId + "requestSignature:" + requestSignature);
                 String clientSecret = "";
                 if (StringUtils.isNotBlank(clientId)) {
-                    clientSecret = mtConfigClient.getValue(clientId);
+//                    clientSecret = mtConfigClient.getValue(clientId);
+                    clientSecret = "";
                 }
                 boolean passed = doAuthorization0(request, requestSignature, clientId, clientSecret, date);
                 if (!passed) {
-                    clientSecret = lionConfig.get(clientId);  //throw RuntimeException
+                    clientSecret = lionConfig.get("taurus." + clientId);  //throw RuntimeException
                     passed = doAuthorization0(request, requestSignature, clientId, clientSecret, date);
                 }
 
@@ -115,7 +116,7 @@ public class ApiAuthenticationFilter implements Filter {
             }
         }
 
-        return true;
+        return false;
     }
 
     @Override
