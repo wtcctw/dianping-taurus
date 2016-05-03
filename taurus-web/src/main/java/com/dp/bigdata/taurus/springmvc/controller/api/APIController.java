@@ -155,8 +155,8 @@ public class APIController {
             return result;
 
         }
-        ClientResource addJob = new ClientResource("localhost:8080/api/" + "task");
-//        ClientResource addJob = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "task");
+//        ClientResource addJob = new ClientResource("localhost:8080/api/" + "task");
+        ClientResource addJob = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "task");
         addJob.put(taskDTO);
         result = Result.getInstance(false, null, addJob.getStatus().getCode(), "");
 
