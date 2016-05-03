@@ -147,23 +147,37 @@ public class APIController {
 
         TaskDTO taskDTO = initTaskDTO();
         fulfillTaskDTO(taskApiDTO, taskDTO);
-
         try {
             validate(taskDTO, false);
-            log.info(String.format("APIController addJob begin for %s", taskDTO.getName()));
-            scheduler.registerTask(taskDTO.getTask());
-            alertRuleMapper.insertSelective(taskDTO.getAlertRule());
-            JobInfoOutModel jobInfoOutModel = new JobInfoOutModel();
-            jobInfoOutModel.setId(taskDTO.getTaskid());
-            jobInfoOutModel.setJobUniqueCode(taskDTO.getName());
-            result = Result.getInstance(true, jobInfoOutModel, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
-            log.info(String.format("APIController addJob end for %s", taskDTO.getName()));
         } catch (Exception e) {
             log.error("addJob" + e);
-            e.printStackTrace();
             result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED.getCode(), ErrorCodeEnum.OPERATION_FAILED.getField());
+            return result;
+
         }
+        ClientResource addJob = new ClientResource("localhost:8080/api/" + "task");
+//        ClientResource addJob = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "task");
+        addJob.put(taskDTO);
+        result = Result.getInstance(false, null, addJob.getStatus().getCode(), "");
+
         return result;
+
+//        try {
+//            validate(taskDTO, false);
+//            log.info(String.format("APIController addJob begin for %s", taskDTO.getName()));
+//            scheduler.registerTask(taskDTO.getTask());
+//            alertRuleMapper.insertSelective(taskDTO.getAlertRule());
+//            JobInfoOutModel jobInfoOutModel = new JobInfoOutModel();
+//            jobInfoOutModel.setId(taskDTO.getTaskid());
+//            jobInfoOutModel.setJobUniqueCode(taskDTO.getName());
+//            result = Result.getInstance(true, jobInfoOutModel, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
+//            log.info(String.format("APIController addJob end for %s", taskDTO.getName()));
+//        } catch (Exception e) {
+//            log.error("addJob" + e);
+//            e.printStackTrace();
+//            result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED.getCode(), ErrorCodeEnum.OPERATION_FAILED.getField());
+//        }
+//        return result;
     }
 
     @RequestMapping(value = "/modifyJob", method = {RequestMethod.POST})

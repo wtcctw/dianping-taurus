@@ -20,6 +20,7 @@ import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 import org.restlet.resource.Post;
+import org.restlet.resource.Put;
 import org.restlet.resource.ServerResource;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -270,6 +271,20 @@ public class TasksResource extends ServerResource implements ITasksResource {
 		try {
 			scheduler.registerTask(task.getTask());
 			alertRuleMapper.insertSelective(task.getAlertRule());
+			setStatus(Status.SUCCESS_CREATED);
+		} catch (ScheduleException e) {
+			LOG.error(e.getMessage(), e);
+			setStatus(Status.SERVER_ERROR_INTERNAL);
+		}
+	}
+
+	@Put
+	@Override
+	public void createOrUpdate(TaskDTO taskDTO) {
+
+		try {
+			scheduler.registerTask(taskDTO.getTask());
+			alertRuleMapper.insertSelective(taskDTO.getAlertRule());
 			setStatus(Status.SUCCESS_CREATED);
 		} catch (ScheduleException e) {
 			LOG.error(e.getMessage(), e);

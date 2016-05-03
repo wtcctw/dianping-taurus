@@ -1,11 +1,12 @@
 package com.dp.bigdata.taurus.restlet.resource;
 
-import java.util.ArrayList;
-
 import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 import org.restlet.resource.Post;
+import org.restlet.resource.Put;
+
+import java.util.ArrayList;
 
 /**
  * 
@@ -19,6 +20,9 @@ public interface ITasksResource {
 	public ArrayList<TaskDTO> retrieve();
 	
 	@Post
-	public void create(Representation re) ;
+	public void create(Representation re);
+
+	@Put
+	public void createOrUpdate(TaskDTO taskDTO);
 
 }

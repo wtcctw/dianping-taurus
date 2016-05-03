@@ -15,11 +15,11 @@ import org.restlet.resource.Post;
 public interface ITaskResource {
    
    @Get
-    public TaskDTO retrieve();
+   public TaskDTO retrieve();
    
    @Post
    public void update(Representation re);
-   
+
    @Delete
    public void remove();
 
