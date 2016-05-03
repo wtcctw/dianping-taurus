@@ -1,11 +1,11 @@
 package com.dp.bigdata.taurus.restlet.shared;
 
-import java.io.Serializable;
-import java.util.Date;
-
 import com.dp.bigdata.taurus.core.TaskStatus;
 import com.dp.bigdata.taurus.generated.module.AlertRule;
 import com.dp.bigdata.taurus.generated.module.Task;
+
+import java.io.Serializable;
+import java.util.Date;
 
 public class TaskDTO implements Serializable {
 
@@ -63,6 +63,8 @@ public class TaskDTO implements Serializable {
 	private boolean hassms;
 
 	private boolean hasmail;
+
+	private boolean hasdaxiang;
 
 	private String userid;
 
@@ -284,6 +286,10 @@ public class TaskDTO implements Serializable {
 		return hassms;
 	}
 
+	public boolean isHasdaxiang() {
+		return hasdaxiang;
+	}
+
 	public void setAddtime(Date addtime) {
 		this.addtime = addtime;
 	}
@@ -334,6 +340,10 @@ public class TaskDTO implements Serializable {
 
 	public void setHasmail(boolean hasmail) {
 		this.hasmail = hasmail;
+	}
+
+	public void setHasdaxiang(boolean hasdaxiang) {
+		this.hasdaxiang = hasdaxiang;
 	}
 
 	public void setHassms(boolean hassms) {

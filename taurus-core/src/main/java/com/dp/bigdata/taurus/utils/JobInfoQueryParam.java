@@ -1,34 +1,41 @@
-package com.dp.bigdata.taurus.springmvc.controller.api;
+package com.dp.bigdata.taurus.utils;
+
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 
 import java.util.Date;
 
 /**
  * Author   mingdongli
- * 16/4/27  下午3:01.
+ * 16/4/28  下午2:02.
+ * BaseJobInfo -> JobInfoQueryParam
  */
 public class JobInfoQueryParam extends ReWriteToStringModel{
 
-    private Integer id;//id                  Task.taskid
-    private String jobUniqueCode;//唯一编码   Task.name
-    private String jobCode;//任务码           NO
-    private String jobName;//任务名称          NO
-    private String jobGroup;//任务分组         下面两个映射分组
+    private Integer id;//id
+    private String jobUniqueCode;//唯一编码
+    private String jobCode;//任务码
+    private String jobName;//任务名称
+    private String jobGroup;//任务分组
     private String jobLine;//业务线
-    private String expressionType;//表达式类型  NO
-    private String expression;//表达式         Task.crontab
-    private Integer maxExecuteTime;//最大执行时间  Task.executiontimeout
-    private String taskNodes;//运行机器列表      NO
-    private String jobOwner;//任务所有者         Task.creator
-    private Date gmtCreate;//创建时间            Task.addtime
-    private Date gmtModified;//最后修改时间       Task.updatetime
-    private Integer dbSchedule;//调度信息是否入db  NO
-    private Integer subTask;//子任务标识          NO
-    private Integer startNewJob;//上次任务未完成不启动新任务  可增加一个选项
-    private String myData;//用户存储的信息，任务调度时发送给用户  NO
-    private Integer alarmTimeInterval;//持续报警时间间隔       NO
-    private Integer scheduleState;//启动状态     Task.status
-    private Integer pageNum;//页数               NO
-    private Integer pageSize;//每页大小           NO
+    private String expressionType;//表达式类型
+    private String expression;//表达式
+    private Integer maxExecuteTime;//最大执行时间
+    private String taskNodes;//运行机器列表
+    private String jobOwner;//任务所有者
+    private Date gmtCreate;//创建时间
+    private Date gmtModified;//最后修改时间
+    private Integer dbSchedule;//调度信息是否入db
+    private Integer subTask;//子任务标识
+    private Integer startNewJob;//上次任务未完成不启动新任务
+    private String myData;//用户存储的信息，任务调度时发送给用户
+    private Integer port;//端口
+    private Integer alarmTimeInterval;//持续报警时间间隔
+    private Integer scheduleState;//启动状态
+    private Integer scheduleChannel;
+    //以上是数据库中job的基本结构
+    private Integer pageNum;//页数
+    private Integer pageSize;//每页大小
 
     public Integer getId() {
         return id;
@@ -196,5 +203,28 @@ public class JobInfoQueryParam extends ReWriteToStringModel{
 
     public void setPageSize(Integer pageSize) {
         this.pageSize = pageSize;
+    }
+
+    public Integer getPort() {
+        return port;
+    }
+
+    public void setPort(Integer port) {
+        this.port = port;
+    }
+
+    public Integer getScheduleChannel() {
+        return scheduleChannel;
+    }
+
+    public void setScheduleChannel(Integer scheduleChannel) {
+        this.scheduleChannel = scheduleChannel;
+    }
+
+    private class ReWriteToStringModel {
+
+        public  String toString(){
+            return ToStringBuilder.reflectionToString(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        }
     }
 }

@@ -615,4 +615,49 @@
     <select id="getTaskByAppNameIP" parameterType="String" resultMap="BaseResultMap" >
        select TaurusTask.* from TaurusTask where TaurusTask.appName = #{appName}  and TaurusTask.hostName = #{ip} and status != 3
     </select>
+
+  <select id="selectJobInfoDetailByIds"
+          resultMap="BaseResultMap"
+          parameterType="java.util.Arrays">
+    select * from TaurusTask t
+    <where>
+      <if test="creators != null">
+        and t.creator in
+        <foreach item="item" index="index" collection="creators"
+                 open="(" separator="," close=")">
+          #{item}
+        </foreach>
+
+      </if>
+
+      <if test="ids != null">
+        and t.taskID in
+        <foreach item="item" index="index" collection="ids"
+                 open="(" separator="," close=")">
+          #{item}
+        </foreach>
+      </if>
+    </where>
+  </select>
+
+  <select id="selectJobInfoDetailByParamForApi"
+          resultMap="BaseResultMap"
+          parameterType="com.dp.bigdata.taurus.generated.module.Task">
+    select * from TaurusTask t
+    <where>
+      <if test="task.creator != null">
+        and t.creator = #{task.creator}
+      </if>
+      <if test="task.taskid != null">
+        and t.taskID = #{task.taskid}
+      </if>
+      <if test="task.name != null">
+        and  t.name = #{task.name}
+      </if>
+      <if test="task.status != null">
+        and t.status = #{task.status}
+      </if>
+    </where>
+  </select>
+
 </mapper>

@@ -1,19 +1,40 @@
 package com.dp.bigdata.taurus.springmvc.controller.api;
 
-import com.dp.bigdata.taurus.generated.mapper.TaskAttemptMapper;
+import com.dp.bigdata.taurus.core.*;
+import com.dp.bigdata.taurus.core.parser.DependencyParser;
+import com.dp.bigdata.taurus.generated.mapper.AlertRuleMapper;
 import com.dp.bigdata.taurus.generated.mapper.TaskMapper;
+import com.dp.bigdata.taurus.generated.mapper.UserGroupMapper;
+import com.dp.bigdata.taurus.generated.mapper.UserMapper;
+import com.dp.bigdata.taurus.generated.module.*;
+import com.dp.bigdata.taurus.restlet.exception.DuplicatedNameException;
+import com.dp.bigdata.taurus.restlet.exception.InvalidArgumentException;
+import com.dp.bigdata.taurus.restlet.resource.impl.NameResource;
+import com.dp.bigdata.taurus.restlet.shared.AttemptDTO;
+import com.dp.bigdata.taurus.restlet.shared.TaskApiDTO;
+import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
+import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
+import com.dp.bigdata.taurus.restlet.utils.PoolManager;
+import com.dp.bigdata.taurus.springmvc.service.IScheduleService;
+import com.dp.bigdata.taurus.springmvc.utils.TaurusApiException;
 import com.dp.bigdata.taurus.utils.APIAuthorizationUtils;
 import org.apache.commons.lang.StringUtils;
+import org.restlet.resource.ClientResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -24,23 +45,52 @@ import java.util.List;
 @API
 @Controller
 @Scope("prototype")
-public class APIController{
+public class APIController {
 
     private Logger log = LoggerFactory.getLogger(getClass());
+
+    private static final String MAIL_ONLY = "1";
+
+    private static final String WECHAT_ONLY = "2";
+
+    private static final String DAXIANG_ONLY = "3";
+
+    private static final String ALL = "4";
 
     @Autowired
     private HttpServletRequest request;
 
     @Autowired
-    private TaskAttemptMapper taskAttemptMapper;
+    private IScheduleService scheduleService;
+
+    @Autowired
+    private IDFactory idFactory;
+
+    @Autowired
+    private PoolManager poolManager;
+
+    @Autowired
+    private NameResource nameResource;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Autowired
     private TaskMapper taskMapper;
 
+    @Autowired
+    private UserGroupMapper userGroupMapper;
+
+    @Autowired
+    private AlertRuleMapper alertRuleMapper;
+
+    @Autowired
+    private Scheduler scheduler;
+
     @RequestMapping(value = "/jobList", method = {RequestMethod.GET})
     @ResponseBody
-    public Result getJobList( String jobIds) { //jobIds映射到任务名
-        Result result = null;
+    public Result getJobList(String jobIds) {
+        Result result;
         String userGroup = (String) request.getAttribute(APIAuthorizationUtils.BA_REQUST_ATTRIBUTE_CLIENTID);
         //校验参数是否为空
         log.info("APIController  jobList begin  jobIds:" + jobIds + " ,clientId:" + userGroup);
@@ -48,77 +98,341 @@ public class APIController{
             result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED_PARAM_NULL.getCode(), ErrorCodeEnum.OPERATION_FAILED_PARAM_NULL.getField());
             return result;
         }
-        JobIdsParam jobIdsParam = new JobIdsParam();
-        jobIdsParam.setIds(jobIds.split(","));
 
-//        try {
-//            List<JobDetailOutModel> list = scheduleAPIService.queryJobDetailByIds(jobIdsParam);
-//            result = Result.getInstance(true, list, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
-//
-//        } catch (MSException e) {
-//            log.error("getJobList jobDetailAPIList ", e);
-//            result = Result.getInstance(false, null, e.getCode(), e.getMessage());
-//
-//        } catch (Exception e) {
-//            log.error("getJobList queryParam error ", e);
-//            result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED_PARAM_TYPE_ERROR.getCode(), ErrorCodeEnum.OPERATION_FAILED_PARAM_TYPE_ERROR.getField());
-//            return result;
-//        }
-        log.info("ScheduleAPIController  jobList end  jobIds:" + jobIds + " ,clientId:" + clientId);
+        try {
+            List<Task> list = scheduleService.queryJobDetailByIds(userGroup, jobIds.split(","));
+            result = Result.getInstance(true, list, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
+
+        } catch (TaurusApiException e) {
+            log.error("getJobList jobDetailAPIList ", e);
+            result = Result.getInstance(false, null, e.getCode(), e.getMessage());
+
+        } catch (Exception e) {
+            log.error("getJobList queryParam error ", e);
+            result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED_PARAM_TYPE_ERROR.getCode(), ErrorCodeEnum.OPERATION_FAILED_PARAM_TYPE_ERROR.getField());
+            return result;
+        }
+        log.info("ScheduleAPIController  jobList end  jobIds:" + jobIds + " ,clientId:" + jobIds);
         return result;
 
     }
 
     @RequestMapping(value = "/quaryJobList", method = {RequestMethod.GET})
     @ResponseBody
-    public Result quaryJobList(JobInfoQueryParam queryParam) {
-        Result result = null;
-        BAInfoModel baInfoModel = null;
-//        baInfoModel = this.getBAinfo();
-//        log.info("ScheduleAPIController  quaryJobList begin  queryParam:" + queryParam + " ,clientId:" + baInfoModel.getClientId());
-//        queryParam.setJobLine(baInfoModel.getJobLine());
-//        queryParam.setJobGroup(baInfoModel.getJobGroup());
-//        try {
-//            List<JobDetailOutModel> list = scheduleAPIService.queryJobDetailByParam(queryParam);
-//            result = Result.getInstance(true, list, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
-//        } catch (MSException e) {
-//            log.error("quaryJobList jobDetailAPIList ", e);
-//            result = Result.getInstance(false, null, e.getCode(), e.getMessage());
-//            return result;
-//        }
-        log.info("ScheduleAPIController  quaryJobList end  queryParam:" + queryParam + " ,clientId:" + baInfoModel.getClientId());
+    public Result quaryJobList(Task task) {
+
+        Result result;
+        String userGroup = (String) request.getAttribute(APIAuthorizationUtils.BA_REQUST_ATTRIBUTE_CLIENTID);
+        try {
+            List<Task> list = scheduleService.queryJobDetailByParam(userGroup, task);
+            result = Result.getInstance(true, list, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
+        } catch (TaurusApiException e) {
+            log.error("quaryJobList jobDetailAPIList ", e);
+            result = Result.getInstance(false, null, e.getCode(), e.getMessage());
+            return result;
+        }
         return result;
     }
 
-    @RequestMapping(value = "/addJob", method = {RequestMethod.POST}, produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "/addJob", method = {RequestMethod.POST})
     @ResponseBody
-    public Result addJob(@RequestBody JobSimpleInfoParam jobSimpleInfoParam) {
+    public Result addJob(@RequestBody TaskApiDTO taskApiDTO) {
         {
-            Result result = null;
-            try {
-                // 组装唯一码
-                String jobUniqueCode = ScheduleUtil.getJobUniqueCode(this.getBAinfo().getJobLine(), this.getBAinfo().getJobGroup(), jobSimpleInfoParam.getJobCode());
-                jobSimpleInfoParam.setJobUniqueCode(jobUniqueCode);
-                List<Integer> jobIdList = new ArrayList<Integer>();
-                log.info("ScheduleAPIController addJob begin,jobUniqueCode = " + jobUniqueCode + " ,clientId:" + this.getBAinfo().getClientId());
-                JobInfo jobInfo = verifyJobInfo(jobSimpleInfoParam);
-                List<JobNotifyAlarm> jobNotifyAlarmList = verfyJobNotifyAlarm(jobSimpleInfoParam.getJobNotifyAlarmList(), jobUniqueCode);
-                scheduleAPIService.addJobAndAlarm(jobInfo, jobNotifyAlarmList);
-                JobInfoOutModel jobInfoOutModel = new JobInfoOutModel();
-                jobInfoOutModel.setId(jobInfo.getId());
-                jobInfoOutModel.setJobUniqueCode(jobInfo.getJobUniqueCode());
-                result = Result.getInstance(true, jobInfoOutModel, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
-                log.info("ScheduleAPIController addJob end,jobUniqueCode = " + jobUniqueCode + " ,clientId:" + this.getBAinfo().getClientId());
-            } catch (MSException e) {
-                log.error("addJob" + e);
-                result = Result.getInstance(false, null, e.getCode(), e.getMessage());
+
+            Result result;
+            String taskName = taskApiDTO.getTaskName();
+            HashMap<String, String> tasks = taskMapper.isExitTaskName(taskName);
+            if(tasks != null && !tasks.isEmpty()){
+                result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_ADD_FAILED_UNIQUE_CODE_REPEAT.getCode(), ErrorCodeEnum.OPERATION_ADD_FAILED_UNIQUE_CODE_REPEAT.getField());
                 return result;
+            }
+
+            TaskDTO taskDTO = initTaskDTO();
+            fulfillTaskDTO(taskApiDTO, taskDTO);
+
+            try {
+                validate(taskDTO);
+                log.info(String.format("APIController addJob begin for %s", taskDTO.getName()));
+                scheduler.registerTask(taskDTO.getTask());
+                alertRuleMapper.insertSelective(taskDTO.getAlertRule());
+                JobInfoOutModel jobInfoOutModel = new JobInfoOutModel();
+                jobInfoOutModel.setId(taskDTO.getTaskid());
+                jobInfoOutModel.setJobUniqueCode(taskDTO.getName());
+                result = Result.getInstance(true, jobInfoOutModel, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
+                log.info(String.format("APIController addJob end for %s", taskDTO.getName()));
+            } catch (Exception e) {
+                log.error("addJob" + e);
+                e.printStackTrace();
+                result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED.getCode(), ErrorCodeEnum.OPERATION_FAILED.getField());
             }
             return result;
         }
     }
 
-    private static class Result<T>{
+    @RequestMapping(value = "/modifyJob", method = {RequestMethod.POST})
+    @ResponseBody
+    public Result modifyJob(@RequestBody TaskApiDTO taskApiDTO) {
+
+        TaskDTO taskDTO = new TaskDTO();
+        fulfillTaskDTO(taskApiDTO, taskDTO);
+        Result result;
+        try {
+            validate(taskDTO);
+            log.info(String.format("APIController modifyJob begin for %s", taskDTO.getName()));
+            scheduler.updateTask(taskDTO.getTask());
+            AlertRuleExample example = new AlertRuleExample();
+            example.or().andJobidEqualTo(taskDTO.getTaskid());
+            AlertRule updatedRule = taskDTO.getAlertRule();
+            updatedRule.setId(null);
+            alertRuleMapper.updateByExampleSelective(updatedRule, example);
+            JobInfoOutModel jobInfoOutModel = new JobInfoOutModel();
+            jobInfoOutModel.setId(taskDTO.getTaskid());
+            jobInfoOutModel.setJobUniqueCode(taskDTO.getName());
+            result = Result.getInstance(true, jobInfoOutModel, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
+            log.info(String.format("APIController modifyJob end for %s", taskDTO.getName()));
+        } catch (Exception e) {
+            log.error("modifyJob" + e);
+            e.printStackTrace();
+            result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED.getCode(), ErrorCodeEnum.OPERATION_FAILED.getField());
+        }
+        return result;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/startJob", method = RequestMethod.POST)
+    public Result startJob(String jobId) {
+
+        Result result;
+        if (StringUtils.isBlank(jobId)) {
+            result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED_PARAM_NULL.getCode(), ErrorCodeEnum.OPERATION_FAILED_PARAM_NULL.getField());
+            return result;
+        }
+        ClientResource manualCr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "manualtask/" + jobId);
+        log.info("APIController startJob begin taskId = " + jobId);
+        manualCr.post(null);
+        log.info("APIController startJob end taskId = " + jobId);
+        result = Result.getInstance(false, null, manualCr.getStatus().getCode(), "");
+        return result;
+
+    }
+
+    @RequestMapping(value = "/stopJob", method = RequestMethod.POST)
+    @ResponseBody
+    public Result stopJob(String jobId) {
+
+        Result result;
+        if (StringUtils.isBlank(jobId)) {
+            result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED_PARAM_NULL.getCode(), ErrorCodeEnum.OPERATION_FAILED_PARAM_NULL.getField());
+            return result;
+        }
+        ClientResource manualCr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "manualtask/" + jobId);
+        log.info("APIController stopJob begin taskId = " + jobId);
+        manualCr.put(null);
+        log.info("APIController stopJob end taskId = " + jobId);
+        result = Result.getInstance(false, null, manualCr.getStatus().getCode(), "");
+        return result;
+    }
+
+    @RequestMapping(value = "/onceJob", method = RequestMethod.POST)
+    @ResponseBody
+    public Result onceJob(String jobId) {
+
+        Result result;
+        if (StringUtils.isBlank(jobId)) {
+            result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED_PARAM_NULL.getCode(), ErrorCodeEnum.OPERATION_FAILED_PARAM_NULL.getField());
+            return result;
+        }
+        ClientResource manualCr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "manualtask/" + jobId);
+        log.info("APIController onceJob begin taskId = " + jobId);
+        manualCr.get();
+        log.info("APIController onceJob end taskId = " + jobId);
+        result = Result.getInstance(false, null, manualCr.getStatus().getCode(), "");
+        return result;
+
+    }
+
+    @RequestMapping(value = "/getJobTrace", method = RequestMethod.GET)
+    @ResponseBody
+    public Result getJobTrace(String jobCodes) {
+
+
+            Result result = null;
+        try {
+
+            ClientResource cr;
+
+            String url = LionConfigUtil.RESTLET_API_BASE + "attempt?task_id=" + jobCodes;
+            cr = new ClientResource(url);
+            cr.setRequestEntityBuffering(true);
+            ArrayList<AttemptDTO> attempts = cr.get(ArrayList.class);
+            result = Result.getInstance(true, attempts, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
+        }catch (Exception e){
+            log.error("getJobTrace  error", e);
+            result = Result.getInstance(true, null, ErrorCodeEnum.OPERATION_FAILED.getCode(), ErrorCodeEnum.OPERATION_FAILED.getField());
+        }
+
+        return result;
+    }
+
+    private TaskDTO initTaskDTO(){
+
+        TaskDTO taskDTO = new TaskDTO();
+        Date current = new Date();
+        taskDTO.setAddtime(current);
+        taskDTO.setLastscheduletime(current);
+        String id = idFactory.newTaskID();
+        taskDTO.setTaskid(id);
+        taskDTO.setStatus(TaskStatus.getTaskRunState(TaskStatus.RUNNING));
+        taskDTO.setUpdatetime(current);
+        return taskDTO;
+    }
+
+    private void fulfillTaskDTO(TaskApiDTO taskApiDTO, TaskDTO taskDTO){
+
+        String condition = taskApiDTO.getAlertCondition();
+        if (StringUtils.isBlank(condition)) {
+            taskDTO.setConditions(AttemptStatus.getInstanceRunState(AttemptStatus.FAILED));
+        }
+
+        String alertGroup = taskApiDTO.getAlertGroup();
+        if (StringUtils.isNotBlank(alertGroup)) {
+            String[] groups = alertGroup.split(";");
+            StringBuilder groupId = new StringBuilder();
+            for (int i = 0; i < groups.length; i++) {
+                String group = groups[i];
+
+                if (group != null && group.length() > 0) {
+                    UserGroupExample example = new UserGroupExample();
+                    example.or().andGroupnameEqualTo(group);
+
+                    List<UserGroup> userGroups = userGroupMapper.selectByExample(example);
+
+                    if (userGroups != null && userGroups.size() == 1) {
+                        groupId.append(userGroups.get(0).getId());
+
+                        if (i < groups.length - 1) {
+                            groupId.append(";");
+                        }
+                    }
+                }
+            }
+            taskDTO.setGroupid(groupId.toString());
+        } else {
+            taskDTO.setGroupid("");
+        }
+
+        String alertUser = taskApiDTO.getAlertUser();
+        if (StringUtils.isNotBlank(alertUser)) {
+            String[] users = alertUser.split(";");
+            StringBuilder userId = new StringBuilder();
+
+            for (int i = 0; i < users.length; i++) {
+                String user = users[i];
+                if (user != null & user.length() > 0) {
+                    UserExample example = new UserExample();
+
+                    example.or().andNameEqualTo(user);
+                    List<User> userList = userMapper.selectByExample(example);
+
+                    if (userList != null && userList.size() == 1) {
+                        userId.append(userList.get(0).getId());
+                        if (i < users.length - 1) {
+                            userId.append(";");
+                        }
+                    }
+                }
+            }
+
+            taskDTO.setUserid(userId.toString());
+        } else {
+            taskDTO.setUserid("");
+        }
+
+        String alertType = taskApiDTO.getAlertType();
+        if (StringUtils.isNotBlank(alertType)) {
+            if (alertType.equalsIgnoreCase(MAIL_ONLY)) {
+                taskDTO.setHasmail(true);
+            } else if (alertType.equalsIgnoreCase(WECHAT_ONLY)) {
+                taskDTO.setHassms(true);
+            } else if (alertType.equalsIgnoreCase(DAXIANG_ONLY)) {
+                taskDTO.setHasdaxiang(true);
+            } else if (alertType.equalsIgnoreCase(ALL)) {
+                taskDTO.setHasmail(true);
+                taskDTO.setHassms(true);
+                taskDTO.setHasdaxiang(true);
+            } else {
+                taskDTO.setHasmail(true);
+            }
+        }
+
+        taskDTO.setAppName(taskApiDTO.getAppName());
+        taskDTO.setName(taskApiDTO.getTaskName());
+        taskDTO.setType(taskApiDTO.getTaskType());
+        taskDTO.setPoolid(2);
+        taskDTO.setCommand(taskApiDTO.getTaskCommand());
+        taskDTO.setCrontab(taskApiDTO.getCrontab());
+        taskDTO.setDependencyexpr(taskApiDTO.getDependency());
+        taskDTO.setProxyuser(taskApiDTO.getProxyUser());
+        taskDTO.setExecutiontimeout(taskApiDTO.getMaxExecutionTime());
+        taskDTO.setWaittimeout(taskApiDTO.getMaxWaitTime());
+        taskDTO.setDescription(taskApiDTO.getDescription());
+        taskDTO.setAutoKill(taskApiDTO.iskillcongexp());
+        taskDTO.setMainClass(taskApiDTO.getMainClass());
+        taskDTO.setTaskUrl(taskApiDTO.getTaskUrl());
+        taskDTO.setIskillcongexp(taskApiDTO.iskillcongexp());
+        int retryTimes = taskApiDTO.getRetryTimes();
+        taskDTO.setRetrytimes(retryTimes);
+        if(retryTimes > 0){
+            taskDTO.setIsautoretry(true);
+        }else {
+            taskDTO.setIsautoretry(false);
+        }
+    }
+
+    private void validate(TaskDTO task) throws Exception {
+        if (StringUtils.isBlank(task.getCreator())) {
+            throw new InvalidArgumentException("Cannot get creator name from request");
+        }
+
+        if (StringUtils.isBlank(task.getUserid())) {
+            String name = task.getCreator();
+            UserExample example = new UserExample();
+            example.or().andNameEqualTo(name);
+            List<User> user = userMapper.selectByExample(example);
+            if (user == null || user.size() != 1) {
+                throw new InvalidArgumentException("Cannot get mail user from request");
+            } else {
+                User u = user.get(0);
+                task.setUserid(u.getId().toString());
+            }
+        }
+
+        if (StringUtils.isBlank(task.getProxyuser())) {
+            throw new InvalidArgumentException("Cannot get proxy user from request");
+        }
+
+        if (StringUtils.isNotBlank(task.getDependencyexpr())) {
+            if (!DependencyParser.isValidateExpression(task.getDependencyexpr())) {
+                throw new InvalidArgumentException("Invalid dependency expression : " + task.getDependencyexpr());
+            }
+        }
+
+        if (StringUtils.isBlank(task.getName())) {
+            throw new InvalidArgumentException("Cannot get task name from request");
+        }
+
+        if (nameResource.isExistTaskName(task.getName())) {
+            throw new DuplicatedNameException("Duplicated Name : " + task.getName());
+        }
+
+        try {
+            new CronExpression(task.getCrontab());
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
+    private static class Result<T> {
 
         private boolean ret = true;
 
@@ -178,39 +492,6 @@ public class APIController{
         }
     }
 
-    private class JobIdsParam {
-
-        private String[]  ids;//
-
-        private String jobGroup;//任务分组
-
-        private String jobLine;//业务线
-
-        public String[] getIds() {
-            return ids;
-        }
-
-        public void setIds(String[] ids) {
-            this.ids = ids;
-        }
-
-        public String getJobGroup() {
-            return jobGroup;
-        }
-
-        public void setJobGroup(String jobGroup) {
-            this.jobGroup = jobGroup;
-        }
-
-        public String getJobLine() {
-            return jobLine;
-        }
-
-        public void setJobLine(String jobLine) {
-            this.jobLine = jobLine;
-        }
-    }
-
     public static class BAInfoModel implements Serializable {
 
         private String clientId;
@@ -245,7 +526,7 @@ public class APIController{
 
     }
 
-    protected enum ErrorCodeEnum{
+    protected enum ErrorCodeEnum {
 
         //define error code
         OPERATION_SUCCESS(0, "操作成功"),
@@ -263,19 +544,19 @@ public class APIController{
 
         OPERATION_DELETE_FAILED(301, "删除失败"),
         OPERATION_DELETE_FAILED_JOB_IS_START(302, "删除失败,处于启动状态的job不允许删除"),
-        OPERATION_DELETE_FAILED_NOT_JOB_OWNER(303,"删除失败，您不是任务所有者不能删除该任务"),
+        OPERATION_DELETE_FAILED_NOT_JOB_OWNER(303, "删除失败，您不是任务所有者不能删除该任务"),
 
-        OPERATION_FAILED_PARAM_NULL(401,"必填参数为空"),
-        OPERATION_FAILED_PARAM_EXPRESSIONTYPE(402,"expressiontype必须为 cron "),
-        OPERATION_FAILED_PARAM_BAERROR(403,"jobLine和jobGroup的组合信息与clientId不符"),
-        OPERATION_FAILED_PARAM_TYPE_ERROR(404,"参数类型错误"),
-        OPERATION_FAILED_PARAM_JOB_NOFOUND(405,"未找到相应的jobInfo信息"),
-        OPERATION_FAILED_PARAM_MIS_NOFOUND(406,"未找到相应的mis信息"),
-        OPERATION_FAILED_PARAM_PORT_ERROR(407,"taskAcceptorPort must in 8410~8430,include 8410 and " +
+        OPERATION_FAILED_PARAM_NULL(401, "必填参数为空"),
+        OPERATION_FAILED_PARAM_EXPRESSIONTYPE(402, "expressiontype必须为 cron "),
+        OPERATION_FAILED_PARAM_BAERROR(403, "jobLine和jobGroup的组合信息与clientId不符"),
+        OPERATION_FAILED_PARAM_TYPE_ERROR(404, "参数类型错误"),
+        OPERATION_FAILED_PARAM_JOB_NOFOUND(405, "未找到相应的jobInfo信息"),
+        OPERATION_FAILED_PARAM_MIS_NOFOUND(406, "未找到相应的mis信息"),
+        OPERATION_FAILED_PARAM_PORT_ERROR(407, "taskAcceptorPort must in 8410~8430,include 8410 and " +
                 "8430,default 8383"),
-        OPERATION_FAILED_PARAM_IP_ERROR(408,"指定机器IP地址有误"),
+        OPERATION_FAILED_PARAM_IP_ERROR(408, "指定机器IP地址有误"),
         OPERATION_FAILED_PARAM_IP_TASKNODE_NULL(409, "指定IP模式，任务节点需要配置"),
-        OPERATION_FAILED_PARAM_SHARDSTRATEGY_SUBTASK_NULL(410,"任务策略为分片任务时，任务分片数必须为正整数");
+        OPERATION_FAILED_PARAM_SHARDSTRATEGY_SUBTASK_NULL(410, "任务策略为分片任务时，任务分片数必须为正整数");
 
         private Integer code;
 
@@ -295,5 +576,27 @@ public class APIController{
         }
     }
 
+    private static class JobInfoOutModel{
+
+        private String id;//id
+
+        private String jobUniqueCode;//唯一编码
+
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getJobUniqueCode() {
+            return jobUniqueCode;
+        }
+
+        public void setJobUniqueCode(String jobUniqueCode) {
+            this.jobUniqueCode = jobUniqueCode;
+        }
+    }
 
 }

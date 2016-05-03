@@ -1,4 +1,4 @@
-package com.dp.bigdata.taurus.springmvc.controller.api;
+package com.dp.bigdata.taurus.utils;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;

@@ -115,7 +115,7 @@ public class ApiAuthenticationFilter implements Filter {
             }
         }
 
-        return false;
+        return true;
     }
 
     @Override
