@@ -149,7 +149,7 @@ public class APIController {
         fulfillTaskDTO(taskApiDTO, taskDTO);
 
         try {
-            validate(taskDTO);
+            validate(taskDTO, false);
             log.info(String.format("APIController addJob begin for %s", taskDTO.getName()));
             scheduler.registerTask(taskDTO.getTask());
             alertRuleMapper.insertSelective(taskDTO.getAlertRule());
@@ -174,7 +174,7 @@ public class APIController {
         fulfillTaskDTO(taskApiDTO, taskDTO);
         Result result;
         try {
-            validate(taskDTO);
+            validate(taskDTO, true);
             log.info(String.format("APIController modifyJob begin for %s", taskDTO.getName()));
             scheduler.updateTask(taskDTO.getTask());
             AlertRuleExample example = new AlertRuleExample();
@@ -388,7 +388,7 @@ public class APIController {
         }
     }
 
-    private void validate(TaskDTO task) throws Exception {
+    private void validate(TaskDTO task, boolean isUpdateAction) throws Exception {
         if (StringUtils.isBlank(task.getCreator())) {
             throw new InvalidArgumentException("Cannot get creator name from request");
         }
@@ -420,7 +420,7 @@ public class APIController {
             throw new InvalidArgumentException("Cannot get task name from request");
         }
 
-        if (nameResource.isExistTaskName(task.getName())) {
+        if (!isUpdateAction && nameResource.isExistTaskName(task.getName())) {
             throw new DuplicatedNameException("Duplicated Name : " + task.getName());
         }
 
