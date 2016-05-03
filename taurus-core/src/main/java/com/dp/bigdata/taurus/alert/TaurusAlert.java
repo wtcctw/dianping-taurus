@@ -207,6 +207,7 @@ public class TaurusAlert {
 				while(isInterrupt.get()) {
 					alertThreadRestFlag = true;
 					SleepUtils.sleep(5000);
+					m_lastNotifyTime = new Date();
 				}
 				alertThreadRestFlag = false;
 
@@ -232,8 +233,6 @@ public class TaurusAlert {
 					LOG.error(e, e);
 				}
 
-				m_lastNotifyTime = new Date();
-				
 			}
 		}
 
