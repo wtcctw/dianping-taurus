@@ -155,29 +155,13 @@ public class APIController {
             return result;
 
         }
-//        ClientResource addJob = new ClientResource("localhost:8080/api/" + "task");
+
         ClientResource addJob = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "task");
         addJob.put(taskDTO);
         result = Result.getInstance(false, null, addJob.getStatus().getCode(), "");
 
         return result;
 
-//        try {
-//            validate(taskDTO, false);
-//            log.info(String.format("APIController addJob begin for %s", taskDTO.getName()));
-//            scheduler.registerTask(taskDTO.getTask());
-//            alertRuleMapper.insertSelective(taskDTO.getAlertRule());
-//            JobInfoOutModel jobInfoOutModel = new JobInfoOutModel();
-//            jobInfoOutModel.setId(taskDTO.getTaskid());
-//            jobInfoOutModel.setJobUniqueCode(taskDTO.getName());
-//            result = Result.getInstance(true, jobInfoOutModel, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
-//            log.info(String.format("APIController addJob end for %s", taskDTO.getName()));
-//        } catch (Exception e) {
-//            log.error("addJob" + e);
-//            e.printStackTrace();
-//            result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED.getCode(), ErrorCodeEnum.OPERATION_FAILED.getField());
-//        }
-//        return result;
     }
 
     @RequestMapping(value = "/modifyJob", method = {RequestMethod.POST})
@@ -187,8 +171,8 @@ public class APIController {
         Result result;
         String taskName = taskApiDTO.getTaskName();
         HashMap<String, String> tasks = taskMapper.isExitTaskName(taskName);
-        if (tasks != null && !tasks.isEmpty()) {
-            result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_ADD_FAILED_UNIQUE_CODE_REPEAT.getCode(), ErrorCodeEnum.OPERATION_ADD_FAILED_UNIQUE_CODE_REPEAT.getField());
+        if (tasks == null || tasks.isEmpty()) {
+            result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_ADD_FAILED_NO_UNIQUE_CODE.getCode(), ErrorCodeEnum.OPERATION_ADD_FAILED_UNIQUE_CODE_REPEAT.getField());
             return result;
         }
 
@@ -202,35 +186,11 @@ public class APIController {
             return result;
 
         }
-//        ClientResource addJob = new ClientResource("localhost:8080/api/" + "task");
         ClientResource addJob = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "task");
         addJob.put(taskDTO);
         result = Result.getInstance(false, null, addJob.getStatus().getCode(), "");
 
         return result;
-//        TaskDTO taskDTO = new TaskDTO();
-//        fulfillTaskDTO(taskApiDTO, taskDTO);
-//        Result result;
-//        try {
-//            validate(taskDTO, true);
-//            log.info(String.format("APIController modifyJob begin for %s", taskDTO.getName()));
-//            scheduler.updateTask(taskDTO.getTask());
-//            AlertRuleExample example = new AlertRuleExample();
-//            example.or().andJobidEqualTo(taskDTO.getTaskid());
-//            AlertRule updatedRule = taskDTO.getAlertRule();
-//            updatedRule.setId(null);
-//            alertRuleMapper.updateByExampleSelective(updatedRule, example);
-//            JobInfoOutModel jobInfoOutModel = new JobInfoOutModel();
-//            jobInfoOutModel.setId(taskDTO.getTaskid());
-//            jobInfoOutModel.setJobUniqueCode(taskDTO.getName());
-//            result = Result.getInstance(true, jobInfoOutModel, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
-//            log.info(String.format("APIController modifyJob end for %s", taskDTO.getName()));
-//        } catch (Exception e) {
-//            log.error("modifyJob" + e);
-//            e.printStackTrace();
-//            result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED.getCode(), ErrorCodeEnum.OPERATION_FAILED.getField());
-//        }
-//        return result;
     }
 
 
@@ -575,6 +535,7 @@ public class APIController {
         OPERATION_ADD_FAILED_UNIQUE_CODE_REPEAT(102, "job唯一码已存在"),
         OPERATION_ADD_FAILED_CRON_NOT_VALID(103, "cron表达式配置错误"),
         OPERATION_ADD_FAILED_PORT_NOT_VALID(104, "通信端口必须在8410-8430,默认8383"),
+        OPERATION_ADD_FAILED_NO_UNIQUE_CODE(105, "job唯一码不存在"),
 
         OPERATION_MODIFY_FAILED(201, "修改失败"),
         OPERATION_MODIFY_FAILED_UNIQUE_CODE_REPEAT(202, "job唯一码已存在"),
