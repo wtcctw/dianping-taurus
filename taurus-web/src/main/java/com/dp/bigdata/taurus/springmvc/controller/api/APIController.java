@@ -172,7 +172,7 @@ public class APIController {
         String taskName = taskApiDTO.getTaskName();
         HashMap<String, String> tasks = taskMapper.isExitTaskName(taskName);
         if (tasks == null || tasks.isEmpty()) {
-            result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_ADD_FAILED_NO_UNIQUE_CODE.getCode(), ErrorCodeEnum.OPERATION_ADD_FAILED_UNIQUE_CODE_REPEAT.getField());
+            result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_ADD_FAILED_NO_UNIQUE_CODE.getCode(), ErrorCodeEnum.OPERATION_ADD_FAILED_NO_UNIQUE_CODE.getField());
             return result;
         }
 
@@ -365,7 +365,7 @@ public class APIController {
         taskDTO.setAppName(taskApiDTO.getAppName());
         taskDTO.setName(taskApiDTO.getTaskName());
         taskDTO.setType(taskApiDTO.getTaskType());
-        taskDTO.setPoolid(2);
+        taskDTO.setPoolid(1); //以后可让用户设置
         taskDTO.setCommand(taskApiDTO.getTaskCommand());
         taskDTO.setCrontab(taskApiDTO.getCrontab());
         taskDTO.setDependencyexpr(taskApiDTO.getDependency());
