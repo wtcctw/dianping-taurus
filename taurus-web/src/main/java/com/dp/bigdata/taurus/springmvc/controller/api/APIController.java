@@ -155,7 +155,7 @@ public class APIController {
         }
 
         ClientResource addJob = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "task");
-        addJob.put(taskDTO);
+        addJob.put(new TaskDTOWrapper(taskDTO, false));
 
         if (addJob.getStatus().getCode() == Status.SUCCESS_CREATED.getCode()) {
             result = Result.getInstance(true, null, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
@@ -196,7 +196,7 @@ public class APIController {
 
         }
         ClientResource addJob = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "task");
-        addJob.put(taskDTO);
+        addJob.put(new TaskDTOWrapper(taskDTO, false));
 
         if (addJob.getStatus().getCode() == Status.SUCCESS_CREATED.getCode()) {
             result = Result.getInstance(true, null, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
@@ -626,6 +626,26 @@ public class APIController {
 
         public void setJobUniqueCode(String jobUniqueCode) {
             this.jobUniqueCode = jobUniqueCode;
+        }
+    }
+
+    public static class TaskDTOWrapper{
+
+        private TaskDTO taskDTO;
+
+        private boolean update;
+
+        public TaskDTOWrapper(TaskDTO taskDTO, boolean update) {
+            this.taskDTO = taskDTO;
+            this.update = update;
+        }
+
+        public TaskDTO getTaskDTO() {
+            return taskDTO;
+        }
+
+        public boolean isUpdate() {
+            return update;
         }
     }
 
