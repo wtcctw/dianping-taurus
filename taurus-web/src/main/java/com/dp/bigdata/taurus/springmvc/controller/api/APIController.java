@@ -19,6 +19,7 @@ import com.dp.bigdata.taurus.springmvc.service.IScheduleService;
 import com.dp.bigdata.taurus.springmvc.utils.TaurusApiException;
 import com.dp.bigdata.taurus.utils.APIAuthorizationUtils;
 import org.apache.commons.lang.StringUtils;
+import org.restlet.data.Status;
 import org.restlet.resource.ClientResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -158,7 +159,12 @@ public class APIController {
 
         ClientResource addJob = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "task");
         addJob.put(taskDTO);
-        result = Result.getInstance(false, null, addJob.getStatus().getCode(), "");
+
+        if (addJob.getStatus() == Status.SUCCESS_CREATED) {
+            result = Result.getInstance(true, null, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
+        } else {
+            result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED.getCode(), ErrorCodeEnum.OPERATION_FAILED.getField());
+        }
 
         return result;
 
@@ -188,11 +194,14 @@ public class APIController {
         }
         ClientResource addJob = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "task");
         addJob.put(taskDTO);
-        result = Result.getInstance(false, null, addJob.getStatus().getCode(), "");
 
+        if (addJob.getStatus() == Status.SUCCESS_CREATED) {
+            result = Result.getInstance(true, null, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
+        } else {
+            result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED.getCode(), ErrorCodeEnum.OPERATION_FAILED.getField());
+        }
         return result;
     }
-
 
 
     @ResponseBody
@@ -208,7 +217,13 @@ public class APIController {
         log.info("APIController startJob begin taskId = " + jobId);
         manualCr.post(null);
         log.info("APIController startJob end taskId = " + jobId);
-        result = Result.getInstance(false, null, manualCr.getStatus().getCode(), "");
+
+        if (manualCr.getStatus() == Status.SUCCESS_CREATED) {
+            result = Result.getInstance(true, null, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
+        } else {
+            result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED.getCode(), ErrorCodeEnum.OPERATION_FAILED.getField());
+        }
+
         return result;
 
     }
@@ -226,7 +241,13 @@ public class APIController {
         log.info("APIController stopJob begin taskId = " + jobId);
         manualCr.put(null);
         log.info("APIController stopJob end taskId = " + jobId);
-        result = Result.getInstance(false, null, manualCr.getStatus().getCode(), "");
+
+        if (manualCr.getStatus() == Status.SUCCESS_CREATED) {
+            result = Result.getInstance(true, null, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
+        } else {
+            result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED.getCode(), ErrorCodeEnum.OPERATION_FAILED.getField());
+        }
+
         return result;
     }
 
@@ -243,7 +264,13 @@ public class APIController {
         log.info("APIController onceJob begin taskId = " + jobId);
         manualCr.get();
         log.info("APIController onceJob end taskId = " + jobId);
-        result = Result.getInstance(false, null, manualCr.getStatus().getCode(), "");
+
+        if (manualCr.getStatus() == Status.SUCCESS_CREATED) {
+            result = Result.getInstance(true, null, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
+        } else {
+            result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED.getCode(), ErrorCodeEnum.OPERATION_FAILED.getField());
+        }
+
         return result;
 
     }
@@ -253,11 +280,10 @@ public class APIController {
     public Result getJobTrace(String jobCodes) {
 
 
-        Result result = null;
+        Result result;
         try {
 
             ClientResource cr;
-
             String url = LionConfigUtil.RESTLET_API_BASE + "attempt?task_id=" + jobCodes;
             cr = new ClientResource(url);
             cr.setRequestEntityBuffering(true);
