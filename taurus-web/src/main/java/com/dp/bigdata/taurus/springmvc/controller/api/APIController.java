@@ -33,10 +33,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 
 /**
@@ -182,12 +179,18 @@ public class APIController {
             return result;
         }
 
-        TaskDTO taskDTO = initTaskDTO();
+
+        TaskDTO taskDTO = new TaskDTO();
         fulfillTaskDTO(taskApiDTO, taskDTO);
         try {
+            TaskExample taskExample = new TaskExample();
+            taskExample.createCriteria().andNameEqualTo(taskName);
+            List<Task> taskList = taskMapper.selectByExample(taskExample);
+            Task task = taskList.get(0);
+            taskDTO.setTaskid(task.getTaskid());
             validate(taskDTO, true);
         } catch (Exception e) {
-            log.error("addJob" + e);
+            log.error("modifyJob" + e);
             result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED.getCode(), ErrorCodeEnum.OPERATION_FAILED.getField());
             return result;
 
@@ -306,12 +309,13 @@ public class APIController {
         String id = idFactory.newTaskID();
         taskDTO.setTaskid(id);
         taskDTO.setStatus(TaskStatus.getTaskRunState(TaskStatus.RUNNING));
-        taskDTO.setUpdatetime(current);
+
         return taskDTO;
     }
 
     private void fulfillTaskDTO(TaskApiDTO taskApiDTO, TaskDTO taskDTO) {
 
+        taskDTO.setUpdatetime(new Date());
         String condition = taskApiDTO.getAlertCondition();
         if (StringUtils.isBlank(condition)) {
             taskDTO.setConditions(AttemptStatus.getInstanceRunState(AttemptStatus.FAILED));
