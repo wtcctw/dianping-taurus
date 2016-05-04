@@ -157,7 +157,7 @@ public class APIController {
         ClientResource addJob = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "task");
         addJob.put(taskDTO);
 
-        if (addJob.getStatus() == Status.SUCCESS_CREATED) {
+        if (addJob.getStatus().getCode() == Status.SUCCESS_CREATED.getCode()) {
             result = Result.getInstance(true, null, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
         } else {
             result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED.getCode(), ErrorCodeEnum.OPERATION_FAILED.getField());
@@ -198,7 +198,7 @@ public class APIController {
         ClientResource addJob = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "task");
         addJob.put(taskDTO);
 
-        if (addJob.getStatus() == Status.SUCCESS_CREATED) {
+        if (addJob.getStatus().getCode() == Status.SUCCESS_CREATED.getCode()) {
             result = Result.getInstance(true, null, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
         } else {
             result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED.getCode(), ErrorCodeEnum.OPERATION_FAILED.getField());
@@ -221,7 +221,7 @@ public class APIController {
         manualCr.post(null);
         log.info("APIController startJob end taskId = " + jobId);
 
-        if (manualCr.getStatus() == Status.SUCCESS_CREATED) {
+        if (manualCr.getStatus().getCode() == Status.SUCCESS_CREATED.getCode()) {
             result = Result.getInstance(true, null, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
         } else {
             result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED.getCode(), ErrorCodeEnum.OPERATION_FAILED.getField());
@@ -245,7 +245,7 @@ public class APIController {
         manualCr.put(null);
         log.info("APIController stopJob end taskId = " + jobId);
 
-        if (manualCr.getStatus() == Status.SUCCESS_CREATED) {
+        if (manualCr.getStatus().getCode() == Status.SUCCESS_CREATED.getCode()) {
             result = Result.getInstance(true, null, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
         } else {
             result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED.getCode(), ErrorCodeEnum.OPERATION_FAILED.getField());
@@ -268,7 +268,7 @@ public class APIController {
         manualCr.get();
         log.info("APIController onceJob end taskId = " + jobId);
 
-        if (manualCr.getStatus() == Status.SUCCESS_CREATED) {
+        if (manualCr.getStatus().getCode() == Status.SUCCESS_CREATED.getCode()) {
             result = Result.getInstance(true, null, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
         } else {
             result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED.getCode(), ErrorCodeEnum.OPERATION_FAILED.getField());
