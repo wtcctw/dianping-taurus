@@ -1,15 +1,13 @@
 package com.dp.bigdata.taurus.restlet.resource.impl;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+import com.dp.bigdata.taurus.core.ScheduleException;
+import com.dp.bigdata.taurus.core.Scheduler;
+import com.dp.bigdata.taurus.core.TaskStatus;
+import com.dp.bigdata.taurus.generated.mapper.*;
+import com.dp.bigdata.taurus.generated.module.*;
 import com.dp.bigdata.taurus.restlet.resource.ITasksResource;
 import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
 import com.dp.bigdata.taurus.restlet.utils.*;
-
-import com.dp.bigdata.taurus.springmvc.controller.api.APIController;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -25,24 +23,10 @@ import org.restlet.resource.Put;
 import org.restlet.resource.ServerResource;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.dp.bigdata.taurus.core.ScheduleException;
-import com.dp.bigdata.taurus.core.Scheduler;
-import com.dp.bigdata.taurus.core.TaskStatus;
-import com.dp.bigdata.taurus.generated.mapper.AlertRuleMapper;
-import com.dp.bigdata.taurus.generated.mapper.TaskMapper;
-import com.dp.bigdata.taurus.generated.mapper.UserGroupMapper;
-import com.dp.bigdata.taurus.generated.mapper.UserGroupMappingMapper;
-import com.dp.bigdata.taurus.generated.mapper.UserMapper;
-import com.dp.bigdata.taurus.generated.module.AlertRule;
-import com.dp.bigdata.taurus.generated.module.AlertRuleExample;
-import com.dp.bigdata.taurus.generated.module.Task;
-import com.dp.bigdata.taurus.generated.module.TaskExample;
-import com.dp.bigdata.taurus.generated.module.User;
-import com.dp.bigdata.taurus.generated.module.UserExample;
-import com.dp.bigdata.taurus.generated.module.UserGroup;
-import com.dp.bigdata.taurus.generated.module.UserGroupExample;
-import com.dp.bigdata.taurus.generated.module.UserGroupMapping;
-import com.dp.bigdata.taurus.generated.module.UserGroupMappingExample;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Resource url : http://xxx.xxx/api/task?user={xxx}
@@ -281,16 +265,20 @@ public class TasksResource extends ServerResource implements ITasksResource {
 
     @Put
     @Override
-    public void createOrUpdate(APIController.TaskDTOWrapper taskDTOWrapper) {
+    public void createOrUpdate(TaskDTO taskDTO) {
 
-        boolean update = taskDTOWrapper.isUpdate();
-        TaskDTO taskDTO = taskDTOWrapper.getTaskDTO();
+        String taskId = taskDTO.getTaskid();
         try {
-            if (!update) {
+            if (StringUtils.isNotBlank(taskId)) {
                 scheduler.registerTask(taskDTO.getTask());
                 alertRuleMapper.insertSelective(taskDTO.getAlertRule());
-                setStatus(Status.SUCCESS_CREATED);
-            }else {
+            } else {
+                TaskExample taskExample = new TaskExample();
+                taskExample.createCriteria().andNameEqualTo(taskDTO.getName());
+                List<Task> taskList = taskMapper.selectByExample(taskExample);
+                Task task = taskList.get(0);
+                taskDTO.setTaskid(task.getTaskid());
+
                 scheduler.updateTask(taskDTO.getTask());
                 AlertRuleExample example = new AlertRuleExample();
                 example.or().andJobidEqualTo(taskDTO.getTaskid());
@@ -298,6 +286,7 @@ public class TasksResource extends ServerResource implements ITasksResource {
                 updatedRule.setId(null);
                 alertRuleMapper.updateByExampleSelective(updatedRule, example);
             }
+            setStatus(Status.SUCCESS_CREATED);
         } catch (ScheduleException e) {
             LOG.error(e.getMessage(), e);
             setStatus(Status.SERVER_ERROR_INTERNAL);

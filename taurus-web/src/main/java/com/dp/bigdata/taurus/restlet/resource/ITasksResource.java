@@ -1,7 +1,6 @@
 package com.dp.bigdata.taurus.restlet.resource;
 
 import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
-import com.dp.bigdata.taurus.springmvc.controller.api.APIController;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Get;
 import org.restlet.resource.Post;
@@ -24,6 +23,6 @@ public interface ITasksResource {
 	public void create(Representation re);
 
 	@Put
-	public void createOrUpdate(APIController.TaskDTOWrapper taskDTOWrapper);
+	public void createOrUpdate(TaskDTO taskDTO);
 
 }

@@ -64,9 +64,6 @@ public class APIController {
     private IDFactory idFactory;
 
     @Autowired
-    private PoolManager poolManager;
-
-    @Autowired
     private NameResource nameResource;
 
     @Autowired
@@ -77,12 +74,6 @@ public class APIController {
 
     @Autowired
     private UserGroupMapper userGroupMapper;
-
-    @Autowired
-    private AlertRuleMapper alertRuleMapper;
-
-    @Autowired
-    private Scheduler scheduler;
 
     @RequestMapping(value = "/jobList", method = {RequestMethod.GET})
     @ResponseBody
@@ -155,7 +146,7 @@ public class APIController {
         }
 
         ClientResource addJob = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "task");
-        addJob.put(new TaskDTOWrapper(taskDTO, false));
+        addJob.put(taskDTO);
 
         if (addJob.getStatus().getCode() == Status.SUCCESS_CREATED.getCode()) {
             result = Result.getInstance(true, null, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
@@ -183,11 +174,6 @@ public class APIController {
         TaskDTO taskDTO = new TaskDTO();
         fulfillTaskDTO(taskApiDTO, taskDTO);
         try {
-            TaskExample taskExample = new TaskExample();
-            taskExample.createCriteria().andNameEqualTo(taskName);
-            List<Task> taskList = taskMapper.selectByExample(taskExample);
-            Task task = taskList.get(0);
-            taskDTO.setTaskid(task.getTaskid());
             validate(taskDTO, true);
         } catch (Exception e) {
             log.error("modifyJob" + e);
@@ -195,8 +181,9 @@ public class APIController {
             return result;
 
         }
-        ClientResource addJob = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "task");
-        addJob.put(new TaskDTOWrapper(taskDTO, false));
+        ClientResource addJob = new ClientResource("http://localhost:8080/api/" + "task");
+//        ClientResource addJob = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "task");
+        addJob.put(taskDTO);
 
         if (addJob.getStatus().getCode() == Status.SUCCESS_CREATED.getCode()) {
             result = Result.getInstance(true, null, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
@@ -280,14 +267,14 @@ public class APIController {
 
     @RequestMapping(value = "/getJobTrace", method = RequestMethod.GET)
     @ResponseBody
-    public Result getJobTrace(String jobCodes) {
+    public Result getJobTrace(String jobId) {
 
 
         Result result;
         try {
 
             ClientResource cr;
-            String url = LionConfigUtil.RESTLET_API_BASE + "attempt?task_id=" + jobCodes;
+            String url = LionConfigUtil.RESTLET_API_BASE + "attempt?task_id=" + jobId;
             cr = new ClientResource(url);
             cr.setRequestEntityBuffering(true);
             ArrayList<AttemptDTO> attempts = cr.get(ArrayList.class);
@@ -626,26 +613,6 @@ public class APIController {
 
         public void setJobUniqueCode(String jobUniqueCode) {
             this.jobUniqueCode = jobUniqueCode;
-        }
-    }
-
-    public static class TaskDTOWrapper{
-
-        private TaskDTO taskDTO;
-
-        private boolean update;
-
-        public TaskDTOWrapper(TaskDTO taskDTO, boolean update) {
-            this.taskDTO = taskDTO;
-            this.update = update;
-        }
-
-        public TaskDTO getTaskDTO() {
-            return taskDTO;
-        }
-
-        public boolean isUpdate() {
-            return update;
         }
     }
 
