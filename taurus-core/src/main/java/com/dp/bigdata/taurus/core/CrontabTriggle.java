@@ -91,6 +91,8 @@ public class CrontabTriggle implements Triggle {
                         attempt.setStatus(AttemptStatus.INITIALIZED);
                         attempt.setAttemptid(attemptID);
                         attemptMapper.insert(attempt);
+                        ConcurrentMap<String, Date> previousTime = scheduler.getPreviousFireTimeMap();
+                        previousTime.put(task.getTaskid(), nextFireTime);
                         for (InitializedAttemptListener listener : initializedAttemptListeners) {
                             listener.addInitializedAttempt(attempt);
                         }
