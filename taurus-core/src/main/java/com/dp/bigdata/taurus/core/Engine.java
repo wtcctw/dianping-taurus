@@ -573,6 +573,7 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
                 retry.setScheduletime(attempt.getScheduletime());
                 retry.setStatus(AttemptStatus.DEPENDENCY_PASS);
                 taskAttemptMapper.insertSelective(retry);
+                addDependPassAttempt(retry);
             }
         }
     }

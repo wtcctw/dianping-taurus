@@ -57,7 +57,7 @@ public class APIControllerTest {
 
     @Test
     public void testAddJob() throws Exception {
-        httpAddJobPost("http://alpha.taurus.dp/api/job/addJob", "/api/job/addJob");
+        httpAddJobPost("http://localhost:8080/api/job/addJob", "/api/job/addJob");
 
     }
 
