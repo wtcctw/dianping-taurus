@@ -53,6 +53,8 @@ public abstract class CachedScheduler extends ConfigedScheduler implements Sched
 
     protected ConcurrentMap<String, BoundedList<TaskAttempt>> dependPassMap = new ConcurrentHashMap<String, BoundedList<TaskAttempt>>();
 
+    protected ConcurrentMap<String, Date> previousFireTime = new ConcurrentHashMap<String, Date>();
+
     @Autowired
     protected TaskAttemptMapper taskAttemptMapper;
 
@@ -112,6 +114,7 @@ public abstract class CachedScheduler extends ConfigedScheduler implements Sched
         attemptsOfStatusDependTimeout.clear();
         dependPassMap.clear();
         registeredCron.clear();
+        previousFireTime.clear();
     }
 
     /**
@@ -351,6 +354,10 @@ public abstract class CachedScheduler extends ConfigedScheduler implements Sched
             logger.error(String.format("crontab of %s:%s is wrong", task.getName(), cronExpression));
         }
 
+    }
+
+    public ConcurrentMap<String, Date> getPreviousFireTimeMap() {
+        return previousFireTime;
     }
 
     @Override

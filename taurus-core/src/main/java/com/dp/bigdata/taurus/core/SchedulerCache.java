@@ -3,8 +3,10 @@ package com.dp.bigdata.taurus.core;
 import com.dp.bigdata.taurus.generated.module.Task;
 import com.dp.bigdata.taurus.generated.module.TaskAttempt;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Author   mingdongli
@@ -21,6 +23,8 @@ public interface SchedulerCache extends SchedulerConfig{
     List<AttemptContext> getRunningAttemptsByTaskID(String taskID);
 
     Map<String, Task> getAllRegistedTask();
+
+    ConcurrentMap<String, Date> getPreviousFireTimeMap();
 
     Task getTaskByName(String name) throws ScheduleException;
 
