@@ -76,6 +76,8 @@ public class CrontabTriggle implements Triggle {
             // for update the crontab expression
             if (previousFireTime.before(task.getUpdatetime())) {
                 previousFireTime = task.getUpdatetime();
+                ConcurrentMap<String, Date> previousTime = scheduler.getPreviousFireTimeMap();
+                previousTime.put(task.getTaskid(), previousFireTime);
             }
 
             // iterator each fire time from last previousFireTime to current.
