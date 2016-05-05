@@ -73,7 +73,7 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
 
     private Runnable progressMonitor;
 
-    private ExecutorService attemptExecutor = ThreadUtils.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2, "AttemptExector");
+    private ExecutorService attemptExecutor = ThreadUtils.newFixedThreadPool(500, "AttemptExector");
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -573,6 +573,7 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
                 retry.setScheduletime(attempt.getScheduletime());
                 retry.setStatus(AttemptStatus.DEPENDENCY_PASS);
                 taskAttemptMapper.insertSelective(retry);
+                addDependPassAttempt(retry);
             }
         }
     }
