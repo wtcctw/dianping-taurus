@@ -2,6 +2,7 @@ package com.dp.bigdata.taurus.core;
 
 import java.text.ParseException;
 import java.util.*;
+import java.util.concurrent.ConcurrentMap;
 
 import com.dp.bigdata.taurus.core.listener.GenericAttemptListener;
 import com.dp.bigdata.taurus.core.listener.InitializedAttemptListener;
@@ -126,24 +127,32 @@ public class CrontabTriggle implements Triggle {
     }
 
     private Date getPreviousFireTime(final Task task, final Date now) {
-        List<TaskAttempt> attempts = retrieveLatestTaskAttemptByTaskID(task.getTaskid());
-        Date previousFireTime;
-        // if it is the first time to execute this task, set time to now; otherwise set to the first attempt's schedule time.
-        if (attempts == null || attempts.size() == 0) {
-            Calendar lastExecDateCal = Calendar.getInstance();
-            lastExecDateCal.setTime(now);
-            lastExecDateCal.set(Calendar.MILLISECOND, 0);
-            lastExecDateCal.set(Calendar.SECOND, 0);
-            lastExecDateCal.add(Calendar.MINUTE, -1);
-            previousFireTime = lastExecDateCal.getTime();
-        } else {
-            previousFireTime = attempts.get(0).getScheduletime();
+
+        ConcurrentMap<String, Date> previousTime =  scheduler.getPreviousFireTimeMap();
+        String taskId = task.getTaskid();
+        Date previousFireTime = previousTime.get(taskId);
+        if(previousFireTime == null){
+            List<TaskAttempt> attempts = retrieveLatestTaskAttemptByTaskID(taskId);
+            // if it is the first time to execute this task, set time to now; otherwise set to the first attempt's schedule time.
+            if (attempts == null || attempts.size() == 0) {
+                Calendar lastExecDateCal = Calendar.getInstance();
+                lastExecDateCal.setTime(now);
+                lastExecDateCal.set(Calendar.MILLISECOND, 0);
+                lastExecDateCal.set(Calendar.SECOND, 0);
+                lastExecDateCal.add(Calendar.MINUTE, -1);
+                previousFireTime = lastExecDateCal.getTime();
+            } else {
+                previousFireTime = attempts.get(0).getScheduletime();
+            }
+
+            previousTime.put(taskId, previousFireTime);
         }
 
         // if lastScheduleTime is after previous schedule time, set previousFireTime = lastScheduleTime.
         Date lastScheduleTime = task.getLastscheduletime();
         if (lastScheduleTime != null && lastScheduleTime.after(previousFireTime)) {
             previousFireTime = lastScheduleTime;
+            previousTime.put(taskId, previousFireTime);
         }
         return previousFireTime;
     }
