@@ -247,9 +247,18 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
 
                 Transaction t = Cat.newTransaction("Engine", "Schedule");
                 try {
-                    crontabTriggle.triggle();
-                    dependencyTriggle.triggle(CollectionUtils.union(attemptsOfStatusInitialized, attemptsOfStatusDependTimeout));
 
+                    Transaction cron = Cat.newTransaction("Engine", "Cron");
+                    crontabTriggle.triggle();
+                    cron.setStatus(Message.SUCCESS);
+                    cron.complete();
+
+                    Transaction depend = Cat.newTransaction("Engine", "Depend");
+                    dependencyTriggle.triggle(CollectionUtils.union(attemptsOfStatusInitialized, attemptsOfStatusDependTimeout));
+                    depend.setStatus(Message.SUCCESS);
+                    depend.complete();
+
+                    Transaction fil = Cat.newTransaction("Engine", "Filter");
                     List<AttemptContext> contexts = filter.filter(getReadyToRunAttempt());
 
                     if (contexts != null) {
@@ -258,6 +267,8 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
                             attemptExecutor.execute(new AttemptTask(context));
                         }
                     }
+                    fil.setStatus(Message.SUCCESS);
+                    fil.complete();
 
                     t.setStatus(Message.SUCCESS);
                 } catch (Throwable e) {
