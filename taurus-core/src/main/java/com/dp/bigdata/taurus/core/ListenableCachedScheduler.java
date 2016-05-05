@@ -42,6 +42,5 @@ public abstract class ListenableCachedScheduler extends CachedScheduler implemen
     @Override
     public synchronized void addInitializedAttempt(TaskAttempt taskAttempt) {
         attemptsOfStatusInitialized.add(taskAttempt);
-        previousFireTime.put(taskAttempt.getTaskid(), taskAttempt.getScheduletime());
     }
 }

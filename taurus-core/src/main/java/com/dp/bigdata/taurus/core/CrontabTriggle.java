@@ -1,20 +1,21 @@
 package com.dp.bigdata.taurus.core;
 
-import java.text.ParseException;
-import java.util.*;
-import java.util.concurrent.ConcurrentMap;
-
-import com.dp.bigdata.taurus.core.listener.GenericAttemptListener;
-import com.dp.bigdata.taurus.core.listener.InitializedAttemptListener;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Date;
 
 import com.dianping.cat.Cat;
+import com.dp.bigdata.taurus.core.listener.GenericAttemptListener;
+import com.dp.bigdata.taurus.core.listener.InitializedAttemptListener;
 import com.dp.bigdata.taurus.generated.mapper.TaskAttemptMapper;
 import com.dp.bigdata.taurus.generated.module.Task;
 import com.dp.bigdata.taurus.generated.module.TaskAttempt;
 import com.dp.bigdata.taurus.generated.module.TaskAttemptExample;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.text.ParseException;
+import java.util.*;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * Triggle for Crontab Expression.
@@ -92,6 +93,8 @@ public class CrontabTriggle implements Triggle {
                         attempt.setStatus(AttemptStatus.INITIALIZED);
                         attempt.setAttemptid(attemptID);
                         attemptMapper.insert(attempt);
+                        ConcurrentMap<String, Date> previousTime = scheduler.getPreviousFireTimeMap();
+                        previousTime.put(task.getTaskid(), nextFireTime);
                         for (InitializedAttemptListener listener : initializedAttemptListeners) {
                             listener.addInitializedAttempt(attempt);
                         }
@@ -128,10 +131,10 @@ public class CrontabTriggle implements Triggle {
 
     private Date getPreviousFireTime(final Task task, final Date now) {
 
-        ConcurrentMap<String, Date> previousTime =  scheduler.getPreviousFireTimeMap();
+        ConcurrentMap<String, Date> previousTime = scheduler.getPreviousFireTimeMap();
         String taskId = task.getTaskid();
         Date previousFireTime = previousTime.get(taskId);
-        if(previousFireTime == null){
+        if (previousFireTime == null) {
             List<TaskAttempt> attempts = retrieveLatestTaskAttemptByTaskID(taskId);
             // if it is the first time to execute this task, set time to now; otherwise set to the first attempt's schedule time.
             if (attempts == null || attempts.size() == 0) {
