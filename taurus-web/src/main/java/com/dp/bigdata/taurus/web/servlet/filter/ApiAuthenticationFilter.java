@@ -2,7 +2,6 @@ package com.dp.bigdata.taurus.web.servlet.filter;
 
 import com.dp.bigdata.taurus.lion.LionDynamicConfig;
 import com.dp.bigdata.taurus.utils.APIAuthorizationUtils;
-import com.sankuai.meituan.config.MtConfigClient;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,8 +22,6 @@ import java.util.HashMap;
 public class ApiAuthenticationFilter implements Filter {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    private MtConfigClient mtConfigClient;
 
     private LionDynamicConfig lionConfig;
 
@@ -86,14 +83,9 @@ public class ApiAuthenticationFilter implements Filter {
                 logger.info("clientId:" + clientId + "requestSignature:" + requestSignature);
                 String clientSecret = "";
                 if (StringUtils.isNotBlank(clientId)) {
-//                    clientSecret = mtConfigClient.getValue(clientId);
-                    clientSecret = "";
+                    clientSecret = lionConfig.get("taurus." + clientId);  //throw RuntimeException
                 }
                 boolean passed = doAuthorization0(request, requestSignature, clientId, clientSecret, date);
-                if (!passed) {
-                    clientSecret = lionConfig.get("taurus." + clientId);  //throw RuntimeException
-                    passed = doAuthorization0(request, requestSignature, clientId, clientSecret, date);
-                }
 
                 return passed;
             }
@@ -122,10 +114,6 @@ public class ApiAuthenticationFilter implements Filter {
     @Override
     public void destroy() {
 
-    }
-
-    public void setMtConfigClient(MtConfigClient mtConfigClient) {
-        this.mtConfigClient = mtConfigClient;
     }
 
     public void setLionConfig(LionDynamicConfig lionConfig) {
