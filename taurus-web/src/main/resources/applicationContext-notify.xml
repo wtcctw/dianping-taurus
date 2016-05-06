@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+ http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <bean id="mtThriftPoolConfig"
+          class="com.meituan.service.mobile.mtthrift.client.pool.MTThriftPoolConfig">
+        <property name="maxActive" value="100"/>
+        <property name="maxIdle" value="20"/>
+        <property name="minIdle" value="1"/>
+        <property name="maxWait" value="3000000"/>
+        <property name="testOnBorrow" value="true"/>
+        <property name="testOnReturn" value="false"/>
+        <property name="testWhileIdle" value="false"/>
+    </bean>
+
+    <bean id="notifyService"
+          class="com.meituan.service.mobile.mtthrift.proxy.ThriftClientProxy"
+          destroy-method="destroy">
+        <property name="mtThriftPoolConfig" ref="mtThriftPoolConfig"/>
+        <property name="serviceInterface"
+                  value="com.meituan.hotel.notify.thrift.service.INotifyService"/>
+        <!-- 可不配置:默认maxActive=100,maxIdle=20,minIdle=5,maxWait=3000 -->
+        <property name="timeout" value="15000"/>
+        <!-- thrift rpc 超时时间（毫秒） -->
+        <property name="clusterManager" value="OCTO"/>
+        <!-- 自己应用appKey -->
+
+        <property name="appKey" value="com.sankuai.travel.mschedule.dev"/>
+        <!--<property name="appKey" value="${kms_appKey}"/>-->
+        <property name="remoteAppkey" value="com.meituan.hotel.notify"/>
+    </bean>
+</beans>
