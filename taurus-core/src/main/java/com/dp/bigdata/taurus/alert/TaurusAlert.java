@@ -12,15 +12,10 @@ import com.dp.bigdata.taurus.lion.ConfigHolder;
 import com.dp.bigdata.taurus.lion.LionKeys;
 import com.dp.bigdata.taurus.utils.EnvUtils;
 import com.dp.bigdata.taurus.utils.SleepUtils;
-import com.meituan.hotel.notify.thrift.models.MultiChannelDownstreamModel;
-import com.meituan.hotel.notify.thrift.result.NotifyResult;
-import com.meituan.hotel.notify.thrift.service.INotifyService;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.thrift.TException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.CollectionUtils;
 
 import javax.mail.MessagingException;
 import java.util.*;
@@ -63,9 +58,6 @@ public class TaurusAlert {
 
 	@Autowired
 	private HealthChecker healthChecker;
-
-	@Autowired
-	private INotifyService.Iface notifyService;
 
 	private Map<Integer, User> userMap;
 	
@@ -194,18 +186,15 @@ public class TaurusAlert {
 
 				if (user != null) {
 					if (rule.getHasmail() && StringUtils.isNotBlank(user.getMail())) {
-						sendMail(user.getName(),user.getMail(), attempt);
+						sendMail(user.getName(), user.getMail(), attempt);
 
 					}
 
 					if (rule.getHassms() /*&& StringUtils.isNotBlank(user.getTel())*/) {
-		                sendWeChat(user.getName(),attempt);
+		                sendWeChat(user.getName(), attempt);
 						//sendSMS(user.getTel(), attempt);
 					}
 
-					if(rule.getHasdaxiang()){
-						sendDaxiang(user.getName(), attempt);
-					}
 				} else {
 					Cat.logError("Cannot find user id : " + id, null);
 				}
@@ -255,22 +244,6 @@ public class TaurusAlert {
 			mail.setFormat("text/html");
 			mail.setSubject("Taurus告警服务");
 			MailHelper.sendMail(mail);
-		}
-
-		private void sendDaxiang(String to, TaskAttempt attempt) {
-
-			Cat.logEvent("Alert.DaXiang", to);
-			LOG.info("Send daxiang to " + to);
-			List<String> daxiangMisList = new ArrayList<String>();
-			daxiangMisList.add(to);
-			String daxiangContent = contentBuild(to, attempt);
-			try {
-				if (!CollectionUtils.isEmpty(daxiangMisList)) {
-					MultiChannelDownstreamModel multiChannelDownstreamModel = toMultiChannelDownstreamModel(daxiangMisList, 4, "Taurus告警", daxiangContent);
-					notifyService.multiChannelSend(multiChannelDownstreamModel);
-				}
-			} catch (TException te1) {
-			}
 		}
 
 		private void sendMail(String userName,String mailTo, TaskAttempt attempt) {
@@ -407,23 +380,4 @@ public class TaurusAlert {
         alert.start(-1);
     }
 
-	/**
-	 * 发送多渠道消息
-	 * @param misList
-	 * @param channel 1 ：邮件， 2 ：短信， 4 ：大象文本， 5 ：邮件＋大象文本， 3 ：邮件＋短信， 7 ：邮件＋短信＋大象文本
-	 * @param title
-	 * @param content
-	 * @return
-	 */
-	private MultiChannelDownstreamModel toMultiChannelDownstreamModel(List<String> misList, int channel, String title, String content) {
-		if (CollectionUtils.isEmpty(misList)) {
-			return null;
-		}
-		MultiChannelDownstreamModel multiChannelDownstreamModel = new MultiChannelDownstreamModel();
-		multiChannelDownstreamModel.setMis(misList);
-		multiChannelDownstreamModel.setChannels(channel);
-		multiChannelDownstreamModel.setTitle(title);
-		multiChannelDownstreamModel.setContent(content);
-		return multiChannelDownstreamModel;
-	}
 }

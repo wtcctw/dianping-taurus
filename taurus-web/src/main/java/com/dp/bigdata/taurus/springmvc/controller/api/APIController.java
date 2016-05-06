@@ -423,12 +423,9 @@ public class APIController {
                 taskDTO.setHasmail(true);
             } else if (alertType.equalsIgnoreCase(TaskRequestExtractor.WECHAT_ONLY)) {
                 taskDTO.setHassms(true);
-            } else if (alertType.equalsIgnoreCase(TaskRequestExtractor.DAXIANG_ONLY)) {
-                taskDTO.setHasdaxiang(true);
-            } else if (alertType.equalsIgnoreCase(TaskRequestExtractor.ALL)) {
+            } else if (alertType.equalsIgnoreCase(TaskRequestExtractor.MAIL_AND_WECHAT)) {
                 taskDTO.setHasmail(true);
                 taskDTO.setHassms(true);
-                taskDTO.setHasdaxiang(true);
             } else {
                 taskDTO.setHasmail(true);
             }
