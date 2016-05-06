@@ -334,7 +334,7 @@ public class APIController {
         manualCr.get();
         log.info("APIController onceJob end taskId = " + jobId);
 
-        if (manualCr.getStatus().getCode() == Status.SUCCESS_OK.getCode()) {
+        if (manualCr.getStatus().getCode() == Status.SUCCESS_NO_CONTENT.getCode()) {
             result = Result.getInstance(true, null, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
         } else {
             result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED.getCode(), ErrorCodeEnum.OPERATION_FAILED.getField());

@@ -104,15 +104,48 @@ public class APIControllerTest {
     @Test
     public void testgetJobTrace() throws Exception {
         List<BasicNameValuePair> nvps = new ArrayList<BasicNameValuePair>();
-        nvps.add(new BasicNameValuePair("jobId", "task_201605042328_0001"));
+        nvps.add(new BasicNameValuePair("jobId", "task_201605041836_0003"));
         httpJobTraceJobGet("http://alpha.taurus.dp/api/job/getJobTrace", nvps);
     }
 
     @Test
     public void testjobList() throws Exception {
         List<BasicNameValuePair> nvps = new ArrayList<BasicNameValuePair>();
-        nvps.add(new BasicNameValuePair("jobId", "task_201605042328_0001"));
+        nvps.add(new BasicNameValuePair("jobIds", "task_201605041836_0003,task_201605041742_0002"));
         httpJobListGet("http://alpha.taurus.dp/api/job/jobList", nvps);
+    }
+
+    @Test
+    public void testquaryJobList() throws Exception {
+        List<BasicNameValuePair> nvps = new ArrayList<BasicNameValuePair>();
+        nvps.add(new BasicNameValuePair("taskid", "task_201605041836_0003"));
+        nvps.add(new BasicNameValuePair("name", "addjobtest333"));
+        nvps.add(new BasicNameValuePair("status", "1"));
+        nvps.add(new BasicNameValuePair("creator", "mingdong.li"));
+        httpQuaryJobListGet("http://alpha.taurus.dp/api/job/quaryJobList", nvps);
+    }
+
+    public static String httpQuaryJobListGet(String url, List<BasicNameValuePair> nvps) throws JSONException, IOException, InvalidKeyException, NoSuchAlgorithmException {
+
+        //构造nvps为queryString
+        if (nvps != null && nvps.size() > 0) {
+            String query = URLEncodedUtils.format(nvps, "UTF-8");
+            url += "?" + query;
+        }
+        HttpGet httpGet = new HttpGet(url);
+
+        HttpEntity entity;
+        String result;
+        String date = TimeUtil.getAuthDate(new Date());
+        String authorization = AuthUtil.getAuthorization("/api/job/quaryJobList", "GET", date, "hotel_mtazhilian", "b4db8cd497ff274c0e60af06ba6f2da3");
+        httpGet.setHeader("Date", date);
+        httpGet.setHeader("Authorization", authorization);
+        HttpResponse response = httpclient.execute(httpGet);
+        entity = response.getEntity();
+        InputStream ins = entity.getContent();
+        result = IOUtils.toString(ins, "UTF-8");
+        System.out.println(result);
+        return result;
     }
 
 
@@ -205,58 +238,6 @@ public class APIControllerTest {
         jsonParam.put("appName", "");
         jsonParam.put("iskillcongexp", false);
         jsonParam.put("hostName", "192.168.78.42");
-
-        StringEntity entity = new StringEntity(jsonParam.toString(), "UTF-8");
-        entity.setContentEncoding("UTF-8");
-        entity.setContentType("application/json");
-        method.setEntity(entity);
-
-        System.out.println(jsonParam);
-        HttpResponse result = httpclient.execute(method);
-
-        String resData = EntityUtils.toString(result.getEntity());
-        System.out.println(resData);
-    }
-
-    public static void httpStopJobPost(String url, String uri) throws JSONException, IOException, InvalidKeyException, NoSuchAlgorithmException {
-
-        HttpPost method = new HttpPost(url);
-        String date = TimeUtil.getAuthDate(new Date());
-        String authorization = AuthUtil.getAuthorization(uri, "POST", date, "hotel_mtazhilian", "b4db8cd497ff274c0e60af06ba6f2da3");
-        method.setHeader("Date", date);
-        method.setHeader("Authorization", authorization);
-
-
-        // 接收参数json列表
-        JSONObject jsonParam = new JSONObject();
-
-        jsonParam.put("jobId", "task_201605042328_0001");
-
-        StringEntity entity = new StringEntity(jsonParam.toString(), "UTF-8");
-        entity.setContentEncoding("UTF-8");
-        entity.setContentType("application/json");
-        method.setEntity(entity);
-
-        System.out.println(jsonParam);
-        HttpResponse result = httpclient.execute(method);
-
-        String resData = EntityUtils.toString(result.getEntity());
-        System.out.println(resData);
-    }
-
-    public static void httpStartJobPost(String url, String uri) throws JSONException, IOException, InvalidKeyException, NoSuchAlgorithmException {
-
-        HttpPost method = new HttpPost(url);
-        String date = TimeUtil.getAuthDate(new Date());
-        String authorization = AuthUtil.getAuthorization(uri, "POST", date, "hotel_mtazhilian", "b4db8cd497ff274c0e60af06ba6f2da3");
-        method.setHeader("Date", date);
-        method.setHeader("Authorization", authorization);
-
-
-        // 接收参数json列表
-        JSONObject jsonParam = new JSONObject();
-
-        jsonParam.put("jobId", "task_201605042328_0001");
 
         StringEntity entity = new StringEntity(jsonParam.toString(), "UTF-8");
         entity.setContentEncoding("UTF-8");
