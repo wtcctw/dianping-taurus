@@ -15,4 +15,14 @@ public interface IScheduleService {
 
     List<Task> queryJobDetailByParam(String group, Task task) throws TaurusApiException;
 
+    boolean isTaskExist(String taskName);
+
+    boolean isCreatorInGroup(String creator, String group);
+
+    List<String> creatorsInGroup(String group);
+
+    String userConvertToId(String userName);
+
+    String groupConvertToId(String groupName);
+
 }

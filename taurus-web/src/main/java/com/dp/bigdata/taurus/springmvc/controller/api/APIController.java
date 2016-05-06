@@ -1,12 +1,14 @@
 package com.dp.bigdata.taurus.springmvc.controller.api;
 
-import com.dp.bigdata.taurus.core.*;
+import com.dp.bigdata.taurus.core.AttemptStatus;
+import com.dp.bigdata.taurus.core.CronExpression;
+import com.dp.bigdata.taurus.core.IDFactory;
+import com.dp.bigdata.taurus.core.TaskStatus;
 import com.dp.bigdata.taurus.core.parser.DependencyParser;
-import com.dp.bigdata.taurus.generated.mapper.AlertRuleMapper;
-import com.dp.bigdata.taurus.generated.mapper.TaskMapper;
-import com.dp.bigdata.taurus.generated.mapper.UserGroupMapper;
 import com.dp.bigdata.taurus.generated.mapper.UserMapper;
-import com.dp.bigdata.taurus.generated.module.*;
+import com.dp.bigdata.taurus.generated.module.Task;
+import com.dp.bigdata.taurus.generated.module.User;
+import com.dp.bigdata.taurus.generated.module.UserExample;
 import com.dp.bigdata.taurus.restlet.exception.DuplicatedNameException;
 import com.dp.bigdata.taurus.restlet.exception.InvalidArgumentException;
 import com.dp.bigdata.taurus.restlet.resource.impl.NameResource;
@@ -14,7 +16,6 @@ import com.dp.bigdata.taurus.restlet.shared.AttemptDTO;
 import com.dp.bigdata.taurus.restlet.shared.TaskApiDTO;
 import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
 import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
-import com.dp.bigdata.taurus.restlet.utils.PoolManager;
 import com.dp.bigdata.taurus.springmvc.service.IScheduleService;
 import com.dp.bigdata.taurus.springmvc.utils.TaurusApiException;
 import com.dp.bigdata.taurus.utils.APIAuthorizationUtils;
@@ -24,7 +25,6 @@ import org.restlet.resource.ClientResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,8 +32,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -68,12 +69,6 @@ public class APIController {
 
     @Autowired
     private UserMapper userMapper;
-
-    @Autowired
-    private TaskMapper taskMapper;
-
-    @Autowired
-    private UserGroupMapper userGroupMapper;
 
     @RequestMapping(value = "/jobList", method = {RequestMethod.GET})
     @ResponseBody
@@ -122,14 +117,28 @@ public class APIController {
         return result;
     }
 
+    /**
+     * 用户首先将BA验证的key作为一个分组，并且加入其中
+     *
+     * @param taskApiDTO
+     * @return
+     */
     @RequestMapping(value = "/addJob", method = {RequestMethod.POST})
     @ResponseBody
     public Result addJob(@RequestBody TaskApiDTO taskApiDTO) {
 
         Result result;
         String taskName = taskApiDTO.getTaskName();
-        HashMap<String, String> tasks = taskMapper.isExitTaskName(taskName);
-        if (tasks != null && !tasks.isEmpty()) {
+        String creator = taskApiDTO.getCreator();
+        String userGroup = (String) request.getAttribute(APIAuthorizationUtils.BA_REQUST_ATTRIBUTE_CLIENTID);
+        boolean hasAuth = scheduleService.isCreatorInGroup(creator, userGroup);
+        if (!hasAuth) {
+            result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED_PARAM_AUTHENTICATION.getCode(), ErrorCodeEnum.OPERATION_FAILED_PARAM_AUTHENTICATION.getField());
+            return result;
+        }
+
+        boolean exist = scheduleService.isTaskExist(taskName);
+        if (!exist) {
             result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_ADD_FAILED_UNIQUE_CODE_REPEAT.getCode(), ErrorCodeEnum.OPERATION_ADD_FAILED_UNIQUE_CODE_REPEAT.getField());
             return result;
         }
@@ -164,12 +173,19 @@ public class APIController {
 
         Result result;
         String taskName = taskApiDTO.getTaskName();
-        HashMap<String, String> tasks = taskMapper.isExitTaskName(taskName);
-        if (tasks == null || tasks.isEmpty()) {
-            result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_ADD_FAILED_NO_UNIQUE_CODE.getCode(), ErrorCodeEnum.OPERATION_ADD_FAILED_NO_UNIQUE_CODE.getField());
+        String creator = taskApiDTO.getCreator();
+        String userGroup = (String) request.getAttribute(APIAuthorizationUtils.BA_REQUST_ATTRIBUTE_CLIENTID);
+        boolean hasAuth = scheduleService.isCreatorInGroup(creator, userGroup);
+        if (!hasAuth) {
+            result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED_PARAM_AUTHENTICATION.getCode(), ErrorCodeEnum.OPERATION_FAILED_PARAM_AUTHENTICATION.getField());
             return result;
         }
 
+        boolean exist = scheduleService.isTaskExist(taskName);
+        if (!exist) {
+            result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_ADD_FAILED_UNIQUE_CODE_REPEAT.getCode(), ErrorCodeEnum.OPERATION_ADD_FAILED_UNIQUE_CODE_REPEAT.getField());
+            return result;
+        }
 
         TaskDTO taskDTO = new TaskDTO();
         fulfillTaskDTO(taskApiDTO, taskDTO);
@@ -182,7 +198,6 @@ public class APIController {
 
         }
         ClientResource addJob = new ClientResource("http://localhost:8080/api/" + "task");
-//        ClientResource addJob = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "task");
         addJob.put(taskDTO);
 
         if (addJob.getStatus().getCode() == Status.SUCCESS_CREATED.getCode()) {
@@ -193,6 +208,11 @@ public class APIController {
         return result;
     }
 
+    /**
+     * jobId查询出的task中的creator需要在BA验证的分组中，否则不通过验证
+     * @param jobId
+     * @return
+     */
 
     @ResponseBody
     @RequestMapping(value = "/startJob", method = RequestMethod.POST)
@@ -203,6 +223,25 @@ public class APIController {
             result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED_PARAM_NULL.getCode(), ErrorCodeEnum.OPERATION_FAILED_PARAM_NULL.getField());
             return result;
         }
+        String userGroup = (String) request.getAttribute(APIAuthorizationUtils.BA_REQUST_ATTRIBUTE_CLIENTID);
+        try {
+            List<Task> list = scheduleService.queryJobDetailByIds(userGroup, jobId);
+            if(list == null || list.isEmpty()){
+                result = Result.getInstance(true, null, ErrorCodeEnum.OPERATION_FAILED_PARAM_NOTINGROUP.getCode(), ErrorCodeEnum.OPERATION_FAILED_PARAM_NOTINGROUP.getField());
+                return result;
+            }
+            for (Task task : list) {
+                if (jobId.equals(task.getName())) {
+                    break;
+                }
+                result = Result.getInstance(true, null, ErrorCodeEnum.OPERATION_FAILED_PARAM_NOTINGROUP.getCode(), ErrorCodeEnum.OPERATION_FAILED_PARAM_NOTINGROUP.getField());
+                return result;
+            }
+        } catch (TaurusApiException e) {
+            result = Result.getInstance(false, null, e.getCode(), e.getMessage());
+            return result;
+        }
+
         ClientResource manualCr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "manualtask/" + jobId);
         log.info("APIController startJob begin taskId = " + jobId);
         manualCr.post(null);
@@ -227,6 +266,26 @@ public class APIController {
             result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED_PARAM_NULL.getCode(), ErrorCodeEnum.OPERATION_FAILED_PARAM_NULL.getField());
             return result;
         }
+
+        String userGroup = (String) request.getAttribute(APIAuthorizationUtils.BA_REQUST_ATTRIBUTE_CLIENTID);
+        try {
+            List<Task> list = scheduleService.queryJobDetailByIds(userGroup, jobId);
+            if(list == null || list.isEmpty()){
+                result = Result.getInstance(true, null, ErrorCodeEnum.OPERATION_FAILED_PARAM_NOTINGROUP.getCode(), ErrorCodeEnum.OPERATION_FAILED_PARAM_NOTINGROUP.getField());
+                return result;
+            }
+            for (Task task : list) {
+                if (jobId.equals(task.getName())) {
+                    break;
+                }
+                result = Result.getInstance(true, null, ErrorCodeEnum.OPERATION_FAILED_PARAM_NOTINGROUP.getCode(), ErrorCodeEnum.OPERATION_FAILED_PARAM_NOTINGROUP.getField());
+                return result;
+            }
+        } catch (TaurusApiException e) {
+            result = Result.getInstance(false, null, e.getCode(), e.getMessage());
+            return result;
+        }
+
         ClientResource manualCr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "manualtask/" + jobId);
         log.info("APIController stopJob begin taskId = " + jobId);
         manualCr.put(null);
@@ -250,6 +309,26 @@ public class APIController {
             result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED_PARAM_NULL.getCode(), ErrorCodeEnum.OPERATION_FAILED_PARAM_NULL.getField());
             return result;
         }
+
+        String userGroup = (String) request.getAttribute(APIAuthorizationUtils.BA_REQUST_ATTRIBUTE_CLIENTID);
+        try {
+            List<Task> list = scheduleService.queryJobDetailByIds(userGroup, jobId);
+            if(list == null || list.isEmpty()){
+                result = Result.getInstance(true, null, ErrorCodeEnum.OPERATION_FAILED_PARAM_NOTINGROUP.getCode(), ErrorCodeEnum.OPERATION_FAILED_PARAM_NOTINGROUP.getField());
+                return result;
+            }
+            for (Task task : list) {
+                if (jobId.equals(task.getName())) {
+                    break;
+                }
+                result = Result.getInstance(true, null, ErrorCodeEnum.OPERATION_FAILED_PARAM_NOTINGROUP.getCode(), ErrorCodeEnum.OPERATION_FAILED_PARAM_NOTINGROUP.getField());
+                return result;
+            }
+        } catch (TaurusApiException e) {
+            result = Result.getInstance(false, null, e.getCode(), e.getMessage());
+            return result;
+        }
+
         ClientResource manualCr = new ClientResource(LionConfigUtil.RESTLET_API_BASE + "manualtask/" + jobId);
         log.info("APIController onceJob begin taskId = " + jobId);
         manualCr.get();
@@ -271,6 +350,25 @@ public class APIController {
 
 
         Result result;
+        String userGroup = (String) request.getAttribute(APIAuthorizationUtils.BA_REQUST_ATTRIBUTE_CLIENTID);
+        try {
+            List<Task> list = scheduleService.queryJobDetailByIds(userGroup, jobId);
+            if(list == null || list.isEmpty()){
+                result = Result.getInstance(true, null, ErrorCodeEnum.OPERATION_FAILED_PARAM_NOTINGROUP.getCode(), ErrorCodeEnum.OPERATION_FAILED_PARAM_NOTINGROUP.getField());
+                return result;
+            }
+            for (Task task : list) {
+                if (jobId.equals(task.getName())) {
+                    break;
+                }
+                result = Result.getInstance(true, null, ErrorCodeEnum.OPERATION_FAILED_PARAM_NOTINGROUP.getCode(), ErrorCodeEnum.OPERATION_FAILED_PARAM_NOTINGROUP.getField());
+                return result;
+            }
+        } catch (TaurusApiException e) {
+            result = Result.getInstance(false, null, e.getCode(), e.getMessage());
+            return result;
+        }
+
         try {
 
             ClientResource cr;
@@ -309,54 +407,18 @@ public class APIController {
         }
 
         String alertGroup = taskApiDTO.getAlertGroup();
+
         if (StringUtils.isNotBlank(alertGroup)) {
-            String[] groups = alertGroup.split(";");
-            StringBuilder groupId = new StringBuilder();
-            for (int i = 0; i < groups.length; i++) {
-                String group = groups[i];
-
-                if (group != null && group.length() > 0) {
-                    UserGroupExample example = new UserGroupExample();
-                    example.or().andGroupnameEqualTo(group);
-
-                    List<UserGroup> userGroups = userGroupMapper.selectByExample(example);
-
-                    if (userGroups != null && userGroups.size() == 1) {
-                        groupId.append(userGroups.get(0).getId());
-
-                        if (i < groups.length - 1) {
-                            groupId.append(";");
-                        }
-                    }
-                }
-            }
-            taskDTO.setGroupid(groupId.toString());
+            String groupId = scheduleService.groupConvertToId(alertGroup);
+            taskDTO.setGroupid(groupId);
         } else {
             taskDTO.setGroupid("");
         }
 
         String alertUser = taskApiDTO.getAlertUser();
+
         if (StringUtils.isNotBlank(alertUser)) {
-            String[] users = alertUser.split(";");
-            StringBuilder userId = new StringBuilder();
-
-            for (int i = 0; i < users.length; i++) {
-                String user = users[i];
-                if (user != null & user.length() > 0) {
-                    UserExample example = new UserExample();
-
-                    example.or().andNameEqualTo(user);
-                    List<User> userList = userMapper.selectByExample(example);
-
-                    if (userList != null && userList.size() == 1) {
-                        userId.append(userList.get(0).getId());
-                        if (i < users.length - 1) {
-                            userId.append(";");
-                        }
-                    }
-                }
-            }
-
+            String userId = scheduleService.userConvertToId(alertUser);
             taskDTO.setUserid(userId.toString());
         } else {
             taskDTO.setUserid("");
@@ -508,40 +570,6 @@ public class APIController {
         }
     }
 
-    public static class BAInfoModel implements Serializable {
-
-        private String clientId;
-
-        private String jobLine;
-
-        private String jobGroup;
-
-        public String getClientId() {
-            return clientId;
-        }
-
-        public String getJobLine() {
-            return jobLine;
-        }
-
-        public String getJobGroup() {
-            return jobGroup;
-        }
-
-        public void setClientId(String clientId) {
-            this.clientId = clientId;
-        }
-
-        public void setJobLine(String jobLine) {
-            this.jobLine = jobLine;
-        }
-
-        public void setJobGroup(String jobGroup) {
-            this.jobGroup = jobGroup;
-        }
-
-    }
-
     protected enum ErrorCodeEnum {
 
         //define error code
@@ -573,7 +601,9 @@ public class APIController {
                 "8430,default 8383"),
         OPERATION_FAILED_PARAM_IP_ERROR(408, "指定机器IP地址有误"),
         OPERATION_FAILED_PARAM_IP_TASKNODE_NULL(409, "指定IP模式，任务节点需要配置"),
-        OPERATION_FAILED_PARAM_SHARDSTRATEGY_SUBTASK_NULL(410, "任务策略为分片任务时，任务分片数必须为正整数");
+        OPERATION_FAILED_PARAM_SHARDSTRATEGY_SUBTASK_NULL(410, "任务策略为分片任务时，任务分片数必须为正整数"),
+        OPERATION_FAILED_PARAM_AUTHENTICATION(411, "用户名不在分组中"),
+        OPERATION_FAILED_PARAM_NOTINGROUP(411, "任务不在分组中");
 
         private Integer code;
 
@@ -590,29 +620,6 @@ public class APIController {
 
         public String getField() {
             return field;
-        }
-    }
-
-    private static class JobInfoOutModel {
-
-        private String id;//id
-
-        private String jobUniqueCode;//唯一编码
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        public String getJobUniqueCode() {
-            return jobUniqueCode;
-        }
-
-        public void setJobUniqueCode(String jobUniqueCode) {
-            this.jobUniqueCode = jobUniqueCode;
         }
     }
 
