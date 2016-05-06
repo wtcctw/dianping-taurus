@@ -73,7 +73,7 @@ public class APIControllerTest {
     @Test
     public void teststartJob() throws Exception {
         List<BasicNameValuePair> nvps = new ArrayList<BasicNameValuePair>();
-        nvps.add(new BasicNameValuePair("jobId", "task_201605042328_0001"));
+        nvps.add(new BasicNameValuePair("jobId", "task_201605041836_0003"));
         httpStartJobPost("http://alpha.taurus.dp/api/job/startJob", nvps);
 
     }
@@ -81,7 +81,7 @@ public class APIControllerTest {
     @Test
     public void testonceJob() throws Exception {
         List<BasicNameValuePair> nvps = new ArrayList<BasicNameValuePair>();
-        nvps.add(new BasicNameValuePair("jobId", "task_201605042328_0001"));
+        nvps.add(new BasicNameValuePair("jobId", "task_201605041836_0003"));
         httpOnceJobPost("http://alpha.taurus.dp/api/job/onceJob", nvps);
 
     }
@@ -89,8 +89,8 @@ public class APIControllerTest {
     @Test
     public void teststopJob() throws Exception {
         List<BasicNameValuePair> nvps = new ArrayList<BasicNameValuePair>();
-        nvps.add(new BasicNameValuePair("jobId", "192"));
-        httpStopJobPost("http://localhost:8080/api/job/stopJob", nvps);
+        nvps.add(new BasicNameValuePair("jobId", "task_201605041836_0003"));
+        httpStopJobPost("http://alpha.taurus.dp/api/job/stopJob", nvps);
 
     }
 //
@@ -98,7 +98,7 @@ public class APIControllerTest {
 //    public void testmschedulestopJob() throws Exception {
 //        List<BasicNameValuePair> nvps = new ArrayList<BasicNameValuePair>();
 //        nvps.add(new BasicNameValuePair("jobId", "2"));
-//        httpStopJobPost("http://localhost:8080/api/job/stopJob", nvps);
+//        httpStopJobPost("http://alpha.taurus.dp/api/job/stopJob", nvps);
 //    }
 
     @Test
@@ -131,6 +131,7 @@ public class APIControllerTest {
         entity = response.getEntity();
         InputStream ins = entity.getContent();
         result = IOUtils.toString(ins, "UTF-8");
+        System.out.printf(result);
         return result;
     }
 
@@ -150,6 +151,7 @@ public class APIControllerTest {
         entity = response.getEntity();
         InputStream ins = entity.getContent();
         result = IOUtils.toString(ins, "UTF-8");
+        System.out.println(result);
         return result;
     }
 
@@ -184,10 +186,10 @@ public class APIControllerTest {
         // 接收参数json列表
         JSONObject jsonParam = new JSONObject();
 
-        jsonParam.put("taskName", "alpha-test-api-addjob");
+        jsonParam.put("taskName", "addjobtest333");
         jsonParam.put("taskType", "default");
         jsonParam.put("taskCommand", "date");
-        jsonParam.put("crontab", "0/30 * * * * ?");
+        jsonParam.put("crontab", "0/35 * * * * ?");
         jsonParam.put("proxyUser", "nobady");
         jsonParam.put("maxExecutionTime", 60);
         jsonParam.put("maxWaitTime", 60);

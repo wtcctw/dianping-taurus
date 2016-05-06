@@ -231,7 +231,7 @@ public class APIController {
                 return result;
             }
             for (Task task : list) {
-                if (jobId.equals(task.getName())) {
+                if (jobId.equals(task.getTaskid())) {
                     break;
                 }
                 result = Result.getInstance(true, null, ErrorCodeEnum.OPERATION_FAILED_PARAM_NOTINGROUP.getCode(), ErrorCodeEnum.OPERATION_FAILED_PARAM_NOTINGROUP.getField());
@@ -247,7 +247,7 @@ public class APIController {
         manualCr.post(null);
         log.info("APIController startJob end taskId = " + jobId);
 
-        if (manualCr.getStatus().getCode() == Status.SUCCESS_CREATED.getCode()) {
+        if (manualCr.getStatus().getCode() == Status.SUCCESS_OK.getCode()) {
             result = Result.getInstance(true, null, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
         } else {
             result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED.getCode(), ErrorCodeEnum.OPERATION_FAILED.getField());
@@ -275,7 +275,7 @@ public class APIController {
                 return result;
             }
             for (Task task : list) {
-                if (jobId.equals(task.getName())) {
+                if (jobId.equals(task.getTaskid())) {
                     break;
                 }
                 result = Result.getInstance(true, null, ErrorCodeEnum.OPERATION_FAILED_PARAM_NOTINGROUP.getCode(), ErrorCodeEnum.OPERATION_FAILED_PARAM_NOTINGROUP.getField());
@@ -291,7 +291,7 @@ public class APIController {
         manualCr.put(null);
         log.info("APIController stopJob end taskId = " + jobId);
 
-        if (manualCr.getStatus().getCode() == Status.SUCCESS_CREATED.getCode()) {
+        if (manualCr.getStatus().getCode() == Status.SUCCESS_OK.getCode()) {
             result = Result.getInstance(true, null, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
         } else {
             result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED.getCode(), ErrorCodeEnum.OPERATION_FAILED.getField());
@@ -318,7 +318,7 @@ public class APIController {
                 return result;
             }
             for (Task task : list) {
-                if (jobId.equals(task.getName())) {
+                if (jobId.equals(task.getTaskid())) {
                     break;
                 }
                 result = Result.getInstance(true, null, ErrorCodeEnum.OPERATION_FAILED_PARAM_NOTINGROUP.getCode(), ErrorCodeEnum.OPERATION_FAILED_PARAM_NOTINGROUP.getField());
@@ -334,7 +334,7 @@ public class APIController {
         manualCr.get();
         log.info("APIController onceJob end taskId = " + jobId);
 
-        if (manualCr.getStatus().getCode() == Status.SUCCESS_CREATED.getCode()) {
+        if (manualCr.getStatus().getCode() == Status.SUCCESS_OK.getCode()) {
             result = Result.getInstance(true, null, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
         } else {
             result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED.getCode(), ErrorCodeEnum.OPERATION_FAILED.getField());
@@ -358,7 +358,7 @@ public class APIController {
                 return result;
             }
             for (Task task : list) {
-                if (jobId.equals(task.getName())) {
+                if (jobId.equals(task.getTaskid())) {
                     break;
                 }
                 result = Result.getInstance(true, null, ErrorCodeEnum.OPERATION_FAILED_PARAM_NOTINGROUP.getCode(), ErrorCodeEnum.OPERATION_FAILED_PARAM_NOTINGROUP.getField());
