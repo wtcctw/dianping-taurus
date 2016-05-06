@@ -7,6 +7,9 @@ import com.dp.bigdata.taurus.core.listener.DependPassAttemptListener;
 import com.dp.bigdata.taurus.core.listener.GenericAttemptListener;
 import com.dp.bigdata.taurus.core.structure.Converter;
 import com.dp.bigdata.taurus.core.structure.ListStringConverter;
+import com.dp.bigdata.taurus.generated.mapper.UserMapper;
+import com.dp.bigdata.taurus.generated.module.User;
+import com.dp.bigdata.taurus.generated.module.UserExample;
 import com.dp.bigdata.taurus.lion.AbstractLionPropertyInitializer;
 import com.dp.bigdata.taurus.lion.ConfigHolder;
 import com.dp.bigdata.taurus.lion.LionKeys;
@@ -27,9 +30,11 @@ import java.util.concurrent.ExecutorService;
  */
 public class MultiInstanceFilter extends AbstractLionPropertyInitializer<List<String>> implements Filter<List<String>> {
 
-    private static final String NOT_ALERT = "taurus.web.taskblock.notalert";
+    private static final String NOT_ALERT = "taurus.web.taskblock.notalert";  //白名单
 
     private static final String SERVER_NAME = "taurus.web.serverName";
+
+    private static final String DEPEND_ALERT = "taurus.web.issenddependpassalert";  //重启时秒级调度阻塞不告警
 
     private static final int ALERT_SILENCE_MAX_COUNT = 30;
 
@@ -43,12 +48,18 @@ public class MultiInstanceFilter extends AbstractLionPropertyInitializer<List<St
 
     private String serverName;
 
+    private String isSendDependAlert = "true";
+
+    @Autowired
+    private UserMapper userMapper;
+
     private ExecutorService alertExecutor = ThreadUtils.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2, "AlertSender");
 
     @Override
     public void afterPropertiesSet() throws Exception {
         super.afterPropertiesSet();
         serverName = lionDynamicConfig.get(SERVER_NAME);
+        isSendDependAlert = lionDynamicConfig.get(DEPEND_ALERT);
     }
 
     @Autowired
@@ -172,6 +183,19 @@ public class MultiInstanceFilter extends AbstractLionPropertyInitializer<List<St
         return lionValue;
     }
 
+    @Override
+    public void onConfigChange(String key, String value) throws Exception {
+
+        if (key != null && key.equals(getKey())) {
+            logger.info("[onChange][" + getKey() + "]" + value);
+            lionValue = converter.convertTo(value.trim());
+        } else if (key != null && key.equals(DEPEND_ALERT)) {
+            logger.info("[onChange][" + DEPEND_ALERT + "]" + value);
+            isSendDependAlert = value;
+        } else {
+            logger.info("not match");
+        }
+    }
 
     class AlertTask extends Thread {
 
@@ -186,7 +210,12 @@ public class MultiInstanceFilter extends AbstractLionPropertyInitializer<List<St
 
         @Override
         public void run() {
-            sendAlerm(context, content);
+
+            if ("true".equalsIgnoreCase(isSendDependAlert)) {
+                sendAlerm(context, content);
+            }else {
+                Cat.logEvent("DependAlertSwitch", isSendDependAlert + ":" + context.getName());
+            }
         }
 
         private void sendAlerm(AttemptContext context, String content) {
@@ -194,7 +223,20 @@ public class MultiInstanceFilter extends AbstractLionPropertyInitializer<List<St
             WeChatHelper.sendWeChat(alertAdmin, content, "Taurus-Job拥塞告警服务", ConfigHolder.get(LionKeys.ADMIN_WECHAT_AGENTID));
             WeChatHelper.sendWeChat(context.getCreator(), content, "Taurus-Job拥塞告警服务", "12");
             try {
-                MailHelper.sendMail(context.getCreator() + "@dianping.com", content, "Taurus-Job拥塞告警服务");
+                UserExample example = new UserExample();
+                String creator = context.getCreator();
+                example.or().andNameEqualTo(creator);
+                List<User> users = userMapper.selectByExample(example);
+                String mailTo;
+
+                if (users != null && !users.isEmpty()) {
+                    mailTo = users.get(0).getMail();
+                    MailHelper.sendMail(mailTo, content, "Taurus-Job拥塞告警服务");
+                } else {
+                    MailHelper.sendMail(creator + "@dianping.com", content, "Taurus-Job拥塞告警服务");
+                    MailHelper.sendMail(creator + "@meituan.com", content, "Taurus-Job拥塞告警服务");
+                }
+
             } catch (MessagingException e) {
                 Cat.logError(e);
             }
