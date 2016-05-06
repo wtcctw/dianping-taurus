@@ -314,7 +314,8 @@
                     <select class="input-small field" id="alertType" name="alertType">
                         <option id="1">邮件</option>
                         <option id="2">微信</option>
-                        <option id="3">邮件和微信</option>
+                        <option id="2">大象</option>
+                        <option id="3">邮件,大象和微信</option>
                     </select>
                 </div>
             </div>

@@ -16,6 +16,7 @@ import com.dp.bigdata.taurus.restlet.shared.AttemptDTO;
 import com.dp.bigdata.taurus.restlet.shared.TaskApiDTO;
 import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
 import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
+import com.dp.bigdata.taurus.restlet.utils.TaskRequestExtractor;
 import com.dp.bigdata.taurus.springmvc.service.IScheduleService;
 import com.dp.bigdata.taurus.springmvc.utils.TaurusApiException;
 import com.dp.bigdata.taurus.utils.APIAuthorizationUtils;
@@ -46,14 +47,6 @@ import java.util.List;
 public class APIController {
 
     private Logger log = LoggerFactory.getLogger(getClass());
-
-    private static final String MAIL_ONLY = "1";
-
-    private static final String WECHAT_ONLY = "2";
-
-    private static final String DAXIANG_ONLY = "3";
-
-    private static final String ALL = "4";
 
     @Autowired
     private HttpServletRequest request;
@@ -426,13 +419,13 @@ public class APIController {
 
         String alertType = taskApiDTO.getAlertType();
         if (StringUtils.isNotBlank(alertType)) {
-            if (alertType.equalsIgnoreCase(MAIL_ONLY)) {
+            if (alertType.equalsIgnoreCase(TaskRequestExtractor.MAIL_ONLY)) {
                 taskDTO.setHasmail(true);
-            } else if (alertType.equalsIgnoreCase(WECHAT_ONLY)) {
+            } else if (alertType.equalsIgnoreCase(TaskRequestExtractor.WECHAT_ONLY)) {
                 taskDTO.setHassms(true);
-            } else if (alertType.equalsIgnoreCase(DAXIANG_ONLY)) {
+            } else if (alertType.equalsIgnoreCase(TaskRequestExtractor.DAXIANG_ONLY)) {
                 taskDTO.setHasdaxiang(true);
-            } else if (alertType.equalsIgnoreCase(ALL)) {
+            } else if (alertType.equalsIgnoreCase(TaskRequestExtractor.ALL)) {
                 taskDTO.setHasmail(true);
                 taskDTO.setHassms(true);
                 taskDTO.setHasdaxiang(true);

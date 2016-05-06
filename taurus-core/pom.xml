@@ -133,6 +133,11 @@
 			<artifactId>taurus-zookeeper-helper</artifactId>
 			<version>0.5.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.meituan.hotel</groupId>
+			<artifactId>hotel-notify</artifactId>
+			<version>1.2-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 	<build>
