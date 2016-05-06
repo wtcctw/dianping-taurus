@@ -48,6 +48,8 @@
             状态</a></li>
         <li><a href="#crontab"><i class="icon-chevron-down"></i>
             定时器</a></li>
+        <li><a href="#apijob"><i class="icon-chevron-down"></i>
+            API调用</a></li>
         <li><a href="#agent"><i class="icon-chevron-down"></i>
             安装agent</a></li>
     </ul>
@@ -652,6 +654,284 @@
     </tbody>
 </table>
 <br>
+<section id="apijob">
+    <div class="page-header">
+        <h1>API调用</h1>
+    </div>
+    本api接口是提供给想直接通过接口方式对job进行添加、编辑、查询、启动、停止、单次执行、查看历史纪录的使用方，请求方式为带有BA认证的Http请求，BA认证参见<a href="http://wiki.sankuai.com/pages/viewpage.action?pageId=196864772">wiki链接</a>。API使用方首先在<a href="http://beta.taurus.dp/user">用户设置</a>中添加自己所在的组名，BA认证时将所在的组名提供给taurus值班人员，获得密钥。
+    <div>
+        <h3>
+            API说明
+        </h3>
+    </div>
+    <div class="table-wrap">
+        <table class="confluenceTable">
+            <thead>
+            <tr>
+                <th colspan="1" class="confluenceTh"><div class="tablesorter-header-inner">序号</div></th>
+                <th colspan="1" class="confluenceTh"><div class="tablesorter-header-inner">模块</div></th>
+                <th class="confluenceTh"><div class="tablesorter-header-inner">功能</div></div></div></div></div></th>
+                <th class="confluenceTh"><div class="tablesorter-header-inner">URI</div></div></div></div></div></th>
+                <th colspan="1" class="confluenceTh"><div class="tablesorter-header-inner">参数</div></th>
+                <th class="confluenceTh"><div class="tablesorter-header-inner">HTTP方法</div></div></div></div></div></th>
+                <th class="confluenceTh"><div class="tablesorter-header-inner">返回值</div></div></div></div></div></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td colspan="1" class="confluenceTd">1</td>
+                <td colspan="1" class="confluenceTd"><span>批量查询</span></td>
+                <td colspan="1" class="confluenceTd">依据 jobIds批量查询</td>
+                <td colspan="1" class="confluenceTd">/api/job/jobList</td>
+                <td colspan="1" class="confluenceTd"><span>jobIds</span></td>
+                <td colspan="1" class="confluenceTd">GET</td>
+                <td colspan="1" class="confluenceTd">Result</td>
+            </tr>
+            <tr>
+                <td colspan="1" class="confluenceTd">2</td>
+                <td colspan="1" class="confluenceTd">按条件查询</td>
+                <td colspan="1" class="confluenceTd">按照taskid，调度人、任务状态</td>
+                <td colspan="1" class="confluenceTd"><span>/api/job/quaryJobList</span></td>
+                <td colspan="1" class="confluenceTd"><span>Task</span></td>
+                <td colspan="1" class="confluenceTd"><span>GET</span></td>
+                <td colspan="1" class="confluenceTd">Result</td>
+            </tr>
+            <tr>
+                <td colspan="1" class="confluenceTd">3</td>
+                <td colspan="1" class="confluenceTd">添加job</td>
+                <td colspan="1" class="confluenceTd">新增job</td>
+                <td colspan="1" class="confluenceTd">/<span>api</span>/job/addJob</td>
+                <td colspan="1" class="confluenceTd">TaskApiDTO对象</td>
+                <td colspan="1" class="confluenceTd">POST</td>
+                <td colspan="1" class="confluenceTd">Result</td>
+            </tr>
+            <tr>
+                <td colspan="1" class="confluenceTd">4</td>
+                <td colspan="1" class="confluenceTd">编辑job</td>
+                <td colspan="1" class="confluenceTd">编辑job</td>
+                <td colspan="1" class="confluenceTd">/<span>api</span>/job/modifyJob</td>
+                <td colspan="1" class="confluenceTd">TaskApiDTO对象</td>
+                <td colspan="1" class="confluenceTd">POST</td>
+                <td colspan="1" class="confluenceTd">Result</td>
+            </tr>
+            <tr>
+                <td colspan="1" class="confluenceTd">5</td>
+                <td colspan="1" class="confluenceTd">启动</td>
+                <td colspan="1" class="confluenceTd">启动任务</td>
+                <td colspan="1" class="confluenceTd">/<span>api</span>/<span>job</span>/startJob</td>
+                <td colspan="1" class="confluenceTd">jobId</td>
+                <td colspan="1" class="confluenceTd">POST</td>
+                <td colspan="1" class="confluenceTd">Result</td>
+            </tr>
+            <tr>
+                <td colspan="1" class="confluenceTd">6</td>
+                <td colspan="1" class="confluenceTd">停止</td>
+                <td colspan="1" class="confluenceTd">停止任务</td>
+                <td colspan="1" class="confluenceTd">/<span>api</span>/<span>job</span>/stopJob</td>
+                <td colspan="1" class="confluenceTd">jobId</td>
+                <td colspan="1" class="confluenceTd">POST</td>
+                <td colspan="1" class="confluenceTd">Result</td>
+            </tr>
+            <tr>
+                <td colspan="1" class="confluenceTd">7</td>
+                <td colspan="1" class="confluenceTd">单次执行</td>
+                <td colspan="1" class="confluenceTd">单次执行一次任务</td>
+                <td colspan="1" class="confluenceTd">/<span>api</span>/<span>job</span>/onceJob</td>
+                <td colspan="1" class="confluenceTd">jobId</td>
+                <td colspan="1" class="confluenceTd">POST</td>
+                <td colspan="1" class="confluenceTd">Result</td>
+            </tr>
+            <tr>
+                <td colspan="1" class="confluenceTd">8</td>
+                <td colspan="1" class="confluenceTd">trace</td>
+                <td colspan="1" class="confluenceTd">查看任务执行记录</td>
+                <td colspan="1" class="confluenceTd">/<span>api</span>/job/getJobTrace</td>
+                <td colspan="1" class="confluenceTd"><span>jobId</span></td>
+                <td colspan="1" class="confluenceTd">GET</td>
+                <td colspan="1" class="confluenceTd">Result</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <h3>
+            参数和返回值对象说明
+        </h3>
+    </div>
+    <div>
+        <h4>
+            Task
+        </h4>
+    </div>
+    <div class="table-wrap">
+        <table class="confluenceTable">
+            <thead>
+            <tr>
+                <th colspan="1" class="confluenceTh"><div class="tablesorter-header-inner">参数</div></th>
+                <th class="confluenceTh"><div class="tablesorter-header-inner">描述</div></div></div></div></div></th>
+                <th class="confluenceTh"><div class="tablesorter-header-inner">是否必须</div></div></div></div></div></th>
+            </tr>
+            </thead>
+        <tbody>
+            <tr>
+                <td colspan="1" class="confluenceTd">taskid</td>
+                <td colspan="1" class="confluenceTd"><span>任务id，比如task_201604211612_0001</span></td>
+                <td colspan="1" class="confluenceTd"><span>否</span></td>
+            </tr>
+            <tr>
+                <td colspan="1" class="confluenceTd">creator</td>
+                <td colspan="1" class="confluenceTd">调度人，比如mingdong.li</td>
+                <td colspan="1" class="confluenceTd"><span>否</span></td>
+            </tr>
+            <tr>
+                <td colspan="1" class="confluenceTd">name</td>
+                <td colspan="1" class="confluenceTd">任务名称，比如arch-test</td>
+                <td colspan="1" class="confluenceTd"><span>否</span></td>
+            </tr>
+            <tr>
+                <td colspan="1" class="confluenceTd">status</td>
+                <td colspan="1" class="confluenceTd">任务状态，比如1</td>
+                <td colspan="1" class="confluenceTd"><span>否</span></td>
+            </tr>
+        </tbody>
+        </table>
+    </div>
+
+    <div>
+        <h4>
+            TaskApiDTO
+        </h4>
+    </div>
+    <div class="table-wrap">
+        <table class="confluenceTable">
+            <thead>
+            <tr>
+                <th colspan="1" class="confluenceTh"><div class="tablesorter-header-inner">参数</div></th>
+                <th class="confluenceTh"><div class="tablesorter-header-inner">描述</div></div></div></div></div></th>
+                <th class="confluenceTh"><div class="tablesorter-header-inner">是否必须</div></div></div></div></div></th>
+            </tr>
+            </thead>
+        <tbody>
+            <tr>
+                <td colspan="1" class="confluenceTd">taskName</td>
+                <td colspan="1" class="confluenceTd"><span>任务名称</span></td>
+                <td colspan="1" class="confluenceTd"><span>是</span></td>
+            </tr>
+            <tr>
+                <td colspan="1" class="confluenceTd">taskType</td>
+                <td colspan="1" class="confluenceTd">任务类型，比如default</td>
+                <td colspan="1" class="confluenceTd"><span>是</span></td>
+            </tr>
+            <tr>
+                <td colspan="1" class="confluenceTd">taskCommand</td>
+                <td colspan="1" class="confluenceTd">taurus执行的命令，比如sh xx.sh</td>
+                <td colspan="1" class="confluenceTd"><span>是</span></td>
+            </tr>
+            <tr>
+                <td colspan="1" class="confluenceTd">crontab</td>
+                <td colspan="1" class="confluenceTd">cron表达式</td>
+                <td colspan="1" class="confluenceTd"><span>是</span></td>
+            </tr>
+            <tr>
+                <td colspan="1" class="confluenceTd">creator</td>
+                <td colspan="1" class="confluenceTd">调度人</td>
+                <td colspan="1" class="confluenceTd"><span>是</span></td>
+            </tr>
+            <tr>
+                <td colspan="1" class="confluenceTd">proxyUser</td>
+                <td colspan="1" class="confluenceTd">任务执行身份，比如nobody</td>
+                <td colspan="1" class="confluenceTd"><span>是</span></td>
+            </tr>
+            <tr>
+                <td colspan="1" class="confluenceTd">hostName</td>
+                <td colspan="1" class="confluenceTd">任务执行的机器，比如10.1.1.1</td>
+                <td colspan="1" class="confluenceTd"><span>是</span></td>
+            </tr>
+            <tr>
+                <td colspan="1" class="confluenceTd">alertUser</td>
+                <td colspan="1" class="confluenceTd">告警通知人，比如mingdong.li</td>
+                <td colspan="1" class="confluenceTd"><span>是</span></td>
+            </tr>
+            <tr>
+                <td colspan="1" class="confluenceTd">alertCondition</td>
+                <td colspan="1" class="confluenceTd">告警条件，比如TIMEOUT;FAILED</td>
+                <td colspan="1" class="confluenceTd"><span>是</span></td>
+            </tr>
+            <tr>
+                <td colspan="1" class="confluenceTd">iskillcongexp</td>
+                <td colspan="1" class="confluenceTd">任务拥塞时新任务是否执行，true表示不执行新任务</td>
+                <td colspan="1" class="confluenceTd"><span>是</span></td>
+            </tr>
+            <tr>
+                <td colspan="1" class="confluenceTd">dependency</td>
+                <td colspan="1" class="confluenceTd">任务依赖关系，比如taskName[1][0]</td>
+                <td colspan="1" class="confluenceTd"><span>否</span></td>
+            </tr>
+            <tr>
+                <td colspan="1" class="confluenceTd">maxExecutionTime</td>
+                <td colspan="1" class="confluenceTd">任务执行最大时间</td>
+                <td colspan="1" class="confluenceTd"><span>否</span></td>
+            </tr>
+            <tr>
+                <td colspan="1" class="confluenceTd">maxWaitTime</td>
+                <td colspan="1" class="confluenceTd">任务依赖等待最大时间</td>
+                <td colspan="1" class="confluenceTd"><span>否</span></td>
+            </tr>
+            <tr>
+                <td colspan="1" class="confluenceTd">retryTimes</td>
+                <td colspan="1" class="confluenceTd">重试次数</td>
+                <td colspan="1" class="confluenceTd"><span>否</span></td>
+            </tr>
+            <tr>
+                <td colspan="1" class="confluenceTd">description</td>
+                <td colspan="1" class="confluenceTd">任务描述</td>
+                <td colspan="1" class="confluenceTd"><span>否</span></td>
+            </tr>
+            <tr>
+                <td colspan="1" class="confluenceTd">alertType</td>
+                <td colspan="1" class="confluenceTd">告警类型，1表示邮件；2表示微信；3表示大象；4表示以上全部</td>
+                <td colspan="1" class="confluenceTd"><span>否</span></td>
+            </tr>
+            <tr>
+                <td colspan="1" class="confluenceTd">alertGroup</td>
+                <td colspan="1" class="confluenceTd">告警分组</td>
+                <td colspan="1" class="confluenceTd"><span>否</span></td>
+            </tr>
+        </tbody>
+        </table>
+    </div>
+
+    <div>
+        <h4>
+            Result
+        </h4>
+    </div>
+    <div class="table-wrap">
+    <table class="confluenceTable">
+        <thead>
+        <tr>
+            <th colspan="1" class="confluenceTh"><div class="tablesorter-header-inner">参数</div></th>
+            <th class="confluenceTh"><div class="tablesorter-header-inner">描述</div></div></div></div></div></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td colspan="1" class="confluenceTd">errCode</td>
+            <td colspan="1" class="confluenceTd"><span>状态码，0表示请求成功，其他表示失败</span></td>
+        </tr>
+        <tr>
+            <td colspan="1" class="confluenceTd">errMsg</td>
+            <td colspan="1" class="confluenceTd">状态信息</td>
+        </tr>
+        <tr>
+            <td colspan="1" class="confluenceTd">data</td>
+            <td colspan="1" class="confluenceTd">json化后返回的数据</td>
+        </tr>
+    </tbody>
+    </table>
+    </div>
+</section>
 </section>
 <section id="agent">
     <div class="page-header">

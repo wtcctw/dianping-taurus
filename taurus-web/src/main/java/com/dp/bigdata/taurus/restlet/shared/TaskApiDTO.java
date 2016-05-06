@@ -30,7 +30,7 @@ public class TaskApiDTO {
 
     private String alertCondition = "";
 
-    private String alertType = "";
+    private String alertType = "4";
 
     private String alertGroup = "";
 
@@ -42,7 +42,7 @@ public class TaskApiDTO {
 
     private String appName = "";
 
-    private boolean iskillcongexp;
+    private boolean iskillcongexp = false;
 
     private String hostName;
 
