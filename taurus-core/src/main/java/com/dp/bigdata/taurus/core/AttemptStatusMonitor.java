@@ -1,15 +1,16 @@
 package com.dp.bigdata.taurus.core;
 
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
-
+import com.dianping.cat.Cat;
+import com.dp.bigdata.taurus.generated.module.TaskAttempt;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.dianping.cat.Cat;
-import com.dp.bigdata.taurus.generated.module.TaskAttempt;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * AttemptStatusMonitor is to update the TaskAttmpt status.
@@ -44,6 +45,7 @@ public class AttemptStatusMonitor implements Runnable {
 			
 			try {
 				List<AttemptContext> runningAttempts = scheduler.getAllRunningAttempt();
+				Collections.sort(runningAttempts, new AttemptContextComparator());  //优先检查同一task先调度的attempt
 				for (AttemptContext attempt : runningAttempts) {
 					AttemptStatus sstatus = scheduler.getAttemptStatus(attempt.getAttemptid());
 					int status = sstatus.getStatus();
@@ -109,5 +111,13 @@ public class AttemptStatusMonitor implements Runnable {
 
 	public boolean isAttemptStatusMonitorRestFlag() {
 		return attemptStatusMonitorRestFlag;
+	}
+
+	class AttemptContextComparator implements Comparator<AttemptContext> {
+
+		@Override
+		public int compare(AttemptContext a0, AttemptContext a1) {
+			return a0.getAttemptid().compareToIgnoreCase(a1.getAttemptid());
+		}
 	}
 }

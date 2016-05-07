@@ -630,7 +630,7 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
                 attempts.add(tmpAttempts.get(0));  //只取第一个, 不取全部
             }
         }
-        Collections.sort(attempts, new TaskAttemptComparator());
+        AttemptContextComparator(attempts, new TaskAttemptComparator());
         for (TaskAttempt attempt : attempts) {
             Task task = registedTasks.get(attempt.getTaskid());
             if (task != null) {
