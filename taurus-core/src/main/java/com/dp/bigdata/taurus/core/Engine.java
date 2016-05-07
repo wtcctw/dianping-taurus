@@ -620,14 +620,13 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
 
     private List<AttemptContext> getReadyToRunAttempt() {
         List<AttemptContext> contexts = new ArrayList<AttemptContext>();
-//		TaskAttemptExample example = new TaskAttemptExample();
-//		example.or().andStatusEqualTo(AttemptStatus.DEPENDENCY_PASS);
-//		example.setOrderByClause("scheduleTime");
-//		List<TaskAttempt> attempts = taskAttemptMapper.selectByExample(example);
         List<TaskAttempt> attempts = new ArrayList<TaskAttempt>();
         for (Map.Entry<String, BoundedList<TaskAttempt>> entry : dependPassMap.entrySet()) {
             BoundedList<TaskAttempt> tmpAttempts = entry.getValue();
             if (tmpAttempts != null && tmpAttempts.size() > 0) {
+                if(tmpAttempts.size() > 1){
+                    Collections.sort(tmpAttempts, new TaskAttemptComparator());
+                }
                 attempts.add(tmpAttempts.get(0));  //只取第一个, 不取全部
             }
         }
