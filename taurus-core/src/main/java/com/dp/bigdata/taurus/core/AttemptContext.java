@@ -1,14 +1,13 @@
 package com.dp.bigdata.taurus.core;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.commons.lang.StringUtils;
-
 import com.dp.bigdata.taurus.generated.module.Task;
 import com.dp.bigdata.taurus.generated.module.TaskAttempt;
 import com.dp.bigdata.taurus.zookeeper.execute.helper.ExecuteContext;
+import org.apache.commons.lang.StringUtils;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <code>AttemptContext</code> is the scheduling context for each attempt.
@@ -178,4 +177,11 @@ public class AttemptContext {
         this.task = task;
     }
 
+    @Override
+    public String toString() {
+        return "AttemptContext{" +
+                "attempt=" + attempt.toString() +
+                ", task=" + task.toString() +
+                '}';
+    }
 }
