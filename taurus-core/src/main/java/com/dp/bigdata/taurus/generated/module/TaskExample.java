@@ -1764,6 +1764,66 @@ public class TaskExample {
             addCriterion("isKillCongExp not between", value1, value2, "iskillcongexp");
             return (Criteria) this;
         }
+
+        public Criteria andIsnotconcurrencyIsNull() {
+            addCriterion("isnotconcurrency is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsnotconcurrencyIsNotNull() {
+            addCriterion("isnotconcurrency is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsnotconcurrencyEqualTo(Boolean value) {
+            addCriterion("isNotConcurrency =", value, "isnotconcurrency");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsnotconcurrencyNotEqualTo(Boolean value) {
+            addCriterion("isNotConcurrency <>", value, "isnotconcurrency");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsnotconcurrencyGreaterThan(Boolean value) {
+            addCriterion("isNotConcurrency >", value, "isnotconcurrency");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsnotconcurrencyGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("isNotConcurrency >=", value, "isnotconcurrency");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsnotconcurrencyLessThan(Boolean value) {
+            addCriterion("isNotConcurrency <", value, "isnotconcurrency");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsnotconcurrencyLessThanOrEqualTo(Boolean value) {
+            addCriterion("isNotConcurrency <=", value, "isnotconcurrency");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsnotconcurrencyIn(List<Boolean> values) {
+            addCriterion("isNotConcurrency in", values, "isnotconcurrency");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsnotconcurrencyNotIn(List<Boolean> values) {
+            addCriterion("isNotConcurrency not in", values, "isnotconcurrency");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsnotconcurrencyBetween(Boolean value1, Boolean value2) {
+            addCriterion("isNotConcurrency between", value1, value2, "isnotconcurrency");
+            return (Criteria) this;
+        }
+
+        public Criteria andIsnotconcurrencyNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("isNotConcurrency not between", value1, value2, "isnotconcurrency");
+            return (Criteria) this;
+        }
     }
 
     /**
