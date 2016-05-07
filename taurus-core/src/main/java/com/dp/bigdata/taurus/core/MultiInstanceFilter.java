@@ -98,7 +98,7 @@ public class MultiInstanceFilter extends AbstractLionPropertyInitializer<List<St
                         }
                     }
 
-                    if (needAlert) {
+                    if (needAlert && context.getIsnotconcurrency()) {
                         // 告警加入domain
                         String alertontext = "您好，你的Taurus Job【"
                                 + context.getTask().getName()
@@ -132,6 +132,11 @@ public class MultiInstanceFilter extends AbstractLionPropertyInitializer<List<St
                 //这里控制同时只有一个执行
                 if (ctx == null) {
                     maps.put(taskId, context);
+                }else{ //是否允许多实例同时执行
+                    boolean isnotconcurrency = context.getIsnotconcurrency();
+                    if(!isnotconcurrency){
+                        maps.put(taskId, context);
+                    }
                 }
             }
         }

@@ -443,10 +443,11 @@ public class APIController {
         taskDTO.setExecutiontimeout(taskApiDTO.getMaxExecutionTime());
         taskDTO.setWaittimeout(taskApiDTO.getMaxWaitTime());
         taskDTO.setDescription(taskApiDTO.getDescription());
-        taskDTO.setAutoKill(taskApiDTO.iskillcongexp());
         taskDTO.setMainClass(taskApiDTO.getMainClass());
         taskDTO.setTaskUrl(taskApiDTO.getTaskUrl());
+        taskDTO.setAutoKill(taskApiDTO.isautokill());
         taskDTO.setIskillcongexp(taskApiDTO.iskillcongexp());
+        taskDTO.setIsconcurrency(taskApiDTO.isnotconcurrency());
         taskDTO.setHostname(taskApiDTO.getHostName());
         int retryTimes = taskApiDTO.getRetryTimes();
         taskDTO.setRetrytimes(retryTimes);

@@ -56,6 +56,7 @@ public class TaskConverter {
         dto.setHadoopName(task.getHadoopname());
         dto.setAppName(task.getAppname());
         dto.setIskillcongexp(task.getIskillcongexp());
+        dto.setIsconcurrency(task.getIsnotconcurrency());
         return dto;
     }
 }

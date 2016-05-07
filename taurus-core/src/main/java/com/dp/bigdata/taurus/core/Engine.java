@@ -687,7 +687,7 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
 
         TaskAttempt attempt = attempts.get(0);
 
-        attempt.setStatus(AttemptStatus.EXPIRED);
+        attempt.setStatus(AttemptStatus.CONGESTION_SKIPED);
         attempt.setEndtime(new Date());
         taskAttemptMapper.updateByPrimaryKeySelective(attempt);
 

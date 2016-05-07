@@ -79,7 +79,9 @@ public class TaskDTO implements Serializable {
 	private String hadoopName;
 	
 	private Boolean iskillcongexp;
-	
+
+	private Boolean isnotconcurrency;
+
 	public TaskDTO(){ }
 	
 	public TaskDTO(Task task){
@@ -98,6 +100,7 @@ public class TaskDTO implements Serializable {
 		this.setAutoKill(task.getIsautokill());
 		this.setIsautoretry(task.getIsautoretry());
 		this.setIskillcongexp(task.getIskillcongexp());
+		this.setIsconcurrency(task.getIsnotconcurrency());
 		this.setLastscheduletime(task.getLastscheduletime());
 		this.setName(task.getName());
 		this.setPoolid(task.getPoolid());
@@ -430,6 +433,14 @@ public class TaskDTO implements Serializable {
 		this.iskillcongexp = iskillcongexp;
 	}
 
+	public Boolean getIsNotconcurrency() {
+		return isnotconcurrency;
+	}
+
+	public void setIsconcurrency(Boolean isnotconcurrency) {
+		this.isnotconcurrency = isnotconcurrency;
+	}
+
 	@Override
     public String toString() {
         return "TaskDTO{" +
@@ -465,6 +476,7 @@ public class TaskDTO implements Serializable {
                 ", taskUrl='" + taskUrl + '\'' +
                 ", hadoopName='" + hadoopName + '\'' +
                 ", iskillcongexp=" + iskillcongexp +
+				", isnotconcurrency=" + isnotconcurrency +
                 '}';
     }
 

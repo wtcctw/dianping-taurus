@@ -22,10 +22,11 @@ public class ExecuteStatus {
     public static final int EXPIRED = 12;//拥塞调度过期
     public static final int MAN_KILLED = 13;//人工杀死调度
     public static final int DEPENDENCY_EXPIRED = 14;//TODO 依赖任务等待时间超时后过期
+    public static final int CONGESTION_SKIPED = 15;//TODO 依赖任务等待时间超时后过期
 
     private static final String[] runStates = { "INITIALIZED", "DEPENDENCY_PASS", "DEPENDENCY_TIMEOUT", "SUBMIT_SUCCESS",
             "SUBMIT_FAIL", "RUNNING", "SUCCEEDED", "FAILED", "TIMEOUT", "KILLED", "UNKNOWN" , "EXPIRED", "MAN_KILLED",
-            "DEPENDENCY_EXPIRED"};
+            "DEPENDENCY_EXPIRED", "CONGESTION_SKIPED"};
 
     private int status;
     private int returnCode;

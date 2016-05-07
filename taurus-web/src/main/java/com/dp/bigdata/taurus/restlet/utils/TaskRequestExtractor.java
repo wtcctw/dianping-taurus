@@ -237,6 +237,12 @@ public class TaskRequestExtractor implements RequestExtrator<TaskDTO> {
 				} else {
 					task.setIskillcongexp(false);
 				}
+			}else if (key.equals(TaskDetailControlName.ISNOTCONNCURRENCY.getName())) {
+				if (value.equals("1")) {
+					task.setIsconcurrency(true);
+				} else {
+					task.setIsconcurrency(false);
+				}
 			}
 		}
 		validate(task, isUpdateAction);
