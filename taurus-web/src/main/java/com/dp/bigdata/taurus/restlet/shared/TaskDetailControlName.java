@@ -34,7 +34,8 @@ public enum TaskDetailControlName {
     MAINCLASS("mainClass"),
     HADOOPNAME("hadoopName"),
     APPNAME("appName"),
-    ISKILLCONGEXP("iskillcongexp");
+    ISKILLCONGEXP("iskillcongexp"),
+    ISNOTCONNCURRENCY("isnotconcurrency");
     
     private String name;
     

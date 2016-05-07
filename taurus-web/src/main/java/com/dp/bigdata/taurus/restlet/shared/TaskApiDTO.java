@@ -44,6 +44,10 @@ public class TaskApiDTO {
 
     private boolean iskillcongexp = false;
 
+    private boolean isautokill = true;
+
+    private boolean isnotconcurrency = true;
+
     private String hostName;
 
     public String getTaskName() {
@@ -196,6 +200,22 @@ public class TaskApiDTO {
 
     public void setIskillcongexp(boolean iskillcongexp) {
         this.iskillcongexp = iskillcongexp;
+    }
+
+    public boolean isnotconcurrency() {
+        return isnotconcurrency;
+    }
+
+    public void setIsnotconcurrency(boolean isnotconcurrency) {
+        this.isnotconcurrency = isnotconcurrency;
+    }
+
+    public boolean isautokill() {
+        return isautokill;
+    }
+
+    public void setIsautokill(boolean isautokill) {
+        this.isautokill = isautokill;
     }
 
     public String getHostName() {

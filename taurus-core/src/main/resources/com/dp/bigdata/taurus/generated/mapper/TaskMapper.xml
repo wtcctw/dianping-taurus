@@ -31,6 +31,7 @@
     <result column="hadoopName" jdbcType="VARCHAR" property="hadoopname" />
     <result column="appName" jdbcType="VARCHAR" property="appname" />
     <result column="isKillCongExp" jdbcType="BIT" property="iskillcongexp" />
+    <result column="isNotConcurrency" jdbcType="BIT" property="isnotconcurrency" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
@@ -108,7 +109,7 @@
     -->
     taskID, name, creator, dependencyExpr, addTime, lastScheduleTime, updateTime, crontab, 
     status, isAutoKill, proxyUser, waitTimeout, executionTimeout, isAutoRetry, retryTimes, 
-    command, hostName, poolID, type, fileName, description, hadoopName, appName,isKillCongExp
+    command, hostName, poolID, type, fileName, description, hadoopName, appName,isKillCongExp ,isNotConcurrency
   </sql>
   <select id="selectByExample" parameterType="com.dp.bigdata.taurus.generated.module.TaskExample" resultMap="BaseResultMap">
     <!--
@@ -173,7 +174,7 @@
       executionTimeout, isAutoRetry, retryTimes, 
       command, hostName, poolID, 
       type, fileName, description, 
-      hadoopName, appName, isKillCongExp)
+      hadoopName, appName, isKillCongExp, isNotConcurrency)
     values (#{taskid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
       #{dependencyexpr,jdbcType=VARCHAR}, #{addtime,jdbcType=TIMESTAMP}, #{lastscheduletime,jdbcType=TIMESTAMP}, 
       #{updatetime,jdbcType=TIMESTAMP}, #{crontab,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
@@ -181,7 +182,7 @@
       #{executiontimeout,jdbcType=INTEGER}, #{isautoretry,jdbcType=BIT}, #{retrytimes,jdbcType=INTEGER}, 
       #{command,jdbcType=VARCHAR}, #{hostname,jdbcType=VARCHAR}, #{poolid,jdbcType=INTEGER}, 
       #{type,jdbcType=VARCHAR}, #{filename,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
-      #{hadoopname,jdbcType=VARCHAR}, #{appname,jdbcType=VARCHAR}, #{iskillcongexp,jdbcType=BIT})
+      #{hadoopname,jdbcType=VARCHAR}, #{appname,jdbcType=VARCHAR}, #{iskillcongexp,jdbcType=BIT}, #{isnotconcurrency,jdbcType=BIT})
   </insert>
   <insert id="insertSelective" parameterType="com.dp.bigdata.taurus.generated.module.Task">
     <!--
@@ -263,6 +264,9 @@
       <if test="iskillcongexp != null">
         isKillCongExp,
       </if>
+      <if test="isnotconcurrency != null">
+        isnotconcurrency,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="taskid != null">
@@ -336,6 +340,9 @@
       </if>
       <if test="iskillcongexp != null">
         #{iskillcongexp,jdbcType=BIT},
+      </if>
+      <if test="isnotconcurrency != null">
+        #{isnotconcurrency,jdbcType=BIT},
       </if>
     </trim>
   </insert>
@@ -430,6 +437,9 @@
       <if test="record.iskillcongexp != null">
         isKillCongExp = #{record.iskillcongexp,jdbcType=BIT},
       </if>
+      <if test="record.isnotconcurrency != null">
+        isnotconcurrency = #{record.isnotconcurrency,jdbcType=BIT},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -465,7 +475,8 @@
       description = #{record.description,jdbcType=VARCHAR},
       hadoopName = #{record.hadoopname,jdbcType=VARCHAR},
       appName = #{record.appname,jdbcType=VARCHAR},
-      isKillCongExp = #{record.iskillcongexp,jdbcType=BIT}
+      isKillCongExp = #{record.iskillcongexp,jdbcType=BIT,
+      isNotConcurrency = #{record.isnotconcurrency,jdbcType=BIT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -547,6 +558,9 @@
       <if test="iskillcongexp != null">
         isKillCongExp = #{iskillcongexp,jdbcType=BIT},
       </if>
+      <if test="isnotconcurrency != null">
+        isnotconcurrency = #{isnotconcurrency,jdbcType=BIT},
+      </if>
     </set>
     where taskID = #{taskid,jdbcType=VARCHAR}
   </update>
@@ -579,7 +593,8 @@
       description = #{description,jdbcType=VARCHAR},
       hadoopName = #{hadoopname,jdbcType=VARCHAR},
       appName = #{appname,jdbcType=VARCHAR},
-      isKillCongExp = #{iskillcongexp,jdbcType=BIT}
+      isKillCongExp = #{iskillcongexp,jdbcType=BIT,
+      isNotConcurrency = #{isnotconcurrency,jdbcType=BIT}
     where taskID = #{taskid,jdbcType=VARCHAR}
   </update>
 

@@ -864,6 +864,16 @@
                 <td colspan="1" class="confluenceTd"><span>是</span></td>
             </tr>
             <tr>
+                <td colspan="1" class="confluenceTd">isautokill</td>
+                <td colspan="1" class="confluenceTd">任务执行之间超过设置的最大时间是否自动kill</td>
+                <td colspan="1" class="confluenceTd"><span>是</span></td>
+            </tr>
+            <tr>
+                <td colspan="1" class="confluenceTd">isnotconcurrency</td>
+                <td colspan="1" class="confluenceTd">上次未执行完不启动新任务</td>
+                <td colspan="1" class="confluenceTd"><span>是</span></td>
+            </tr>
+            <tr>
                 <td colspan="1" class="confluenceTd">dependency</td>
                 <td colspan="1" class="confluenceTd">任务依赖关系，比如taskName[1][0]</td>
                 <td colspan="1" class="confluenceTd"><span>否</span></td>

@@ -288,7 +288,18 @@
                     <span class="label">不要轻易修改，除非你确定其含义：<a href="${rc.contextPath}/about#config" target="view_window">帮助</a></span>
                 </div>
             </div>
-            
+
+            <div id="isnotconcurrency" >
+                <div class="control-group">
+                    <label class="label label-lg label-info arrowed-right col-sm-2" for="isnotconcurrency">上次未执行完不启动新任务*</label>
+
+                    <div class="controls field" id="isnotconcurrency">
+                        <input type="radio" value="1" name="isnotconcurrency" checked> 是
+                        <input type="radio" value="0" name="isnotconcurrency"> 否
+                        <span class="label">不要轻易修改，除非你确定其含义：<a href="${rc.contextPath}/about#config" target="view_window">帮助</a></span>
+                    </div>
+                </div>
+            </div>
 
             <p><span class="label" style="margin-top:20px">注意：使用以下配置项，你需要在用户<a href="${rc.contextPath}/user">用户设置</a>填写您的联系方式</span></p>
 

@@ -95,6 +95,10 @@ public class AttemptContext {
 	   return task.getIsautokill();
    }
 
+    public Boolean getIsnotconcurrency() {
+	   return task.getIsnotconcurrency();
+   }
+
     public Boolean getIsautoretry() {
         return task.getIsautoretry();
     }
