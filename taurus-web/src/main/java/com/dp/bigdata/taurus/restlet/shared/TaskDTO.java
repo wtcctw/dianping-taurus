@@ -250,6 +250,7 @@ public class TaskDTO implements Serializable {
 		task.setHadoopname(hadoopName);
 		task.setAppname(appName);
 		task.setIskillcongexp(iskillcongexp);
+		task.setIsnotconcurrency(isnotconcurrency);
 		return task;
 	}
 
@@ -433,7 +434,7 @@ public class TaskDTO implements Serializable {
 		this.iskillcongexp = iskillcongexp;
 	}
 
-	public Boolean getIsNotconcurrency() {
+	public Boolean getIsnotconcurrency() {
 		return isnotconcurrency;
 	}
 
