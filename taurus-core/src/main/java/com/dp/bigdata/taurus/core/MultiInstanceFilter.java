@@ -75,12 +75,20 @@ public class MultiInstanceFilter extends AbstractLionPropertyInitializer<List<St
             List<AttemptContext> runnings = scheduler.getRunningAttemptsByTaskID(taskId);
             AttemptContext ctx = maps.get(taskId);
 
-            if (runnings != null && runnings.size() > 0) {
+            if (runnings != null && runnings.size() > 0) { //这里控制是否只有一个实例执行
                 //TODO 根据用户设置，决定是否设置拥塞的任务调度的新调度为过期状态，不执行
                 if (context.getTask().getIskillcongexp()) {
                     scheduler.expireCongestionAttempt(context.getAttemptid());
                     continue;
                 }
+
+                //是否允许多实例同时执行
+                boolean isnotconcurrency = context.getIsnotconcurrency();
+                if(!isnotconcurrency){
+                    maps.put(taskId, context);
+                    continue;  //不用检查告警了，因为这种情况不可能堆积
+                }
+
                 // 拥堵了~应该告警用户任务堵住了~
                 Integer jobAlertCount = null;
                 if (jobAlert.containsKey(taskId)) {
@@ -98,7 +106,7 @@ public class MultiInstanceFilter extends AbstractLionPropertyInitializer<List<St
                         }
                     }
 
-                    if (needAlert && context.getIsnotconcurrency()) {
+                    if (needAlert) {
                         // 告警加入domain
                         String alertontext = "您好，你的Taurus Job【"
                                 + context.getTask().getName()
@@ -129,14 +137,10 @@ public class MultiInstanceFilter extends AbstractLionPropertyInitializer<List<St
                         jobAlert.remove(taskId);
                     }
                 }
-                //这里控制同时只有一个执行
+
+                //每次只放行一个执行
                 if (ctx == null) {
                     maps.put(taskId, context);
-                }else{ //是否允许多实例同时执行
-                    boolean isnotconcurrency = context.getIsnotconcurrency();
-                    if(!isnotconcurrency){
-                        maps.put(taskId, context);
-                    }
                 }
             }
         }
