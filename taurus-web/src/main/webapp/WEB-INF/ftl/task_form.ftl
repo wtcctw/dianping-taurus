@@ -185,7 +185,7 @@
     <label class="label label-lg label-info arrowed-right col-sm-4">上次未执行完不启动新任务*</label>
 
     <div class="controls field" id="isnotconcurrency">
-    <#if dto.isnotconcurrency >
+    <#if dto.getIskillcongexp() >
         <input type="radio" value="1" name="isnotconcurrency" checked>是
         <input type="radio" value="0" name="isnotconcurrency">否
     <#else>
@@ -194,6 +194,7 @@
     </#if>
     </div>
 </div>
+
 <br>
 <div class="control-group col-sm-12">
     <label class="label label-lg label-info arrowed-right col-sm-3">选择何时收到报警</label>
