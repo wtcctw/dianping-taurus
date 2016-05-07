@@ -1,20 +1,18 @@
 package com.dp.bigdata.taurus.core;
 
 import com.dianping.cat.Cat;
+import com.dp.bigdata.taurus.generated.module.Task;
 import com.dp.bigdata.taurus.generated.module.TaskAttempt;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * AttemptStatusMonitor is to update the TaskAttmpt status.
- * 
+ *
  * @author damon.zhu
  * @see Engine
  */
@@ -23,12 +21,12 @@ public class AttemptStatusMonitor implements Runnable {
 	private static final Log LOG = LogFactory.getLog(AttemptStatusMonitor.class);
 
 	private final AtomicBoolean isInterrupt = new AtomicBoolean(false);
-	
+
 	private volatile boolean attemptStatusMonitorRestFlag = false;
 
 	private final Scheduler scheduler;
 
-	
+
 	@Autowired
 	public AttemptStatusMonitor(Scheduler scheduler) {
 		this.scheduler = scheduler;
@@ -37,15 +35,14 @@ public class AttemptStatusMonitor implements Runnable {
 	@Override
 	public void run() {
 		LOG.info("Starting to monitor attempts status");
-		
+
 		while (true) {
-			
+
 			while(isInterrupt.get()){ attemptStatusMonitorRestFlag = true; }
 			attemptStatusMonitorRestFlag = false;
-			
+
 			try {
 				List<AttemptContext> runningAttempts = scheduler.getAllRunningAttempt();
-				Collections.sort(runningAttempts, new AttemptContextComparator());  //优先检查同一task先调度的attempt
 				for (AttemptContext attempt : runningAttempts) {
 					AttemptStatus sstatus = scheduler.getAttemptStatus(attempt.getAttemptid());
 					int status = sstatus.getStatus();
@@ -75,7 +72,7 @@ public class AttemptStatusMonitor implements Runnable {
 										String taskID = attempt.getTaskid();
 										String previousAttemptID = attempt.getAttemptid();
 										TaskAttempt newFiredAttempt = scheduler.getRecentFiredAttemptByTaskID(taskID);
-	
+
 										if (newFiredAttempt != null
 										      && !newFiredAttempt.getAttemptid().equalsIgnoreCase(previousAttemptID)) {
 											scheduler.killAttempt(previousAttemptID);
@@ -100,7 +97,7 @@ public class AttemptStatusMonitor implements Runnable {
 
 				Cat.logError(ie);
 			}
-			
+
 		}
 	}
 
@@ -113,11 +110,27 @@ public class AttemptStatusMonitor implements Runnable {
 		return attemptStatusMonitorRestFlag;
 	}
 
-	class AttemptContextComparator implements Comparator<AttemptContext> {
+	static class AttemptContextComparator implements Comparator<AttemptContext> {
 
 		@Override
 		public int compare(AttemptContext a0, AttemptContext a1) {
 			return a0.getAttemptid().compareToIgnoreCase(a1.getAttemptid());
 		}
+	}
+
+	public static void main(String[] args) {
+		TaskAttempt attempt1  = new TaskAttempt();
+		Task task = new Task();
+		attempt1.setAttemptid("123_1");
+		AttemptContext attemptContext1 = new AttemptContext(attempt1, task);
+		TaskAttempt attempt2  = new TaskAttempt();
+		attempt2.setAttemptid("123_0");
+		AttemptContext attemptContext2 = new AttemptContext(attempt2, task);
+		List<AttemptContext> attemptList = new ArrayList<AttemptContext>();
+		attemptList.add(attemptContext1);
+		attemptList.add(attemptContext2);
+		System.out.println(attemptList);
+		Collections.sort(attemptList, new AttemptContextComparator());
+		System.out.println(attemptList);
 	}
 }
