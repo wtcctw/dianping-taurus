@@ -19,7 +19,7 @@ public class LeaderElectorChanelModule extends AbstractModule {
     }
 
     protected void bindZooKeeper() {
-        bind(ZKPair.class).toProvider(ZKPairProvider.class);
+        bind(ZKPair.class).toProvider(ZKPairProvider.class).in(Scopes.SINGLETON);
     }
 
 }
