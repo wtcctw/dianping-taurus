@@ -1,5 +1,6 @@
 package com.dp.bigdata.taurus.springmvc.utils;
 
+import com.dianping.cat.Cat;
 import com.dp.bigdata.taurus.generated.mapper.TaskAttemptMapper;
 import com.dp.bigdata.taurus.generated.module.TaskAttempt;
 import com.dp.bigdata.taurus.generated.module.TaskAttemptExample;
@@ -23,7 +24,7 @@ import java.util.List;
  * 16/5/8  上午11:33.
  */
 @Component
-public class TaskAttemptCleanTask {
+public class AttemptCleanTask {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -47,27 +48,33 @@ public class TaskAttemptCleanTask {
     public void taskAttemptCleanExecute() {
 
         if(leaderElector.amILeader()){
-            Date startTime = null;
-            List<TaskAttempt> firstTaskAttempt = retrieveLatestTaskAttemptByTaskID();
-            if (firstTaskAttempt != null && !firstTaskAttempt.isEmpty()) {
-                startTime = firstTaskAttempt.get(0).getEndtime();
-                Calendar startCal = Calendar.getInstance();
-                startCal.setTime(startTime);
-                startCal.add(Calendar.DAY_OF_YEAR, CLEAR_DAY);
-                startTime = startCal.getTime();
-            }
-
-            Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.MONTH, RESERVE_MONTH);
-            Date stopTime = cal.getTime();
-
-            if (startTime != null && stopTime != null && startTime.before(stopTime)) {
-                logger.info("TaskAttemptCleanTask [begin] : " + startTime);
-                int deleted = taskAttemptMapper.deleteTaskAttemptsByEndTime(startTime);
-                logger.info(String.format("TaskAttempCleanTask [end] : delete %d records", deleted));
-            }
+            cleanDatabase();
         }
 
+    }
+
+    private void cleanDatabase(){
+
+        Date startTime = null;
+        List<TaskAttempt> firstTaskAttempt = retrieveLatestTaskAttemptByTaskID();
+        if (firstTaskAttempt != null && !firstTaskAttempt.isEmpty()) {
+            startTime = firstTaskAttempt.get(0).getEndtime();
+            Calendar startCal = Calendar.getInstance();
+            startCal.setTime(startTime);
+            startCal.add(Calendar.DAY_OF_YEAR, CLEAR_DAY);
+            startTime = startCal.getTime();
+        }
+
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MONTH, RESERVE_MONTH);
+        Date stopTime = cal.getTime();
+
+        if (startTime != null && stopTime != null && startTime.before(stopTime)) {
+            logger.info("AttemptCleanTask [begin] : " + startTime);
+            int deleted = taskAttemptMapper.deleteTaskAttemptsByEndTime(startTime);
+            Cat.logEvent("AttemptClean", String.format("%s:%d",startTime.toString(),deleted));
+            logger.info(String.format("AttemptCleanTask [end] : delete %d records", deleted));
+        }
     }
 
     private List<TaskAttempt> retrieveLatestTaskAttemptByTaskID() {
