@@ -10,6 +10,7 @@ import com.dp.bigdata.taurus.zookeeper.common.utils.JaasUtils;
 import com.dp.bigdata.taurus.zookeeper.common.visit.ILeaderElectorVisit;
 import com.dp.bigdata.taurus.zookeeper.common.visit.LeaderElectorVisitor;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import org.I0Itec.zkclient.IZkDataListener;
 import org.I0Itec.zkclient.ZkConnection;
 import org.I0Itec.zkclient.exception.ZkNodeExistsException;
@@ -25,6 +26,7 @@ import java.util.List;
  * Author   mingdongli
  * 16/3/15  下午2:02.
  */
+@Singleton
 public class TaurusZKLeaderElector extends TaurusZKInfoChannel implements LeaderElector, ILeaderElectorVisit {
 
     private final Log logger = LogFactory.getLog(getClass());

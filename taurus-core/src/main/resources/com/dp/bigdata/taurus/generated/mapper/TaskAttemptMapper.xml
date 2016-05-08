@@ -468,4 +468,8 @@
     <select id="getTaskAttemptsHistory"  resultMap="BaseResultMap">
         select * from TaurusTaskAttempt where execHost = #{ip} and startTime > #{time}
     </select>
+
+    <delete id="deleteTaskAttemptsByEndTime" parameterType="java.util.Date">
+      DELETE from TaurusTaskAttempt where endTime &lt;= #{endTime};
+    </delete>
 </mapper>

@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.dao.DataAccessException;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -119,6 +120,7 @@ public interface TaskAttemptMapper {
     public TaskAttempt isExitRunningTask(@Param("taskId")String taskId);
 
     public int deleteDependencyPassTask(@Param("taskId")String taskId,@Param("status")int status);
+    public int deleteTaskAttemptsByEndTime(@Param("endTime")Date endTime);
     public ArrayList<TaskAttempt> selectDependencyTask(@Param("taskId")String taskId,@Param("status")int status);
     public int getTaskLastStatus(@Param("taskId")String taskId);
 

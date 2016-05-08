@@ -4,6 +4,7 @@ import com.dp.bigdata.taurus.zookeeper.common.elect.LeaderElector;
 import com.dp.bigdata.taurus.zookeeper.common.elect.TaurusZKLeaderElector;
 import com.dp.bigdata.taurus.zookeeper.common.elect.ZKPair;
 import com.google.inject.AbstractModule;
+import com.google.inject.Scopes;
 
 /**
  * Author   mingdongli
@@ -13,7 +14,7 @@ public class LeaderElectorChanelModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        bind(LeaderElector.class).to(TaurusZKLeaderElector.class);
+        bind(LeaderElector.class).to(TaurusZKLeaderElector.class).in(Scopes.SINGLETON);
         bindZooKeeper();
     }
 
