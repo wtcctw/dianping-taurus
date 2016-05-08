@@ -67,6 +67,9 @@ public class TaurusZKLeaderElector extends TaurusZKInfoChannel implements Leader
     @Override
     public boolean amILeader() {
 
+        if(StringUtils.isBlank(currentLeaderIp)){
+            currentLeaderIp = getLeaderIpFromZk();
+        }
         if (StringUtils.isNotBlank(hostIp) && hostIp.equalsIgnoreCase(currentLeaderIp)) {
             return true;
         }
