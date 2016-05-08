@@ -26,7 +26,6 @@ public class AttemptStatusMonitor implements Runnable {
 
 	private final Scheduler scheduler;
 
-
 	@Autowired
 	public AttemptStatusMonitor(Scheduler scheduler) {
 		this.scheduler = scheduler;

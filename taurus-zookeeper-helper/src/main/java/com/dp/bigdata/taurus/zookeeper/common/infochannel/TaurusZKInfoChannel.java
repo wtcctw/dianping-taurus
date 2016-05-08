@@ -142,7 +142,7 @@ public abstract class TaurusZKInfoChannel implements ClusterInfoChannel{
 
 
 
-	private String getFullPath(String... node){
+	protected String getFullPath(String... node){
 		StringBuilder sb = new StringBuilder();
 		for(int i = 0; i < node.length; i++){
 			sb.append(SEP).append(node[i]);
