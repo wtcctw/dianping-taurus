@@ -167,18 +167,20 @@ public class DefaultExecutorManager implements ExecutorManager{
         int statusCode = status.getStatus();
         if(statusCode == ScheduleStatus.EXECUTE_FAILED) {
             result = new ExecuteStatus(ExecuteStatus.FAILED);
+            dic.cleanupOnFinish(agentIP, attemptID);
         } else if(statusCode == ScheduleStatus.EXECUTE_SUCCESS) {
             result = new ExecuteStatus(ExecuteStatus.SUCCEEDED);
+            dic.cleanupOnFinish(agentIP, attemptID);
         } else if(statusCode == ScheduleStatus.DELETE_SUCCESS) {
             result = new ExecuteStatus(ExecuteStatus.AUTO_KILLED);
+            dic.cleanupOnFinish(agentIP, attemptID);
         } else if(statusCode == ScheduleStatus.UNKNOWN) {
             result = new ExecuteStatus(ExecuteStatus.UNKNOWN);
+            dic.cleanupOnFinish(agentIP, attemptID);
         } else {
             result = new ExecuteStatus(ExecuteStatus.RUNNING);
         }
-        if(statusCode != ExecuteStatus.RUNNING){
-            dic.cleanupOnFinish(agentIP, attemptID);
-        }
+
         result.setReturnCode(status.getReturnCode());
         return result;
     }
