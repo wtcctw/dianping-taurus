@@ -1,21 +1,21 @@
 package com.dp.bigdata.taurus.zookeeper.common.infochannel;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import org.I0Itec.zkclient.ZkClient;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.zookeeper.KeeperException;
-
 import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.ScheduleStatus;
 import com.dp.bigdata.taurus.zookeeper.common.infochannel.guice.ZooKeeperProvider;
 import com.dp.bigdata.taurus.zookeeper.common.infochannel.interfaces.CleanInfoChannel;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Scopes;
+import org.I0Itec.zkclient.ZkClient;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.zookeeper.KeeperException;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 public class ZooKeeperCleaner {
 	private static Log LOGGER = LogFactory.getLog(ZooKeeperCleaner.class);
@@ -127,15 +127,15 @@ public class ZooKeeperCleaner {
 
 	}
 	
-	class CleanInfoChannelModule extends AbstractModule{
+	public static class CleanInfoChannelModule extends AbstractModule{
 		@Override
 		protected void configure() {
-			bind(CleanInfoChannel.class).to(TaurusZKCleanerInfoChannel.class);
+			bind(CleanInfoChannel.class).to(TaurusZKCleanerInfoChannel.class).in(Scopes.SINGLETON);
 			bindZooKeeper();
 		}
 		
 		protected void bindZooKeeper() {
-			bind(ZkClient.class).toProvider(ZooKeeperProvider.class);
+			bind(ZkClient.class).toProvider(ZooKeeperProvider.class).in(Scopes.SINGLETON);
 		}
 	}
 	

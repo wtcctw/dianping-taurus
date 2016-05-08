@@ -176,6 +176,9 @@ public class DefaultExecutorManager implements ExecutorManager{
         } else {
             result = new ExecuteStatus(ExecuteStatus.RUNNING);
         }
+        if(statusCode != ExecuteStatus.RUNNING){
+            dic.cleanupOnFinish(agentIP, attemptID);
+        }
         result.setReturnCode(status.getReturnCode());
         return result;
     }

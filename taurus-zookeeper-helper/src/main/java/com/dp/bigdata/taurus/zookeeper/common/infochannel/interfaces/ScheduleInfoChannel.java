@@ -1,9 +1,9 @@
 package com.dp.bigdata.taurus.zookeeper.common.infochannel.interfaces;
 
-import java.util.Set;
-
 import org.I0Itec.zkclient.IZkChildListener;
 import org.I0Itec.zkclient.IZkDataListener;
+
+import java.util.Set;
 
 public interface ScheduleInfoChannel extends ClusterInfoChannel {
 	
@@ -51,5 +51,7 @@ public interface ScheduleInfoChannel extends ClusterInfoChannel {
 	void completeOperate(String ip, String op);
 
 	boolean operateCompleted(String ip, String op);
+
+	void cleanupOnFinish(String ip, String taskAttempt);
 	
 }

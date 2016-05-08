@@ -1,22 +1,18 @@
 package com.dp.bigdata.taurus.zookeeper.common.infochannel;
 
-import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-
-import org.I0Itec.zkclient.IZkChildListener;
-import org.I0Itec.zkclient.IZkDataListener;
-import org.I0Itec.zkclient.ZkClient;
-import org.I0Itec.zkclient.exception.ZkNoNodeException;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import com.dp.bigdata.taurus.zookeeper.common.MachineType;
 import com.dp.bigdata.taurus.zookeeper.common.TaurusZKException;
 import com.dp.bigdata.taurus.zookeeper.common.infochannel.interfaces.ScheduleInfoChannel;
 import com.google.inject.Inject;
+import org.I0Itec.zkclient.IZkChildListener;
+import org.I0Itec.zkclient.IZkDataListener;
+import org.I0Itec.zkclient.ZkClient;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 public class TaurusZKScheduleInfoChannel extends TaurusZKInfoChannel implements
 		ScheduleInfoChannel {
@@ -187,14 +183,14 @@ public class TaurusZKScheduleInfoChannel extends TaurusZKInfoChannel implements
 	public void removeRunningJob(String ip, String taskAttempt) {
 		try {
 			rmPath(BASE, SCHEDULE, ip, RUNNING, taskAttempt);
-			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-			String date = format.format(new Date());
-			try {
-				mkPathIfNotExists(BASE, SCHEDULE, ip, date, taskAttempt);
-			} catch (ZkNoNodeException e) {
-				mkPathIfNotExists(BASE, SCHEDULE, ip, date);
-				mkPathIfNotExists(BASE, SCHEDULE, ip, date, taskAttempt);
-			}
+//			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+//			String date = format.format(new Date());
+//			try {
+//				mkPathIfNotExists(BASE, SCHEDULE, ip, date, taskAttempt);
+//			} catch (ZkNoNodeException e) {
+//				mkPathIfNotExists(BASE, SCHEDULE, ip, date);
+//				mkPathIfNotExists(BASE, SCHEDULE, ip, date, taskAttempt);
+//			}
 		} catch (Exception e) {
 			LOGGER.error("Remove running job failed.", e);
 		}
@@ -251,6 +247,11 @@ public class TaurusZKScheduleInfoChannel extends TaurusZKInfoChannel implements
 	@Override
 	public boolean operateCompleted(String ip, String op) {
 		return !existPath(BASE, SCHEDULE, ip, op);
+	}
+
+	@Override
+	public void cleanupOnFinish(String ip, String taskAttempt) {
+		zk.deleteRecursive(getFullPath(BASE, SCHEDULE, ip, taskAttempt));
 	}
 
 	/*
