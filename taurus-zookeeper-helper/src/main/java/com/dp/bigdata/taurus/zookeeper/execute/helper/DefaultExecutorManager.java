@@ -35,7 +35,7 @@ public class DefaultExecutorManager implements ExecutorManager{
 
 	private ScheduleInfoChannel dic;
 	private int opTimeout = DEFAULT_TIME_OUT_IN_SECONDS;
-	
+
 	public DefaultExecutorManager(){
 		Injector injector = Guice.createInjector(new ScheduleInfoChanelModule());
 		dic = injector.getInstance(ScheduleInfoChannel.class);
@@ -167,16 +167,12 @@ public class DefaultExecutorManager implements ExecutorManager{
         int statusCode = status.getStatus();
         if(statusCode == ScheduleStatus.EXECUTE_FAILED) {
             result = new ExecuteStatus(ExecuteStatus.FAILED);
-            dic.cleanupOnFinish(agentIP, attemptID);
         } else if(statusCode == ScheduleStatus.EXECUTE_SUCCESS) {
             result = new ExecuteStatus(ExecuteStatus.SUCCEEDED);
-            dic.cleanupOnFinish(agentIP, attemptID);
         } else if(statusCode == ScheduleStatus.DELETE_SUCCESS) {
             result = new ExecuteStatus(ExecuteStatus.AUTO_KILLED);
-            dic.cleanupOnFinish(agentIP, attemptID);
         } else if(statusCode == ScheduleStatus.UNKNOWN) {
             result = new ExecuteStatus(ExecuteStatus.UNKNOWN);
-            dic.cleanupOnFinish(agentIP, attemptID);
         } else {
             result = new ExecuteStatus(ExecuteStatus.RUNNING);
         }
@@ -241,6 +237,11 @@ public class DefaultExecutorManager implements ExecutorManager{
     public List<String> registerNewHost() {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public void cleanZkAttemptPath(String ip, String attemptId) {
+        dic.cleanupOnFinish(ip, attemptId);
     }
 
 }

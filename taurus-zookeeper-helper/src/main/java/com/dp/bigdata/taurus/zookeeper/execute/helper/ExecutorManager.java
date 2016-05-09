@@ -38,4 +38,6 @@ public interface ExecutorManager {
      */
     public List<String> registerNewHost();
 
+    public void cleanZkAttemptPath(String ip, String attemptId);
+
 }
