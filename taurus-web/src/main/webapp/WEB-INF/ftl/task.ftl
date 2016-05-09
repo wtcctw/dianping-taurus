@@ -64,6 +64,7 @@
                 <div class="controls col-sm-10">
                     <select id="taskType" name="taskType" class="input-big  field" style="width: 300px">
                         <option>default</option>
+                        <option>mschedule</option>
                         <option>hadoop</option>
                     </select>
                     <a href="${rc.contextPath}/about#config" class="atip" data-toggle="tooltip" data-placement="top"
@@ -103,7 +104,7 @@
                 </div>
             </div>
 
-            <div id="host" class="control-group">
+            <div id="hostname" class="control-group">
                 <label class="label label-lg label-info arrowed-right col-sm-1" for="hostname">部署的机器*</label>
 
                 <div class="controls col-sm-10">
@@ -119,6 +120,13 @@
                     </select>
                     <a class="atip" data-toggle="tooltip" data-placement="top"
                        data-original-title="如果你要部署的主机ip不在这里，说明agent机器出现了故障或者主机ip上没有部署agent，请联系运维哥哥">提示</a>
+                </div>
+            </div>
+            <div id="hostlist" class="control-group" style="display:none;">
+                <label class="label label-lg label-info arrowed-right col-sm-1" for="hostname">部署的机器*</label>
+
+                <div class="controls col-sm-4">
+                    <input type="text" class="input-xxlarge field" id="hostlist" name="hostlist" placeholder="多个IP请用','分开,可为空" style="width: 300px">
                 </div>
             </div>
         </fieldset>
@@ -170,7 +178,7 @@
 
             </div>
 
-            <div class="control-group">
+            <div class="control-group" id="taskCommand">
                 <label class="label label-lg label-info arrowed-right col-sm-2" for="taskCommand">命令*</label>
 
                 <div class="controls col-sm-9">
@@ -195,7 +203,7 @@
                 <br>
             </div>
 
-            <div class="control-group">
+            <div class="control-group" id="proxyUser">
                 <label class="label label-lg label-info arrowed-right col-sm-2" for="proxyUser">运行身份（不可为root）*</label>
 
                 <div class="controls col-sm-9" id="hadoopUser">
