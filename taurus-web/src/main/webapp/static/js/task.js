@@ -22,6 +22,7 @@ $(document).ready(function() {
 			$("#beanCG").show();
             $("#hadoopUser").hide();
             $("#defaultUser").show();
+            $("#hostlist").hide();
 		} else if($(this).val() === 'hadoop'){
 			isSpringType = false;
 			$("#jarAddress").hide();
@@ -31,8 +32,23 @@ $(document).ready(function() {
 			$("#beanCG").hide();
             $("#hadoopUser").show();
             $("#defaultUser").hide();
+            $("#hostlist").hide();
+		} else if($(this).val() === 'mschedule'){
+			isSpringType = false;
+            $("#hostlist").show();
+			$("#jarAddress").hide();
+			$("#hadoopName").hide();
+			$("#upfile").hide();
+			$("#mainClassCG").hide();
+			$("#beanCG").hide();
+            $("#hadoopUser").hide();
+            $("#defaultUser").hide();
+            $("#hostname").hide();
+            $("#taskCommand").hide();
+            $("#proxyUser").hide();
 		} else{
 			isSpringType = false;
+            $("#hostlist").hide();
 			$("#jarAddress").hide();
 			$("#hadoopName").hide();
 			$("#upfile").show();
