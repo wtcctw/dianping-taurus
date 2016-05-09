@@ -111,6 +111,7 @@
 	<bean id="statusChecker" class="com.dp.bigdata.taurus.core.DefaultAttemptStatusCheck" />
 	<bean id="agentMonitor" class="com.dp.bigdata.taurus.zookeeper.heartbeat.helper.PollingAgentMonitor"/>
 	<bean id="alert" class="com.dp.bigdata.taurus.alert.TaurusAlert" init-method="load"/>
+	<bean id="selector" class="com.dp.bigdata.taurus.core.RandomSelector" />
 
 </beans>
 
