@@ -60,6 +60,9 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
     private TaskAssignPolicy assignPolicy;
 
     @Autowired
+    private Selector<String> selector;
+
+    @Autowired
     private IDFactory idFactory;
 
     @Autowired
@@ -448,8 +451,16 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
         Host host;
         if (task.getPoolid() == 1) {
             host = new Host();
+            String ip = task.getHostname();
             // assume that hostname is ip address!!
-            host.setIp(task.getHostname());
+            if (StringUtils.isBlank(ip)) {
+                Cat.logEvent("Attempt.SubmitFailed", context.getName(), "no-host", context.getAttemptid());
+                failAttempt(attempt);
+                throw new ScheduleException("Fail to execute attemptID : " + attempt.getAttemptid() + " due to no host");
+            }
+            String[] ipArray = ip.split(ip);
+            String finalIp = selector.select(Arrays.asList(ipArray));
+            host.setIp(finalIp);
             // host = hostMapper.selectByPrimaryKey(task.getHostname());
         } else {
             host = assignPolicy.assignTask(task);
@@ -465,9 +476,7 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
             Cat.logError(ee);
             Cat.logEvent("Attempt.SubmitFailed", context.getName(), "submit-fail", context.getAttemptid());
 
-            attempt.setStatus(AttemptStatus.SUBMIT_FAIL);
-            attempt.setEndtime(new Date());
-            taskAttemptMapper.updateByPrimaryKeySelective(attempt);
+            failAttempt(attempt);
 
             throw new ScheduleException("Fail to execute attemptID : " + attempt.getAttemptid() + " on host : "
                     + host.getIp(), ee);
@@ -478,6 +487,13 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
         taskAttemptMapper.updateByPrimaryKeySelective(attempt);
         // register the attempt context
         registAttemptContext(context);
+    }
+
+    private void failAttempt(TaskAttempt attempt) {
+
+        attempt.setStatus(AttemptStatus.SUBMIT_FAIL);
+        attempt.setEndtime(new Date());
+        taskAttemptMapper.updateByPrimaryKeySelective(attempt);
     }
 
     @Override
@@ -624,7 +640,7 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
         for (Map.Entry<String, BoundedList<TaskAttempt>> entry : dependPassMap.entrySet()) {
             BoundedList<TaskAttempt> tmpAttempts = entry.getValue();
             if (tmpAttempts != null && tmpAttempts.size() > 0) {
-                if(tmpAttempts.size() > 1){
+                if (tmpAttempts.size() > 1) {
                     Collections.sort(tmpAttempts, new TaskAttemptComparator());
                 }
                 attempts.add(tmpAttempts.get(0));  //只取第一个, 不取全部
