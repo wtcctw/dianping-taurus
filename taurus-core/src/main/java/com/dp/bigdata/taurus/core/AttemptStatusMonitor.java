@@ -44,22 +44,6 @@ public class AttemptStatusMonitor extends AbstractLionPropertyInitializer<Boolea
 
     private ExecutorService zkCleanerExecutorService = ThreadUtils.newFixedThreadPool(10, "ZkCleanerExecutor");
 
-    private Thread consumerThread = new Thread(new Runnable() {
-        @Override
-        public void run() {
-            while (true) {
-                try {
-                    DelayedAttemptZkPath delayedAttemptZkPath = delayedAttemptZkPaths.take();
-                    if(lionValue){
-                        zkCleanerExecutorService.submit(new CleanTask(delayedAttemptZkPath.getIp(), delayedAttemptZkPath.getAttemptId()));
-                    }
-                } catch (InterruptedException e) {
-                    //
-                }
-            }
-        }
-    });
-
     @Autowired
     public AttemptStatusMonitor(Scheduler scheduler, ExecutorManager zookeeper) {
         this.scheduler = scheduler;
@@ -154,6 +138,22 @@ public class AttemptStatusMonitor extends AbstractLionPropertyInitializer<Boolea
     @Override
     public void afterPropertiesSet() throws Exception {
         Cat.logEvent("AttemptStatusMonitor", "ZkClean");
+        Thread consumerThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    System.out.println("-----------------");
+                    try {
+                        DelayedAttemptZkPath delayedAttemptZkPath = delayedAttemptZkPaths.take();
+                        if(lionValue){
+                            zkCleanerExecutorService.submit(new CleanTask(delayedAttemptZkPath.getIp(), delayedAttemptZkPath.getAttemptId()));
+                        }
+                    } catch (InterruptedException e) {
+                        //
+                    }
+                }
+            }
+        });
         consumerThread.start();
     }
 
