@@ -458,7 +458,7 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
                 failAttempt(attempt);
                 throw new ScheduleException("Fail to execute attemptID : " + attempt.getAttemptid() + " due to no host");
             }
-            String[] ipArray = ip.split(ip);
+            String[] ipArray = ip.split(",");
             String finalIp = selector.select(Arrays.asList(ipArray));
             host.setIp(finalIp);
             // host = hostMapper.selectByPrimaryKey(task.getHostname());
