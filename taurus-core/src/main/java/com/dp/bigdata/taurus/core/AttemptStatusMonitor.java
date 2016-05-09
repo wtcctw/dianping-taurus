@@ -137,6 +137,7 @@ public class AttemptStatusMonitor extends AbstractLionPropertyInitializer<Boolea
 
     @Override
     public void afterPropertiesSet() throws Exception {
+        super.afterPropertiesSet();
         Cat.logEvent("AttemptStatusMonitor", "ZkClean");
         Thread consumerThread = new Thread(new Runnable() {
             @Override
