@@ -240,8 +240,8 @@ public class DefaultExecutorManager implements ExecutorManager{
     }
 
     @Override
-    public void cleanZkAttemptPath(String ip, String attemptId) {
-        dic.cleanupOnFinish(ip, attemptId);
+    public boolean cleanZkAttemptPath(String ip, String attemptId) {
+        return dic.cleanupOnFinish(ip, attemptId);
     }
 
 }

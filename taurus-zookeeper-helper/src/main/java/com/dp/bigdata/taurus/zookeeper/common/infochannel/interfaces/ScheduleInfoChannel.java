@@ -52,6 +52,6 @@ public interface ScheduleInfoChannel extends ClusterInfoChannel {
 
 	boolean operateCompleted(String ip, String op);
 
-	void cleanupOnFinish(String ip, String taskAttempt);
+	boolean cleanupOnFinish(String ip, String taskAttempt);
 	
 }

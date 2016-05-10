@@ -1,25 +1,16 @@
 package com.dp.bigdata.taurus.agent.spring;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Method;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Properties;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
+import com.dp.bigdata.taurus.agent.common.TaskType;
+import com.dp.bigdata.taurus.agent.utils.AgentEnvValue;
+import com.dp.bigdata.taurus.agent.utils.IPUtils;
+import com.dp.bigdata.taurus.agent.utils.TaskHelper;
+import com.dp.bigdata.taurus.framework.ApplicationContextProvider;
+import com.dp.bigdata.taurus.framework.TaskBean;
+import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.ScheduleConf;
+import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.ScheduleStatus;
+import com.dp.bigdata.taurus.zookeeper.common.utils.ClassLoaderUtils;
 import org.I0Itec.zkclient.IZkChildListener;
 import org.I0Itec.zkclient.ZkClient;
 import org.apache.commons.lang.StringUtils;
@@ -31,15 +22,15 @@ import org.apache.log4j.Layout;
 import org.apache.log4j.PatternLayout;
 import org.springframework.context.ApplicationContext;
 
-import com.dp.bigdata.taurus.agent.common.TaskType;
-import com.dp.bigdata.taurus.agent.utils.AgentEnvValue;
-import com.dp.bigdata.taurus.agent.utils.IPUtils;
-import com.dp.bigdata.taurus.agent.utils.TaskHelper;
-import com.dp.bigdata.taurus.framework.ApplicationContextProvider;
-import com.dp.bigdata.taurus.framework.TaskBean;
-import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.ScheduleConf;
-import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.ScheduleStatus;
-import com.dp.bigdata.taurus.zookeeper.common.utils.ClassLoaderUtils;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Properties;
+import java.util.concurrent.*;
 
 /**
  * JarExecutor
@@ -177,7 +168,7 @@ public class JarExecutor {
 								}
 
 								// add attempt in the date folder
-								zkClient.createPersistent(SCHEDULE_PATH + "/" + date + "/" + attemptID, true);
+//								zkClient.createPersistent(SCHEDULE_PATH + "/" + date + "/" + attemptID, true);
 								zkClient.writeData(attemptPath, status);
 
 								// upload log
