@@ -292,6 +292,39 @@ public class TaskAttempt {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TaskAttempt that = (TaskAttempt) o;
+
+        if (attemptid != null ? !attemptid.equals(that.attemptid) : that.attemptid != null) return false;
+        if (instanceid != null ? !instanceid.equals(that.instanceid) : that.instanceid != null) return false;
+        if (taskid != null ? !taskid.equals(that.taskid) : that.taskid != null) return false;
+        if (starttime != null ? !starttime.equals(that.starttime) : that.starttime != null) return false;
+        if (endtime != null ? !endtime.equals(that.endtime) : that.endtime != null) return false;
+        if (scheduletime != null ? !scheduletime.equals(that.scheduletime) : that.scheduletime != null) return false;
+        if (status != null ? !status.equals(that.status) : that.status != null) return false;
+        if (returnvalue != null ? !returnvalue.equals(that.returnvalue) : that.returnvalue != null) return false;
+        return !(exechost != null ? !exechost.equals(that.exechost) : that.exechost != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = attemptid != null ? attemptid.hashCode() : 0;
+        result = 31 * result + (instanceid != null ? instanceid.hashCode() : 0);
+        result = 31 * result + (taskid != null ? taskid.hashCode() : 0);
+        result = 31 * result + (starttime != null ? starttime.hashCode() : 0);
+        result = 31 * result + (endtime != null ? endtime.hashCode() : 0);
+        result = 31 * result + (scheduletime != null ? scheduletime.hashCode() : 0);
+        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (returnvalue != null ? returnvalue.hashCode() : 0);
+        result = 31 * result + (exechost != null ? exechost.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "TaskAttempt{" +
                 "attemptid='" + attemptid + '\'' +
