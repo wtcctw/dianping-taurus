@@ -250,8 +250,8 @@ public class TaurusZKScheduleInfoChannel extends TaurusZKInfoChannel implements
 	}
 
 	@Override
-	public void cleanupOnFinish(String ip, String taskAttempt) {
-		zk.deleteRecursive(getFullPath(BASE, SCHEDULE, ip, taskAttempt));
+	public boolean cleanupOnFinish(String ip, String taskAttempt) {
+		return zk.deleteRecursive(getFullPath(BASE, SCHEDULE, ip, taskAttempt));
 	}
 
 	/*
