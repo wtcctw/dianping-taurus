@@ -10,7 +10,9 @@ import org.I0Itec.zkclient.ZkClient;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -199,7 +201,7 @@ public class TaurusZKScheduleInfoChannel extends TaurusZKInfoChannel implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.dp.bigdata.taurus.zookeeper.common.infochannel.interfaces.
 	 * ScheduleInfoChannel#getRunningJObs(java.lang.String)
 	 */
@@ -215,7 +217,7 @@ public class TaurusZKScheduleInfoChannel extends TaurusZKInfoChannel implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.dp.bigdata.taurus.zookeeper.common.infochannel.interfaces.
 	 * ScheduleInfoChannel
 	 * #setExecutionJobListener(org.I0Itec.zkclient.IZkChildListener)
@@ -227,7 +229,7 @@ public class TaurusZKScheduleInfoChannel extends TaurusZKInfoChannel implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.dp.bigdata.taurus.zookeeper.common.infochannel.interfaces.
 	 * ScheduleInfoChannel
 	 * #setKillingJobListener(org.I0Itec.zkclient.IZkChildListener)
@@ -240,7 +242,7 @@ public class TaurusZKScheduleInfoChannel extends TaurusZKInfoChannel implements
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.dp.bigdata.taurus.zookeeper.common.infochannel.interfaces.
 	 * ScheduleInfoChannel#needUpdate(java.lang.String)
 	 */
@@ -251,12 +253,16 @@ public class TaurusZKScheduleInfoChannel extends TaurusZKInfoChannel implements
 
 	@Override
 	public boolean cleanupOnFinish(String ip, String taskAttempt) {
+
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		String date = format.format(new Date());
+		rmPath(BASE, SCHEDULE, ip, date, taskAttempt);
 		return zk.deleteRecursive(getFullPath(BASE, SCHEDULE, ip, taskAttempt));
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.dp.bigdata.taurus.zookeeper.common.infochannel.interfaces.
 	 * ScheduleInfoChannel#completeUpdate(java.lang.String)
 	 */
