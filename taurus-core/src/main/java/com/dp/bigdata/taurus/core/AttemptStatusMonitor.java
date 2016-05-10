@@ -87,7 +87,6 @@ public class AttemptStatusMonitor extends AbstractLionPropertyInitializer<Boolea
                                 if (now > start.getTime() + timeout * 1000 * 60) {
                                     LOG.info("attempt " + attempt.getAttemptid() + " executing timeout ");
                                     scheduler.attemptExpired(attempt.getAttemptid());
-                                    delayedAttemptZkPaths.offer(new DelayedAttemptZkPath(attempt.getExechost(), attempt.getAttemptid()));
                                 }
                             } else {
                                 try {
