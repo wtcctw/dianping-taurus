@@ -36,7 +36,7 @@ public class AttemptBackupTask extends AbstractAttemptCleanTask {
 
     private void backupDatabase() {
 
-        Date stopDate = DateUtils.yesterday().getTime();
+        Date stopDate = new Date();
         Date startDate;
         TaskAttempt firstTaskAttempt = retrieveLastBackupTaskAttempt();
 
@@ -92,32 +92,27 @@ public class AttemptBackupTask extends AbstractAttemptCleanTask {
         return attemptBackupMapper.deleteTaskAttemptsByEndTime(endTime);
     }
 
-    private TaskAttempt retrieveLastBackupTaskAttempt() {
-
+    private TaskAttempt retrieveTaskAttempt(String orderByClause){
         TaskAttemptExample example = new TaskAttemptExample();
         example.or().andEndtimeIsNotNull();
-        String orderByClause = "endTime desc limit 1";
         example.setOrderByClause(orderByClause);
         List<TaskAttempt> taskAttemptList = attemptBackupMapper.selectByExample(example);
         if (taskAttemptList != null && !taskAttemptList.isEmpty()) {
             return taskAttemptList.get(0);
         }
         return null;
+    }
 
+    private TaskAttempt retrieveLastBackupTaskAttempt() {
+
+        String orderByClause = "endTime desc limit 1";
+        return retrieveTaskAttempt(orderByClause);
     }
 
     protected TaskAttempt retrieveFirstTaskAttempt() {
 
-        TaskAttemptExample example = new TaskAttemptExample();
-        example.or().andEndtimeIsNotNull();
         String orderByClause = "endTime asc limit 1";
-        example.setOrderByClause(orderByClause);
-        List<TaskAttempt> taskAttemptList = attemptBackupMapper.selectByExample(example);
-        if (taskAttemptList != null && !taskAttemptList.isEmpty()) {
-            return taskAttemptList.get(0);
-        }
-        return null;
-
+        return retrieveTaskAttempt(orderByClause);
     }
 
     protected int getReserveMonth() {
