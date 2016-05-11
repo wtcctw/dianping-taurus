@@ -27,8 +27,8 @@ public class AttemptBackupTask extends AbstractAttemptCleanTask {
     public void taskAttemptBackupExecute() {
 
         if (leaderElector.amILeader()) {
+            backupDatabase();
         }
-        backupDatabase();
 
     }
 
