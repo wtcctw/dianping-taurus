@@ -126,5 +126,7 @@ public interface TaskAttemptMapper {
 
     public ArrayList<TaskAttempt> getTaskAttemptsHistory(@Param("ip")String ip,@Param("time")String time);
     public ArrayList<TaskAttempt> getTaskAttempt(@Param("startTime")Date startTime,@Param("endTime")Date endTime);
+    public void batchiInsert(@Param("list")List<TaskAttempt> list);
+
 
 }

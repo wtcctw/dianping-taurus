@@ -20,6 +20,8 @@ import java.util.List;
 @Component
 public class AttemptBackupTask extends AbstractAttemptCleanTask {
 
+    private static final int BATCH_SIZE = 10000;
+
     @Autowired
     private AttemptBackupMapper attemptBackupMapper;
 
@@ -41,12 +43,12 @@ public class AttemptBackupTask extends AbstractAttemptCleanTask {
         if (firstTaskAttempt == null) {
             startDate = DateUtils.yesterdayOfLastYear().getTime();
             TaskAttempt taskAttempt = retrieveFirstTaskAttempt();
-            if(taskAttempt == null){ //没有数据
+            if (taskAttempt == null) { //没有数据
                 return;
-            }else {
+            } else {
                 Date initDate = taskAttempt.getEndtime();
                 initDate = DateUtils.zeroHour(initDate);
-                if(initDate.after(startDate)){
+                if (initDate.after(startDate)) {
                     startDate = initDate;
                 }
             }
@@ -61,8 +63,21 @@ public class AttemptBackupTask extends AbstractAttemptCleanTask {
         while (taskAttemptList != null && taskAttemptList.isEmpty() && tomorrow.before(stopDate)) { //防止中间某天没有数据
             taskAttemptList = taskAttemptMapper.getTaskAttempt(startDate, tomorrow);
             if (taskAttemptList != null && !taskAttemptList.isEmpty()) {
-                for (TaskAttempt taskAttempt : taskAttemptList) {
-                    attemptBackupMapper.insert(taskAttempt);
+                int size = taskAttemptList.size();
+
+                if (size <= BATCH_SIZE) {
+                    attemptBackupMapper.batchiInsert(taskAttemptList);
+                } else {
+                    int times = 0;
+                    int startIndex = times * BATCH_SIZE;
+                    int stopIndex = (times + 1) * BATCH_SIZE;
+                    while (stopIndex <= size) {
+                        attemptBackupMapper.batchiInsert(taskAttemptList.subList(startIndex, stopIndex));
+                        times++;
+                        startIndex = times * BATCH_SIZE;
+                        stopIndex = (times + 1) * BATCH_SIZE;
+                    }
+                    attemptBackupMapper.batchiInsert(taskAttemptList.subList(startIndex, size));
                 }
                 Cat.logEvent(getClass().getSimpleName(), String.format("backup:%s:%d", startDate.toString(), taskAttemptList.size()));
                 break;
@@ -91,7 +106,21 @@ public class AttemptBackupTask extends AbstractAttemptCleanTask {
 
     }
 
-    protected int getReserveMonth(){
+    protected TaskAttempt retrieveFirstTaskAttempt() {
+
+        TaskAttemptExample example = new TaskAttemptExample();
+        example.or().andEndtimeIsNotNull();
+        String orderByClause = "endTime asc limit 1";
+        example.setOrderByClause(orderByClause);
+        List<TaskAttempt> taskAttemptList = attemptBackupMapper.selectByExample(example);
+        if (taskAttemptList != null && !taskAttemptList.isEmpty()) {
+            return taskAttemptList.get(0);
+        }
+        return null;
+
+    }
+
+    protected int getReserveMonth() {
         return 12;
     }
 
