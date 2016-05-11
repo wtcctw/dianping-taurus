@@ -25,12 +25,12 @@ public class AttemptBackupTask extends AbstractAttemptCleanTask {
     @Autowired
     private AttemptBackupMapper attemptBackupMapper;
 
-    @Scheduled(cron = "0 0/1 * * * ?")
+    @Scheduled(cron = "0/10 * * * * ?")
     public void taskAttemptBackupExecute() {
 
         if (leaderElector.amILeader()) {
-            backupDatabase();
         }
+            backupDatabase();
 
     }
 
@@ -106,12 +106,6 @@ public class AttemptBackupTask extends AbstractAttemptCleanTask {
     private TaskAttempt retrieveLastBackupTaskAttempt() {
 
         String orderByClause = "endTime desc limit 1";
-        return retrieveTaskAttempt(orderByClause);
-    }
-
-    protected TaskAttempt retrieveFirstTaskAttempt() {
-
-        String orderByClause = "endTime asc limit 1";
         return retrieveTaskAttempt(orderByClause);
     }
 
