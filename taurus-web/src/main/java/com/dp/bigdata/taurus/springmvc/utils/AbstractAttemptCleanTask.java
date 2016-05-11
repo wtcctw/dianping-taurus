@@ -21,7 +21,7 @@ public abstract class AbstractAttemptCleanTask extends AbstractAttemptTask {
 
     private static final int CLEAR_DAY = 2;
 
-    private static final int RESERVE_MONTH = -6;
+    private static final int RESERVE_MONTH = 5;
 
     @Autowired
     protected TaskAttemptMapper taskAttemptMapper;
@@ -50,7 +50,7 @@ public abstract class AbstractAttemptCleanTask extends AbstractAttemptTask {
         startTime = startCal.getTime();
 
         Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.MONTH, getReserveMonth());
+        cal.add(Calendar.MONTH, -getReserveMonth());
         Date stopTime = cal.getTime();
 
         if (startTime != null && stopTime != null && startTime.before(stopTime)) {
