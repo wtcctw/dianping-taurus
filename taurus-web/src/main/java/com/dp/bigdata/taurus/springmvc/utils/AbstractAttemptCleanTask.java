@@ -17,7 +17,7 @@ import java.util.List;
  */
 public abstract class AbstractAttemptCleanTask extends AbstractAttemptTask {
 
-    private static final String ATTEEMPT_CLEANUP = "taurus.taskattempt.cleanup";
+    private static final String ATTEMPT_CLEANUP = "taurus.taskattempt.cleanup";
 
     private static final int CLEAR_DAY = 2;
 
@@ -26,7 +26,7 @@ public abstract class AbstractAttemptCleanTask extends AbstractAttemptTask {
     @Autowired
     protected TaskAttemptMapper taskAttemptMapper;
 
-    @Scheduled(cron = "0/20 * * * * ?")
+    @Scheduled(cron = "0/30 * * * * ?")
     public void taskAttemptCleanExecute() {
 
         if (lionValue && leaderElector.amILeader()) {
@@ -86,6 +86,6 @@ public abstract class AbstractAttemptCleanTask extends AbstractAttemptTask {
 
     @Override
     protected String getKey() {
-        return ATTEEMPT_CLEANUP;
+        return ATTEMPT_CLEANUP;
     }
 }
