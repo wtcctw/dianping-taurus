@@ -283,7 +283,6 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
                 }
 
                 try {
-                    clearInitialized();
                     Thread.sleep(SCHDUELE_INTERVAL);
                 } catch (InterruptedException e) {
                     logger.error("Interrupted exception", e);
