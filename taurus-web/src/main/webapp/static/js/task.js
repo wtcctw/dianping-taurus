@@ -33,6 +33,9 @@ $(document).ready(function() {
             $("#hadoopUser").show();
             $("#defaultUser").hide();
             $("#hostlist").hide();
+			$("#hostname").show();
+			$("#taskCommand").show();
+			$("#proxyUser").show();
 		} else if($(this).val() === 'mschedule'){
 			isSpringType = false;
             $("#hostlist").show();
@@ -56,6 +59,9 @@ $(document).ready(function() {
 			$("#beanCG").hide();
             $("#hadoopUser").hide();
             $("#defaultUser").show();
+			$("#hostname").show();
+			$("#taskCommand").show();
+			$("#proxyUser").show();
 		}
 	});
     if($("#taskType").val() === 'default'){
