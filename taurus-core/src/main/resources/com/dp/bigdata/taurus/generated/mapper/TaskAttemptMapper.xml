@@ -474,7 +474,7 @@
     </delete>
     <select id="getTaskAttempt" parameterType="java.util.Date" resultMap="BaseResultMap">
       select * from TaurusTaskAttempt
-      where endTime &lt;= #{endTime} and startTime &gt; #{startTime}
+      where endTime &lt; #{endTime} and startTime &gt;= #{startTime}
     </select>
   <insert id="batchiInsert" parameterType="java.util.List">
     <!--
