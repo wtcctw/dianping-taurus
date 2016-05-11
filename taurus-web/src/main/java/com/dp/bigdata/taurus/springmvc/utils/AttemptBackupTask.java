@@ -25,7 +25,7 @@ public class AttemptBackupTask extends AbstractAttemptCleanTask {
     @Autowired
     private AttemptBackupMapper attemptBackupMapper;
 
-    @Scheduled(cron = "0/10 * * * * ?")
+    @Scheduled(cron = "0 0/1 * * * ?")
     public void taskAttemptBackupExecute() {
 
         if (leaderElector.amILeader()) {
