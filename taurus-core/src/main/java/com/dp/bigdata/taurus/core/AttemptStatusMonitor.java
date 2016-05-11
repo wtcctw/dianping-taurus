@@ -142,7 +142,6 @@ public class AttemptStatusMonitor extends AbstractLionPropertyInitializer<Boolea
             @Override
             public void run() {
                 while (true) {
-                    System.out.println("-----------------");
                     try {
                         DelayedAttemptZkPath delayedAttemptZkPath = delayedAttemptZkPaths.take();
                         if(lionValue){
