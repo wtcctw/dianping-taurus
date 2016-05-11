@@ -126,7 +126,7 @@
                 <label class="label label-lg label-info arrowed-right col-sm-1" for="hostname">部署的机器*</label>
 
                 <div class="controls col-sm-4">
-                    <input type="text" class="input-xxlarge field" id="hostlist" name="hostlist" placeholder="多个IP请用','分开,可为空" style="width: 300px">
+                    <input type="text" class="input-xxlarge field" id="hostlist" name="hostlist" placeholder="mschedule类型正在开发中，暂不支持..." style="width: 300px">
                 </div>
             </div>
         </fieldset>
