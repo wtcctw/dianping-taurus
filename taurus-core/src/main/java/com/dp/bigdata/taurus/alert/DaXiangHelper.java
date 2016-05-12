@@ -1,6 +1,5 @@
 package com.dp.bigdata.taurus.alert;
 
-import com.alibaba.fastjson.JSONObject;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
@@ -8,6 +7,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,8 +40,12 @@ public class DaXiangHelper {
         HttpPost method = new HttpPost(DAXIANG_URL);
 
         JSONObject jsonParam = new JSONObject();
-        jsonParam.put("user", user);
-        jsonParam.put("content", content);
+        try {
+            jsonParam.put("user", user);
+            jsonParam.put("content", content);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         StringEntity entity = new StringEntity(jsonParam.toString(), "UTF-8");
         entity.setContentEncoding("UTF-8");
@@ -54,7 +59,7 @@ public class DaXiangHelper {
             resData = EntityUtils.toString(result.getEntity());
         } catch (IOException e) {
             logger.error(String.format("Send %s to %s error", content, DAXIANG_URL));
-        }finally {
+        } finally {
             method.releaseConnection();
         }
         return resData;
