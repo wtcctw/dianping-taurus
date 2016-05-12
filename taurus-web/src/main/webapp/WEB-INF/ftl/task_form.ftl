@@ -223,18 +223,26 @@
     <div class="controls">
         <select class="input-small field" id="alertType" name="alertType"
                 disabled>
-        <#if dto.isHasmail() && dto.isHassms()>
+        <#if dto.isHasmail() && dto.isHassms() && dto.isHasdaxiang()>
             <option id="1">邮件</option>
             <option id="2">微信</option>
-            <option id="3" selected="selected">邮件和微信</option>
-        <#elseif !dto.isHasmail() && dto.isHassms()>
+            <option id="4">大象</option>
+            <option id="3" selected="selected">邮件,微信和大象</option>
+        <#elseif !dto.isHasmail() && !dto.isHasdaxiang() && dto.isHassms()>
             <option id="1">邮件</option>
             <option id="2" selected="selected">微信</option>
-            <option id="3">邮件和微信</option>
+            <option id="4">大象</option>
+            <option id="3">邮件,微信和大象</option>
+        <#elseif !dto.isHasmail() && dto.isHasdaxiang() && !dto.isHassms()>
+            <option id="1">邮件</option>
+            <option id="2">微信</option>
+            <option id="4" selected="selected">大象</option>
+            <option id="3">邮件,微信和大象</option>
         <#else>
             <option id="1" selected="selected">邮件</option>
             <option id="2">微信</option>
-            <option id="3">邮件和微信</option>
+            <option id="4">大象</option>
+            <option id="3">邮件,微信和大象</option>
         </#if>
         </select>
     </div>

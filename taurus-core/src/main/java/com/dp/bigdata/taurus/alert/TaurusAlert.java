@@ -194,6 +194,10 @@ public class TaurusAlert {
 		                sendWeChat(user.getName(), attempt);
 						//sendSMS(user.getTel(), attempt);
 					}
+					
+					if(rule.getHasdaxiang()){
+						DaXiangHelper.sendDaXiang(user.getName(), contentBuild(attempt));
+					}
 
 				} else {
 					Cat.logError("Cannot find user id : " + id, null);
@@ -249,7 +253,7 @@ public class TaurusAlert {
 		private void sendMail(String userName,String mailTo, TaskAttempt attempt) {
 			Cat.logEvent("Alert.Email", mailTo);
 			LOG.info("Send mail to " + mailTo);
-			String sbMailContent = contentBuild(mailTo, attempt);
+			String sbMailContent = contentBuild(attempt);
 
 			try {
 				sendMail(mailTo, sbMailContent.toString());
@@ -260,34 +264,6 @@ public class TaurusAlert {
 				LOG.error("fail to send mail to " + mailTo, e);
 				Cat.logError(e);
 			}
-		}
-
-		private String contentBuild(String mailTo, TaskAttempt attempt){
-
-			Task task = taskMapper.selectByPrimaryKey(attempt.getTaskid());
-			StringBuilder sbMailContent = new StringBuilder();
-
-			String domain ="";
-			try {
-				domain = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.serverName");
-			} catch (LionException e) {
-				domain="http://taurus.dp";
-				e.printStackTrace();
-			}
-
-			sbMailContent.append("<table>");
-			sbMailContent.append("<tr>");
-			sbMailContent.append("<td>任务名</td><td>" + task.getName() + "</td>");
-			sbMailContent.append("</tr>");
-			sbMailContent.append("<tr>");
-			sbMailContent.append("<td>任务状态</td><td> " + AttemptStatus.getInstanceRunState(attempt.getStatus()) + "</td>");
-			sbMailContent.append("</tr>");
-			sbMailContent.append("<tr>");//
-			sbMailContent.append("<td>日志查看</td><td>" +domain+"/viewlog?id="+ attempt.getAttemptid() +"&status="+AttemptStatus.getInstanceRunState(attempt.getStatus())+"</td>");
-			sbMailContent.append("</tr>");
-			sbMailContent.append("</table>");
-
-			return sbMailContent.toString();
 		}
 
 		private void sendSMS(String tel, TaskAttempt attempt) {
@@ -315,32 +291,39 @@ public class TaurusAlert {
             LOG.info("Send WeChat to " + user);
             Task task = taskMapper.selectByPrimaryKey(attempt.getTaskid());
 
-            StringBuilder sbMailContent = new StringBuilder();
-
-            String domain ="";
             try {
-                domain = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.serverName");
-            } catch (LionException e) {
-                domain="http://taurus.dp";
-                e.printStackTrace();
-            }
-            sbMailContent.append("※ Taurus 任务执行状态微信告警服务 ※");
-            sbMailContent.append("\n");
-            sbMailContent.append("任务名:" + task.getName());
-            sbMailContent.append("\n");
-            sbMailContent.append("任务状态: " + AttemptStatus.getInstanceRunState(attempt.getStatus()));
-            sbMailContent.append("\n");
-            sbMailContent.append("日志查看:" +domain+"/viewlog?id="+ attempt.getAttemptid());
-            sbMailContent.append("\n");
-            sbMailContent.append("※ 点评工具组 ※");
-
-            try {
-                WeChatHelper.sendWeChat( task.getCreator(),sbMailContent.toString(), "12");
+                WeChatHelper.sendWeChat(task.getCreator(), contentBuild(attempt), "12");
             } catch (Exception e) {
                 LOG.error("fail to send WeChat to " + user, e);
                 Cat.logError(e);
             }
         }
+		
+		private String contentBuild(TaskAttempt attempt){
+
+			Task task = taskMapper.selectByPrimaryKey(attempt.getTaskid());
+
+			StringBuilder sbContent = new StringBuilder();
+
+			String domain;
+			try {
+				domain = ConfigCache.getInstance(EnvZooKeeperConfig.getZKAddress()).getProperty("taurus.web.serverName");
+			} catch (LionException e) {
+				domain="http://taurus.dp";
+				e.printStackTrace();
+			}
+			sbContent.append("※ Taurus 任务执行状态微信告警服务 ※");
+			sbContent.append("\n");
+			sbContent.append("任务名:" + task.getName());
+			sbContent.append("\n");
+			sbContent.append("任务状态: " + AttemptStatus.getInstanceRunState(attempt.getStatus()));
+			sbContent.append("\n");
+			sbContent.append("日志查看:" + domain + "/viewlog?id=" + attempt.getAttemptid());
+			sbContent.append("\n");
+			sbContent.append("※ 点评工具组 ※");
+			
+			return sbContent.toString();
+		}
 	}
 
 	public class MetaDataUpdatedThread implements Runnable {

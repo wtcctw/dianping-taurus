@@ -44,7 +44,9 @@ public class TaskRequestExtractor implements RequestExtrator<TaskDTO> {
 
 	public static final String WECHAT_ONLY = "2";
 
-	public static final String MAIL_AND_WECHAT = "3";
+	public static final String ALL = "3";
+
+	public static final String DAXIANG_ONLY = "4";
 
 	@Autowired
 	private IDFactory idFactory;
@@ -220,9 +222,12 @@ public class TaskRequestExtractor implements RequestExtrator<TaskDTO> {
 						task.setHasmail(true);
 					} else if (value.equalsIgnoreCase(WECHAT_ONLY)) {
 						task.setHassms(true);
-					} else if (value.equalsIgnoreCase(MAIL_AND_WECHAT)) {
+					} else if (value.equalsIgnoreCase(DAXIANG_ONLY)) {
+						task.setHasdaxiang(true);
+					} else if (value.equalsIgnoreCase(ALL)) {
 						task.setHasmail(true);
 						task.setHassms(true);
+						task.setHasdaxiang(true);
 					} else {
 						task.setHasmail(true);
 					}

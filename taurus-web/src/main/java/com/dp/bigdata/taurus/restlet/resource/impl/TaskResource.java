@@ -87,6 +87,7 @@ public class TaskResource extends ServerResource implements ITaskResource {
                 AlertRule rule = rules.get(0);
                 dto.setHasmail(rule.getHasmail());
                 dto.setHassms(rule.getHassms());
+                dto.setHasdaxiang(rule.getHasdaxiang());
                 dto.setConditions(rule.getConditions().toUpperCase());
                 String userID = rule.getUserid();
                 if (StringUtils.isNotBlank(userID)) {
