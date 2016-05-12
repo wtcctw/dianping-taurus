@@ -196,7 +196,7 @@ public class TaurusAlert {
 					}
 					
 					if(rule.getHasdaxiang()){
-						DaXiangHelper.sendDaXiang(user.getName(), contentBuild(attempt));
+						DaXiangHelper.sendDaXiang(user.getMail(), contentBuild(attempt));
 					}
 
 				} else {
