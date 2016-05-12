@@ -312,7 +312,7 @@ public class TaurusAlert {
 				domain="http://taurus.dp";
 				e.printStackTrace();
 			}
-			sbContent.append("※ Taurus 任务执行状态微信告警服务 ※");
+			sbContent.append("※ Taurus 任务执行状态告警服务 ※");
 			sbContent.append("\n");
 			sbContent.append("任务名:" + task.getName());
 			sbContent.append("\n");
@@ -320,7 +320,7 @@ public class TaurusAlert {
 			sbContent.append("\n");
 			sbContent.append("日志查看:" + domain + "/viewlog?id=" + attempt.getAttemptid());
 			sbContent.append("\n");
-			sbContent.append("※ 点评工具组 ※");
+			sbContent.append("※ 美团点评架构组 ※");
 			
 			return sbContent.toString();
 		}
