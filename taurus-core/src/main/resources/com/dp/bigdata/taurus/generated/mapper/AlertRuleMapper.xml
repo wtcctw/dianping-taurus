@@ -173,7 +173,7 @@
         hasSMS,
       </if>
       <if test="hasdaxiang != null">
-        hasSMS,
+        hasDaxiang,
       </if>
       <if test="hasDaxiang != null">
         hasMail,
@@ -244,7 +244,7 @@
         hasSMS = #{record.hassms,jdbcType=BIT},
       </if>
       <if test="record.hasdaxiang != null">
-        hasSMS = #{record.hasdaxiang,jdbcType=BIT},
+        hasDaxiang = #{record.hasdaxiang,jdbcType=BIT},
       </if>
       <if test="record.hasmail != null">
         hasMail = #{record.hasmail,jdbcType=BIT},
