@@ -44,9 +44,7 @@ public class TaskRequestExtractor implements RequestExtrator<TaskDTO> {
 
 	public static final String WECHAT_ONLY = "2";
 
-	public static final String ALL = "3";
-
-	public static final String DAXIANG_ONLY = "4";
+	public static final String DAXIANG_ONLY = "3";
 
 	@Autowired
 	private IDFactory idFactory;
