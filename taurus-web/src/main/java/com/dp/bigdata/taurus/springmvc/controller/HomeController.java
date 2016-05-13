@@ -457,6 +457,22 @@ public class HomeController extends BaseController {
 	    String conditionStr = dto.getConditions();
 	    modelMap.addAttribute("dto", dto);
 	    modelMap.addAttribute("conditionStr", conditionStr);
+		StringBuilder alerttypeStr = new StringBuilder();
+		if(dto.isHasmail()){
+			alerttypeStr.append("1;");
+		}
+		if(dto.isHassms()){
+			alerttypeStr.append("2;");
+		}
+		if(dto.isHasdaxiang()){
+			alerttypeStr.append("3;");
+		}
+		if(alerttypeStr.length() > 0){
+			modelMap.addAttribute("alerttypeStr", alerttypeStr.substring(0, alerttypeStr.length() - 1));
+		}else {
+			modelMap.addAttribute("alerttypeStr", "");
+		}
+
 	    
 		return "/task_form.ftl";
 	}

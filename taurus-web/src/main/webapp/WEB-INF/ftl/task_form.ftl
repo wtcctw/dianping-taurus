@@ -217,34 +217,24 @@
     </div>
 </div>
 <br>
+
+<br>
 <div class="control-group col-sm-12">
-    <label class="label label-lg label-info arrowed-right col-sm-3" for="alertType">选择报警方式</label>
+    <label class="label label-lg label-info arrowed-right col-sm-3">选择报警方式</label>
 
     <div class="controls">
-        <select class="input-small field" id="alertType" name="alertType"
-                disabled>
-        <#if dto.isHasmail() && dto.isHassms() && dto.isHasdaxiang()>
-            <option id="1">邮件</option>
-            <option id="2">微信</option>
-            <option id="4">大象</option>
-            <option id="3" selected="selected">邮件,微信和大象</option>
-        <#elseif !dto.isHasmail() && !dto.isHasdaxiang() && dto.isHassms()>
-            <option id="1">邮件</option>
-            <option id="2" selected="selected">微信</option>
-            <option id="4">大象</option>
-            <option id="3">邮件,微信和大象</option>
-        <#elseif !dto.isHasmail() && dto.isHasdaxiang() && !dto.isHassms()>
-            <option id="1">邮件</option>
-            <option id="2">微信</option>
-            <option id="4" selected="selected">大象</option>
-            <option id="3">邮件,微信和大象</option>
+    <#list alerttypes as alerttype>
+        <#if alerttypeStr?exists && alerttypeStr?contains(alerttype.status)>
+            <input type="checkbox" class="field alertType"
+               id="alertType" name="${alerttype.status!}"
+               checked="checked" disabled>
+               ${alerttype.ch_status!}
         <#else>
-            <option id="1" selected="selected">邮件</option>
-            <option id="2">微信</option>
-            <option id="4">大象</option>
-            <option id="3">邮件,微信和大象</option>
+            <input type="checkbox" class="field alertType"
+               id="alertType" name="${alerttype.status!}" disabled>
+               ${alerttype.ch_status!}
         </#if>
-        </select>
+    </#list>
     </div>
 </div>
 

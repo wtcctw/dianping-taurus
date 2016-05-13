@@ -267,7 +267,7 @@ $(document).ready(function() {
 		    }).get().join(";");
 		var type = $('#alertType').children().map(function() {
 			if($(this).prop("selected"))
-				return this.id;
+				return this.name;
 		    }).get().join();
 		
 		params["alertCondition"] = condition;

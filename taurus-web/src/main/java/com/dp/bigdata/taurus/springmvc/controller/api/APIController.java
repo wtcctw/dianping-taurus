@@ -418,19 +418,18 @@ public class APIController {
         }
 
         String alertType = taskApiDTO.getAlertType();
-        if (StringUtils.isNotBlank(alertType)) {
-            if (alertType.equalsIgnoreCase(TaskRequestExtractor.MAIL_ONLY)) {
-                taskDTO.setHasmail(true);
-            } else if (alertType.equalsIgnoreCase(TaskRequestExtractor.WECHAT_ONLY)) {
-                taskDTO.setHassms(true);
-            } else if (alertType.equalsIgnoreCase(TaskRequestExtractor.DAXIANG_ONLY)) {
-                taskDTO.setHasdaxiang(true);
-            } else if (alertType.equalsIgnoreCase(TaskRequestExtractor.ALL)) {
-                taskDTO.setHasmail(true);
-                taskDTO.setHassms(true);
-                taskDTO.setHasdaxiang(true);
-            } else {
-                taskDTO.setHasmail(true);
+        if (StringUtils.isBlank(alertType)) {
+            taskDTO.setHasmail(true);
+        } else {
+            String[] alerts = alertType.split(";");
+            for(String alert : alerts){
+                if(TaskRequestExtractor.MAIL_ONLY.equalsIgnoreCase(alert)){
+                    taskDTO.setHassms(true);
+                }else if(TaskRequestExtractor.WECHAT_ONLY.equalsIgnoreCase(alert)){
+                    taskDTO.setHassms(true);
+                }else if(TaskRequestExtractor.DAXIANG_ONLY.equalsIgnoreCase(alert)){
+                    taskDTO.setHasdaxiang(true);
+                }
             }
         }
 
