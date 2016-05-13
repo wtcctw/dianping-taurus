@@ -3,10 +3,6 @@ package com.dp.bigdata.taurus.springmvc.controller;
 import com.dp.bigdata.taurus.restlet.shared.AttemptDTO;
 import com.dp.bigdata.taurus.restlet.shared.TaskDTO;
 import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
-import com.dp.bigdata.taurus.zookeeper.execute.helper.ExecuteStatus;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import org.restlet.resource.ClientResource;
 import org.slf4j.Logger;

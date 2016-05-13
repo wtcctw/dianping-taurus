@@ -14,7 +14,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Logger;
 
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
@@ -41,10 +40,10 @@ import com.dp.bigdata.taurus.generated.module.Host;
 import com.dp.bigdata.taurus.generated.module.HostExample;
 import com.dp.bigdata.taurus.generated.module.Task;
 import com.dp.bigdata.taurus.generated.module.TaskExample;
-import com.dp.bigdata.taurus.zookeeper.deploy.helper.DeployStatus;
-import com.dp.bigdata.taurus.zookeeper.deploy.helper.Deployer;
-import com.dp.bigdata.taurus.zookeeper.deploy.helper.DeploymentContext;
-import com.dp.bigdata.taurus.zookeeper.deploy.helper.DeploymentException;
+import com.dp.bigdata.taurus.zookeeper.helper.deploy.DeployStatus;
+import com.dp.bigdata.taurus.zookeeper.helper.deploy.Deployer;
+import com.dp.bigdata.taurus.zookeeper.helper.deploy.DeploymentContext;
+import com.dp.bigdata.taurus.zookeeper.helper.deploy.DeploymentException;
 
 public class DeployResource extends ServerResource implements IDeployResource {
 

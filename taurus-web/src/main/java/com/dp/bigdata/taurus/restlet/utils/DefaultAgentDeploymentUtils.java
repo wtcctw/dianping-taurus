@@ -13,9 +13,9 @@ import com.dp.bigdata.taurus.generated.mapper.HostMapper;
 import com.dp.bigdata.taurus.generated.module.Host;
 import com.dp.bigdata.taurus.generated.module.HostExample;
 import com.dp.bigdata.taurus.generated.module.Task;
-import com.dp.bigdata.taurus.zookeeper.deploy.helper.Deployer;
-import com.dp.bigdata.taurus.zookeeper.deploy.helper.DeploymentContext;
-import com.dp.bigdata.taurus.zookeeper.deploy.helper.DeploymentException;
+import com.dp.bigdata.taurus.zookeeper.helper.deploy.Deployer;
+import com.dp.bigdata.taurus.zookeeper.helper.deploy.DeploymentContext;
+import com.dp.bigdata.taurus.zookeeper.helper.deploy.DeploymentException;
 
 /**
  * DefaultAgentDeploymentUtils

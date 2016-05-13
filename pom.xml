@@ -140,8 +140,7 @@ org.eclipse.jdt.core.compiler.compliance=1.6
 
 
 	<modules>
-		<module>taurus-zookeeper-helper</module>
-		<module>taurus-core</module>
+		<module>taurus-common</module>
 		<module>taurus-web</module>
 		<module>taurus-agent</module>
 		<module>taurus-scheduler</module>

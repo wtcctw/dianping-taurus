@@ -92,7 +92,7 @@
 	<bean id="assignPolicy" class="com.dp.bigdata.taurus.core.RoundRobinTaskAssignPolicy"
 		init-method="init" />
 	<bean id="zookeeper"
-		class="com.dp.bigdata.taurus.zookeeper.execute.helper.DefaultExecutorManager" />
+		class="com.dp.bigdata.taurus.zookeeper.helper.execute.DefaultExecutorManager" />
 	<bean id="lionDynamicConfig"
 		class="com.dp.bigdata.taurus.lion.LionDynamicConfig" />
 	<bean id="dynamicMaxCapacity"
@@ -109,7 +109,7 @@
 		<property name="lionConfig" ref="lionDynamicConfig"></property>
 	</bean>
 	<bean id="statusChecker" class="com.dp.bigdata.taurus.core.DefaultAttemptStatusCheck" />
-	<bean id="agentMonitor" class="com.dp.bigdata.taurus.zookeeper.heartbeat.helper.PollingAgentMonitor"/>
+	<bean id="agentMonitor" class="com.dp.bigdata.taurus.zookeeper.helper.heartbeat.PollingAgentMonitor"/>
 	<bean id="alert" class="com.dp.bigdata.taurus.alert.TaurusAlert" init-method="load"/>
 	<bean id="selector" class="com.dp.bigdata.taurus.core.RandomSelector" />
 
