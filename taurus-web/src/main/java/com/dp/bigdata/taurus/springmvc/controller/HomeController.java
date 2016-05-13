@@ -5,6 +5,7 @@ import com.dianping.lion.client.ConfigCache;
 import com.dp.bigdata.taurus.lion.ConfigHolder;
 import com.dp.bigdata.taurus.lion.LionKeys;
 import com.dp.bigdata.taurus.restlet.shared.*;
+import com.dp.bigdata.taurus.springmvc.utils.AlertType;
 import com.dp.bigdata.taurus.springmvc.utils.GlobalViewVariable;
 import jodd.util.StringUtil;
 import org.codehaus.plexus.util.StringUtils;
@@ -389,6 +390,9 @@ public class HomeController extends BaseController {
 		globalViewVariable.cr = new ClientResource(globalViewVariable.host + "group");
 		ArrayList<UserGroupDTO> groups = globalViewVariable.cr.get(ArrayList.class);
 		modelMap.addAttribute("groups",groups);
+
+		List<AlertTypeDTO> alertType = getAlertTypeDTO();
+		modelMap.addAttribute("alerttypes",alertType);
 		
 		return "/task.ftl";
 	}
@@ -1084,6 +1088,14 @@ public class HomeController extends BaseController {
 		response.setContentType("text/plain;charset=utf-8");
 		PrintWriter writer = response.getWriter();
 		writer.write("ok");
+	}
+
+	private List<AlertTypeDTO> getAlertTypeDTO(){
+		List<AlertTypeDTO> alertTypeDTOList = new ArrayList<AlertTypeDTO>();
+		alertTypeDTOList.add(new AlertTypeDTO(AlertType.EMAIL.getNum(), AlertType.EMAIL.getAlertType()));
+		alertTypeDTOList.add(new AlertTypeDTO(AlertType.WECHAT.getNum(), AlertType.WECHAT.getAlertType()));
+		alertTypeDTOList.add(new AlertTypeDTO(AlertType.DAXIANG.getNum(), AlertType.DAXIANG.getAlertType()));
+		return  alertTypeDTOList;
 	}
 	
 	/**

@@ -217,19 +217,18 @@ public class TaskRequestExtractor implements RequestExtrator<TaskDTO> {
 					task.setUserid("");
 				}
 			} else if (key.equals(TaskDetailControlName.ALERTTYPE.getName())) {
-				if (StringUtils.isNotBlank(value)) {
-					if (value.equalsIgnoreCase(MAIL_ONLY)) {
-						task.setHasmail(true);
-					} else if (value.equalsIgnoreCase(WECHAT_ONLY)) {
-						task.setHassms(true);
-					} else if (value.equalsIgnoreCase(DAXIANG_ONLY)) {
-						task.setHasdaxiang(true);
-					} else if (value.equalsIgnoreCase(ALL)) {
-						task.setHasmail(true);
-						task.setHassms(true);
-						task.setHasdaxiang(true);
-					} else {
-						task.setHasmail(true);
+				if (StringUtils.isBlank(value)) {
+					task.setHasmail(true);
+				} else {
+					String[] alerts = value.split(";");
+					for(String alert : alerts){
+						if(MAIL_ONLY.equalsIgnoreCase(alert)){
+							task.setHassms(true);
+						}else if(WECHAT_ONLY.equalsIgnoreCase(alert)){
+							task.setHassms(true);
+						}else if(DAXIANG_ONLY.equalsIgnoreCase(alert)){
+							task.setHasdaxiang(true);
+						}
 					}
 				}
 			} else if (key.equals(TaskDetailControlName.MAINCLASS.getName())) {
