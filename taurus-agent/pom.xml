@@ -6,7 +6,7 @@
 	<parent>
 		<artifactId>taurus-parent</artifactId>
 		<groupId>com.dp.bigdata</groupId>
-		<version>0.5.0</version>
+		<version>0.5.2-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>taurus-agent</artifactId>
@@ -140,7 +140,7 @@
 		<dependency>
 			<groupId>com.dp.bigdata</groupId>
 			<artifactId>taurus-zookeeper-helper</artifactId>
-			<version>0.5.0</version>
+			<version>0.5.2-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
     <build>
