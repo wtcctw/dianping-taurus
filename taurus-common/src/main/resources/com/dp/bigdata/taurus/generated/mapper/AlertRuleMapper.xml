@@ -175,7 +175,7 @@
       <if test="hasdaxiang != null">
         hasDaxiang,
       </if>
-      <if test="hasDaxiang != null">
+      <if test="hasmail != null">
         hasMail,
       </if>
       <if test="userid != null">

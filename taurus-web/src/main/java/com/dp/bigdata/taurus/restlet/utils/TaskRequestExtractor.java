@@ -221,7 +221,7 @@ public class TaskRequestExtractor implements RequestExtrator<TaskDTO> {
 					String[] alerts = value.split(";");
 					for(String alert : alerts){
 						if(MAIL_ONLY.equalsIgnoreCase(alert)){
-							task.setHassms(true);
+							task.setHasmail(true);
 						}else if(WECHAT_ONLY.equalsIgnoreCase(alert)){
 							task.setHassms(true);
 						}else if(DAXIANG_ONLY.equalsIgnoreCase(alert)){
