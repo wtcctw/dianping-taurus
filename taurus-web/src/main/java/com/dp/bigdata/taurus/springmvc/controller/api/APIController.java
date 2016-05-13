@@ -20,6 +20,8 @@ import com.dp.bigdata.taurus.restlet.utils.TaskRequestExtractor;
 import com.dp.bigdata.taurus.springmvc.service.IScheduleService;
 import com.dp.bigdata.taurus.springmvc.utils.TaurusApiException;
 import com.dp.bigdata.taurus.utils.APIAuthorizationUtils;
+import com.dp.bigdata.taurus.zookeeper.helper.execute.ExecuteStatus;
+import com.google.gson.JsonArray;
 import org.apache.commons.lang.StringUtils;
 import org.restlet.data.Status;
 import org.restlet.resource.ClientResource;
@@ -33,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -151,7 +154,8 @@ public class APIController {
         addJob.put(taskDTO);
 
         if (addJob.getStatus().getCode() == Status.SUCCESS_CREATED.getCode()) {
-            result = Result.getInstance(true, null, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
+            String taskID = getTaskId(taskName);
+            result = Result.getInstance(true, taskID, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
         } else {
             result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED.getCode(), ErrorCodeEnum.OPERATION_FAILED.getField());
         }
@@ -424,7 +428,7 @@ public class APIController {
             String[] alerts = alertType.split(";");
             for(String alert : alerts){
                 if(TaskRequestExtractor.MAIL_ONLY.equalsIgnoreCase(alert)){
-                    taskDTO.setHasmail(true);
+                    taskDTO.setH(true);
                 }else if(TaskRequestExtractor.WECHAT_ONLY.equalsIgnoreCase(alert)){
                     taskDTO.setHassms(true);
                 }else if(TaskRequestExtractor.DAXIANG_ONLY.equalsIgnoreCase(alert)){
@@ -500,6 +504,18 @@ public class APIController {
             new CronExpression(task.getCrontab());
         } catch (Exception e) {
             throw e;
+        }
+    }
+
+    private String getTaskId(String name){
+
+        String task_api = LionConfigUtil.RESTLET_API_BASE + "task" + "&name=" + name;
+        ClientResource cr = new ClientResource(task_api);
+        ArrayList<TaskDTO> tasks = cr.get(ArrayList.class);
+        for (TaskDTO dto : tasks) {
+            if(dto.getStatus() == TaskStatus.getTaskRunState(TaskStatus.RUNNING)){
+                return dto.getTaskid();
+            }
         }
     }
 
