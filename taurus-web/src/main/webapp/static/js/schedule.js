@@ -111,11 +111,11 @@ function action_update(id) {
 			if($(this).prop("checked"))
 				return this.name;
 		    }).get().join(";");
-		var type = $('#alertType',form).children().map(function() {
-			if($(this).prop("selected"))
-				return this.id;
-		    }).get().join();
-		
+		var type = $('.alertType',form).map(function() {
+			if($(this).prop("checked"))
+				return this.name;
+		    }).get().join(";");
+
 		params["alertCondition"] = condition;
 		params["alertType"] = type;
 		params["poolId"] = $('#poolIdReal',form).val();

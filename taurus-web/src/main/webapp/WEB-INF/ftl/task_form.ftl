@@ -224,7 +224,7 @@
 
     <div class="controls">
     <#list alerttypes as alerttype>
-        <#if alerttypeStr?exists && alerttypeStr?contains(alerttype.status)>
+        <#if alerttypeStr?exists && alerttypeStr?contains(alerttype.status+"")>
             <input type="checkbox" class="field alertType"
                id="alertType" name="${alerttype.status!}"
                checked="checked" disabled>

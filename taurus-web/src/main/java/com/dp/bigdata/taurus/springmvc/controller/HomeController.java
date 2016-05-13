@@ -473,6 +473,9 @@ public class HomeController extends BaseController {
 			modelMap.addAttribute("alerttypeStr", "");
 		}
 
+		List<AlertTypeDTO> alertType = getAlertTypeDTO();
+		modelMap.addAttribute("alerttypes", alertType);
+
 	    
 		return "/task_form.ftl";
 	}
