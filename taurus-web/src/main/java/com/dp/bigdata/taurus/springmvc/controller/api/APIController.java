@@ -428,7 +428,7 @@ public class APIController {
             String[] alerts = alertType.split(";");
             for(String alert : alerts){
                 if(TaskRequestExtractor.MAIL_ONLY.equalsIgnoreCase(alert)){
-                    taskDTO.setH(true);
+                    taskDTO.setHasmail(true);
                 }else if(TaskRequestExtractor.WECHAT_ONLY.equalsIgnoreCase(alert)){
                     taskDTO.setHassms(true);
                 }else if(TaskRequestExtractor.DAXIANG_ONLY.equalsIgnoreCase(alert)){
