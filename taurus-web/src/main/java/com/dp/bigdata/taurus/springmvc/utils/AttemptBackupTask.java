@@ -20,7 +20,7 @@ import java.util.List;
 @Component
 public class AttemptBackupTask extends AbstractAttemptCleanTask {
 
-    private static final int BATCH_SIZE = 10000;
+    private static final int BATCH_SIZE = 1000;
 
     @Autowired
     private AttemptBackupMapper attemptBackupMapper;
@@ -110,7 +110,7 @@ public class AttemptBackupTask extends AbstractAttemptCleanTask {
     }
 
     protected int getReserveMonth() {
-        return 12;
+        return 3;
     }
 
 }

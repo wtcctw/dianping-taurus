@@ -7,7 +7,6 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dp.bigdata.taurus.framework.ApplicationContextProvider;
 
 /**
  * JarsClassLoader

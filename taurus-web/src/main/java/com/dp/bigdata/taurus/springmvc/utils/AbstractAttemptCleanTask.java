@@ -21,7 +21,7 @@ public abstract class AbstractAttemptCleanTask extends AbstractAttemptTask {
 
     private static final int CLEAR_DAY = 2;
 
-    private static final int RESERVE_MONTH = 5;
+    private static final int RESERVE_MONTH = 1;
 
     @Autowired
     protected TaskAttemptMapper taskAttemptMapper;

@@ -120,11 +120,23 @@
             </exclusions>
         </dependency>
         <!-- 公司以及模块依赖 -->
-		<dependency>
-			<groupId>com.dp.bigdata</groupId>
-			<artifactId>taurus-framework</artifactId>
-			<version>0.1</version>
-		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>com.dp.bigdata</groupId>-->
+			<!--<artifactId>taurus-framework</artifactId>-->
+			<!--<version>0.1</version>-->
+		<!--</dependency>-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>3.2.3.RELEASE</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>3.2.3.RELEASE</version>
+            <scope>provided</scope>
+        </dependency>
 		<dependency>
 			<groupId>com.dp.bigdata</groupId>
 			<artifactId>taurus-zookeeper-helper</artifactId>

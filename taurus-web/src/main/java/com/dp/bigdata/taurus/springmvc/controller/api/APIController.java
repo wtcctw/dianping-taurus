@@ -514,14 +514,6 @@ public class APIController {
 
         private T data;
 
-        public static <T> Result getSuccessInstance(T data) {
-            return getInstance(true, data, null, null);
-        }
-
-        public static Result getFailedInstance(Integer errCode, String errMsg) {
-            return getInstance(false, null, errCode, errMsg);
-        }
-
         public static <T> Result getInstance(boolean ret, T data, Integer errCode, String errMsg) {
             Result<T> result = new Result<T>();
             result.setRet(ret);

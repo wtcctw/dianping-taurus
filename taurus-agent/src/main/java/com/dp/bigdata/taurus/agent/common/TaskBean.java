@@ -1,4 +1,4 @@
-package com.dp.bigdata.taurus.framework;
+package com.dp.bigdata.taurus.agent.common;
 
 /**
  * TaskBean

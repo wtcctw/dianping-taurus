@@ -2,12 +2,11 @@ package com.dp.bigdata.taurus.agent.spring;
 
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
+import com.dp.bigdata.taurus.agent.common.TaskBean;
 import com.dp.bigdata.taurus.agent.common.TaskType;
 import com.dp.bigdata.taurus.agent.utils.AgentEnvValue;
 import com.dp.bigdata.taurus.agent.utils.IPUtils;
 import com.dp.bigdata.taurus.agent.utils.TaskHelper;
-import com.dp.bigdata.taurus.framework.ApplicationContextProvider;
-import com.dp.bigdata.taurus.framework.TaskBean;
 import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.ScheduleConf;
 import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.ScheduleStatus;
 import com.dp.bigdata.taurus.zookeeper.common.utils.ClassLoaderUtils;

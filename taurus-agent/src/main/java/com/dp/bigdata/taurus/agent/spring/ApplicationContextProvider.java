@@ -1,4 +1,4 @@
-package com.dp.bigdata.taurus.framework;
+package com.dp.bigdata.taurus.agent.spring;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
