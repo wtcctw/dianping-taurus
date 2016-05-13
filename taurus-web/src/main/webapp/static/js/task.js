@@ -265,7 +265,7 @@ $(document).ready(function() {
 			if($(this).prop("checked"))
 				return this.name;
 		    }).get().join(";");
-		var type = $('#alertType').children().map(function() {
+		var type = $('.alertType').children().map(function() {
 			if($(this).prop("checked"))
 				return this.name;
 		    }).get().join();
