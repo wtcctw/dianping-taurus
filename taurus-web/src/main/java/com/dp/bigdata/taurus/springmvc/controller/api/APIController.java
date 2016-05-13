@@ -517,6 +517,7 @@ public class APIController {
                 return dto.getTaskid();
             }
         }
+        return null;
     }
 
     private static class Result<T> {
