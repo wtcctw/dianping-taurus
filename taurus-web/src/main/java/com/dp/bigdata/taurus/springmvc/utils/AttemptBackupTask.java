@@ -24,6 +24,8 @@ public class AttemptBackupTask extends AbstractAttemptCleanTask {
 
     private static final int BATCH_SIZE = 1000;
 
+    private Date previous;
+
     @Autowired
     private AttemptBackupMapper attemptBackupMapper;
 
@@ -78,6 +80,9 @@ public class AttemptBackupTask extends AbstractAttemptCleanTask {
             }
         } else {
             startDate = firstTaskAttempt.getEndtime();
+            if(startDate.equals(previous)){  //避免出现startDate为整点的死循环
+                startDate = DateUtils.nextHalfHour(startDate);
+            }
             startDate = DateUtils.zeroOrThirtyMinute(startDate);
             startDate = DateUtils.zeroSecond(startDate);
         }
@@ -103,6 +108,7 @@ public class AttemptBackupTask extends AbstractAttemptCleanTask {
                     }
                     attemptBackupMapper.batchiInsert(taskAttemptList.subList(startIndex, size));
                 }
+                previous = startDate;
                 Cat.logEvent(getClass().getSimpleName(), String.format("backup:%s:%d", startDate.toString(), taskAttemptList.size()));
                 break;
             }
