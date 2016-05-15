@@ -121,10 +121,12 @@ public interface AttemptBackupMapper {
 
     public int deleteDependencyPassTask(@Param("taskId")String taskId,@Param("status")int status);
     public int deleteTaskAttemptsByEndTime(@Param("endTime")Date endTime);
+    public int deleteTaskAttempts(@Param("endTime")Date endTime, @Param("taskId")String taskId);
     public ArrayList<TaskAttempt> selectDependencyTask(@Param("taskId")String taskId,@Param("status")int status);
     public int getTaskLastStatus(@Param("taskId")String taskId);
 
     public ArrayList<TaskAttempt> getTaskAttemptsHistory(@Param("ip")String ip,@Param("time")String time);
     public ArrayList<TaskAttempt> getTaskAttempt(@Param("startTime")Date startTime,@Param("endTime")Date endTime);
     public void batchiInsert(@Param("list")List<TaskAttempt> list);
+
 }
