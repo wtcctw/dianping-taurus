@@ -14,10 +14,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.dp.bigdata.taurus.alert.MailHelper;
-import com.dp.bigdata.taurus.alert.WeChatHelper;
-import com.dp.bigdata.taurus.lion.ConfigHolder;
-import com.dp.bigdata.taurus.lion.LionKeys;
+import com.dp.bigdata.taurus.common.alert.MailHelper;
+import com.dp.bigdata.taurus.common.alert.WeChatHelper;
+import com.dp.bigdata.taurus.common.lion.ConfigHolder;
+import com.dp.bigdata.taurus.common.lion.LionKeys;
 
 @Controller
 public class FeedBackController {

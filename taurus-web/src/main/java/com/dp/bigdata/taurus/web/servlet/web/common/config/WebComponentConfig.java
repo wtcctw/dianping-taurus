@@ -1,6 +1,6 @@
 package com.dp.bigdata.taurus.web.servlet.web.common.config;
 
-import com.dp.bigdata.taurus.config.AbstractConfig;
+import com.dp.bigdata.taurus.common.config.AbstractConfig;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;

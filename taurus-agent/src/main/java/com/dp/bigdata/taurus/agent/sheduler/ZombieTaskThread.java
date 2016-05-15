@@ -29,8 +29,8 @@ import org.apache.commons.logging.LogFactory;
 
 import com.dp.bigdata.taurus.agent.common.BaseEnvManager;
 import com.dp.bigdata.taurus.agent.utils.TaskHelper;
-import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.ScheduleStatus;
-import com.dp.bigdata.taurus.zookeeper.common.infochannel.interfaces.ScheduleInfoChannel;
+import com.dp.bigdata.taurus.common.zookeeper.infochannel.bean.ScheduleStatus;
+import com.dp.bigdata.taurus.common.zookeeper.infochannel.interfaces.ScheduleInfoChannel;
 
 /**
  * 维护agent上次退出时遗留的作业。

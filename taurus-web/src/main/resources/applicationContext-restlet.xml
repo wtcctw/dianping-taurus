@@ -150,12 +150,12 @@
 		<bean id="requestExtractor"
 			class="com.dp.bigdata.taurus.restlet.utils.TaskRequestExtractor" />
 		<bean id="deployer"
-			class="com.dp.bigdata.taurus.zookeeper.helper.deploy.DefaultDeployerManager" />
+			class="com.dp.bigdata.taurus.common.zookeeper.deploy.DefaultDeployerManager" />
 		<bean id="poolManager" class="com.dp.bigdata.taurus.restlet.utils.PoolManager"
 			init-method="init" />
 		<bean id="filePathManager" class="com.dp.bigdata.taurus.restlet.utils.FilePathManager" />
 		<bean id="hostManager"
-			class="com.dp.bigdata.taurus.zookeeper.helper.host.DefaultHostManager" />
+			class="com.dp.bigdata.taurus.common.zookeeper.host.DefaultHostManager" />
 </beans>
 
 	

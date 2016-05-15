@@ -1,10 +1,10 @@
 package com.dp.bigdata.taurus.springmvc.controller.api;
 
-import com.dp.bigdata.taurus.core.AttemptStatus;
-import com.dp.bigdata.taurus.core.CronExpression;
-import com.dp.bigdata.taurus.core.IDFactory;
-import com.dp.bigdata.taurus.core.TaskStatus;
-import com.dp.bigdata.taurus.core.parser.DependencyParser;
+import com.dp.bigdata.taurus.common.AttemptStatus;
+import com.dp.bigdata.taurus.common.CronExpression;
+import com.dp.bigdata.taurus.common.IDFactory;
+import com.dp.bigdata.taurus.common.TaskStatus;
+import com.dp.bigdata.taurus.common.parser.DependencyParser;
 import com.dp.bigdata.taurus.generated.mapper.UserMapper;
 import com.dp.bigdata.taurus.generated.module.Task;
 import com.dp.bigdata.taurus.generated.module.User;
@@ -19,9 +19,7 @@ import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
 import com.dp.bigdata.taurus.restlet.utils.TaskRequestExtractor;
 import com.dp.bigdata.taurus.springmvc.service.IScheduleService;
 import com.dp.bigdata.taurus.springmvc.utils.TaurusApiException;
-import com.dp.bigdata.taurus.utils.APIAuthorizationUtils;
-import com.dp.bigdata.taurus.zookeeper.helper.execute.ExecuteStatus;
-import com.google.gson.JsonArray;
+import com.dp.bigdata.taurus.common.utils.APIAuthorizationUtils;
 import org.apache.commons.lang.StringUtils;
 import org.restlet.data.Status;
 import org.restlet.resource.ClientResource;
@@ -35,7 +33,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

@@ -7,9 +7,9 @@ import org.restlet.data.Status;
 import org.restlet.resource.ServerResource;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.dp.bigdata.taurus.core.ScheduleException;
-import com.dp.bigdata.taurus.core.Scheduler;
-import com.dp.bigdata.taurus.core.TaskID;
+import com.dp.bigdata.taurus.common.ScheduleException;
+import com.dp.bigdata.taurus.common.Scheduler;
+import com.dp.bigdata.taurus.common.TaskID;
 
 /**
  * Resource url : http://xxx.xxx/api/manualtask/{task_id}

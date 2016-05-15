@@ -21,11 +21,11 @@ import org.restlet.ext.fileupload.RestletFileUpload;
 import org.restlet.representation.Representation;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.dp.bigdata.taurus.core.AttemptStatus;
-import com.dp.bigdata.taurus.core.CronExpression;
-import com.dp.bigdata.taurus.core.IDFactory;
-import com.dp.bigdata.taurus.core.TaskStatus;
-import com.dp.bigdata.taurus.core.parser.DependencyParser;
+import com.dp.bigdata.taurus.common.AttemptStatus;
+import com.dp.bigdata.taurus.common.CronExpression;
+import com.dp.bigdata.taurus.common.IDFactory;
+import com.dp.bigdata.taurus.common.TaskStatus;
+import com.dp.bigdata.taurus.common.parser.DependencyParser;
 import com.dp.bigdata.taurus.generated.mapper.UserGroupMapper;
 import com.dp.bigdata.taurus.generated.mapper.UserMapper;
 import com.dp.bigdata.taurus.generated.module.User;

@@ -5,7 +5,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import com.dp.bigdata.taurus.zookeeper.common.utils.IPUtils;
+import com.dp.bigdata.taurus.common.utils.IPUtils;
 
 
 public class AgentServerHelper {

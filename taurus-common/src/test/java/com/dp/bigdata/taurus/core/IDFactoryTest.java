@@ -2,8 +2,8 @@ package com.dp.bigdata.taurus.core;
 
 import static org.junit.Assert.*;
 
+import com.dp.bigdata.taurus.common.IDFactory;
 import org.junit.Ignore;
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**

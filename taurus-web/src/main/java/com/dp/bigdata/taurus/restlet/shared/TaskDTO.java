@@ -1,6 +1,6 @@
 package com.dp.bigdata.taurus.restlet.shared;
 
-import com.dp.bigdata.taurus.core.TaskStatus;
+import com.dp.bigdata.taurus.common.TaskStatus;
 import com.dp.bigdata.taurus.generated.module.AlertRule;
 import com.dp.bigdata.taurus.generated.module.Task;
 

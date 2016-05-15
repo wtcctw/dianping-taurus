@@ -77,28 +77,28 @@
 	</bean>
 
 	<!-- Core Service -->
-	<bean id="engine" class="com.dp.bigdata.taurus.core.Engine"
+	<bean id="engine" class="com.dp.bigdata.taurus.common.Engine"
 		init-method="load">
 		<property name="progressMonitor" ref="statusMonitor" />
 	</bean>
-	<bean id="idFactory" class="com.dp.bigdata.taurus.core.DefaultIDFactory" />
-	<bean id="statusMonitor" class="com.dp.bigdata.taurus.core.AttemptStatusMonitor" />
-	<bean id="triggle.crontab" class="com.dp.bigdata.taurus.core.CrontabTriggle" />
-	<bean id="triggle.dependency" class="com.dp.bigdata.taurus.core.DependencyTriggle" />
-	<bean id="filter.isAllowMutilInstance" class="com.dp.bigdata.taurus.core.MultiInstanceFilter">
+	<bean id="idFactory" class="com.dp.bigdata.taurus.common.DefaultIDFactory" />
+	<bean id="statusMonitor" class="com.dp.bigdata.taurus.common.AttemptStatusMonitor" />
+	<bean id="triggle.crontab" class="com.dp.bigdata.taurus.common.CrontabTriggle" />
+	<bean id="triggle.dependency" class="com.dp.bigdata.taurus.common.DependencyTriggle" />
+	<bean id="filter.isAllowMutilInstance" class="com.dp.bigdata.taurus.common.MultiInstanceFilter">
 		<property name="next" ref="filter.maxConcurrency" />
 	</bean>
-	<bean id="filter.maxConcurrency" class="com.dp.bigdata.taurus.core.MaximumConcurrentTaskFilter" />
-	<bean id="assignPolicy" class="com.dp.bigdata.taurus.core.RoundRobinTaskAssignPolicy"
+	<bean id="filter.maxConcurrency" class="com.dp.bigdata.taurus.common.MaximumConcurrentTaskFilter" />
+	<bean id="assignPolicy" class="com.dp.bigdata.taurus.common.RoundRobinTaskAssignPolicy"
 		init-method="init" />
 	<bean id="zookeeper"
-		class="com.dp.bigdata.taurus.zookeeper.helper.execute.DefaultExecutorManager" />
+		class="com.dp.bigdata.taurus.common.zookeeper.execute.DefaultExecutorManager" />
 	<bean id="lionDynamicConfig"
-		class="com.dp.bigdata.taurus.lion.LionDynamicConfig" />
+		class="com.dp.bigdata.taurus.common.lion.LionDynamicConfig" />
 	<bean id="dynamicMaxCapacity"
-		class="com.dp.bigdata.taurus.core.structure.DefaultDynamicBounded" />
+		class="com.dp.bigdata.taurus.common.structure.DefaultDynamicBounded" />
 	<bean id="maxCapacityList"
-		class="com.dp.bigdata.taurus.core.structure.DefaultBoundedList" scope="prototype"/>
+		class="com.dp.bigdata.taurus.common.structure.DefaultBoundedList" scope="prototype"/>
 	<!--ba 认证filter-->
 	<!--<bean id="mtConfigClient" class="com.sankuai.meituan.config.MtConfigClient" init-method="init" destroy-method="destroy">-->
 		<!--<property name="nodeName" value="sample.hotel.mschedule"/> &lt;!&ndash; 配置所在路径 &ndash;&gt;-->
@@ -108,10 +108,10 @@
 		<!--<property name="mtConfigClient" ref="mtConfigClient"></property>-->
 		<property name="lionConfig" ref="lionDynamicConfig"></property>
 	</bean>
-	<bean id="statusChecker" class="com.dp.bigdata.taurus.core.DefaultAttemptStatusCheck" />
-	<bean id="agentMonitor" class="com.dp.bigdata.taurus.zookeeper.helper.heartbeat.PollingAgentMonitor"/>
-	<bean id="alert" class="com.dp.bigdata.taurus.alert.TaurusAlert" init-method="load"/>
-	<bean id="selector" class="com.dp.bigdata.taurus.core.RandomSelector" />
+	<bean id="statusChecker" class="com.dp.bigdata.taurus.common.DefaultAttemptStatusCheck" />
+	<bean id="agentMonitor" class="com.dp.bigdata.taurus.common.zookeeper.heartbeat.PollingAgentMonitor"/>
+	<bean id="alert" class="com.dp.bigdata.taurus.common.alert.TaurusAlert" init-method="load"/>
+	<bean id="selector" class="com.dp.bigdata.taurus.common.RandomSelector" />
 
 </beans>
 

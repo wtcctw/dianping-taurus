@@ -1,12 +1,12 @@
 package com.dp.bigdata.taurus.restlet.resource.impl;
 
-import com.dp.bigdata.taurus.core.Engine;
-import com.dp.bigdata.taurus.core.MultiInstanceFilter;
-import com.dp.bigdata.taurus.core.structure.BoundedList;
+import com.dp.bigdata.taurus.common.Engine;
+import com.dp.bigdata.taurus.common.MultiInstanceFilter;
+import com.dp.bigdata.taurus.common.structure.BoundedList;
 import com.dp.bigdata.taurus.generated.mapper.TaskAttemptMapper;
 import com.dp.bigdata.taurus.generated.module.TaskAttempt;
 import com.dp.bigdata.taurus.restlet.resource.IClearDependencyPassTask;
-import com.dp.bigdata.taurus.zookeeper.helper.execute.ExecuteStatus;
+import com.dp.bigdata.taurus.common.zookeeper.execute.ExecuteStatus;
 import org.restlet.resource.ServerResource;
 import org.springframework.beans.factory.annotation.Autowired;
 

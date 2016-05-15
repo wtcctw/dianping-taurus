@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import com.dianping.ops.http.HttpPoster;
 import com.dianping.ops.http.HttpResult;
-import com.dp.bigdata.taurus.alert.OpsAlarmHelper;
+import com.dp.bigdata.taurus.common.alert.OpsAlarmHelper;
 
 public class AlarmInfoTest {
 

@@ -7,7 +7,7 @@ import com.dp.bigdata.taurus.restlet.shared.StatusDTO;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
-import com.dp.bigdata.taurus.core.AttemptStatus;
+import com.dp.bigdata.taurus.common.AttemptStatus;
 
 /**
  * AttemptStatusResource url : http://xxx/api/status

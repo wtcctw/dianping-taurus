@@ -18,11 +18,11 @@ import com.dianping.cat.Cat;
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
 import com.dianping.lion.client.LionException;
-import com.dp.bigdata.taurus.alert.MailHelper;
-import com.dp.bigdata.taurus.alert.OpsAlarmHelper;
-import com.dp.bigdata.taurus.alert.WeChatHelper;
-import com.dp.bigdata.taurus.lion.ConfigHolder;
-import com.dp.bigdata.taurus.lion.LionKeys;
+import com.dp.bigdata.taurus.common.alert.MailHelper;
+import com.dp.bigdata.taurus.common.alert.OpsAlarmHelper;
+import com.dp.bigdata.taurus.common.alert.WeChatHelper;
+import com.dp.bigdata.taurus.common.lion.ConfigHolder;
+import com.dp.bigdata.taurus.common.lion.LionKeys;
 import com.dp.bigdata.taurus.restlet.resource.IAllHosts;
 import com.dp.bigdata.taurus.restlet.resource.IExceptionHosts;
 

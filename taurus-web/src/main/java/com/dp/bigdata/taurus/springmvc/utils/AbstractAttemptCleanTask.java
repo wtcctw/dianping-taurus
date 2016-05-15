@@ -23,6 +23,8 @@ public abstract class AbstractAttemptCleanTask extends AbstractAttemptTask {
 
     private static final int RESERVE_MONTH = 1;
 
+    private static final int RESERVE_RECORD = 100;
+
     @Autowired
     protected TaskAttemptMapper taskAttemptMapper;
 
@@ -82,6 +84,10 @@ public abstract class AbstractAttemptCleanTask extends AbstractAttemptTask {
 
     protected int getReserveMonth(){
         return RESERVE_MONTH;
+    }
+
+    protected int getReserveRecord(){
+        return RESERVE_RECORD;
     }
 
     @Override

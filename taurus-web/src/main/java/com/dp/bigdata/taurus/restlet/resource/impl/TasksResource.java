@@ -1,8 +1,8 @@
 package com.dp.bigdata.taurus.restlet.resource.impl;
 
-import com.dp.bigdata.taurus.core.ScheduleException;
-import com.dp.bigdata.taurus.core.Scheduler;
-import com.dp.bigdata.taurus.core.TaskStatus;
+import com.dp.bigdata.taurus.common.ScheduleException;
+import com.dp.bigdata.taurus.common.Scheduler;
+import com.dp.bigdata.taurus.common.TaskStatus;
 import com.dp.bigdata.taurus.generated.mapper.*;
 import com.dp.bigdata.taurus.generated.module.*;
 import com.dp.bigdata.taurus.restlet.resource.ITasksResource;

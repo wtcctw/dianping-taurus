@@ -1,8 +1,7 @@
 package com.dp.bigdata.taurus.restlet.utils;
 
-import com.dp.bigdata.taurus.core.Engine;
+import com.dp.bigdata.taurus.common.Engine;
 import org.restlet.Component;
-import org.restlet.data.Protocol;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 

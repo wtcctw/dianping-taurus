@@ -1,19 +1,14 @@
 package com.dp.bigdata.taurus.restlet.resource.impl;
 
-import java.io.File;
-
 import com.dp.bigdata.taurus.restlet.resource.ILogResource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.restlet.data.MediaType;
 import org.restlet.data.Status;
-import org.restlet.representation.FileRepresentation;
-import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.dp.bigdata.taurus.core.ScheduleException;
-import com.dp.bigdata.taurus.core.Scheduler;
+import com.dp.bigdata.taurus.common.ScheduleException;
+import com.dp.bigdata.taurus.common.Scheduler;
 
 /**
  * Resource url : http://xxx.xxx/api/attempt/{attempt_id}

@@ -2,7 +2,7 @@ package com.dp.bigdata.taurus.restlet.shared;
 
 import java.io.Serializable;
 
-import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.HeartbeatInfo;
+import com.dp.bigdata.taurus.common.zookeeper.infochannel.bean.HeartbeatInfo;
 
 /**
  * HostDTO

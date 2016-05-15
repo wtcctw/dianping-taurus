@@ -17,8 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.dp.bigdata.taurus.generated.mapper.HostMapper;
 import com.dp.bigdata.taurus.generated.module.Host;
 import com.dp.bigdata.taurus.generated.module.HostExample;
-import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.HeartbeatInfo;
-import com.dp.bigdata.taurus.zookeeper.helper.host.HostManager;
+import com.dp.bigdata.taurus.common.zookeeper.infochannel.bean.HeartbeatInfo;
+import com.dp.bigdata.taurus.common.zookeeper.host.HostManager;
 
 /**
  * Resource url : http://xxx.xxx/api/host/{hostname}

@@ -19,10 +19,10 @@ import com.dp.bigdata.taurus.agent.exec.Executor;
 import com.dp.bigdata.taurus.agent.utils.AgentServerHelper;
 import com.dp.bigdata.taurus.agent.utils.LockHelper;
 
-import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.ScheduleConf;
-import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.ScheduleStatus;
-import com.dp.bigdata.taurus.zookeeper.common.infochannel.interfaces.ScheduleInfoChannel;
-import com.dp.bigdata.taurus.zookeeper.common.infochannel.interfaces.ScheduleInfoChannel.Operate;
+import com.dp.bigdata.taurus.common.zookeeper.infochannel.bean.ScheduleConf;
+import com.dp.bigdata.taurus.common.zookeeper.infochannel.bean.ScheduleStatus;
+import com.dp.bigdata.taurus.common.zookeeper.infochannel.interfaces.ScheduleInfoChannel;
+import com.dp.bigdata.taurus.common.zookeeper.infochannel.interfaces.ScheduleInfoChannel.Operate;
 
 public class ScheduleUtility {
 	private static final Log LOGGER = LogFactory.getLog(ScheduleUtility.class);

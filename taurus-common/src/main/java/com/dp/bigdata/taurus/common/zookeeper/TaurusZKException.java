@@ -1,0 +1,10 @@
+package com.dp.bigdata.taurus.common.zookeeper;
+
+public class TaurusZKException extends RuntimeException{
+
+	private static final long serialVersionUID = 3075283030815196266L;
+
+	public TaurusZKException(Throwable t){
+		super(t);
+	}
+}

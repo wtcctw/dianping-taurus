@@ -9,7 +9,7 @@ import org.apache.commons.logging.LogFactory;
 import org.I0Itec.zkclient.IZkChildListener;
 
 import com.dp.bigdata.taurus.agent.utils.AgentServerHelper;
-import com.dp.bigdata.taurus.zookeeper.common.infochannel.interfaces.DeploymentInfoChannel;
+import com.dp.bigdata.taurus.common.zookeeper.infochannel.interfaces.DeploymentInfoChannel;
 
 
 

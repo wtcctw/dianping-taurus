@@ -4,7 +4,7 @@ import com.dianping.cat.Cat;
 import com.dp.bigdata.taurus.generated.mapper.AttemptBackupMapper;
 import com.dp.bigdata.taurus.generated.module.TaskAttempt;
 import com.dp.bigdata.taurus.generated.module.TaskAttemptExample;
-import com.dp.bigdata.taurus.utils.DateUtils;
+import com.dp.bigdata.taurus.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -111,6 +111,10 @@ public class AttemptBackupTask extends AbstractAttemptCleanTask {
 
     protected int getReserveMonth() {
         return 3;
+    }
+
+    protected int getReserveRecord(){
+        return 300;
     }
 
 }

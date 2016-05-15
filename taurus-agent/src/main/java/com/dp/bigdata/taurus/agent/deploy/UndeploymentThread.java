@@ -24,9 +24,9 @@ import org.apache.commons.logging.LogFactory;
 
 import com.dp.bigdata.taurus.agent.common.BaseEnvManager;
 import com.dp.bigdata.taurus.agent.utils.LockHelper;
-import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.DeploymentConf;
-import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.DeploymentStatus;
-import com.dp.bigdata.taurus.zookeeper.common.infochannel.interfaces.DeploymentInfoChannel;
+import com.dp.bigdata.taurus.common.zookeeper.infochannel.bean.DeploymentConf;
+import com.dp.bigdata.taurus.common.zookeeper.infochannel.bean.DeploymentStatus;
+import com.dp.bigdata.taurus.common.zookeeper.infochannel.interfaces.DeploymentInfoChannel;
 
 /**
  * undeploy task thread

@@ -1,10 +1,10 @@
 package com.dp.bigdata.taurus.springmvc.utils;
 
-import com.dp.bigdata.taurus.core.structure.BooleanConverter;
-import com.dp.bigdata.taurus.core.structure.Converter;
-import com.dp.bigdata.taurus.lion.AbstractLionPropertyInitializer;
-import com.dp.bigdata.taurus.zookeeper.common.elect.LeaderElector;
-import com.dp.bigdata.taurus.zookeeper.common.infochannel.guice.LeaderElectorChanelModule;
+import com.dp.bigdata.taurus.common.structure.BooleanConverter;
+import com.dp.bigdata.taurus.common.structure.Converter;
+import com.dp.bigdata.taurus.common.lion.AbstractLionPropertyInitializer;
+import com.dp.bigdata.taurus.common.zookeeper.elect.LeaderElector;
+import com.dp.bigdata.taurus.common.zookeeper.infochannel.guice.LeaderElectorChanelModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.slf4j.Logger;

@@ -15,11 +15,11 @@
 		<property name="includeLocalProps" value="false"></property>
 	</bean>
 	
-	<bean name="configHolder" class="com.dp.bigdata.taurus.lion.ConfigHolder" init-method="init" />
+	<bean name="configHolder" class="com.dp.bigdata.taurus.common.lion.ConfigHolder" init-method="init" />
 	
 	<bean id="startRestLet" class="com.dp.bigdata.taurus.restlet.TaurusServer"  destroy-method="stop"/>
-    <bean id="alertBean" class="com.dp.bigdata.taurus.alert.TaurusAlert" />
-    <bean id="healthChecker" class="com.dp.bigdata.taurus.alert.healthcheck.LeaderElectorHealthChecker" />
+    <bean id="alertBean" class="com.dp.bigdata.taurus.common.alert.TaurusAlert" />
+    <bean id="healthChecker" class="com.dp.bigdata.taurus.common.alert.healthcheck.LeaderElectorHealthChecker" />
 
     <!--<pigeon:annotation />-->
     

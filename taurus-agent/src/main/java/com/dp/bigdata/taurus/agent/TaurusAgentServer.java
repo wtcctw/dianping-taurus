@@ -13,10 +13,10 @@ import com.dp.bigdata.taurus.agent.exec.Executor;
 import com.dp.bigdata.taurus.agent.sheduler.ScheduleUtility;
 import com.dp.bigdata.taurus.agent.spring.JarExecutor;
 import com.dp.bigdata.taurus.agent.utils.AgentServerHelper;
-import com.dp.bigdata.taurus.zookeeper.common.MachineType;
-import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.HeartbeatInfo;
-import com.dp.bigdata.taurus.zookeeper.common.infochannel.interfaces.DeploymentInfoChannel;
-import com.dp.bigdata.taurus.zookeeper.common.infochannel.interfaces.ScheduleInfoChannel;
+import com.dp.bigdata.taurus.common.zookeeper.MachineType;
+import com.dp.bigdata.taurus.common.zookeeper.infochannel.bean.HeartbeatInfo;
+import com.dp.bigdata.taurus.common.zookeeper.infochannel.interfaces.DeploymentInfoChannel;
+import com.dp.bigdata.taurus.common.zookeeper.infochannel.interfaces.ScheduleInfoChannel;
 import com.google.inject.Inject;
 
 public class TaurusAgentServer implements AgentServer{

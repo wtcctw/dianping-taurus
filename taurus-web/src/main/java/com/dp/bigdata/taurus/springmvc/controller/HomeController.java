@@ -2,8 +2,8 @@ package com.dp.bigdata.taurus.springmvc.controller;
 
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
-import com.dp.bigdata.taurus.lion.ConfigHolder;
-import com.dp.bigdata.taurus.lion.LionKeys;
+import com.dp.bigdata.taurus.common.lion.ConfigHolder;
+import com.dp.bigdata.taurus.common.lion.LionKeys;
 import com.dp.bigdata.taurus.restlet.shared.*;
 import com.dp.bigdata.taurus.springmvc.utils.AlertType;
 import com.dp.bigdata.taurus.springmvc.utils.GlobalViewVariable;

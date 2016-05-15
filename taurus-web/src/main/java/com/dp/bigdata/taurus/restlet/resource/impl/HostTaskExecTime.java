@@ -1,7 +1,6 @@
 package com.dp.bigdata.taurus.restlet.resource.impl;
 
 import com.dianping.cat.Cat;
-import com.dp.bigdata.taurus.core.Scheduler;
 import com.dp.bigdata.taurus.generated.mapper.TaskAttemptMapper;
 import com.dp.bigdata.taurus.generated.mapper.TaskMapper;
 import com.dp.bigdata.taurus.generated.module.Task;
