@@ -59,7 +59,6 @@ public abstract class AbstractAttemptCleanTask extends AbstractAttemptTask {
             Cat.logEvent(getClass().getSimpleName(), String.format("%s:%d", startTime.toString(), deleted));
             logger.info(String.format("%s [end] : delete %d records", getClass().getSimpleName(), deleted));
         }
-        doDeleteTaskAttempts(startTime);
     }
 
     protected TaskAttempt retrieveFirstTaskAttempt() {

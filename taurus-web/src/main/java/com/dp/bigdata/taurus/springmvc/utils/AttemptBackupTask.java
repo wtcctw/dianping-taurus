@@ -49,9 +49,7 @@ public class AttemptBackupTask extends AbstractAttemptCleanTask {
                     if (taskAttempt != null) {
                         Date date = taskAttempt.getEndtime();
                         recordCount = attemptBackupMapper.deleteTaskAttempts(date, taskId);
-                        System.out.println(recordCount);
                         Cat.logEvent(getClass().getSimpleName(), String.format("%s:%d", taskId, recordCount));
-
                     }
                 }
             }
