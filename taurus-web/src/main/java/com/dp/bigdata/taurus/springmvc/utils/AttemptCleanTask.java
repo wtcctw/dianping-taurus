@@ -1,6 +1,7 @@
 package com.dp.bigdata.taurus.springmvc.utils;
 
 import com.dianping.cat.Cat;
+import com.dp.bigdata.taurus.common.utils.SleepUtils;
 import com.dp.bigdata.taurus.generated.module.Task;
 import com.dp.bigdata.taurus.generated.module.TaskAttempt;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -25,7 +26,7 @@ public class AttemptCleanTask extends AbstractAttemptCleanTask {
         return deleted;
     }
 
-    @Scheduled(cron = "30 1/30 * * * ?")
+    @Scheduled(cron = "0 */30 * * * ?")
     public void fixSizeRecord() {  //每30分钟执行一次
 
         if (lionValue && leaderElector.amILeader()) {
@@ -34,6 +35,7 @@ public class AttemptCleanTask extends AbstractAttemptCleanTask {
                 return;
             }
 
+            SleepUtils.sleep(90000);  //等待90秒，备份完成。
             int recordCount;
             Map<String, Task> registedTask = scheduler.getAllRegistedTask();
             for (String taskId : registedTask.keySet()) {
