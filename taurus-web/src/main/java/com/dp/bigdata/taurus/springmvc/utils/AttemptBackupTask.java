@@ -36,8 +36,8 @@ public class AttemptBackupTask extends AbstractAttemptCleanTask {
 
     }
 
-    @Scheduled(cron = "0 0/30 * * * ?")
-    public void fixSizeRecord() {  //每30分钟执行一次
+    @Scheduled(cron = "45 0/30 * * * ?")
+    public void fixSizeRecord() {  //每30分钟执行一次，相对备份延迟45秒，备份完后删除
 
         if (lionValue && leaderElector.amILeader()) {
             int recordCount;
