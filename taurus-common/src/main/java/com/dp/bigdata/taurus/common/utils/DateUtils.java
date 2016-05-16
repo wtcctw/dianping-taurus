@@ -90,4 +90,11 @@ public class DateUtils {
         cal.add(Calendar.MONTH, -N);
         return cal;
     }
+
+    public static void main(String[] args) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.MINUTE, 31);
+        System.out.println(cal.getTime().toString());
+        System.out.println(DateUtils.nextHalfHour(cal.getTime()));
+    }
 }

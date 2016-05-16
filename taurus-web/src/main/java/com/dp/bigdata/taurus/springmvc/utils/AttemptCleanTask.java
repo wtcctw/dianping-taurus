@@ -5,7 +5,6 @@ import com.dp.bigdata.taurus.common.utils.SleepUtils;
 import com.dp.bigdata.taurus.generated.module.Task;
 import com.dp.bigdata.taurus.generated.module.TaskAttempt;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.Map;
@@ -14,7 +13,7 @@ import java.util.Map;
  * Author   mingdongli
  * 16/5/8  上午11:33.
  */
-@Component
+//@Component
 public class AttemptCleanTask extends AbstractAttemptCleanTask {
 
     @Override
