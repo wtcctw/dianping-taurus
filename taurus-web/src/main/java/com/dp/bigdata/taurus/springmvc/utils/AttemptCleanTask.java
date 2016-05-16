@@ -39,7 +39,7 @@ public class AttemptCleanTask extends AbstractAttemptCleanTask {
                     if (taskAttempt != null) {
                         Date date = taskAttempt.getEndtime();
                         recordCount = taskAttemptMapper.deleteTaskAttempts(date, taskId);
-                        Cat.logEvent(getClass().getSimpleName(), String.format("%t:%s:%d", new Date(), taskId, recordCount));
+                        Cat.logEvent(getClass().getSimpleName(), String.format("%s:%s:%d", new Date().toString(), taskId, recordCount));
                     }
                 }
             }
