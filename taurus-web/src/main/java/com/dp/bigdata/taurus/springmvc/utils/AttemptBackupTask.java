@@ -20,7 +20,7 @@ import java.util.Map;
  * Author   mingdongli
  * 16/5/10  下午6:32.
  */
-//@Component
+@Component
 public class AttemptBackupTask extends AbstractAttemptCleanTask {
 
     private static final int BATCH_SIZE = 1000;

@@ -13,7 +13,7 @@ import java.util.Map;
  * Author   mingdongli
  * 16/5/8  上午11:33.
  */
-//@Component
+@Component
 public class AttemptCleanTask extends AbstractAttemptCleanTask {
 
     @Override
