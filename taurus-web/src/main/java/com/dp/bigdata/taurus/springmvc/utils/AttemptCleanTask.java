@@ -23,7 +23,7 @@ public class AttemptCleanTask extends AbstractAttemptCleanTask {
         return deleted;
     }
 
-    @Scheduled(cron = "45 0/30 * * * ?")
+    @Scheduled(cron = "45 2/30 * * * ?")
     public void fixSizeRecord() {  //每30分钟执行一次
 
         if (lionValue && leaderElector.amILeader()) {

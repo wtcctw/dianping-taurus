@@ -94,7 +94,14 @@ public class DateUtils {
     public static void main(String[] args) {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.MINUTE, 31);
-        System.out.println(cal.getTime().toString());
-        System.out.println(DateUtils.nextHalfHour(cal.getTime()));
+        Date startDate = cal.getTime();
+        Date nextHour = DateUtils.nextHalfHour(startDate);
+        System.out.println(startDate);
+        System.out.println(nextHour);
+
+        startDate = nextHour;
+        nextHour = DateUtils.nextHalfHour(nextHour);
+        System.out.println(startDate);
+        System.out.println(nextHour);
     }
 }

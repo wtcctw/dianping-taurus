@@ -1,6 +1,7 @@
 package com.dp.bigdata.taurus.springmvc.utils;
 
 import com.dianping.cat.Cat;
+import com.dp.bigdata.taurus.common.utils.SleepUtils;
 import com.dp.bigdata.taurus.generated.mapper.AttemptBackupMapper;
 import com.dp.bigdata.taurus.generated.module.Task;
 import com.dp.bigdata.taurus.generated.module.TaskAttempt;
@@ -27,7 +28,7 @@ public class AttemptBackupTask extends AbstractAttemptCleanTask {
     @Autowired
     private AttemptBackupMapper attemptBackupMapper;
 
-    @Scheduled(cron = "0/30 * * * * ?")
+    @Scheduled(cron = "0 2/30 * * * ?")
     public void taskAttemptBackupExecute() {
 
         if (leaderElector.amILeader()) {
@@ -36,10 +37,11 @@ public class AttemptBackupTask extends AbstractAttemptCleanTask {
 
     }
 
-    @Scheduled(cron = "45 0/30 * * * ?")
+    @Scheduled(cron = "45 2/30 * * * ?")
     public void fixSizeRecord() {  //每30分钟执行一次，相对备份延迟45秒，备份完后删除
 
         if (lionValue && leaderElector.amILeader()) {
+            SleepUtils.sleep(60000);  //等待60秒，备份完成。
             int recordCount;
             Map<String, Task> registedTask = scheduler.getAllRegistedTask();
             for (String taskId : registedTask.keySet()) {
@@ -56,7 +58,7 @@ public class AttemptBackupTask extends AbstractAttemptCleanTask {
         }
     }
 
-    private void backupDatabase() {
+    private void  backupDatabase() {
 
         Date stopDate = new Date();
         Date startDate;
