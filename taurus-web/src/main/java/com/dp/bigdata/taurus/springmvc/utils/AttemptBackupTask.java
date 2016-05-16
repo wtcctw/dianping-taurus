@@ -27,7 +27,7 @@ public class AttemptBackupTask extends AbstractAttemptCleanTask {
     @Autowired
     private AttemptBackupMapper attemptBackupMapper;
 
-    @Scheduled(cron = "0 */1 * * * ?")
+    @Scheduled(cron = "0/30 * * * * ?")
     public void taskAttemptBackupExecute() {
 
         if (leaderElector.amILeader()) {
@@ -36,7 +36,7 @@ public class AttemptBackupTask extends AbstractAttemptCleanTask {
 
     }
 
-    @Scheduled(cron = "0 */30 * * * ?")
+    @Scheduled(cron = "0 0/30 * * * ?")
     public void fixSizeRecord() {  //每30分钟执行一次
 
         if (lionValue && leaderElector.amILeader()) {

@@ -17,8 +17,6 @@ import java.util.Map;
 @Component
 public class AttemptCleanTask extends AbstractAttemptCleanTask {
 
-    private boolean firstTime = false;
-
     @Override
     protected int doDeleteTaskAttempts(Date endTime) {
         int deleted = taskAttemptMapper.deleteTaskAttemptsByEndTime(endTime);
@@ -26,14 +24,10 @@ public class AttemptCleanTask extends AbstractAttemptCleanTask {
         return deleted;
     }
 
-    @Scheduled(cron = "0 */30 * * * ?")
+    @Scheduled(cron = "0 0/30 * * * ?")
     public void fixSizeRecord() {  //每30分钟执行一次
 
         if (lionValue && leaderElector.amILeader()) {
-            if (!firstTime) {  // 延迟半个小时
-                firstTime = true;
-                return;
-            }
 
             SleepUtils.sleep(90000);  //等待90秒，备份完成。
             int recordCount;
