@@ -107,7 +107,7 @@ public class AttemptBackupTask extends AbstractAttemptCleanTask {
                 }catch (Exception e){
                     startDate = nextHalfHour;  //死循环
                     nextHalfHour = DateUtils.nextHalfHour(nextHalfHour);
-                    Cat.logEvent(getClass().getSimpleName(), String.format("InfiniteLoop:%s:%d", startDate.toString(), taskAttemptList.size()));
+                    Cat.logEvent(getClass().getSimpleName(), String.format("InfiniteLoop:%s:%s:%d", startDate.toString(), nextHalfHour.toString(), taskAttemptList.size()));
                     taskAttemptList.clear();
                     continue;
                 }
