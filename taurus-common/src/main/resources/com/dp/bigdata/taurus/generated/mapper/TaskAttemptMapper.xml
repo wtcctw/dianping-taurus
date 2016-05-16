@@ -473,7 +473,7 @@
       DELETE from TaurusTaskAttempt where endTime &lt;= #{endTime};
     </delete>
     <delete id="deleteTaskAttempts" parameterType="java.util.Date">
-      DELETE from TaurusTaskAttempt where endTime &lt; #{endTime} and taskID = #{taskId};
+      DELETE from TaurusTaskAttempt where endTime &lt;= #{endTime} and taskID = #{taskId};
     </delete>
     <select id="getTaskAttempt" parameterType="java.util.Date" resultMap="BaseResultMap">
       select * from TaurusTaskAttempt
