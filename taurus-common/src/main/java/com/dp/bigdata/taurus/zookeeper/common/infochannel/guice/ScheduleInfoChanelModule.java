@@ -1,7 +1,7 @@
 package com.dp.bigdata.taurus.zookeeper.common.infochannel.guice;
 
 
-import com.dp.bigdata.taurus.common.zookeeper.infochannel.TaurusZKScheduleInfoChannel;
+import com.dp.bigdata.taurus.zookeeper.common.infochannel.TaurusZKScheduleInfoChannel;
 import com.dp.bigdata.taurus.zookeeper.common.infochannel.interfaces.ScheduleInfoChannel;
 import org.I0Itec.zkclient.ZkClient;
 

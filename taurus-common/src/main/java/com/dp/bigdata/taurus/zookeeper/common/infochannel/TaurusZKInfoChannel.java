@@ -1,8 +1,8 @@
 package com.dp.bigdata.taurus.zookeeper.common.infochannel;
 
 
-import com.dp.bigdata.taurus.common.zookeeper.MachineType;
-import com.dp.bigdata.taurus.common.zookeeper.TaurusZKException;
+import com.dp.bigdata.taurus.zookeeper.common.MachineType;
+import com.dp.bigdata.taurus.zookeeper.common.TaurusZKException;
 import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.HeartbeatInfo;
 import com.dp.bigdata.taurus.zookeeper.common.infochannel.interfaces.ClusterInfoChannel;
 import com.google.inject.Inject;

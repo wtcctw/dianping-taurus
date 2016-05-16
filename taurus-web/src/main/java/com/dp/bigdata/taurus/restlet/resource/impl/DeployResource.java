@@ -40,10 +40,10 @@ import com.dp.bigdata.taurus.generated.module.Host;
 import com.dp.bigdata.taurus.generated.module.HostExample;
 import com.dp.bigdata.taurus.generated.module.Task;
 import com.dp.bigdata.taurus.generated.module.TaskExample;
-import com.dp.bigdata.taurus.common.zookeeper.deploy.DeployStatus;
-import com.dp.bigdata.taurus.common.zookeeper.deploy.Deployer;
-import com.dp.bigdata.taurus.common.zookeeper.deploy.DeploymentContext;
-import com.dp.bigdata.taurus.common.zookeeper.deploy.DeploymentException;
+import com.dp.bigdata.taurus.zookeeper.common.deploy.DeployStatus;
+import com.dp.bigdata.taurus.zookeeper.common.deploy.Deployer;
+import com.dp.bigdata.taurus.zookeeper.common.deploy.DeploymentContext;
+import com.dp.bigdata.taurus.zookeeper.common.deploy.DeploymentException;
 
 public class DeployResource extends ServerResource implements IDeployResource {
 

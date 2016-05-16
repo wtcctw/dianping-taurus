@@ -11,7 +11,7 @@ import org.I0Itec.zkclient.IZkDataListener;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.dp.bigdata.taurus.common.zookeeper.MachineType;
+import com.dp.bigdata.taurus.zookeeper.common.MachineType;
 import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.DeploymentConf;
 import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.DeploymentStatus;
 import com.dp.bigdata.taurus.zookeeper.common.infochannel.guice.DeploymentInfoChannelModule;

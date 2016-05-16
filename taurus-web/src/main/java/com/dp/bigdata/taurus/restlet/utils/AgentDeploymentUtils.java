@@ -1,7 +1,7 @@
 package com.dp.bigdata.taurus.restlet.utils;
 
 import com.dp.bigdata.taurus.generated.module.Task;
-import com.dp.bigdata.taurus.common.zookeeper.deploy.DeploymentException;
+import com.dp.bigdata.taurus.zookeeper.common.deploy.DeploymentException;
 
 /**
  * 

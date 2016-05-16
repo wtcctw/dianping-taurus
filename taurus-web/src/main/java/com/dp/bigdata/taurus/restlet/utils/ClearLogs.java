@@ -1,6 +1,6 @@
 package com.dp.bigdata.taurus.restlet.utils;
 
-import com.dp.bigdata.taurus.common.zookeeper.infochannel.ZooKeeperCleaner;
+import com.dp.bigdata.taurus.zookeeper.common.infochannel.ZooKeeperCleaner;
 
 /**
  * Created by mkirin on 14-8-7.

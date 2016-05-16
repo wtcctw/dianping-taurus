@@ -7,7 +7,7 @@ import com.dp.bigdata.taurus.generated.module.Task;
 import com.dp.bigdata.taurus.generated.module.TaskAttempt;
 import com.dp.bigdata.taurus.common.lion.AbstractLionPropertyInitializer;
 import com.dp.bigdata.taurus.common.utils.ThreadUtils;
-import com.dp.bigdata.taurus.common.zookeeper.execute.ExecutorManager;
+import com.dp.bigdata.taurus.zookeeper.common.execute.ExecutorManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;

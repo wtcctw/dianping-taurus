@@ -7,10 +7,10 @@ import org.apache.commons.logging.LogFactory;
 import com.dp.bigdata.taurus.agent.exec.Executor;
 import com.dp.bigdata.taurus.agent.exec.TaurusExecutor;
 import com.dp.bigdata.taurus.agent.utils.AgentEnvValue;
-import com.dp.bigdata.taurus.common.zookeeper.infochannel.TaurusZKScheduleInfoChannel;
-import com.dp.bigdata.taurus.common.zookeeper.infochannel.guice.DeploymentInfoChannelModule;
-import com.dp.bigdata.taurus.common.zookeeper.infochannel.interfaces.DeploymentInfoChannel;
-import com.dp.bigdata.taurus.common.zookeeper.infochannel.interfaces.ScheduleInfoChannel;
+import com.dp.bigdata.taurus.zookeeper.common.infochannel.TaurusZKScheduleInfoChannel;
+import com.dp.bigdata.taurus.zookeeper.common.infochannel.guice.DeploymentInfoChannelModule;
+import com.dp.bigdata.taurus.zookeeper.common.infochannel.interfaces.DeploymentInfoChannel;
+import com.dp.bigdata.taurus.zookeeper.common.infochannel.interfaces.ScheduleInfoChannel;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 

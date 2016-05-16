@@ -1,8 +1,8 @@
 package com.dp.bigdata.taurus.zookeeper.common.infochannel.guice;
 
-import com.dp.bigdata.taurus.common.zookeeper.elect.LeaderElector;
-import com.dp.bigdata.taurus.common.zookeeper.elect.TaurusZKLeaderElector;
-import com.dp.bigdata.taurus.common.zookeeper.elect.ZKPair;
+import com.dp.bigdata.taurus.zookeeper.common.elect.LeaderElector;
+import com.dp.bigdata.taurus.zookeeper.common.elect.TaurusZKLeaderElector;
+import com.dp.bigdata.taurus.zookeeper.common.elect.ZKPair;
 import com.google.inject.AbstractModule;
 import com.google.inject.Scopes;
 

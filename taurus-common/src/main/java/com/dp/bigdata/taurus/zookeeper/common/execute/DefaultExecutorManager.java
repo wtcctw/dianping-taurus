@@ -1,6 +1,6 @@
 package com.dp.bigdata.taurus.zookeeper.common.execute;
 
-import com.dp.bigdata.taurus.common.zookeeper.MachineType;
+import com.dp.bigdata.taurus.zookeeper.common.MachineType;
 import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.ScheduleConf;
 import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.ScheduleStatus;
 import com.dp.bigdata.taurus.zookeeper.common.infochannel.guice.ScheduleInfoChanelModule;

@@ -7,8 +7,8 @@ import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
 import org.I0Itec.zkclient.ZkClient;
 
-import com.dp.bigdata.taurus.common.zookeeper.infochannel.bean.ScheduleConf;
-import com.dp.bigdata.taurus.common.zookeeper.infochannel.bean.ScheduleStatus;
+import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.ScheduleConf;
+import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.ScheduleStatus;
 import com.dp.bigdata.taurus.common.utils.ClassLoaderUtils;
 
 public class JarExecutorTest {

@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
-import com.dp.bigdata.taurus.common.zookeeper.deploy.DeployStatus;
+import com.dp.bigdata.taurus.zookeeper.common.deploy.DeployStatus;
 
 @Controller
 public class DeployController {

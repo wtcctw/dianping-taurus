@@ -2,7 +2,7 @@ package com.dp.bigdata.taurus.zookeeper.common.infochannel.guice;
 
 import org.I0Itec.zkclient.ZkClient;
 
-import com.dp.bigdata.taurus.common.zookeeper.infochannel.TaurusZKDeploymentInfoChannel;
+import com.dp.bigdata.taurus.zookeeper.common.infochannel.TaurusZKDeploymentInfoChannel;
 import com.dp.bigdata.taurus.zookeeper.common.infochannel.interfaces.DeploymentInfoChannel;
 import com.google.inject.AbstractModule;
 

@@ -4,7 +4,7 @@ import com.dp.bigdata.taurus.common.alert.TaurusAlert;
 import com.dp.bigdata.taurus.common.AttemptStatusMonitor;
 import com.dp.bigdata.taurus.common.Engine;
 import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
-import com.dp.bigdata.taurus.common.zookeeper.infochannel.ZooKeeperCleaner;
+import com.dp.bigdata.taurus.zookeeper.common.infochannel.ZooKeeperCleaner;
 import org.restlet.resource.ClientResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

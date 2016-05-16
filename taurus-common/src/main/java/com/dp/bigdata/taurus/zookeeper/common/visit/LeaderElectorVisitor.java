@@ -1,6 +1,6 @@
 package com.dp.bigdata.taurus.zookeeper.common.visit;
 
-import com.dp.bigdata.taurus.common.zookeeper.elect.LeaderElector;
+import com.dp.bigdata.taurus.zookeeper.common.elect.LeaderElector;
 
 /**
  * Author   mingdongli

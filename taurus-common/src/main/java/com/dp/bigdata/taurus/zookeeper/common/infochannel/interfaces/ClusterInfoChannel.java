@@ -2,7 +2,7 @@ package com.dp.bigdata.taurus.zookeeper.common.infochannel.interfaces;
 
 import java.util.Set;
 
-import com.dp.bigdata.taurus.common.zookeeper.MachineType;
+import com.dp.bigdata.taurus.zookeeper.common.MachineType;
 import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.HeartbeatInfo;
 
 public interface ClusterInfoChannel {

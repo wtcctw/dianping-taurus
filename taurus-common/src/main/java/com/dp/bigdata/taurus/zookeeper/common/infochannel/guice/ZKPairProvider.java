@@ -2,8 +2,8 @@ package com.dp.bigdata.taurus.zookeeper.common.infochannel.guice;
 
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
-import com.dp.bigdata.taurus.common.zookeeper.elect.ZKPair;
-import com.dp.bigdata.taurus.common.zookeeper.elect.ZKStringSerializer;
+import com.dp.bigdata.taurus.zookeeper.common.elect.ZKPair;
+import com.dp.bigdata.taurus.zookeeper.common.elect.ZKStringSerializer;
 import com.dp.bigdata.taurus.common.utils.ClassLoaderUtils;
 import com.google.inject.Provider;
 import org.I0Itec.zkclient.ZkClient;

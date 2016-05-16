@@ -6,7 +6,7 @@ import com.dp.bigdata.taurus.common.structure.BoundedList;
 import com.dp.bigdata.taurus.generated.mapper.TaskAttemptMapper;
 import com.dp.bigdata.taurus.generated.module.TaskAttempt;
 import com.dp.bigdata.taurus.restlet.resource.IClearDependencyPassTask;
-import com.dp.bigdata.taurus.common.zookeeper.execute.ExecuteStatus;
+import com.dp.bigdata.taurus.zookeeper.common.execute.ExecuteStatus;
 import org.restlet.resource.ServerResource;
 import org.springframework.beans.factory.annotation.Autowired;
 
