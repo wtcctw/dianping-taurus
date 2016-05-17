@@ -63,6 +63,12 @@ public class APIControllerTest {
         httpAddJobPost("http://alpha.taurus.dp/api/job/addJob", "/api/job/addJob");
 
     }
+//
+//    @Test
+//    public void testMscheduleAddJob() throws Exception {
+//        httpMscheduleAddJobPost("http://localhost:8080/api/job/addJob", "/api/job/addJob");
+//
+//    }
 
     @Test
     public void testmodifyJob() throws Exception {
@@ -104,8 +110,10 @@ public class APIControllerTest {
     @Test
     public void testgetJobTrace() throws Exception {
         List<BasicNameValuePair> nvps = new ArrayList<BasicNameValuePair>();
-        nvps.add(new BasicNameValuePair("jobId", "task_201605041836_0003"));
-        httpJobTraceJobGet("http://alpha.taurus.dp/api/job/getJobTrace", nvps);
+        nvps.add(new BasicNameValuePair("jobCodes", "taskTest1"));
+        nvps.add(new BasicNameValuePair("offset", "1"));
+        nvps.add(new BasicNameValuePair("limit", "1"));
+        httpJobTraceJobGet("http://localhost:8080/api/job/getJobTrace", nvps);
     }
 
     @Test
@@ -251,6 +259,47 @@ public class APIControllerTest {
         System.out.println(resData);
     }
 
+    public static void httpMscheduleAddJobPost(String url, String uri) throws JSONException, IOException, InvalidKeyException, NoSuchAlgorithmException {
+
+        HttpPost method = new HttpPost(url);
+        String date = TimeUtil.getAuthDate(new Date());
+        String authorization = AuthUtil.getAuthorization(uri, "POST", date, "hotel_mtazhilian", "b4db8cd497ff274c0e60af06ba6f2da3");
+        method.setHeader("Date", date);
+        method.setHeader("Authorization", authorization);
+
+
+        // 接收参数json列表
+        JSONObject jsonParam = new JSONObject();
+
+        jsonParam.put("jobUniqueCode", "dianping1_arch1_testmingdong");
+        jsonParam.put("jobCode", "testmingdong");
+        jsonParam.put("jobName", "mingdongli-test1");
+        jsonParam.put("expression", "0/13 * * * * ?");
+        jsonParam.put("expressionType", "cron");
+        jsonParam.put("jobGroup", "arch1");
+        jsonParam.put("jobLine", "dianping1");
+        jsonParam.put("jobOwner", "mingdong.li");
+        jsonParam.put("port", "8420");
+        jsonParam.put("maxExecuteTime", 30);
+        jsonParam.put("taskNodes", "127.0.0.1");
+        jsonParam.put("dbSchedule", 1);
+        jsonParam.put("startNewJob", 1);
+        jsonParam.put("alarmTimeInterval", 10);
+        jsonParam.put("scheduleChannel", 1);
+        jsonParam.put("scheduleState", 1);
+
+        StringEntity entity = new StringEntity(jsonParam.toString(), "UTF-8");
+        entity.setContentEncoding("UTF-8");
+        entity.setContentType("application/json");
+        method.setEntity(entity);
+
+        System.out.println(jsonParam);
+        HttpResponse result = httpclient.execute(method);
+
+        String resData = EntityUtils.toString(result.getEntity());
+        System.out.println(resData);
+    }
+
     public static void httpAddJobPost(String url, String uri) throws JSONException, IOException, InvalidKeyException, NoSuchAlgorithmException {
 
         HttpPost method = new HttpPost(url);
@@ -337,5 +386,80 @@ public class APIControllerTest {
         result = IOUtils.toString(ins, "UTF-8");
         System.out.println(result);
         return result;
+    }
+
+    static class JobNotifyAlarmModel {
+        private Integer id;//主键
+        private String jobUniqueCode;//job唯一码
+        private String mis;//mis号
+        private Integer daxiang;//是否发大象
+        private Integer email;//是否发邮件
+        private Integer phone;//是否发短信
+        private Date gmtCreate;//创建时间
+        private Date gmtModified;//更新时间
+
+        public Integer getId() {
+            return id;
+        }
+
+        public void setId(Integer id) {
+            this.id = id;
+        }
+
+        public String getJobUniqueCode() {
+            return jobUniqueCode;
+        }
+
+        public void setJobUniqueCode(String jobUniqueCode) {
+            this.jobUniqueCode = jobUniqueCode;
+        }
+
+        public String getMis() {
+            return mis;
+        }
+
+        public void setMis(String mis) {
+            this.mis = mis;
+        }
+
+        public Integer getDaxiang() {
+            return daxiang;
+        }
+
+        public void setDaxiang(Integer daxiang) {
+            this.daxiang = daxiang;
+        }
+
+        public Integer getEmail() {
+            return email;
+        }
+
+        public void setEmail(Integer email) {
+            this.email = email;
+        }
+
+        public Integer getPhone() {
+            return phone;
+        }
+
+        public void setPhone(Integer phone) {
+            this.phone = phone;
+        }
+
+        public Date getGmtCreate() {
+            return gmtCreate;
+        }
+
+        public void setGmtCreate(Date gmtCreate) {
+            this.gmtCreate = gmtCreate;
+        }
+
+        public Date getGmtModified() {
+            return gmtModified;
+        }
+
+        public void setGmtModified(Date gmtModified) {
+            this.gmtModified = gmtModified;
+        }
     }
 }
