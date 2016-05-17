@@ -20,7 +20,7 @@ public class AttemptCleanTask extends AbstractAttemptCleanTask {
     @Override
     protected int doDeleteTaskAttempts(Date endTime) {
         int deleted = taskAttemptMapper.deleteTaskAttemptsByEndTime(endTime);
-        Cat.logEvent(getClass().getSimpleName(), String.format("%s:%d", endTime.toString(), deleted));
+        Cat.logEvent(getClass().getSimpleName(), String.format("delete:%s:%d", endTime.toString(), deleted));
         return deleted;
     }
 
@@ -39,7 +39,7 @@ public class AttemptCleanTask extends AbstractAttemptCleanTask {
                     if (taskAttempt != null) {
                         Date date = taskAttempt.getEndtime();
                         recordCount = taskAttemptMapper.deleteTaskAttempts(date, taskId);
-                        Cat.logEvent(getClass().getSimpleName(), String.format("%s:%s:%d", new Date().toString(), taskId, recordCount));
+                        Cat.logEvent(getClass().getSimpleName(), String.format("delete:%s:%s:%d", new Date().toString(), taskId, recordCount));
                     }
                 }
             }
