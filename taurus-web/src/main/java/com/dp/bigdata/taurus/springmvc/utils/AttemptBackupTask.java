@@ -1,6 +1,7 @@
 package com.dp.bigdata.taurus.springmvc.utils;
 
 import com.dianping.cat.Cat;
+import com.dp.bigdata.taurus.common.utils.EnvUtils;
 import com.dp.bigdata.taurus.common.utils.SleepUtils;
 import com.dp.bigdata.taurus.generated.mapper.AttemptBackupMapper;
 import com.dp.bigdata.taurus.generated.module.Task;
@@ -78,12 +79,17 @@ public class AttemptBackupTask extends AbstractAttemptCleanTask {
             }
         } else {
             startDate = firstTaskAttempt.getEndtime();
+            Date firstDate = DateUtils.NMonthAgo(getReserveMonth()).getTime();
+            if(startDate.before(firstDate)){
+                startDate = firstDate;
+            }
             startDate = DateUtils.zeroOrThirtyMinute(startDate);
             startDate = DateUtils.zeroSecond(startDate);
         }
 
         Date nextHalfHour = DateUtils.nextHalfHour(startDate);
         List<TaskAttempt> taskAttemptList = new ArrayList<TaskAttempt>();
+        int time = 0;
         while (taskAttemptList != null && taskAttemptList.isEmpty() && nextHalfHour.before(stopDate)) { //防止中间某天没有数据
             taskAttemptList = taskAttemptMapper.getTaskAttempt(startDate, nextHalfHour);
             if (taskAttemptList != null && !taskAttemptList.isEmpty()) {
@@ -105,6 +111,14 @@ public class AttemptBackupTask extends AbstractAttemptCleanTask {
                         attemptBackupMapper.batchiInsert(taskAttemptList.subList(startIndex, size));
                     }
                     Cat.logEvent(getClass().getSimpleName(), String.format("backup:%s:%d", startDate.toString(), taskAttemptList.size()));
+                    if(EnvUtils.isProduct() && time < 10){  //加快线上备份
+                        startDate = nextHalfHour;
+                        nextHalfHour = DateUtils.nextHalfHour(nextHalfHour);
+                        taskAttemptList.clear();
+                        time++;
+                        SleepUtils.sleep(500);
+                        continue;
+                    }
                     break;
                 }catch (Exception e){
                     startDate = nextHalfHour;  //死循环
@@ -132,7 +146,6 @@ public class AttemptBackupTask extends AbstractAttemptCleanTask {
                 if (taskAttempt != null) {
                     Date date = taskAttempt.getEndtime();
                     recordCount = attemptBackupMapper.deleteTaskAttempts(date, taskId);
-                    System.out.println(recordCount);
                 }
             }
         }
