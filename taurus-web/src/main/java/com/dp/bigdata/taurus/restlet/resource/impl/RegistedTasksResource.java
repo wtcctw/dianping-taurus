@@ -7,7 +7,7 @@ import java.util.Map;
 import org.restlet.resource.ServerResource;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.dp.bigdata.taurus.core.Scheduler;
+import com.dp.bigdata.taurus.common.Scheduler;
 import com.dp.bigdata.taurus.generated.module.Task;
 import com.dp.bigdata.taurus.restlet.resource.IRegistedTasksResource;
 import com.dp.bigdata.taurus.restlet.shared.TaskDTO;

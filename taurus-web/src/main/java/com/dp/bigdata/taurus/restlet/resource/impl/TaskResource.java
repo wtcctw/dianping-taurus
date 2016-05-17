@@ -16,9 +16,9 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.ServerResource;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.dp.bigdata.taurus.core.ScheduleException;
-import com.dp.bigdata.taurus.core.Scheduler;
-import com.dp.bigdata.taurus.core.TaskID;
+import com.dp.bigdata.taurus.common.ScheduleException;
+import com.dp.bigdata.taurus.common.Scheduler;
+import com.dp.bigdata.taurus.common.TaskID;
 import com.dp.bigdata.taurus.generated.mapper.AlertRuleMapper;
 import com.dp.bigdata.taurus.generated.mapper.UserGroupMapper;
 import com.dp.bigdata.taurus.generated.mapper.UserMapper;
@@ -87,6 +87,7 @@ public class TaskResource extends ServerResource implements ITaskResource {
                 AlertRule rule = rules.get(0);
                 dto.setHasmail(rule.getHasmail());
                 dto.setHassms(rule.getHassms());
+                dto.setHasdaxiang(rule.getHasdaxiang());
                 dto.setConditions(rule.getConditions().toUpperCase());
                 String userID = rule.getUserid();
                 if (StringUtils.isNotBlank(userID)) {

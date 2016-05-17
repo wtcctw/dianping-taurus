@@ -6,7 +6,7 @@
 	<parent>
 		<artifactId>taurus-parent</artifactId>
 		<groupId>com.dp.bigdata</groupId>
-		<version>0.5.0</version>
+		<version>0.5.2-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>taurus-agent</artifactId>
@@ -122,14 +122,21 @@
         <!-- 公司以及模块依赖 -->
 		<dependency>
 			<groupId>com.dp.bigdata</groupId>
-			<artifactId>taurus-framework</artifactId>
-			<version>0.1</version>
+			<artifactId>taurus-common</artifactId>
+			<version>0.5.2-SNAPSHOT</version>
 		</dependency>
-		<dependency>
-			<groupId>com.dp.bigdata</groupId>
-			<artifactId>taurus-zookeeper-helper</artifactId>
-			<version>0.5.0</version>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>3.2.3.RELEASE</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>3.2.3.RELEASE</version>
+            <scope>provided</scope>
+        </dependency>
 	</dependencies>
     <build>
         <plugins>

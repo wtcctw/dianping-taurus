@@ -1,34 +1,32 @@
 package com.dp.bigdata.taurus.agent.sheduler;
 
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.locks.Lock;
-
+import com.dp.bigdata.taurus.agent.common.BaseEnvManager;
+import com.dp.bigdata.taurus.agent.common.TaskType;
+import com.dp.bigdata.taurus.agent.exec.Executor;
+import com.dp.bigdata.taurus.agent.utils.AgentServerHelper;
+import com.dp.bigdata.taurus.agent.utils.LockHelper;
+import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.ScheduleConf;
+import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.ScheduleStatus;
+import com.dp.bigdata.taurus.zookeeper.common.infochannel.interfaces.ScheduleInfoChannel;
+import com.dp.bigdata.taurus.zookeeper.common.infochannel.interfaces.ScheduleInfoChannel.Operate;
 import org.I0Itec.zkclient.IZkChildListener;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.dp.bigdata.taurus.agent.common.BaseEnvManager;
-import com.dp.bigdata.taurus.agent.common.TaskType;
-import com.dp.bigdata.taurus.agent.exec.Executor;
-import com.dp.bigdata.taurus.agent.utils.AgentServerHelper;
-import com.dp.bigdata.taurus.agent.utils.LockHelper;
-
-import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.ScheduleConf;
-import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.ScheduleStatus;
-import com.dp.bigdata.taurus.zookeeper.common.infochannel.interfaces.ScheduleInfoChannel;
-import com.dp.bigdata.taurus.zookeeper.common.infochannel.interfaces.ScheduleInfoChannel.Operate;
+import java.io.IOException;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.locks.Lock;
 
 public class ScheduleUtility {
 	private static final Log LOGGER = LogFactory.getLog(ScheduleUtility.class);
 
 	private static ExecutorService killThreadPool = AgentServerHelper.createThreadPool(2, 4);
-	private static ExecutorService executeThreadPool = AgentServerHelper.createThreadPool(10, 10);	
+	private static ExecutorService executeThreadPool = AgentServerHelper.createThreadPool(100, 500);
 	private static final String UPDATE_COMMAND = "source /etc/profile; %s/script/update-agent.sh > %s/agent-logs/update.log";
 	private static final String RESTART_COMMAND = "source /etc/profile; %s/bin/start.sh";
 

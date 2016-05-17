@@ -9,8 +9,8 @@ import org.restlet.resource.ClientResource;
 import org.springframework.ui.ModelMap;
 
 import com.dianping.lion.client.Lion;
-import com.dp.bigdata.taurus.lion.ConfigHolder;
-import com.dp.bigdata.taurus.lion.LionKeys;
+import com.dp.bigdata.taurus.common.lion.ConfigHolder;
+import com.dp.bigdata.taurus.common.lion.LionKeys;
 import com.dp.bigdata.taurus.restlet.shared.UserDTO;
 import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
 import com.dp.bigdata.taurus.springmvc.utils.GlobalViewVariable;

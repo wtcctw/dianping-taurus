@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.dp.bigdata</groupId>
 	<artifactId>taurus-parent</artifactId>
-	<version>0.5.0</version>
+	<version>0.5.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>taurus-parent</name>
 
@@ -140,13 +140,9 @@ org.eclipse.jdt.core.compiler.compliance=1.6
 
 
 	<modules>
-		<module>taurus-framework</module>
-		<module>taurus-zookeeper-helper</module>
-		<module>taurus-core</module>
+		<module>taurus-common</module>
 		<module>taurus-web</module>
 		<module>taurus-agent</module>
 		<module>taurus-scheduler</module>
-		<module>taurus-spring-test</module>
-		<module>taurus-helper-api</module>
 	</modules>
 </project>

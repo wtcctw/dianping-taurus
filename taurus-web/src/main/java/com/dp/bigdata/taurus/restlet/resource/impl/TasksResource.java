@@ -1,8 +1,8 @@
 package com.dp.bigdata.taurus.restlet.resource.impl;
 
-import com.dp.bigdata.taurus.core.ScheduleException;
-import com.dp.bigdata.taurus.core.Scheduler;
-import com.dp.bigdata.taurus.core.TaskStatus;
+import com.dp.bigdata.taurus.common.ScheduleException;
+import com.dp.bigdata.taurus.common.Scheduler;
+import com.dp.bigdata.taurus.common.TaskStatus;
 import com.dp.bigdata.taurus.generated.mapper.*;
 import com.dp.bigdata.taurus.generated.module.*;
 import com.dp.bigdata.taurus.restlet.resource.ITasksResource;
@@ -146,6 +146,7 @@ public class TasksResource extends ServerResource implements ITasksResource {
                 AlertRule rule = rules.get(0);
                 dto.setHasmail(rule.getHasmail());
                 dto.setHassms(rule.getHassms());
+                dto.setHasdaxiang(rule.getHasdaxiang());
                 dto.setConditions(rule.getConditions().toUpperCase());
                 String userID = rule.getUserid();
                 if (StringUtils.isNotBlank(userID)) {

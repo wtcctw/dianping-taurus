@@ -1,10 +1,10 @@
 package com.dp.bigdata.taurus.springmvc.controller.api;
 
-import com.dp.bigdata.taurus.core.AttemptStatus;
-import com.dp.bigdata.taurus.core.CronExpression;
-import com.dp.bigdata.taurus.core.IDFactory;
-import com.dp.bigdata.taurus.core.TaskStatus;
-import com.dp.bigdata.taurus.core.parser.DependencyParser;
+import com.dp.bigdata.taurus.common.AttemptStatus;
+import com.dp.bigdata.taurus.common.CronExpression;
+import com.dp.bigdata.taurus.common.IDFactory;
+import com.dp.bigdata.taurus.common.TaskStatus;
+import com.dp.bigdata.taurus.common.parser.DependencyParser;
 import com.dp.bigdata.taurus.generated.mapper.UserMapper;
 import com.dp.bigdata.taurus.generated.module.Task;
 import com.dp.bigdata.taurus.generated.module.User;
@@ -19,7 +19,7 @@ import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
 import com.dp.bigdata.taurus.restlet.utils.TaskRequestExtractor;
 import com.dp.bigdata.taurus.springmvc.service.IScheduleService;
 import com.dp.bigdata.taurus.springmvc.utils.TaurusApiException;
-import com.dp.bigdata.taurus.utils.APIAuthorizationUtils;
+import com.dp.bigdata.taurus.common.utils.APIAuthorizationUtils;
 import org.apache.commons.lang.StringUtils;
 import org.restlet.data.Status;
 import org.restlet.resource.ClientResource;
@@ -131,7 +131,7 @@ public class APIController {
         }
 
         boolean exist = scheduleService.isTaskExist(taskName);
-        if (!exist) {
+        if (exist) {
             result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_ADD_FAILED_UNIQUE_CODE_REPEAT.getCode(), ErrorCodeEnum.OPERATION_ADD_FAILED_UNIQUE_CODE_REPEAT.getField());
             return result;
         }
@@ -151,7 +151,7 @@ public class APIController {
         addJob.put(taskDTO);
 
         if (addJob.getStatus().getCode() == Status.SUCCESS_CREATED.getCode()) {
-            result = Result.getInstance(true, null, ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
+            result = Result.getInstance(true, taskDTO.getTaskid(), ErrorCodeEnum.OPERATION_SUCCESS.getCode(), ErrorCodeEnum.OPERATION_SUCCESS.getField());
         } else {
             result = Result.getInstance(false, null, ErrorCodeEnum.OPERATION_FAILED.getCode(), ErrorCodeEnum.OPERATION_FAILED.getField());
         }
@@ -418,16 +418,18 @@ public class APIController {
         }
 
         String alertType = taskApiDTO.getAlertType();
-        if (StringUtils.isNotBlank(alertType)) {
-            if (alertType.equalsIgnoreCase(TaskRequestExtractor.MAIL_ONLY)) {
-                taskDTO.setHasmail(true);
-            } else if (alertType.equalsIgnoreCase(TaskRequestExtractor.WECHAT_ONLY)) {
-                taskDTO.setHassms(true);
-            } else if (alertType.equalsIgnoreCase(TaskRequestExtractor.MAIL_AND_WECHAT)) {
-                taskDTO.setHasmail(true);
-                taskDTO.setHassms(true);
-            } else {
-                taskDTO.setHasmail(true);
+        if (StringUtils.isBlank(alertType)) {
+            taskDTO.setHasmail(true);
+        } else {
+            String[] alerts = alertType.split(";");
+            for(String alert : alerts){
+                if(TaskRequestExtractor.MAIL_ONLY.equalsIgnoreCase(alert)){
+                    taskDTO.setHasmail(true);
+                }else if(TaskRequestExtractor.WECHAT_ONLY.equalsIgnoreCase(alert)){
+                    taskDTO.setHassms(true);
+                }else if(TaskRequestExtractor.DAXIANG_ONLY.equalsIgnoreCase(alert)){
+                    taskDTO.setHasdaxiang(true);
+                }
             }
         }
 
@@ -510,14 +512,6 @@ public class APIController {
         private String errMsg;
 
         private T data;
-
-        public static <T> Result getSuccessInstance(T data) {
-            return getInstance(true, data, null, null);
-        }
-
-        public static Result getFailedInstance(Integer errCode, String errMsg) {
-            return getInstance(false, null, errCode, errMsg);
-        }
 
         public static <T> Result getInstance(boolean ret, T data, Integer errCode, String errMsg) {
             Result<T> result = new Result<T>();

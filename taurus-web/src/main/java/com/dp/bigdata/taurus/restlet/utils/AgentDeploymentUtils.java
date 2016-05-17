@@ -1,7 +1,7 @@
 package com.dp.bigdata.taurus.restlet.utils;
 
 import com.dp.bigdata.taurus.generated.module.Task;
-import com.dp.bigdata.taurus.zookeeper.deploy.helper.DeploymentException;
+import com.dp.bigdata.taurus.zookeeper.common.deploy.DeploymentException;
 
 /**
  * 
@@ -15,7 +15,7 @@ public interface AgentDeploymentUtils {
      * notify all agent to deploy or un-deploy a task
      * @param task
      * @param option
-     * @throws com.dp.bigdata.taurus.zookeeper.deploy.helper.DeploymentException
+     * @throws DeploymentException
      */
     public void notifyAllAgent(final Task task, final DeployOptions option) throws DeploymentException;
 

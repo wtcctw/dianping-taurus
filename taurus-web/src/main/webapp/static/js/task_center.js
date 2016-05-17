@@ -185,8 +185,8 @@ function reflash_data(starttime,endtime){
             var jsonarray = $.parseJSON(response);
             $.each(jsonarray, function (i, item) {
                 totalBody += "<tr>" +
-                    "<td>" + item.execHost + "</td>" +
-                    "<td>" + item.totaltask + "</td>"+"</tr>"
+                "<td>" + item.execHost + "</td>" +
+                "<td>" + item.totaltask + "</td>"+"</tr>"
             });
             var topLists = ' <table  class="table table-striped table-bordered table-hover " id="totalJobTable">'
                 + '<thead><tr><th>IP</th>  <th>执行任务数</th> </tr> </thead>'
@@ -223,15 +223,15 @@ function reflash_data(starttime,endtime){
             if(jsonarray != null&& jsonarray.length > 0){
                 $.each(jsonarray, function (i, item) {
                     failBody += "<tr>" +
-                        "<td>" + item.execHost + "</td>" +
-                        "<td>" + item.totaltask + "</td>"+"</tr>";
+                    "<td>" + item.execHost + "</td>" +
+                    "<td>" + item.totaltask + "</td>"+"</tr>";
                 });
                 topLists = ' <table  class="table table-striped table-bordered table-hover " id = "failedJobTable">'
-                    + '<thead><tr><th>IP</th>  <th>执行任务数</th> </tr> </thead>'
-                    + '        <tbody>'
-                    + failBody
-                    + '        </tbody>'
-                    + '    </table>';
+                + '<thead><tr><th>IP</th>  <th>执行任务数</th> </tr> </thead>'
+                + '        <tbody>'
+                + failBody
+                + '        </tbody>'
+                + '    </table>';
             }else{
                 topLists="<i class='icon-info-sign icon-large green '>没有执行失败的任务！</i> ";
             }
@@ -313,12 +313,12 @@ function reflash_data(starttime,endtime){
 
                     totalSuccBody += taskicon + item.taskName + ": " + item.nums + usericon + item.creator + groupicon + group +"<br>"
                     totalTaskListBody += "<tr>" +
-                        "<td>" + group + "</td>" +
-                        "<td>" + item.taskName + "</td>" +
-                        "<td>成功</td>" +
-                        "<td>" + item.nums + "</td>" +
-                        "<td>" + item.creator + "</td>" +
-                        "</tr>";
+                    "<td>" + group + "</td>" +
+                    "<td>" + item.taskName + "</td>" +
+                    "<td>成功</td>" +
+                    "<td>" + item.nums + "</td>" +
+                    "<td>" + item.creator + "</td>" +
+                    "</tr>";
                 } else if (item.status == "failed"){
                     if (item.nums != 0) {
                         totalFailedNums += item.nums;
@@ -332,12 +332,12 @@ function reflash_data(starttime,endtime){
 
                         totalFailedBody += taskicon + item.taskName + ": " + item.nums + usericon + item.creator + groupicon + group + "<br>"
                         totalTaskListBody += "<tr>" +
-                            "<td>" + group + "</td>" +
-                            "<td>" + item.taskName + "</td>" +
-                            "<td>失败</td>" +
-                            "<td>" + item.nums + "</td>" +
-                            "<td>" + item.creator + "</td>" +
-                            "</tr>";
+                        "<td>" + group + "</td>" +
+                        "<td>" + item.taskName + "</td>" +
+                        "<td>失败</td>" +
+                        "<td>" + item.nums + "</td>" +
+                        "<td>" + item.creator + "</td>" +
+                        "</tr>";
                     }
 
                 }else if (item.status == "killed"){
@@ -354,12 +354,12 @@ function reflash_data(starttime,endtime){
 
                         totalKillBody += taskicon+ item.taskName + ": " + item.nums + usericon + item.creator + groupicon + group + "<br>"
                         totalTaskListBody += "<tr>" +
-                            "<td>" + group + "</td>" +
-                            "<td>" + item.taskName + "</td>" +
-                            "<td>杀死</td>" +
-                            "<td>" + item.nums + "</td>" +
-                            "<td>" + item.creator + "</td>" +
-                            "</tr>";
+                        "<td>" + group + "</td>" +
+                        "<td>" + item.taskName + "</td>" +
+                        "<td>杀死</td>" +
+                        "<td>" + item.nums + "</td>" +
+                        "<td>" + item.creator + "</td>" +
+                        "</tr>";
                     }
 
                 }else if (item.status == "timeout"){
@@ -376,12 +376,12 @@ function reflash_data(starttime,endtime){
 
                         totalTimeoutBody += taskicon + item.taskName + ": " + item.nums + usericon + item.creator + groupicon + group + "<br>"
                         totalTaskListBody += "<tr>" +
-                            "<td>" + group + "</td>" +
-                            "<td>" + item.taskName + "</td>" +
-                            "<td>超时</td>" +
-                            "<td>" + item.nums + "</td>" +
-                            "<td>" + item.creator + "</td>" +
-                            "</tr>";
+                        "<td>" + group + "</td>" +
+                        "<td>" + item.taskName + "</td>" +
+                        "<td>超时</td>" +
+                        "<td>" + item.nums + "</td>" +
+                        "<td>" + item.creator + "</td>" +
+                        "</tr>";
                     }
 
                 }else if (item.status == "congest"){
@@ -398,12 +398,12 @@ function reflash_data(starttime,endtime){
 
                         totalCongestBody += taskicon + item.taskName + ": " + item.nums + usericon + item.creator + groupicon + group + "<br>"
                         totalTaskListBody += "<tr>" +
-                            "<td>" + group + "</td>" +
-                            "<td>" + item.taskName + "</td>" +
-                            "<td>拥堵</td>" +
-                            "<td>" + item.nums + "</td>" +
-                            "<td>" + item.creator + "</td>" +
-                            "</tr>";
+                        "<td>" + group + "</td>" +
+                        "<td>" + item.taskName + "</td>" +
+                        "<td>拥堵</td>" +
+                        "<td>" + item.nums + "</td>" +
+                        "<td>" + item.creator + "</td>" +
+                        "</tr>";
                     }
 
                 }
@@ -413,7 +413,7 @@ function reflash_data(starttime,endtime){
             // 路径配置
             require.config({
                 paths: {
-                    echarts: '../lib/dist'
+                    echarts: '../../lib/dist'
                 }
             });
             // 使用

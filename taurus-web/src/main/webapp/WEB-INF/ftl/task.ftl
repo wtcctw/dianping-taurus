@@ -330,11 +330,13 @@
                 <label class="label label-lg  label-info arrowed-right col-sm-2" for="alertType">选择报警方式</label>
 
                 <div class="controls">
-                    <select class="input-small field" id="alertType" name="alertType">
-                        <option id="1">邮件</option>
-                        <option id="2">微信</option>
-                        <option id="3">邮件和微信</option>
-                    </select>
+                <#if alerttypes??>
+                    <#list alerttypes as alerttype>
+                        <label><input type="checkbox" class="ace ace-checkbox-2 field alertType" id="alertType"
+                                      name="${alerttype.status!}" <#if alerttype.status == 1> checked="checked" </#if> ><span
+                                class="lbl"> ${alerttype.ch_status!} </span></label>
+                    </#list>
+                </#if>
                 </div>
             </div>
 

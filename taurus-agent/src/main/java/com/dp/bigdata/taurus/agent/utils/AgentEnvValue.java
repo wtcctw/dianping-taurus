@@ -12,7 +12,7 @@ import java.util.Properties;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.dp.bigdata.taurus.zookeeper.common.utils.ClassLoaderUtils;
+import com.dp.bigdata.taurus.common.utils.ClassLoaderUtils;
 
 public final class AgentEnvValue {
 

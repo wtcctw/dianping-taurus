@@ -2,9 +2,10 @@ package com.dp.bigdata.taurus.springmvc.controller;
 
 import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
-import com.dp.bigdata.taurus.lion.ConfigHolder;
-import com.dp.bigdata.taurus.lion.LionKeys;
+import com.dp.bigdata.taurus.common.lion.ConfigHolder;
+import com.dp.bigdata.taurus.common.lion.LionKeys;
 import com.dp.bigdata.taurus.restlet.shared.*;
+import com.dp.bigdata.taurus.springmvc.utils.AlertType;
 import com.dp.bigdata.taurus.springmvc.utils.GlobalViewVariable;
 import jodd.util.StringUtil;
 import org.codehaus.plexus.util.StringUtils;
@@ -389,6 +390,9 @@ public class HomeController extends BaseController {
 		globalViewVariable.cr = new ClientResource(globalViewVariable.host + "group");
 		ArrayList<UserGroupDTO> groups = globalViewVariable.cr.get(ArrayList.class);
 		modelMap.addAttribute("groups",groups);
+
+		List<AlertTypeDTO> alertType = getAlertTypeDTO();
+		modelMap.addAttribute("alerttypes",alertType);
 		
 		return "/task.ftl";
 	}
@@ -453,6 +457,25 @@ public class HomeController extends BaseController {
 	    String conditionStr = dto.getConditions();
 	    modelMap.addAttribute("dto", dto);
 	    modelMap.addAttribute("conditionStr", conditionStr);
+		StringBuilder alerttypeStr = new StringBuilder();
+		if(dto.isHasmail()){
+			alerttypeStr.append("1;");
+		}
+		if(dto.isHassms()){
+			alerttypeStr.append("2;");
+		}
+		if(dto.isHasdaxiang()){
+			alerttypeStr.append("3;");
+		}
+		if(alerttypeStr.length() > 0){
+			modelMap.addAttribute("alerttypeStr", alerttypeStr.substring(0, alerttypeStr.length() - 1));
+		}else {
+			modelMap.addAttribute("alerttypeStr", "");
+		}
+
+		List<AlertTypeDTO> alertType = getAlertTypeDTO();
+		modelMap.addAttribute("alerttypes", alertType);
+
 	    
 		return "/task_form.ftl";
 	}
@@ -1084,6 +1107,14 @@ public class HomeController extends BaseController {
 		response.setContentType("text/plain;charset=utf-8");
 		PrintWriter writer = response.getWriter();
 		writer.write("ok");
+	}
+
+	private List<AlertTypeDTO> getAlertTypeDTO(){
+		List<AlertTypeDTO> alertTypeDTOList = new ArrayList<AlertTypeDTO>();
+		alertTypeDTOList.add(new AlertTypeDTO(AlertType.EMAIL.getNum(), AlertType.EMAIL.getAlertType()));
+		alertTypeDTOList.add(new AlertTypeDTO(AlertType.WECHAT.getNum(), AlertType.WECHAT.getAlertType()));
+		alertTypeDTOList.add(new AlertTypeDTO(AlertType.DAXIANG.getNum(), AlertType.DAXIANG.getAlertType()));
+		return  alertTypeDTOList;
 	}
 	
 	/**

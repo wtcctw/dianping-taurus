@@ -263,7 +263,7 @@ public class APIControllerTest {
         // 接收参数json列表
         JSONObject jsonParam = new JSONObject();
 
-        jsonParam.put("taskName", "alpha-test-api-addjob");
+        jsonParam.put("taskName", "alpha-test-api-addjob2g");
         jsonParam.put("taskType", "default");
         jsonParam.put("taskCommand", "date");
         jsonParam.put("crontab", "0/13 * * * * ?");

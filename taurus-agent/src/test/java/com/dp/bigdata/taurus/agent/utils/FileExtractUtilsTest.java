@@ -23,9 +23,8 @@ import java.io.IOException;
 
 import org.apache.commons.compress.archivers.ArchiveException;
 import org.apache.commons.io.FileUtils;
-import org.junit.Test;
 
-import com.dp.bigdata.taurus.zookeeper.common.utils.ClassLoaderUtils;
+import com.dp.bigdata.taurus.common.utils.ClassLoaderUtils;
 
 /**
  * TODO Comment of FileExtractUtils

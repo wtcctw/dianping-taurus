@@ -265,11 +265,11 @@ $(document).ready(function() {
 			if($(this).prop("checked"))
 				return this.name;
 		    }).get().join(";");
-		var type = $('#alertType').children().map(function() {
-			if($(this).prop("selected"))
-				return this.id;
-		    }).get().join();
-		
+		var type = $('.alertType').map(function() {
+			if($(this).prop("checked"))
+				return this.name;
+		    }).get().join(";");
+
 		params["alertCondition"] = condition;
 		params["alertType"] = type;
 		if(params["dependency"]!=null && params["dependency"]!=''){

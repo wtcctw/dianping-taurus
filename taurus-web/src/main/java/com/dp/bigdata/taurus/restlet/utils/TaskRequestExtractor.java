@@ -21,11 +21,11 @@ import org.restlet.ext.fileupload.RestletFileUpload;
 import org.restlet.representation.Representation;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.dp.bigdata.taurus.core.AttemptStatus;
-import com.dp.bigdata.taurus.core.CronExpression;
-import com.dp.bigdata.taurus.core.IDFactory;
-import com.dp.bigdata.taurus.core.TaskStatus;
-import com.dp.bigdata.taurus.core.parser.DependencyParser;
+import com.dp.bigdata.taurus.common.AttemptStatus;
+import com.dp.bigdata.taurus.common.CronExpression;
+import com.dp.bigdata.taurus.common.IDFactory;
+import com.dp.bigdata.taurus.common.TaskStatus;
+import com.dp.bigdata.taurus.common.parser.DependencyParser;
 import com.dp.bigdata.taurus.generated.mapper.UserGroupMapper;
 import com.dp.bigdata.taurus.generated.mapper.UserMapper;
 import com.dp.bigdata.taurus.generated.module.User;
@@ -44,7 +44,7 @@ public class TaskRequestExtractor implements RequestExtrator<TaskDTO> {
 
 	public static final String WECHAT_ONLY = "2";
 
-	public static final String MAIL_AND_WECHAT = "3";
+	public static final String DAXIANG_ONLY = "3";
 
 	@Autowired
 	private IDFactory idFactory;
@@ -215,16 +215,18 @@ public class TaskRequestExtractor implements RequestExtrator<TaskDTO> {
 					task.setUserid("");
 				}
 			} else if (key.equals(TaskDetailControlName.ALERTTYPE.getName())) {
-				if (StringUtils.isNotBlank(value)) {
-					if (value.equalsIgnoreCase(MAIL_ONLY)) {
-						task.setHasmail(true);
-					} else if (value.equalsIgnoreCase(WECHAT_ONLY)) {
-						task.setHassms(true);
-					} else if (value.equalsIgnoreCase(MAIL_AND_WECHAT)) {
-						task.setHasmail(true);
-						task.setHassms(true);
-					} else {
-						task.setHasmail(true);
+				if (StringUtils.isBlank(value)) {
+					task.setHasmail(true);
+				} else {
+					String[] alerts = value.split(";");
+					for(String alert : alerts){
+						if(MAIL_ONLY.equalsIgnoreCase(alert)){
+							task.setHasmail(true);
+						}else if(WECHAT_ONLY.equalsIgnoreCase(alert)){
+							task.setHassms(true);
+						}else if(DAXIANG_ONLY.equalsIgnoreCase(alert)){
+							task.setHasdaxiang(true);
+						}
 					}
 				}
 			} else if (key.equals(TaskDetailControlName.MAINCLASS.getName())) {

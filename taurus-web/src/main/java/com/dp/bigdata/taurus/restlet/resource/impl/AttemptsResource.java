@@ -12,7 +12,7 @@ import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.dp.bigdata.taurus.core.AttemptStatus;
+import com.dp.bigdata.taurus.common.AttemptStatus;
 import com.dp.bigdata.taurus.generated.mapper.TaskAttemptMapper;
 import com.dp.bigdata.taurus.generated.module.TaskAttempt;
 import com.dp.bigdata.taurus.generated.module.TaskAttemptExample;

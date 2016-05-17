@@ -6,9 +6,9 @@ target/
 /*/.*/*
 /*/.*
 
-# taurus-core/src/main/java/com/dp/bigdata/taurus/generated/ #
-# taurus-core/src/main/resources/com
-taurus-core/derby.log
+# taurus-common/src/main/java/com/dp/bigdata/taurus/generated/ #
+# taurus-common/src/main/resources/com
+taurus-common/derby.log
 
 *.class
 

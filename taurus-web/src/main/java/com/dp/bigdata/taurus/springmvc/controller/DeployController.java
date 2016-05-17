@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.restlet.data.Form;
-import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.representation.Representation;
@@ -22,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.dp.bigdata.taurus.restlet.utils.LionConfigUtil;
-import com.dp.bigdata.taurus.zookeeper.deploy.helper.DeployStatus;
+import com.dp.bigdata.taurus.zookeeper.common.deploy.DeployStatus;
 
 @Controller
 public class DeployController {

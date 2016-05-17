@@ -9,7 +9,7 @@ import org.I0Itec.zkclient.ZkClient;
 
 import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.ScheduleConf;
 import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.ScheduleStatus;
-import com.dp.bigdata.taurus.zookeeper.common.utils.ClassLoaderUtils;
+import com.dp.bigdata.taurus.common.utils.ClassLoaderUtils;
 
 public class JarExecutorTest {
 

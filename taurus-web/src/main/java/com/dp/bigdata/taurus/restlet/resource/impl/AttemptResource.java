@@ -1,6 +1,6 @@
 package com.dp.bigdata.taurus.restlet.resource.impl;
 
-import com.dp.bigdata.taurus.core.AttemptStatus;
+import com.dp.bigdata.taurus.common.AttemptStatus;
 import com.dp.bigdata.taurus.generated.mapper.TaskAttemptMapper;
 import com.dp.bigdata.taurus.generated.module.TaskAttempt;
 import com.dp.bigdata.taurus.restlet.resource.IAttemptResource;
