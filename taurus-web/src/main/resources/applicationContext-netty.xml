@@ -13,7 +13,9 @@
     <bean id="proxy"
           class="com.dp.bigdata.taurus.common.ExecutorManagerFactory" />
     <bean id="nettyRemotingClient"
-          class="com.dp.bigdata.taurus.common.netty.NettyRemotingClient" />
+          class="com.dp.bigdata.taurus.common.netty.NettyRemotingClient" init-method="start" destroy-method="shutdown"/>
+    <bean id="nettyRemotingServer"
+          class="com.dp.bigdata.taurus.common.netty.NettyRemotingServer" init-method="start" destroy-method="shutdown"/>
 </beans>
 
 

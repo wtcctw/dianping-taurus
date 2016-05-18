@@ -32,9 +32,6 @@ public class NettyRemotingClient implements RemotingClient, InitializingBean {
 
     private static final Logger logger = LoggerFactory.getLogger(NettyRemotingClient.class);
 
-    @Value("${task.callback.port}")
-    public int callbackPort;
-
     @Value("${task.executor.port}")
     public int sendPort;
 
