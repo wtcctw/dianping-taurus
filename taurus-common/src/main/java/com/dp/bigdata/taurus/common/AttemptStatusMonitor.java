@@ -12,6 +12,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
@@ -35,19 +36,16 @@ public class AttemptStatusMonitor extends AbstractLionPropertyInitializer<Boolea
 
     private static final String ZK_CLEANER = "taurus.zk.cleaner";
 
-    private final Scheduler scheduler;
+    @Autowired
+    private Scheduler scheduler;
 
+    @Qualifier("zookeeper")
+    @Autowired
     private ExecutorManager zookeeper;
 
     private BlockingQueue<DelayedAttemptZkPath> delayedAttemptZkPaths = new DelayQueue<DelayedAttemptZkPath>();
 
     private ExecutorService zkCleanerExecutorService = ThreadUtils.newFixedThreadPool(10, "ZkCleanerExecutor");
-
-    @Autowired
-    public AttemptStatusMonitor(Scheduler scheduler, ExecutorManager zookeeper) {
-        this.scheduler = scheduler;
-        this.zookeeper = zookeeper;
-    }
 
     @Override
     public void run() {

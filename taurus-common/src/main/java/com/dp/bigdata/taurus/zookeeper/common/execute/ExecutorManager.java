@@ -11,14 +11,14 @@ public interface ExecutorManager {
     /**
      * execute the attempt
      * @param context
-     * @throws ScheduleException
+     * @throws ExecuteException
      */
     public void execute(ExecuteContext context) throws ExecuteException;
 
     /**
      * kill the attempt
      * @param context
-     * @throws ScheduleException
+     * @throws ExecuteException
      */
     public void kill(ExecuteContext context) throws ExecuteException;
 
@@ -26,7 +26,7 @@ public interface ExecutorManager {
      * get attempt status for the given context
      * @param context
      * @return
-     * @throws ScheduleException
+     * @throws ExecuteException
      */
     public ExecuteStatus getStatus(ExecuteContext context) throws ExecuteException;
 

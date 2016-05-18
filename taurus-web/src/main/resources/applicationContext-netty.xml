@@ -6,7 +6,14 @@
 						     http://www.springframework.org/schema/context
 						     http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <context:component-scan base-package="com.dp.bigdata.taurus.common"/>
+    <context:property-placeholder ignore-unresolvable="true"
+                                  location="classpath*:/netty.properties"/>
+    <bean id="netty"
+          class="com.dp.bigdata.taurus.common.netty.NettyExecutorManager" />
+    <bean id="proxy"
+          class="com.dp.bigdata.taurus.common.ExecutorManagerFactory" />
+    <bean id="nettyRemotingClient"
+          class="com.dp.bigdata.taurus.common.netty.NettyRemotingClient" />
 </beans>
 
 

@@ -15,7 +15,8 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,33 +28,38 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Author   mingdongli
  * 16/5/18  上午10:14.
  */
-@Component
-public class NettyRemotingClient implements RemotingClient {
+public class NettyRemotingClient implements RemotingClient, InitializingBean {
 
     private static final Logger logger = LoggerFactory.getLogger(NettyRemotingClient.class);
 
-    private final NettyClientConfig nettyClientConfig;
+    @Value("${task.callback.port}")
+    public int callbackPort;
+
+    @Value("${task.executor.port}")
+    public int sendPort;
+
+    private NettyClientConfig nettyClientConfig = new NettyClientConfig();
 
     private final Bootstrap bootstrap = new Bootstrap();
 
-    private final EventLoopGroup eventLoopGroupWorker;
+    private EventLoopGroup eventLoopGroupWorker;
 
     private DefaultEventExecutorGroup defaultEventExecutorGroup;
 
     private final ConcurrentMap<String, Channel> channels = new ConcurrentHashMap<String, Channel>();
 
-    public NettyRemotingClient(final NettyClientConfig nettyClientConfig) {
-        this.nettyClientConfig = nettyClientConfig;
-        this.eventLoopGroupWorker = new NioEventLoopGroup(1, new ThreadFactory() {
-            private AtomicInteger threadIndex = new AtomicInteger(0);
+    @Override
+    public void afterPropertiesSet() throws Exception {
 
+        nettyClientConfig.setConnectPort(sendPort);
+        eventLoopGroupWorker = new NioEventLoopGroup(1, new ThreadFactory() {
+            private AtomicInteger threadIndex = new AtomicInteger(0);
 
             public Thread newThread(Runnable r) {
                 return new Thread(r, String.format("NettyClientSelector_%d", this.threadIndex.incrementAndGet()));
             }
         });
     }
-
 
     /**
      *
@@ -145,7 +151,6 @@ public class NettyRemotingClient implements RemotingClient {
                     }
                 });
     }
-
 
     class NettyConnetManageHandler extends ChannelDuplexHandler {
 

@@ -1,6 +1,5 @@
 package com.dp.bigdata.taurus.zookeeper.common.execute;
 
-import com.dp.bigdata.taurus.common.netty.AbstractExecutorManager;
 import com.dp.bigdata.taurus.common.utils.IPUtils;
 import com.dp.bigdata.taurus.zookeeper.common.MachineType;
 import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.ScheduleConf;
@@ -26,7 +25,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author damon.zhu
  *
  */
-public class DefaultExecutorManager extends AbstractExecutorManager implements ExecutorManager{
+public class DefaultExecutorManager implements ExecutorManager{
 	
 	private static final Log LOGGER = LogFactory.getLog(DefaultExecutorManager.class);
 	private static final int DEFAULT_TIME_OUT_IN_SECONDS = 10;

@@ -67,7 +67,7 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
 
     @Autowired
     @Qualifier("proxy")
-    private ExecutorManager proxy;
+    private ExecutorManager executorManager;
 
     @Autowired
     private HostMapper hostMapper;
@@ -469,7 +469,7 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
         attempt.setStarttime(new Date());
 
         try {
-            proxy.execute(context.getContext());
+            executorManager.execute(context.getContext());
             logger.info("Attempt " + attempt.getAttemptid() + " is running now...");
             Cat.logEvent("Attempt.Scheduled", context.getName(), Message.SUCCESS, context.getAttemptid());
         } catch (Exception ee) {
@@ -504,7 +504,7 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
             throw new ScheduleException("Unable find attemptID : " + attemptID);
         }
         try {
-            proxy.kill(context.getContext());
+            executorManager.kill(context.getContext());
         } catch (Exception ee) {
             logger.error("Fail to kill attemptID :  " + attemptID + " on host : " + context.getExechost());
         }
@@ -526,7 +526,7 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
             throw new ScheduleException("Unable find attemptID : " + attemptID);
         }
         try {
-            proxy.kill(context.getContext());
+            executorManager.kill(context.getContext());
         } catch (Exception ee) {
             logger.error("Fail to kill attemptID :  " + attemptID + " on host : " + context.getExechost());
         }
@@ -624,7 +624,7 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
         AttemptContext context = maps.get(attemptID);
         ExecuteStatus status = null;
         try {
-            status = proxy.getStatus(context.getContext());
+            status = executorManager.getStatus(context.getContext());
         } catch (ExecuteException ee) {
             // 当心跳节点消失后出现异常，但是作业仍应该是running状态。
             status = new ExecuteStatus(AttemptStatus.RUNNING);
