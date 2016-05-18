@@ -3,6 +3,7 @@ package com.dp.bigdata.taurus.common.netty;
 import com.dp.bigdata.taurus.common.netty.codec.NettyDecoder;
 import com.dp.bigdata.taurus.common.netty.codec.NettyEncoder;
 import com.dp.bigdata.taurus.common.netty.config.NettyServerConfig;
+import com.dp.bigdata.taurus.common.netty.processor.CallbackProcessor;
 import com.dp.bigdata.taurus.common.netty.processor.NettyRequestProcessor;
 import com.dp.bigdata.taurus.common.netty.protocol.Command;
 import com.dp.bigdata.taurus.common.netty.protocol.CommandType;
@@ -18,6 +19,7 @@ import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.net.InetSocketAddress;
@@ -40,6 +42,9 @@ public class NettyRemotingServer implements RemotingServer, InitializingBean {
 
     @Value("${task.callback.port}")
     public int callbackPort;
+
+    @Autowired
+    private CallbackProcessor callbackProcessor;
 
     private ServerBootstrap serverBootstrap;
 
@@ -78,6 +83,9 @@ public class NettyRemotingServer implements RemotingServer, InitializingBean {
                 return new Thread(r, String.format("NettyServerSelector_%d_%d", threadTotal, this.threadIndex.incrementAndGet()));
             }
         });
+
+        ExecutorService scheduleService = Executors.newFixedThreadPool(cpus << 1);
+        registerProcessor(CommandType.ScheduleReceiveResult, callbackProcessor, scheduleService);
     }
 
     /**

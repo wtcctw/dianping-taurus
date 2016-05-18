@@ -1,6 +1,7 @@
 package com.dp.bigdata.taurus.common;
 
 import com.dianping.cat.Cat;
+import com.dp.bigdata.taurus.common.netty.MscheduleExecutorManager;
 import com.dp.bigdata.taurus.common.structure.BooleanConverter;
 import com.dp.bigdata.taurus.common.structure.Converter;
 import com.dp.bigdata.taurus.generated.module.Task;
@@ -61,6 +62,9 @@ public class AttemptStatusMonitor extends AbstractLionPropertyInitializer<Boolea
             try {
                 List<AttemptContext> runningAttempts = scheduler.getAllRunningAttempt();
                 for (AttemptContext attempt : runningAttempts) {
+                    if(MscheduleExecutorManager.MSCHEDULE_TYPE.equals(attempt.getType())){
+                        continue;
+                    }
                     AttemptStatus sstatus = scheduler.getAttemptStatus(attempt.getAttemptid());
                     int status = sstatus.getStatus();
                     //LOG.info("Current status for attempt " + attempt.getAttemptid() + " : " + status);

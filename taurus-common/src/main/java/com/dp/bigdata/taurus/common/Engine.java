@@ -9,16 +9,18 @@ import com.dianping.lion.client.LionException;
 import com.dp.bigdata.taurus.common.alert.MailHelper;
 import com.dp.bigdata.taurus.common.alert.OpsAlarmHelper;
 import com.dp.bigdata.taurus.common.alert.WeChatHelper;
+import com.dp.bigdata.taurus.common.lion.ConfigHolder;
+import com.dp.bigdata.taurus.common.lion.LionKeys;
+import com.dp.bigdata.taurus.common.netty.MscheduleExecutorManager;
+import com.dp.bigdata.taurus.common.netty.zookeeper.ZookeeperMananger;
 import com.dp.bigdata.taurus.common.structure.BoundedList;
+import com.dp.bigdata.taurus.common.utils.SleepUtils;
+import com.dp.bigdata.taurus.common.utils.ThreadUtils;
 import com.dp.bigdata.taurus.generated.mapper.HostMapper;
 import com.dp.bigdata.taurus.generated.module.Host;
 import com.dp.bigdata.taurus.generated.module.Task;
 import com.dp.bigdata.taurus.generated.module.TaskAttempt;
 import com.dp.bigdata.taurus.generated.module.TaskAttemptExample;
-import com.dp.bigdata.taurus.common.lion.ConfigHolder;
-import com.dp.bigdata.taurus.common.lion.LionKeys;
-import com.dp.bigdata.taurus.common.utils.SleepUtils;
-import com.dp.bigdata.taurus.common.utils.ThreadUtils;
 import com.dp.bigdata.taurus.zookeeper.common.execute.ExecuteException;
 import com.dp.bigdata.taurus.zookeeper.common.execute.ExecuteStatus;
 import com.dp.bigdata.taurus.zookeeper.common.execute.ExecutorManager;
@@ -74,6 +76,9 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
 
     @Autowired
     private AgentMonitor agentMonitor;
+
+    @Autowired
+    private ZookeeperMananger zookeeperMananger;
 
     private Runnable progressMonitor;
 
@@ -452,14 +457,30 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
         if (task.getPoolid() == 1) {
             host = new Host();
             String ip = task.getHostname();
+            Collection<String> ipCollection;
             // assume that hostname is ip address!!
             if (StringUtils.isBlank(ip)) {
-                Cat.logEvent("Attempt.SubmitFailed", context.getName(), "no-host", context.getAttemptid());
-                failAttempt(attempt);
-                throw new ScheduleException("Fail to execute attemptID : " + attempt.getAttemptid() + " due to no host");
+                ipCollection = zookeeperMananger.getTaskNodes(task.getTaskid());
+                if (ipCollection == null) {
+                    Cat.logEvent("Attempt.SubmitFailed", context.getName(), "no-host", context.getAttemptid());
+                    failAttempt(attempt);
+                    throw new ScheduleException("Fail to execute attemptID : " + attempt.getAttemptid() + " due to no host");
+                }
+            } else {
+                if (MscheduleExecutorManager.MSCHEDULE_TYPE.equals(context.getType())) {
+                    String[] ipAndPort = ip.split(",");
+                    Set<String> tmpCollection = zookeeperMananger.getTaskNodes(task.getTaskid());
+                    if (tmpCollection == null) {
+                        Cat.logEvent("Attempt.SubmitFailed", context.getName(), "no-host", context.getAttemptid());
+                        failAttempt(attempt);
+                        throw new ScheduleException("Fail to execute attemptID : " + attempt.getAttemptid() + " due to no host");
+                    }
+                    ipCollection = CollectionUtils.intersection(Arrays.asList(ipAndPort), tmpCollection);
+                }else {
+                    ipCollection = Arrays.asList(ip.split(","));
+                }
             }
-            String[] ipArray = ip.split(",");
-            String finalIp = selector.select(Arrays.asList(ipArray));
+            String finalIp = selector.select(ipCollection);
             host.setIp(finalIp);
             // host = hostMapper.selectByPrimaryKey(task.getHostname());
         } else {
@@ -748,4 +769,13 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
         return filter;
     }
 
+    public static void main(String[] args) {
+        Set<String> set = new HashSet<String>();
+        set.add("123456");
+        set.add("123");
+        Collection<String> collection = set;
+        String[] array = new String[]{"123456"};
+        System.out.println(collection);
+        System.out.println(CollectionUtils.intersection(set, Arrays.asList(array)));
+    }
 }

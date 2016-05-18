@@ -1,5 +1,6 @@
 package com.dp.bigdata.taurus.common;
 
+import com.dp.bigdata.taurus.common.netty.MscheduleExecutorManager;
 import com.dp.bigdata.taurus.zookeeper.common.execute.ExecuteContext;
 import com.dp.bigdata.taurus.zookeeper.common.execute.ExecutorManager;
 import org.apache.commons.logging.Log;
@@ -19,8 +20,6 @@ import java.lang.reflect.Proxy;
 public class ExecutorManagerFactory implements FactoryBean<ExecutorManager>, InvocationHandler {
 
     private static final Log logger = LogFactory.getLog(ExecutorManagerFactory.class);
-
-    public static final String MSCHEDULE = "mschedule";
 
     @Qualifier("netty")
     @Autowired
@@ -56,7 +55,7 @@ public class ExecutorManagerFactory implements FactoryBean<ExecutorManager>, Inv
         if(args.length == 1){
             ExecuteContext executeContext = (ExecuteContext) args[0];
             String type = executeContext.getType();
-            if(MSCHEDULE.equalsIgnoreCase(type)){
+            if(MscheduleExecutorManager.MSCHEDULE_TYPE.equalsIgnoreCase(type)){
                 return method.invoke(netty, args);
             }else {
                 return method.invoke(zookeeper, args);

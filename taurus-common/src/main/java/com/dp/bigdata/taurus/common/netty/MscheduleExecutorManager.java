@@ -19,9 +19,11 @@ import java.util.Set;
  * Author   mingdongli
  * 16/5/17  下午10:48.
  */
-public class NettyExecutorManager implements ExecutorManager{
+public class MscheduleExecutorManager implements ExecutorManager{
 
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    public static final String MSCHEDULE_TYPE = "mschedule";
 
     @Autowired
     private NettyRemotingClient nettyRemotingClient;
