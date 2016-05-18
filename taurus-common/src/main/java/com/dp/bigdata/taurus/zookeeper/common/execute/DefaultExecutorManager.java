@@ -1,11 +1,12 @@
 package com.dp.bigdata.taurus.zookeeper.common.execute;
 
+import com.dp.bigdata.taurus.common.netty.AbstractExecutorManager;
+import com.dp.bigdata.taurus.common.utils.IPUtils;
 import com.dp.bigdata.taurus.zookeeper.common.MachineType;
 import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.ScheduleConf;
 import com.dp.bigdata.taurus.zookeeper.common.infochannel.bean.ScheduleStatus;
 import com.dp.bigdata.taurus.zookeeper.common.infochannel.guice.ScheduleInfoChanelModule;
 import com.dp.bigdata.taurus.zookeeper.common.infochannel.interfaces.ScheduleInfoChannel;
-import com.dp.bigdata.taurus.common.utils.IPUtils;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.I0Itec.zkclient.IZkDataListener;
@@ -13,7 +14,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
@@ -26,7 +26,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author damon.zhu
  *
  */
-public class DefaultExecutorManager implements ExecutorManager{
+public class DefaultExecutorManager extends AbstractExecutorManager implements ExecutorManager{
 	
 	private static final Log LOGGER = LogFactory.getLog(DefaultExecutorManager.class);
 	private static final int DEFAULT_TIME_OUT_IN_SECONDS = 10;
@@ -181,6 +181,11 @@ public class DefaultExecutorManager implements ExecutorManager{
         return result;
     }
 
+    @Override
+    public boolean updateStatus(ExecuteContext context) throws ExecuteException {
+        throw new UnsupportedOperationException("not support");
+    }
+
 
     private static final class ScheduleStatusListener implements IZkDataListener{
 
@@ -229,18 +234,8 @@ public class DefaultExecutorManager implements ExecutorManager{
         }
 	}
 
-
-    /* (non-Javadoc)
-     * @see com.dp.bigdata.taurus.zookeeper.helper.execute.helper.ExecutorManager#registerNewHost()
-     */
     @Override
-    public List<String> registerNewHost() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public boolean cleanZkAttemptPath(String ip, String attemptId) {
+    public boolean cleanAttemptNode(String ip, String attemptId) {
         return dic.cleanupOnFinish(ip, attemptId);
     }
 

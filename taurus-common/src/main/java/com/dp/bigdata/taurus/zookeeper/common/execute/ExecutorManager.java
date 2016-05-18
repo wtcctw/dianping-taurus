@@ -1,7 +1,5 @@
 package com.dp.bigdata.taurus.zookeeper.common.execute;
 
-import java.util.List;
-
 /**
  * 
  * ExecutorManager
@@ -31,13 +29,9 @@ public interface ExecutorManager {
      * @throws ScheduleException
      */
     public ExecuteStatus getStatus(ExecuteContext context) throws ExecuteException;
-    
-    /**
-     * get all new agent hosts List<ip>
-     * @return List<Host>
-     */
-    public List<String> registerNewHost();
 
-    public boolean cleanZkAttemptPath(String ip, String attemptId);
+    public boolean updateStatus(ExecuteContext context) throws ExecuteException;
+
+    public boolean cleanAttemptNode(String ip, String attemptId);
 
 }

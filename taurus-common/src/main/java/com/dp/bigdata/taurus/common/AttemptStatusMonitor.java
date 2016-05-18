@@ -191,7 +191,7 @@ public class AttemptStatusMonitor extends AbstractLionPropertyInitializer<Boolea
 
         @Override
         public void run() {
-            boolean res = zookeeper.cleanZkAttemptPath(ip, attemptId);
+            boolean res = zookeeper.cleanAttemptNode(ip, attemptId);
             Cat.logEvent("ZkCleaner", attemptId + ":" + res);
         }
     }
