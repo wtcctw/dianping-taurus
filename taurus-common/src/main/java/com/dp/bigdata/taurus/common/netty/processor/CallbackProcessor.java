@@ -8,12 +8,14 @@ import io.netty.channel.ChannelHandlerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * 更新状态，结束一个调用过程
  * Author   mingdongli
  * 16/5/18  下午4:56.
  */
+@Component
 public class CallbackProcessor implements NettyRequestProcessor {
 
     private static final Logger logger = LoggerFactory.getLogger(CallbackProcessor.class);

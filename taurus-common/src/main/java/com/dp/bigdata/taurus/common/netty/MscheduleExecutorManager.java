@@ -11,6 +11,8 @@ import com.dp.bigdata.taurus.zookeeper.common.execute.ExecutorManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -19,6 +21,9 @@ import java.util.Set;
  * Author   mingdongli
  * 16/5/17  下午10:48.
  */
+
+@Component
+@Qualifier("netty")
 public class MscheduleExecutorManager implements ExecutorManager{
 
     protected Logger logger = LoggerFactory.getLogger(this.getClass());

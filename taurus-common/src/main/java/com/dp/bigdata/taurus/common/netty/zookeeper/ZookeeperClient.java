@@ -5,8 +5,8 @@ import org.apache.curator.framework.recipes.cache.TreeCache;
 import org.apache.curator.framework.recipes.cache.TreeCacheListener;
 import org.apache.curator.framework.state.ConnectionStateListener;
 import org.apache.zookeeper.KeeperException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
@@ -14,14 +14,11 @@ import java.io.IOException;
  * Author   mingdongli
  * 16/5/18  下午4:02.
  */
+@Component
 public final class ZookeeperClient {
 
-    private static Logger log = LoggerFactory.getLogger(ZookeeperClient.class);
-
+    @Autowired
     private  ZookeeperRegistryCenter zookeeperRegistryCenter;
-
-    public ZookeeperClient() {
-    }
 
     public void addConnectionStateListener(final ConnectionStateListener listener) {
         getClient().getConnectionStateListenable().addListener(listener);

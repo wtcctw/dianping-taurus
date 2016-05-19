@@ -8,29 +8,9 @@
 
     <context:property-placeholder ignore-unresolvable="true"
                                   location="classpath*:/netty.properties"/>
-    <bean id="netty"
-          class="com.dp.bigdata.taurus.common.netty.MscheduleExecutorManager" />
-    <bean id="proxy"
-          class="com.dp.bigdata.taurus.common.ExecutorManagerFactory" />
-    <bean id="nettyRemotingClient"
-          class="com.dp.bigdata.taurus.common.netty.NettyRemotingClient" init-method="start" destroy-method="shutdown"/>
-    <bean id="nettyRemotingServer"
-          class="com.dp.bigdata.taurus.common.netty.NettyRemotingServer" init-method="start" destroy-method="shutdown"/>
-    <bean id="zookeeperRegistryCenter"
-          class="com.dp.bigdata.taurus.common.netty.zookeeper.ZookeeperRegistryCenter" init-method="init" destroy-method="close"/>
-    <bean id="callbackProcessor"
-          class="com.dp.bigdata.taurus.common.netty.processor.CallbackProcessor" />
-    <bean id="zookeeperMananger"
-          class="com.dp.bigdata.taurus.common.netty.zookeeper.MscheduleZookeeperMananger" init-method="init"/>
-    <bean id="zookeeperConfiguration"
-          class="com.dp.bigdata.taurus.common.netty.config.ZookeeperConfiguration" init-method="init">
-        <property name="namespace" value="taurus"/>
-        <property name="maxRetries" value="3"/>
-        <property name="baseSleepTimeMilliseconds" value="1000"/>
-        <property name="connectionTimeoutMilliseconds" value="3000"/>
-        <property name="maxSleepTimeMilliseconds" value="3000"/>
-        <property name="sessionTimeoutMilliseconds" value="15000"/>
-    </bean>
+
+    <context:component-scan base-package="com.dp.bigdata.taurus.common.netty"/>
+
 </beans>
 
 

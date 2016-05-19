@@ -21,7 +21,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PreDestroy;
 import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
@@ -34,6 +36,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Author   mingdongli
  * 16/5/18  下午2:33.
  */
+@Component
 public class NettyRemotingServer implements RemotingServer, InitializingBean {
 
     private static final Logger logger = LoggerFactory.getLogger(NettyRemotingServer.class);
@@ -86,6 +89,8 @@ public class NettyRemotingServer implements RemotingServer, InitializingBean {
 
         ExecutorService scheduleService = Executors.newFixedThreadPool(cpus << 1);
         registerProcessor(CommandType.ScheduleReceiveResult, callbackProcessor, scheduleService);
+
+        start();
     }
 
     /**
@@ -139,7 +144,7 @@ public class NettyRemotingServer implements RemotingServer, InitializingBean {
                         new NettyEncoder(), //编码
                         new NettyDecoder(), //解码
                         new NettyServerHandler(), //业务处理
-                        new NettyConnetManageHandler()); //异常处理
+                        new NettyConnectManageHandler()); //异常处理
             }
         });
 
@@ -158,7 +163,7 @@ public class NettyRemotingServer implements RemotingServer, InitializingBean {
         }
     }
 
-    class NettyConnetManageHandler extends ChannelDuplexHandler {
+    class NettyConnectManageHandler extends ChannelDuplexHandler {
 
         @Override
         public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
@@ -203,6 +208,7 @@ public class NettyRemotingServer implements RemotingServer, InitializingBean {
     }
 
 
+    @PreDestroy
     public void shutdown() {
         logger.info("Shutdown netty remoting server....");
         try {

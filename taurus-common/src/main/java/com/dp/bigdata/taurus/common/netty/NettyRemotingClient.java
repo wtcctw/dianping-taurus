@@ -17,7 +17,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PreDestroy;
 import java.net.InetSocketAddress;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -28,6 +30,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Author   mingdongli
  * 16/5/18  上午10:14.
  */
+@Component
 public class NettyRemotingClient implements RemotingClient, InitializingBean {
 
     private static final Logger logger = LoggerFactory.getLogger(NettyRemotingClient.class);
@@ -56,6 +59,8 @@ public class NettyRemotingClient implements RemotingClient, InitializingBean {
                 return new Thread(r, String.format("NettyClientSelector_%d", this.threadIndex.incrementAndGet()));
             }
         });
+
+        start();
     }
 
     /**
@@ -144,12 +149,12 @@ public class NettyRemotingClient implements RemotingClient, InitializingBean {
                                 defaultEventExecutorGroup, //
                                 new NettyEncoder(), //
                                 new NettyDecoder(), //
-                                new NettyConnetManageHandler());
+                                new NettyConnectManageHandler());
                     }
                 });
     }
 
-    class NettyConnetManageHandler extends ChannelDuplexHandler {
+    class NettyConnectManageHandler extends ChannelDuplexHandler {
 
         @Override
         public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
@@ -161,6 +166,7 @@ public class NettyRemotingClient implements RemotingClient, InitializingBean {
         }
     }
 
+    @PreDestroy
     public void shutdown() {
         logger.info("Shutdown netty remoting client...");
         try {

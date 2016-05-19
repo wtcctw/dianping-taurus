@@ -7,7 +7,9 @@ import org.apache.curator.framework.state.ConnectionState;
 import org.apache.curator.framework.state.ConnectionStateListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -17,7 +19,8 @@ import java.util.concurrent.Executors;
  * Author   mingdongli
  * 16/5/18  下午3:47.
  */
-public class MscheduleZookeeperMananger implements ZookeeperMananger{
+@Component
+public class MscheduleZookeeperManager implements ZookeeperMananger, InitializingBean {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -34,17 +37,12 @@ public class MscheduleZookeeperMananger implements ZookeeperMananger{
     @Autowired
     private ZookeeperRegistryCenter zookeeperRegistryCenter;
 
-    public void init() {
+    @Override
+    public void afterPropertiesSet() throws Exception {
 
-        ScheduleNodeListenerManager scheduleNodeListenerManager = new ScheduleNodeListenerManager(zookeeperRegistryCenter);
-        scheduleNodeListenerManager.start();
-
-        TaskNodeListenerManager taskNodeListenerManager = new TaskNodeListenerManager(zookeeperRegistryCenter);
-        taskNodeListenerManager.start();
-
-        logger.info("MSchedule connect to ZK successfully.");
+        logger.info("Taurus connect to ZK successfully.");
         registry();
-        logger.info("MSchedule registry to ZK successfully.");
+        logger.info("Taurus registry to ZK successfully.");
 
         CuratorFramework curatorFramework = (CuratorFramework) zookeeperRegistryCenter.getRawClient();
         curatorFramework.getConnectionStateListenable().addListener(new ScheduleNodeStateListener(), executor);
@@ -82,14 +80,11 @@ public class MscheduleZookeeperMananger implements ZookeeperMananger{
         }
     }
 
-    class TaskNodeListenerManager extends AbstractListenerManager {
+    @Component
+    static class TaskNodeListenerManager extends AbstractListenerManager {
 
-        private final ZookeeperRegistryCenter zookeeperRegistryCenter;
-
-        public TaskNodeListenerManager(ZookeeperRegistryCenter coordinatorRegistryCenter) {
-            super(coordinatorRegistryCenter);
-            this.zookeeperRegistryCenter = coordinatorRegistryCenter;
-        }
+        @Autowired
+        private ZookeeperRegistryCenter zookeeperRegistryCenter;
 
         @Override
         public void start() {
@@ -130,14 +125,11 @@ public class MscheduleZookeeperMananger implements ZookeeperMananger{
         }
     }
 
-    class ScheduleNodeListenerManager extends AbstractListenerManager {
+    @Component
+    static class ScheduleNodeListenerManager extends AbstractListenerManager {
 
-        private final ZookeeperRegistryCenter zookeeperRegistryCenter;
-
-        public ScheduleNodeListenerManager(ZookeeperRegistryCenter coordinatorRegistryCenter) {
-            super(coordinatorRegistryCenter);
-            this.zookeeperRegistryCenter = coordinatorRegistryCenter;
-        }
+        @Autowired
+        private ZookeeperRegistryCenter zookeeperRegistryCenter;
 
         @Override
         public void start() {

@@ -21,7 +21,10 @@ import org.apache.zookeeper.data.ACL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.*;
@@ -30,12 +33,17 @@ import java.util.*;
  * Author   mingdongli
  * 16/5/18  下午3:38.
  */
+@Component
 public class ZookeeperRegistryCenter implements CoordinatorRegistryCenter {
+
     private static final Logger log = LoggerFactory.getLogger(ZookeeperRegistryCenter.class);
 
     private static final String EVENT_PATH = "/nodes/event";
+
     private static final String SCHEDULE_PATH = "/nodes/schedule";
+
     private static final String TASK_PATH = "/nodes/task";
+
     private static final String EMPTY = "";
 
     @Autowired
@@ -48,7 +56,7 @@ public class ZookeeperRegistryCenter implements CoordinatorRegistryCenter {
     public ZookeeperRegistryCenter() {
     }
 
-
+    @PostConstruct
     public void init() {
         log.debug("MSchedule : zookeeper registry center init, server lists is: {}.", zkConfig.getServerLists());
         CuratorFrameworkFactory.Builder builder = CuratorFrameworkFactory.builder().connectString(zkConfig.getServerLists()).retryPolicy(new ExponentialBackoffRetry(zkConfig.getBaseSleepTimeMilliseconds(), zkConfig.getMaxRetries(), zkConfig.getMaxSleepTimeMilliseconds())).namespace(zkConfig.getNamespace());
@@ -96,6 +104,7 @@ public class ZookeeperRegistryCenter implements CoordinatorRegistryCenter {
     }
 
     @Override
+    @PreDestroy
     public void close() {
         if (null != cache) {
             cache.close();

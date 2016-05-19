@@ -4,20 +4,23 @@ import org.apache.curator.framework.recipes.cache.TreeCacheListener;
 import org.apache.curator.framework.state.ConnectionStateListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Author   mingdongli
  * 16/5/18  下午4:01.
  */
-public abstract class AbstractListenerManager {
+public abstract class AbstractListenerManager implements InitializingBean{
 
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
+    @Autowired
     private ZookeeperClient zookeeperClient;
 
-    protected AbstractListenerManager(final ZookeeperRegistryCenter coordinatorRegistryCenter) {
-        zookeeperClient = new ZookeeperClient();
-        zookeeperClient.setZookeeperRegistryCenter(coordinatorRegistryCenter);
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        start();
     }
 
     public abstract void start();
@@ -29,4 +32,5 @@ public abstract class AbstractListenerManager {
     protected void addConnectionStateListener(final ConnectionStateListener listener) {
         zookeeperClient.addConnectionStateListener(listener);
     }
+
 }
