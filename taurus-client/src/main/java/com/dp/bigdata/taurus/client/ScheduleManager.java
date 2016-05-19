@@ -46,7 +46,7 @@ public class ScheduleManager {
 
     private int detectInterval = 60;
 
-    private String namespace = "mschedule";
+    private String namespace = "taurus";
 
     private int taskCallBackPort = 8383;
 
