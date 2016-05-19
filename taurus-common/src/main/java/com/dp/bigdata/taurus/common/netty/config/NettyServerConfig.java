@@ -1,10 +1,12 @@
 package com.dp.bigdata.taurus.common.netty.config;
 
+import org.springframework.stereotype.Component;
+
 /**
  * Author   mingdongli
  * 16/5/18  下午2:35.
  */
-
+@Component
 public class NettyServerConfig {
 
     //监听端口

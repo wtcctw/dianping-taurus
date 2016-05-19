@@ -1,6 +1,8 @@
 package com.dp.bigdata.taurus.common.netty.protocol;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -9,26 +11,49 @@ import java.util.Set;
  */
 public class ScheduleTask extends Command{
 
-    private String taskId;
+    private String jobUniqueCode;   //taskId
 
-    private String attemptId;
+    private String traceId;         // attemptId
+
+    private int subTask;
+
+    private List<String> taskItems = new ArrayList<String>();
 
     private Set<String> callbackAddress = new HashSet<String>();
 
-    public String getTaskId() {
-        return taskId;
+    public ScheduleTask() {
     }
 
-    public void setTaskId(String taskId) {
-        this.taskId = taskId;
+    public String getTraceId() {
+        return traceId;
     }
 
-    public String getAttemptId() {
-        return attemptId;
+    public void setTraceId(String traceId) {
+        this.traceId = traceId;
     }
 
-    public void setAttemptId(String attemptId) {
-        this.attemptId = attemptId;
+    public String getJobUniqueCode() {
+        return jobUniqueCode;
+    }
+
+    public void setJobUniqueCode(String jobUniqueCode) {
+        this.jobUniqueCode = jobUniqueCode;
+    }
+
+    public int getSubTask() {
+        return subTask;
+    }
+
+    public void setSubTask(int subTask) {
+        this.subTask = subTask;
+    }
+
+    public List<String> getTaskItems() {
+        return taskItems;
+    }
+
+    public void setTaskItems(List<String> taskItems) {
+        this.taskItems = taskItems;
     }
 
     public Set<String> getCallbackAddress() {
@@ -42,8 +67,10 @@ public class ScheduleTask extends Command{
     @Override
     public String toString() {
         return "ScheduleTask{" +
-                "taskId='" + taskId + '\'' +
-                ", attemptId='" + attemptId + '\'' +
+                "jobUniqueCode='" + jobUniqueCode + '\'' +
+                ", traceId='" + traceId + '\'' +
+                ", subTask=" + subTask +
+                ", taskItems=" + taskItems +
                 ", callbackAddress=" + callbackAddress +
                 '}';
     }

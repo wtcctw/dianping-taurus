@@ -1,9 +1,12 @@
 package com.dp.bigdata.taurus.common.netty.config;
 
+import org.springframework.stereotype.Component;
+
 /**
  * Author   mingdongli
  * 16/5/18  上午10:20.
  */
+@Component
 public class NettyClientConfig {
 
     private int SocketSndbufSize = 65535;

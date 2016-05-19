@@ -86,6 +86,14 @@ public class MscheduleZookeeperManager implements ZookeeperMananger, Initializin
         @Autowired
         private ZookeeperRegistryCenter zookeeperRegistryCenter;
 
+        public TaskNodeListenerManager(){
+        }
+
+        public TaskNodeListenerManager(ZookeeperRegistryCenter coordinatorRegistryCenter) {
+            super(coordinatorRegistryCenter);
+            this.zookeeperRegistryCenter = coordinatorRegistryCenter;
+        }
+
         @Override
         public void start() {
             logger.info("TaskNodeListenerManager started.");
@@ -130,6 +138,9 @@ public class MscheduleZookeeperManager implements ZookeeperMananger, Initializin
 
         @Autowired
         private ZookeeperRegistryCenter zookeeperRegistryCenter;
+
+        public ScheduleNodeListenerManager() {
+        }
 
         @Override
         public void start() {

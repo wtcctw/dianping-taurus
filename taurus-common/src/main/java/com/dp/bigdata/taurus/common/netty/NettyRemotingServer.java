@@ -18,11 +18,11 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.net.InetSocketAddress;
 import java.util.HashMap;
@@ -37,17 +37,17 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 16/5/18  下午2:33.
  */
 @Component
-public class NettyRemotingServer implements RemotingServer, InitializingBean {
+public class NettyRemotingServer implements RemotingServer {
 
     private static final Logger logger = LoggerFactory.getLogger(NettyRemotingServer.class);
-
-    private NettyServerConfig nettyServerConfig = new NettyServerConfig();
 
     @Value("${task.callback.port}")
     public int callbackPort;
 
     @Autowired
     private CallbackProcessor callbackProcessor;
+
+    private NettyServerConfig nettyServerConfig;
 
     private ServerBootstrap serverBootstrap;
 
@@ -63,11 +63,12 @@ public class NettyRemotingServer implements RemotingServer, InitializingBean {
 
     protected final HashMap<CommandType/* request code */, Pair<NettyRequestProcessor, ExecutorService>> processorTable = new HashMap<CommandType, Pair<NettyRequestProcessor, ExecutorService>>(64);
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
+    @Autowired
+    public NettyRemotingServer(final NettyServerConfig nettyServerConfig) {
 
-        nettyServerConfig.setListenPort(callbackPort);
+        this.nettyServerConfig = nettyServerConfig;
         this.serverBootstrap = new ServerBootstrap();
+
         this.eventLoopGroupBoss = new NioEventLoopGroup(1, new ThreadFactory() {
             private AtomicInteger threadIndex = new AtomicInteger(0);
 
@@ -89,8 +90,6 @@ public class NettyRemotingServer implements RemotingServer, InitializingBean {
 
         ExecutorService scheduleService = Executors.newFixedThreadPool(cpus << 1);
         registerProcessor(CommandType.ScheduleReceiveResult, callbackProcessor, scheduleService);
-
-        start();
     }
 
     /**
@@ -111,7 +110,9 @@ public class NettyRemotingServer implements RemotingServer, InitializingBean {
 
     }
 
+    @PostConstruct
     public void start() {
+        this.nettyServerConfig.setListenPort(callbackPort);
         this.defaultEventExecutorGroup = new DefaultEventExecutorGroup(//
                 nettyServerConfig.getServerWorkerThreads(), //
                 new ThreadFactory() {
@@ -137,7 +138,7 @@ public class NettyRemotingServer implements RemotingServer, InitializingBean {
                         //
                 .childOption(ChannelOption.SO_RCVBUF, nettyServerConfig.getSocketSndbufSize())
 
-                .localAddress(new InetSocketAddress(this.nettyServerConfig.getListenPort())).childHandler(new ChannelInitializer<SocketChannel>() {
+                .localAddress(new InetSocketAddress(callbackPort)).childHandler(new ChannelInitializer<SocketChannel>() {
             @Override
             public void initChannel(SocketChannel ch) throws Exception {
                 ch.pipeline().addLast(defaultEventExecutorGroup, //

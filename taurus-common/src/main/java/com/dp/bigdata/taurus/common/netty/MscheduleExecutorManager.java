@@ -62,7 +62,8 @@ public class MscheduleExecutorManager implements ExecutorManager{
     private ScheduleTask buildScheduleTask(ExecuteContext executeContext) {
 
         ScheduleTask scheduleTask = new ScheduleTask();
-        scheduleTask.setTaskId(executeContext.getTaskID());
+        scheduleTask.setJobUniqueCode(executeContext.getTaskID());
+        scheduleTask.setTraceId(executeContext.getAttemptID());
         String schedAddress = IPUtils.getFirstNoLoopbackIP4Address();
         Set<String> callbackAddress = new HashSet<String>();
         callbackAddress.add(schedAddress);

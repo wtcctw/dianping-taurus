@@ -15,10 +15,11 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.net.InetSocketAddress;
 import java.util.concurrent.ConcurrentHashMap;
@@ -31,14 +32,14 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 16/5/18  上午10:14.
  */
 @Component
-public class NettyRemotingClient implements RemotingClient, InitializingBean {
+public class NettyRemotingClient implements RemotingClient {
 
     private static final Logger logger = LoggerFactory.getLogger(NettyRemotingClient.class);
 
     @Value("${task.executor.port}")
     public int sendPort;
 
-    private NettyClientConfig nettyClientConfig = new NettyClientConfig();
+    private NettyClientConfig nettyClientConfig;
 
     private final Bootstrap bootstrap = new Bootstrap();
 
@@ -48,10 +49,9 @@ public class NettyRemotingClient implements RemotingClient, InitializingBean {
 
     private final ConcurrentMap<String, Channel> channels = new ConcurrentHashMap<String, Channel>();
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
-
-        nettyClientConfig.setConnectPort(sendPort);
+    @Autowired
+    public NettyRemotingClient(NettyClientConfig nettyClientConfig) {
+        this.nettyClientConfig = nettyClientConfig;
         eventLoopGroupWorker = new NioEventLoopGroup(1, new ThreadFactory() {
             private AtomicInteger threadIndex = new AtomicInteger(0);
 
@@ -59,8 +59,6 @@ public class NettyRemotingClient implements RemotingClient, InitializingBean {
                 return new Thread(r, String.format("NettyClientSelector_%d", this.threadIndex.incrementAndGet()));
             }
         });
-
-        start();
     }
 
     /**
@@ -122,7 +120,9 @@ public class NettyRemotingClient implements RemotingClient, InitializingBean {
         }
     }
 
+    @PostConstruct
     public void start() {
+        this.nettyClientConfig.setConnectPort(sendPort);
         this.defaultEventExecutorGroup = new DefaultEventExecutorGroup(//
                 nettyClientConfig.getClientWorkerThreads(), //
                 new ThreadFactory() {
@@ -199,7 +199,7 @@ public class NettyRemotingClient implements RemotingClient, InitializingBean {
 
 
     public Channel getChannel(String address) {
-        return getChannel(address, nettyClientConfig.getConnectPort());
+        return getChannel(address, sendPort);
     }
 
     //TODO 需要枷锁吗？

@@ -144,5 +144,6 @@ org.eclipse.jdt.core.compiler.compliance=1.6
 		<module>taurus-web</module>
 		<module>taurus-agent</module>
 		<module>taurus-scheduler</module>
+		<module>taurus-client</module>
 	</modules>
 </project>

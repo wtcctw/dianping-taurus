@@ -18,6 +18,14 @@ public abstract class AbstractListenerManager implements InitializingBean{
     @Autowired
     private ZookeeperClient zookeeperClient;
 
+    public AbstractListenerManager() {
+    }
+
+    public AbstractListenerManager(ZookeeperRegistryCenter zookeeperRegistryCenter) {
+        zookeeperClient = new ZookeeperClient();
+        zookeeperClient.setZookeeperRegistryCenter(zookeeperRegistryCenter);
+    }
+
     @Override
     public void afterPropertiesSet() throws Exception {
         start();
