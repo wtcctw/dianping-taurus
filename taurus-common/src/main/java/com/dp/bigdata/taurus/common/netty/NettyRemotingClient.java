@@ -37,7 +37,7 @@ public class NettyRemotingClient implements RemotingClient {
     private static final Logger logger = LoggerFactory.getLogger(NettyRemotingClient.class);
 
     @Value("${task.executor.port}")
-    public int sendPort;
+    public int sendPort = -1;
 
     private NettyClientConfig nettyClientConfig;
 
@@ -62,7 +62,6 @@ public class NettyRemotingClient implements RemotingClient {
     }
 
     /**
-     *
      * @param address
      * @param port
      * @param command
@@ -70,7 +69,7 @@ public class NettyRemotingClient implements RemotingClient {
      * @throws RemotingSendRequestException
      */
     public boolean send(String address, int port, final Command command) throws
-            RemotingSendRequestException{
+            RemotingSendRequestException {
         Channel channel = getChannel(address, port);
         if (channel == null) {
             logger.error("Please check  specified target address. If the address is ok, check " +
@@ -84,7 +83,7 @@ public class NettyRemotingClient implements RemotingClient {
                 return true;
             } else {
                 logger.info("Command : {} Send failed.", command);
-                logger.info("Failed caused by :",future.cause());
+                logger.info("Failed caused by :", future.cause());
                 return false;
             }
         } catch (Exception e) {
@@ -110,7 +109,7 @@ public class NettyRemotingClient implements RemotingClient {
                 return true;
             } else {
                 logger.info("Command : {} Send failed.", command);
-                logger.info("Failed caused by :",future.cause());
+                logger.info("Failed caused by :", future.cause());
                 return false;
             }
         } catch (Exception e) {
@@ -122,7 +121,9 @@ public class NettyRemotingClient implements RemotingClient {
 
     @PostConstruct
     public void start() {
-        this.nettyClientConfig.setConnectPort(sendPort);
+        if (sendPort > 0) {
+            this.nettyClientConfig.setConnectPort(sendPort);
+        }
         this.defaultEventExecutorGroup = new DefaultEventExecutorGroup(//
                 nettyClientConfig.getClientWorkerThreads(), //
                 new ThreadFactory() {
@@ -186,8 +187,8 @@ public class NettyRemotingClient implements RemotingClient {
 
     }
 
-    public Channel getChannel(String address, int port){
-        if (address == null){
+    public Channel getChannel(String address, int port) {
+        if (address == null) {
             return null;
         }
         Channel id = channels.get(address + ":" + port);
@@ -199,7 +200,7 @@ public class NettyRemotingClient implements RemotingClient {
 
 
     public Channel getChannel(String address) {
-        return getChannel(address, sendPort);
+        return getChannel(address, this.nettyClientConfig.getConnectPort());
     }
 
     //TODO 需要枷锁吗？
@@ -211,11 +212,11 @@ public class NettyRemotingClient implements RemotingClient {
             logger.info("Connect to TargetServer encounter error.", e);
             return null;
         }
-        if(future.isSuccess()){
+        if (future.isSuccess()) {
             Channel channel = future.channel();
             channels.put(address + ":" + port, channel);
             return channel;
-        }else{
+        } else {
             logger.error("Connect to TargetServer failed.", future.cause());
             return null;
         }

@@ -42,7 +42,7 @@ public class NettyRemotingServer implements RemotingServer {
     private static final Logger logger = LoggerFactory.getLogger(NettyRemotingServer.class);
 
     @Value("${task.callback.port}")
-    public int callbackPort;
+    public int callbackPort = -1;
 
     @Autowired
     private CallbackProcessor callbackProcessor;
@@ -112,7 +112,9 @@ public class NettyRemotingServer implements RemotingServer {
 
     @PostConstruct
     public void start() {
-        this.nettyServerConfig.setListenPort(callbackPort);
+        if (callbackPort > 0) {
+            this.nettyServerConfig.setListenPort(callbackPort);
+        }
         this.defaultEventExecutorGroup = new DefaultEventExecutorGroup(//
                 nettyServerConfig.getServerWorkerThreads(), //
                 new ThreadFactory() {
@@ -138,7 +140,7 @@ public class NettyRemotingServer implements RemotingServer {
                         //
                 .childOption(ChannelOption.SO_RCVBUF, nettyServerConfig.getSocketSndbufSize())
 
-                .localAddress(new InetSocketAddress(callbackPort)).childHandler(new ChannelInitializer<SocketChannel>() {
+                .localAddress(new InetSocketAddress(this.nettyServerConfig.getListenPort())).childHandler(new ChannelInitializer<SocketChannel>() {
             @Override
             public void initChannel(SocketChannel ch) throws Exception {
                 ch.pipeline().addLast(defaultEventExecutorGroup, //
