@@ -3,7 +3,6 @@ package com.dp.bigdata.taurus.common.netty;
 import com.dp.bigdata.taurus.common.netty.codec.NettyDecoder;
 import com.dp.bigdata.taurus.common.netty.codec.NettyEncoder;
 import com.dp.bigdata.taurus.common.netty.config.NettyServerConfig;
-import com.dp.bigdata.taurus.common.netty.processor.CallbackProcessor;
 import com.dp.bigdata.taurus.common.netty.processor.NettyRequestProcessor;
 import com.dp.bigdata.taurus.common.netty.protocol.Command;
 import com.dp.bigdata.taurus.common.netty.protocol.CommandType;
@@ -44,9 +43,6 @@ public class NettyRemotingServer implements RemotingServer {
     @Value("${task.callback.port}")
     public int callbackPort = -1;
 
-    @Autowired
-    private CallbackProcessor callbackProcessor;
-
     private NettyServerConfig nettyServerConfig;
 
     private ServerBootstrap serverBootstrap;
@@ -57,9 +53,7 @@ public class NettyRemotingServer implements RemotingServer {
 
     private DefaultEventExecutorGroup defaultEventExecutorGroup;
 
-    private int cpus = Runtime.getRuntime().availableProcessors();
-
-    private ExecutorService defaultService = Executors.newFixedThreadPool(cpus);
+    private ExecutorService defaultService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
     protected final HashMap<CommandType/* request code */, Pair<NettyRequestProcessor, ExecutorService>> processorTable = new HashMap<CommandType, Pair<NettyRequestProcessor, ExecutorService>>(64);
 
@@ -88,8 +82,6 @@ public class NettyRemotingServer implements RemotingServer {
             }
         });
 
-        ExecutorService scheduleService = Executors.newFixedThreadPool(cpus << 1);
-        registerProcessor(CommandType.ScheduleReceiveResult, callbackProcessor, scheduleService);
     }
 
     /**

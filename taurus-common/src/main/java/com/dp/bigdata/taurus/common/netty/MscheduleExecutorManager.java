@@ -1,6 +1,8 @@
 package com.dp.bigdata.taurus.common.netty;
 
 import com.dp.bigdata.taurus.common.netty.exception.RemotingSendRequestException;
+import com.dp.bigdata.taurus.common.netty.processor.CallbackProcessor;
+import com.dp.bigdata.taurus.common.netty.protocol.CommandType;
 import com.dp.bigdata.taurus.common.netty.protocol.ScheduleTask;
 import com.dp.bigdata.taurus.common.utils.IPUtils;
 import com.dp.bigdata.taurus.common.utils.SleepUtils;
@@ -14,8 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * Author   mingdongli
@@ -32,6 +37,18 @@ public class MscheduleExecutorManager implements ExecutorManager{
 
     @Autowired
     private NettyRemotingClient nettyRemotingClient;
+
+    @Autowired
+    private NettyRemotingServer nettyRemotingServer;
+
+    @Autowired
+    private CallbackProcessor callbackProcessor;
+
+    @PostConstruct
+    public void registerProcessor(){
+        ExecutorService scheduleService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() << 1);
+        nettyRemotingServer.registerProcessor(CommandType.ScheduleReceiveResult, callbackProcessor, scheduleService);
+    }
 
     @Override
     public void execute(ExecuteContext context) throws ExecuteException {
