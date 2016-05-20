@@ -70,7 +70,8 @@ public class NettyRemotingClient extends AbstractRemotingService implements Remo
             } else {
                 logger.info("Command : {} Send failed.", command);
                 logger.info("Failed caused by :", future.cause());
-                return false;
+                throw new RemotingSendRequestException("Send command: + " + command + ",to " +
+                        "address:" + address + "failed.");
             }
         } catch (Exception e) {
             logger.error("Send command {} to address {} encounter error.", command, address);
