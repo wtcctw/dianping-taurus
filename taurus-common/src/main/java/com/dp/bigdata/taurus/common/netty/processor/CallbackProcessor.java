@@ -1,5 +1,6 @@
 package com.dp.bigdata.taurus.common.netty.processor;
 
+import com.dianping.cat.Cat;
 import com.dp.bigdata.taurus.common.Scheduler;
 import com.dp.bigdata.taurus.common.netty.protocol.CallBackTask;
 import com.dp.bigdata.taurus.common.netty.protocol.Command;
@@ -30,7 +31,12 @@ public class CallbackProcessor implements NettyRequestProcessor {
     public void processRequest(ChannelHandlerContext ctx, Command request) throws Exception {
         CallBackTask callBackTask = (CallBackTask) request;
         logger.info("Schedule node received callback : {}.", callBackTask);
-        callBack(callBackTask);
+        try {
+            callBack(callBackTask);
+        }catch (Exception e){
+            logger.error("update staus error", e);
+            Cat.logError("CallbackProcessor", e);
+        }
         logger.info("Schedule node handle callback {} successfully.", callBackTask);
     }
 
@@ -39,7 +45,7 @@ public class CallbackProcessor implements NettyRequestProcessor {
      *
      * @param callBackTask
      */
-    public void callBack(CallBackTask callBackTask)throws Exception{
+    public void callBack(CallBackTask callBackTask) throws Exception {
 
 
         String attemptId = callBackTask.getTraceId();
@@ -48,7 +54,7 @@ public class CallbackProcessor implements NettyRequestProcessor {
             scheduler.attemptSucceed(attemptId);
         } else if (RunState.FAIL.value == callBackTask.getRunState()) {
             scheduler.attemptFailed(attemptId);
-        } else if(RunState.UNKNOWN.value == callBackTask.getRunState()){
+        } else if (RunState.UNKNOWN.value == callBackTask.getRunState()) {
             scheduler.attemptUnKnown(attemptId);
         }
     }
