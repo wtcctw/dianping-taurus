@@ -564,7 +564,13 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
     @Override
     public void attemptSucceed(String attemptID) {
         AttemptContext context = runningAttempts.get(AttemptID.getTaskID(attemptID)).get(attemptID);
-        TaskAttempt attempt = context.getAttempt();
+        TaskAttempt attempt;
+        if(context == null){
+            attempt = taskAttemptMapper.selectByPrimaryKey(attemptID);
+            Cat.logEvent("NullAttempt", attemptID);
+        }else {
+            attempt = context.getAttempt();
+        }
         attempt.setReturnvalue(0);
         attempt.setEndtime(new Date());
         attempt.setStatus(AttemptStatus.SUCCEEDED);
