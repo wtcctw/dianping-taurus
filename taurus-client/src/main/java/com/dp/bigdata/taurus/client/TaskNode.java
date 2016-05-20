@@ -40,7 +40,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * Time: 下午3:19
  * MailTo: hongbin03@meituan.com
  */
-public class TaskNode {
+public class TaskNode extends AbstractLionPropertyInitializer<Boolean>{
     private static final Logger logger = LoggerFactory.getLogger(TaskNode.class);
     private static final String SELF_SCHEDULE_SWITCH = "taurus.client.selfschedule";
     private static final Set<String> groups = ScheduleManager.getGroup2Jobs().keySet();
@@ -82,7 +82,7 @@ public class TaskNode {
     }
 
 
-    class OnLeader extends AbstractLionPropertyInitializer<Boolean> implements LeaderExecutionCallback {
+    class OnLeader implements LeaderExecutionCallback {
 
         @Override
         public void execute() {
@@ -96,20 +96,21 @@ public class TaskNode {
             }
         }
 
-        @Override
-        protected String getKey() {
-            return SELF_SCHEDULE_SWITCH;
-        }
+    }
 
-        @Override
-        protected Boolean getDefaultValue() {
-            return false;
-        }
+    @Override
+    protected String getKey() {
+        return SELF_SCHEDULE_SWITCH;
+    }
 
-        @Override
-        protected Converter<Boolean> getConvert() {
-            return new BooleanConverter();
-        }
+    @Override
+    protected Boolean getDefaultValue() {
+        return false;
+    }
+
+    @Override
+    protected Converter<Boolean> getConvert() {
+        return new BooleanConverter();
     }
 
     private boolean isAllScheduleCrashed() {
@@ -214,7 +215,7 @@ public class TaskNode {
         @Override
         public void doSomething() throws InterruptedException {
             logger.info("All schedule nodes crashed with session timeout : {}.", sessionTimeout);
-            if (isLeader()) {
+            if (lionValue && isLeader()) {
                 logger.info("Fair Schedule service start.....");
                 QuartzScheduler quartzScheduler = new QuartzScheduler(TaskNode.this, new DefaultSelector());
                 quartzScheduler.init();
