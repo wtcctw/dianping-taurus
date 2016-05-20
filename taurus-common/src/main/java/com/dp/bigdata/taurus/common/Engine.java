@@ -476,7 +476,7 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
                         throw new ScheduleException("Fail to execute attemptID : " + attempt.getAttemptid() + " due to no host");
                     }
                     ipCollection = CollectionUtils.intersection(Arrays.asList(ipAndPort), tmpCollection);
-                }else {
+                } else {
                     ipCollection = Arrays.asList(ip.split(","));
                 }
             }
@@ -565,19 +565,22 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
     public void attemptSucceed(String attemptID) {
         AttemptContext context = runningAttempts.get(AttemptID.getTaskID(attemptID)).get(attemptID);
         TaskAttempt attempt;
-        if(context == null){
+
+        if (context != null) {
+            attempt = context.getAttempt();
+        } else { //netty通信方式在重启时会丢失未确认的attempt
             attempt = taskAttemptMapper.selectByPrimaryKey(attemptID);
             Cat.logEvent("NullAttempt", attemptID);
-        }else {
-            attempt = context.getAttempt();
         }
         attempt.setReturnvalue(0);
         attempt.setEndtime(new Date());
         attempt.setStatus(AttemptStatus.SUCCEEDED);
         taskAttemptMapper.updateByPrimaryKeySelective(attempt);
-        unregistAttemptContext(context);
+        if (context != null) {
+            unregistAttemptContext(context);
+            Cat.logEvent("Attempt-Succeeded", context.getName(), Message.SUCCESS, context.getAttemptid());
+        }
 
-        Cat.logEvent("Attempt-Succeeded", context.getName(), Message.SUCCESS, context.getAttemptid());
     }
 
     @Override
@@ -594,19 +597,33 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
     @Override
     public void attemptFailed(String attemptID) {
         AttemptContext context = runningAttempts.get(AttemptID.getTaskID(attemptID)).get(attemptID);
-        TaskAttempt attempt = context.getAttempt();
+        TaskAttempt attempt;
+
+        if (context != null) {
+            attempt = context.getAttempt();
+        } else { //netty通信方式在重启时会丢失未确认的attempt
+            attempt = taskAttemptMapper.selectByPrimaryKey(attemptID);
+            Cat.logEvent("NullAttempt", attemptID);
+        }
         attempt.setStatus(AttemptStatus.FAILED);
         attempt.setEndtime(new Date());
         taskAttemptMapper.updateByPrimaryKeySelective(attempt);
-        unregistAttemptContext(context);
 
-        Cat.logEvent("Attempt-Failed", context.getName(), Message.SUCCESS, context.getAttemptid());
+        Task task;
+
+        if (context != null) {
+            unregistAttemptContext(context);
+            Cat.logEvent("Attempt-Failed", context.getName(), Message.SUCCESS, context.getAttemptid());
+            task = context.getTask();
+        } else {
+            String taskId = attempt.getTaskid();
+            task = taskMapper.selectByPrimaryKey(taskId);
+        }
 
 		/*
          * Check whether it is necessary to retry this failed attempt. If true, insert new attempt into the database; Otherwise, do
 		 * nothing.
 		 */
-        Task task = context.getTask();
         if (task.getIsautoretry()) {
             TaskAttemptExample example = new TaskAttemptExample();
             example.or().andInstanceidEqualTo(attempt.getInstanceid());
@@ -635,14 +652,24 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
 
     public void attemptUnKnown(String attemptID) {
         AttemptContext context = runningAttempts.get(AttemptID.getTaskID(attemptID)).get(attemptID);
-        TaskAttempt attempt = context.getAttempt();
+        TaskAttempt attempt;
+
+        if (context != null) {
+            attempt = context.getAttempt();
+        } else { //netty通信方式在重启时会丢失未确认的attempt
+            attempt = taskAttemptMapper.selectByPrimaryKey(attemptID);
+            Cat.logEvent("NullAttempt", attemptID);
+        }
         attempt.setEndtime(new Date());
         attempt.setStatus(AttemptStatus.UNKNOWN);
         attempt.setReturnvalue(-1);
         taskAttemptMapper.updateByPrimaryKeySelective(attempt);
-        unregistAttemptContext(context);
 
-        Cat.logEvent("Attempt-Unknown", context.getName(), Message.SUCCESS, context.getAttemptid());
+        if (context != null) {
+            unregistAttemptContext(context);
+            Cat.logEvent("Attempt-Unknown", context.getName(), Message.SUCCESS, context.getAttemptid());
+        }
+
     }
 
     @Override
