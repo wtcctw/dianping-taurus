@@ -2,7 +2,7 @@ package com.dp.bigdata.taurus.common;
 
 import com.dp.bigdata.taurus.generated.module.Task;
 import com.dp.bigdata.taurus.generated.module.TaskAttempt;
-import com.dp.bigdata.taurus.zookeeper.common.execute.ExecuteContext;
+import com.dp.bigdata.taurus.common.execute.ExecuteContext;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.Date;

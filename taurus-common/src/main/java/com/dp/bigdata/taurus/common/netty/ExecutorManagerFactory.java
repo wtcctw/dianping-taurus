@@ -1,7 +1,7 @@
 package com.dp.bigdata.taurus.common.netty;
 
-import com.dp.bigdata.taurus.zookeeper.common.execute.ExecuteContext;
-import com.dp.bigdata.taurus.zookeeper.common.execute.ExecutorManager;
+import com.dp.bigdata.taurus.common.execute.ExecuteContext;
+import com.dp.bigdata.taurus.common.execute.ExecutorManager;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.FactoryBean;

@@ -1,4 +1,4 @@
-package com.dp.bigdata.taurus.zookeeper.common.execute;
+package com.dp.bigdata.taurus.common.execute;
 
 import com.dp.bigdata.taurus.common.utils.IPUtils;
 import com.dp.bigdata.taurus.zookeeper.common.MachineType;
@@ -25,7 +25,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author damon.zhu
  *
  */
-public class DefaultExecutorManager implements ExecutorManager{
+public class DefaultExecutorManager extends ExecutorManagerSupport implements ExecutorManager{
 	
 	private static final Log LOGGER = LogFactory.getLog(DefaultExecutorManager.class);
 	private static final int DEFAULT_TIME_OUT_IN_SECONDS = 10;
@@ -179,12 +179,6 @@ public class DefaultExecutorManager implements ExecutorManager{
         result.setReturnCode(status.getReturnCode());
         return result;
     }
-
-    @Override
-    public boolean updateStatus(ExecuteContext context) throws ExecuteException {
-        throw new UnsupportedOperationException("not support");
-    }
-
 
     private static final class ScheduleStatusListener implements IZkDataListener{
 

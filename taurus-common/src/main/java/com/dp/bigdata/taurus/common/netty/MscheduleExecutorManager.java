@@ -1,15 +1,12 @@
 package com.dp.bigdata.taurus.common.netty;
 
+import com.dp.bigdata.taurus.common.execute.*;
 import com.dp.bigdata.taurus.common.netty.exception.RemotingSendRequestException;
 import com.dp.bigdata.taurus.common.netty.processor.CallbackProcessor;
 import com.dp.bigdata.taurus.common.netty.protocol.CommandType;
 import com.dp.bigdata.taurus.common.netty.protocol.ScheduleTask;
 import com.dp.bigdata.taurus.common.utils.IPUtils;
 import com.dp.bigdata.taurus.common.utils.SleepUtils;
-import com.dp.bigdata.taurus.zookeeper.common.execute.ExecuteContext;
-import com.dp.bigdata.taurus.zookeeper.common.execute.ExecuteException;
-import com.dp.bigdata.taurus.zookeeper.common.execute.ExecuteStatus;
-import com.dp.bigdata.taurus.zookeeper.common.execute.ExecutorManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +26,7 @@ import java.util.concurrent.Executors;
 
 @Component
 @Qualifier("netty")
-public class MscheduleExecutorManager implements ExecutorManager{
+public class MscheduleExecutorManager extends ExecutorManagerSupport implements ExecutorManager{
 
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -54,26 +51,6 @@ public class MscheduleExecutorManager implements ExecutorManager{
     public void execute(ExecuteContext context) throws ExecuteException {
 
         executeAttempt(context);
-    }
-
-    @Override
-    public void kill(ExecuteContext context) throws ExecuteException {
-
-    }
-
-    @Override
-    public ExecuteStatus getStatus(ExecuteContext context) throws ExecuteException {
-        return null;
-    }
-
-    @Override
-    public boolean updateStatus(ExecuteContext context) throws ExecuteException {
-        return true;
-    }
-
-    @Override
-    public boolean cleanAttemptNode(String ip, String attemptId) {
-        return false;
     }
 
     private ScheduleTask buildScheduleTask(ExecuteContext executeContext) {

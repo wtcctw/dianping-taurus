@@ -18,7 +18,7 @@ import com.dp.bigdata.taurus.common.lion.ConfigHolder;
 import com.dp.bigdata.taurus.common.lion.LionKeys;
 import com.dp.bigdata.taurus.common.utils.EnvUtils;
 import com.dp.bigdata.taurus.common.utils.SleepUtils;
-import com.dp.bigdata.taurus.zookeeper.common.execute.ExecuteStatus;
+import com.dp.bigdata.taurus.common.execute.ExecuteStatus;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;

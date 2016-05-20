@@ -1,4 +1,4 @@
-package com.dp.bigdata.taurus.zookeeper.common.execute;
+package com.dp.bigdata.taurus.common.execute;
 
 /**
  * 
@@ -29,8 +29,6 @@ public interface ExecutorManager {
      * @throws ExecuteException
      */
     public ExecuteStatus getStatus(ExecuteContext context) throws ExecuteException;
-
-    public boolean updateStatus(ExecuteContext context) throws ExecuteException;
 
     public boolean cleanAttemptNode(String ip, String attemptId);
 

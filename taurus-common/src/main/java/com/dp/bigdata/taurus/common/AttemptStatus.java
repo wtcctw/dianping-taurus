@@ -1,6 +1,6 @@
 package com.dp.bigdata.taurus.common;
 
-import com.dp.bigdata.taurus.zookeeper.common.execute.ExecuteStatus;
+import com.dp.bigdata.taurus.common.execute.ExecuteStatus;
 
 /**
  * @author damon.zhu

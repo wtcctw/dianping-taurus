@@ -91,7 +91,7 @@
 	<bean id="assignPolicy" class="com.dp.bigdata.taurus.common.RoundRobinTaskAssignPolicy"
 		init-method="init" />
 	<bean id="zookeeper"
-		class="com.dp.bigdata.taurus.zookeeper.common.execute.DefaultExecutorManager" />
+		class="com.dp.bigdata.taurus.common.execute.DefaultExecutorManager" />
 	<bean id="lionDynamicConfig"
 		class="com.dp.bigdata.taurus.common.lion.LionDynamicConfig" />
 	<bean id="dynamicMaxCapacity"
