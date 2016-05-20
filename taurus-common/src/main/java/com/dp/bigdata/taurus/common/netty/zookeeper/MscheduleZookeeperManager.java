@@ -41,6 +41,12 @@ public class MscheduleZookeeperManager implements ZookeeperMananger, Initializin
     @Override
     public void afterPropertiesSet() throws Exception {
 
+        ScheduleNodeListenerManager scheduleNodeListenerManager = new ScheduleNodeListenerManager(zookeeperRegistryCenter);
+        scheduleNodeListenerManager.start();
+
+        TaskNodeListenerManager taskNodeListenerManager = new TaskNodeListenerManager(zookeeperRegistryCenter);
+        taskNodeListenerManager.start();
+
         logger.info("Taurus connect to ZK successfully.");
         registry();
         logger.info("Taurus registry to ZK successfully.");
@@ -84,14 +90,9 @@ public class MscheduleZookeeperManager implements ZookeeperMananger, Initializin
         }
     }
 
-    @Component
-    static class TaskNodeListenerManager extends AbstractListenerManager {
+    class TaskNodeListenerManager extends AbstractListenerManager {
 
-        @Autowired
         private ZookeeperRegistryCenter zookeeperRegistryCenter;
-
-        public TaskNodeListenerManager() {
-        }
 
         public TaskNodeListenerManager(ZookeeperRegistryCenter coordinatorRegistryCenter) {
             super(coordinatorRegistryCenter);
@@ -137,13 +138,13 @@ public class MscheduleZookeeperManager implements ZookeeperMananger, Initializin
         }
     }
 
-    @Component
-    static class ScheduleNodeListenerManager extends AbstractListenerManager {
+    class ScheduleNodeListenerManager extends AbstractListenerManager {
 
-        @Autowired
         private ZookeeperRegistryCenter zookeeperRegistryCenter;
 
-        public ScheduleNodeListenerManager() {
+        public ScheduleNodeListenerManager(ZookeeperRegistryCenter coordinatorRegistryCenter) {
+            super(coordinatorRegistryCenter);
+            this.zookeeperRegistryCenter = coordinatorRegistryCenter;
         }
 
         @Override
