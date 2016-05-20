@@ -36,6 +36,7 @@ public class CallbackProcessor implements NettyRequestProcessor {
         }catch (Exception e){
             logger.error("update staus error", e);
             Cat.logError("CallbackProcessor", e);
+            callBack(callBackTask);
         }
         logger.info("Schedule node handle callback {} successfully.", callBackTask);
     }
