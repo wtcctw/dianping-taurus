@@ -8,10 +8,13 @@ import com.dp.bigdata.taurus.client.schedule.DefaultSelector;
 import com.dp.bigdata.taurus.client.schedule.QuartzScheduler;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.dp.bigdata.taurus.common.lion.AbstractLionPropertyInitializer;
 import com.dp.bigdata.taurus.common.netty.config.ZookeeperConfiguration;
 import com.dp.bigdata.taurus.common.netty.zookeeper.AbstractListener;
 import com.dp.bigdata.taurus.common.netty.zookeeper.AbstractListenerManager;
 import com.dp.bigdata.taurus.common.netty.zookeeper.ZookeeperRegistryCenter;
+import com.dp.bigdata.taurus.common.structure.BooleanConverter;
+import com.dp.bigdata.taurus.common.structure.Converter;
 import org.apache.commons.lang.StringUtils;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.cache.TreeCacheEvent;
@@ -39,6 +42,7 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class TaskNode {
     private static final Logger logger = LoggerFactory.getLogger(TaskNode.class);
+    private static final String SELF_SCHEDULE_SWITCH = "taurus.client.selfschedule";
     private static final Set<String> groups = ScheduleManager.getGroup2Jobs().keySet();
     private static final ExecutorService executor = Executors.newFixedThreadPool(1);
     private static final DelayQ delayQ = new DelayQ();
@@ -78,18 +82,33 @@ public class TaskNode {
     }
 
 
-    class OnLeader implements LeaderExecutionCallback {
+    class OnLeader extends AbstractLionPropertyInitializer<Boolean> implements LeaderExecutionCallback {
 
         @Override
         public void execute() {
             logger.info("Becoming Leader...");
             isLeader = true;
-            if (isAllScheduleCrashed()) {
+            if (lionValue && isAllScheduleCrashed()) {
                 logger.info("Fair Schedule service start.....");
                 QuartzScheduler quartzScheduler = new QuartzScheduler(TaskNode.this, new DefaultSelector());
                 quartzScheduler.init();
                 quartzSchedulerAtomicReference.set(quartzScheduler);
             }
+        }
+
+        @Override
+        protected String getKey() {
+            return SELF_SCHEDULE_SWITCH;
+        }
+
+        @Override
+        protected Boolean getDefaultValue() {
+            return false;
+        }
+
+        @Override
+        protected Converter<Boolean> getConvert() {
+            return new BooleanConverter();
         }
     }
 
