@@ -5,6 +5,7 @@ import com.dp.bigdata.taurus.common.netty.codec.NettyEncoder;
 import com.dp.bigdata.taurus.common.netty.config.NettyClientConfig;
 import com.dp.bigdata.taurus.common.netty.exception.RemotingSendRequestException;
 import com.dp.bigdata.taurus.common.netty.protocol.Command;
+import com.dp.bigdata.taurus.common.netty.remote.AbstractRemotingService;
 import com.dp.bigdata.taurus.common.netty.remote.RemotingClient;
 import com.dp.bigdata.taurus.common.netty.remote.RemotingHelper;
 import io.netty.bootstrap.Bootstrap;
@@ -12,9 +13,6 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.util.concurrent.DefaultEventExecutorGroup;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -32,9 +30,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 16/5/18  上午10:14.
  */
 @Component
-public class NettyRemotingClient implements RemotingClient {
-
-    private static final Logger logger = LoggerFactory.getLogger(NettyRemotingClient.class);
+public class NettyRemotingClient extends AbstractRemotingService implements RemotingClient {
 
     @Value("${task.executor.port}")
     public int sendPort = -1;
@@ -43,16 +39,13 @@ public class NettyRemotingClient implements RemotingClient {
 
     private final Bootstrap bootstrap = new Bootstrap();
 
-    private EventLoopGroup eventLoopGroupWorker;
-
-    private DefaultEventExecutorGroup defaultEventExecutorGroup;
-
     private final ConcurrentMap<String, Channel> channels = new ConcurrentHashMap<String, Channel>();
 
     @Autowired
     public NettyRemotingClient(NettyClientConfig nettyClientConfig) {
+
         this.nettyClientConfig = nettyClientConfig;
-        eventLoopGroupWorker = new NioEventLoopGroup(1, new ThreadFactory() {
+        eventLoopGroup = new NioEventLoopGroup(1, new ThreadFactory() {
             private AtomicInteger threadIndex = new AtomicInteger(0);
 
             public Thread newThread(Runnable r) {
@@ -61,13 +54,6 @@ public class NettyRemotingClient implements RemotingClient {
         });
     }
 
-    /**
-     * @param address
-     * @param port
-     * @param command
-     * @return
-     * @throws RemotingSendRequestException
-     */
     public boolean send(String address, int port, final Command command) throws
             RemotingSendRequestException {
         Channel channel = getChannel(address, port);
@@ -121,22 +107,13 @@ public class NettyRemotingClient implements RemotingClient {
 
     @PostConstruct
     public void start() {
+
+        super.start();
         if (sendPort > 0) {
             this.nettyClientConfig.setConnectPort(sendPort);
         }
-        this.defaultEventExecutorGroup = new DefaultEventExecutorGroup(//
-                nettyClientConfig.getClientWorkerThreads(), //
-                new ThreadFactory() {
 
-                    private AtomicInteger threadIndex = new AtomicInteger(0);
-
-
-                    public Thread newThread(Runnable r) {
-                        return new Thread(r, "NettyClientWorkerThread_" + this.threadIndex.incrementAndGet());
-                    }
-                });
-
-        this.bootstrap.group(this.eventLoopGroupWorker).channel(NioSocketChannel.class)//
+        this.bootstrap.group(this.eventLoopGroup).channel(NioSocketChannel.class)//
                 //
                 .option(ChannelOption.TCP_NODELAY, true)
                         //
@@ -153,6 +130,11 @@ public class NettyRemotingClient implements RemotingClient {
                                 new NettyConnectManageHandler());
                     }
                 });
+    }
+
+    @Override
+    protected int getThreadCount() {
+        return nettyClientConfig.getClientWorkerThreads();
     }
 
     class NettyConnectManageHandler extends ChannelDuplexHandler {
@@ -175,7 +157,7 @@ public class NettyRemotingClient implements RemotingClient {
                 cw.close();
             }
             this.channels.clear();
-            this.eventLoopGroupWorker.shutdownGracefully();
+            this.eventLoopGroup.shutdownGracefully();
 
             if (this.defaultEventExecutorGroup != null) {
                 this.defaultEventExecutorGroup.shutdownGracefully();
@@ -205,7 +187,7 @@ public class NettyRemotingClient implements RemotingClient {
 
     //TODO 需要枷锁吗？
     private Channel createNewChannel(String address, int port) {
-        ChannelFuture future = null;
+        ChannelFuture future;
         try {
             future = bootstrap.connect(new InetSocketAddress(address, port)).await();
         } catch (Exception e) {

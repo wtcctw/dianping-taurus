@@ -6,6 +6,7 @@ import com.dp.bigdata.taurus.common.netty.config.NettyServerConfig;
 import com.dp.bigdata.taurus.common.netty.processor.NettyRequestProcessor;
 import com.dp.bigdata.taurus.common.netty.protocol.Command;
 import com.dp.bigdata.taurus.common.netty.protocol.CommandType;
+import com.dp.bigdata.taurus.common.netty.remote.AbstractRemotingService;
 import com.dp.bigdata.taurus.common.netty.remote.RemotingHelper;
 import com.dp.bigdata.taurus.common.netty.remote.RemotingServer;
 import com.dp.bigdata.taurus.common.utils.Pair;
@@ -14,9 +15,6 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.util.concurrent.DefaultEventExecutorGroup;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -36,22 +34,16 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 16/5/18  下午2:33.
  */
 @Component
-public class NettyRemotingServer implements RemotingServer {
-
-    private static final Logger logger = LoggerFactory.getLogger(NettyRemotingServer.class);
+public class NettyRemotingServer extends AbstractRemotingService implements RemotingServer {
 
     @Value("${task.callback.port}")
     public int callbackPort = -1;
 
     private NettyServerConfig nettyServerConfig;
 
-    private ServerBootstrap serverBootstrap;
+    private ServerBootstrap serverBootstrap = new ServerBootstrap();
 
     private EventLoopGroup eventLoopGroupWorker;
-
-    private EventLoopGroup eventLoopGroupBoss;
-
-    private DefaultEventExecutorGroup defaultEventExecutorGroup;
 
     private ExecutorService defaultService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
@@ -61,9 +53,7 @@ public class NettyRemotingServer implements RemotingServer {
     public NettyRemotingServer(final NettyServerConfig nettyServerConfig) {
 
         this.nettyServerConfig = nettyServerConfig;
-        this.serverBootstrap = new ServerBootstrap();
-
-        this.eventLoopGroupBoss = new NioEventLoopGroup(1, new ThreadFactory() {
+        this.eventLoopGroup = new NioEventLoopGroup(1, new ThreadFactory() {
             private AtomicInteger threadIndex = new AtomicInteger(0);
 
 
@@ -84,43 +74,15 @@ public class NettyRemotingServer implements RemotingServer {
 
     }
 
-    /**
-     * 注册处理器
-     *
-     * @param commandType
-     * @param processor
-     * @param executor
-     */
-    public void registerProcessor(CommandType commandType, NettyRequestProcessor processor, ExecutorService executor) {
-        ExecutorService executorThis = executor;
-        if (null == executor) {
-            executorThis = this.defaultService;
-        }
-
-        Pair<NettyRequestProcessor, ExecutorService> pair = new Pair<NettyRequestProcessor, ExecutorService>(processor, executorThis);
-        this.processorTable.put(commandType, pair);
-
-    }
-
     @PostConstruct
     public void start() {
+
+        super.start();
         if (callbackPort > 0) {
             this.nettyServerConfig.setListenPort(callbackPort);
         }
-        this.defaultEventExecutorGroup = new DefaultEventExecutorGroup(//
-                nettyServerConfig.getServerWorkerThreads(), //
-                new ThreadFactory() {
 
-                    private AtomicInteger threadIndex = new AtomicInteger(0);
-
-
-                    public Thread newThread(Runnable r) {
-                        return new Thread(r, "NettyServerWorkerThread_" + this.threadIndex.incrementAndGet());
-                    }
-                });
-
-
-        this.serverBootstrap.group(this.eventLoopGroupBoss, this.eventLoopGroupWorker).channel(NioServerSocketChannel.class)
+        this.serverBootstrap.group(this.eventLoopGroup, this.eventLoopGroupWorker).channel(NioServerSocketChannel.class)
                 //
                 .option(ChannelOption.SO_BACKLOG, 1024)
                         //
@@ -148,6 +110,22 @@ public class NettyRemotingServer implements RemotingServer {
         } catch (InterruptedException e1) {
             throw new RuntimeException("this.serverBootstrap.bind().sync() InterruptedException", e1);
         }
+    }
+
+    public void registerProcessor(CommandType commandType, NettyRequestProcessor processor, ExecutorService executor) {
+        ExecutorService executorThis = executor;
+        if (null == executor) {
+            executorThis = this.defaultService;
+        }
+
+        Pair<NettyRequestProcessor, ExecutorService> pair = new Pair<NettyRequestProcessor, ExecutorService>(processor, executorThis);
+        this.processorTable.put(commandType, pair);
+
+    }
+
+    @Override
+    protected int getThreadCount() {
+        return nettyServerConfig.getServerWorkerThreads();
     }
 
     class NettyServerHandler extends SimpleChannelInboundHandler<Command> {
@@ -207,7 +185,7 @@ public class NettyRemotingServer implements RemotingServer {
     public void shutdown() {
         logger.info("Shutdown netty remoting server....");
         try {
-            this.eventLoopGroupBoss.shutdownGracefully();
+            this.eventLoopGroup.shutdownGracefully();
             this.eventLoopGroupWorker.shutdownGracefully();
             if (this.defaultEventExecutorGroup != null) {
                 this.defaultEventExecutorGroup.shutdownGracefully();
