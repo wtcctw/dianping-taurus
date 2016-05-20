@@ -1,5 +1,6 @@
 package com.dp.bigdata.taurus.common.netty.zookeeper;
 
+import com.dianping.cat.Cat;
 import com.dp.bigdata.taurus.common.utils.IPUtils;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.cache.TreeCacheEvent;
@@ -48,6 +49,9 @@ public class MscheduleZookeeperManager implements ZookeeperMananger, Initializin
         curatorFramework.getConnectionStateListenable().addListener(new ScheduleNodeStateListener(), executor);
 
         Map<String, Set<String>> nodes = zookeeperRegistryCenter.getJob2Nodes();
+        if (nodes != null) {
+            Cat.logEvent("NodesTask", String.valueOf(nodes.size()));
+        }
         synchronized (lockTask) {
             job2Nodes.clear();
             job2Nodes.putAll(nodes);
@@ -86,7 +90,7 @@ public class MscheduleZookeeperManager implements ZookeeperMananger, Initializin
         @Autowired
         private ZookeeperRegistryCenter zookeeperRegistryCenter;
 
-        public TaskNodeListenerManager(){
+        public TaskNodeListenerManager() {
         }
 
         public TaskNodeListenerManager(ZookeeperRegistryCenter coordinatorRegistryCenter) {
