@@ -63,6 +63,11 @@ public class TaskNode extends AbstractLionPropertyInitializer<Boolean>{
     }
 
     public void init() {
+        try {
+            super.afterPropertiesSet();
+        } catch (Exception e) {
+            lionValue = getDefaultValue();
+        }
         logger.info("TaskNode init zookeeper registry center begin.");
         zookeeperRegistryCenter.setZkConfig(zookeeperConfiguration);
         zookeeperRegistryCenter.init();
