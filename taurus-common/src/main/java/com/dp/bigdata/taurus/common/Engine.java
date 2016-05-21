@@ -534,7 +534,7 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
         context.getAttempt().setEndtime(new Date());
         context.getAttempt().setReturnvalue(-1);
         taskAttemptMapper.updateByPrimaryKeySelective(context.getAttempt());
-        unregistAttemptContext(context);
+        unregistAttemptContext(context.getTaskid(), attemptID);
 
         Cat.logEvent("Kill-Attempt", context.getName(), Message.SUCCESS, context.getAttemptid());
     }
@@ -556,7 +556,7 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
         context.getAttempt().setEndtime(new Date());
         context.getAttempt().setReturnvalue(-1);
         taskAttemptMapper.updateByPrimaryKeySelective(context.getAttempt());
-        unregistAttemptContext(context);
+        unregistAttemptContext(context.getTaskid(), attemptID);
 
         Cat.logEvent("Kill-Attempt", context.getName(), Message.SUCCESS, context.getAttemptid());
     }
@@ -576,11 +576,8 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
         attempt.setEndtime(new Date());
         attempt.setStatus(AttemptStatus.SUCCEEDED);
         taskAttemptMapper.updateByPrimaryKeySelective(attempt);
-        if (context != null) {
-            unregistAttemptContext(context);
-            Cat.logEvent("Attempt-Succeeded", context.getName(), Message.SUCCESS, context.getAttemptid());
-        }
 
+        unregistAttemptContext(attempt.getTaskid(), attemptID);
     }
 
     @Override
@@ -609,10 +606,10 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
         attempt.setEndtime(new Date());
         taskAttemptMapper.updateByPrimaryKeySelective(attempt);
 
+        unregistAttemptContext(attempt.getTaskid(), attemptID);
         Task task;
 
         if (context != null) {
-            unregistAttemptContext(context);
             Cat.logEvent("Attempt-Failed", context.getName(), Message.SUCCESS, context.getAttemptid());
             task = context.getTask();
         } else {
@@ -665,10 +662,8 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
         attempt.setReturnvalue(-1);
         taskAttemptMapper.updateByPrimaryKeySelective(attempt);
 
-        if (context != null) {
-            unregistAttemptContext(context);
-            Cat.logEvent("Attempt-Unknown", context.getName(), Message.SUCCESS, context.getAttemptid());
-        }
+        unregistAttemptContext(attempt.getTaskid(), attemptID);
+        Cat.logEvent("Attempt-Unknown", context.getName(), Message.SUCCESS, context.getAttemptid());
 
     }
 
@@ -719,11 +714,11 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
         runningAttempts.put(context.getTaskid(), contexts);
     }
 
-    private void unregistAttemptContext(AttemptContext context) {
-        if (runningAttempts.containsKey(context.getTaskid())) {
-            HashMap<String, AttemptContext> contexts = runningAttempts.get(context.getTaskid());
-            if (contexts.containsKey(context.getAttemptid())) {
-                contexts.remove(context.getAttemptid());
+    private void unregistAttemptContext(String taskId, String attemptId) {
+        if (runningAttempts.containsKey(taskId)) {
+            HashMap<String, AttemptContext> contexts = runningAttempts.get(taskId);
+            if (contexts.containsKey(attemptId)) {
+                contexts.remove(attemptId);
             }
         }
     }
