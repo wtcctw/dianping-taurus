@@ -25,7 +25,7 @@ public class MscheduleZookeeperManager implements ZookeeperMananger, Initializin
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private static final ExecutorService executor = Executors.newFixedThreadPool(1);
+    private final ExecutorService executor = Executors.newFixedThreadPool(1);
 
     private static final Object lockSchedule = new Object();
 
@@ -40,12 +40,6 @@ public class MscheduleZookeeperManager implements ZookeeperMananger, Initializin
 
     @Override
     public void afterPropertiesSet() throws Exception {
-
-        ScheduleNodeListenerManager scheduleNodeListenerManager = new ScheduleNodeListenerManager(zookeeperRegistryCenter);
-        scheduleNodeListenerManager.start();
-
-        TaskNodeListenerManager taskNodeListenerManager = new TaskNodeListenerManager(zookeeperRegistryCenter);
-        taskNodeListenerManager.start();
 
         logger.info("Taurus connect to ZK successfully.");
         registry();
@@ -90,7 +84,7 @@ public class MscheduleZookeeperManager implements ZookeeperMananger, Initializin
         }
     }
 
-    class TaskNodeListenerManager extends AbstractListenerManager {
+    public static class TaskNodeListenerManager extends AbstractListenerManager {
 
         private ZookeeperRegistryCenter zookeeperRegistryCenter;
 
@@ -138,7 +132,7 @@ public class MscheduleZookeeperManager implements ZookeeperMananger, Initializin
         }
     }
 
-    class ScheduleNodeListenerManager extends AbstractListenerManager {
+    public static class ScheduleNodeListenerManager extends AbstractListenerManager {
 
         private ZookeeperRegistryCenter zookeeperRegistryCenter;
 

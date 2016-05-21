@@ -100,8 +100,16 @@ public class ZookeeperRegistryCenter implements CoordinatorRegistryCenter, Prior
     }
 
     private void cacheData(String namespace) throws Exception {
+
         cache = new TreeCache(client, "/");
         cache.start();
+
+        MscheduleZookeeperManager.ScheduleNodeListenerManager scheduleNodeListenerManager;
+        scheduleNodeListenerManager = new MscheduleZookeeperManager.ScheduleNodeListenerManager(this);
+        scheduleNodeListenerManager.start();
+
+        MscheduleZookeeperManager.TaskNodeListenerManager taskNodeListenerManager = new MscheduleZookeeperManager.TaskNodeListenerManager(this);
+        taskNodeListenerManager.start();
     }
 
     @Override
@@ -308,12 +316,8 @@ public class ZookeeperRegistryCenter implements CoordinatorRegistryCenter, Prior
         return path != null && path.contains(TASK_PATH);
     }
 
-    /**
-     * 由于目前zk结构比较鸡肋, 在获取job和节点对应关系的代码比较繁琐，这块需要优化
-     *
-     * @return
-     */
     public Map<String, Set<String>> getJob2Nodes() {
+
         Map<String, ChildData> dataMap = cache.getCurrentChildren(TASK_PATH);
         // node : jobs, 首先获取task节点和job信息的对应关系
         Map<String, Set<String>> node2Jobs = new HashMap<String, Set<String>>();
