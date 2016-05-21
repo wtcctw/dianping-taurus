@@ -563,21 +563,16 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
 
     @Override
     public void attemptSucceed(String attemptID) {
-        AttemptContext context = runningAttempts.get(AttemptID.getTaskID(attemptID)).get(attemptID);
-        TaskAttempt attempt;
 
-        if (context != null) {
-            attempt = context.getAttempt();
-        } else { //netty通信方式在重启时会丢失未确认的attempt
-            attempt = taskAttemptMapper.selectByPrimaryKey(attemptID);
-            Cat.logEvent("NullAttempt", attemptID);
-        }
+        TaskAttempt attempt = new TaskAttempt();
+
+        attempt.setAttemptid(attemptID);
         attempt.setReturnvalue(0);
         attempt.setEndtime(new Date());
         attempt.setStatus(AttemptStatus.SUCCEEDED);
         taskAttemptMapper.updateByPrimaryKeySelective(attempt);
 
-        unregistAttemptContext(attempt.getTaskid(), attemptID);
+        unregistAttemptContext(AttemptID.getTaskID(attemptID), attemptID);
     }
 
     @Override
@@ -630,7 +625,7 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
             } else if (task.getRetrytimes() == attemptsOfRecentInstance.size() - 1) {
                 // do nothing
             } else {
-                Cat.logEvent("Attempt-Expired-Retry", context.getName(), Message.SUCCESS, context.getAttemptid());
+                Cat.logEvent("Attempt-Expired-Retry", task.getName(), Message.SUCCESS, attemptID);
 
                 logger.info("Attempt " + attempt.getAttemptid() + " fail, begin to retry the attempt...");
                 String instanceID = attempt.getInstanceid();
@@ -648,22 +643,18 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
     }
 
     public void attemptUnKnown(String attemptID) {
-        AttemptContext context = runningAttempts.get(AttemptID.getTaskID(attemptID)).get(attemptID);
-        TaskAttempt attempt;
 
-        if (context != null) {
-            attempt = context.getAttempt();
-        } else { //netty通信方式在重启时会丢失未确认的attempt
-            attempt = taskAttemptMapper.selectByPrimaryKey(attemptID);
-            Cat.logEvent("NullAttempt", attemptID);
-        }
+        TaskAttempt attempt = new TaskAttempt();
+
+        attempt.setAttemptid(attemptID);
         attempt.setEndtime(new Date());
         attempt.setStatus(AttemptStatus.UNKNOWN);
         attempt.setReturnvalue(-1);
         taskAttemptMapper.updateByPrimaryKeySelective(attempt);
+        String taskId = AttemptID.getTaskID(attemptID);
+        unregistAttemptContext(taskId, attemptID);
 
-        unregistAttemptContext(attempt.getTaskid(), attemptID);
-        Cat.logEvent("Attempt-Unknown", context.getName(), Message.SUCCESS, context.getAttemptid());
+        Cat.logEvent("Attempt-Unknown", taskId, Message.SUCCESS, attemptID);
 
     }
 
