@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.*;
 import java.util.Map.Entry;
 
+import com.dp.bigdata.taurus.common.netty.MscheduleExecutorManager;
 import com.dp.bigdata.taurus.restlet.exception.DuplicatedNameException;
 import com.dp.bigdata.taurus.restlet.exception.InvalidArgumentException;
 import com.dp.bigdata.taurus.restlet.resource.impl.NameResource;
@@ -277,7 +278,7 @@ public class TaskRequestExtractor implements RequestExtrator<TaskDTO> {
 			}
 		}
 
-		if (StringUtils.isBlank(task.getProxyuser())) {
+		if (StringUtils.isBlank(task.getProxyuser()) && !MscheduleExecutorManager.MSCHEDULE_TYPE.equalsIgnoreCase(task.getType())) {
 			throw new InvalidArgumentException("Cannot get proxy user from request");
 		}
 
