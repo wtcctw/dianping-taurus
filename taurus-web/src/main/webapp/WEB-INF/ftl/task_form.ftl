@@ -77,6 +77,7 @@
 </div>
 <br>
 
+<#if dto.type?exists && dto.type != "mschedule" >
 <div class="control-group col-sm-12">
     <label class="label label-lg label-info arrowed-right col-sm-2" for="taskCommand">命令*</label>
 
@@ -86,7 +87,9 @@
     </div>
 </div>
 <br>
+</#if>
 
+<#if dto.type?exists && dto.type != "mschedule" >
 <div class="control-group col-sm-12">
     <label class="label label-lg label-info arrowed-right col-sm-2" for="proxyUser">运行身份（不可为root）*</label>
 
@@ -95,6 +98,7 @@
                name="proxyUser" value="${dto.proxyuser!}" disabled>
     </div>
 </div>
+</#if>
 <br>
 
 <div class="control-group col-sm-12">
