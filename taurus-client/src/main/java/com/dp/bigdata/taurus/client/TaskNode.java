@@ -163,7 +163,7 @@ public class TaskNode extends AbstractLionPropertyInitializer<Boolean>{
                             if (event.getType() == TreeCacheEvent.Type.NODE_ADDED) {
                                 String scheduleNode = zookeeperRegistryCenter.get(path);
                                 logger.info("NEW Schedule node join : {}", scheduleNode);
-                                checkAndReleaseScheduleRight();
+                                //checkAndReleaseScheduleRight();
                                 Set<String> nodes = getScheduleNodesFromRegistry();
                                 resetScheduleNodes(nodes);
                             } else if (event.getType() == TreeCacheEvent.Type.NODE_REMOVED) {
@@ -298,7 +298,7 @@ public class TaskNode extends AbstractLionPropertyInitializer<Boolean>{
         String address = StringUtils.defaultIfEmpty(IPUtil.getAddress(), IPUtil.getLocalHost());
         String addressAndPort = address + ":" + taskAcceptorPort;
         createNodePathUnderJobUnicode(addressAndPort);
-        checkAndCreateJobNodePath(addressAndPort);
+        //checkAndCreateJobNodePath(addressAndPort);
         logger.info("Task Node : {} registry to ZK successfully.", address);
     }
 
@@ -307,7 +307,7 @@ public class TaskNode extends AbstractLionPropertyInitializer<Boolean>{
      * 注意是检查zk节点是否存在，如果不存在则去创建
      */
     private void prepareElection() {
-        checkAndCreateJobInfoPath();
+        //checkAndCreateJobInfoPath();
         checkAndCreateLeaderElectionLatchPath();
     }
 
