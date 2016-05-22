@@ -2,6 +2,7 @@ package com.dp.bigdata.taurus.common.netty.zookeeper;
 
 import com.dianping.cat.Cat;
 import com.dp.bigdata.taurus.common.utils.IPUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.cache.TreeCacheEvent;
 import org.apache.curator.framework.state.ConnectionState;
@@ -27,19 +28,25 @@ public class MscheduleZookeeperManager implements ZookeeperMananger, Initializin
 
     private final ExecutorService executor = Executors.newFixedThreadPool(1);
 
-    private static final Object lockSchedule = new Object();
+    private final Object lockSchedule = new Object();
 
-    private static final Object lockTask = new Object();
+    private final Object lockTask = new Object();
 
-    private static final Set<String> scheduleNodes = new HashSet<String>();
+    private final Set<String> scheduleNodes = new HashSet<String>();
 
-    private static final Map<String, Set<String>> job2Nodes = new HashMap<String, Set<String>>();
+    private final Map<String, Set<String>> job2Nodes = new HashMap<String, Set<String>>();
 
     @Autowired
     private ZookeeperRegistryCenter zookeeperRegistryCenter;
 
     @Override
     public void afterPropertiesSet() throws Exception {
+
+        ScheduleNodeListenerManager scheduleNodeListenerManager = new ScheduleNodeListenerManager(zookeeperRegistryCenter);
+        scheduleNodeListenerManager.start();
+
+        TaskNodeListenerManager taskNodeListenerManager = new TaskNodeListenerManager(zookeeperRegistryCenter);
+        taskNodeListenerManager.start();
 
         logger.info("Taurus connect to ZK successfully.");
         registry();
@@ -84,7 +91,7 @@ public class MscheduleZookeeperManager implements ZookeeperMananger, Initializin
         }
     }
 
-    public static class TaskNodeListenerManager extends AbstractListenerManager {
+    class TaskNodeListenerManager extends AbstractListenerManager {
 
         private ZookeeperRegistryCenter zookeeperRegistryCenter;
 
@@ -108,7 +115,10 @@ public class MscheduleZookeeperManager implements ZookeeperMananger, Initializin
                     if (zookeeperRegistryCenter.isTaskNodePath(path)) {
                         try {
                             if (event.getType() == TreeCacheEvent.Type.NODE_ADDED) {
-                                logger.info("NEW TASK node join : {}", zookeeperRegistryCenter.get(path));
+                                String taskNode = zookeeperRegistryCenter.get(path);
+                                if (StringUtils.isNotBlank(taskNode)) {
+                                    logger.info("NEW TASK node join : {}", taskNode);
+                                }
                                 Map<String, Set<String>> nodes = zookeeperRegistryCenter.getJob2Nodes();
                                 synchronized (lockTask) {
                                     job2Nodes.clear();
@@ -132,7 +142,7 @@ public class MscheduleZookeeperManager implements ZookeeperMananger, Initializin
         }
     }
 
-    public static class ScheduleNodeListenerManager extends AbstractListenerManager {
+    class ScheduleNodeListenerManager extends AbstractListenerManager {
 
         private ZookeeperRegistryCenter zookeeperRegistryCenter;
 
@@ -156,7 +166,10 @@ public class MscheduleZookeeperManager implements ZookeeperMananger, Initializin
                     if (zookeeperRegistryCenter.isScheculePath(path)) {
                         try {
                             if (event.getType() == TreeCacheEvent.Type.NODE_ADDED) {
-                                logger.info("NEW Schedule node join : {}", zookeeperRegistryCenter.get(path));
+                                String scheduleNode = zookeeperRegistryCenter.get(path);
+                                if (StringUtils.isNotBlank(scheduleNode)) {
+                                    logger.info("NEW Schedule node join : {}", scheduleNode);
+                                }
 
                                 Set<String> nodes = zookeeperRegistryCenter.getScheduleNodes();
                                 synchronized (lockSchedule) {

@@ -1,14 +1,15 @@
 package com.dp.bigdata.taurus.client;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.dp.bigdata.taurus.client.common.constants.ZkPathConstants;
 import com.dp.bigdata.taurus.client.common.util.DelayQ;
 import com.dp.bigdata.taurus.client.common.util.IPUtil;
 import com.dp.bigdata.taurus.client.election.LeaderExecutionCallback;
 import com.dp.bigdata.taurus.client.schedule.DefaultSelector;
 import com.dp.bigdata.taurus.client.schedule.QuartzScheduler;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.dp.bigdata.taurus.common.lion.AbstractLionPropertyInitializer;
+import com.dp.bigdata.taurus.common.lion.LionDynamicConfig;
 import com.dp.bigdata.taurus.common.netty.config.ZookeeperConfiguration;
 import com.dp.bigdata.taurus.common.netty.zookeeper.AbstractListener;
 import com.dp.bigdata.taurus.common.netty.zookeeper.AbstractListenerManager;
@@ -64,6 +65,7 @@ public class TaskNode extends AbstractLionPropertyInitializer<Boolean>{
 
     public void init() {
         try {
+            lionDynamicConfig = new LionDynamicConfig();
             super.afterPropertiesSet();
         } catch (Exception e) {
             lionValue = getDefaultValue();
@@ -159,7 +161,8 @@ public class TaskNode extends AbstractLionPropertyInitializer<Boolean>{
                     if (zookeeperRegistryCenter.isScheculePath(path)) {
                         try {
                             if (event.getType() == TreeCacheEvent.Type.NODE_ADDED) {
-                                logger.info("NEW Schedule node join : {}", zookeeperRegistryCenter.get(path));
+                                String scheduleNode = zookeeperRegistryCenter.get(path);
+                                logger.info("NEW Schedule node join : {}", scheduleNode);
                                 checkAndReleaseScheduleRight();
                                 Set<String> nodes = getScheduleNodesFromRegistry();
                                 resetScheduleNodes(nodes);

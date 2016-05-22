@@ -103,13 +103,6 @@ public class ZookeeperRegistryCenter implements CoordinatorRegistryCenter, Prior
 
         cache = new TreeCache(client, "/");
         cache.start();
-
-        MscheduleZookeeperManager.ScheduleNodeListenerManager scheduleNodeListenerManager;
-        scheduleNodeListenerManager = new MscheduleZookeeperManager.ScheduleNodeListenerManager(this);
-        scheduleNodeListenerManager.start();
-
-        MscheduleZookeeperManager.TaskNodeListenerManager taskNodeListenerManager = new MscheduleZookeeperManager.TaskNodeListenerManager(this);
-        taskNodeListenerManager.start();
     }
 
     @Override
@@ -364,6 +357,6 @@ public class ZookeeperRegistryCenter implements CoordinatorRegistryCenter, Prior
 
     @Override
     public int getOrder() {
-        return 0;
+        return Integer.MIN_VALUE;
     }
 }
