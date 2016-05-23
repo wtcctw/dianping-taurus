@@ -21,7 +21,7 @@
 		<jersey.version>2.6</jersey.version>
 		<mybatis.version>3.2.4</mybatis.version>
 		<aspectj.version>1.7.4</aspectj.version>
-		<netty.version>3.9.2.Final</netty.version>
+		<netty.version>3.7.0.Final</netty.version>
 	</properties>
 
 	<dependencyManagement>
