@@ -12,7 +12,7 @@ import com.dp.bigdata.taurus.common.alert.WeChatHelper;
 import com.dp.bigdata.taurus.common.lion.ConfigHolder;
 import com.dp.bigdata.taurus.common.lion.LionKeys;
 import com.dp.bigdata.taurus.common.netty.MscheduleExecutorManager;
-import com.dp.bigdata.taurus.common.netty.zookeeper.ZookeeperMananger;
+import com.dp.bigdata.taurus.common.netty.zookeeper.ZookeeperManager;
 import com.dp.bigdata.taurus.common.structure.BoundedList;
 import com.dp.bigdata.taurus.common.utils.SleepUtils;
 import com.dp.bigdata.taurus.common.utils.ThreadUtils;
@@ -78,7 +78,7 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
     private AgentMonitor agentMonitor;
 
     @Autowired
-    private ZookeeperMananger zookeeperMananger;
+    private ZookeeperManager zookeeperManager;
 
     private Runnable progressMonitor;
 
@@ -460,7 +460,7 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
             Collection<String> ipCollection;
             // assume that hostname is ip address!!
             if (StringUtils.isBlank(ip)) {
-                ipCollection = zookeeperMananger.getTaskNodes(task.getTaskid());
+                ipCollection = zookeeperManager.getTaskNodes(task.getTaskid());
                 if (ipCollection == null) {
                     Cat.logEvent("Attempt.SubmitFailed", context.getName(), "no-host", context.getAttemptid());
                     failAttempt(attempt);
@@ -469,7 +469,7 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
             } else {
                 if (MscheduleExecutorManager.MSCHEDULE_TYPE.equals(context.getType())) {
                     String[] ipAndPort = ip.split(",");
-                    Set<String> tmpCollection = zookeeperMananger.getTaskNodes(task.getTaskid());
+                    Set<String> tmpCollection = zookeeperManager.getTaskNodes(task.getTaskid());
                     if (tmpCollection == null) {
                         Cat.logEvent("Attempt.SubmitFailed", context.getName(), "no-host", context.getAttemptid());
                         failAttempt(attempt);

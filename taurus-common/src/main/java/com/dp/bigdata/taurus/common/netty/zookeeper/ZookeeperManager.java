@@ -6,7 +6,7 @@ import java.util.Set;
  * Author   mingdongli
  * 16/5/18  下午3:46.
  */
-public interface ZookeeperMananger {
+public interface ZookeeperManager {
 
     Set<String> getScheduleNodes();
 

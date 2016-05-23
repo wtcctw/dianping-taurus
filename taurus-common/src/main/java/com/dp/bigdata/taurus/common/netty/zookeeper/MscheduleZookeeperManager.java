@@ -5,8 +5,6 @@ import com.dp.bigdata.taurus.common.utils.IPUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.cache.TreeCacheEvent;
-import org.apache.curator.framework.state.ConnectionState;
-import org.apache.curator.framework.state.ConnectionStateListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -22,7 +20,7 @@ import java.util.concurrent.Executors;
  * 16/5/18  下午3:47.
  */
 @Component
-public class MscheduleZookeeperManager implements ZookeeperMananger, InitializingBean {
+public class MscheduleZookeeperManager implements ZookeeperManager, InitializingBean {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -42,8 +40,8 @@ public class MscheduleZookeeperManager implements ZookeeperMananger, Initializin
     @Override
     public void afterPropertiesSet() throws Exception {
 
-        ScheduleNodeListenerManager scheduleNodeListenerManager = new ScheduleNodeListenerManager(zookeeperRegistryCenter);
-        scheduleNodeListenerManager.start();
+//        ScheduleNodeListenerManager scheduleNodeListenerManager = new ScheduleNodeListenerManager(zookeeperRegistryCenter);
+//        scheduleNodeListenerManager.start();
 
         TaskNodeListenerManager taskNodeListenerManager = new TaskNodeListenerManager(zookeeperRegistryCenter);
         taskNodeListenerManager.start();
@@ -52,8 +50,8 @@ public class MscheduleZookeeperManager implements ZookeeperMananger, Initializin
         registry();
         logger.info("Taurus registry to ZK successfully.");
 
-        CuratorFramework curatorFramework = (CuratorFramework) zookeeperRegistryCenter.getRawClient();
-        curatorFramework.getConnectionStateListenable().addListener(new ScheduleNodeStateListener(), executor);
+//        CuratorFramework curatorFramework = (CuratorFramework) zookeeperRegistryCenter.getRawClient();
+//        curatorFramework.getConnectionStateListenable().addListener(new ScheduleNodeStateListener(), executor);
 
         Map<String, Set<String>> nodes = zookeeperRegistryCenter.getJob2Nodes();
         if (nodes != null) {
@@ -195,20 +193,20 @@ public class MscheduleZookeeperManager implements ZookeeperMananger, Initializin
         }
     }
 
-    class ScheduleNodeStateListener implements ConnectionStateListener {
-
-        @Override
-        public void stateChanged(CuratorFramework curatorFramework, ConnectionState connectionState) {
-            if (connectionState == ConnectionState.LOST) {
-                logger.warn("Network is unreachable to ZK with a long time, stop schedule service" + ".");
-                // quartzScheduler.destroy();
-            } else if (connectionState == ConnectionState.SUSPENDED) {
-                logger.warn("Network is unreachable to ZK. Reconnection.....");
-            } else if (connectionState == ConnectionState.RECONNECTED) {
-                logger.info("Network reachable to ZK,Reconnected to ZK.");
-                registry();
-            }
-        }
-    }
+//    class ScheduleNodeStateListener implements ConnectionStateListener {
+//
+//        @Override
+//        public void stateChanged(CuratorFramework curatorFramework, ConnectionState connectionState) {
+//            if (connectionState == ConnectionState.LOST) {
+//                logger.warn("Network is unreachable to ZK with a long time, stop schedule service" + ".");
+//                // quartzScheduler.destroy();
+//            } else if (connectionState == ConnectionState.SUSPENDED) {
+//                logger.warn("Network is unreachable to ZK. Reconnection.....");
+//            } else if (connectionState == ConnectionState.RECONNECTED) {
+//                logger.info("Network reachable to ZK,Reconnected to ZK.");
+//                registry();
+//            }
+//        }
+//    }
 
 }
