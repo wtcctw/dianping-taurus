@@ -21,7 +21,6 @@ import org.apache.zookeeper.data.ACL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.PriorityOrdered;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -35,15 +34,19 @@ import java.util.*;
  * 16/5/18  下午3:38.
  */
 @Component
-public class ZookeeperRegistryCenter implements CoordinatorRegistryCenter, PriorityOrdered {
+public class ZookeeperRegistryCenter implements CoordinatorRegistryCenter {
 
     private static final Logger log = LoggerFactory.getLogger(ZookeeperRegistryCenter.class);
 
-    private static final String EVENT_PATH = "/nodes/event";
+    private static final String NAMESPACE = "taurus";
 
-    private static final String SCHEDULE_PATH = "/nodes/schedule";
+    private static final String NODES = NAMESPACE + "/nodes";
 
-    private static final String TASK_PATH = "/nodes/task";
+    private static final String EVENT_PATH = NAMESPACE + "/nodes/event";
+
+    private static final String SCHEDULE_PATH = NAMESPACE + "/nodes/schedule";
+
+    private static final String TASK_PATH = NAMESPACE + "/nodes/task";
 
     private static final String EMPTY = "";
 
@@ -60,7 +63,7 @@ public class ZookeeperRegistryCenter implements CoordinatorRegistryCenter, Prior
     @PostConstruct
     public void init() {
         log.debug("MSchedule : zookeeper registry center init, server lists is: {}.", zkConfig.getServerLists());
-        CuratorFrameworkFactory.Builder builder = CuratorFrameworkFactory.builder().connectString(zkConfig.getServerLists()).retryPolicy(new ExponentialBackoffRetry(zkConfig.getBaseSleepTimeMilliseconds(), zkConfig.getMaxRetries(), zkConfig.getMaxSleepTimeMilliseconds())).namespace(zkConfig.getNamespace());
+        CuratorFrameworkFactory.Builder builder = CuratorFrameworkFactory.builder().connectString(zkConfig.getServerLists()).retryPolicy(new ExponentialBackoffRetry(zkConfig.getBaseSleepTimeMilliseconds(), zkConfig.getMaxRetries(), zkConfig.getMaxSleepTimeMilliseconds()));
         if (0 != zkConfig.getSessionTimeoutMilliseconds()) {
             builder.sessionTimeoutMs(zkConfig.getSessionTimeoutMilliseconds());
         }
@@ -86,7 +89,7 @@ public class ZookeeperRegistryCenter implements CoordinatorRegistryCenter, Prior
         try {
             client.blockUntilConnected();
             initZkNodes();
-            cacheData(zkConfig.getNamespace());
+            cacheData();
         } catch (final Exception ex) {
             RegExceptionHandler.handleException(ex);
         }
@@ -99,9 +102,9 @@ public class ZookeeperRegistryCenter implements CoordinatorRegistryCenter, Prior
         persist(TASK_PATH, EMPTY);
     }
 
-    private void cacheData(String namespace) throws Exception {
+    private void cacheData() throws Exception {
 
-        cache = new TreeCache(client, "/");
+        cache = new TreeCache(client, NODES);
         cache.start();
     }
 
@@ -355,8 +358,4 @@ public class ZookeeperRegistryCenter implements CoordinatorRegistryCenter, Prior
         this.zkConfig = zkConfig;
     }
 
-    @Override
-    public int getOrder() {
-        return Integer.MIN_VALUE;
-    }
 }
