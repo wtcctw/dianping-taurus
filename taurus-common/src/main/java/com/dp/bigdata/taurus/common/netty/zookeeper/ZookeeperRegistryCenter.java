@@ -38,7 +38,7 @@ public class ZookeeperRegistryCenter implements CoordinatorRegistryCenter {
 
     private static final Logger log = LoggerFactory.getLogger(ZookeeperRegistryCenter.class);
 
-    private static final String NAMESPACE = "taurus";
+    private static final String NAMESPACE = "/taurus";
 
     private static final String NODES = NAMESPACE + "/nodes";
 
