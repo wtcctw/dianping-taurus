@@ -14,7 +14,7 @@ import java.io.IOException;
  * Author   mingdongli
  * 16/5/18  下午4:02.
  */
-@Component
+//@Component
 public final class ZookeeperClient {
 
     @Autowired

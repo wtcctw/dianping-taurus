@@ -4,13 +4,12 @@ import com.dianping.lion.EnvZooKeeperConfig;
 import com.dianping.lion.client.ConfigCache;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 /**
  * Author   mingdongli
  * 16/5/18  下午3:40.
  */
-@Component
+//@Component
 public class ZookeeperConfiguration implements InitializingBean{
 
     /**
