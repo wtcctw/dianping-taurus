@@ -77,7 +77,7 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
     @Autowired
     private AgentMonitor agentMonitor;
 
-    @Autowired
+    @Autowired(required = false)
     private ZookeeperManager zookeeperManager;
 
     private Runnable progressMonitor;
