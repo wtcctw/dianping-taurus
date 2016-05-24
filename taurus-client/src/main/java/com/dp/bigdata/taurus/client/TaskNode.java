@@ -257,10 +257,20 @@ public class TaskNode extends AbstractLionPropertyInitializer<Boolean>{
         }
     }
 
+    public void executeInLeader(){
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                executeInLeaderInternal();
+            }
+        }).start();
+    }
+
     /**
      * 选举Leader节点，Leader当选后会回调OnLeader.execute函数，如果没有当选则会阻塞
      */
-    public void executeInLeader() {
+    private void executeInLeaderInternal() {
 
         String group = (String) groups.toArray()[0];
         String electionLatchPath = String.format(ZkPathConstants.JOB_LEADER_ELECTION_LATCH, group);

@@ -179,12 +179,8 @@ public class ScheduleManager {
 
 
     private void selectLeader(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                taskNode.executeInLeader();
-            }
-        }).start();
+
+        taskNode.executeInLeader();
     }
 
     private boolean isZKMode() {
