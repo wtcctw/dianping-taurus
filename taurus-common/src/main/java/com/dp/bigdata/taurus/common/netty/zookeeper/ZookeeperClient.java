@@ -5,8 +5,6 @@ import org.apache.curator.framework.recipes.cache.TreeCache;
 import org.apache.curator.framework.recipes.cache.TreeCacheListener;
 import org.apache.curator.framework.state.ConnectionStateListener;
 import org.apache.zookeeper.KeeperException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
@@ -14,10 +12,8 @@ import java.io.IOException;
  * Author   mingdongli
  * 16/5/18  下午4:02.
  */
-//@Component
 public final class ZookeeperClient {
 
-    @Autowired
     private  ZookeeperRegistryCenter zookeeperRegistryCenter;
 
     public void addConnectionStateListener(final ConnectionStateListener listener) {

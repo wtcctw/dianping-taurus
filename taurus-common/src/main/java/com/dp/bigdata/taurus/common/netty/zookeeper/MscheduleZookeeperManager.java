@@ -4,26 +4,27 @@ import com.dianping.cat.Cat;
 import com.dp.bigdata.taurus.common.utils.IPUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.recipes.cache.TreeCache;
 import org.apache.curator.framework.recipes.cache.TreeCacheEvent;
+import org.apache.curator.framework.recipes.cache.TreeCacheListener;
+import org.apache.curator.framework.state.ConnectionState;
+import org.apache.curator.framework.state.ConnectionStateListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * Author   mingdongli
  * 16/5/18  下午3:47.
  */
-//@Component
+@Component
 public class MscheduleZookeeperManager implements ZookeeperManager, InitializingBean {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
-
-    private final ExecutorService executor = Executors.newFixedThreadPool(1);
 
     private final Object lockSchedule = new Object();
 
@@ -39,18 +40,13 @@ public class MscheduleZookeeperManager implements ZookeeperManager, Initializing
     @Override
     public void afterPropertiesSet() throws Exception {
 
-//        ScheduleNodeListenerManager scheduleNodeListenerManager = new ScheduleNodeListenerManager(zookeeperRegistryCenter);
-//        scheduleNodeListenerManager.start();
-
-        TaskNodeListenerManager taskNodeListenerManager = new TaskNodeListenerManager(zookeeperRegistryCenter);
-        taskNodeListenerManager.start();
+        addDataListener(new TaskNodeListenerManager());
+        addDataListener(new ScheduleNodeListenerManager());
+        addConnectionStateListener(new ScheduleNodeStateListener());
 
         logger.info("Taurus connect to ZK successfully.");
         registry();
         logger.info("Taurus registry to ZK successfully.");
-
-//        CuratorFramework curatorFramework = (CuratorFramework) zookeeperRegistryCenter.getRawClient();
-//        curatorFramework.getConnectionStateListenable().addListener(new ScheduleNodeStateListener(), executor);
 
         Map<String, Set<String>> nodes = zookeeperRegistryCenter.getJob2Nodes();
         if (nodes != null) {
@@ -88,124 +84,98 @@ public class MscheduleZookeeperManager implements ZookeeperManager, Initializing
         }
     }
 
-    class TaskNodeListenerManager extends AbstractListenerManager {
+    public void addConnectionStateListener(final ConnectionStateListener listener) {
+        getClient().getConnectionStateListenable().addListener(listener);
+    }
 
-        private ZookeeperRegistryCenter zookeeperRegistryCenter;
+    private CuratorFramework getClient() {
+        return (CuratorFramework) zookeeperRegistryCenter.getRawClient();
+    }
 
-        public TaskNodeListenerManager(ZookeeperRegistryCenter coordinatorRegistryCenter) {
-            super(coordinatorRegistryCenter);
-            this.zookeeperRegistryCenter = coordinatorRegistryCenter;
-        }
+    @Override
+    public void addDataListener(TreeCacheListener listener) {
+        TreeCache cache = (TreeCache) zookeeperRegistryCenter.getRawCache();
+        cache.getListenable().addListener(listener);
+    }
+
+    class TaskNodeListenerManager extends AbstractListener{
 
         @Override
-        public void start() {
-            logger.info("TaskNodeListenerManager started.");
-            listenTaskNode();
-        }
-
-        private void listenTaskNode() {
-            addDataListener(new AbstractListener() {
-
-                @Override
-                protected void dataChanged(final CuratorFramework client, final TreeCacheEvent event, final String path) {
-
-                    if (zookeeperRegistryCenter.isTaskNodePath(path)) {
-                        try {
-                            if (event.getType() == TreeCacheEvent.Type.NODE_ADDED) {
-                                String taskNode = zookeeperRegistryCenter.get(path);
-                                if (StringUtils.isNotBlank(taskNode)) {
-                                    logger.info("NEW TASK node join : {}", taskNode);
-                                }
-                                Map<String, Set<String>> nodes = zookeeperRegistryCenter.getJob2Nodes();
-                                synchronized (lockTask) {
-                                    job2Nodes.clear();
-                                    job2Nodes.putAll(nodes);
-                                }
-                            } else if (event.getType() == TreeCacheEvent.Type.NODE_REMOVED) {
-                                logger.info("TASK node : {} DOWN.", path);
-                                Map<String, Set<String>> nodes = zookeeperRegistryCenter.getJob2Nodes();
-                                synchronized (lockTask) {
-                                    job2Nodes.clear();
-                                    job2Nodes.putAll(nodes);
-                                }
-                            }
-                        } catch (Exception e) {
-                            logger.error("TaskNode listener capture node change and get data failed .", e);
+        protected void dataChanged(CuratorFramework client, TreeCacheEvent event, String path) {
+            if (zookeeperRegistryCenter.isTaskNodePath(path)) {
+                try {
+                    if (event.getType() == TreeCacheEvent.Type.NODE_ADDED) {
+                        String taskNode = zookeeperRegistryCenter.get(path);
+                        if (StringUtils.isNotBlank(taskNode)) {
+                            logger.info("NEW TASK node join : {}", taskNode);
+                        }
+                        Map<String, Set<String>> nodes = zookeeperRegistryCenter.getJob2Nodes();
+                        synchronized (lockTask) {
+                            job2Nodes.clear();
+                            job2Nodes.putAll(nodes);
+                        }
+                    } else if (event.getType() == TreeCacheEvent.Type.NODE_REMOVED) {
+                        logger.info("TASK node : {} DOWN.", path);
+                        Map<String, Set<String>> nodes = zookeeperRegistryCenter.getJob2Nodes();
+                        synchronized (lockTask) {
+                            job2Nodes.clear();
+                            job2Nodes.putAll(nodes);
                         }
                     }
+                } catch (Exception e) {
+                    logger.error("TaskNode listener capture node change and get data failed .", e);
                 }
-
-            });
+            }
         }
     }
 
-    class ScheduleNodeListenerManager extends AbstractListenerManager {
-
-        private ZookeeperRegistryCenter zookeeperRegistryCenter;
-
-        public ScheduleNodeListenerManager(ZookeeperRegistryCenter coordinatorRegistryCenter) {
-            super(coordinatorRegistryCenter);
-            this.zookeeperRegistryCenter = coordinatorRegistryCenter;
-        }
+    class ScheduleNodeListenerManager extends AbstractListener {
 
         @Override
-        public void start() {
-            logger.info("ScheduleNodeListenerManager started.");
-            listenScheduleNode();
-        }
+        protected void dataChanged(CuratorFramework client, TreeCacheEvent event, String path) {
+            if (zookeeperRegistryCenter.isScheculePath(path)) {
+                try {
+                    if (event.getType() == TreeCacheEvent.Type.NODE_ADDED) {
+                        String scheduleNode = zookeeperRegistryCenter.get(path);
+                        if (StringUtils.isNotBlank(scheduleNode)) {
+                            logger.info("NEW Schedule node join : {}", scheduleNode);
+                        }
 
-        private void listenScheduleNode() {
-            addDataListener(new AbstractListener() {
+                        Set<String> nodes = zookeeperRegistryCenter.getScheduleNodes();
+                        synchronized (lockSchedule) {
+                            scheduleNodes.clear();
+                            scheduleNodes.addAll(nodes);
+                        }
 
-                @Override
-                protected void dataChanged(final CuratorFramework client, final TreeCacheEvent event, final String path) {
-
-                    if (zookeeperRegistryCenter.isScheculePath(path)) {
-                        try {
-                            if (event.getType() == TreeCacheEvent.Type.NODE_ADDED) {
-                                String scheduleNode = zookeeperRegistryCenter.get(path);
-                                if (StringUtils.isNotBlank(scheduleNode)) {
-                                    logger.info("NEW Schedule node join : {}", scheduleNode);
-                                }
-
-                                Set<String> nodes = zookeeperRegistryCenter.getScheduleNodes();
-                                synchronized (lockSchedule) {
-                                    scheduleNodes.clear();
-                                    scheduleNodes.addAll(nodes);
-                                }
-
-                            } else if (event.getType() == TreeCacheEvent.Type.NODE_REMOVED) {
-                                logger.info("Schedule node : {} DOWN.", path);
-                                Set<String> nodes = zookeeperRegistryCenter.getScheduleNodes();
-                                synchronized (lockSchedule) {
-                                    scheduleNodes.clear();
-                                    scheduleNodes.addAll(nodes);
-                                }
-                            }
-                        } catch (Exception e) {
-                            logger.error("ScheduleNodeListener capture data change and get data " + "failed.", e);
+                    } else if (event.getType() == TreeCacheEvent.Type.NODE_REMOVED) {
+                        logger.info("Schedule node : {} DOWN.", path);
+                        Set<String> nodes = zookeeperRegistryCenter.getScheduleNodes();
+                        synchronized (lockSchedule) {
+                            scheduleNodes.clear();
+                            scheduleNodes.addAll(nodes);
                         }
                     }
+                } catch (Exception e) {
+                    logger.error("ScheduleNodeListener capture data change and get data " + "failed.", e);
                 }
-
-            });
+            }
         }
     }
 
-//    class ScheduleNodeStateListener implements ConnectionStateListener {
-//
-//        @Override
-//        public void stateChanged(CuratorFramework curatorFramework, ConnectionState connectionState) {
-//            if (connectionState == ConnectionState.LOST) {
-//                logger.warn("Network is unreachable to ZK with a long time, stop schedule service" + ".");
-//                // quartzScheduler.destroy();
-//            } else if (connectionState == ConnectionState.SUSPENDED) {
-//                logger.warn("Network is unreachable to ZK. Reconnection.....");
-//            } else if (connectionState == ConnectionState.RECONNECTED) {
-//                logger.info("Network reachable to ZK,Reconnected to ZK.");
-//                registry();
-//            }
-//        }
-//    }
+    class ScheduleNodeStateListener implements ConnectionStateListener {
+
+        @Override
+        public void stateChanged(CuratorFramework curatorFramework, ConnectionState connectionState) {
+            if (connectionState == ConnectionState.LOST) {
+                logger.warn("Network is unreachable to ZK with a long time, stop schedule service" + ".");
+                // quartzScheduler.destroy();
+            } else if (connectionState == ConnectionState.SUSPENDED) {
+                logger.warn("Network is unreachable to ZK. Reconnection.....");
+            } else if (connectionState == ConnectionState.RECONNECTED) {
+                logger.info("Network reachable to ZK,Reconnected to ZK.");
+                registry();
+            }
+        }
+    }
 
 }

@@ -1,5 +1,8 @@
 package com.dp.bigdata.taurus.common.netty.zookeeper;
 
+import org.apache.curator.framework.recipes.cache.TreeCacheListener;
+import org.apache.curator.framework.state.ConnectionStateListener;
+
 import java.util.Set;
 
 /**
@@ -11,4 +14,9 @@ public interface ZookeeperManager {
     Set<String> getScheduleNodes();
 
     Set<String> getTaskNodes(String taskId);
+
+    void addConnectionStateListener(ConnectionStateListener listener);
+
+    void addDataListener(TreeCacheListener listener);
+
 }
