@@ -1,7 +1,5 @@
 package com.dp.bigdata.taurus.springmvc.controller.api;
 
-import com.sankuai.meituan.config.util.AuthUtil;
-import com.sankuai.meituan.config.util.TimeUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -144,10 +142,6 @@ public class APIControllerTest {
 
         HttpEntity entity;
         String result;
-        String date = TimeUtil.getAuthDate(new Date());
-        String authorization = AuthUtil.getAuthorization("/api/job/quaryJobList", "GET", date, "hotel_mtazhilian", "b4db8cd497ff274c0e60af06ba6f2da3");
-        httpGet.setHeader("Date", date);
-        httpGet.setHeader("Authorization", authorization);
         HttpResponse response = httpclient.execute(httpGet);
         entity = response.getEntity();
         InputStream ins = entity.getContent();
@@ -164,10 +158,6 @@ public class APIControllerTest {
 
         HttpEntity entity = null;
         String result;
-        String date = TimeUtil.getAuthDate(new Date());
-        String authorization = AuthUtil.getAuthorization("/api/job/onceJob", "POST", date, "hotel_mtazhilian", "b4db8cd497ff274c0e60af06ba6f2da3");
-        httpPost.setHeader("Date", date);
-        httpPost.setHeader("Authorization", authorization);
         HttpResponse response = httpclient.execute(httpPost);
         entity = response.getEntity();
         InputStream ins = entity.getContent();
@@ -184,10 +174,6 @@ public class APIControllerTest {
 
         HttpEntity entity = null;
         String result;
-        String date = TimeUtil.getAuthDate(new Date());
-        String authorization = AuthUtil.getAuthorization("/api/job/startJob", "POST", date, "hotel_mtazhilian", "b4db8cd497ff274c0e60af06ba6f2da3");
-        httpPost.setHeader("Date", date);
-        httpPost.setHeader("Authorization", authorization);
         HttpResponse response = httpclient.execute(httpPost);
         entity = response.getEntity();
         InputStream ins = entity.getContent();
@@ -203,10 +189,6 @@ public class APIControllerTest {
 
         HttpEntity entity = null;
         String result;
-        String date = TimeUtil.getAuthDate(new Date());
-        String authorization = AuthUtil.getAuthorization("/api/job/stopJob", "POST", date, "hotel_mtazhilian", "b4db8cd497ff274c0e60af06ba6f2da3");
-        httpPost.setHeader("Date", date);
-        httpPost.setHeader("Authorization", authorization);
         HttpResponse response = httpclient.execute(httpPost);
         entity = response.getEntity();
         InputStream ins = entity.getContent();
@@ -218,10 +200,6 @@ public class APIControllerTest {
     public static void httpModifyJobPost(String url, String uri) throws JSONException, IOException, InvalidKeyException, NoSuchAlgorithmException {
 
         HttpPost method = new HttpPost(url);
-        String date = TimeUtil.getAuthDate(new Date());
-        String authorization = AuthUtil.getAuthorization(uri, "POST", date, "hotel_mtazhilian", "b4db8cd497ff274c0e60af06ba6f2da3");
-        method.setHeader("Date", date);
-        method.setHeader("Authorization", authorization);
 
 
         // 接收参数json列表
@@ -262,10 +240,6 @@ public class APIControllerTest {
     public static void httpMscheduleAddJobPost(String url, String uri) throws JSONException, IOException, InvalidKeyException, NoSuchAlgorithmException {
 
         HttpPost method = new HttpPost(url);
-        String date = TimeUtil.getAuthDate(new Date());
-        String authorization = AuthUtil.getAuthorization(uri, "POST", date, "hotel_mtazhilian", "b4db8cd497ff274c0e60af06ba6f2da3");
-        method.setHeader("Date", date);
-        method.setHeader("Authorization", authorization);
 
 
         // 接收参数json列表
@@ -303,11 +277,6 @@ public class APIControllerTest {
     public static void httpAddJobPost(String url, String uri) throws JSONException, IOException, InvalidKeyException, NoSuchAlgorithmException {
 
         HttpPost method = new HttpPost(url);
-        String date = TimeUtil.getAuthDate(new Date());
-        String authorization = AuthUtil.getAuthorization(uri, "POST", date, "hotel_mtazhilian", "b4db8cd497ff274c0e60af06ba6f2da3");
-        method.setHeader("Date", date);
-        method.setHeader("Authorization", authorization);
-
 
         // 接收参数json列表
         JSONObject jsonParam = new JSONObject();
@@ -354,10 +323,6 @@ public class APIControllerTest {
 
         HttpEntity entity;
         String result;
-        String date = TimeUtil.getAuthDate(new Date());
-        String authorization = AuthUtil.getAuthorization("/api/job/getJobTrace", "GET", date, "hotel_mtazhilian", "b4db8cd497ff274c0e60af06ba6f2da3");
-        httpGet.setHeader("Date", date);
-        httpGet.setHeader("Authorization", authorization);
         HttpResponse response = httpclient.execute(httpGet);
         entity = response.getEntity();
         InputStream ins = entity.getContent();
@@ -376,10 +341,6 @@ public class APIControllerTest {
 
         HttpEntity entity;
         String result;
-        String date = TimeUtil.getAuthDate(new Date());
-        String authorization = AuthUtil.getAuthorization("/api/job/jobList", "GET", date, "hotel_mtazhilian", "b4db8cd497ff274c0e60af06ba6f2da3");
-        httpGet.setHeader("Date", date);
-        httpGet.setHeader("Authorization", authorization);
         HttpResponse response = httpclient.execute(httpGet);
         entity = response.getEntity();
         InputStream ins = entity.getContent();

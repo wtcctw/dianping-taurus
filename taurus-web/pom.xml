@@ -140,17 +140,6 @@
 			<artifactId>jackson-annotations</artifactId>
 			<version>2.6.1</version>
 		</dependency>
-		<dependency>
-			<groupId>com.sankuai.meituan</groupId>
-			<artifactId>mtconfig-client</artifactId>
-			<version>1.1.1</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.httpcomponents</groupId>
-					<artifactId>httpclient</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
 
         <!-- JSON-lib框架，转换JSON、XML不再困难 -->
 		<dependency>
