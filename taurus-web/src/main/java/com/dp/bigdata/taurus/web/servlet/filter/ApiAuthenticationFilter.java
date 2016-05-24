@@ -2,7 +2,7 @@ package com.dp.bigdata.taurus.web.servlet.filter;
 
 import com.dp.bigdata.taurus.common.lion.LionDynamicConfig;
 import com.dp.bigdata.taurus.common.utils.APIAuthorizationUtils;
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
