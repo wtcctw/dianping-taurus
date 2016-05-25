@@ -491,6 +491,8 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
 
         try {
             executorManager.execute(context.getContext());
+            attempt.setStatus(AttemptStatus.RUNNING);
+            taskAttemptMapper.updateStatusToRunning(attempt);
             logger.info("Attempt " + attempt.getAttemptid() + " is running now...");
             Cat.logEvent("Attempt.Scheduled", context.getName(), Message.SUCCESS, context.getAttemptid());
         } catch (Exception ee) {
@@ -503,14 +505,6 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
                     + host.getIp(), ee);
         }
 
-        // update the status for TaskAttempt
-        attempt.setStatus(AttemptStatus.RUNNING);
-        TaskAttempt taskAttempt = taskAttemptMapper.selectByPrimaryKey(attempt.getAttemptid());
-        if(taskAttempt != null && ExecuteStatus.DEPENDENCY_PASS != taskAttempt.getStatus()){
-            Cat.logEvent("Mschedule-Finish", attempt.getAttemptid() + ":" + taskAttempt.getStatus());
-            attempt.setStatus(null);
-        }
-        taskAttemptMapper.updateStatusToRunning(attempt);
         // register the attempt context
         registAttemptContext(context);
     }

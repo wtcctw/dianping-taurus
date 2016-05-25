@@ -378,6 +378,7 @@
       </if>
     </set>
     where attemptID = #{attemptid,jdbcType=VARCHAR}
+    AND status = 2
   </update>
   <update id="updateByPrimaryKey" parameterType="com.dp.bigdata.taurus.generated.module.TaskAttempt">
     <!--
