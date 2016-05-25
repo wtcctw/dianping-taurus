@@ -488,7 +488,8 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
             host = assignPolicy.assignTask(task);
         }
         attempt.setExechost(host.getIp());
-        attempt.setStarttime(new Date());
+        Date date = new Date();
+        attempt.setStarttime(date);
 
         try {
             executorManager.execute(context.getContext());
@@ -496,8 +497,8 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
             int rows = taskAttemptMapper.updateStatusToRunning(attempt);
             if(rows == 0){
                 attempt.setStatus(null);
-                taskAttemptMapper.updateStatusToRunning(attempt);
-                Cat.logEvent("Mschedule", attemptId);
+                taskAttemptMapper.updateByPrimaryKeySelective(attempt);
+                Cat.logEvent("Mschedule", attemptId + ":" + date.toString());
             }
             logger.info("Attempt " + attemptId + " is running now...");
             Cat.logEvent("Attempt.Scheduled", context.getName(), Message.SUCCESS, attemptId);
