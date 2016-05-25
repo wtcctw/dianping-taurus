@@ -452,6 +452,7 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
 
     public void executeAttempt(AttemptContext context) throws ScheduleException {
         TaskAttempt attempt = context.getAttempt();
+        String attemptId = context.getAttemptid();
         Task task = context.getTask();
         Host host;
         if (task.getPoolid() == 1) {
@@ -462,18 +463,18 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
             if (StringUtils.isBlank(ip)) {
                 ipCollection = zookeeperManager.getTaskNodes(task.getTaskid());
                 if (ipCollection == null) {
-                    Cat.logEvent("Attempt.SubmitFailed", context.getName(), "no-host", context.getAttemptid());
+                    Cat.logEvent("Attempt.SubmitFailed", context.getName(), "no-host", attemptId);
                     failAttempt(attempt);
-                    throw new ScheduleException("Fail to execute attemptID : " + attempt.getAttemptid() + " due to no host");
+                    throw new ScheduleException("Fail to execute attemptID : " + attemptId + " due to no host");
                 }
             } else {
                 if (MscheduleExecutorManager.MSCHEDULE_TYPE.equals(context.getType())) {
                     String[] ipAndPort = ip.split(",");
                     Set<String> tmpCollection = zookeeperManager.getTaskNodes(task.getTaskid());
                     if (tmpCollection == null) {
-                        Cat.logEvent("Attempt.SubmitFailed", context.getName(), "no-host", context.getAttemptid());
+                        Cat.logEvent("Attempt.SubmitFailed", context.getName(), "no-host", attemptId);
                         failAttempt(attempt);
-                        throw new ScheduleException("Fail to execute attemptID : " + attempt.getAttemptid() + " due to no host");
+                        throw new ScheduleException("Fail to execute attemptID : " + attemptId + " due to no host");
                     }
                     ipCollection = CollectionUtils.intersection(Arrays.asList(ipAndPort), tmpCollection);
                 } else {
@@ -492,16 +493,21 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
         try {
             executorManager.execute(context.getContext());
             attempt.setStatus(AttemptStatus.RUNNING);
-            taskAttemptMapper.updateStatusToRunning(attempt);
-            logger.info("Attempt " + attempt.getAttemptid() + " is running now...");
-            Cat.logEvent("Attempt.Scheduled", context.getName(), Message.SUCCESS, context.getAttemptid());
+            int rows = taskAttemptMapper.updateStatusToRunning(attempt);
+            if(rows == 0){
+                attempt.setStatus(null);
+                taskAttemptMapper.updateStatusToRunning(attempt);
+                Cat.logEvent("Mschedule", attemptId);
+            }
+            logger.info("Attempt " + attemptId + " is running now...");
+            Cat.logEvent("Attempt.Scheduled", context.getName(), Message.SUCCESS, attemptId);
         } catch (Exception ee) {
             Cat.logError(ee);
-            Cat.logEvent("Attempt.SubmitFailed", context.getName(), "submit-fail", context.getAttemptid());
+            Cat.logEvent("Attempt.SubmitFailed", context.getName(), "submit-fail", attemptId);
 
             failAttempt(attempt);
 
-            throw new ScheduleException("Fail to execute attemptID : " + attempt.getAttemptid() + " on host : "
+            throw new ScheduleException("Fail to execute attemptID : " + attemptId + " on host : "
                     + host.getIp(), ee);
         }
 
