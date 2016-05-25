@@ -331,7 +331,7 @@
       <if test="scheduletime != null">
         scheduleTime = #{scheduletime,jdbcType=TIMESTAMP},
       </if>
-      <if test="status != null">
+      <if test="status != null and status != 7">
         status = #{status,jdbcType=INTEGER},
       </if>
       <if test="returnvalue != null">

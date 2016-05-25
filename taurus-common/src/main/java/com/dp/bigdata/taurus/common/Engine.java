@@ -505,6 +505,10 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
 
         // update the status for TaskAttempt
         attempt.setStatus(AttemptStatus.RUNNING);
+        TaskAttempt taskAttempt = taskAttemptMapper.selectByPrimaryKey(attempt.getAttemptid());
+        if(taskAttempt != null && ExecuteStatus.RUNNING == taskAttempt.getStatus()){
+            Cat.logEvent("Mschedule-Finish", attempt.getAttemptid());
+        }
         taskAttemptMapper.updateByPrimaryKeySelective(attempt);
         // register the attempt context
         registAttemptContext(context);
@@ -670,9 +674,6 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
             // 当心跳节点消失后出现异常，但是作业仍应该是running状态。
 
             status = new ExecuteStatus(AttemptStatus.RUNNING);
-        }
-        if(status == null){  //for type of mschedule
-            return null;
         }
         AttemptStatus astatus = new AttemptStatus(status.getStatus());
         astatus.setReturnCode(status.getReturnCode());
