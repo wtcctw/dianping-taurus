@@ -570,13 +570,7 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
         attempt.setReturnvalue(0);
         attempt.setEndtime(new Date());
         attempt.setStatus(AttemptStatus.SUCCEEDED);
-        int rows = taskAttemptMapper.updateByPrimaryKeySelective(attempt);
-        int times = 0;
-        while (rows < 1 && times < 3){
-            Cat.logEvent("Attempt-Update", attemptID);
-            rows = taskAttemptMapper.updateByPrimaryKeySelective(attempt);
-            times++;
-        }
+        taskAttemptMapper.updateByPrimaryKeySelective(attempt);
 
         Cat.logEvent("Attempt-Succeed", attemptID);
         unregistAttemptContext(AttemptID.getTaskID(attemptID), attemptID);
@@ -674,7 +668,11 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
             status = executorManager.getStatus(context.getContext());
         } catch (ExecuteException ee) {
             // 当心跳节点消失后出现异常，但是作业仍应该是running状态。
+
             status = new ExecuteStatus(AttemptStatus.RUNNING);
+        }
+        if(status == null){  //for type of mschedule
+            return null;
         }
         AttemptStatus astatus = new AttemptStatus(status.getStatus());
         astatus.setReturnCode(status.getReturnCode());

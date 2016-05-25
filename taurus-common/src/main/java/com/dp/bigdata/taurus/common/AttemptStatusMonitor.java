@@ -66,6 +66,10 @@ public class AttemptStatusMonitor extends AbstractLionPropertyInitializer<Boolea
                         continue;
                     }
                     AttemptStatus sstatus = scheduler.getAttemptStatus(attempt.getAttemptid());
+                    if(sstatus == null){
+                        Cat.logEvent("Monitor-Status", attempt.getAttemptid());
+                        continue;
+                    }
                     int status = sstatus.getStatus();
                     //LOG.info("Current status for attempt " + attempt.getAttemptid() + " : " + status);
 
