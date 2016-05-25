@@ -409,7 +409,7 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
         String attemptID = idFactory.newAttemptID(instanceID);
         attempt.setInstanceid(instanceID);
         attempt.setTaskid(taskID);
-        attempt.setStatus(AttemptStatus.UNKNOWN);
+        attempt.setStatus(AttemptStatus.DEPENDENCY_PASS);
         attempt.setAttemptid(attemptID);
         attempt.setScheduletime(new Date());
         taskAttemptMapper.insertSelective(attempt);
