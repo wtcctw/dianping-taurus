@@ -19,7 +19,7 @@ public abstract class AbstractAttemptCleanTask extends AbstractAttemptTask {
 
     private static final String ATTEMPT_CLEANUP = "taurus.taskattempt.cleanup";
 
-    private static final int CLEAR_HOUR = 1;
+    private static final int CLEAR_HOUR = 10;
 
     private static final int RESERVE_MONTH = 1;
 
@@ -56,7 +56,6 @@ public abstract class AbstractAttemptCleanTask extends AbstractAttemptTask {
 
         if (startTime != null && stopTime != null && startTime.before(stopTime)) {
             int deleted = doDeleteTaskAttempts(startTime);
-            Cat.logEvent(getClass().getSimpleName(), String.format("%s:%d", startTime.toString(), deleted));
             logger.info(String.format("%s [end] : delete %d records", getClass().getSimpleName(), deleted));
         }
     }

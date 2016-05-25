@@ -570,7 +570,13 @@ final public class Engine extends ListenableCachedScheduler implements Scheduler
         attempt.setReturnvalue(0);
         attempt.setEndtime(new Date());
         attempt.setStatus(AttemptStatus.SUCCEEDED);
-        taskAttemptMapper.updateByPrimaryKeySelective(attempt);
+        int rows = taskAttemptMapper.updateByPrimaryKeySelective(attempt);
+        int times = 0;
+        while (rows < 1 && times < 3){
+            Cat.logEvent("Attempt-Update", attemptID);
+            rows = taskAttemptMapper.updateByPrimaryKeySelective(attempt);
+            times++;
+        }
 
         Cat.logEvent("Attempt-Succeed", attemptID);
         unregistAttemptContext(AttemptID.getTaskID(attemptID), attemptID);
