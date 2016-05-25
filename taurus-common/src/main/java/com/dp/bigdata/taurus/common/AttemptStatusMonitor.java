@@ -62,7 +62,7 @@ public class AttemptStatusMonitor extends AbstractLionPropertyInitializer<Boolea
             try {
                 List<AttemptContext> runningAttempts = scheduler.getAllRunningAttempt();
                 for (AttemptContext attempt : runningAttempts) {
-                    if(MscheduleExecutorManager.MSCHEDULE_TYPE.equals(attempt.getType())){
+                    if(MscheduleExecutorManager.MSCHEDULE_TYPE.equalsIgnoreCase(attempt.getType().trim())){
                         continue;
                     }
                     AttemptStatus sstatus = scheduler.getAttemptStatus(attempt.getAttemptid());
@@ -81,7 +81,8 @@ public class AttemptStatusMonitor extends AbstractLionPropertyInitializer<Boolea
                             delayedAttemptZkPaths.offer(new DelayedAttemptZkPath(attempt.getExechost(), attempt.getAttemptid()));
                             break;
                         case AttemptStatus.RUNNING:
-                            if (attempt.getStatus() != AttemptStatus.TIMEOUT) {
+                            Integer attemptStatus = attempt.getStatus();
+                            if (attemptStatus != null && attemptStatus != AttemptStatus.TIMEOUT) {
                                 int timeout = attempt.getExecutiontimeout();
                                 Date start = attempt.getStarttime();
                                 long now = System.currentTimeMillis();
@@ -212,5 +213,13 @@ public class AttemptStatusMonitor extends AbstractLionPropertyInitializer<Boolea
         System.out.println(attemptList);
         Collections.sort(attemptList, new AttemptContextComparator());
         System.out.println(attemptList);
+
+        TaskAttempt taskAttempt = new TaskAttempt();
+        Task task1 = new Task();
+        AttemptContext attemptContext = new AttemptContext(taskAttempt, task1);
+
+        if(7 != attemptContext.getStatus()){
+            System.out.println("hihi");
+        }
     }
 }
