@@ -102,6 +102,9 @@ function action_update(id) {
 			} else if(element.id == "iskillcongexp") {
 				var checked = $('input[type=radio]:checked','#iskillcongexp').val();
 				params[element.id] = checked;
+			} else if(element.id == "isnotconcurrency") {
+				var checked = $('input[type=radio]:checked','#isnotconcurrency').val();
+				params[element.id] = checked;
 			}else {
 				params[element.id] = element.value;
 			}
