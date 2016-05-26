@@ -1,5 +1,6 @@
 var taskID;
 var action_chinese;
+
 jQuery(function($) {
 
 	$(document).delegate('.detailBtn', 'click', function(e) {
@@ -32,7 +33,6 @@ jQuery(function($) {
         });
     });
 });
-
 
 function action(id, index) {
 	action_chinese = $("#" + id + " .dropdown-menu li:nth-child(" + index + ") a").html();

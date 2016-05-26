@@ -184,7 +184,6 @@
     </div>
 </div>
 
-<#if dto.iskillcongexp?exists && !dto.iskillcongexp >
 <br>
 <div class="control-group col-sm-12" id="isnotconcurrency">
     <label class="label label-lg label-info arrowed-right col-sm-4">上次未执行完不启动新任务*</label>
@@ -199,7 +198,6 @@
     </#if>
     </div>
 </div>
-</#if>
 
 <br>
 <div class="control-group col-sm-12">
@@ -295,6 +293,12 @@
     userList = userList.substr(1);
     groupList = groupList.substr(1);
 
+    if($('input[type=radio]:checked','#iskillcongexp').val() === "1"){
+        $("#isnotconcurrency").hide();
+    }else{
+        $("#isnotconcurrency").show();
+    }
+
     $("#iskillcongexp").change(function(e){
         var checked = $('input[type=radio]:checked','#iskillcongexp').val();
         if(checked === '1'){
@@ -303,4 +307,5 @@
             $("#isnotconcurrency").show();
         }
     });
+
 </script>
