@@ -2,11 +2,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.dp.bigdata</groupId>
-	<artifactId>taurus-parent</artifactId>
+	<groupId>com.cip.crane</groupId>
+	<artifactId>crane-parent</artifactId>
 	<version>0.5.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<name>taurus-parent</name>
+	<name>crane-parent</name>
 
 	<properties>
 		<env>dev</env>
@@ -146,10 +146,10 @@ org.eclipse.jdt.core.compiler.compliance=1.6
 
 
 	<modules>
-		<module>taurus-common</module>
-		<module>taurus-web</module>
-		<module>taurus-agent</module>
-		<module>taurus-scheduler</module>
-		<module>taurus-client</module>
+		<module>crane-common</module>
+		<module>crane-web</module>
+		<module>crane-agent</module>
+		<module>crane-scheduler</module>
+		<module>crane-client</module>
 	</modules>
 </project>

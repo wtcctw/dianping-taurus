@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+
+
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+	
+	<bean name="placeholder" lazy-init="false" class="com.dianping.lion.client.InitializeConfig">
+		<property name="propertiesPath" value="config/applicationContext.properties" />
+		<property name="includeLocalProps" value="false"></property>
+	</bean>
+	
+	<bean name="configHolder" class="com.cip.crane.common.lion.ConfigHolder" init-method="init" />
+	
+	<bean id="startRestLet" class="com.cip.crane.restlet.TaurusServer"  destroy-method="stop"/>
+    <bean id="alertBean" class="com.cip.crane.common.alert.TaurusAlert" />
+    <bean id="healthChecker" class="com.cip.crane.common.alert.healthcheck.LeaderElectorHealthChecker" />
+
+    <context:component-scan base-package="com.cip.crane.springmvc.service,com.cip.crane.web.servlet.web.common"/>
+    
+</beans>

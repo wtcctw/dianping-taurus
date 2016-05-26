@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<mappers>
+		<mapper resource="com/cip/crane/generated/mapper/HostMapper.xml" />
+		<mapper resource="com/cip/crane/generated/mapper/HostMapperDal.xml" />
+		<mapper resource="com/cip/crane/generated/mapper/PoolMapper.xml" />
+		<mapper resource="com/cip/crane/generated/mapper/TaskMapper.xml" />
+		<mapper resource="com/cip/crane/generated/mapper/TaskAttemptMapper.xml" />
+		<mapper resource="com/cip/crane/generated/mapper/AttemptBackupMapper.xml" />
+		<mapper resource="com/cip/crane/generated/mapper/InstanceIDCounterMapper.xml" />
+		<mapper resource="com/cip/crane/generated/mapper/TaskIDCounterMapper.xml" />
+		<mapper resource="com/cip/crane/generated/mapper/AlertRuleMapper.xml" />
+		<mapper resource="com/cip/crane/generated/mapper/User.xml" />
+		<mapper resource="com/cip/crane/generated/mapper/UserGroup.xml" />
+		<mapper resource="com/cip/crane/generated/mapper/UserGroupMapping.xml" />
+		<mapper resource="com/cip/crane/generated/mapper/DeployMapping.xml" />
+	</mappers>
+</configuration>

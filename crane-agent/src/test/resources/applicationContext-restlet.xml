@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+	<bean id="component" class="org.restlet.ext.spring.SpringComponent">
+		<property name="server" ref="server" />
+		<property name="defaultTarget" ref="router" />
+	</bean>
+
+	<bean id="component.context"
+		class="org.springframework.beans.factory.config.PropertyPathFactoryBean" />
+
+	<bean id="server" class="org.restlet.ext.spring.SpringServer">
+		<constructor-arg value="http" />
+		<constructor-arg value="8278" />
+	</bean>
+
+	<bean name="router" class="org.restlet.ext.spring.SpringBeanRouter" />
+
+	<!-- Singleton instance of RESTful Resource -->
+	<bean name="/api/getlog/{date}/{attemptId}/{file_offset}/{flag}/{query_type}" id="getLogs" autowire="byName" scope="prototype"
+		class="com.cip.crane.agent.utils.GetLogs" />
+    <bean name="/api/isend/{attemptId}" id="isEnd" autowire="byName" scope="prototype"
+          class="com.cip.crane.agent.utils.LogFileEnd" />
+    <bean name="/api/isnew" id="isNew" autowire="byName" scope="prototype"
+          class="com.cip.crane.agent.utils.NewAgentVersion" />
+
+</beans>
+
+	

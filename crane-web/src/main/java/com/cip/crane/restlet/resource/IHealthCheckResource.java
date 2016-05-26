@@ -1,0 +1,10 @@
+package com.cip.crane.restlet.resource;
+
+import org.restlet.resource.Get;
+
+public interface IHealthCheckResource {
+
+	@Get
+	public String healthCheck();
+	
+}
