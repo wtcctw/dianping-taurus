@@ -65,7 +65,7 @@
                     <select id="taskType" name="taskType" class="input-big  field" style="width: 300px">
                         <option>default</option>
                         <option>mschedule</option>
-                        <option>hadoop</option>
+                        <#--<option>hadoop</option>-->
                     </select>
                     <a href="${rc.contextPath}/about#config" class="atip" data-toggle="tooltip" data-placement="top"
                        data-original-title="hadoop: 需要访问hadoop的作业。这种类型的作业，taurus会管理作业的hadoop ticket的申请和销毁。

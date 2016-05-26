@@ -38,9 +38,9 @@
             taurus能干什么？</a></li>
         <li><a href="#q2"><i class="icon-chevron-down"></i>
             创建一个普通任务？</a></li>
+        <#--<li><a href="#q3"><i class="icon-chevron-down"></i>-->
+            <#--创建一个hadoop任务？</a></li>-->
         <li><a href="#q3"><i class="icon-chevron-down"></i>
-            创建一个hadoop任务？</a></li>
-        <li><a href="#q4"><i class="icon-chevron-down"></i>
             创建一个一次性脚本？</a></li>
         <li><a href="#config"><i
                 class="icon-chevron-down"></i> 配置</a></li>
@@ -156,8 +156,7 @@
                             创建crontab表达式任务，任务类型default，请用ci上传job
                         </li>
                         <li>
-                            创建hadoop任务，在创建时任务类型选择hadoop，运行job机器要确认为hadoop
-                            job机器，另外把任务需要的keytab文件上传到job机器的/data/home/hadoop用户名/.keytab
+                            创建hadoop任务，在创建时任务类型选择default，使用HadoopRun方式进行认证，详见<a href="http://wiki.sankuai.com/pages/viewpage.action?pageId=484271776">hadoop认证</a>
                         </li>
                         <li>
                             执行一次性脚本，一般是用了初始化任务环境，比如创建任务需要的目录，文件，等等。在ci上传脚本，在taurus上设置命令选择执行任务，执行完成后，回到调度中心，删除该任务。
@@ -202,37 +201,37 @@
         </div>
         <br><br><br><br>
 
-        <div id="q3">
-            <h4><font color="#a52a2a">Q3.我要创建一个Hadoop任务，怎么操作？</font></h4>
-            <h4>答：</h4><br>
+        <#--<div id="q3">-->
+            <#--<h4><font color="#a52a2a">Q3.我要创建一个Hadoop任务，怎么操作？</font></h4>-->
+            <#--<h4>答：</h4><br>-->
 
-            <div class="well">
-                <font color="#5f9ea0">taurus是和ci一起使用的，你需要在[code.dianpingoa.com]上你的项目点ci 如下图<br>
-                    <img src="${rc.contextPath}/img/citask.png" style="width: 950px;height: 580px"/>
-                    <br>
-                    <br>
-                    <br>
-                    job发布到job机器后配置，跳转到taurus.dp上来,注意作业类型选择[hadoop],并且保证keytab文件已经上传到job机器的/data/home/hadoop用户名/.keytab上。如下图：
-                    <br>
-                    <br>
-                    <img src="${rc.contextPath}/img/task4.png" style="width: 950px;height: 420px"/>
-                    <br>
-                    <br>
-                    点击【下一步】后进行相关设置，注意按照自己任务需求，填写crontab表达式和命令;执行身份如无特别要求请填nobody,如果有特别需求请联系运维，如下图所示：
-                    <br>
-                    <br>
-                    <img src="${rc.contextPath}/img/task5.png" style="width: 980px;height: 450px"/>
-                    <br><br>
-                    这时你可以选择直接提交，或者点击下一步进行可选项设置，如下图：
-                    <br><br>
-                    <img src="${rc.contextPath}/img/task3.png" style="width: 980px;height: 550px"/>
-                    <br><br>
-                    设置完毕后，点击提交。此时任务就创建完毕，taurus会按照你设置的crontab对你的任务进行调度执行。
-                </font>
-            </div>
-        </div>
-        <div id="q4">
-            <h4><font color="#a52a2a">Q4.我要创建一个一次性脚本，怎么操作？</font></h4>
+            <#--<div class="well">-->
+                <#--<font color="#5f9ea0">taurus是和ci一起使用的，你需要在[code.dianpingoa.com]上你的项目点ci 如下图<br>-->
+                    <#--<img src="${rc.contextPath}/img/citask.png" style="width: 950px;height: 580px"/>-->
+                    <#--<br>-->
+                    <#--<br>-->
+                    <#--<br>-->
+                    <#--job发布到job机器后配置，跳转到taurus.dp上来,注意作业类型选择[hadoop],并且保证keytab文件已经上传到job机器的/data/home/hadoop用户名/.keytab上。如下图：-->
+                    <#--<br>-->
+                    <#--<br>-->
+                    <#--<img src="${rc.contextPath}/img/task4.png" style="width: 950px;height: 420px"/>-->
+                    <#--<br>-->
+                    <#--<br>-->
+                    <#--点击【下一步】后进行相关设置，注意按照自己任务需求，填写crontab表达式和命令;执行身份如无特别要求请填nobody,如果有特别需求请联系运维，如下图所示：-->
+                    <#--<br>-->
+                    <#--<br>-->
+                    <#--<img src="${rc.contextPath}/img/task5.png" style="width: 980px;height: 450px"/>-->
+                    <#--<br><br>-->
+                    <#--这时你可以选择直接提交，或者点击下一步进行可选项设置，如下图：-->
+                    <#--<br><br>-->
+                    <#--<img src="${rc.contextPath}/img/task3.png" style="width: 980px;height: 550px"/>-->
+                    <#--<br><br>-->
+                    <#--设置完毕后，点击提交。此时任务就创建完毕，taurus会按照你设置的crontab对你的任务进行调度执行。-->
+                <#--</font>-->
+            <#--</div>-->
+        <#--</div>-->
+        <div id="q3">
+            <h4><font color="#a52a2a">Q3.我要创建一个一次性脚本，怎么操作？</font></h4>
             <h4>答：</h4><br>
 
             <div class="well">
