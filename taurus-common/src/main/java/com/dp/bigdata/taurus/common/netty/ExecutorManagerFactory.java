@@ -8,7 +8,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -18,8 +17,6 @@ import java.lang.reflect.Proxy;
  * Author   mingdongli
  * 16/5/18  上午10:41.
  */
-@Component
-@Qualifier("proxy")
 public class ExecutorManagerFactory implements FactoryBean<ExecutorManager>, InvocationHandler {
 
     private static final Log logger = LogFactory.getLog(ExecutorManagerFactory.class);

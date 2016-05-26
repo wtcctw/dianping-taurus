@@ -1,6 +1,9 @@
 package com.dp.bigdata.taurus.common.netty;
 
-import com.dp.bigdata.taurus.common.execute.*;
+import com.dp.bigdata.taurus.common.execute.ExecuteContext;
+import com.dp.bigdata.taurus.common.execute.ExecuteException;
+import com.dp.bigdata.taurus.common.execute.ExecutorManager;
+import com.dp.bigdata.taurus.common.execute.ExecutorManagerSupport;
 import com.dp.bigdata.taurus.common.netty.exception.RemotingSendRequestException;
 import com.dp.bigdata.taurus.common.netty.processor.CallbackProcessor;
 import com.dp.bigdata.taurus.common.netty.protocol.CommandType;
@@ -10,8 +13,6 @@ import com.dp.bigdata.taurus.common.utils.SleepUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.util.HashSet;
@@ -24,8 +25,6 @@ import java.util.concurrent.Executors;
  * 16/5/17  下午10:48.
  */
 
-@Component
-@Qualifier("netty")
 public class MscheduleExecutorManager extends ExecutorManagerSupport implements ExecutorManager{
 
     protected Logger logger = LoggerFactory.getLogger(this.getClass());

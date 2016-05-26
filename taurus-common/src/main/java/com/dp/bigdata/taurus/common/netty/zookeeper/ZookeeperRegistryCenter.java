@@ -21,7 +21,6 @@ import org.apache.zookeeper.data.ACL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -33,7 +32,6 @@ import java.util.*;
  * Author   mingdongli
  * 16/5/18  下午3:38.
  */
-@Component
 public class ZookeeperRegistryCenter implements CoordinatorRegistryCenter {
 
     private static final Logger log = LoggerFactory.getLogger(ZookeeperRegistryCenter.class);

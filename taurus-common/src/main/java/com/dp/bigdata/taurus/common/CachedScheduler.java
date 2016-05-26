@@ -280,7 +280,7 @@ public abstract class CachedScheduler extends ConfigedScheduler implements Sched
     }
 
     @Override
-    public List<AttemptContext> getAllRunningAttempt() {
+    public synchronized List<AttemptContext> getAllRunningAttempt() {
         List<AttemptContext> contexts = new ArrayList<AttemptContext>();
         for (HashMap<String, AttemptContext> maps : runningAttempts.values()) {
             for (AttemptContext context : maps.values()) {
@@ -291,7 +291,7 @@ public abstract class CachedScheduler extends ConfigedScheduler implements Sched
     }
 
     @Override
-    public List<AttemptContext> getRunningAttemptsByTaskID(String taskID) {
+    public synchronized List<AttemptContext> getRunningAttemptsByTaskID(String taskID) {
         List<AttemptContext> contexts = new ArrayList<AttemptContext>();
         HashMap<String, AttemptContext> maps = runningAttempts.get(taskID);
 
@@ -305,7 +305,7 @@ public abstract class CachedScheduler extends ConfigedScheduler implements Sched
     }
 
     @Override
-    public Map<String, Task> getAllRegistedTask() {
+    public synchronized Map<String, Task> getAllRegistedTask() {
         return Collections.unmodifiableMap(registedTasks);
     }
 

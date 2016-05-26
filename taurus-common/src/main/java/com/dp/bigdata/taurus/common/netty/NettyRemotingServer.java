@@ -17,7 +17,6 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -33,7 +32,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Author   mingdongli
  * 16/5/18  下午2:33.
  */
-@Component
 public class NettyRemotingServer extends AbstractRemotingService implements RemotingServer {
 
     @Value("${task.callback.port}")

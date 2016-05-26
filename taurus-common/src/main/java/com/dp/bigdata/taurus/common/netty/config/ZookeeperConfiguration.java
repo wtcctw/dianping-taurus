@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
  * Author   mingdongli
  * 16/5/18  下午3:40.
  */
-@Component
 public class ZookeeperConfiguration implements InitializingBean{
 
     /**

@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.*;
 
@@ -21,7 +20,6 @@ import java.util.*;
  * Author   mingdongli
  * 16/5/18  下午3:47.
  */
-@Component
 public class MscheduleZookeeperManager implements ZookeeperManager, InitializingBean {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());

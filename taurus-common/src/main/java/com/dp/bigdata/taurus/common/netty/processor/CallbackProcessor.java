@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
  * Author   mingdongli
  * 16/5/18  下午4:56.
  */
-@Component
 public class CallbackProcessor implements NettyRequestProcessor {
 
     private static final Logger logger = LoggerFactory.getLogger(CallbackProcessor.class);
